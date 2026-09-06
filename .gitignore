@@ -1,0 +1,16 @@
+# Python (tools/ — governance tooling)
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+
+# Build artifacts (P2+ — do not commit from P1)
+out/
+build-xr/
+*.log
