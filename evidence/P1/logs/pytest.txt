@@ -61,4 +61,4 @@ tools/tests/test_vocab_lint.py::test_military_grade_spelling_variants PASSED [ 9
 tools/tests/test_vocab_lint.py::test_suggest_lists_hits PASSED           [ 98%]
 tools/tests/test_vocab_lint.py::test_no_anonymity_false_positive PASSED  [100%]
 
-============================== 55 passed in 5.29s ==============================
+============================== 55 passed in 5.24s ==============================

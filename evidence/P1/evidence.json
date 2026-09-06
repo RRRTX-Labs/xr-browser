@@ -4,8 +4,8 @@
   "plan": "docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md",
   "plan_sha256": "a74b2aa4e8fd6f427c71cadfe932489249afe208a10413bf78c04734fd343e1b",
   "repos": {
-    "xr-browser (meta)": "13 commits, main, 3e78f06..f7178bf (see logs/git-log-xr-browser.txt)",
-    "xr-core (product)": "3 commits, main, 0050c53..6fb5411 (see logs/git-log-xr-core.txt)"
+    "xr-browser (meta)": "15 commits on main at P1 close (3e78f06..final evidence commit; logs captured at the final verification run, just before that commit — see logs/git-log-xr-browser.txt)",
+    "xr-core (product)": "3 commits on main, 0050c53..6fb5411 (see logs/git-log-xr-core.txt)"
   },
   "verdict_vocabulary": ["VERIFIED", "HUMAN-GATED", "BLOCKED"],
   "policy": "Never-fabrication: every VERIFIED row cites artifacts actually produced in this workspace and/or gates actually executed here. Anything requiring an external actor (counsel, hosting, mailboxes, funding) is HUMAN-GATED with its gate id — never marked VERIFIED. Nothing is marked BLOCKED: no P1 artifact was stopped mid-way (denylist-adjacent uncertainties were recorded UNVERIFIED in the briefs/evals instead, per policy).",
