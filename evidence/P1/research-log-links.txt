@@ -1,0 +1,85 @@
+# Research artifact traceability (P1, 2026-09-07)
+
+Maps the raw fetches in the working scratch dir `/home/user/.research-p1/`
+to the committed deliverables that cite them. This file is the durable
+record of *which primary source supports which claim*; the scratch dir
+itself is deleted at P1 close, so the mapping survives.
+
+Legend: [VERIFIED] = backed by a live primary source fetched 2026-09-07.
+[404] = the fetch returned 404 / no content — recorded as a dead end,
+NOT used to support a claim.
+
+## Licensing
+- adblock-rust-LICENSE (16726 B)
+  [VERIFIED] verbatim MPL-2.0 text. Consumed by: `LICENSE` in BOTH repos,
+  `tools/license_audit.py` CANONICAL_MPL20_SHA256, docs/dependencies/adblock-rust.yaml.
+  sha256 3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04.
+- chromium-LICENSE (1536 B)  [VERIFIED] Chromium BSD-style license (context for LG-1).
+- ublock-LICENSE (35126 B)   [VERIFIED] uBlock Origin GPLv3 -> adblock-rust.yaml REJECTED-as-linked (DR-04).
+- disconnect-LICENSE (741 B) [VERIFIED] Disconnect CC BY-NC-SA 4.0 -> easylist-family.yaml (excluded).
+- inter-LICENSE (4380 B)     [VERIFIED] Inter OFL-1.1 -> fonts-icons.yaml.
+- jbmono-OFL (4399 B)        [VERIFIED] JetBrains Mono OFL-1.1 -> fonts-icons.yaml.
+- jbmono-LICENSE [404]       dead end (used jbmono-OFL instead).
+- lit-LICENSE (1561 B)       [VERIFIED] Lit BSD-3 -> lit.yaml.
+- libsodium-LICENSE (823 B)  [VERIFIED] libsodium ISC -> libsodium-rustcrypto.yaml.
+- keepass-rs-LICENSE (1072 B)[VERIFIED] keepass-rs MIT -> keepass-rs.yaml.
+- tor-C-LICENSE (21086 B)    [VERIFIED] C-tor 3-clause BSD -> c-tor-fallback.yaml.
+- wireguard-go-LICENSE (1023 B) [VERIFIED] wireguard-go MIT -> wireguard-go.yaml.
+- rustcrypto-LICENSE [404], rustcrypto-argon2-LICENSE [404]
+  dead ends -> argon2 0.6.0 license UNVERIFIED, re-verify P28 (argon2-crate.json license field empty).
+- easylist-LICENSE [404]     dead end (EasyList dual license from easylist-README / licence.html).
+- mpl-2.0-raw.txt (0 B), osi-mpl-extract.txt (0 B), mpl2.txt (217 B)
+  dead ends — attempted direct Mozilla/OSI fetches that yielded nothing usable;
+  the adblock-rust copy is the verbatim source instead (see research-log §1).
+- mpl-2.0.txt (9125 B), mpl2-page.html, mpl2-toolkit.html, spdx-mpl2.html, osi-mpl2.html
+  Mozilla/SPDX/OSI pages (JS-heavy or partial); superseded by the adblock-rust verbatim copy.
+
+## Chromium / fork viability (LG-1, DR-01/02/03)
+- chrome-two-week.html (97109 B) [VERIFIED] Chrome two-week release blog -> research-log §2, LG-1.
+- cef-issue-4114.json (5277 B)   [VERIFIED] even-milestone strategy -> research-log §2.
+- widevine-installer.cc (17559 B)[VERIFIED] in-tree CDM component installer -> research-log §2, LG-3.
+- chromium-DEPS-head (198071 B)  [VERIFIED] DEPS pin structure (P2 context, LG-1).
+- chromium-OWNERS (13187 B)      [VERIFIED] Chromium OWNERS convention -> xr-core OWNERS.
+- chromium-process-model (33585 B) [VERIFIED] process model (threat model / LG-1 context).
+- chromium-adding_code (2 B)     [404]/empty — dead end.
+- .b64 siblings are base64 mirrors of the same fetches (kept for byte-exactness).
+
+## Widevine (LG-3)
+- brave-widevine-wiki.html (490633 B) [VERIFIED-fetch] Brave wiki Widevine page (page fetched; specific clauses not all extractable).
+- brave-wiki-widevine.md [404]  dead end.
+- freshports-widevine.html / widevine2.html / wv3.html
+  [404/UNVERIFIED] freshports Widevine pages — recorded UNVERIFIED-live, NOT used to assert a verdict (LG-3 open item).
+- deletedports.html [404]  dead end.
+
+## Safe Browsing v5 (LG-2, DR-15)
+- sb-terms.html (57525 B) [VERIFIED] Safe Browsing ToS clauses -> LG-2 (non-commercial, 30-min freshness, attribution).
+- (OHTTP gateway API fetched live; page marked "under development" — facts recorded in research-log §3 + LG-2.)
+
+## Dependencies
+- adblock-rust-README (3526 B) [VERIFIED] adblock-rust (brave org) -> adblock-rust.yaml.
+- easylist-README (7001 B) + easylist-licence.html (3717 B) [VERIFIED] EasyList GPL-3.0-or-later OR CC-BY-SA-3.0 dual -> easylist-family.yaml.
+- keepass-rs-README (1870 B) [VERIFIED] "experimental KDBX4.1 writing" -> keepass-rs.yaml (DR-30).
+- keepass-crate.json (258281 B) [VERIFIED] keepass 0.13.25 (2026-08-30) -> keepass-rs.yaml (drift vs plan 0.13.6).
+- argon2-crate.json (72757 B) [VERIFIED] argon2 0.6.0 license field EMPTY -> UNVERIFIED (P28).
+- arti-README (7136 B) + arti-tags.json (3602 B) + arti-gitlab-api (1019 B)
+  [VERIFIED] Apache-2.0 OR MIT + optional LGPLv3, tag arti-v2.6.0 (2026-09-01) -> arti.yaml.
+- tor-gitlab-api (876 B) [VERIFIED] C-tor fallback (BSD) -> c-tor-fallback.yaml.
+- boringtun-README (5766 B) [VERIFIED] org-restructuring warning -> boringtun-REJECTED.yaml.
+- github-repos.json (958 B) [VERIFIED] GitHub license/branch/push-date API for the dependency set.
+- ff-transl.html / ff-translations (3038 B) [VERIFIED] translation provider context (P34 reference).
+- thorium-README (11185 B) [VERIFIED] Thorium builds on latest LTS Chromium -> research-log §4 (LG-1 context).
+- thorium-README2 [404]  dead end.
+- brave-core-README (10667 B) [VERIFIED] patches/manifest model -> research-log §4 (LG-1 context).
+- ungoogled-README (12349 B) [VERIFIED] domain-substitution model -> research-log §4 (LG-1 context).
+- browsermt-README [404]  dead end — license re-verify before P34 (see research-log §4 note).
+
+## CI action pins (governance.yml)
+- checkout-releases.json (24982 B) [VERIFIED] actions/checkout release/tag -> full-SHA pin.
+- setuppython-releases.json (32350 B) [VERIFIED] actions/setup-python release/tag -> full-SHA pin.
+- (GitHub release JSON commit_url was empty for actions/*; the commits/<tag> API was used instead — see research-log §6.)
+
+## Not used by any committed deliverable (context only / superseded)
+- mpl2-page.html, mpl2-toolkit.html, spdx-mpl2.html, osi-mpl2.html (Mozilla/SPDX/OSI, superseded)
+- chromium-DEPS-head.b64, chromium-LICENSE.b64, chromium-OWNERS.b64, chromium-process-model.b64,
+  widevine-installer.cc.b64, chromium-adding_code.b64 (base64 mirrors)
+- github-repos.json (re-fetched; keepass-rs + wireguard-go license/branch confirmation)

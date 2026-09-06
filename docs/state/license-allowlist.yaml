@@ -28,3 +28,9 @@ allowlist:
     justification: "P1 research log records live-verified dependency licenses (uBlock Origin GPLv3, EasyList GPL-3.0-or-later dual) — the evaluation trail that justifies the DR-04 data-only treatment."
   - path: tools/README.md
     justification: "Tool inventory table names the license gate's own rule ('no GPL/AGPL code') — meta-mention of what license_audit.py enforces."
+  - path: CONTRIBUTING.md
+    justification: "Contributor rules restate the license gate ('no copyleft (GPL/AGPL) code' — ADR-0001/DR-04) — meta-mention of the enforcement rule."
+  - path: README.md
+    justification: "Gate table restates the license gate's rule ('no GPL/AGPL code') — meta-mention of what CI enforces."
+  - path: evidence/P1/research-log-links.txt
+    justification: "Evidence traceability map names the verified copyleft artifacts (uBlock GPLv3, EasyList GPL-3.0 dual) that the dependency evals cite."

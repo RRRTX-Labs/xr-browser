@@ -1,0 +1,109 @@
+{
+  "phase": "P1 — Governance, legal gates, repository skeleton",
+  "generated": "2026-09-07",
+  "plan": "docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md",
+  "plan_sha256": "a74b2aa4e8fd6f427c71cadfe932489249afe208a10413bf78c04734fd343e1b",
+  "repos": {
+    "xr-browser (meta)": "13 commits, main, 3e78f06..f7178bf (see logs/git-log-xr-browser.txt)",
+    "xr-core (product)": "3 commits, main, 0050c53..6fb5411 (see logs/git-log-xr-core.txt)"
+  },
+  "verdict_vocabulary": ["VERIFIED", "HUMAN-GATED", "BLOCKED"],
+  "policy": "Never-fabrication: every VERIFIED row cites artifacts actually produced in this workspace and/or gates actually executed here. Anything requiring an external actor (counsel, hosting, mailboxes, funding) is HUMAN-GATED with its gate id — never marked VERIFIED. Nothing is marked BLOCKED: no P1 artifact was stopped mid-way (denylist-adjacent uncertainties were recorded UNVERIFIED in the briefs/evals instead, per policy).",
+  "dod_rows": [
+    {
+      "id": "E1",
+      "dod": "Repos exist (plan P1 DoD item 1): xr-browser meta + xr-core product, MPL-2.0 LICENSE committed, initial READMEs, DCO in CONTRIBUTING",
+      "status": "VERIFIED",
+      "evidence": ["LICENSE (both repos, sha256 3f3d9e00…9b9d04)", "logs/git-log-xr-browser.txt", "logs/git-log-xr-core.txt", "CONTRIBUTING.md (both repos)"],
+      "notes": "T1. Canonical verbatim MPL-2.0 (source + hash in license_audit.py)."
+    },
+    {
+      "id": "E2",
+      "dod": "MPL-2.0 everywhere in //xr (plan P1 DoD item 2)",
+      "status": "VERIFIED",
+      "evidence": ["tools/license_audit.py (canonical-hash check)", "logs/local-ci-run.txt"],
+      "notes": "Both LICENSE files hash-verified byte-for-byte; copyleft marker scan clean (14/14 doc citations allowlisted with justifications)."
+    },
+    {
+      "id": "E3",
+      "dod": "ADR system adopted with reserved numbering (P1-T2) + decision register machine-checkable (P1-T9)",
+      "status": "VERIFIED",
+      "evidence": ["docs/adr/0000-template.md", "docs/adr/0001-repo-topology-and-licensing.md", "docs/adr/0002-decision-register.md", "docs/adr/RESERVED.md", "docs/register/decisions.yaml (30 rows)", "tools/dr_parse.py", "logs/pytest.txt"],
+      "notes": "Register schema + Register-Change trailer protection green. Row-by-row human ratification of the Appendix B transcription is HUMAN-GATED (HG-7) — mechanics are CI-enforced regardless."
+    },
+    {
+      "id": "E4",
+      "dod": "SECURITY.md + embargo/disclosure process + bounty charter v0 + disclosure pipeline TESTED (plan P1 security req)",
+      "status": "VERIFIED",
+      "evidence": ["SECURITY.md", "docs/process/disclosure-policy.md", "docs/process/bounty-charter-v0.md", "logs/synthetic-intake-drill.md"],
+      "notes": "Synthetic report walked end-to-end locally (12 steps, 4 findings F1–F4). Live mailbox/GHSA routing is HUMAN-GATED (HG-2/HG-4); the drill records exactly what breaks until then."
+    },
+    {
+      "id": "E5",
+      "dod": "Threat model v0 published with T1–T11 adversary table incl. 'Does NOT protect against' column (plan P1 DoD item 4)",
+      "status": "VERIFIED",
+      "evidence": ["docs/threat-model.md", "tools/check_threat_model.py", "logs/local-ci-run.txt"],
+      "notes": "Structural gate green: plan-SHA binding, 11/11 adversaries with non-empty honesty cells, 14 linked invariants, T8+T9 stated out of scope. Pre-implementation posture declared in the doc itself."
+    },
+    {
+      "id": "E6",
+      "dod": "LG-1/LG-2/LG-3 written, with verdicts (plan P1 DoD item 3; Manual req: counsel memos filed)",
+      "status": "HUMAN-GATED",
+      "gate": "HG-1",
+      "evidence": ["docs/legal/LG-1-fork-viability.md", "docs/legal/LG-2-safe-browsing-terms.md", "docs/legal/LG-3-widevine-cdm.md", "evidence/P1/human-gates.md"],
+      "notes": "Briefs complete as DRAFT-FOR-COUNSEL: facts + primary sources + options + questions, verdict fields deliberately BLANK (counsel work, never agent work). Attached to register rows DR-02/05/21/26 (LG-1), DR-15 (LG-2), DR-14 (LG-3) as OPEN/GATE-PENDING."
+    },
+    {
+      "id": "E7",
+      "dod": "Funding-gate check per DR-01 recorded (P1-T6)",
+      "status": "HUMAN-GATED",
+      "gate": "HG-6",
+      "evidence": ["docs/register/decisions.yaml (DR-01 GATE-PENDING)", "docs/state/assumptions.md", "evidence/P1/human-gates.md"],
+      "notes": "Recorded with the funded-team premise (plan §0.2-7) and the §15-R17 fallback trigger; the staffing confirmation is a principals' act."
+    },
+    {
+      "id": "E8",
+      "dod": "S0 review rules enforced by CI (plan P1 DoD item 5; P1-T7)",
+      "status": "VERIFIED",
+      "evidence": ["docs/process/s0-paths.yaml", ".github/CODEOWNERS", "CODEOWNERS (xr-core)", "OWNERS (xr-core)", "tools/owners_sync.py", ".github/workflows/governance.yml", "logs/local-ci-run.txt"],
+      "notes": "CODEOWNERS/OWNERS generated from the S0 path list and sync-checked by CI; handles are PLACEHOLDER (RFC 2606) until real owners are named (part of HG-3). GitHub-side enforcement activates with hosting (HG-3); the local gate is the executed equivalent."
+    },
+    {
+      "id": "E9",
+      "dod": "Dependency-intake pack pre-filled for every §8 INTEGRATE row (P1-T8; plan artifacts line)",
+      "status": "VERIFIED",
+      "evidence": ["docs/process/dependency-eval-template.yaml", "docs/dependencies/*.yaml (12 files)", "docs/state/research-log-P1.md §4", "evidence/P1/research-log-links.txt"],
+      "notes": "All 12 evals: full template fields, evaluated 2026-09-07, refresh 2026-12-06, live-verified licenses/versions; 5 live-vs-plan drifts recorded (versions/orgs/license phrasings) — plan NOT edited."
+    },
+    {
+      "id": "E10",
+      "dod": "Machine-readable Feature Registry from plan §2 + reserved interfaces from §2.10 + plan pinned by SHA-256 (P1-T10/T11)",
+      "status": "VERIFIED",
+      "evidence": ["docs/registry/features.yaml (122 rows)", "docs/registry/reserved-interfaces.yaml (6)", "docs/registry/COUNTS.json", "docs/master-plan.sha256", "tools/gen_registry.py", "tools/registry_lint.py", "tools/plan_pin_check.py", "evidence/P1/registry-recount.md"],
+      "notes": "Registry derived by script from the pinned plan (no hand-transcription); drift in plan, registry, or counts fails CI. Row count 122 vs the ~115 working estimate — recounted line-by-line, recorded, no rows dropped."
+    },
+    {
+      "id": "E11",
+      "dod": "Plan P1 'Tests': license-scan fails on an injected GPL sample; DCO blocks unsigned PR (extended to all gates)",
+      "status": "VERIFIED",
+      "evidence": ["tools/run_negatives.sh", "logs/negative-fixtures.txt", "tools/tests/fixtures/"],
+      "notes": "7/7 negative cases rejected with the expected reason: GPL sample in code, unsigned commit, hand-edited registry, banned vocab in new doc, bad register enum, emptied threat-model honesty cell, tampered plan copy."
+    },
+    {
+      "id": "E12",
+      "dod": "CI from commit 1: governance workflow + full local gate suite + claims-discipline (banned vocab) gate (P1-T12/T13)",
+      "status": "VERIFIED",
+      "evidence": [".github/workflows/governance.yml (actions pinned by full SHA; Python 3.12)", "tools/requirements-dev.txt (sha256-pinned; clean-venv install verified)", "tools/run_checks.sh", "logs/local-ci-run.txt (10/10 gates, 55/55 tests)", "tools/vocab_lint.py", "docs/state/vocab-allowlist.yaml (20 justified entries)"],
+      "notes": "Local runs are the executed gate; GitHub-side execution is HUMAN-GATED (HG-3) — the workflow is the committed definition and is YAML-validated. jsonschema permitted-but-unpinned (no consumer) per tools/DEPS.md."
+    }
+  ],
+  "human_gates": {
+    "file": "evidence/P1/human-gates.md",
+    "gates": ["HG-1 counsel verdicts (LG-1..3)", "HG-2 security mailbox/DNS", "HG-3 GitHub hosting + branch protection", "HG-4 GHSA", "HG-5 domain/trademark filings", "HG-6 funding confirmation (DR-01)", "HG-7 human re-read of ADRs 0001/0002 + register transcription", "HG-8 live intake drill re-run"]
+  },
+  "not_done_by_design": [
+    "No GN/Chromium build files, no DEPS, no patches/manifest.yaml, no product source (P2+ scope — premature stubs are anti-fabrication violations).",
+    "No counsel verdicts, no live CI runs, no mailbox/GHSA operations, no funding decision — all HUMAN-GATED above.",
+    ".research-p1/ scratch dir deleted at P1 close; its durable content lives in docs/state/research-log-P1.md + docs/dependencies/* + this evidence bundle."
+  ]
+}

@@ -1,0 +1,3 @@
+6fb5411 2026-09-06 governance: fix placeholder-domain comment in OWNERS (XR-P1-T7)
+22922d8 2026-09-06 governance: OWNERS/CODEOWNERS for S0 paths (XR-P1-T7)
+0050c53 2026-09-06 governance: initialize xr-core product repo (XR-P1-T1)

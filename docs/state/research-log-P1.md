@@ -65,9 +65,12 @@ page. Verdicts remain counsel's (LG-3).
 
 Fork-precedent research (context for LG-1, not a dependency):
 Thorium (Alex313031, formerly Everdevs.io — org-move drift) builds on
-the latest LTS Chromium; brave-core uses the patches/manifest model;
-ungoogled-chromium does domain substitution; browsermt mirror-signing
-is MIT-licensed.
+the latest LTS Chromium; brave-core (MPL-2.0, pushed 2026-09-06 per
+GitHub API) uses the patches/manifest model; ungoogled-chromium does
+domain substitution. (sign/browsermt's mirror-signing approach is cited
+by plan §4 P34-T7; its README fetch 404'd at research time — license
+re-verify before any P34 translation work; raw fetch inventory in
+evidence/P1/research-log-links.txt.)
 
 ## 5. Drift vs the pinned plan (recorded, plan NOT edited — see docs/process/plan-amendment.md)
 

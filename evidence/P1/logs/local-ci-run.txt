@@ -1,0 +1,22 @@
+== plan pin ==
+PASS: plan_pin_check
+== feature registry (plan §2 ↔ docs/registry/*) ==
+PASS: registry_lint
+== decision register (schema) ==
+PASS: dr_parse
+== decision register (Register-Change trailers) ==
+PASS: dr_parse
+== license audit (canonical MPL-2.0 + copyleft scan) ==
+PASS: license_audit
+== DCO signoff ==
+PASS: dco_check
+== threat model v0 structure ==
+PASS: check_threat_model
+== banned-vocabulary lint ==
+PASS: vocab_lint
+== CODEOWNERS / S0 path sync ==
+PASS: owners_sync
+== test suites ==
+.......................................................                  [100%]
+55 passed in 5.20s
+== ALL GOVERNANCE CHECKS PASSED ==

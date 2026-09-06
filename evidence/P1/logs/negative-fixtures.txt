@@ -1,0 +1,9 @@
+ok: license: injected GPL sample in code (rejected with expected reason)
+ok: dco: unsigned commit (rejected with expected reason)
+ok: registry: hand-edited features.yaml (rejected with expected reason)
+ok: vocab: banned words in new doc (rejected with expected reason)
+ok: register: invalid status enum (rejected with expected reason)
+ok: threat model: emptied honesty cell (T2) (rejected with expected reason)
+ok: plan pin: tampered plan copy (rejected with expected reason)
+
+ALL NEGATIVE CASES REJECTED AS EXPECTED
