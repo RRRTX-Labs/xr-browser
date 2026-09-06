@@ -1,0 +1,63 @@
+# ci/nightly-rebase-build.yml — nightly 3-OS full build + rebase job (P2-T4 def).
+#
+# CI-as-code in ci/ (Plan §13.1: no GUI pipelines). This is the DEFINITION the
+# farm runs; execution is HUMAN-GATED until the runners exist (HG-9) and branch
+# protection requires the lane (HG-10). Full Chromium builds run here (nightly
+# per rebase, Plan §13.3), NOT on every PR.
+#
+# Self-hosted runner labels: xr-linux, xr-mac, xr-win (§13.1).
+# Action pins (full SHA, 2026-09-07 — see docs/process/pinned-actions.md):
+#   actions/checkout@11d5960a326750d5838078e36cf38b85af677262  (v4.4.0)
+#   actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  (v4)
+name: nightly-rebase-build
+
+on:
+  schedule:
+    - cron: "0 3 * * *"     # daily, off-hours for the canary rebase (P3)
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: linux
+            label: xr-linux
+            argset: xr_release.gn
+          - os: linux
+            label: xr-linux
+            argset: xr_debug.gn
+          - os: mac
+            label: xr-mac
+            argset: xr_release.gn
+          - os: windows
+            label: xr-win
+            argset: xr_release.gn
+          - os: windows
+            label: xr-win
+            argset: xr_debug.gn
+    runs-on: [self-hosted, "${{ matrix.label }}"]
+    timeout-minutes: 600
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Preflight (refuse under-provisioned hosts)
+        run: ./build preflight --checkout ./chromium
+      - name: Sync pinned checkout (+ xr-core mount)
+        run: ./build sync --checkout ./chromium
+      - name: Apply branding patches (idempotent)
+        run: ./build patch apply --checkout ./chromium
+      - name: gn gen
+        run: ./build gen --checkout ./chromium --argset ${{ matrix.argset }}
+      - name: Compile //xr:xr_all
+        run: ./build compile --checkout ./chromium --argset ${{ matrix.argset }}
+      - name: Brand check (no "Google Chrome" strings, XR marks present)
+        run: ./build brand-check --checkout ./chromium
+      - name: SBOM
+        run: ./build sbom --checkout ./chromium
+      - name: Patch-budget meter (report-only this phase)
+        run: ./build budget
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: sbom-${{ matrix.os }}-${{ matrix.argset }}
+          path: chromium/out/**/sbom.json

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  com.rrrtx.xrbuilder.plist — launchd agent for the macOS self-hosted runner.
+  Provisioned on a dedicated build Mac (HG-9, live machine work — this file is
+  the definition). Load with:
+    cp com.rrrtx.xrbuilder.plist ~/Library/LaunchAgents/
+    launchctl load ~/Library/LaunchAgents/com.rrrtx.xrbuilder.plist
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.rrrtx.xrbuilder</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/xrbuilder/actions-runner/run.sh</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Users/xrbuilder/actions-runner</string>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/Users/xrbuilder/actions-runner/runner.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/xrbuilder/actions-runner/runner.err.log</string>
+</dict>
+</plist>

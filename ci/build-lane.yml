@@ -1,0 +1,65 @@
+# ci/build-lane.yml — per-PR compile lane (P2-T4 def).
+#
+# PR-tier logic (Plan §13.1): tiny (tooling/docs) = subset; UI = subset+visual;
+# S0 paths = full relevant suites + dual-review label gate; release branches =
+# everything, always. Per PR touching //xr that can affect the browser:
+# compile matrix Win/Linux debug+release, mac release (§13.3). This file is the
+# DEFINITION; execution is HUMAN-GATED (HG-9/HG-10).
+#
+# Action pins (full SHA, 2026-09-07 — docs/process/pinned-actions.md):
+#   actions/checkout@11d5960a326750d5838078e36cf38b85af677262  (v4.4.0)
+name: build-lane
+
+on:
+  pull_request:
+    paths:
+      - "buildsys/**"
+      - "DEPS"
+      - "ci/**"
+      - "xr-core/**"          # mirror hook if a combined checkout is used
+
+jobs:
+  tier-detect:
+    runs-on: [self-hosted, xr-linux]
+    outputs:
+      tier: ${{ steps.tier.outputs.tier }}
+    steps:
+      - id: tier
+        run: |
+          # tiny: tooling/docs only -> subset. S0 -> full relevant suites.
+          if git diff --name-only origin/main...HEAD | grep -qE '^(docs/|buildsys/farm/|ci/)'; then
+            echo "tier=tiny" >> "$GITHUB_OUTPUT"
+          else
+            echo "tier=s0" >> "$GITHUB_OUTPUT"
+          fi
+
+  compile-matrix:
+    needs: tier-detect
+    if: needs.tier-detect.outputs.tier == 's0'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: linux
+            label: xr-linux
+            argset: xr_release.gn
+          - os: linux
+            label: xr-linux
+            argset: xr_debug.gn
+          - os: windows
+            label: xr-win
+            argset: xr_release.gn
+          - os: windows
+            label: xr-win
+            argset: xr_debug.gn
+          - os: mac
+            label: xr-mac
+            argset: xr_release.gn
+    runs-on: [self-hosted, "${{ matrix.label }}"]
+    timeout-minutes: 600
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - run: ./build preflight --checkout ./chromium
+      - run: ./build sync --checkout ./chromium
+      - run: ./build gen --checkout ./chromium --argset ${{ matrix.argset }}
+      - run: ./build compile --checkout ./chromium --argset ${{ matrix.argset }}

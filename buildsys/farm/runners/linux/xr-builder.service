@@ -1,0 +1,24 @@
+# xr-builder.service — GitHub Actions self-hosted runner (Linux bare-metal).
+# Provisioned by provision-linux.sh. The runner is a service user with no
+# interactive login; the repo is checked out by the runner itself.
+[Unit]
+Description=XR Browser self-hosted build runner (GitHub Actions)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=xrbuilder
+WorkingDirectory=/opt/xr-runner
+ExecStart=/opt/xr-runner/run.sh
+Restart=on-failure
+RestartSec=10
+# Build jobs are CPU/disk heavy; let the runner own the machine.
+Nice=5
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/opt/xr-runner /home/xrbuilder/.ccache /home/xrbuilder/actions-runner/_work
+
+[Install]
+WantedBy=multi-user.target
