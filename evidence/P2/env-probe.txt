@@ -1,0 +1,49 @@
+# Environment probe — XR-P2 (executed 2026-09-07, Asia/Karachi)
+
+Raw probe output captured before any P2 work. This file is the source of
+truth for the evidence ladder decision (build_depth_attained).
+
+## Host
+- OS:      Debian GNU/Linux 13 (trixie), x86_64
+- Kernel:  6.1.158+ (sandbox)
+- CPU:     2 vCPU — Intel(R) Xeon(R) Processor @ 2.60GHz
+- RAM:     1.9 GiB total, ~1.5 GiB available, 0 swap
+- Disk:    25 G total, ~20 G free on /
+- Python:  3.13.14
+- git:     2.47.3
+- curl:    present
+
+## Network reachability (live, 2026-09-07)
+| Target | Result |
+|---|---|
+| github.com (xr-browser clone) | OK — cloned, HEAD 17ab59ed2… |
+| github.com/RRRTX-Labs/xr-core | GitHub API 404 → repo not public (see research-log-P2 R3) |
+| chromium.googlesource.com (depot_tools) | OK — ls-remote HEAD 81577f19a… |
+| chromium.googlesource.com (chromium/src) | REST API OK (tag→SHA verified); `git ls-remote` timed out at 20s (slow, not blocked) |
+| chromiumdash.appspot.com | OK (HTTP 200) — stable release JSON fetched |
+| cyclonedx.org | OK (HTTP 200) |
+
+## Evidence-ladder decision
+- L0 (fixtures only): feasible.
+- L1 (depot_tools obtained + gn/schema validations): feasible — depot_tools
+  is a small fetch; gn binary via CIPD is downloadable; schemas validate
+  with stdlib.
+- L2 (real pinned Chromium `sync` + `gn gen`): INFEASIBLE here.
+  Stop cause: Chromium checkout+toolchain needs on the order of 100+ GB
+  disk and 16+ GB RAM for a gen/link; this sandbox has 20 GB free disk and
+  1.9 GB RAM (documented minimums will be probed from reference docs and
+  recorded honestly in docs/build/*.md).
+- L3/L4 (real compile / full browser): INFEASIBLE here (same cause).
+
+Exact stop-cause command (recorded as the L2+ boundary, never simulated):
+
+    $ df -h /        → 25G total, 20G avail   (Chromium checkout alone ≫ 40 GB)
+    $ free -h        → 1.9 GiB total, 0 swap  (Chromium link needs ≫ 8 GiB)
+    $ nproc          → 2
+
+## Git / push capability
+- No GITHUB_TOKEN / credential.helper / ~/.git-credentials / ~/.netrc present.
+- → DoD #13 push is not possible from this environment; `evidence/P2/push-instructions.md`
+  will be produced instead. xr-browser commits are made locally with the
+  project identity (XR Platform <platform@rrrtx.example>, RFC 2606 placeholder
+  per P1 HG-2/HG-3).
