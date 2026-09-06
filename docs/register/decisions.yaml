@@ -1,0 +1,273 @@
+# XR Browser — Decision Register (machine-readable source of truth)
+#
+# Transcribed from XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md Appendix B
+# ("DECISION REGISTER (carry-forward; reopen only with written new
+# evidence)") on 2026-09-07 (Phase P1, XR-P1-T6/T9). Rationales are
+# 1-line Plan text; they are NEVER rewritten on status change (ADR-0002).
+#
+# Schema (validated by tools/dr_parse.py):
+#   id               DR-\d{2}, unique, all of DR-01..DR-30 present
+#   title            short name (from Appendix B)
+#   status           RATIFIED | OPEN | GATE-PENDING | MONITORED
+#   rationale        1-line rationale from the Plan (verbatim carry-forward)
+#   linked_lg        list of LG brief ids ([]) if none
+#   reopen_condition how this row may be reopened (verbatim where the Plan
+#                    is specific; register default otherwise)
+#   phase_anchor     phase where the decision bites / was locked
+#
+# P1 status assignments (Plan §4 P1 "Decisions locked" + orchestrator):
+#   DR-01 GATE-PENDING (funding; funded-team premise per Plan §0.2-7)
+#   DR-13 MONITORED    (CWS fragility watch, Plan §15-R5)
+#   DR-14 OPEN         (pending LG-3 written verdict, A2)
+#   DR-15 OPEN         (pending LG-2 written verdict, A3)
+#   all others RATIFIED (re-ratified at P1 with Appendix A evidence)
+#
+# CHANGE PROTECTION: any commit touching this file requires the git
+# trailer `Register-Change: ADR-<nnnn>` (enforced by
+# tools/dr_parse.py --check-trailers). Initial seeding commit cites
+# ADR-0002.
+
+schema_version: 1
+plan_sha256: a74b2aa4e8fd6f427c71cadfe932489249afe208a10413bf78c04734fd343e1b
+
+decisions:
+  - id: DR-01
+    title: "funding gate for a fork (else hardened-distribution pivot, §15-R17)"
+    status: GATE-PENDING
+    rationale: "funding gate for a fork (else hardened-distribution pivot, §15-R17)"
+    linked_lg: [LG-1]
+    reopen_condition: "staffing gate review at each SF (Plan §15-R17 early warning); regression activates the §15-R17 fallback posture"
+    phase_anchor: P1
+    note: "Plan §0.2-7: the plan assumes the funded-team premise (≥10 engineers; the brief says build the full product). Gate recorded GATE-PENDING — principals must record staffing (HG-6). Fallback if it regresses: hardened-Chromium distribution + companion processes (§15-R17)."
+
+  - id: DR-02
+    title: "Chromium + overlay repo + canary-daily/8-week-promotion cadence + ≤150 patch budget"
+    status: RATIFIED
+    rationale: "Chromium + overlay repo + canary-daily/8-week-promotion cadence + ≤150 patch budget"
+    linked_lg: [LG-1]
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5)"
+    phase_anchor: P1
+
+  - id: DR-03
+    title: "adblock-rust native in network service; lists as signed data"
+    status: RATIFIED
+    rationale: "adblock-rust native in network service; lists as signed data"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5)"
+    phase_anchor: P11
+
+  - id: DR-04
+    title: "no GPL linked ever"
+    status: RATIFIED
+    rationale: "no GPL linked ever"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5); counsel sign-off required (license law)"
+    phase_anchor: P1
+
+  - id: DR-05
+    title: "MPL-2.0 for //xr"
+    status: RATIFIED
+    rationale: "MPL-2.0 for //xr"
+    linked_lg: [LG-1]
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5); counsel sign-off required (license law)"
+    phase_anchor: P1
+
+  - id: DR-06
+    title: "Identity-first vocabulary (Profile/Identity/Workspace/Ephemeral/Trust exact meanings; 'container' alias-only)"
+    status: RATIFIED
+    rationale: "Identity-first vocabulary (Profile/Identity/Workspace/Ephemeral/Trust exact meanings; 'container' alias-only)"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5)"
+    phase_anchor: P1
+
+  - id: DR-07
+    title: "one policy resolver, total & deny-on-unknown"
+    status: RATIFIED
+    rationale: "one policy resolver, total & deny-on-unknown"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5)"
+    phase_anchor: P6
+
+  - id: DR-08
+    title: "three-position dial; Tor/Disposable = identities"
+    status: RATIFIED
+    rationale: "three-position dial; Tor/Disposable = identities"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5)"
+    phase_anchor: P14
+
+  - id: DR-09
+    title: "Tor networking ≠ anonymity, non-dismissible disclosure"
+    status: RATIFIED
+    rationale: "Tor networking ≠ anonymity, non-dismissible disclosure"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5)"
+    phase_anchor: P31
+
+  - id: DR-10
+    title: "no operated VPN/sync/store/AV/threat-intel"
+    status: RATIFIED
+    rationale: "no operated VPN/sync/store/AV/threat-intel"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5)"
+    phase_anchor: P1
+
+  - id: DR-11
+    title: "vault: sandboxed proc, KDBX-4 (XR-owned writer), zero custom crypto, published external audit as hard gate"
+    status: RATIFIED
+    rationale: "vault: sandboxed proc, KDBX-4 (XR-owned writer), zero custom crypto, published external audit as hard gate"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5); the audit gate itself blocks stable-credential storage (Plan §1.7)"
+    phase_anchor: P28
+
+  - id: DR-12
+    title: "no AI assistant/chat/agent/LLM ever (sole R7 translation exception)"
+    status: RATIFIED
+    rationale: "no AI assistant/chat/agent/LLM ever (sole R7 translation exception)"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5)"
+    phase_anchor: P1
+
+  - id: DR-13
+    title: "CWS best-effort + warm .crx/XR-Verified fallback"
+    status: MONITORED
+    rationale: "CWS best-effort + warm .crx/XR-Verified fallback"
+    linked_lg: []
+    reopen_condition: "CWS fragility monitoring (Plan §15-R5 early warning: P21-T7 monitor failures); the sideload + XR Verified fallback is kept warm from P1"
+    phase_anchor: P21
+
+  - id: DR-14
+    title: "Widevine = user-consented download if legally clear; else disclosed absence"
+    status: OPEN
+    rationale: "Widevine = user-consented download if legally clear; else disclosed absence"
+    linked_lg: [LG-3]
+    reopen_condition: "written counsel verdict (LG-3) before P10 exit (assumption A2); per-platform table"
+    phase_anchor: P10
+
+  - id: DR-15
+    title: "Safe Browsing kept (Local-List + OHTTP; Enhanced never) per LG-2"
+    status: OPEN
+    rationale: "Safe Browsing kept (Local-List + OHTTP; Enhanced never) per LG-2"
+    linked_lg: [LG-2]
+    reopen_condition: "written counsel verdict (LG-2) before P16 (assumption A3); edition split (consumer vs enterprise) is the open question"
+    phase_anchor: P16
+
+  - id: DR-16
+    title: "no general extractor/DRM circumvention ever; direct-media only"
+    status: RATIFIED
+    rationale: "no general extractor/DRM circumvention ever; direct-media only"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5); contribution-policy ban is structural (Plan §12.7-adjacent, risk §15-R15)"
+    phase_anchor: P26
+
+  - id: DR-17
+    title: "no MV2 revival (upstream machinery deleted 2026-07-28; annual evidence re-check)"
+    status: RATIFIED
+    rationale: "no MV2 revival (upstream machinery deleted 2026-07-28; annual evidence re-check)"
+    linked_lg: []
+    reopen_condition: "per-train/annual evidence re-check (Plan §12.6: upstream re-introduces an MV2-compatible seam AND demand persists AND uBO-class need resurfaces — all three — it's a registry amendment, not code)"
+    phase_anchor: P21
+
+  - id: DR-18
+    title: "no scores, no intent claims, no anonymity vocabulary (machine-enforced)"
+    status: RATIFIED
+    rationale: "no scores, no intent claims, no anonymity vocabulary (machine-enforced)"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5)"
+    phase_anchor: P1
+
+  - id: DR-19
+    title: "Attention Budget enforced in code"
+    status: RATIFIED
+    rationale: "Attention Budget enforced in code"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5)"
+    phase_anchor: P8
+
+  - id: DR-20
+    title: "network helpers = local SOCKS endpoints, never system tunnels/TUN/root"
+    status: RATIFIED
+    rationale: "network helpers = local SOCKS endpoints, never system tunnels/TUN/root"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5); Plan: 'do not let anyone improve it into a system tunnel' (R4)"
+    phase_anchor: P32
+
+  - id: DR-21
+    title: "reproducibility = provenance ladder, bit-identical never date-promise"
+    status: RATIFIED
+    rationale: "reproducibility = provenance ladder, bit-identical never date-promise"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5); annual review (Plan §13.7 R4 rung)"
+    phase_anchor: P10
+
+  - id: DR-22
+    title: "no default telemetry / no feeds / no ads / no tokens"
+    status: RATIFIED
+    rationale: "no default telemetry / no feeds / no ads / no tokens"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5); Plan §2.9: 'permanently'"
+    phase_anchor: P1
+
+  - id: DR-23
+    title: "iOS out (Android = register, funded separately)"
+    status: RATIFIED
+    rationale: "iOS out (Android = register, funded separately)"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5); Android gated by decision DR-23a at P39 review"
+    phase_anchor: P39
+
+  - id: DR-24
+    title: "Command Registry before features"
+    status: RATIFIED
+    rationale: "Command Registry before features"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5)"
+    phase_anchor: P7
+
+  - id: DR-25
+    title: "Identity = per-WebContents StoragePartitionConfig seam (primary) w/ BrowserContext fallback by ADR-0042"
+    status: RATIFIED
+    rationale: "Identity = per-WebContents StoragePartitionConfig seam (primary) w/ BrowserContext fallback by ADR-0042"
+    linked_lg: []
+    reopen_condition: "P4 spike outcome (ADR-0042): primary vs pre-designed fallback per Plan §4 P4-T8/T9"
+    phase_anchor: P4
+
+  - id: DR-26
+    title: "shipping cadence decoupled from Chrome's 2-week train (8-week promotions + 72h security line)"
+    status: RATIFIED
+    rationale: "shipping cadence decoupled from Chrome's 2-week train (8-week promotions + 72h security line)"
+    linked_lg: [LG-1]
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5); cadence facts re-verified per promotion (Plan §12.1)"
+    phase_anchor: P3
+
+  - id: DR-27
+    title: "Tor engine swappable behind xr-tord IPC; Arti default, C-tor fallback"
+    status: RATIFIED
+    rationale: "Tor engine swappable behind xr-tord IPC; Arti default, C-tor fallback"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5); A4 verification at P31 spike (bridge/transport completeness)"
+    phase_anchor: P31
+
+  - id: DR-28
+    title: "wireguard-go via local-SOCKS helper (boringtun rejected on maintenance evidence)"
+    status: RATIFIED
+    rationale: "wireguard-go via local-SOCKS helper (boringtun rejected on maintenance evidence)"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5); boringtun reconsideration only if its restructuring completes (eval: docs/dependencies/boringtun-REJECTED.yaml)"
+    phase_anchor: P32
+
+  - id: DR-29
+    title: "SB = v5 local-list + OHTTP; no XR-operated proxy"
+    status: RATIFIED
+    rationale: "SB = v5 local-list + OHTTP; no XR-operated proxy"
+    linked_lg: [LG-2]
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5); LG-2 verdict may shape the mode, not the no-operated-proxy rule"
+    phase_anchor: P16
+
+  - id: DR-30
+    title: "vault KDBX writer is XR-owned behind a golden-fidelity corpus (keepass-rs write path experimental upstream)"
+    status: RATIFIED
+    rationale: "vault KDBX writer is XR-owned behind a golden-fidelity corpus (keepass-rs write path experimental upstream)"
+    linked_lg: []
+    reopen_condition: "written new evidence + recorded reversal (Appendix B header; ADR-0002 §5); e.g. upstream write path becomes non-experimental AND corpus-verified (eval: docs/dependencies/keepass-rs.yaml)"
+    phase_anchor: P28
