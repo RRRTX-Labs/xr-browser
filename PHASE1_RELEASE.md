@@ -14,7 +14,7 @@
 | | xr-browser (meta) | xr-core (product) |
 |---|---|---|
 | Branch | `main` | `main` |
-| Commits at packaging | 17 (16 listed in §2 + this file's commit) | 3 (all listed in §2) |
+| Commits at packaging | 18 (16 listed in §2 + this file's commit + the final fixup commit) | 3 (all listed in §2) |
 | License | MPL-2.0 (canonical verbatim, sha256 `3f3d9e00…9b9d04`) | same file, same hash |
 | Working tree | clean (`git status` empty) | clean |
 | Untracked/temp files | none | none |
@@ -51,7 +51,8 @@
 | 14 | `aa7a39934fb80fa363d6a1978271b9041fd620c5` | P1 evidence bundle + final repo docs (XR-P1-T14) |
 | 15 | `2aada3652fcd91df85ea29f2da341794dfa0ac48` | final evidence capture + repo-map/README/CONTRIBUTING updates (XR-P1-T14) |
 | 16 | `885d13191367e8940a632114f6a298faf91a8fb1` | brand correction to RRRTX Labs + plan v2 re-pin (release prep) |
-| 17 | *(this file's commit — HEAD at packaging; `git log -1` inside the ZIP)* | PHASE1_RELEASE.md (release prep) |
+| 17 | *(commit adding this file)* | PHASE1_RELEASE.md (release prep) |
+| 18 | *(final commit — HEAD at packaging; `git log -1` inside the ZIP)* | release doc fixup: old-brand string kept out of the release note (audit trail stays in ADR-0003) |
 
 **xr-core** (oldest → newest):
 
@@ -91,11 +92,13 @@ register 30 rows + status split, threat-model SHA, 12 evals, MPL-2.0 hashes —
 statuses are **26** RATIFIED (the report's "27" was an arithmetic slip;
 26+2 OPEN+1 GATE-PENDING+1 MONITORED = 30).
 
-**Brand scan** (`grep -rni "rrrtx systems"`, both repos, excl. `.git`):
-**0 branding occurrences remain.** The string survives only as an audit
-reference inside the amendment record itself (ADR-0003 title/body, research
-log §8, `evidence.json` `plan_repin.change`) — a record of the correction
-that names the old token, by design; removing it would falsify the audit trail.
+**Brand scan** (case-insensitive grep for the old brand string, both
+repos, excl. `.git`): **0 branding occurrences remain.** The old string
+survives *only* inside the amendment's own audit trail — ADR-0003
+(title/body), research-log §8, and `evidence.json`
+`plan_repin.change` — where a record of the correction must quote the old
+token by design; removing it there would falsify the audit trail. Every
+other file, including this release note, is free of it.
 
 **ZIP reproducibility:** both ZIPs extracted to a clean directory; git
 history intact (`git log`, `git status` clean); the extracted xr-browser
@@ -105,7 +108,7 @@ re-ran the complete gate suite green (55/55 + 7/7 negatives).
 
 | # | Fix |
 |---|---|
-| F1 | **Brand correction:** "RRRTX Systems" → **RRRTX Labs** in README, SECURITY.md title, and plan line 3 (plan v1 was internally inconsistent: line 8 already said "RRRTX Labs"). Executed per the amendment path as **plan v2** (one token; no lines added/removed, so all line-number anchors stayed valid) with a full re-pin in one commit — **ADR-0003** records both digests. |
+| F1 | **Brand correction:** the stale old company name (still used on plan v1 line 3 while line 8 of the same file already used the official brand) was corrected to **RRRTX Labs** everywhere it appears as project branding: README, SECURITY.md title, and the plan (via v2). Plan v1 was internally inconsistent about the brand; v2 resolves it. Executed per the amendment path as **plan v2** (one token; no lines added/removed, so all line-number anchors stayed valid) with a full re-pin in one commit — **ADR-0003** records both digests and the exact token. |
 | F2 | SECURITY.md + human-gates HG-3 now reference the real organization `github.com/RRRTX-Labs` (status still PENDING-OPS: repos not yet pushed, GHSA not yet enabled). |
 | F3 | Removed `tools/tests/__pycache__` build junk (was gitignored, removed from disk). |
 | F4 | Corrected register-status count in the release record (26 RATIFIED, see §3). |
