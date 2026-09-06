@@ -1,0 +1,2179 @@
+schema_version: 1
+source: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+plan_sha256: a74b2aa4e8fd6f427c71cadfe932489249afe208a10413bf78c04734fd343e1b
+plan_sections: 2.1–2.9
+generated_by: tools/gen_registry.py
+note: 'GENERATED FILE — do not edit by hand. Source: pinned Master Plan (see plan_sha256). Regenerate with tools/gen_registry.py --write after an approved plan amendment (docs/process/plan-amendment.md); CI verifies with tools/registry_lint.py.'
+features:
+- id: F-001
+  section: '2.1'
+  plan_line: 300
+  feature: Chromium/Blink/V8 engine via overlay repo
+  decision_raw: BUILD(overlay)
+  decision_class: BUILD
+  status: active
+  owner: A/infra
+  dep_raw: P2,P3
+  depends_on:
+  - P2
+  - P3
+  phases_raw: P1–P39
+  phase_tokens:
+  - P1
+  - P39
+  criticality: P0
+  security_tier: S0
+  risk: rebase treadmill; seam loss
+  proof: full 3-OS builds per patchset; WPT parity ≥ upstream−0.5% tracked daily; CVE SLA metrics published
+- id: F-002
+  section: '2.1'
+  plan_line: 301
+  feature: Modern web compat posture (never weaken upstream guarantees)
+  decision_raw: LAW
+  decision_class: LAW
+  status: active
+  owner: A
+  dep_raw: —
+  depends_on: []
+  phases_raw: all
+  phase_tokens: []
+  criticality: P0
+  security_tier: S0
+  risk: regressions from patches
+  proof: compat corpus (top-1k + hard-app list) per release; site-isolation assumption tests
+- id: F-003
+  section: '2.1'
+  plan_line: 302
+  feature: De-Googling (RLZ/UMA/GAIA/GCM/field trials; strip Gemini surfaces)
+  decision_raw: ADAPT
+  decision_class: ADAPT
+  status: active
+  owner: A
+  dep_raw: P2
+  depends_on:
+  - P2
+  phases_raw: P1,P6
+  phase_tokens:
+  - P1
+  - P6
+  criticality: P0
+  security_tier: S2
+  risk: breakage of update/components paths
+  proof: 'build-manifest audit: zero Google endpoints except disclosed list (§9.13)'
+- id: F-004
+  section: '2.1'
+  plan_line: 303
+  feature: XR branding, icon set, `xr://` scheme surfaces
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: E
+  dep_raw: P7
+  depends_on:
+  - P7
+  phases_raw: P6
+  phase_tokens:
+  - P6
+  criticality: P1
+  security_tier: null
+  risk: trivial churn
+  proof: visual + install tests
+- id: F-005
+  section: '2.1'
+  plan_line: 304
+  feature: Windows 10+/macOS 12+/Linux desktop
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: A
+  dep_raw: P2
+  depends_on:
+  - P2
+  phases_raw: P10
+  phase_tokens:
+  - P10
+  criticality: P0
+  security_tier: null
+  risk: platform drift
+  proof: per-OS smoke matrix green
+- id: F-006
+  section: '2.1'
+  plan_line: 305
+  feature: Android
+  decision_raw: DEFER
+  decision_class: DEFER
+  status: deferred
+  owner: (new track)
+  dep_raw: full arch stable
+  depends_on: []
+  phases_raw: P39+
+  phase_tokens:
+  - P39
+  criticality: P2
+  security_tier: null
+  risk: second-platform team cost
+  proof: gated by decision DR-23a at P39 review
+- id: F-007
+  section: '2.1'
+  plan_line: 306
+  feature: iOS
+  decision_raw: '**DROP**'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: WebKit mandate kills the moat
+  proof: null
+- id: F-008
+  section: '2.2'
+  plan_line: 312
+  feature: Native network ad/tracker blocking (`adblock-rust` in network service)
+  decision_raw: INTEGRATE+BUILD
+  decision_class: BUILD
+  status: active
+  owner: D
+  dep_raw: P4,P5,P10
+  depends_on:
+  - P4
+  - P5
+  - P10
+  phases_raw: P11
+  phase_tokens:
+  - P11
+  criticality: P0
+  security_tier: S0
+  risk: list-format drift; perf
+  proof: uBO conformance corpus ±2% on 1,000-site benchmark; p99 ≤1 ms; memory ≤80 MB
+- id: F-009
+  section: '2.2'
+  plan_line: 313
+  feature: Cosmetic filtering + scriptlets (document-start Blink seam)
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: D
+  dep_raw: P11
+  depends_on:
+  - P11
+  phases_raw: P12
+  phase_tokens:
+  - P12
+  criticality: P0
+  security_tier: S0
+  risk: layout breakage; hook death
+  proof: 0 corruption on compat corpus; degrade-safe kill-switch test
+- id: F-010
+  section: '2.2'
+  plan_line: 314
+  feature: Filter lists as signed runtime data (EasyList, EasyPrivacy, uAssets, Peter Lowe, AdGuard)
+  decision_raw: INTEGRATE(data)
+  decision_class: INTEGRATE
+  status: active
+  owner: D
+  dep_raw: P10 update stack
+  depends_on:
+  - P10
+  phases_raw: P11
+  phase_tokens:
+  - P11
+  criticality: P0
+  security_tier: S0
+  risk: list channel = attack surface
+  proof: signature pin/rotation drill; fail-closed LKG test; GPL-as-data license audit green
+- id: F-011
+  section: '2.2'
+  plan_line: 315
+  feature: Per-site Shields-down + scoped exceptions (once/session/7d/Settings-only)
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: D
+  dep_raw: P6 resolver
+  depends_on:
+  - P6
+  phases_raw: P13
+  phase_tokens:
+  - P13
+  criticality: P0
+  security_tier: S1
+  risk: exception sprawl
+  proof: expiry tests; settings-only-permanent assertion
+- id: F-012
+  section: '2.2'
+  plan_line: 316
+  feature: Breakage-report pipeline (user-initiated, redacted, public tracker)
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: E+D
+  dep_raw: P13
+  depends_on:
+  - P13
+  phases_raw: P13
+  phase_tokens:
+  - P13
+  criticality: P1
+  security_tier: S2
+  risk: privacy of reports
+  proof: report contains zero page content by schema test
+- id: F-013
+  section: '2.2'
+  plan_line: 317
+  feature: Tracker Observatory (per-tab ring 2k + categorization by list provenance)
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: D+E
+  dep_raw: P11
+  depends_on:
+  - P11
+  phases_raw: P13
+  phase_tokens:
+  - P13
+  criticality: P0
+  security_tier: S1
+  risk: OOM via unbounded log (real footgun)
+  proof: bounded-ring soak; categorization accuracy spot-audit
+- id: F-014
+  section: '2.2'
+  plan_line: 318
+  feature: '"Why was this blocked?" explainers (rule + list provenance)'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: D+E
+  dep_raw: P11
+  depends_on:
+  - P11
+  phases_raw: P13
+  phase_tokens:
+  - P13
+  criticality: P0
+  security_tier: S1
+  risk: mislabeling
+  proof: 100% events carry rule-id+list; fuzz no crash
+- id: F-015
+  section: '2.2'
+  plan_line: 319
+  feature: 'Fingerprint farbling: canvas/WebGL/AudioContext per-eTLD+1-per-session'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: D
+  dep_raw: P4 seam
+  depends_on:
+  - P4
+  phases_raw: P20
+  phase_tokens:
+  - P20
+  criticality: P0
+  security_tier: S0
+  risk: site breakage; perf
+  proof: Brave-style determinism tests; compat diff ≤ baseline+0.5%
+- id: F-016
+  section: '2.2'
+  plan_line: 320
+  feature: '`deviceMemory`/`hardwareConcurrency` clamps, font enumeration limits, navigator/screen normalization'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: D
+  dep_raw: P20
+  depends_on:
+  - P20
+  phases_raw: P20
+  phase_tokens:
+  - P20
+  criticality: P1
+  security_tier: S0
+  risk: detection of clamps
+  proof: AmIUnique-family regression suite (expect improvement, ban claims)
+- id: F-017
+  section: '2.2'
+  plan_line: 321
+  feature: Letterboxing
+  decision_raw: BUILD (Fortress opt-in)
+  decision_class: BUILD
+  status: active
+  owner: B
+  dep_raw: P20
+  depends_on:
+  - P20
+  phases_raw: P35
+  phase_tokens:
+  - P35
+  criticality: P2
+  security_tier: S1
+  risk: UX damage
+  proof: default-off assertion; Fortress-only test
+- id: F-018
+  section: '2.2'
+  plan_line: 322
+  feature: Third-party cookie blocking, storage partitioning, CHIPS, referrer trimming
+  decision_raw: ADAPT (upstream default-on)
+  decision_class: ADAPT
+  status: active
+  owner: B
+  dep_raw: —
+  depends_on: []
+  phases_raw: P16
+  phase_tokens:
+  - P16
+  criticality: P0
+  security_tier: S0
+  risk: none — inherit
+  proof: upstream defaults asserted; no reimplementation
+- id: F-019
+  section: '2.2'
+  plan_line: 323
+  feature: HTTPS-First / always-upgrade with styled interstitial
+  decision_raw: ADAPT
+  decision_class: ADAPT
+  status: active
+  owner: D+E
+  dep_raw: —
+  depends_on: []
+  phases_raw: P16
+  phase_tokens:
+  - P16
+  criticality: P0
+  security_tier: S1
+  risk: downgrade UX
+  proof: per-trust policy tests
+- id: F-020
+  section: '2.2'
+  plan_line: 324
+  feature: 'Malicious/phishing protection: SB v5 Local-List + OHTTP relay; Real-Time opt-in; Enhanced never'
+  decision_raw: ADAPT
+  decision_class: ADAPT
+  status: active
+  owner: D
+  dep_raw: legal LG-2
+  depends_on: []
+  phases_raw: P16
+  phase_tokens:
+  - P16
+  criticality: P0
+  security_tier: S0
+  risk: license terms (non-commercial)
+  proof: protocol mode matrix + no-phone-home packet capture; legal sign-off artifact
+- id: F-021
+  section: '2.2'
+  plan_line: 325
+  feature: Punycode/IDN homograph caution + eTLD+1 emphasis
+  decision_raw: ADAPT+BUILD
+  decision_class: BUILD
+  status: active
+  owner: E
+  dep_raw: P7
+  depends_on:
+  - P7
+  phases_raw: P16
+  phase_tokens:
+  - P16
+  criticality: P0
+  security_tier: S0
+  risk: subtle bypasses
+  proof: homograph suite incl. mixed-script vectors
+- id: F-022
+  section: '2.3'
+  plan_line: 331
+  feature: Identity (the moat) = StoragePartitionConfig seam + overlay stores
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: B
+  dep_raw: '**P4 spike**, P5 freeze'
+  depends_on:
+  - P4
+  - P5
+  phases_raw: P14
+  phase_tokens:
+  - P14
+  criticality: P0
+  security_tier: S0
+  risk: papercuts (downloads/print/DevTools/omnibox); upstream seam change
+  proof: isolation matrix 100% or disclosed §1.13 row; mixed-tab windows E2E; per-identity NSContext binding test
+- id: F-023
+  section: '2.3'
+  plan_line: 332
+  feature: Identity templates (Personal/Work/Research/Banking/Shopping/Disposable/Tor as *tunable starting points*, user-named)
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: B
+  dep_raw: P14
+  depends_on:
+  - P14
+  phases_raw: P14
+  phase_tokens:
+  - P14
+  criticality: P0
+  security_tier: S1
+  risk: preset zoo ≈ false security
+  proof: creation ceremony shows defaults applied (transparency copy)
+- id: F-024
+  section: '2.3'
+  plan_line: 333
+  feature: '"Containers" as separate user concept'
+  decision_raw: '**DROP** (merged into Identity; word resolves in palette)'
+  decision_class: DROP
+  status: dropped
+  owner: F
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: vocabulary confusion
+  proof: naming lint in docs
+- id: F-025
+  section: '2.3'
+  plan_line: 334
+  feature: Site→identity assignment rules; never silent switch
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: B
+  dep_raw: P14
+  depends_on:
+  - P14
+  phases_raw: P17
+  phase_tokens:
+  - P17
+  criticality: P0
+  security_tier: S1
+  risk: wrong-identity logins
+  proof: suggestion-only UX test; move=destructive+confirm
+- id: F-026
+  section: '2.3'
+  plan_line: 335
+  feature: Disposable (ephemeral) identities — plural, simultaneous, in-memory
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: B
+  dep_raw: P14
+  depends_on:
+  - P14
+  phases_raw: P14
+  phase_tokens:
+  - P14
+  criticality: P0
+  security_tier: S0
+  risk: disk residue
+  proof: FS-diff zero-bytes incl. crash-kill
+- id: F-027
+  section: '2.3'
+  plan_line: 336
+  feature: Mixed identities in one window
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: B
+  dep_raw: P4 spike result
+  depends_on:
+  - P4
+  phases_raw: P14(v1)/P34(split)
+  phase_tokens:
+  - P14
+  - P34
+  criticality: P0
+  security_tier: S0
+  risk: chrome confusion
+  proof: per-pane persistent identity chip visual test
+- id: F-028
+  section: '2.3'
+  plan_line: 337
+  feature: 'Per-identity `NetworkContext`: DNS + proxy + route binding'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: D
+  dep_raw: P14,P10
+  depends_on:
+  - P14
+  - P10
+  phases_raw: P17,P18
+  phase_tokens:
+  - P17
+  - P18
+  criticality: P0
+  security_tier: S0
+  risk: shared-state leaks
+  proof: xr-leaktest per route, published
+- id: F-029
+  section: '2.3'
+  plan_line: 338
+  feature: Fortress-promoted identity (dedicated OTR Profile)
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: B
+  dep_raw: P14
+  depends_on:
+  - P14
+  phases_raw: P35
+  phase_tokens:
+  - P35
+  criticality: P2
+  security_tier: S0
+  risk: profile mgmt complexity
+  proof: promotion ceremony + rollback test
+- id: F-030
+  section: '2.3'
+  plan_line: 339
+  feature: Preset identity zoo as *security boundary*
+  decision_raw: '**DROP** → templates'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: '"Shopping isn''t a threat model"'
+  proof: null
+- id: F-031
+  section: '2.3'
+  plan_line: 340
+  feature: Profiles (OS-persona)
+  decision_raw: ADAPT
+  decision_class: ADAPT
+  status: active
+  owner: B
+  dep_raw: —
+  depends_on: []
+  phases_raw: P14
+  phase_tokens:
+  - P14
+  criticality: P1
+  security_tier: null
+  risk: de-emphasize but keep
+  proof: import/export per profile
+- id: F-032
+  section: '2.3'
+  plan_line: 341
+  feature: Adaptive Trust = one resolver; dial Standard/Shield/Fortress (3 positions)
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: B
+  dep_raw: P6
+  depends_on:
+  - P6
+  phases_raw: P14
+  phase_tokens:
+  - P14
+  criticality: P0
+  security_tier: S0
+  risk: unreadable if 5 modes; combinatorial QA
+  proof: resolver exhaustive unit matrix; usability gate §17 (users state mode unaided)
+- id: F-033
+  section: '2.3'
+  plan_line: 342
+  feature: Tor/Disposable as dial positions
+  decision_raw: '**DROP** — they are identities'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: mode explosion
+  proof: IA test
+- id: F-034
+  section: '2.3'
+  plan_line: 343
+  feature: Per-identity partitioning of DNS cache/HSTS/TLS-state where shared upstream
+  decision_raw: BUILD (Fortress-promoted; disclosed elsewhere)
+  decision_class: BUILD
+  status: active
+  owner: D
+  dep_raw: P35
+  depends_on:
+  - P35
+  phases_raw: P35
+  phase_tokens:
+  - P35
+  criticality: P2
+  security_tier: S0
+  risk: hard; partial
+  proof: leak matrix documents exceptions or closes them
+- id: F-035
+  section: '2.3'
+  plan_line: 344
+  feature: Workspaces (tabs+layout, never logins)
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: F
+  dep_raw: P22
+  depends_on:
+  - P22
+  phases_raw: P23
+  phase_tokens:
+  - P23
+  criticality: P1
+  security_tier: S3
+  risk: scope creep
+  proof: hidden-until-second-workspace assertion
+- id: F-036
+  section: '2.3'
+  plan_line: 345
+  feature: '"Workspaces as security boundary" claims'
+  decision_raw: '**DROP** (organizational only)'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: null
+  proof: copy review
+- id: F-037
+  section: '2.4'
+  plan_line: 351
+  feature: 'Permission Firewall: per-identity defaults + one-time grants + audit + revoke-all'
+  decision_raw: ADAPT(HCMS+PermissionManager)+BUILD(overlay, ledger)
+  decision_class: BUILD
+  status: active
+  owner: B
+  dep_raw: P6,P14
+  depends_on:
+  - P6
+  - P14
+  phases_raw: P15
+  phase_tokens:
+  - P15
+  criticality: P0
+  security_tier: S0
+  risk: grants leaking across identities
+  proof: grant state-machine tests incl. expiry; ledger row per grant
+- id: F-038
+  section: '2.4'
+  plan_line: 352
+  feature: Runtime auditing of permission *usage*
+  decision_raw: '**DROP**'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: needs WebAPI hooks across Blink; low yield
+  proof: — (re-check annually, evidence required)
+- id: F-039
+  section: '2.4'
+  plan_line: 353
+  feature: Extension support (MV3)
+  decision_raw: ADAPT (upstream)
+  decision_class: ADAPT
+  status: active
+  owner: D
+  dep_raw: P3
+  depends_on:
+  - P3
+  phases_raw: P21
+  phase_tokens:
+  - P21
+  criticality: P0
+  security_tier: S0
+  risk: CWS fragility for forks
+  proof: top-100 CWS install/run/uninstall corpus
+- id: F-040
+  section: '2.4'
+  plan_line: 354
+  feature: 'Extension Guard: static manifest review → A–D grade, outcomes-as-copy'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: D
+  dep_raw: P21
+  depends_on:
+  - P21
+  phases_raw: P21
+  phase_tokens:
+  - P21
+  criticality: P0
+  security_tier: S1
+  risk: false precision
+  proof: 'copy checklist: zero intent claims; grade reproducibility test'
+- id: F-041
+  section: '2.4'
+  plan_line: 355
+  feature: Per-identity extension availability ("Banking runs zero extensions")
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: D
+  dep_raw: P14
+  depends_on:
+  - P14
+  phases_raw: P21
+  phase_tokens:
+  - P21
+  criticality: P0
+  security_tier: S0
+  risk: enforcement gaps
+  proof: dispatch-chokepoint test from disallowed identity = denial + ledger row
+- id: F-042
+  section: '2.4'
+  plan_line: 356
+  feature: '`nativeMessaging` / `debugger` deny-by-default, high-friction opt-in'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: D
+  dep_raw: P21
+  depends_on:
+  - P21
+  phases_raw: P21
+  phase_tokens:
+  - P21
+  criticality: P0
+  security_tier: S0
+  risk: friction fatigue
+  proof: default-denied asserted; typed-confirmation flow
+- id: F-043
+  section: '2.4'
+  plan_line: 357
+  feature: 'Egress observation: extension requests through Shield; undeclared-host log/deny'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: D
+  dep_raw: P11
+  depends_on:
+  - P11
+  phases_raw: P34
+  phase_tokens:
+  - P34
+  criticality: P1
+  security_tier: S1
+  risk: proxy/cert noise
+  proof: endpoint-vs-declared diff tests
+- id: F-044
+  section: '2.4'
+  plan_line: 358
+  feature: Update-time permission diff alerts
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: D
+  dep_raw: P21
+  depends_on:
+  - P21
+  phases_raw: P34
+  phase_tokens:
+  - P34
+  criticality: P1
+  security_tier: S1
+  risk: alert storms
+  proof: Attention Budget ceiling test
+- id: F-045
+  section: '2.4'
+  plan_line: 359
+  feature: Behavioural "this extension is tracking you" verdicts
+  decision_raw: '**DROP — banned**'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: unfalsifiable
+  proof: copy gate
+- id: F-046
+  section: '2.4'
+  plan_line: 360
+  feature: MV2 compatibility layer
+  decision_raw: '**DROP** (upstream deleted machinery 2026-07-28)'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: unbounded fork cost
+  proof: re-check task per §12.6
+- id: F-047
+  section: '2.4'
+  plan_line: 361
+  feature: Own extension store
+  decision_raw: '**DROP**'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: ops company
+  proof: null
+- id: F-048
+  section: '2.4'
+  plan_line: 362
+  feature: Sideload `.crx`/unpacked + signed "XR Verified" metadata catalog
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: D
+  dep_raw: P21
+  depends_on:
+  - P21
+  phases_raw: P21
+  phase_tokens:
+  - P21
+  criticality: P1
+  security_tier: S1
+  risk: metadata mirror licensing
+  proof: signature verify; catalog staleness SLA
+- id: F-049
+  section: '2.4'
+  plan_line: 363
+  feature: 'XR Panel (5 tabs: Site · Network · Extensions · Downloads · Activity) — replaces the separate Security/Performance/Observatory/Firewall dashboards of the source concepts'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: E
+  dep_raw: P7,P11,P13→P34
+  depends_on:
+  - P7
+  - P11
+  - P13
+  - P34
+  phases_raw: P13
+  phase_tokens:
+  - P13
+  criticality: P0
+  security_tier: S1
+  risk: dashboard sprawl creeping back
+  proof: visual+perf budgets; parity bot checks subsystem-tab registration; every row links evidence
+- id: F-050
+  section: '2.5'
+  plan_line: 369
+  feature: 'Launch credentials: hardened upstream password manager, OS-keystore, identity-scoped'
+  decision_raw: ADAPT
+  decision_class: ADAPT
+  status: active
+  owner: C
+  dep_raw: P14
+  depends_on:
+  - P14
+  phases_raw: P27
+  phase_tokens:
+  - P27
+  criticality: P0
+  security_tier: S0
+  risk: keystore fragmentation (Linux)
+  proof: per-OS keystore tests + documented fallback
+- id: F-051
+  section: '2.5'
+  plan_line: 370
+  feature: Password generator
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: C
+  dep_raw: P27
+  depends_on:
+  - P27
+  phases_raw: P27
+  phase_tokens:
+  - P27
+  criticality: P1
+  security_tier: S1
+  risk: weak defaults
+  proof: entropy config tests
+- id: F-052
+  section: '2.5'
+  plan_line: 371
+  feature: 'XR Vault core: KDBX-4.1 in sandboxed `xr-vaultd`'
+  decision_raw: BUILD(+INTEGRATE crypto)
+  decision_class: BUILD
+  status: active
+  owner: C
+  dep_raw: P5 contract, P28
+  depends_on:
+  - P5
+  - P28
+  phases_raw: P28–P29
+  phase_tokens:
+  - P28
+  - P29
+  criticality: P0
+  security_tier: S0
+  risk: data loss (lossy writes — keepass-rs write path experimental **[VERIFIED]**)
+  proof: golden-corpus round-trip matrix vs KeePassXC/KeePass; §11.5 full suite
+- id: F-053
+  section: '2.5'
+  plan_line: 372
+  feature: Zero custom primitives (BoringSSL/libsodium/RustCrypto)
+  decision_raw: LAW
+  decision_class: LAW
+  status: active
+  owner: C
+  dep_raw: —
+  depends_on: []
+  phases_raw: P28
+  phase_tokens:
+  - P28
+  criticality: P0
+  security_tier: S0
+  risk: null
+  proof: dep audit + code review checklist
+- id: F-054
+  section: '2.5'
+  plan_line: 373
+  feature: TOTP (RFC 6238, auto-clear copy)
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: C
+  dep_raw: P29
+  depends_on:
+  - P29
+  phases_raw: P29
+  phase_tokens:
+  - P29
+  criticality: P1
+  security_tier: S1
+  risk: clock drift
+  proof: vectors + drift tests
+- id: F-055
+  section: '2.5'
+  plan_line: 374
+  feature: Secure notes
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: C
+  dep_raw: P29
+  depends_on:
+  - P29
+  phases_raw: P30
+  phase_tokens:
+  - P30
+  criticality: P1
+  security_tier: S1
+  risk: null
+  proof: export/import parity
+- id: F-056
+  section: '2.5'
+  plan_line: 375
+  feature: Autofill with visible cross-origin + cross-identity guards
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: C
+  dep_raw: P27
+  depends_on:
+  - P27
+  phases_raw: P29
+  phase_tokens:
+  - P29
+  criticality: P0
+  security_tier: S0
+  risk: the CVE generator
+  proof: full §11.5 attack suite (iframe, redress, clickjacking, homograph, about:blank)
+- id: F-057
+  section: '2.5'
+  plan_line: 376
+  feature: Passkeys — USE platform/hybrid (Chromium WebAuthn)
+  decision_raw: ADAPT
+  decision_class: ADAPT
+  status: active
+  owner: C
+  dep_raw: —
+  depends_on: []
+  phases_raw: P27
+  phase_tokens:
+  - P27
+  criticality: P0
+  security_tier: S0
+  risk: must not break upstream
+  proof: WebAuthn compat suite (security keys, Hello, Touch ID)
+- id: F-058
+  section: '2.5'
+  plan_line: 377
+  feature: Passkeys — XR-resident authenticator, hardware-bound only
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: C
+  dep_raw: P29 audit
+  depends_on:
+  - P29
+  phases_raw: P33
+  phase_tokens:
+  - P33
+  criticality: P2
+  security_tier: S0
+  risk: per-platform token APIs; recovery story
+  proof: attestation + wipe/recovery ceremony; software-only = banned (design review gate)
+- id: F-059
+  section: '2.5'
+  plan_line: 378
+  feature: Payment cards
+  decision_raw: DEFER
+  decision_class: DEFER
+  status: deferred
+  owner: C
+  dep_raw: P29
+  depends_on:
+  - P29
+  phases_raw: P39
+  phase_tokens:
+  - P39
+  criticality: P2
+  security_tier: S1
+  risk: PCI-adjacency, abuse value
+  proof: demand evidence required to start
+- id: F-060
+  section: '2.5'
+  plan_line: 379
+  feature: Local-first zero-knowledge model; "we cannot reset" copy
+  decision_raw: LAW
+  decision_class: LAW
+  status: active
+  owner: C
+  dep_raw: —
+  depends_on: []
+  phases_raw: P27
+  phase_tokens:
+  - P27
+  criticality: P0
+  security_tier: S0
+  risk: null
+  proof: help-copy contract test
+- id: F-061
+  section: '2.5'
+  plan_line: 380
+  feature: Encrypted sync — BYO storage (WebDAV/S3), client-side E2EE, multi-device pairing
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: C
+  dep_raw: P29
+  depends_on:
+  - P29
+  phases_raw: P30
+  phase_tokens:
+  - P30
+  criticality: P1
+  security_tier: S0
+  risk: key ceremony UX; conflict merge
+  proof: sync threat-model tests; offline-matrix; conflict no-loss
+- id: F-062
+  section: '2.5'
+  plan_line: 381
+  feature: BYOK + printable recovery kit
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: C
+  dep_raw: P30
+  depends_on:
+  - P30
+  phases_raw: P30
+  phase_tokens:
+  - P30
+  criticality: P0
+  security_tier: S0
+  risk: key loss
+  proof: naive-user recovery drill on clean machine
+- id: F-063
+  section: '2.5'
+  plan_line: 382
+  feature: XR-operated sync service
+  decision_raw: '**DROP**'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: ops liability
+  proof: null
+- id: F-064
+  section: '2.5'
+  plan_line: 383
+  feature: Vault sharing / emergency access
+  decision_raw: '**DROP**'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: multipart KMS ≠ feature
+  proof: null
+- id: F-065
+  section: '2.5'
+  plan_line: 384
+  feature: External cryptographic audit
+  decision_raw: BUILD(gate)
+  decision_class: BUILD
+  status: active
+  owner: C
+  dep_raw: P28
+  depends_on:
+  - P28
+  phases_raw: P28–P30
+  phase_tokens:
+  - P28
+  - P30
+  criticality: P0
+  security_tier: S0
+  risk: finding backlog
+  proof: no stable stores real creds until published audit + closures
+- id: F-066
+  section: '2.6'
+  plan_line: 390
+  feature: 'DNS controls: per-identity DoH/DoT, presets + custom templates'
+  decision_raw: ADAPT
+  decision_class: ADAPT
+  status: active
+  owner: D
+  dep_raw: P14
+  depends_on:
+  - P14
+  phases_raw: P17
+  phase_tokens:
+  - P17
+  criticality: P0
+  security_tier: S0
+  risk: misconfig leaks
+  proof: DNS leak matrix every route
+- id: F-067
+  section: '2.6'
+  plan_line: 391
+  feature: Proxy per identity (SOCKS5/HTTPS + auth)
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: D
+  dep_raw: P17
+  depends_on:
+  - P17
+  phases_raw: P18
+  phase_tokens:
+  - P18
+  criticality: P0
+  security_tier: S0
+  risk: fail-open mistakes
+  proof: fail-closed test (route loss ⇒ error, not direct)
+- id: F-068
+  section: '2.6'
+  plan_line: 392
+  feature: VPN (XR-operated)
+  decision_raw: '**DROP — permanently**'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: different company
+  proof: null
+- id: F-069
+  section: '2.6'
+  plan_line: 393
+  feature: WireGuard via `xr-wgd` (wireguard-go userspace → local SOCKS5)
+  decision_raw: INTEGRATE
+  decision_class: INTEGRATE
+  status: active
+  owner: D
+  dep_raw: P18
+  depends_on:
+  - P18
+  phases_raw: P32
+  phase_tokens:
+  - P32
+  criticality: P1
+  security_tier: S0
+  risk: key mgmt UX; perf
+  proof: route proof; key lifecycle; proxy-down kill test; no-TUN asserted
+- id: F-070
+  section: '2.6'
+  plan_line: 394
+  feature: Tor via `xr-tord` (Arti default / C-tor fallback), per-first-party stream isolation, DNS-in-tunnel, WebRTC off, `.onion` confined
+  decision_raw: INTEGRATE
+  decision_class: INTEGRATE
+  status: active
+  owner: D
+  dep_raw: P14,P19
+  depends_on:
+  - P14
+  - P19
+  phases_raw: P31
+  phase_tokens:
+  - P31
+  criticality: P1
+  security_tier: S0
+  risk: leaks; younger engine churn
+  proof: Tor leak suite green = only path to ship; disclosure modal read-gated
+- id: F-071
+  section: '2.6'
+  plan_line: 395
+  feature: Tor *handoff* (open in Tor Browser) cheap affordance
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: D
+  dep_raw: P14
+  depends_on:
+  - P14
+  phases_raw: P19
+  phase_tokens:
+  - P19
+  criticality: P1
+  security_tier: S2
+  risk: false sense
+  proof: 'copy: handoff, not equivalent'
+- id: F-072
+  section: '2.6'
+  plan_line: 396
+  feature: Onion websites support (view `.onion` in Tor identity only)
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: D
+  dep_raw: P31
+  depends_on:
+  - P31
+  phases_raw: P31
+  phase_tokens:
+  - P31
+  criticality: P1
+  security_tier: S0
+  risk: non-Tor resolution
+  proof: resolver-policy unit assert + leak case
+- id: F-073
+  section: '2.6'
+  plan_line: 397
+  feature: Region routing = exit dropdown on user endpoints, never XR infra
+  decision_raw: ADAPT
+  decision_class: ADAPT
+  status: active
+  owner: D
+  dep_raw: P18/P32
+  depends_on:
+  - P18
+  - P32
+  phases_raw: P32
+  phase_tokens:
+  - P32
+  criticality: P2
+  security_tier: S2
+  risk: geo-unblocking expectations
+  proof: no such marketing claim (copy gate)
+- id: F-074
+  section: '2.6'
+  plan_line: 398
+  feature: 'Network Firewall: per-site/identity allow-deny rules over Shield engine'
+  decision_raw: BUILD (view+rules)
+  decision_class: BUILD
+  status: active
+  owner: D
+  dep_raw: P11,P6
+  depends_on:
+  - P11
+  - P6
+  phases_raw: P34(rules UI)/P11(engine)
+  phase_tokens:
+  - P34
+  - P11
+  criticality: P1
+  security_tier: S0
+  risk: blind-click rule creation
+  proof: deliberate sub-dialog; scope ladder once/session/site/identity
+- id: F-075
+  section: '2.6'
+  plan_line: 399
+  feature: Network status live view (route, resolver, latency, offline state)
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: D+E
+  dep_raw: P18
+  depends_on:
+  - P18
+  phases_raw: P18
+  phase_tokens:
+  - P18
+  criticality: P1
+  security_tier: S1
+  risk: stale data
+  proof: staleness indicator test
+- id: F-076
+  section: '2.7'
+  plan_line: 405
+  feature: Universal Search + custom engines + `!bang` + per-identity defaults
+  decision_raw: ADAPT(TemplateURLService)
+  decision_class: ADAPT
+  status: active
+  owner: E
+  dep_raw: P7
+  depends_on:
+  - P7
+  phases_raw: P24
+  phase_tokens:
+  - P24
+  criticality: P1
+  security_tier: S2
+  risk: revenue-lever simplicity loss (deliberate)
+  proof: engine CRUD E2E; bang conformance
+- id: F-077
+  section: '2.7'
+  plan_line: 406
+  feature: Research providers (arXiv, Semantic Scholar, PubMed, GitHub, manpages…) as curated bangs
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: E
+  dep_raw: P24
+  depends_on:
+  - P24
+  phases_raw: P24
+  phase_tokens:
+  - P24
+  criticality: P1
+  security_tier: S3
+  risk: list rot
+  proof: curated-file freshness check
+- id: F-078
+  section: '2.7'
+  plan_line: 407
+  feature: '"Research Mode" as named mode'
+  decision_raw: '**DROP** → template+presets'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: mode explosion
+  proof: null
+- id: F-079
+  section: '2.7'
+  plan_line: 408
+  feature: Bookmarks (+identity metadata, search, import)
+  decision_raw: ADAPT
+  decision_class: ADAPT
+  status: active
+  owner: E
+  dep_raw: P14
+  depends_on:
+  - P14
+  phases_raw: P25
+  phase_tokens:
+  - P25
+  criticality: P1
+  security_tier: S3
+  risk: null
+  proof: move/tag E2E
+- id: F-080
+  section: '2.7'
+  plan_line: 409
+  feature: Notes (page- and workspace-scoped, Markdown, per identity, export)
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: E
+  dep_raw: P25
+  depends_on:
+  - P25
+  phases_raw: P25
+  phase_tokens:
+  - P25
+  criticality: P1
+  security_tier: S3
+  risk: sprawl
+  proof: export/import round-trip
+- id: F-081
+  section: '2.7'
+  plan_line: 410
+  feature: Pins → Highlights (`#:~:text=` + provenance)
+  decision_raw: ADAPT+BUILD
+  decision_class: BUILD
+  status: active
+  owner: E
+  dep_raw: P25
+  depends_on:
+  - P25
+  phases_raw: P25
+  phase_tokens:
+  - P25
+  criticality: P1
+  security_tier: S3
+  risk: silent anchor miss
+  proof: anchor-miss honest fallback test
+- id: F-082
+  section: '2.7'
+  plan_line: 411
+  feature: Reading list (upstream + identity metadata)
+  decision_raw: ADAPT
+  decision_class: ADAPT
+  status: active
+  owner: E
+  dep_raw: —
+  depends_on: []
+  phases_raw: P25
+  phase_tokens:
+  - P25
+  criticality: P1
+  security_tier: S3
+  risk: null
+  proof: E2E
+- id: F-083
+  section: '2.7'
+  plan_line: 412
+  feature: Reader mode (typography, width, theme, save)
+  decision_raw: ADAPT(Reading Mode)
+  decision_class: ADAPT
+  status: active
+  owner: E
+  dep_raw: —
+  depends_on: []
+  phases_raw: P25
+  phase_tokens:
+  - P25
+  criticality: P1
+  security_tier: S3
+  risk: distiller edge pages
+  proof: corpus render parity
+- id: F-084
+  section: '2.7'
+  plan_line: 413
+  feature: 'Screenshot: visible → +full-page → +region → +redact/annotate'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: E
+  dep_raw: P7
+  depends_on:
+  - P7
+  phases_raw: P25(visible/full)/P26(region/redact)
+  phase_tokens:
+  - P25
+  - P26
+  criticality: P1
+  security_tier: S1
+  risk: PII in annotations
+  proof: redaction irreversibility test
+- id: F-085
+  section: '2.7'
+  plan_line: 414
+  feature: 'Translation: provider framework (user endpoint/self-host; offline option only if Google-free), inline provider disclosure, per-origin memory, default-off'
+  decision_raw: ADAPT+BUILD
+  decision_class: BUILD
+  status: active
+  owner: E
+  dep_raw: P5 contract
+  depends_on:
+  - P5
+  phases_raw: P34
+  phase_tokens:
+  - P34
+  criticality: P1
+  security_tier: S2
+  risk: silent page-content egress (banned)
+  proof: packet capture proves provider+consent; provider shown before send
+- id: F-086
+  section: '2.7'
+  plan_line: 415
+  feature: 'Media downloading: direct `<video/audio src>`, plain HLS/DASH-as-file (no DRM)'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: C(downloads)
+  dep_raw: P26
+  depends_on:
+  - P26
+  phases_raw: P26
+  phase_tokens:
+  - P26
+  criticality: P1
+  security_tier: S1
+  risk: legal posture creep
+  proof: 'policy lint: no manifest decryption; only unprotected bytes'
+- id: F-087
+  section: '2.7'
+  plan_line: 416
+  feature: Universal extractor ("download any media")
+  decision_raw: '**DROP**'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: §1201 pressure onto a *signed browser*; weekly-break treadmill
+  proof: null
+- id: F-088
+  section: '2.7'
+  plan_line: 417
+  feature: DRM circumvention
+  decision_raw: '**DROP — categorical**'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: null
+  proof: contribution-policy ban
+- id: F-089
+  section: '2.7'
+  plan_line: 418
+  feature: Download manager (queue, pause/resume, per-identity tagging)
+  decision_raw: ADAPT
+  decision_class: ADAPT
+  status: active
+  owner: C
+  dep_raw: P26
+  depends_on:
+  - P26
+  phases_raw: P26
+  phase_tokens:
+  - P26
+  criticality: P1
+  security_tier: S1
+  risk: null
+  proof: E2E under throttle
+- id: F-090
+  section: '2.7'
+  plan_line: 419
+  feature: 'Download security: magic/MIME/extension mismatch, dangerous-type warnings, MoTW (Win)/quarantine (mac), Authenticode/notarized-signature display, hash display, VirusTotal link only — never upload, quarantine-until-acknowledged'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: C
+  dep_raw: P26
+  depends_on:
+  - P26
+  phases_raw: P26
+  phase_tokens:
+  - P26
+  criticality: P0
+  security_tier: S0
+  risk: sniffing bugs
+  proof: xr-inspect fuzz 72h clean; verdict fixtures
+- id: F-091
+  section: '2.7'
+  plan_line: 420
+  feature: Archive content peek
+  decision_raw: BUILD (in xr-inspect)
+  decision_class: BUILD
+  status: active
+  owner: C
+  dep_raw: P26
+  depends_on:
+  - P26
+  phases_raw: P26
+  phase_tokens:
+  - P26
+  criticality: P1
+  security_tier: S0
+  risk: hostile archives
+  proof: sandbox escape tests; zip-bomb limits
+- id: F-092
+  section: '2.7'
+  plan_line: 421
+  feature: XR malware-scanning engine
+  decision_raw: '**DROP**'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: we are not an AV
+  proof: null
+- id: F-093
+  section: '2.7'
+  plan_line: 422
+  feature: 'Performance tools: Task Manager re-skin + Memory Saver + tab discard + per-identity aggregation'
+  decision_raw: ADAPT
+  decision_class: ADAPT
+  status: active
+  owner: E
+  dep_raw: P14
+  depends_on:
+  - P14
+  phases_raw: P34
+  phase_tokens:
+  - P34
+  criticality: P1
+  security_tier: S3
+  risk: re-derivation of telemetry stack (banned)
+  proof: no new data collection (audit)
+- id: F-094
+  section: '2.7'
+  plan_line: 423
+  feature: 'DevTools: unmodified + XR panel as internal DevTools extension (identity/partition view, block decisions, storage contents)'
+  decision_raw: ADAPT
+  decision_class: ADAPT
+  status: active
+  owner: G
+  dep_raw: P14
+  depends_on:
+  - P14
+  phases_raw: P34
+  phase_tokens:
+  - P34
+  criticality: P1
+  security_tier: S2
+  risk: none (patches banned)
+  proof: DevTools version-drift smoke per promotion
+- id: F-095
+  section: '2.8'
+  plan_line: 429
+  feature: Command Registry + Palette (⌘K) — first feature
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: E
+  dep_raw: P5,P7
+  depends_on:
+  - P5
+  - P7
+  phases_raw: P7
+  phase_tokens:
+  - P7
+  criticality: P0
+  security_tier: S3
+  risk: scope creep of "every command"
+  proof: 50ms/150ms budgets in CI; every settings section = command
+- id: F-096
+  section: '2.8'
+  plan_line: 430
+  feature: 'Tabs: top/vertical/rail/compact, identity-aware; groups'
+  decision_raw: BUILD+ADAPT
+  decision_class: BUILD
+  status: active
+  owner: E
+  dep_raw: P7
+  depends_on:
+  - P7
+  phases_raw: P22
+  phase_tokens:
+  - P22
+  criticality: P0
+  security_tier: S1
+  risk: tab-strip perf at 500 tabs
+  proof: bench + visual CI (identity bar everywhere)
+- id: F-097
+  section: '2.8'
+  plan_line: 431
+  feature: Split view (2–4 panes; focused pane owns toolbar; same-identity first; mixed at P34)
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: E
+  dep_raw: P14
+  depends_on:
+  - P14
+  phases_raw: P23(same-id)/P34(mixed)
+  phase_tokens:
+  - P23
+  - P34
+  criticality: P1
+  security_tier: S1
+  risk: address-bar ambiguity (solved by focused-pane rule)
+  proof: E2E + accessibility
+- id: F-098
+  section: '2.8'
+  plan_line: 432
+  feature: Focus View (explicit, 3 recovery routes, security UI always wins)
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: E
+  dep_raw: P7
+  depends_on:
+  - P7
+  phases_raw: P34
+  phase_tokens:
+  - P34
+  criticality: P1
+  security_tier: S1
+  risk: hides security signals
+  proof: auto-exit on any security UI test
+- id: F-099
+  section: '2.8'
+  plan_line: 433
+  feature: Compact mode / sidebar
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: E
+  dep_raw: P7
+  depends_on:
+  - P7
+  phases_raw: P22/P34
+  phase_tokens:
+  - P22
+  - P34
+  criticality: P1
+  security_tier: S3
+  risk: null
+  proof: visual
+- id: F-100
+  section: '2.8'
+  plan_line: 434
+  feature: 'Themes: declarative JSON tokens only — no CSS, no JS in themes (+custom import framework at P30; security boundary, not limitation); contrast ≥4.5:1 enforced by loader'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: E
+  dep_raw: P8
+  depends_on:
+  - P8
+  phases_raw: P30(ui)/P6(tokens)
+  phase_tokens:
+  - P30
+  - P6
+  criticality: P1
+  security_tier: S1
+  risk: 'web-exposed color side channels (Fortress: normalize)'
+  proof: loader rejects failing theme; side-channel test in P20
+- id: F-101
+  section: '2.8'
+  plan_line: 435
+  feature: 'Built-ins: Light, Dark, System, High Contrast (+2 curated); themed gallery post-GA (community, format-locked)'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: E
+  dep_raw: —
+  depends_on: []
+  phases_raw: P30
+  phase_tokens:
+  - P30
+  criticality: P1
+  security_tier: S3
+  risk: QA matrix per theme
+  proof: visual regression ×theme
+- id: F-102
+  section: '2.8'
+  plan_line: 436
+  feature: 'Settings: search-first, deep-linkable, XR sections'
+  decision_raw: ADAPT(WebUI)
+  decision_class: ADAPT
+  status: active
+  owner: E
+  dep_raw: P7
+  depends_on:
+  - P7
+  phases_raw: P8(v0)/P31(full)
+  phase_tokens:
+  - P8
+  - P31
+  criticality: P0
+  security_tier: S1
+  risk: forking settings UI (banned)
+  proof: every setting reachable by search+URL
+- id: F-103
+  section: '2.8'
+  plan_line: 437
+  feature: Onboarding ≤4 screens + teach-on-use (6 lifetime coach marks)
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: E
+  dep_raw: P14
+  depends_on:
+  - P14
+  phases_raw: P37
+  phase_tokens:
+  - P37
+  criticality: P0
+  security_tier: S2
+  risk: tour fatigue
+  proof: first-run completion telemetry-free timing study (local)
+- id: F-104
+  section: '2.8'
+  plan_line: 438
+  feature: 'Migration/import: Chrome/Edge/Firefox/Brave/Vivaldi (bookmarks, history, passwords re-encrypted, engines, extensions→Guard review) + KDBX/CSV vault import at first run'
+  decision_raw: ADAPT+BUILD
+  decision_class: BUILD
+  status: active
+  owner: E+C
+  dep_raw: P27
+  depends_on:
+  - P27
+  phases_raw: P37
+  phase_tokens:
+  - P37
+  criticality: P0
+  security_tier: S1
+  risk: importer fragility
+  proof: fixture corpus per source; password re-encrypt verified
+- id: F-105
+  section: '2.8'
+  plan_line: 439
+  feature: 'Help: `xr://help`, threat-model browser, "what this does NOT protect against" mandatory section'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: E
+  dep_raw: P6
+  depends_on:
+  - P6
+  phases_raw: P37
+  phase_tokens:
+  - P37
+  criticality: P0
+  security_tier: S1
+  risk: stale docs
+  proof: 'doc-parity CI: feature flags ↔ help entries'
+- id: F-106
+  section: '2.8'
+  plan_line: 440
+  feature: 'Accessibility: WCAG 2.2 AA gates, AAA for security copy where practical; keyboard model; SR labels; reduced-motion; no color-only signal'
+  decision_raw: BUILD(program)
+  decision_class: BUILD
+  status: active
+  owner: G
+  dep_raw: P9
+  depends_on:
+  - P9
+  phases_raw: P36 (+per-phase gates)
+  phase_tokens:
+  - P36
+  criticality: P0
+  security_tier: S1
+  risk: SR contracts on novel surfaces
+  proof: axe CI + NVDA/VoiceOver/Orca manual passes per release
+- id: F-107
+  section: '2.8'
+  plan_line: 441
+  feature: 'Localization: ICU pipeline; en + 9 at stable (incl. RTL locales); security copy human-reviewed per locale'
+  decision_raw: ADAPT
+  decision_class: ADAPT
+  status: active
+  owner: G+E
+  dep_raw: P9
+  depends_on:
+  - P9
+  phases_raw: P36
+  phase_tokens:
+  - P36
+  criticality: P0
+  security_tier: S2
+  risk: RTL layout drift; string freeze slips
+  proof: pseudo-loc + RTL smoke pre-freeze
+- id: F-108
+  section: '2.8'
+  plan_line: 442
+  feature: 'Backup/recovery: per-identity encrypted export bundles; session restore; crash card not modal; vault recovery kit'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: C+E
+  dep_raw: P28,P30
+  depends_on:
+  - P28
+  - P30
+  phases_raw: P30/P37
+  phase_tokens:
+  - P30
+  - P37
+  criticality: P1
+  security_tier: S1
+  risk: bundle corruption
+  proof: restore-on-clean-machine drill
+- id: F-109
+  section: '2.9'
+  plan_line: 448
+  feature: 'Updates: `//chrome/updater` client + XR update server (signed manifests, staged, delta, rollback, visible failed-state w/ manual download)'
+  decision_raw: BUILD(client reuse)
+  decision_class: BUILD
+  status: active
+  owner: A
+  dep_raw: P2
+  depends_on:
+  - P2
+  phases_raw: P10
+  phase_tokens:
+  - P10
+  criticality: P0
+  security_tier: S0
+  risk: update channel compromise
+  proof: signature/rollback/downgrade attack tests; update drill per release
+- id: F-110
+  section: '2.9'
+  plan_line: 449
+  feature: Component updates (lists, OHTTP configs, tor geoip, Widevine path, models) via upstream component-updater on XR endpoints
+  decision_raw: ADAPT
+  decision_class: ADAPT
+  status: active
+  owner: A
+  dep_raw: P10
+  depends_on:
+  - P10
+  phases_raw: P10
+  phase_tokens:
+  - P10
+  criticality: P0
+  security_tier: S0
+  risk: same as above
+  proof: pinned-keys + rotation drill
+- id: F-111
+  section: '2.9'
+  plan_line: 450
+  feature: 'Release channels: nightly (dev-only, unsiged→test-signed) / beta / stable (+ ESR-class "XR Security Series" patch cadence between promotions)'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: A
+  dep_raw: P10
+  depends_on:
+  - P10
+  phases_raw: P10
+  phase_tokens:
+  - P10
+  criticality: P0
+  security_tier: S1
+  risk: channel skew
+  proof: channel matrix E2E
+- id: F-112
+  section: '2.9'
+  plan_line: 451
+  feature: Signed artifacts + transparency log of build hashes (sigstore/rekor; in-toto/SLSA-style attestations)
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: A
+  dep_raw: P10
+  depends_on:
+  - P10
+  phases_raw: P10→P38 (independent rebuilder)
+  phase_tokens:
+  - P10
+  - P38
+  criticality: P0
+  security_tier: S0
+  risk: key compromise
+  proof: verify-at-CDN; rebuild attempt publishes delta
+- id: F-113
+  section: '2.9'
+  plan_line: 452
+  feature: Bit-identical reproducible builds
+  decision_raw: 'DEFER — **no date ever promised**; ladder: toolchain pins → determinism-of-XR-code → independent rebuilds'
+  decision_class: DEFER
+  status: deferred
+  owner: BUILD(ladder)
+  dep_raw: A
+  depends_on: []
+  phases_raw: P39
+  phase_tokens:
+  - P39
+  criticality: P2
+  security_tier: S0
+  risk: chasing chromium-wide nondeterminism = multi-year
+  proof: only *current rung* is claimable (§0.3)
+- id: F-114
+  section: '2.9'
+  plan_line: 453
+  feature: SBOM (CycloneDX from GN third_party graph + cargo metadata) published per release
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: A
+  dep_raw: P2
+  depends_on:
+  - P2
+  phases_raw: P10
+  phase_tokens:
+  - P10
+  criticality: P0
+  security_tier: S1
+  risk: SBOM tooling drift
+  proof: diff gate; unknown-license fails build
+- id: F-115
+  section: '2.9'
+  plan_line: 454
+  feature: 'Dependency policy: pin, review, `cargo vet`-style auditable allowlist for Rust/Go deps'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: A
+  dep_raw: —
+  depends_on: []
+  phases_raw: P1
+  phase_tokens:
+  - P1
+  criticality: P0
+  security_tier: S0
+  risk: supply chain
+  proof: CI license+advisory gates
+- id: F-116
+  section: '2.9'
+  plan_line: 455
+  feature: 'Telemetry: default off; opt-in aggregate; local "what would be sent" byte viewer; crash reports opt-in, URL/credential-scrubbed'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: A/G
+  dep_raw: P10
+  depends_on:
+  - P10
+  phases_raw: P13(viewer)/P38
+  phase_tokens:
+  - P13
+  - P38
+  criticality: P0
+  security_tier: S0
+  risk: accidental phone-home
+  proof: endpoint capture diff = documented set
+- id: F-117
+  section: '2.9'
+  plan_line: 456
+  feature: Bug bounty + coordinated disclosure + SECURITY.md + advisories
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: G
+  dep_raw: —
+  depends_on: []
+  phases_raw: P1
+  phase_tokens:
+  - P1
+  criticality: P0
+  security_tier: S1
+  risk: unmanaged intake
+  proof: runbook drill (synthetic report end-to-end)
+- id: F-118
+  section: '2.9'
+  plan_line: 457
+  feature: 'Open-source governance: public monorepo, DCO, contribution guide, RFC process for `//xr` contracts, published patch ledger, CODEOWNERS'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: A
+  dep_raw: —
+  depends_on: []
+  phases_raw: P1
+  phase_tokens:
+  - P1
+  criticality: P0
+  security_tier: S1
+  risk: drive-by PRs into S0 code
+  proof: CI requires 2-review label on S0 paths
+- id: F-119
+  section: '2.9'
+  plan_line: 458
+  feature: 'Security testing program: fuzz fleet, SAST, isolation/leak suites, red-team weeks'
+  decision_raw: BUILD
+  decision_class: BUILD
+  status: active
+  owner: G
+  dep_raw: P9
+  depends_on:
+  - P9
+  phases_raw: P9→P38
+  phase_tokens:
+  - P9
+  - P38
+  criticality: P0
+  security_tier: S0
+  risk: theater without cadence
+  proof: §11; CI green definitions
+- id: F-120
+  section: '2.9'
+  plan_line: 459
+  feature: Crypto wallets / tokens / rewards / ads / sponsored tiles / feeds
+  decision_raw: '**DROP — permanently**'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: sells the product's only asset
+  proof: New Tab = zero network beyond user search (test)
+- id: F-121
+  section: '2.9'
+  plan_line: 460
+  feature: AI assistant/copilot/agent/chatbot/LLM (any surface)
+  decision_raw: '**DROP — permanently** (DR-12; sole exception: non-conversational offline translation/reader utility)'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: breaks "page content stays local"
+  proof: copy+feature checklist; build-flag scan for AI endpoints
+- id: F-122
+  section: '2.9'
+  plan_line: 461
+  feature: Security scores / "% protected"
+  decision_raw: '**DROP — banned**'
+  decision_class: DROP
+  status: dropped
+  owner: —
+  dep_raw: —
+  depends_on: []
+  phases_raw: —
+  phase_tokens: []
+  criticality: null
+  security_tier: null
+  risk: unfalsifiable
+  proof: copy gate

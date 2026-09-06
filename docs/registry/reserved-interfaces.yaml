@@ -1,0 +1,28 @@
+schema_version: 1
+source: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+plan_sha256: a74b2aa4e8fd6f427c71cadfe932489249afe208a10413bf78c04734fd343e1b
+plan_section: '2.10'
+generated_by: tools/gen_registry.py
+note: 'GENERATED FILE — do not edit by hand. Source: pinned Master Plan (see plan_sha256). Regenerate with tools/gen_registry.py --write after an approved plan amendment (docs/process/plan-amendment.md); CI verifies with tools/registry_lint.py.'
+freeze_phase: P5
+rule: A phase may not invent a parallel path around these; extending requires an approved contract-amendment RFC (L14; procedure ships with P5-T10).
+plan_line: 463
+interfaces:
+- id: route_manager
+  name: RouteManager
+  covers: covers proxy/WG/Tor before WG/Tor exist
+- id: vault_service
+  name: VaultService
+  covers: covers autofill mediation for P27 before vaultd exists
+- id: guard_ledger
+  name: GuardLedger
+  covers: covers update-diff/egress in P34
+- id: download_safety
+  name: DownloadSafety
+  covers: covers xr-inspect
+- id: activity_log
+  name: ActivityLog
+  covers: every subsystem's accountability rows
+- id: effective_policy
+  name: EffectivePolicy
+  covers: fields for fingerprint/letterbox/storage-scope (resolver is total from day one — unknown fields ⇒ deny, never guess)

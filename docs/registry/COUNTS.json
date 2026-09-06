@@ -1,0 +1,46 @@
+{
+  "by_criticality": {
+    "P0": 57,
+    "P1": 38,
+    "P2": 8,
+    "none": 19
+  },
+  "by_decision_class": {
+    "ADAPT": 20,
+    "BUILD": 74,
+    "DEFER": 3,
+    "DROP": 19,
+    "INTEGRATE": 3,
+    "LAW": 3
+  },
+  "by_section": {
+    "2.1": 7,
+    "2.2": 14,
+    "2.3": 15,
+    "2.4": 13,
+    "2.5": 16,
+    "2.6": 10,
+    "2.7": 19,
+    "2.8": 14,
+    "2.9": 14
+  },
+  "by_security_tier": {
+    "S0": 46,
+    "S1": 33,
+    "S2": 9,
+    "S3": 11,
+    "none": 23
+  },
+  "by_status": {
+    "active": 100,
+    "deferred": 3,
+    "dropped": 19
+  },
+  "generated_by": "tools/gen_registry.py",
+  "note": "GENERATED FILE \u2014 do not edit by hand. Source: pinned Master Plan (see plan_sha256). Regenerate with tools/gen_registry.py --write after an approved plan amendment (docs/process/plan-amendment.md); CI verifies with tools/registry_lint.py.",
+  "plan_sha256": "a74b2aa4e8fd6f427c71cadfe932489249afe208a10413bf78c04734fd343e1b",
+  "reserved_interface_count": 6,
+  "schema_version": 1,
+  "source": "docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md",
+  "total_rows": 122
+}
