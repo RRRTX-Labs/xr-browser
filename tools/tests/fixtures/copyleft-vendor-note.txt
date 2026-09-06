@@ -1,0 +1,3 @@
+NEGATIVE TEST CORPUS FILE — DO NOT SHIP.
+Intentional AGPL mention for the vendor-directory scan test:
+Released under the AGPL, version 3.

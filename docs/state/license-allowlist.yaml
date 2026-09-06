@@ -1,0 +1,30 @@
+schema_version: 1
+source: "ADR-0001 / DR-04 (no GPL/AGPL code linked; lists & feeds are data)"
+lint: tools/license_audit.py
+review: >
+  Path-level allowlist (unlike vocab_lint's line-precise entries):
+  dependency evals, ADRs, and the plan are refreshed over time, so the
+  review unit is the file. Every entry must state WHY the file cites
+  copyleft terms. A file newly citing copyleft without an entry fails
+  CI.
+allowlist:
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    justification: "Pinned plan cites copyleft as prohibitions/decisions: §0.2 R10 (keepass-rs/MIT vs kdbx GPL), §1.5 'lists are data', §1.12-4 license invariant, §8.2 uBO GPL3 DON'T, §8.4 KeePassXC GPL DON'T-copy. Immutable by pin; never edited in place."
+  - path: docs/adr/0001-repo-topology-and-licensing.md
+    justification: "ADR-0001 records the DR-04 GPL boundary itself (no GPL/AGPL/SSPL linked; EasyList GPLv3/CC-BY-SA 3.0 dual consumed as data with LICENSE.data sidecars)."
+  - path: docs/process/dependency-eval-template.yaml
+    justification: "L9 intake template defines the link_policy field, which by design names the copyleft classes (GPL/AGPL/LGPL/SSPL) it checks."
+  - path: docs/threat-model.md
+    justification: "Threat model transcribes plan §1.12-4 (license invariant) and §9.1 T11 scope note; cites copyleft as the invariant's subject."
+  - path: docs/dependencies/easylist-family.yaml
+    justification: "Data-only INTEGRATE eval: EasyList is GPL-3.0-or-later OR CC-BY-SA-3.0 (live-verified 2026-09-07) — the eval must state the data's license to justify the data-only + LICENSE.data sidecar treatment (DR-04)."
+  - path: docs/dependencies/adblock-rust.yaml
+    justification: "Eval records the REJECTED sibling: uBlock Origin code is GPLv3 and must never be linked (DR-04); only the MPL-2.0 adblock-rust crate is integrated."
+  - path: docs/dependencies/keepass-rs.yaml
+    justification: "Eval records banned siblings kdbx-rs (GPL-3.0) and KeePassXC (GPL-3.0) as do-not-copy references; keepass-rs itself is MIT (DR-04 satisfied)."
+  - path: docs/dependencies/arti.yaml
+    justification: "Eval states the main codebase is Apache-2.0 OR MIT and flags the optional LGPLv3 parts that must be excluded/evaluated before vendoring (P31) — the caveat is the point of the record."
+  - path: docs/state/research-log-P1.md
+    justification: "P1 research log records live-verified dependency licenses (uBlock Origin GPLv3, EasyList GPL-3.0-or-later dual) — the evaluation trail that justifies the DR-04 data-only treatment."
+  - path: tools/README.md
+    justification: "Tool inventory table names the license gate's own rule ('no GPL/AGPL code') — meta-mention of what license_audit.py enforces."
