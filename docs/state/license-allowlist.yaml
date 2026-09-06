@@ -36,3 +36,6 @@ allowlist:
     justification: "Gate table restates the license gate's rule ('no GPL/AGPL code') — meta-mention of what CI enforces."
   - path: evidence/P1/research-log-links.txt
     justification: "Evidence traceability map names the verified copyleft artifacts (uBlock GPLv3, EasyList GPL-3.0 dual) that the dependency evals cite."
+  - path: buildsys/sbom/cyclonedx-schema-1.6.json
+    justification: "Vendored CycloneDX 1.6 JSON schema (Apache-2.0, DR-04 clean) enumerates SPDX license IDs as a JSON enum — GPL-2.0/GPL-3.0 appear only as enumerated permit-values inside the 'licenses' definition, not as linked code. Schema is vendored data, byte-frozen, with LICENSE.cyclonedx-schema.txt sidecar."
+

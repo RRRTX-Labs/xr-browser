@@ -1,0 +1,8 @@
+CycloneDX JSON schema (bom-1.6.schema.json)
+Source: https://cyclonedx.org/schema/bom-1.6.schema.json (fetched 2026-09-07)
+License: Apache License 2.0 (per the schema's own $comment: "CycloneDX JSON
+schema is published under the terms of the Apache License 2.0.")
+https://www.apache.org/licenses/LICENSE-2.0
+Classification: DATA (a JSON schema consumed by sbom_gate.py) — vendored as
+data with this license sidecar per the data-vs-code rule (ADR-0001/DR-04);
+it is never linked into any binary.
