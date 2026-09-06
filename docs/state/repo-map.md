@@ -1,7 +1,7 @@
-# Repository map (P1 state)
+# Repository map (P2 state)
 
 Plan §7.1 topology: **two repos + helpers**, deliberately not a sprawl.
-This map records what exists at P1 close and where each planned surface
+This map records what exists at P2 close and where each planned surface
 will land, so nobody builds in the wrong place.
 
 ## xr-browser (this repo — meta: build, release, governance)
@@ -22,8 +22,10 @@ will land, so nobody builds in the wrong place.
 | `tools/` | ✅ | the 9 governance tools + tests + negative corpus + run scripts + DEPS.md |
 | `.github/workflows/governance.yml` | ✅ | CI definition (actions pinned by full SHA) |
 | `evidence/P1/` | ✅ | evidence.json, human-gates.md, logs/, research-log-links.txt, registry-recount.md |
-| `build/`, `ci/` | 📋 planned P2/P3 | `ci/` has a README only; build system arrives with P2 (hermetic Chromium build) |
-| `docs/contracts/` | 📋 planned P5 | contract docs (IDLs land in xr-core `//xr/mojom`) |
+| `build` | ✅ P2 | the `./build` entrypoint dispatcher (sync/gen/compile/patch/sbom/brand-check/sign/budget/test) |
+| `buildsys/` | ✅ P2 | `_common.py` (tool contract), `sync.py`, `preflight.py`, `net-audit.md`, `gn/` (argsets + resolve + gen/compile), `patching/` (manifest applicator), `farm/` (budget/ccache/runners), `toolchain/` (pins + provenance), `branding/` (version/brand-check/icons), `signing/` (test scaffold), `sbom/` (emit/gate/schema), tests |
+| `ci/` | ✅ P2 | README + `build-lane.yml` (PR compile lane) + `nightly-rebase-build.yml` (3-OS matrix definition; not yet running — HG-9) |
+| `docs/contracts/` | ✅ P2 | `deps-pin-policy.md`, `patch-manifest-v1.md`, `sbom-v1.md` (P2 contracts; the P5 IDL contracts will join later) |
 
 ## xr-core (product — `//xr` inside the overlay; MPL-2.0)
 
@@ -32,7 +34,7 @@ will land, so nobody builds in the wrong place.
 | `LICENSE`, `README.md`, `CONTRIBUTING.md`, `.gitignore`, `.clang-format` | ✅ | repo root artifacts |
 | `CODEOWNERS`, `OWNERS` | ✅ | S0 path protection (placeholder handles until HG-3) |
 | `mojom/`, `policy/`, `identity/`, `net/`, `vault/`, `extensions/` | 📋 planned | S0 product surfaces — **do not create stubs now** (P4/P5+; anti-stub rule, plan §0.4/L5). `mojom/` freezes at P5. |
-| `patches/`, `manifest.yaml` | 📋 planned P2 | patch-manifest format v1 lands with P2-T3 |
+| `patches/` | ✅ P2 | `manifest.yaml` (schema v1) + `branding/0001-brand-ui/` (patch + patchinfo) |
 
 ## Helpers (not yet created)
 

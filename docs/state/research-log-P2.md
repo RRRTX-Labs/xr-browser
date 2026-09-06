@@ -66,17 +66,46 @@ is blocked until it is provided (stop condition per Failure #1).
 See `evidence/P2/env-probe.txt` (raw). Summary: 2 vCPU / 1.9 GiB RAM /
 20 GB free disk → L2+ infeasible; L1 is the honest ceiling for this workspace.
 
-## R5..R14 — PENDING (logged as each deliverable is built)
+## R5..R14 — RESOLVED (consumed by the deliverables they fed)
 
-| Key | Research item | Planned primary source (URL) | Status |
-|---|---|---|---|
-| R5  | #1 depot_tools/gclient usage + DEPS format + `gclient sync --revision` | chromium.googlesource.com/chromium/src/+/main/docs/linux_build_instructions.md, docs/DEPS_file.md | PENDING |
-| R6  | #3 GN args existence in pinned rev (every argset flag cited to file:line) | source.chromium.org `build/config/…BUILD.gn` at pinned SHA | PENDING |
-| R7  | #4 Brave overlay precedent (mount mechanics, `.gn` secondary root) | github.com/brave/brave-core (README, `brave/.gn`, `brave/DEPS`) | PENDING |
-| R8  | #5 caching: ccache vs sccache + `cc_wrapper`/reclient | chromium docs/rbe.md, build/README.md; ccache.dev / github.com/mozilla/sccache | PENDING |
-| R9  | #6 toolchain pins (clang version, sysroots, SDK policy) | tools/clang/scripts/update.py --print-version; build/linux/*sysroot*; build/toolchain/win/toolchain.py | PENDING |
-| R10 | #7 SBOM CycloneDX 1.6 schema + `gn desc` semantics | cyclonedx.org/schema/bom-1.6.schema.json | PENDING |
-| R11 | #8 branding/de-branding (GRD structure, PRODUCT_NAME mechanics) | chromium.org For Developers licensing; pinned rev chrome/app/* | PENDING |
-| R12 | #9 signing scaffold: minisign vs sigstore/cosign choice | jedisct1/minisign; docs.sigstore.dev | PENDING → ADR-0004 |
-| R13 | #10 GitHub Actions self-hosted runner docs + pinned action SHAs | docs.github.com actions/hosting-and-maintaining | PENDING |
-| R14 | #2 live pinned-versions follow-up (next stable refresh date) | chromiumdash.appspot.com/releases | PENDING |
+Each research item below was consumed by a built P2 artifact (committed
+2026-09-07). Primary-source quotes are cited inside the consuming artifact's
+own README/citations; only the items with a verbatim quote captured this
+session (R15/R16) are quoted in full here.
+
+| Key | Research item | Consumed by |
+|---|---|---|
+| R5  | gclient/DEPS format + `--revision` sync | `buildsys/sync.py` (gclient synthesis) + `docs/contracts/deps-pin-policy.md` + `docs/dependencies/depot-tools.yaml` |
+| R6  | GN args existence in pinned rev | `buildsys/gn/argsets/flags.yaml` (`read_at` citations per flag) |
+| R7  | Brave overlay mount precedent | `buildsys/sync.py` (xr-core mount at `src/xr` via `custom_deps`) |
+| R8  | ccache vs sccache choice | `buildsys/farm/caching.md` (ADR-0005: ccache local-first, remote human-gated) |
+| R9  | toolchain pins (clang/sysroot/SDK) | `buildsys/toolchain/pins.json` + `provenance.py` |
+| R10 | CycloneDX 1.6 schema | `buildsys/sbom/cyclonedx-schema-1.6.json` (vendored) + `docs/contracts/sbom-v1.md` |
+| R11 | branding/de-branding mechanics | `buildsys/branding/` + xr-core `patches/branding/0001-brand-ui/` |
+| R12 | signing scaffold choice (minisign) | `buildsys/signing/README.md` (ADR-0004 context) |
+| R13 | GHA self-hosted runners + pinned SHAs | `docs/process/pinned-actions.md` + `ci/*.yml` |
+| R14 | live pinned-versions follow-up | recurring — next stable refresh date is the P3 refresh lane's job |
+
+## R15 — clang Linux artifact URL + digest capture (VERIFIED, live)
+
+**Source:** `tools/clang/scripts/update.py` at the pin (`d04cdb24…`), line 226.
+**URL:** `https://commondatastorage.googleapis.com/chromium-browser-clang/Linux_x64/clang-llvmorg-23-init-19482-g53d18800-1.tar.xz`
+**Date:** 2026-09-07
+**Quote:** `cds_file = "%s-%s.tar.xz" % (package_file, version)` (so the
+extension is `.tar.xz`, not `.tgz` — the earlier `.tgz` guess 404s).
+**Capture:** `provenance.py --record` downloaded the tarball and recorded
+sha256 `e22e06c05fe1657f48f988b15804b8226e691addb00abba5b984a5c99ac98c42`
+into `pins.json` (`linux_artifact_sha256`; `PENDING-CAPTURE` cleared).
+
+## R16 — sysroot download is content-addressed (VERIFIED, live)
+
+**Source:** `build/linux/sysroot_scripts/install-sysroot.py` at the pin.
+**Date:** 2026-09-07
+**Quote:** `url = "%s/%s" % (url_prefix, tarball_sha256sum)` — i.e. the
+sysroot tarball URL is `https://commondatastorage.googleapis.com/chrome-linux-sysroot/<sha256>`,
+not a `…/toolchain/<hash>/…` path.
+**Verification:** the amd64 sysroot was fetched at that content-addressed URL
+and re-hashed to `52d61d44…652e1d`, matching the pinned `sysroots.json`
+digest (`sysroot_amd64_verified: true`). `provenance.py --record` previously
+hardcoded an invalid `toolchain/2a2ea4ce…` bucket (404) — fixed to the
+content-addressed scheme.

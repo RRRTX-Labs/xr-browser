@@ -11,8 +11,14 @@ the [Developer Certificate of Origin](https://developercertificate.org)
 (`git commit --signoff`).
 
 **Status:** Phase P1 complete (governance, legal gates, skeleton).
-Phase P2 (hermetic Chromium build) has not started and nothing in this
-repo stubs it — the anti-stub rule is plan law (§0.4, L5).
+Phase P2 (hermetic Chromium build) is **implemented and mock-verified**:
+the `./build` entrypoint, DEPS pinning, GN argsets, patch-manifest
+applicator, toolchain pins (digests captured), de-branding + SBOM
+tooling, and the build-farm/CI definitions all live under `buildsys/`,
+`ci/`, and `docs/contracts/`. The P2 DoD items that need real hardware
+or a human actor (3-OS nightly green for two weeks, external-rebuild
+proof, real signing) remain human-gated — recorded, never fabricated.
+See `BUILDING.md` and `PHASE2_RELEASE.md`.
 
 ## The Master Plan is pinned
 
@@ -59,9 +65,19 @@ hash-pinned; stdlib otherwise).
   rows), `human-gates.md` (HG-1..HG-8 — what humans/ops must do next),
   executed gate logs.
 
+## The build system (P2)
+
+`./build` is the entrypoint for the hermetic Chromium build; subcommands
+cover sync, gen, compile, patching, SBOM, brand-check, signing scaffold,
+budget meter, and the test suite. Reproduce an XR build from pinned
+sources per `BUILDING.md` (the external-rebuild doc, P2-T7). The build
+tools are stdlib-first and mock-verifiable without a checkout
+(`XR_ALLOW_MOCK=1 ./build --mock <sub>`).
+
 ## Honest status of protections
 
-This repo contains **governance only**. The threat model v0 is
+This repo ships **governance + build tooling**. The threat model v0 is
 explicitly pre-implementation: every protection it states is target
-posture, not shipped functionality. P1 ships the rules, the gates, and
-the evidence trail — not a browser.
+posture, not shipped functionality. P1 ships the rules, gates, and
+evidence trail; P2 ships the build machinery and its checks. Neither
+phase ships a browser.

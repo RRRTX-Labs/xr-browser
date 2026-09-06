@@ -1,0 +1,51 @@
+=== real patch roundtrip against pinned Chromium files — executed 2026-09-06T22:57:55Z ===
+pre-image files: chrome/app/theme/chromium/BRANDING + chrome/app/chromium_strings.grd fetched from pinned rev d04cdb24…
+
+--- git apply --check ---
+APPLIES CLEANLY
+
+--- xr-patch apply ---
+{
+  "tool": "xr-patch",
+  "cmd": "apply",
+  "results": [
+    {
+      "id": "0001-brand-ui",
+      "status": "applied"
+    }
+  ],
+  "ledger": "/tmp/realapply/.xr/patch-apply.json",
+  "status": "pass"
+}
+
+--- xr-patch verify ---
+{
+  "tool": "xr-patch",
+  "cmd": "verify",
+  "results": [
+    {
+      "id": "0001-brand-ui",
+      "status": "applied"
+    }
+  ],
+  "ledger": "/tmp/realapply/.xr/patch-apply.json",
+  "status": "pass"
+}
+
+--- xr-patch revert ---
+{
+  "tool": "xr-patch",
+  "cmd": "revert",
+  "results": [
+    {
+      "id": "0001-brand-ui",
+      "status": "reverted"
+    }
+  ],
+  "ledger": "/tmp/realapply/.xr/patch-apply.json",
+  "status": "pass"
+}
+
+--- post-revert diff vs pinned pre-image ---
+BRANDING RESTORED
+STRINGS RESTORED

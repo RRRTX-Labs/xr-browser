@@ -10,8 +10,10 @@ Two honest, scoped checks (the browser-process scan proper is P16):
 2. `--scan`: endpoint-deny scan over THIS repo's build surface only
    (buildsys/, ci/, DEPS, .github/workflows) — NOT docs/ (which legitimately
    quote endpoint strings in the threat model / limitations; P16 covers the
-   browser). The deny list is the endpoint-shaped regex set below, compiled
-   from escaped fragments so the tool's own source does not trip it.
+   browser). `tests/` dirs and `__pycache__` are skipped: negative fixtures
+   legitimately contain deny-strings (same convention as the governance
+   negative corpus). The deny list is the endpoint-shaped regex set below,
+   compiled from escaped fragments so the tool's own source does not trip it.
 
 Zero network. Exit 0 = clean, 1 = hit.
 """
@@ -75,7 +77,13 @@ def scan_repo(root: Path) -> list[str]:
         if p.is_file():
             candidates = [p]
         elif p.is_dir():
-            candidates = [f for f in p.rglob("*") if f.is_file() and ".git" not in f.parts]
+            candidates = [
+                f for f in p.rglob("*")
+                if f.is_file()
+                and ".git" not in f.parts
+                and "__pycache__" not in f.parts
+                and "tests" not in f.parts
+            ]
         else:
             continue
         for f in candidates:

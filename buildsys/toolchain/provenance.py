@@ -90,9 +90,8 @@ def main() -> None:
         clang_url = pins["clang"]["linux_artifact_url"]
         clang_sha = sha256_url(clang_url)
         amd64 = next(e for e in pins["sysroot"] if e["arch"] == "amd64")
-        sysroot_url = ("https://commondatastorage.googleapis.com/chrome-linux-sysroot/"
-                       "toolchain/2a2ea4ce2ea0a15d1953b56a4d224bcfa24c3999b6d47a430d3757e18a69c1bd/"
-                       + amd64["pkg"])
+        # Content-addressed per install-sysroot.py: url = URL + '/' + Sha256Sum
+        sysroot_url = pins["sysroot_url_base"] + "/" + amd64["sha256"]
         sysroot_sha = sha256_url(sysroot_url)
         if sysroot_sha != amd64["sha256"]:
             return emit(args.json, {"tool": "provenance", "mode": "record"},

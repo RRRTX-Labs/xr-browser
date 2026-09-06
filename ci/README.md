@@ -1,10 +1,13 @@
 # ci/ — pipelines-as-code (S0)
 
-At P1 this directory holds **definitions only** — no running pipeline
-exists yet (the build farm, hermetic Chromium build, and patch
-machinery land in P2/P3). The one executable pipeline of P1 is the
-**governance gate**, defined in `.github/workflows/governance.yml` and
-run locally via `tools/run_checks.sh` + `tools/run_negatives.sh`.
+At P2 this directory holds **pipeline definitions** — `build-lane.yml`
+(PR compile lane) and `nightly-rebase-build.yml` (3-OS build matrix).
+No pipeline is *running* yet: the build farm and self-hosted runners
+land via human gate HG-9. The one executable pipeline of the project is
+the **governance gate**, defined in `.github/workflows/governance.yml`
+and run locally via `tools/run_checks.sh` + `tools/run_negatives.sh`
+(plus the P2 build-system gates — `./build test`, provenance verify,
+brand-check scan, argset validate).
 
 ## Conventions (binding from commit 1)
 
@@ -30,7 +33,7 @@ run locally via `tools/run_checks.sh` + `tools/run_negatives.sh`.
 
 | Phase | Pipeline |
 |---|---|
-| P2 | hermetic build matrix (3 OS), ccache/remote-cache wiring, SBOM emission |
+| P2 | hermetic build matrix (3 OS) — **defined** in `nightly-rebase-build.yml` + `build-lane.yml`; runs once HG-9 lands the farm |
 | P3 | rebase bot + patch-budget meter, promotion jobs, security fast-lane |
 | P9 | fuzz fleet scheduling, SAST, isolation/leak suites (T11's full dep-graph license/advisory scan — the one thing P1's `license_audit.py` explicitly is NOT) |
 | P10 | signing, transparency log, update-channel pipeline |

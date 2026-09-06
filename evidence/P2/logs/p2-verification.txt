@@ -1,0 +1,55 @@
+=== P2 RELEASE VERIFICATION — executed 2026-09-06T22:57:20Z ===
+
+--- git log (xr-browser) ---
+d04e12f build: ./build dispatcher + cross-tool test suite (XR-P2-T12)
+0379721 build(sbom): CycloneDX 1.6 emitter + gate + contract (XR-P2-T9)
+9152542 build(signing): TEST-ONLY signing scaffold (XR-P2-T7/T8)
+28927eb build(branding): version gen + brand check + interim icons (XR-P2-T6)
+917156d build(toolchain): pins.json + provenance verify/record (XR-P2-T5)
+b76a531 build(farm): budget meter + ccache provisioning + CI lanes (XR-P2-T4)
+bb492ff build(patching): patch-manifest contract + xr-patch tooling (XR-P2-T3)
+d3ab1d6 build(gn): XR argsets + resolver + gen/compile (XR-P2-T2)
+c2a578e build(deps): DEPS pin + sync/refresh/preflight + deps-pin-policy (XR-P2-T1)
+0ba6859 docs(state): P2 research log + environment probe (XR-P2-T0)
+17ab59e release: keep old-brand string out of release note; audit trail stays in ADR-0003
+4f7c81d release: PHASE1_RELEASE.md — final state, hashes, verification, packages (release prep)
+
+--- tools/run_checks.sh ---
+== plan pin ==
+PASS: plan_pin_check
+== feature registry (plan §2 ↔ docs/registry/*) ==
+PASS: registry_lint
+== decision register (schema) ==
+PASS: dr_parse
+== decision register (Register-Change trailers) ==
+PASS: dr_parse
+== license audit (canonical MPL-2.0 + copyleft scan) ==
+PASS: license_audit
+== DCO signoff ==
+PASS: dco_check
+== threat model v0 structure ==
+PASS: check_threat_model
+== banned-vocabulary lint ==
+PASS: vocab_lint
+== CODEOWNERS / S0 path sync ==
+PASS: owners_sync
+== test suites ==
+.......................................................                  [100%]
+55 passed in 5.28s
+== ALL GOVERNANCE CHECKS PASSED ==
+
+--- tools/run_negatives.sh ---
+ok: license: injected GPL sample in code (rejected with expected reason)
+ok: dco: unsigned commit (rejected with expected reason)
+ok: registry: hand-edited features.yaml (rejected with expected reason)
+ok: vocab: banned words in new doc (rejected with expected reason)
+ok: register: invalid status enum (rejected with expected reason)
+ok: threat model: emptied honesty cell (T2) (rejected with expected reason)
+ok: plan pin: tampered plan copy (rejected with expected reason)
+
+ALL NEGATIVE CASES REJECTED AS EXPECTED
+
+--- ./build test ---
+........................................................................ [ 80%]
+..................                                                       [100%]
+90 passed in 6.30s
