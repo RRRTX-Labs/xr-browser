@@ -1,0 +1,31 @@
+# Dependency evaluation: depot_tools (runtime tool fetched at sync time)
+project: "depot_tools — https://chromium.googlesource.com/chromium/tools/depot_tools.git"
+role: "RUNTIME-FETCHED build tooling: gclient (DEPS checkout) + gn (generates ninja files). Fetched by buildsys/sync.py at sync time; NEVER vendored into either repo (Plan P2 'depot_tools is fetched at runtime, not vendored'). Not linked into any product binary."
+plan_refs: ["P2-T1", "§8.9", "L9"]
+current_status: "actively maintained (Chromium infra); HEAD observed 81577f19a8497ba7e41afac322e8f03553a863ec at evaluation (2026-09-07)"
+version_pin_policy: "the checkout revision of depot_tools itself is pinned by buildsys/toolchain/pins.json 'depot_tools' field; the Chromium revision it checks out is pinned by DEPS chromium_rev. gclient/gn are pinned transitively by the pinned Chromium checkout."
+licenses:
+  code: "BSD-3-Clause (depot_tools; verified via chromium.googlesource.com LICENSE file at evaluation)"
+  data: "—"
+health:
+  last_release: "continuous (HEAD moves daily); pinned at a specific revision, refreshed with the chromium pin"
+  bus_factor: "Chromium infra team (Google) + the open-source checkout is the de-facto standard"
+  open_critical_advisories: "none tracked for the pinned revision as of 2026-09-07"
+security_posture: "runs gclient/gn on developer/CI machines; it downloads toolchain artifacts pinned by the Chromium DEPS at chromium_rev — supply-chain exposure is bounded by the pin, not by depot_tools itself. Zero egress AFTER sync is the enforced rule (buildsys/net-audit.md)."
+maintenance_burden: "low: fetch-at-runtime means no vendoring burden; a bump is a pins.json field"
+link_policy: "permissive — BSD-3 (DR-04 satisfied); dev/runtime tooling only, never linked"
+use_verdict: "USE (runtime-fetched at sync)"
+alternatives_rejected:
+  - "vendoring depot_tools: forbidden by the Plan (runtime fetch) and bloats the meta repo"
+  - "hand-rolled checkout script: gclient is the documented, battle-tested mechanism (Brave uses it) — no novel seams (L24)"
+exit_plan: "replaceable one-for-one: the synthesized DEPS is the interface; any DEPS-capable tool could consume it (none exists today)."
+owner: "A lead (Platform/Chromium) — build track"
+evaluated_on: 2026-09-07
+refresh_by: 2026-12-06
+sources:
+  - url: "https://chromium.googlesource.com/chromium/tools/depot_tools.git"
+    accessed: 2026-09-07
+    quote: "git ls-remote HEAD -> 81577f19a8497ba7e41afac322e8f03553a863ec"
+  - url: "https://chromium.googlesource.com/chromium/tools/depot_tools/+/HEAD/README.gclient.md"
+    accessed: 2026-09-07
+    quote: "Each entry in the `solutions` list is defined by a Python dictionary that … `url`: The URL from which this solution will be checked out."
