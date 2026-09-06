@@ -1,0 +1,89 @@
+schema_version: 1
+source: "plan §0.3 / §1.12-9 / §1.12-11 / §9.11 (banned-claims rhetoric rules)"
+lint: tools/vocab_lint.py
+review: "S1 governance; adding an entry is a reviewable act — every entry needs a written justification and is line-precise."
+human_enforced_rules:
+  - rule: "§1.12-11 no-intent-claims"
+    text: "Guard and Observatory emit observations only; copy review enforces (\"XR can see where an extension connects, not what it intends.\")."
+    enforcement: "human copy review at release time; NOT machine-checked by vocab_lint"
+allowlist:
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 19
+    pattern: protection/security score
+    justification: "§0.1 summary asserts the settled fact \"no security scores\" — a negation, not an offered score."
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 54
+    pattern: anonymous
+    justification: "§0.3 rhetoric rules quote the banned word as something XR \"never says\"."
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 54
+    pattern: unbreakable
+    justification: "§0.3 rhetoric rules quote the banned word as something XR \"never says\"."
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 54
+    pattern: protection/security score
+    justification: "§0.3 rhetoric rules quote the banned concept (\"never ships a 'protection score'\")."
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 257
+    pattern: anonymous
+    justification: "§1.12-9 Honesty invariant quotes the banned word inside the ban."
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 257
+    pattern: unbreakable
+    justification: "§1.12-9 Honesty invariant quotes the banned word inside the ban."
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 461
+    pattern: "% protected"
+    justification: "§2.9 DROP row — the feature name 'Security scores / \"% protected\"' is a binding do-not-build record quoting the banned concept verbatim."
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 461
+    pattern: protection/security score
+    justification: "§2.9 DROP row — see entry above; the DROP feature's verbatim name."
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 803
+    pattern: invisible
+    justification: "§4 P15-T6: \"no invisible widening\" — permission-semantics term (grants must not silently widen), not a product claim."
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 956
+    pattern: invisible
+    justification: "§4 P22 UX req: default workspace is hidden until a second is created — internal design prose, not shipped copy."
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 1203
+    pattern: invisible
+    justification: "§4 P37-T1 onboarding: default unnamed invisible workspace — internal design prose, not shipped copy."
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 1555
+    pattern: anonymous
+    justification: "§9.11 lists the banned vocabulary — meta-citation defining the ban."
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 1555
+    pattern: unbreakable
+    justification: "§9.11 lists the banned vocabulary — meta-citation defining the ban."
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 1555
+    pattern: military-grade
+    justification: "§9.11 lists the banned vocabulary — meta-citation defining the ban."
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 1555
+    pattern: invisible
+    justification: "§9.11 lists the banned vocabulary — meta-citation defining the ban."
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 1555
+    pattern: "% protected"
+    justification: "§9.11 lists the banned vocabulary — meta-citation defining the ban."
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 1555
+    pattern: protection/security score
+    justification: "§9.11 lists the banned vocabulary — meta-citation defining the ban."
+  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+    line: 1555
+    pattern: stealth
+    justification: "§9.11 lists the banned vocabulary — meta-citation defining the ban."
+  - path: docs/registry/features.yaml
+    line: 2167
+    pattern: "% protected"
+    justification: "Generated verbatim copy of the §2.9 DROP row's feature name (generated artifact; see file header note)."
+  - path: docs/registry/features.yaml
+    line: 2167
+    pattern: protection/security score
+    justification: "Generated verbatim copy of the §2.9 DROP row's feature name (generated artifact; see file header note)."
