@@ -1,0 +1,35 @@
+# Dependency evaluation: adblock-rust (native blocking engine)
+project: "adblock-rust — https://github.com/brave/adblock-rust (canonically under the `brave` org as of 2026-09-07; crate `adblock` on crates.io)"
+role: "Native ad/tracker blocking engine embedded in the network service at the URLLoaderFactory layer (Plan §1.5, §8.2, DR-03)"
+plan_refs: ["§1.5", "§8.2", "DR-03", "P11-T1"]
+current_status: "actively maintained; repo pushed 2026-09-06 (live-verified); cross-industry adoption: Brave (shipping), Firefox 149 (experimental, off-by-default, Bug 2013888 per Plan Appendix A), Waterfox, Perplexity Comet (Plan Appendix A item 2)"
+version_pin_policy: "vendored + pinned via third_party/rust (cargo_crate pattern, P2); exact git revision pinned in DEPS; ±2% corpus gate on every pin update (P11-T8); `cargo vet` on diffs (P11-T1)"
+licenses:
+  code: "MPL-2.0"
+  data: "— (filter lists are a separate data dependency: easylist-family.yaml)"
+health:
+  last_release: "crates.io `adblock` — version live at evaluation (pinned by P2; refresh 90-day cadence)"
+  bus_factor: "Brave engineering team + community contributors; Mozilla is a second consumer (Plan Appendix A) — healthy"
+  open_critical_advisories: "none found as of 2026-09-07 (advisory feed wired in P9-T9; this eval predates the feed)"
+security_posture: "parses hostile input (filter-list grammar) — fuzz target required from P11 commit #1 (P9 fleet, 10^9 exec floor before stable, P11 security req); scriptlets bounded to the engine's own sandbox semantics (no page access)"
+maintenance_burden: "low-medium: vendored pin + corpus parity gate; upstream fixes contributed back (Plan §12.5 maintained relationships)"
+link_policy: "permissive — MPL-2.0 is linkable (file-level copyleft, compatible with our MPL-2.0 //xr; DR-04 satisfied — not copyleft-GPL)"
+use_verdict: "INTEGRATE (vendored, pinned; no custom engine)"
+alternatives_rejected:
+  - "own engine: multi-year for negative differentiation (Plan §8.2)"
+  - "DNR-based (extension API): caps + no document-start; and XR IS the browser, so the native path is strictly stronger (Plan §0.1/§8.2)"
+  - "uBlock Origin code: GPLv3 — REJECTED as linked code (DR-04); users may sideload uBO Lite (MV3) themselves (Plan §8.2, R5)"
+exit_plan: "MPL license permits forking cheaply (Plan §15-R8); short-term: fork behind the same FFI boundary; long-term: fund upstreaming (register entry); corpus parity gate means a frozen pin still blocks correctly (degrade-safe: engine death ⇒ fail-open browsing with amber chip, Plan §11/P11 decisions)"
+owner: "D lead (Network, Shield & Extensions)"
+evaluated_on: 2026-09-07
+refresh_by: 2026-12-06
+sources:
+  - url: "https://github.com/brave/adblock-rust/blob/master/LICENSE"
+    accessed: 2026-09-07
+    quote: "Mozilla Public License Version 2.0 — full verbatim text (16,726 bytes); also the source of our own LICENSE files, cross-checked against mozilla.org/MPL/2.0"
+  - url: "https://github.com/brave/adblock-rust/blob/master/README.md"
+    accessed: 2026-09-07
+    quote: "adblock-rust is the engine powering Brave's native adblocker, available as a library for anyone to use. It features: Network blocking, Cosmetic filtering, Resource replacements"
+  - url: "https://github.com/brave/adblock-rust"
+    accessed: 2026-09-07
+    quote: "repo metadata: license MPL-2.0, default branch master, pushed 2026-09-06"

@@ -1,0 +1,39 @@
+# Dependency evaluation: Chromium (engine base)
+project: "Chromium — https://chromium.googlesource.com/chromium/src"
+role: "Engine base: overlay fork (`xr-core` mounted at `chromium/src/xr`), not a linked dependency (Plan §8.1)"
+plan_refs: ["§1.2", "§8.1", "DR-02", "DR-05", "P1-T1", "P2-T1"]
+current_status: "actively maintained by Google; as of 2026-09-07 the release cadence moved to two-week Stable/Beta starting Chrome 153 (2026-09-08) — live-verified (see sources)"
+version_pin_policy: "DEPS-pinned checkout (P2-T1: `chromium_ver` + `v8_rev` …) — single source of truth in the future `xr-browser/DEPS`; daily canary rebase on `xr-core@main` (DR-02); no 'latest' ever"
+licenses:
+  code: "BSD-3-Clause"
+  data: "mixed (third_party data assets carry their own licenses; audited per-release in P2-T9 SBOM walk)"
+health:
+  last_release: "Chrome 153 stable cut scheduled 2026-09-08 (cadence announcement, live-verified)"
+  bus_factor: "large (Google + community); not a single-maintainer risk"
+  open_critical_advisories: "n/a as of evaluation date (consumed via §12.4 security fast-lane, not tracked here)"
+security_posture: "the strongest available web engine: Site Isolation, renderers+network sandboxes, CORB/ORB; XR law L2 = configure, never degrade; upstream security tags feed the 72h/14d SLA (§12.4)"
+maintenance_burden: "high BY DESIGN — that is why it is the budgeted treadmill (≤150-file patch budget, daily rebase bot, P2/P3); the burden is the product's insurance (§0.2-1: cadence doubles rebase economics — sized for it)"
+link_policy: "permissive base — BSD-3-Clause; attribution conditions for modified upstream files tracked in the patch ledger (P3) and reviewed in LG-1 (F1)"
+use_verdict: "USE (overlay fork)"
+alternatives_rejected:
+  - "Firefox ESR: correct only under a solo-maintainer premise the reconciled specs rejected; loses MV3 compat + the StoragePartition story is what we build anyway (Plan §8.1)"
+  - "Ladybird: not a product base this decade (Plan §8.1)"
+  - "WebKit fork: all the treadmill, none of the ecosystem (Plan §8.1)"
+  - "ungoogled-chromium build model: domain-substitution patching built for purity, not product cadence — take the inventory, not the model (live-verified, sources)"
+exit_plan: "no exit — the engine IS the product base; risk managed by DR-01 funding gate + §15-R1 fallback (hardened-distribution pivot), not by swapping engines"
+owner: "A lead (Platform/Chromium)"
+evaluated_on: 2026-09-07
+refresh_by: 2026-12-06
+sources:
+  - url: "https://chromium.googlesource.com/chromium/src/+/main/LICENSE"
+    accessed: 2026-09-07
+    quote: "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met … Neither the name of Google LLC nor the names of its contributors may be used to endorse or promote products derived from this software"
+  - url: "https://developer.chrome.com/blog/chrome-two-week-release"
+    accessed: 2026-09-07
+    quote: "The new release cycle means that a new beta and stable version of Chrome will ship every two weeks, starting from the stable release of Chrome 153 on September 8th. This applies to all platforms—Desktop, Android, and iOS."
+  - url: "https://github.com/chromiumembedded/cef/issues/4114"
+    accessed: 2026-09-07
+    quote: "Adjustments for Chromium's two week release cycle (starting September 2026) … Update CEF for even numbered Chromium milestones only"
+  - url: "https://chromium.googlesource.com/chromium/src/+/main/DEPS"
+    accessed: 2026-09-07
+    quote: "This file is used to manage the dependencies of the Chromium src repo. It is used by gclient to determine what version of each dependency to check out, and where."

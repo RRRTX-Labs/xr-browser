@@ -1,0 +1,47 @@
+# Dependency evaluation template (Plan P1-T8)
+#
+# The intake form for L9: "No dependency without a completed evaluation."
+# Every §2 INTEGRATE row (and any other external project considered for
+# use) must have a completed copy under docs/dependencies/ BEFORE it is
+# vendored/pinned — this file is the intake gate, not a formality.
+#
+# Copy this file to docs/dependencies/<project>.yaml and fill every field.
+# "—" means "none/not applicable" and is only valid where the field can
+# honestly be empty (e.g. data-only projects have no code license).
+#
+# Rules:
+#   * licenses must be verified against the project's own LICENSE file or
+#     package index on `evaluated_on` (URL + one-line quote in sources[]).
+#   * link_policy is the DR-04 check: copyleft code (GPL/AGPL/LGPL/SSPL)
+#     may only appear as DATA with a LICENSE.data attribution sidecar,
+#     never as linked code (Plan §1.5; tools/license_audit.py enforces).
+#   * use_verdict vocabulary: USE | INTEGRATE | INTEGRATE-DATA-ONLY |
+#     ADAPT | REJECTED | REJECTED-AS-DEFAULT | EVALUATE-LATER.
+#   * refresh_by = evaluated_on + 90 days (Plan "First 10 actions" item 9:
+#     "dependency-eval refresh at 90-day cadence").
+
+project: <name + canonical repo URL>
+role: <what it is for the product, one line (Plan §8 row)>
+plan_refs: ["§8.x", "DR-xx", "XR-Pxx-Tyy"]   # plan anchors
+current_status: <maintained / stalled / abandoned / restructuring — with date evidence>
+version_pin_policy: <pin model: exact revision / crate version / tag; where the pin lives (DEPS/cargo/vendor)>
+licenses:
+  code: <SPDX id of the code, or "—">
+  data: <SPDX id of data assets (lists, fonts, models), or "—">
+health:
+  last_release: <version + date, or "—">
+  bus_factor: <n + note on ownership, e.g. "co-owned by X maintainer">
+  open_critical_advisories: <count + ids, or "none found as of date">
+security_posture: <advisory history, fuzzing, known surface (e.g. "parses hostile input — fuzz target required per P5 rule")>
+maintenance_burden: <low/medium/high + rebase/patch cost expectation>
+link_policy: <DR-04 check outcome: "permissive — linkable" | "data only (LICENSE.data sidecar required)" | "REJECTED — copyleft code" | ...>
+use_verdict: <USE | INTEGRATE | INTEGRATE-DATA-ONLY | ADAPT | REJECTED | REJECTED-AS-DEFAULT | EVALUATE-LATER>
+alternatives_rejected: [ <name: one-line why> ]
+exit_plan: <how the product survives if this project dies: interface/alternative/max-adapt-window (§12.3: 2 promotions)>
+owner: <track/role, e.g. "D lead (Network, Shield & Extensions)">
+evaluated_on: YYYY-MM-DD
+refresh_by: YYYY-MM-DD  # evaluated_on + 90d
+sources:
+  - url: <canonical source URL>
+    accessed: YYYY-MM-DD
+    quote: <one-line quote anchoring the claim>

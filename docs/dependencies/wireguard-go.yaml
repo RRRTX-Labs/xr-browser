@@ -1,0 +1,32 @@
+# Dependency evaluation: wireguard-go (userspace WireGuard)
+project: "wireguard-go — https://github.com/WireGuard/wireguard-go (WireGuard project)"
+role: "Userspace WireGuard tunnel inside the `xr-wgd` helper → local SOCKS5 only; no TUN, no root, no system routing, no entitlements — permanent constraint (DR-20, DR-28, R4)"
+plan_refs: ["§1.3", "§8.3", "DR-20", "DR-28", "R4", "P32-T1"]
+current_status: "maintained (repo pushed 2026-05-22 per GitHub metadata, live-verified 2026-09-07); the userspace reference implementation of the WireGuard protocol (IETF RFC 8791)"
+version_pin_policy: "pinned exact git revision, vendored into xr-wgd (Go module pin); component-channel updates (P32-T8: signed + updated on component channel); sandbox posture = same as tord"
+licenses:
+  code: "MIT"
+  data: "—"
+health:
+  last_release: "continuous maintenance; pinned revision recorded at P32 (this eval records the state at 2026-09-07)"
+  bus_factor: "WireGuard project (Jason A. Donenfeld et al.) — protocol-stable, small core team but the protocol is standardized and the code surface is small"
+  open_critical_advisories: "none found as of 2026-09-07 (govulncheck wired in P9-T9)"
+security_posture: "config = secret: keys never in prefs (OS keystore), zeroize-on-lock, no endpoint logging at info level (P32 security req); conf parser fuzzed 72h (P32-T1); DTLS-free design, MTU auto (1280), plain UDP to endpoint — no invented transport"
+maintenance_burden: "low: stable API, small surface; the risky parts are XR's own (conf parsing, key lifecycle) which are fuzzed"
+link_policy: "permissive — MIT, linkable into xr-wgd (DR-04 satisfied); separate process (Plan §1.3) so even a permissive-license question would be moot for the browser binary"
+use_verdict: "INTEGRATE (per R4/DR-28 — primary and only userspace engine)"
+alternatives_rejected:
+  - "boringtun: REJECTED-AS-DEFAULT on maintenance evidence (see boringtun-REJECTED.yaml; R4: 'boringtun carries restructuring warning' — live-verified)"
+  - "TUN / system tunnels: per-OS entitlement hell; permanent ban (DR-20: 'do not let anyone improve it into a system tunnel')"
+  - "kernel modules: out of scope for a browser (no root, Plan §8.3)"
+exit_plan: "wireguard-go is the protocol's userspace reference; if it stalls, the protocol is standardized (RFC 8791) and the local-SOCKS boundary is frozen — an alternative userspace implementation (or boringtun post-restructuring, if it stabilizes) swaps behind the same RouteManager provider interface"
+owner: "D lead (Network, Shield & Extensions)"
+evaluated_on: 2026-09-07
+refresh_by: 2026-12-06
+sources:
+  - url: "https://github.com/WireGuard/wireguard-go/blob/master/LICENSE"
+    accessed: 2026-09-07
+    quote: "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction… (MIT full text)"
+  - url: "https://github.com/WireGuard/wireguard-go"
+    accessed: 2026-09-07
+    quote: "repo metadata: license MIT, default branch master, pushed 2026-05-22"

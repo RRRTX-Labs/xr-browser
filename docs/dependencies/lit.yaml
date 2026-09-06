@@ -1,0 +1,28 @@
+# Dependency evaluation: Lit (WebUI framework)
+project: "Lit — https://github.com/lit/lit (Lit Project)"
+role: "WebUI component framework for panels/settings/vault/onboarding/help (Plan §8.6: 'ADAPT WebUI + Lit (pinned) — Chromium-standard (Lit already in-tree)')"
+plan_refs: ["§1.10", "§8.6", "P7-T8", "P8"]
+current_status: "actively maintained (repo live at evaluation, 2026-09-07); already in-tree in Chromium WebUI — the pin we adopt is the Chromium in-tree pin, not an arbitrary upstream tag (single pin law, §8.9)"
+version_pin_policy: "ONE Lit pin (Plan §8.9: 'one lit pin'), taken from the Chromium in-tree version at P2/P7; bundling + CSP policy for all WebUI built at P7-T8 (no inline JS — theme law preview)"
+licenses:
+  code: "BSD-3-Clause (LICENSE live-verified 2026-09-07)"
+  data: "—"
+health:
+  last_release: "continuous; in-tree Chromium pin is the operative version"
+  bus_factor: "Lit Project (Google + open community) + Chromium in-tree maintenance — strong"
+  open_critical_advisories: "none found as of 2026-09-07 (feeds wired in P9-T9)"
+security_posture: "WebUI CSP strict from P7 (no inline JS); Lit views get Vitest component tests with label/a11y assertions (Plan §11.1); theme law (no CSS/JS in themes, P8) keeps the theming surface schema-validated, not scriptable"
+maintenance_burden: "low: one pin, in-tree toolchain reuse; rebase cost = Chromium's own in-tree pin updates"
+link_policy: "permissive — BSD-3-Clause (DR-04 satisfied)"
+use_verdict: "INTEGRATE (pinned, in-tree)"
+alternatives_rejected:
+  - "React/Vue/Svelte: second toolchain = tax; Lit is already the Chromium WebUI standard (Plan §8.6)"
+  - "all-native panels: iteration speed dies on a11y + theming (Plan §8.6)"
+exit_plan: "WebUI is replaceable per-page (each page is a Lit app under CSP); if Lit ever stalled, the in-tree pin freezes functionality while an ADR evaluates the swap — no product path depends on Lit-specific semantics beyond components"
+owner: "E lead (UX Engineering)"
+evaluated_on: 2026-09-07
+refresh_by: 2026-12-06
+sources:
+  - url: "https://github.com/lit/lit/blob/main/LICENSE"
+    accessed: 2026-09-07
+    quote: "BSD 3-Clause License — Copyright (c) The Lit Project Contributors. Copyright (c) 2017 Google LLC."

@@ -1,0 +1,31 @@
+# Dependency evaluation: boringtun — REJECTED-AS-DEFAULT (R4, DR-28)
+project: "boringtun — https://github.com/cloudflare/boringtun (Cloudflare, Rust)"
+role: "Considered userspace WireGuard engine — REJECTED as default; wireguard-go is the canonical choice (DR-28, R4)"
+plan_refs: ["§8.3", "DR-28", "R4", "P32"]
+current_status: "RESTRUCTURING — README warning live-verified 2026-09-07 (see sources); the Plan's Appendix A also records the FreeBSD port history (IGNORE/DEPRECATED after 'the first and only available release was deleted from upstream') — live re-verification of the FreshPorts page FAILED on 2026-09-07 (page no longer published: 404 on both candidate paths); the port-split fact therefore stands as recorded in Plan Appendix A (verified at reconciliation) with the live page noted as removed"
+version_pin_policy: "n/a — not vendored. If ever revisited: pin the crates.io release (per its own README guidance), never master"
+licenses:
+  code: "BSD-3-Clause (per repo metadata at evaluation)"
+  data: "—"
+health:
+  last_release: "unstable — 'currently undergoing a restructuring' (README, live-verified 2026-09-07); 'You should probably not rely on or link to the master branch right now. Instead you should use the crates.io page.'"
+  bus_factor: "Cloudflare — institutional, but the project itself is mid-restructuring"
+  open_critical_advisories: "none found as of 2026-09-07; the maintenance signal (restructuring + deleted-release history) is the deciding factor, not advisories"
+security_posture: "code quality is not the issue — availability/stability is; a restructuring userspace crypto-adjacent engine is exactly the kind of dependency the 2-promotion adapt window (§12.3) is designed to contain, and P32 does not have that window at integration time"
+maintenance_burden: "high (unknown until restructuring completes) — rejected on that basis"
+link_policy: "permissive (BSD-3) — license was never the rejection reason"
+use_verdict: "REJECTED-AS-DEFAULT"
+alternatives_rejected:
+  - "wireguard-go: CHOSEN instead (MIT, stable, protocol reference — see wireguard-go.yaml)"
+  - "pinning a pre-restructuring boringtun release: a frozen pin of a mid-move project still carries the deleted-release history (Plan Appendix A item 6) and no forward path"
+exit_plan: "n/a (not adopted). Reconsideration trigger: restructuring completes AND a stable release ships AND the FreshPorts/deleted-release pattern is explained — then a fresh eval supersedes this file (ADR + L9 re-intake)"
+owner: "D lead (Network, Shield & Extensions)"
+evaluated_on: 2026-09-07
+refresh_by: 2026-12-06
+sources:
+  - url: "https://github.com/cloudflare/boringtun/blob/master/README.md"
+    accessed: 2026-09-07
+    quote: "Boringtun is currently undergoing a restructuring. You should probably not rely on or link to the master branch right now. Instead you should use the crates.io page."
+  - url: "https://www.freshports.org/security/linux-widevine-cdm (analogous evidence pattern) / FreshPorts net/boringtun history (as recorded in Plan Appendix A)"
+    accessed: 2026-09-07
+    quote: "UNVERIFIED-LIVE: FreshPorts port page for the deleted-release history is no longer published (404 on 2026-09-07); fact stands per Plan Appendix A item 6 (verified at reconciliation 2026-09-07): 'first and only available release was deleted from upstream'"

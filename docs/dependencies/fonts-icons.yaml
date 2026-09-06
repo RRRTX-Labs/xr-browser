@@ -1,0 +1,31 @@
+# Dependency evaluation: fonts & icons (Inter, JetBrains Mono, bundled SVG)
+project: "Inter — https://github.com/rsms/inter · JetBrains Mono — https://github.com/JetBrains/JetBrainsMono · bundled SVG icon set (XR-authored)"
+role: "UI fonts + icon set for the browser chrome and WebUI (Plan §8.6: 'Inter/JetBrains Mono (OFL) + bundled SVG set (no icon fonts) — License-clean (verified by specs; re-checked in dep audit)')"
+plan_refs: ["§8.6", "P6 (branding)", "P8 (themes)"]
+current_status: "both font projects live and stable at evaluation (2026-09-07); icon set is XR-authored (no external dependency — bundled SVG, MPL-2.0 as product files)"
+version_pin_policy: "vendored at P6 (branding task): exact tag/revision pinned in the build; fonts ship as data files with their OFL notices preserved"
+licenses:
+  code: "—"
+  data: "OFL-1.1 (Inter: 'This Font Software is licensed under the SIL Open Font License, Version 1.1' — live-verified; JetBrains Mono: OFL-1.1, GitHub license metadata live-verified) · SVG icons: MPL-2.0 (XR-authored)"
+health:
+  last_release: "fonts are mature/static assets (Inter project; JetBrains Mono repo last push 2025-01-31 — stable, not abandoned: the license files and font binaries are the deliverable)"
+  bus_factor: "n/a for static assets (license + binary distribution, not maintenance)"
+  open_critical_advisories: "n/a (static assets; no code execution)"
+security_posture: "fonts are data: bundled, no fetch (no network side channel); no icon FONTS (no glyph-injection surface); theme law (P8) keeps color/typography declarative"
+maintenance_burden: "none after vendoring (static assets)"
+link_policy: "permissive data — OFL-1.1 (DR-04 satisfied; OFL is not copyleft and has standard font-naming conditions which we honor by keeping the font names)"
+use_verdict: "INTEGRATE (vendored data)"
+alternatives_rejected:
+  - "system fonts only: cross-OS inconsistency in the chrome (identity marks must render identically — Plan §1.10 'isolation must be painted')"
+  - "other font families: license-clean alternatives exist, but Inter/JetBrains Mono are the reconciled choice (Plan §8.6); changing them is a branding decision, not an engineering one"
+exit_plan: "n/a — static assets cannot 'die'; worst case is re-vendoring from the archived repos (OFL permits permanent distribution with the license text)"
+owner: "E lead (UX Engineering) + F (Design)"
+evaluated_on: 2026-09-07
+refresh_by: 2026-12-06
+sources:
+  - url: "https://github.com/rsms/inter/blob/master/LICENSE.txt"
+    accessed: 2026-09-07
+    quote: "Copyright (c) 2016 The Inter Project Authors (https://github.com/rsms/inter). This Font Software is licensed under the SIL Open Font License, Version 1.1."
+  - url: "https://github.com/JetBrains/JetBrainsMono"
+    accessed: 2026-09-07
+    quote: "repo metadata: license OFL-1.1, default branch master (OFL.txt present in repo)"

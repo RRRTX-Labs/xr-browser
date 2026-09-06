@@ -1,0 +1,28 @@
+# Dependency evaluation: C-tor (fallback Tor engine)
+project: "Tor (C implementation) — https://gitlab.torproject.org/tpo/core/tor (Tor Project)"
+role: "FALLBACK Tor engine spawned by `xr-tord` with a generated torrc + cookie-auth control port; keeps anti-censorship completeness (Snowflake, exotic transports) one toggle away (DR-27, R3)"
+plan_refs: ["§8.3", "DR-27", "R3", "P31-T1"]
+current_status: "actively maintained by the Tor Project; the default production Tor engine worldwide; stable C codebase with long security track record"
+version_pin_policy: "pinned exact release tag, vendored binary/source at P31; spawned as a child process (not linked); engine updates on the component channel with per-version kill switch (P31-T10)"
+licenses:
+  code: "3-clause BSD (Tor proper) + assorted component licenses listed in the repo LICENSE (live-verified 2026-09-07: 'Tor is distributed under the \"3-clause BSD\" license')"
+  data: "—"
+health:
+  last_release: "continuous stable releases (production engine for the Tor network); version pinned at P31"
+  bus_factor: "Tor Project — institutional, the strongest available for this category"
+  open_critical_advisories: "tracked via Tor security advisories from P31 (none found as of 2026-09-07 in this eval's scope)"
+security_posture: "the mature reference engine; XR's added surface is the minimal Rust control-port client (cookie-auth) — fuzzed hard from commit one (P31-T1: 'the parser cost is precisely why Arti is default'); leak suite gates the daemon boundary, so engine swaps don't re-open the leak surface (R3)"
+maintenance_burden: "medium: process management + torrc generation + control client; no rebase (external process)"
+link_policy: "permissive — 3-clause BSD (DR-04 satisfied); runs as a separate unprivileged process (Plan §1.3: untrusted-by-consequence, zero inbound reachability beyond localhost socket, killed & re-seeded on demand)"
+use_verdict: "INTEGRATE (fallback engine)"
+alternatives_rejected:
+  - "dropping C-tor entirely (Spec-A position): loses Snowflake/exotic-transport completeness for censored networks (R3 keeps it selectable)"
+  - "little-t-tor child (Spec-A original): wraps C-tor but keeps the control-port parser; `xr-tord` subsumes this with a frozen IPC boundary"
+exit_plan: "if C-tor is ever unmaintainable: Arti covers the default path; exotic transports degrade with visible disclosure (L6); the Tor identity template can be disabled (identities migrate to Disposable with warning — P31 rollback)"
+owner: "D lead (Network, Shield & Extensions)"
+evaluated_on: 2026-09-07
+refresh_by: 2026-12-06
+sources:
+  - url: "https://gitlab.torproject.org/tpo/core/tor (LICENSE)"
+    accessed: 2026-09-07
+    quote: "Tor is distributed under the \"3-clause BSD\" license, a commonly used software license that means Tor is both free software and open source"

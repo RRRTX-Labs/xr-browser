@@ -1,0 +1,34 @@
+# Dependency evaluation: helper tooling (PyYAML, jsonschema, pytest)
+project: "PyYAML — https://pypi.org/project/PyYAML/ · jsonschema — https://pypi.org/project/jsonschema/ · pytest — https://pypi.org/project/pytest/"
+role: "DEV/CI-ONLY governance tooling (tools/*): YAML parse for registers/registries, JSON-Schema validation for evidence, test runner. NO runtime dependency of any kind; NO vendored third-party code in the product (Plan P1 scope rules, §8.9 'Python (tooling only, typed, pinned)')"
+plan_refs: ["P1-T8/T9/T10/T13", "§8.9", "L9"]
+current_status: "all three actively maintained at evaluation (2026-09-07); pinned versions in tools/requirements-dev.txt with sha256 hashes (CI installs with --require-hashes)"
+version_pin_policy: "exact version + sha256 per file in tools/requirements-dev.txt; pip install --require-hashes in CI (governance.yml); no transitive drift possible (transitive deps pinned too)"
+licenses:
+  code: "MIT (all three — verified via PyPI metadata at evaluation; permissive, non-copyleft ✓)"
+  data: "—"
+health:
+  last_release: "PyYAML 6.0.3 · jsonschema 4.26.0 · pytest 9.0.3 (pinned set, all current at 2026-09-07)"
+  bus_factor: "all three are infrastructure-grade projects with large maintainer bases (PyYAML: a few maintainers but 20-year track record; jsonschema: PyCDA/multi; pytest: core team)"
+  open_critical_advisories: "none found as of 2026-09-07 for the pinned set"
+security_posture: "supply chain: pinned hashes mean the exact audited artifact installs (a PyPI compromise of a different file fails the hash check); these run on CI/developers only, never in the browser or a shipped artifact; jsonschema validates OUR evidence format (defense against malformed DoD records), pytest runs the canary-negative suites (L8)"
+maintenance_burden: "minimal: three pins, stdlib-first tools around them; a bump is a one-line PR + hash refresh"
+link_policy: "permissive — MIT (DR-04 satisfied); and they are dev-only, so the link question doesn't arise for shipped binaries"
+use_verdict: "USE (dev/CI-only)"
+alternatives_rejected:
+  - "hand-rolled YAML parsing: fail-closed correctness + standard conformance matter for the registers (a malformed decisions.yaml must fail loudly, not parse ambiguously) — PyYAML safe_load is the boring correct choice"
+  - "other test frameworks: pytest is the de-facto standard and the Plan's test-plan assumes it"
+exit_plan: "replaceable one-for-one (any YAML parser / schema validator / test runner behind the same CLI interfaces in tools/*); dev-only, so an exit costs a tooling PR, not a product change"
+owner: "A lead (Platform/Chromium) — tooling track"
+evaluated_on: 2026-09-07
+refresh_by: 2026-12-06
+sources:
+  - url: "https://pypi.org/project/PyYAML/"
+    accessed: 2026-09-07
+    quote: "PyPI metadata: PyYAML 6.0.3, License: MIT"
+  - url: "https://pypi.org/project/jsonschema/"
+    accessed: 2026-09-07
+    quote: "PyPI metadata: jsonschema 4.26.0, License: MIT"
+  - url: "https://pypi.org/project/pytest/"
+    accessed: 2026-09-07
+    quote: "PyPI metadata: pytest 9.0.3, License: MIT"

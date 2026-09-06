@@ -1,0 +1,34 @@
+# Dependency evaluation: EasyList family (filter lists — DATA, not code)
+project: "EasyList / EasyPrivacy / uAssets / Peter Lowe / AdGuard Base sets — https://github.com/easylist (primary); companions per Plan §1.5"
+role: "Filter rule data, fetched as SIGNED BUNDLES from XR's own update channel and compiled by xr-lists (Plan §1.5, §8.2, DR-03)"
+plan_refs: ["§1.5", "§8.2", "DR-03", "DR-04", "P11-T3"]
+current_status: "actively maintained (easylist repo pushed 2026-09-06, live-verified); used by Adblock Plus, uBlock Origin, AdGuard, Brave, Opera, Vivaldi (their README, live-verified)"
+version_pin_policy: "NOT a code pin — data bundles: each bundle is a signed artifact with pinned content hashes in the bundle manifest (P11-T3); fail-closed to last-known-good on signature/verify failure; lists never enter the git history (runtime data)"
+licenses:
+  code: "—"
+  data: "GPL-3.0-or-later OR CC-BY-SA-3.0 (dual, EasyList) — live-verified 2026-09-07; companions carry their own (AdGuard Base license-permitted per Plan §1.5; Peter Lowe per his site)"
+health:
+  last_release: "continuous list updates (not versioned releases); repo activity live at evaluation"
+  bus_factor: "EasyList authors + community (long-running, multi-decade); uAssets/Lowe sets are single-maintainer but data-only (low risk)"
+  open_critical_advisories: "n/a (data)"
+security_posture: "the list channel is a threat model (T10: compromise = remote behavior control): mitigation = signatures + pinned keys + delta rules + parser fuzzing (P9/P11); rule grammar is sandboxed by the engine — no arbitrary code execution from list bytes; provenance metadata drives Tracker Observatory categorization (R8: categorize by list provenance, not Disconnect data)"
+maintenance_burden: "medium: bundle pipeline (xr-lists) + license attribution sidecars + freshness policy; no rebase cost"
+link_policy: "DATA ONLY — copyleft data is never linked as code (DR-04, Plan §1.5 'Lists are data, not code'); each vendored/bundled copy requires a LICENSE.data attribution sidecar in the same directory (enforced by tools/license_audit.py)"
+use_verdict: "INTEGRATE-DATA-ONLY"
+alternatives_rejected:
+  - "Disconnect lists: CC BY-NC-SA 4.0 — commercial use requires paid license (live-verified 2026-09-07; Plan R8); excluded unless a commercial license is a post-GA business decision (P39)"
+  - "self-authored lists from scratch: years of community curation cannot be reproduced; provenance-based categorization needs the established sets (R8)"
+exit_plan: "lists are swappable by bundle manifest — a replacement set (e.g. community-fork of EasyList, or a licensed set) is a channel-config change, not an engine change; the engine (adblock-rust) is set-agnostic"
+owner: "D lead (Network, Shield & Extensions)"
+evaluated_on: 2026-09-07
+refresh_by: 2026-12-06
+sources:
+  - url: "https://easylist.to/pages/licence.html"
+    accessed: 2026-09-07
+    quote: "the contents of the EasyList repository (https://github.com/easylist) is dual licensed under the GNU General Public License version 3 of the License, or (at your option) any later version, and Creative Commons Attribution-ShareAlike 3.0 Unported, or (at your option) any later version"
+  - url: "https://github.com/easylist/easylist/blob/master/README.md"
+    accessed: 2026-09-07
+    quote: "EasyList, EasyPrivacy, and Fanboy lists are used in a number of extensions and browsers such as Adblock Plus, uBlock Origin, AdGuard, Brave, Opera, and Vivaldi"
+  - url: "https://github.com/disconnectme/disconnect-tracking-protection/blob/master/LICENSE"
+    accessed: 2026-09-07
+    quote: "Licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license (the 'License')."

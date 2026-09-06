@@ -1,0 +1,35 @@
+# Dependency evaluation: Arti (default Tor engine)
+project: "Arti — https://gitlab.torproject.org/tpo/core/arti (Tor Project, Rust)"
+role: "Default Tor engine embedded in the `xr-tord` helper process (SOCKS5 + control IPC); engine-swap design keeps C-tor as fallback (DR-27, R3)"
+plan_refs: ["§1.3", "§8.3", "DR-27", "R3", "P31-T1"]
+current_status: "actively maintained by the Tor Project; README (live-verified 2026-09-07): 'Arti is a full-featured Tor client … It can run and connect to onion services. We believe that Arti is suitable for general client usage.'; release tag `arti-v2.6.0` committed 2026-09-01 (GitLab tags API, live-verified) — matches Plan R3 (2.6.0, 2026-09-01)"
+version_pin_policy: "pinned exact tag/revision, vendored as a library into xr-tord (own repo, P31); engine updates ride the component channel with per-version kill switch (P31-T10); both engines (Arti + C-tor) shipped and leak-gated"
+licenses:
+  code: "Apache-2.0 OR MIT (dual, main codebase) — live-verified; CAVEAT: 'some optional parts are licensed under the GNU Lesser General Public License, version 3.0' (README, live-verified) — the optional LGPLv3 parts must be excluded/evaluated at P31 vendoring (LGPL as separate process is DR-04-tolerable only per Plan §1.12-4 'GPL tools are separate processes or absent'; counsel to confirm at LG-1 refresh if any optional part is actually used)"
+  data: "—"
+health:
+  last_release: "arti-v2.6.0 (2026-09-01, tag live-verified)"
+  bus_factor: "Tor Project (institutional, multi-decade) — strong"
+  open_critical_advisories: "none found as of 2026-09-07 (Tor advisories tracked via torproject.org security channel from P31)"
+security_posture: "memory-safe Rust; designed for embedding; native RPC gives bootstrap events + config without a control-port parser (R3: eliminates the parser we'd otherwise have to build and fuzz); relay/authority features still WIP upstream (Plan Appendix A item 5) — XR needs client features only; A4 (bridge/transport completeness) verified at P31 spike with C-tor fallback shipped same-phase"
+maintenance_burden: "medium: Rust crate pin + engine-swap boundary (frozen local IPC: SOCKS5 + control socket — leak suite tests the boundary, so engine swaps don't re-open the leak surface, R3)"
+link_policy: "permissive for the main codebase (Apache-2.0 OR MIT) — linkable into xr-tord (DR-04 satisfied for the main tree); optional LGPLv3 parts: evaluate at vendoring — if used, they sit in a separate helper process (DR-04 'separate processes or absent'), never in the browser binary"
+use_verdict: "INTEGRATE (default engine, per R3/DR-27)"
+alternatives_rejected:
+  - "C-tor as default: preserves the control-port parser liability Spec-C's position kept (R3); still shipped as FALLBACK for anti-censorship completeness (Snowflake, exotic transports)"
+  - "implementing Tor logic ourselves: banned (Plan §8.3 'Rejected: implementing any Tor logic ourselves')"
+  - "embedding Tor Browser's whole stack: that's a browser, not an engine (Plan §1.13 honesty, §8.3)"
+exit_plan: "engine-swap is the exit plan (DR-27: swappable behind xr-tord IPC); if Arti stalls, C-tor fallback is already shipped; if both fail, the Tor identity degrades with visible failure state (L6) — never silently"
+owner: "D lead (Network, Shield & Extensions)"
+evaluated_on: 2026-09-07
+refresh_by: 2026-12-06
+sources:
+  - url: "https://gitlab.torproject.org/tpo/core/arti"
+    accessed: 2026-09-07
+    quote: "Arti is a full-featured Tor client … It can run and connect to onion services. We believe that Arti is suitable for general client usage."
+  - url: "https://gitlab.torproject.org/tpo/core/arti (README, License section)"
+    accessed: 2026-09-07
+    quote: "This code is licensed under either of Apache License, Version 2.0 / MIT license … **However**, some optional parts are licensed under the GNU Lesser General Public License, version 3.0"
+  - url: "https://gitlab.torproject.org/api/v4/projects/647/repository/tags?search=2.6.0"
+    accessed: 2026-09-07
+    quote: "tag 'arti-v2.6.0', committed 2026-09-01T15:59:39Z"

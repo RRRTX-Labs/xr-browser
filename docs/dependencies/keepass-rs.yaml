@@ -1,0 +1,35 @@
+# Dependency evaluation: keepass-rs (KDBX reader / reference)
+project: "keepass-rs — https://github.com/sseemayer/keepass-rs (crate `keepass`)"
+role: "KDBX-4.1 READER and reference implementation for the sandboxed vault engine (`xr-vaultd`); the WRITER is XR-owned (DR-30, R10)"
+plan_refs: ["§1.7", "§8.4", "DR-30", "R10", "P28-T1"]
+current_status: "actively maintained: crate `keepass` max-stable 0.13.25, updated 2026-08-30 (crates.io, live-verified) — note: Plan Appendix A recorded 0.13.6 at reconciliation; same 0.13.x line, still active, write-path caveat unchanged (see sources)"
+version_pin_policy: "vendored + pinned exact git revision (cargo_crate pattern) in P28's DEPS; `cargo vet` audited-diff on every pin bump; advisory review SLA 72h for criticals (Plan §9.5)"
+licenses:
+  code: "MIT"
+  data: "—"
+health:
+  last_release: "0.13.25 (2026-08-30, crates.io live-verified)"
+  bus_factor: "primary author sseemayer + co-owners incl. a KeePassXC maintainer (Plan Appendix A item 7; crates.io owner list live-verified)"
+  open_critical_advisories: "none found as of 2026-09-07 (advisory feed wired in P9-T9)"
+security_posture: "parser of hostile input (user vault files + imported KDBX) — fuzz target required (P28-T9, 7-day clean floor); MIT + active + co-owned = acceptable; but the WRITE path is the risk: upstream labels KDBX4.1 writing experimental and fork-lineage docs warn unparsed fields are lost on save (Plan R10) — therefore reader-only for us"
+maintenance_burden: "low: stable 0.13.x API for reading; no rebase cost (vendored)"
+link_policy: "permissive — MIT, linkable (DR-04 satisfied). The banned sibling `kdbx-rs` (GPL-3) remains banned (Plan R10/§8.4)"
+use_verdict: "INTEGRATE — reader YES, writer NO (DR-30: XR owns the writer behind the golden-fidelity corpus, P28)"
+alternatives_rejected:
+  - "kdbx-rs: GPL-3.0 — banned as linked code (DR-04, Plan R10)"
+  - "KeePassXC code reuse: GPL-3.0 — study architectures only, no copying (Plan §8.4)"
+  - "XR writes the reader too: unnecessary duplication of a well-tested parser; the writer is where fidelity risk lives, and that is XR-owned regardless"
+exit_plan: "reader is a pure function of a pinned revision: if keepass-rs stalls, the reader is small enough to fork (MIT) behind the same crate interface; the writer is ours, so vault capability never depends on this project's health beyond parse compatibility (golden corpus pins interop)"
+owner: "C lead (Vault & Downloads)"
+evaluated_on: 2026-09-07
+refresh_by: 2026-12-06
+sources:
+  - url: "https://github.com/sseemayer/keepass-rs/blob/master/LICENSE"
+    accessed: 2026-09-07
+    quote: "MIT License — full MIT text, Copyright (c) 2019 Stefan Seemayer"
+  - url: "https://crates.io/crates/keepass"
+    accessed: 2026-09-07
+    quote: "max stable version 0.13.25; 'KeePass .kdbx database file parser'; updated 2026-08-30"
+  - url: "https://github.com/sseemayer/keepass-rs/blob/master/README.md"
+    accessed: 2026-09-07
+    quote: "Rust KeePass database file parser for KDB, KDBX3 and KDBX4, with experimental support for KDBX4.1 writing."

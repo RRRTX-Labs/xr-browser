@@ -1,0 +1,35 @@
+# Dependency evaluation: libsodium + RustCrypto (crypto primitive allow-list)
+project: "libsodium — https://github.com/jedisct1/libsodium · RustCrypto (KDFs/AEAD suites) — https://github.com/RustCrypto"
+role: "The ONLY crypto primitive sources for the vault (Argon2id, AES-256-GCM, ChaCha20-Poly1305, HMAC) — zero custom primitives is LAW (L1, §8.4, DR-11); BoringSSL is used in-Chromium for what the engine already provides"
+plan_refs: ["§1.7", "§8.4", "DR-11", "L1", "P28-T3"]
+current_status: "libsodium: actively maintained (repo live at evaluation, 2026-09-07), the de-facto reference NaCl implementation (ISC). RustCrypto: actively maintained (KDFs repo pushed 2026-08-31, live-verified); per-crate licensing convention is CC0-1.0 — NOTE: crates.io license field for `argon2` (0.6.0) read as empty at evaluation (live-verified) → exact license file to be re-verified at P28 vendoring (recorded, not guessed)"
+version_pin_policy: "vendored + pinned exact revision (cargo_crate pattern) at P28; `cargo vet` audited-diff; advisory SLA 72h critical (Plan §9.5); primitives ONLY from this allow-list (dep-graph lint, P9-T9)"
+licenses:
+  code: "libsodium: ISC (LICENSE live-verified 2026-09-07) · RustCrypto crates: CC0-1.0 per project convention (crates.io field empty for argon2 0.6.0 — re-verify at P28, see current_status)"
+  data: "—"
+health:
+  last_release: "libsodium: continuous stable releases; RustCrypto argon2 crate 0.6.0 (live-verified 2026-09-07)"
+  bus_factor: "libsodium: jedisct1 + community (long-running, audited lineage); RustCrypto: coordinated multi-maintainer Rust crypto suite (audited crates: Argon2 reference vectors, AEAD test vectors)"
+  open_critical_advisories: "none found as of 2026-09-07 (feeds wired in P9-T9)"
+security_posture: "these ARE the security-critical pins: KATs from first commit (P28-T7), fuzz format+IPC 7-day floor, memory hygiene (zeroize/lock/crash-residue, P28-T4), external cryptographic audit BEFORE real credentials in stable (DR-11 — the hard gate); dep-graph lint makes the allow-list structural (L1 enforcement)"
+maintenance_burden: "low: boring, stable, vector-tested; the burden is the AROUND-them ceremony (audit, KATs, memory hygiene) which the Plan already budgets"
+link_policy: "permissive — ISC / CC0-1.0, linkable (DR-04 satisfied); in a sandboxed process (xr-vaultd) regardless"
+use_verdict: "INTEGRATE (allow-list; L1)"
+alternatives_rejected:
+  - "custom primitives: BANNED — L1, DR-11 (zero custom crypto)"
+  - "other Rust crypto suites: not on the allow-list; adoption would be a fresh L9 eval + ADR (none planned)"
+  - "non-vendored crates.io latest: banned by pin policy (supply chain, T11)"
+exit_plan: "primitives are standardized (Argon2 RFC-draft/vectors, AEAD NIST): a replacement crate is a pin change behind the same KAT corpus — the corpus is the exit plan; audit scope re-runs on any swap"
+owner: "C lead (Vault & Downloads)"
+evaluated_on: 2026-09-07
+refresh_by: 2026-12-06
+sources:
+  - url: "https://github.com/jedisct1/libsodium/blob/master/LICENSE"
+    accessed: 2026-09-07
+    quote: "ISC License — Copyright (c) 2013-2026 Frank Denis <j at pureftpd dot org>"
+  - url: "https://crates.io/crates/argon2"
+    accessed: 2026-09-07
+    quote: "version 0.6.0; license field empty in API response (project convention CC0-1.0 per docs.rs — re-verify at P28 vendoring)"
+  - url: "https://github.com/RustCrypto/KDFs"
+    accessed: 2026-09-07
+    quote: "repo metadata: default branch master, pushed 2026-08-31"
