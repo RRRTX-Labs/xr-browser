@@ -1,0 +1,8 @@
+# xr_debug.gn — debug argset (overrides xr_common.gni). Developer builds.
+
+is_official_build = false          # read-at: build/config/BUILDCONFIG.gn:125-136
+is_debug = true                    # read-at: build/config/BUILDCONFIG.gn:158-160
+is_component_build = false         # read-at: build/config/BUILDCONFIG.gn:163-171
+symbol_level = 2                   # read-at: build/config/compiler/BUILD.gn:1423,3114-3118
+dcheck_always_on = true            # read-at: build/config/compiler/BUILD.gn:153
+xr_channel = "dev"                 # XR-owned

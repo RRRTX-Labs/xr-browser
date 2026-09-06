@@ -1,0 +1,8 @@
+# xr_release.gn — release argset (overrides xr_common.gni). Ship-intended builds.
+
+is_official_build = true           # read-at: build/config/BUILDCONFIG.gn:125-136
+is_debug = false                   # read-at: build/config/BUILDCONFIG.gn:158-160
+is_component_build = false         # read-at: build/config/BUILDCONFIG.gn:163-171
+symbol_level = 1                   # read-at: build/config/compiler/BUILD.gn:1423,3114-3118
+dcheck_always_on = false           # read-at: build/config/compiler/BUILD.gn:153
+xr_channel = "stable"              # XR-owned

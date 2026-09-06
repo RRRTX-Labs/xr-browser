@@ -1,0 +1,14 @@
+# xr_common.gni — the common XR argset, applied to every build.
+#
+# Every `# read-at:` cites the pinned Chromium rev d04cdb24… (152.0.7977.82).
+# XR-owned flags (xr_*) are documented in argsets/README.md and flags.yaml.
+# Merge order: xr_common.gni (base) < xr_release|xr_debug|xr_component (overrides).
+
+xr_branding = true                 # XR-owned: de-Google branding (P2-T6)
+enable_widevine = false            # read-at: third_party/widevine/cdm/widevine.gni:14-20 (DR-14 OPEN / LG-3)
+safe_browsing_mode = 0             # read-at: chrome/common/BUILD.gn:407,759 (SB re-architect P16 / DR-15)
+google_api_key = ""                # read-at: google_apis/BUILD.gn:25 (no Google keys, L16)
+google_default_client_id = ""      # read-at: google_apis/BUILD.gn:28
+google_default_client_secret = ""  # read-at: google_apis/BUILD.gn:31
+use_official_google_api_keys = ""  # read-at: google_apis/BUILD.gn:34
+exclude_unwind_tables = false      # read-at: build/config/compiler/BUILD.gn:495
