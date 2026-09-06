@@ -1,0 +1,52 @@
+# S0/S1 path classification — SINGLE SOURCE OF TRUTH
+#
+# Consumed by tools/owners_sync.py to (re)generate CODEOWNERS in both
+# repositories. Edit HERE, then run:  python tools/owners_sync.py --write
+# CI (governance.yml) runs:           python tools/owners_sync.py --check
+# (both in sync or CI fails).
+#
+# Plan anchors: §7.2 (Ownership & boundaries), §14 L13 (S0/S1 = dual senior
+# review incl. Security), P1-T7. S0 set per Plan §7.2:
+#   xr-core:  //xr/policy, //xr/vault*, //xr/net, //xr/identity,
+#             //xr/extensions are S0; //xr/mojom additionally requires RFC.
+#   meta:     tooling + registers + CI definitions are S0 (P1 extension of
+#             the S0 concept to the governance surface — the linters are
+#             the guardrails, so they are guarded).
+#
+# owner_groups: GitHub handles. PLACEHOLDERS until hosting lands (HG-3);
+# ops replaces them with real team handles at repo-creation time. The
+# path→group mapping is authoritative regardless of the handle values.
+
+schema_version: 1
+
+owner_groups:
+  s0: ["@xr/platform", "@xr/security"]
+  s1: ["@xr/platform"]
+  default: ["@xr/platform"]
+
+repos:
+  xr-core:
+    path: "../xr-core"            # relative to the meta repo root
+    codeowners_file: "CODEOWNERS"
+    s0_paths:
+      - "/mojom/"                 # contracts; changes additionally need RFC (L14, P5)
+      - "/policy/"                # THE resolver (L3)
+      - "/identity/"              # partition provisioning, lifecycle (S0)
+      - "/net/"                   # RouteManager, leak policies (S0)
+      - "/vault/"                 # vault client + mediation (S0)
+      - "/extensions/"            # Guard chokepoint (S0)
+    s1_paths: []                  # populated as P5+ directories land
+
+  xr-browser:
+    path: "."
+    codeowners_file: ".github/CODEOWNERS"
+    s0_paths:
+      - "/tools/"                 # the governance linters themselves
+      - "/docs/register/"         # Decision Register (trailer-protected)
+      - "/docs/registry/"         # Feature Registry (release gates read it)
+      - "/docs/adr/"              # ADRs: agents draft, humans decide
+      - "/.github/workflows/"     # CI definitions
+      - "/ci/"                    # pipelines-as-code (P2/P3)
+    s1_paths:
+      - "/docs/legal/"            # counsel briefs: legal review
+      - "/docs/dependencies/"     # L9 eval pack: owner review
