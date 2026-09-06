@@ -1,6 +1,6 @@
 # xr-browser (meta repository)
 
-XR Browser by RRRTX Systems — the governance, build/release, and
+XR Browser by RRRTX Labs — the governance, build/release, and
 documentation surface. The product code lives in the sibling `xr-core`
 repository (Plan §7.1: two repos + helpers; deliberately not a sprawl).
 Full map: `docs/state/repo-map.md`.

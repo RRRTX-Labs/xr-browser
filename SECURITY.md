@@ -1,4 +1,4 @@
-# Security policy — XR Browser (RRRTX Systems)
+# Security policy — XR Browser (RRRTX Labs)
 
 **Status of this file:** in force as policy text (P1). Two operational
 dependencies are **not yet live** and are marked as such — see
@@ -6,7 +6,7 @@ dependencies are **not yet live** and are marked as such — see
 
 | Item | State |
 |---|---|
-| GitHub repository hosting (required for the GitHub Security Advisory flow) | **PENDING-OPS** — placeholder URL: `https://github.com/rrrtx/xr-browser` (PENDING-OPS: repository not yet created; the URL will be corrected by ops in a one-line commit when hosting lands) |
+| GitHub repository hosting (required for the GitHub Security Advisory flow) | **PENDING-OPS** — target: `https://github.com/RRRTX-Labs/xr-browser` (organization `RRRTX-Labs` exists; the repository is created and pushed per `evidence/P1/human-gates.md` HG-3, then GHSA enabled per HG-4) |
 | `security@rrrtx.example` mailbox + DNS | **UNREGISTERED** — the address is declared here as the future routing point but does not exist yet; do not send reports to it until `evidence/P1/human-gates.md` shows it live |
 
 Until both are live, the only working intake path is: **report to a named
@@ -18,9 +18,9 @@ workflow below. That is a *temporary human bridge*, not a policy exception.
 
 1. **Preferred (when hosting is live):** open a **GitHub Security Advisory
    (GHSA)** private vulnerability report on the repository hosting this
-   file (`https://github.com/rrrtx/xr-browser` — PENDING-OPS). GHSA gives
-   reporters private tracking, embargo-aware disclosure, and credit
-   options.
+   file (`https://github.com/RRRTX-Labs/xr-browser` — PENDING-OPS: repo
+   push + GHSA enablement, HG-3/HG-4). GHSA gives reporters private
+   tracking, embargo-aware disclosure, and credit options.
 2. **Email (when registered):** `security@rrrtx.example` (currently
    UNREGISTERED — see table above).
 3. **Never** post security issues to the public issue tracker. The public

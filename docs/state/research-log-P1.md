@@ -104,3 +104,15 @@ was changed, so no amendment or draft issue was required.
 - Funding-gate evidence for DR-01 (HR/finance; HG-6).
 - Any claim about runtime security properties: P1 ships governance
   only; the threat model v0 is explicitly pre-implementation.
+
+## 8. Same-day amendment: plan v2 (brand correction + re-pin)
+
+At P1 release preparation the principal directed removal of all stale
+"RRRTX Systems" branding from XR-owned content (official brand:
+**RRRTX Labs**, already used on plan v1 line 8). Plan v1 line 3 carried
+the stale form; per `docs/process/plan-amendment.md` this was executed as
+**plan v2** (`docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md` —
+exactly one token changed, no line added/removed) with a full re-pin in
+one commit, recorded in **ADR-0003**. All research findings in this log
+are unaffected: the correction touches no verified fact, only the
+company-name token.

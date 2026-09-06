@@ -9,7 +9,9 @@ review: >
   CI.
 allowlist:
   - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
-    justification: "Pinned plan cites copyleft as prohibitions/decisions: §0.2 R10 (keepass-rs/MIT vs kdbx GPL), §1.5 'lists are data', §1.12-4 license invariant, §8.2 uBO GPL3 DON'T, §8.4 KeePassXC GPL DON'T-copy. Immutable by pin; never edited in place."
+    justification: "Pinned plan v2 (brand-corrected copy of the v2 file below) cites copyleft as prohibitions/decisions: §0.2 R10 (keepass-rs/MIT vs kdbx GPL), §1.5 'lists are data', §1.12-4 license invariant, §8.2 uBO GPL3 DON'T, §8.4 KeePassXC GPL DON'T-copy. Immutable by pin; never edited in place."
+  - path: docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md
+    justification: "Versioned plan file (amendment record, docs/process/plan-amendment.md): identical content to the pinned copy above, cites copyleft as prohibitions/decisions (same passages). Retained per amendment rule 4 (old versions are never deleted)."
   - path: docs/adr/0001-repo-topology-and-licensing.md
     justification: "ADR-0001 records the DR-04 GPL boundary itself (no GPL/AGPL/SSPL linked; EasyList GPLv3/CC-BY-SA 3.0 dual consumed as data with LICENSE.data sidecars)."
   - path: docs/process/dependency-eval-template.yaml

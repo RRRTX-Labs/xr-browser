@@ -28,7 +28,7 @@
 # ADR-0002.
 
 schema_version: 1
-plan_sha256: a74b2aa4e8fd6f427c71cadfe932489249afe208a10413bf78c04734fd343e1b
+plan_sha256: 02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b
 
 decisions:
   - id: DR-01

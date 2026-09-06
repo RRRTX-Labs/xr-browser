@@ -2,7 +2,7 @@
 
 - **Version:** v0 (Phase P1, 2026-09-07)
 - **Bound to:** `XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md`
-  (SHA-256 `a74b2aa4e8fd6f427c71cadfe932489249afe208a10413bf78c04734fd343e1b`,
+  (SHA-256 `02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b`,
   pinned in `master-plan.sha256`)
 - **Status of the protections described:** **v0 is pre-implementation.**
   Every protection stated below is the *target posture* from the Plan

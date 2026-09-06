@@ -11,7 +11,7 @@ import pytest
 
 TOOLS = Path(__file__).resolve().parents[1]
 REPO = Path(__file__).resolve().parents[2]
-PIN = "a74b2aa4e8fd6f427c71cadfe932489249afe208a10413bf78c04734fd343e1b"
+PIN = "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b"
 
 
 def run_tool(*args: str, cwd: Path | None = None) -> subprocess.CompletedProcess:
@@ -44,7 +44,7 @@ def test_real_repo_pin_passes() -> None:
     assert data["status"] == "pass"
     assert data["pinned_sha256"] == PIN
     assert data["actual_sha256"] == PIN
-    assert data["plan_bytes"] == 298080
+    assert data["plan_bytes"] == 298077
 
 
 def test_tampered_plan_fails(tmp_path: Path) -> None:
