@@ -1,0 +1,44 @@
+{
+  "phase": "P2 — Build system & hermetic Chromium build",
+  "generated": "2026-09-07",
+  "plan": "docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md",
+  "repos": {
+    "xr-browser (meta)": "main — HEAD at packaging (P2 = 12 commits, 0ba6859… → the PHASE2_RELEASE.md commit; exact list in PHASE2_RELEASE.md §2)",
+    "xr-core (product)": "main @ 6416bf1 (P2 commit 6416bf1 on top of P1's 3; patches/manifest.yaml + patches/branding/0001-brand-ui/)"
+  },
+  "tasks": {
+    "T1": {"what": "vendored Chromium checkout via DEPS pins + refresh", "artifact": "DEPS, buildsys/sync.py (sync/refresh), docs/contracts/deps-pin-policy.md", "commit": "c2a578e", "status": "VERIFIED (mock; real sync needs a provisioned host — preflight refuses this sandbox by design)"},
+    "T2": {"what": "GN arg set (de-Google flags, enable_widevine=false, endpoint posture)", "artifact": "buildsys/gn/argsets/ (flags.yaml allowlist + xr_common.gni + 3 selectables)", "commit": "d3ab1d6", "status": "VERIFIED (allowlist-validated; resolve_args --validate passes)"},
+    "T3": {"what": "xr-core mount into src/xr + patch-manifest applicator", "artifact": "buildsys/sync.py (mount), buildsys/patching/apply.py, xr-core patches/manifest.yaml", "commit": "bb492ff (xr-browser) + 6416bf1 (xr-core)", "status": "VERIFIED (real patch applies/verifies/reverts against pinned Chromium files)"},
+    "T4": {"what": "ccache + remote cache + build-farm bring-up", "artifact": "buildsys/farm/ (caching.md, ccache-setup.sh, budget_meter.py, runners/), ci/*.yml", "commit": "b76a531", "status": "VERIFIED (tooling + CI definitions); farm bring-up HUMAN-GATED (HG-9)"},
+    "T5": {"what": "toolchain pins (clang/sysroot/SDK) + recorded digests", "artifact": "buildsys/toolchain/pins.json + provenance.py", "commit": "917156d", "status": "VERIFIED (clang sha256 captured from the fetched tarball; 9 sysroot digests transcribed; amd64 re-hashed to match)"},
+    "T6": {"what": "de-branding pipeline (icons, strings, about-page)", "artifact": "buildsys/branding/ (gen_version.py, brand_check.py, icons/, about_page.md) + xr-core branding patch", "commit": "28927eb", "status": "VERIFIED (binary fixture good/bad; endpoint-deny scan clean)"},
+    "T7": {"what": "build docs exact enough for external rebuild", "artifact": "BUILDING.md", "commit": "4d1c26e", "status": "VERIFIED (new this release pass)"},
+    "T8": {"what": "artifact signing scaffold (test certs)", "artifact": "buildsys/signing/ (sign_artifact.py, testkeys/)", "commit": "9152542", "status": "VERIFIED (mock; release/stable refused until P10)"},
+    "T9": {"what": "build-time SBOM emission (GN walk + cargo metadata)", "artifact": "buildsys/sbom/ (emit_sbom.py, sbom_gate.py, vendored CycloneDX 1.6 schema) + docs/contracts/sbom-v1.md", "commit": "0379721", "status": "VERIFIED (fixture SBOM validates against vendored schema)"},
+    "T10": {"what": "patch-manifest CI counting hook (budget meter)", "artifact": "buildsys/farm/budget_meter.py (report-only)", "commit": "b76a531", "status": "VERIFIED (1/150 patches, no overage)"}
+  },
+  "toolchain_capture": {
+    "clang_linux_artifact_sha256": "e22e06c05fe1657f48f988b15804b8226e691addb00abba5b984a5c99ac98c42",
+    "clang_linux_artifact_url": "https://commondatastorage.googleapis.com/chromium-browser-clang/Linux_x64/clang-llvmorg-23-init-19482-g53d18800-1.tar.xz",
+    "sysroot_url_base": "https://commondatastorage.googleapis.com/chrome-linux-sysroot",
+    "sysroot_amd64_verified": true,
+    "note": "captured 2026-09-07 by provenance.py --record (fetched artifacts, never typed); the earlier .tgz URL and toolchain/<hash> sysroot path 404'd and are fixed"
+  },
+  "dod_rows": {
+    "3-OS builds green nightly for 2 consecutive weeks": "HUMAN-GATED — needs the real build farm (HG-9); ci/nightly-rebase-build.yml defines the matrix",
+    "external-rebuild proof filed": "HUMAN-GATED — BUILDING.md is written and mock-verified; an outside contributor must execute it (record time-to-first-build)",
+    "SBOM published on dev channel": "TOOL-READY — emitter + schema gate verified; publication requires a real build + dev-channel release (P10 signing)"
+  },
+  "human_gates": {
+    "HG-9": "build-farm bring-up + runner registration (Linux/mac bare-metal, Win VMs)",
+    "HG-11": "remote ccache endpoint sign-off (template only today)",
+    "P10": "real code-signing certs (sign_artifact.py is test-scaffold, dev channel only)",
+    "DR-14/LG-3": "Widevine CDM verdict stays open — enable_widevine=false is the committed default"
+  },
+  "not_done_by_design": [
+    "Real ./build sync + compile: preflight REFUSES this sandbox (2 vCPU / 2.08 GB RAM / 21.2 GB free vs ~240 GB estimate) — refusing rather than simulating checkout state is the P2-T1 behavioral gate working as designed.",
+    "component-updater positive endpoint rewrite ('endpoints -> XR dev URL'): not a GN arg; the defensive deny-scan is in place (brand-check --scan), the positive rewrite lands with the updater work (P10) or a dedicated de-Google patch.",
+    "Bit-stability of two same-input builds: requires real builds (deferred per plan — chromium-wide determinism is never promised, R4)."
+  ]
+}
