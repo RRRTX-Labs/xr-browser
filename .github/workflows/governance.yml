@@ -46,6 +46,14 @@ jobs:
         run: |
           python -m pip install --require-hashes -r tools/requirements-dev.txt
 
+      - name: Checkout xr-core at the DEPS pin
+        # P3 gates (budget / retirement-lint) read the sibling patch repo at
+        # the pin recorded in DEPS (single source of truth).
+        run: |
+          pin=$(grep -oP 'xr_core_rev: "\K[0-9a-f]{40}' DEPS)
+          git clone -q https://github.com/ahmadrrrtx/xr-core.git ../xr-core
+          git -C ../xr-core checkout -q "$pin"
+
       - name: Governance checks
         # Concrete SHAs (always resolvable with fetch-depth: 0):
         #   PR  -> base.sha..HEAD   (only the PR's commits are gated)
@@ -70,3 +78,25 @@ jobs:
           python3 build/toolchain/provenance.py --verify # toolchain digests (R0)
           ./scripts/build brand-check --scan                       # endpoint-deny over the build surface
           python3 build/gn/resolve_args.py --validate   # argset allowlist consistency
+
+      # ------------------------------------------------------------------
+      # P3: upstream-treadmill gates. All offline (fixtures / committed
+      # config); the live lanes run in nightly-rebase-build.yml instead.
+      # ------------------------------------------------------------------
+      - name: Upstream treadmill gates (P3)
+        run: |
+          # patch budget: config must match the plan's §1.2 caps exactly...
+          python3 build/upstream/gen_budget_config.py --check
+          # ...the manifest must be under budget (blocking)...
+          ./scripts/build budget --manifest ../xr-core/patches/manifest.yaml --gate
+          # ...and the committed state doc must not be stale
+          ./scripts/build budget --manifest ../xr-core/patches/manifest.yaml --check-state-doc
+          # rebase engine: offline 5-patch classification drill (3 ranges)
+          ./scripts/build rebase selftest
+          # assumption registry: schema-valid before anything runs it live
+          ./scripts/build assumptions validate
+          # retirement ledger: linkage + removal-without-ledger detection
+          # (xr-core at the DEPS pin; full history for the cross-check)
+          ./scripts/build retire lint --xr-core ../xr-core
+          # network chokepoint: all upstream fetches through fetch.py's allowlist
+          python3 tools/fetch_allowlist_check.py

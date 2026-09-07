@@ -130,6 +130,56 @@ expect_reject "plan pin: tampered plan copy" \
   'plan pin mismatch' \
   "$PY" tools/plan_pin_check.py --repo "$P"
 
+
+# --- 8. budget: over-cap manifest must fail the gate (Plan P3 DoD) ----------
+B="$TMP/budget"; mkdir -p "$B/inj"
+"$PY" - "$B" <<'PYDONE'
+import sys
+from pathlib import Path
+root = Path(sys.argv[1])
+rows = []
+for i in range(3):  # extension_chokepoint cap = 2
+    d = root / "inj" / str(i)
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "inj.patch").write_text("--- a/x.txt\n+++ b/x.txt\n@@ -1 +1 @@\n-x\n+y\n")
+    rows += [f'  - id: "inj-{i}"', '    owner: "@xr/security"',
+             "    category: extension_chokepoint", "    files:", '      - "x.txt"',
+             f"    dir: inj/{i}"]
+(root / "manifest.yaml").write_text(
+    "schema_version: 1\ntotal_cap: 150\ncategories:\n"
+    "  extension_chokepoint: { cap: 2 }\nallowed_roots:\n  - \"x.txt\"\n"
+    "patches:\n" + "\n".join(rows) + "\n")
+PYDONE
+expect_reject "budget: over-cap manifest fails the gate" \
+  'extension_chokepoint' \
+  "$PY" build/farm/budget_meter.py budget --manifest "$B/manifest.yaml" --gate
+
+# --- 9. retirement: manifest removal without a ledger entry -----------------
+X="$TMP/xr-core"; mkdir -p "$X/patches/p/one"; cd "$X"
+git init -q -b main .
+git config user.name "Nevil N"; git config user.email "nevil@example.invalid"
+printf 'schema_version: 1\ntotal_cap: 150\ncategories:\n  ui: { cap: 35 }\nallowed_roots:\n  - "a.txt"\npatches:\n  - id: "one"\n    owner: "@xr/platform"\n    category: ui\n    files:\n      - "a.txt"\n    dir: p/one\n' > patches/manifest.yaml
+printf -- '--- a/a.txt\n+++ b/a.txt\n@@ -1 +1 @@\n-x\n+y\n' > patches/p/one/one.patch
+git add -A; git commit -q -m "init"
+printf 'patches:\n' > patches/manifest.yaml   # raw removal, NO xr-patch retire
+git add -A; git commit -q -m "raw removal (negative)"
+cd - >/dev/null
+M="$TMP/meta"; mkdir -p "$M/build/upstream"
+printf '{"schema_version": 1, "retirements": []}' > "$M/build/upstream/retirements.json"
+expect_reject "retirement: removal without a ledger entry" \
+  'without a ledger entry' \
+  env XR_ROOT="$M" "$PY" build/upstream/retirements.py lint --xr-core "$X"
+
+# --- 10. fetch chokepoint: direct network use outside fetch.py ---------------
+F="$TMP/choke"; mkdir -p "$F/build/upstream" "$F/tools"
+printf 'import urllib.request\nurllib.request.urlopen("https://evil.example.net/x")\n' \
+  > "$F/build/upstream/evil_net.py"
+cp tools/fetch_allowlist_check.py "$F/tools/"
+cp build/upstream/fetch.py "$F/build/upstream/"   # the checker reads the chokepoint
+expect_reject "fetch chokepoint: urlopen outside the chokepoint" \
+  'network import outside the chokepoint' \
+  "$PY" "$F/tools/fetch_allowlist_check.py"
+
 echo
 if [ "$FAILURES" -ne 0 ]; then
   echo "NEGATIVE GATE FAILED: at least one gate accepted bad input or failed for the wrong reason"

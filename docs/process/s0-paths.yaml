@@ -42,6 +42,8 @@ repos:
     codeowners_file: ".github/CODEOWNERS"
     s0_paths:
       - "/tools/"                 # the governance linters themselves
+      - "/build/"                 # build + upstream toolchain (P3: the rebase bot,
+                                  # budget gate, signing scaffold are guardrails)
       - "/docs/register/"         # Decision Register (trailer-protected)
       - "/docs/registry/"         # Feature Registry (release gates read it)
       - "/docs/adr/"              # ADRs: agents draft, humans decide

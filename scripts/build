@@ -37,6 +37,14 @@ SUBCOMMANDS: dict[str, str] = {
     "version": "branding/gen_version.py",
     "sign": "signing/sign_artifact.py",
     "budget": "farm/budget_meter.py",
+    "audit": "farm/budget_meter.py",
+    "rebase": "upstream/rebase_bot.py",
+    "promotion": "upstream/promotion.py",
+    "fastlane": "upstream/fastlane.py",
+    "sla": "upstream/fastlane.py",
+    "assumptions": "upstream/assumptions.py",
+    "retire": "upstream/retirements.py",
+    "fork-health": "upstream/fork_health.py",
     "test": None,  # special: pytest runner, handled below
 }
 
@@ -46,13 +54,21 @@ USAGE_NOTES = {
     "preflight": "refuse under-provisioned hosts; record nproc/RAM/disk",
     "gen": "resolve argsets + run gn gen",
     "compile": "run ninja on a target (default //xr:xr_all)",
-    "patch": "apply|verify|revert|lint the patch manifest",
+    "patch": "apply|verify|revert|retire|lint the patch manifest",
     "sbom": "emit a CycloneDX 1.6 SBOM",
     "sbom-gate": "validate an SBOM against the vendored schema",
     "brand-check": "verify de-branding (binary) or endpoint-deny scan",
     "version": "build the version string",
     "sign": "TEST-ONLY signing scaffold",
-    "budget": "patch-budget meter (gate mode blocks CI; P3)",
+    "budget": "patch-budget meter; --gate blocks CI (P3-T3)",
+    "audit": "xrctl patches audit surface — drift, orphans, budget (§12.2)",
+    "rebase": "classify patch applicability at an upstream rev (P3-T1)",
+    "promotion": "extended-stable promotion job definitions + local run (P3-T4)",
+    "fastlane": "security fast-lane watch/plan/drill (P3-T5)",
+    "sla": "SLA clock: deadlines from tag publication + freeze marker (P3-T5)",
+    "assumptions": "upstream-assumptions suite (§12.4, P3-T6)",
+    "retire": "seam-retirement ledger (P3-T7)",
+    "fork-health": "fork-health headline chart → docs/state/fork-health.md (P3-T7)",
     "test": "run the pytest suites (tools/tests + build/**/tests)",
 }
 

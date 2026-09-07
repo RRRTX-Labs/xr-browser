@@ -1,0 +1,104 @@
+name: nightly-rebase-build
+
+# Plan P3: the nightly upstream treadmill — automated canary rebase against
+# the latest Chromium main, security fast-lane watch + drills, promotion
+# series discovery, and the fork-health chart refresh. Definitions are
+# committed here; activation is human-gated (the workflow_dispatch input is
+# the on-call's act, HG-19). The workflow NEVER pushes branches, tags, or
+# PRs (L24: the bot prepares, humans merge); evidence is uploaded as artifacts.
+#
+# Network policy: this is the ONLY workflow that touches the network beyond
+# git/PyPI — and every upstream byte flows through build/upstream/fetch.py
+# (allowlist: chromium.googlesource.com, commondatastorage.googleapis.com,
+# chromiumdash.appspot.com, api.github.com). Zero new vendored deps.
+
+on:
+  schedule:
+    - cron: "0 2 * * *"   # 02:00 UTC nightly (off-peak for PK/EU/US overlap)
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "why this manual run (logged in the evidence bundle)"
+        required: false
+        default: "manual canary"
+
+concurrency:
+  group: nightly-rebase
+  cancel-in-progress: false
+
+jobs:
+  treadmill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      XR_LIVE_NET: "1"          # gates every live fetch inside fetch.py
+    steps:
+      - name: Checkout xr-browser
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+
+      - name: Checkout xr-core at the DEPS pin
+        run: |
+          pin=$(grep -oP 'xr_core_rev: "\K[0-9a-f]{40}' DEPS)
+          git clone -q https://github.com/ahmadrrrtx/xr-core.git ../xr-core
+          git -C ../xr-core checkout -q "$pin"
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        python-version: "3.12"
+
+      - name: Install pinned dev dependencies
+        run: python -m pip install --require-hashes -r tools/requirements-dev.txt
+
+      - name: Resolve the canary target (latest main via gitiles TEXT only)
+        run: |
+          sha=$(python3 - <<'EOF'
+          import sys; sys.path.insert(0, "build/upstream")
+          from fetch import GitilesFetchSource
+          src = GitilesFetchSource()
+          head = src.ref_value("heads/main")
+          print(head)
+          EOF
+          )
+          echo "CANARY_SHA=$sha" >> "$GITHUB_ENV"
+          echo "canary target: $sha"
+
+      - name: Canary rebase (classify at latest main; issues on drift)
+        run: |
+          ./scripts/build rebase rebase --to "$CANARY_SHA" --dry-run --explain
+          # verdict != GREEN is NOT a job failure: drift is expected treadmill
+          # output; the report + owner bundles are the deliverable. A tool
+          # crash (exit 2) fails the job.
+
+      - name: Assumption suite at the pin (blocking rows, §12.4)
+        run: ./scripts/build assumptions run --use-deps --out work/upstream-cache
+
+      - name: Fast-lane watch + drills (SIMULATED, TEST keys)
+        run: |
+          ./scripts/build fastlane watch --json > work/upstream-cache/fastlane-watch.json
+          ./scripts/build fastlane drill
+
+      - name: Promotion series discovery (cadence as data)
+        run: ./scripts/build promotion discover
+
+      - name: Retirement ledger lint
+        run: ./scripts/build retire lint --xr-core ../xr-core
+
+      - name: Fork-health chart refresh (SKIP-visible)
+        run: ./scripts/build fork-health --xr-core ../xr-core
+
+      - name: Upload the treadmill evidence bundle
+        if: always()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: treadmill-evidence-${{ github.run_id }}
+          path: |
+            work/upstream-cache/
+            docs/state/fork-health.md
+          retention-days: 30
+
+      # NOTE (L24): no push step, by design. The on-call reads the artifacts;
+      # GREEN canaries become DEPS-bump PRs prepared LOCALLY by xr-rebase
+      # (rebase/chromium-<short> branches) that a human reviews and merges.
+      # docs/upstream-bot.md documents the whole loop.

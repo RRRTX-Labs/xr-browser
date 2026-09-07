@@ -4,6 +4,7 @@
 # Interim enforcement: this file is diff-checked in CI (governance.yml).
 # S0 paths require dual senior review incl. Security (Plan §7.2, L13).
 /tools/ @xr/platform @xr/security
+/build/ @xr/platform @xr/security
 /docs/register/ @xr/platform @xr/security
 /docs/registry/ @xr/platform @xr/security
 /docs/adr/ @xr/platform @xr/security
