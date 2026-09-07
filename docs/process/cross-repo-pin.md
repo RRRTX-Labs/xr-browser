@@ -24,6 +24,16 @@ not optional.
 > same day, and the DEPS rev must be a reachable ancestor of origin
 > `xr-core` `main` at the moment it lands.**
 
+## Push modes (ruling, recorded P5→P6)
+
+> **main-push remains sanctioned until HG-3/HG-10 (branch protection + PR
+> flow) activate; from then, pair-bumps land via merged PR only.**
+
+This records the P5 deviation (token-authorized direct main-push, noted in
+`evidence/P5/human-gates.md`) as policy, not drift: until branch protection
+exists on `xr-core` `main`, a same-day pair-bump push to `main` is the
+sanctioned landing mode. The no-force-push rule above applies in ALL modes.
+
 ## Procedure (change a patch / add `//xr` code)
 
 1. **Branch + commit in `xr-core`.** DCO sign-off
