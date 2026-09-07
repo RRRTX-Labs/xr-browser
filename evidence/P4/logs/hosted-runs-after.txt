@@ -1,0 +1,43 @@
+# hosted runs — AFTER the P4 pushes (public API, authenticated read-only)
+generated: 2026-09-07T17:03:18Z
+
+## the fix
+governance.yml:83 used ${{ ... (github.event.pull_request.base.sha + '..HEAD') ... }}.
+GitHub Actions expressions have no '+' operator; a lex error is fatal at
+COMPILE time, so the run ends with zero jobs, zero logs, zero check-runs.
+Introduced in P1-T13 (f7178bf). Fixed with format('{0}..HEAD', x).
+
+## run 34145834427 — governance, event=push, head c0af9d2 -> SUCCESS
+12 steps, all success (this is the first time this job has ever executed):
+  success  1 Set up job
+  success  2 Checkout
+  success  3 Set up Python 3.12
+  success  4 Install pinned dev dependencies
+  success  5 Install optional helper tools (P4-T0.1)
+  success  6 Checkout xr-core at the DEPS pin
+  success  7 Cross-repo pin is alive (P4-T0.2)
+  success  8 Governance checks
+  success  9 Workflow files lint (P4)
+  success  10 Negative fixtures (gates must fail on bad input)
+  success  11 Build-system gates (P2)
+  success  12 Upstream treadmill gates (P3)
+
+## before vs after
+  before: 10/10 push runs conclusion=failure, every one with 0 jobs
+          (run name = the file PATH, i.e. GitHub never read 'name: governance')
+  after : run name = 'governance', jobs = 1, conclusion = success
+
+## raw inventory (newest first, unauthenticated-equivalent fields)
+  run id        workflow                             event              conclusion  head
+  34145834427   governance                           push               success     c0af9d2
+  34145296332   nightly-rebase-build                 workflow_dispatch  success     1452002
+  34145119994   .github/workflows/governance.yml     push               failure     1452002
+  34136342970   .github/workflows/nightly-rebase-bui push               failure     e35f332
+  34136342074   .github/workflows/governance.yml     push               failure     e35f332
+  34128516437   .github/workflows/governance.yml     push               failure     1914412
+  34127018881   .github/workflows/governance.yml     push               failure     e31c94a
+  34067200262   .github/workflows/governance.yml     push               failure     d792824
+  34066373103   .github/workflows/governance.yml     push               failure     0e0e2d5
+  34066355519   .github/workflows/governance.yml     push               failure     17ab59e
+  34066199834   .github/workflows/governance.yml     push               failure     2107b6f
+  34061069528   .github/workflows/governance.yml     push               failure     17ab59e

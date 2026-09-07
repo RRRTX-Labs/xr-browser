@@ -53,14 +53,14 @@
     {
       "id": "DOD-1b",
       "dod": "All hosted GitHub runs conclude success at the pushed HEAD (run IDs cited)",
-      "status": "BLOCKED-PENDING-PUSH",
+      "status": "VERIFIED",
       "source": "hosted-ci",
-      "gate": "HG-P4-PUSH",
       "evidence": [
-        ".github/workflows/governance.yml",
-        "logs/hosted-runs-before.txt"
+        "logs/hosted-runs-after.txt",
+        "logs/hosted-runs-before.txt",
+        ".github/workflows/governance.yml"
       ],
-      "notes": "Before: 9/9 runs failure (IDs in logs/hosted-runs-before.txt), at e35f332 runs 34136342074 (governance) and 34136342970 (spurious nightly push). Two root causes fixed in P4-T0.1: the 404 clone URL (ahmadrrrtx/xr-core -> RRRTX-Labs/xr-core) and the absent minisign. Re-measurement requires pushing, which needs the human's token; no agent handles a token."
+      "notes": "RESOLVED, and the earlier diagnosis was incomplete. Before: 10/10 push runs failure. The dominant cause was NOT the 404 clone URL I fixed in P4-T0.1 \u2014 it was governance.yml:83, which used `+` inside a GitHub expression. GitHub has no `+` operator, so the workflow failed at COMPILE time: zero jobs, zero logs, zero check-runs, and a run named by file path instead of by `name: governance`. Introduced in P1-T13 (f7178bf); it survived four phases because nothing local parsed workflow expressions and run_checks.sh stayed green. Fixed with format('{0}..HEAD', x). After: run 34145834427 at c0af9d2, event push, conclusion success, 1 job, 12/12 steps green \u2014 including the clone-URL fix, which had never before been reached. The nightly-rebase-build push runs remain a platform misfire (actions/runner#4001): that workflow declares no push trigger, and it is green on dispatch (run 34145296332, success)."
     },
     {
       "id": "DOD-1c",
@@ -228,12 +228,11 @@
     }
   ],
   "human_gates": {
-    "HG-20": "Human revokes the over-scoped `ahmadrrrtx` PAT (repo + workflow). Repo verified clean of token strings; no agent handles a token.",
+    "HG-20": "URGENT: revoke BOTH over-scoped classic PATs now \u2014 the one recorded in P3 and the one used for the P4 push. The P4 token carries admin:enterprise, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, audit_log, codespace, delete:packages, gist, notifications, project, repo, user, workflow, write:discussion, write:network_configurations, write:packages. Both were pasted into chat, so both are burned; replace with a fine-grained token limited to the two repos (contents: write + actions: read). No agent handles a token.",
     "HG-21": "Farm executes the runtime identity-seam probes: `./scripts/build spike --farm --binary <built browsertest> --checkout <chromium>` (upstream: `./scripts/build spike probe --farm`).",
     "HG-22": "Org settings, only if hosted-green needs admin action (badges/permissions). Not currently indicated.",
     "HG-23": "Platform + Security lead ratification of ADR-0042.",
     "HG-24": "P5 identity-adjacent contract freeze happens only after HG-21 results; drafting is allowed now.",
-    "HG-P4-PUSH": "Push order: `git -C xr-core push origin main` then bump DEPS xr_core_rev in xr-browser and push (docs/process/cross-repo-pin.md).",
     "HG-25": "Retrofit evidence/P1 and evidence/P2 to evidence-bundle-v1, or explicitly grandfather them in the contract. 21 strict failures, inventoried in logs/p1p2-contract-gap.txt. The re-labelling touches claims made in earlier phases, so it wants a human reviewer rather than an agent."
   },
   "not_done_by_design": [
@@ -248,6 +247,13 @@
     "The spike patch is fail-open on bind failure (documented); production must fail closed (\u00a78.3).",
     "The extension_chokepoint budget is exceeded 4x by census C-03/C-15; that is a plan conflict to resolve, not a rounding error.",
     "TLS/QUIC session-cache scoping was not pinned to a citable line this phase and is deliberately absent from the measured table.",
-    "DEBT D-E (new, opened by P4): evidence/P1 (2 failures) and evidence/P2 (19) do not satisfy evidence-bundle-v1 \u2014 12 rows use qualified statuses where the contract wants a bare token and 9 P2 rows claim VERIFIED while citing no artifact path. tools/run_checks.sh runs --strict on P3,P4 only, and CI therefore does not check these two bundles. Closing it means re-labelling claims authored in earlier phases; recommended as a human-reviewed pass, not an agent edit. Inventory: logs/p1p2-contract-gap.txt."
-  ]
+    "DEBT D-E (new, opened by P4): evidence/P1 (2 failures) and evidence/P2 (19) do not satisfy evidence-bundle-v1 \u2014 12 rows use qualified statuses where the contract wants a bare token and 9 P2 rows claim VERIFIED while citing no artifact path. tools/run_checks.sh runs --strict on P3,P4 only, and CI therefore does not check these two bundles. Closing it means re-labelling claims authored in earlier phases; recommended as a human-reviewed pass, not an agent edit. Inventory: logs/p1p2-contract-gap.txt.",
+    "nightly-rebase-build.yml produces a spurious failure run on push events (actions/runner#4001): the workflow declares only schedule + workflow_dispatch, yet GitHub creates a push-event run with 0 jobs. Nothing in the repo can prevent the run's creation; the job-level `if:` guard skips it, and the workflow is green on dispatch (run 34145296332)."
+  ],
+  "pushed": {
+    "xr-core": "c34cd66..1ee5f4c (2 commits: //xr:xr_all mount; identity-seam spike kit + 0042 candidate)",
+    "xr-browser": "e35f332..c0af9d2 (6 commits: P4-T0.1..T0.4, P4 spike, DEPS paired bump, workflow fix)",
+    "order": "xr-core first, then the DEPS bump inside xr-browser, per docs/process/cross-repo-pin.md",
+    "verified": "both repos in sync with origin main; governance run 34145834427 success"
+  }
 }
