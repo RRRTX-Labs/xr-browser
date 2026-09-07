@@ -74,4 +74,7 @@ echo "== cross-repo pin alive (DEPS xr_core_rev reachable from origin) =="
 echo "== patch ledger incl. candidate (spike/) dirs =="
 "$PY" build/patching/apply.py lint --manifest ../xr-core/patches/manifest.yaml --xr-core ../xr-core
 
+echo "== workflow files: expressions + schema (compile error = zero jobs) =="
+"$PY" build/workflow_lint.py
+
 echo "== ALL GOVERNANCE CHECKS PASSED =="

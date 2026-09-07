@@ -79,3 +79,16 @@ tools:
     owner: "E (Release engineering)"
     added_on: 2026-09-07
     added_by: "P4-T0.1"
+
+  - name: actionlint
+    role: "Deep lint of .github/workflows — GitHub Actions expression syntax and workflow schema (P4)."
+    required: false
+    policy: "absent -> build/workflow_lint.py still runs its always-on checks and prints 'SKIP (tool absent: actionlint)' for the deep pass (L6); present -> full actionlint findings are appended. A workflow expression lex error is fatal at compile time: GitHub fails the run with zero jobs, no logs and no check-runs, so it cannot be seen from the API side."
+    install_ci: "pinned release tarball + sha256 (see governance.yml 'Install optional helper tools'); v1.7.7, sha256 023070a287cd8cccd71515fedc843f1985bf96c436b7effaecce67290e7e0757"
+    install_dev: "same as CI, or: go install github.com/rhysd/actionlint/cmd/actionlint@latest"
+    license: "MIT (rhysd/actionlint) — permissive, non-copyleft; a CI-only binary, neither vendored nor linked"
+    source_url: "https://github.com/rhysd/actionlint"
+    rationale: "Found the defect that had silently disabled this repo's governance CI since P1 (`github.event.pull_request.base.sha + '..HEAD'` — GitHub expressions have no `+` operator). Nothing in tools/ or build/ parsed workflow expressions, so run_checks.sh stayed green while every hosted run died before job creation. Alternative rejected: hand-rolling an Actions-expression parser (large, and would drift from GitHub's); alternative rejected: relying on GitHub's own error surface (there is none — zero jobs, zero logs)."
+    owner: "E (Release engineering)"
+    added_on: 2026-09-07
+    added_by: "P4 (hosted-CI root cause)"

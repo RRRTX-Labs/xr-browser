@@ -37,6 +37,14 @@ EXTERNAL_TOOLS: dict[str, dict[str, str]] = {
         "used_for": "Windows TEST signing passthrough (P2-T7)",
         "install": "Windows SDK (Windows runners only)",
     },
+    "actionlint": {
+        "used_for": "deep check of .github/workflows expressions and schema "
+                    "(P4) — a compile error there yields a run with zero jobs "
+                    "and no logs; the always-on half of build/workflow_lint.py "
+                    "still runs without it",
+        "install": "github.com/rhysd/actionlint releases (CI installs it "
+                   "pinned by version + tarball sha256)",
+    },
 }
 
 SKIP_PREFIX = "SKIP (tool absent: "

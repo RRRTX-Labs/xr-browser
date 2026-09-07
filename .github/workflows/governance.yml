@@ -55,6 +55,19 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq minisign
           minisign -v
+          # actionlint: GitHub's own checker for workflow expressions and
+          # schema. Pinned by version AND release-tarball sha256 — the same
+          # supply-chain discipline as the hash-pinned actions above. It is
+          # what found the defect that had silently killed every hosted run in
+          # this repo: a `+` inside an expression, which GitHub rejects at
+          # compile time, producing a run with zero jobs and no logs.
+          AL_VERSION=1.7.7
+          AL_SHA256=023070a287cd8cccd71515fedc843f1985bf96c436b7effaecce67290e7e0757
+          curl -sSL -o /tmp/actionlint.tgz \
+            "https://github.com/rhysd/actionlint/releases/download/v${AL_VERSION}/actionlint_${AL_VERSION}_linux_amd64.tar.gz"
+          echo "${AL_SHA256}  /tmp/actionlint.tgz" | sha256sum -c -
+          sudo tar -xzf /tmp/actionlint.tgz -C /usr/local/bin actionlint
+          actionlint -version
 
       - name: Checkout xr-core at the DEPS pin
         # P3 gates (budget / retirement-lint) read the sibling patch repo at
@@ -80,7 +93,11 @@ jobs:
         #   PR  -> base.sha..HEAD   (only the PR's commits are gated)
         #   push-> before..HEAD     (empty on the very first push -> full history)
         env:
-          CHECK_RANGE: ${{ github.event_name == 'pull_request' && (github.event.pull_request.base.sha + '..HEAD') || (github.event.before != '0000000000000000000000000000000000000000' && (github.event.before + '..HEAD') || '') }}
+          # GitHub expressions have no `+` operator; string building is
+          # format(). A lex error here is fatal at *compile* time: the run
+          # fails with zero jobs, which is why every push run in this repo
+          # failed before any step executed (caught by actionlint, P4).
+          CHECK_RANGE: ${{ github.event_name == 'pull_request' && format('{0}..HEAD', github.event.pull_request.base.sha) || (github.event.before != '0000000000000000000000000000000000000000' && format('{0}..HEAD', github.event.before) || '') }}
         run: |
           if [ -n "$CHECK_RANGE" ]; then
             echo "checking range: $CHECK_RANGE"
@@ -89,6 +106,12 @@ jobs:
             echo "checking full history"
             tools/run_checks.sh
           fi
+
+      - name: Workflow files lint (P4)
+        # A workflow-expression compile error produces a run with ZERO jobs,
+        # zero logs and zero check-runs. From the API it looks like a normal
+        # failure, so this gate is the only place it is caught before GitHub.
+        run: ./scripts/build workflow-lint
 
       - name: Negative fixtures (gates must fail on bad input)
         run: tools/run_negatives.sh
