@@ -25,6 +25,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -185,6 +186,80 @@ def cmd_sync(args: argparse.Namespace) -> int:
     })
 
 
+def cmd_check_pin_alive(args: argparse.Namespace) -> int:
+    """`./scripts/build sync --check-pin-alive` (P4-T0.2).
+
+    The DEPS `xr_core_rev` is a cross-repo pin: it must be a commit that is
+    actually reachable from origin xr-core `main`. A pin pointing at a
+    rewritten/unpushed commit breaks every fresh clone (build + CI), so this
+    is a blocking lint, not an advisory.
+
+    Method (unauthenticated, public remotes only — no credentials, no token):
+      1. `git ls-remote <origin> refs/heads/main`  -> origin HEAD sha
+      2. scratch `git init` + `git fetch --no-tags origin main`
+      3. `git merge-base --is-ancestor <pinned_rev> FETCH_HEAD` -> reachability
+
+    Failure is fail-closed: unreachable/unresolvable => exit 1 with the
+    reason. Never a silent pass, never simulated from remembered SHAs.
+    """
+    root = repo_root()
+    deps = load_deps(root)
+    rev = str(deps.get("xr_core_rev") or "")
+    if not SHA_RE.match(rev):
+        raise ToolError(f"DEPS: xr_core_rev is not a 40-char SHA (got {rev!r})")
+    url = getattr(args, "remote", None) or XR_CORE_URL
+    if not url.startswith("https://"):
+        raise ToolError(f"xr-core remote must be https (got {url!r})")
+
+    def _gitq(*a: str, cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(["git", *a], cwd=str(cwd) if cwd else None,
+                              text=True, capture_output=True)
+
+    ls = _gitq("ls-remote", url, "refs/heads/main")
+    if ls.returncode != 0:
+        raise ToolError(f"pin-alive: git ls-remote {url} failed: {ls.stderr.strip()}")
+    if not ls.stdout.strip():
+        raise ToolError(f"pin-alive: {url} has no refs/heads/main (repo moved/renamed?)")
+    origin_main = ls.stdout.split()[0]
+
+    with tempfile.TemporaryDirectory(prefix="xr-pin-alive-") as tmp:
+        scratch = Path(tmp) / "probe"
+        scratch.mkdir()
+        _gitq("init", "-q", cwd=scratch)
+        _gitq("remote", "add", "origin", url, cwd=scratch)
+        f = _gitq("fetch", "-q", "--no-tags", "origin", "main", cwd=scratch)
+        if f.returncode != 0:
+            raise ToolError(f"pin-alive: fetch of origin main failed: {f.stderr.strip()}")
+        fetch_rev = _gitq("fetch", "-q", "--no-tags", "origin", rev, cwd=scratch)
+        object_present = fetch_rev.returncode == 0
+        ancestor = False
+        if object_present:
+            anc = _gitq("merge-base", "--is-ancestor", rev, "FETCH_HEAD", cwd=scratch)
+            ancestor = anc.returncode == 0
+
+    failures: list[str] = []
+    if not object_present:
+        failures.append(
+            f"DEPS xr_core_rev {rev} is not fetchable from {url} "
+            f"(unpushed, force-pushed away, or the pin was never pushed)")
+    elif not ancestor:
+        failures.append(
+            f"DEPS xr_core_rev {rev} is fetchable but is NOT an ancestor of "
+            f"origin main ({origin_main}) — diverged or rewritten history")
+
+    return emit(args.json, {
+        "tool": "check-pin-alive",
+        "pinned_rev": rev,
+        "origin_main": origin_main,
+        "remote": url,
+        "object_present": object_present,
+        "ancestor_of_main": ancestor,
+        "verified_by": "git ls-remote + fetch + merge-base --is-ancestor",
+        "auth": "unauthenticated (public repo, no token)",
+        "source": "real-fetch",
+    }, failures=failures)
+
+
 def cmd_refresh(args: argparse.Namespace) -> int:
     root = repo_root()
     deps = load_deps(root)
@@ -264,12 +339,19 @@ def main() -> None:
     p_refresh = sub.add_parser("refresh", help="create a pin-refresh branch (never pushes)")
     p_refresh.add_argument("--to", required=True, help="target 40-char chromium SHA")
 
+    p_alive = sub.add_parser("check-pin-alive",
+                             help="verify DEPS xr_core_rev is reachable from origin xr-core main")
+    p_alive.add_argument("--remote", default=XR_CORE_URL,
+                         help="xr-core remote (default: the org repo; https only)")
+
     add_common_flags(parser)
-    for sp in (p_sync, p_refresh):
+    for sp in (p_sync, p_refresh, p_alive):
         sp.add_argument("--json", action="store_true", help="emit JSON output")
     args = parser.parse_args()
     if args.cmd == "sync":
         main_with_guard(lambda: cmd_sync(args))
+    elif args.cmd == "check-pin-alive":
+        main_with_guard(lambda: cmd_check_pin_alive(args))
     else:
         main_with_guard(lambda: cmd_refresh(args))
 

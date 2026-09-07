@@ -69,6 +69,12 @@ jobs:
           git -C ../xr-core checkout -q "$pin"
           git -C ../xr-core rev-parse HEAD
 
+      - name: Cross-repo pin is alive (P4-T0.2)
+        # DEPS.xr_core_rev must be a reachable ancestor of origin xr-core
+        # main — otherwise every fresh clone (and this runner) is broken.
+        # Unauthenticated, public remote only (docs/process/cross-repo-pin.md).
+        run: ./scripts/build sync check-pin-alive --json
+
       - name: Governance checks
         # Concrete SHAs (always resolvable with fetch-depth: 0):
         #   PR  -> base.sha..HEAD   (only the PR's commits are gated)
