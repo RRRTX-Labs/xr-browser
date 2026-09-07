@@ -101,3 +101,35 @@ will land, so nobody builds in the wrong place.
 | Spike probe driver | `build/spike/probe_driver.py --offline` | the static + fixture lanes; the farm lane refuses to fabricate |
 | SKIP visibility | `build/skip_policy.py` | an absent external tool is never a silent pass |
 | Cross-repo pin | `build/sync.py check-pin-alive` | the DEPS `xr_core_rev` still resolves on origin |
+
+## P5 — contract freeze (§1.11)
+
+### xr-browser
+
+| Path | Change | Contents |
+|---|---|---|
+| `docs/contracts/INDEX.md` | ✅ new | §1.11↔file↔interface↔§2.10 mapping table + conventions + freeze states |
+| `docs/contracts/effective-policy-v1.{schema.json,md}` | ✅ new | EffectivePolicy v1 (strict, deny-default, total) |
+| `docs/contracts/{list-bundle-manifest,command-descriptor,update-manifest-31-json,xr-schema-v1,settings-schema-v1,theme-tokens-v1,contract-amendment-rfc}-v1.md` | ✅ new | per-contract docs |
+| `docs/contracts/*.schema.json` | ✅ new | strict hand-rolled schemas (command/list-bundle/update-manifest) |
+| `docs/contracts/vectors/` | ✅ new | `policy-resolver-v1.json` (66 golden vectors), `route-manager-v1.json` (9) |
+| `docs/contracts/review/01..14-*-v1.md` | ✅ new | 14 review packets (import-law, threat links, human sign-off pending) |
+| `docs/contracts/tests/` | ✅ new | determinism, all-interface parity, update-manifest conformance |
+| `docs/contracts/FROZEN.yaml` | ✅ new | freeze register — 14 rows REVIEW-COMPLETE, ratified PENDING (HG-26) |
+| `docs/rfcs/{0000-template.md}` | ✅ new | contract-amendment RFC template + procedure |
+| `tools/{mojom_lint,contracts_manifest,vectors_check,freeze_check,amend_guard,xr_schema,xrctl}.py` | ✅ new | P5 gates + dev CLI (all <400 LOC, stdlib, --json) |
+| `tools/tests/{test_p5_contract_tools,test_amend_guard}.py` | ✅ new | unit + synthetic-repo negative proofs |
+| `tools/tests/fixtures/mojom/*.mojom` | ✅ new | 9 negative fixtures (one per lint rule) |
+| `build/contracts.py` | ✅ new | `./scripts/build contracts manifest\|lint\|vectors\|freeze\|all` |
+| `tools/run_checks.sh`, `tools/run_negatives.sh`, `.github/workflows/governance.yml`, `scripts/build` | ✏️ edit | P5 gates + 5 new negatives wired |
+| `DEPS` | ✏️ edit | `xr_core_rev` pair-bump to the P5 contract-freeze commit; header lineage note |
+| `docs/{limitations.md,threat-model.md}`, `CONTRIBUTING.md` | ✏️ edit | resolver-total row; contract-enforcement links; amendment-RFC line |
+
+### xr-core
+
+| Path | Change | Contents |
+|---|---|---|
+| `mojom/` | ✅ new | 10 `.mojom` files (module xr.mojom) + `BUILD.gn` (bindings farm-gated) |
+| `fakes/` | ✅ new | 8 behavioral fakes + `_base.py` + `README.md` (stdio JSON protocol) |
+| `fakes/fixtures/` | ✅ new | per-contract fixture sets + example manifests |
+| `l10n/isolation_card.json` | ✅ new | contract #14: measured disclosure strings, evidence-mapped, legal PENDING-HG-1 |

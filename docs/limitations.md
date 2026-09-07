@@ -61,3 +61,13 @@ With identity implemented as a per-tab `StoragePartitionConfig` domain
 Identity partitions are a **storage and process** boundary, not a full-profile
 boundary. Nothing about them is airtight, and the product must not imply
 otherwise.
+
+## Policy resolver (P5 contract)
+
+* **The policy resolver is total: unknown input ⇒ deny.** Any unknown
+  identity, unknown origin, unknown request class, or malformed input resolves
+  to the fully-denying `EffectivePolicy` — never a permissive default and never
+  a guess (DR-07 / L3). Schema of record:
+  `docs/contracts/effective-policy-v1.schema.json`; the deny rows are pinned in
+  `docs/contracts/vectors/policy-resolver-v1.json` and the purity/determinism
+  of the function is a contract test (`docs/contracts/tests/test_policy_determinism.py`).

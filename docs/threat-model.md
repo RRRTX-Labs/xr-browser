@@ -79,6 +79,25 @@ agree with these; a change to any invariant is an ADR + register event
 13. **Identity dignity:** identity is visible on 100% of tabs in 100% of layouts; no silent identity switch. [Plan §1.12-13](XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md)
 14. **Fail-safe:** death of Shield engine, vault process, tord, or wgd degrades security posture *visibly* — never silently, never by bricking browsing. [Plan §1.12-14](XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md)
 
+## Contract enforcement (P5 freeze)
+
+Several §1.12 invariants are now **contractually** enforced at the frozen
+`xr.mojom` surface (P5). This note links each to the contract doc; it does not
+change the invariants above (the structure-checker's numbered list is intact).
+
+- Invariant 5 (route integrity) ↔ `RouteManager.LoseAllFailClosed` (L6):
+  `docs/contracts/review/05-route-manager-v1.md`, golden vector
+  `docs/contracts/vectors/route-manager-v1.json`.
+- Invariant 3 (vault secrecy) ↔ VaultService absence-of-export surface,
+  mechanically lint-enforced (mojom_lint R4):
+  `docs/contracts/review/06-vault-service-v1.md`.
+- Invariant 7 (accountability) ↔ `ActivityLog` bounded-ring rows:
+  `docs/contracts/review/09-activity-log-v1.md`.
+- Invariant 11 (no intent claims) ↔ Isolation-Card measured strings + Shield
+  observation-only surface: `docs/contracts/review/13-isolation-card-v1.md`.
+- Resolver totality (DR-07) ↔ `EffectivePolicy` deny-default schema:
+  `docs/contracts/effective-policy-v1.md`.
+
 ## Out of scope
 
 Stated per Plan §9.1, restated here so a reader of *this* document never

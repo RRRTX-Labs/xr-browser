@@ -25,7 +25,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "1ee5f4cc9f6e42339fdaf33bceec50d4956b1750"     # xr-core P4: identity-seam spike kit + 0042 candidate patch
+xr_core_rev: "2b6f14419a1f9edce04634e2662d8b054bae4c05"     # xr-core P5: xr.mojom contract freeze (mojom/ + fakes/ + l10n/)
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

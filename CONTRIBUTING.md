@@ -65,6 +65,16 @@ tools/run_negatives.sh     # gates must fail on bad input
 Both must pass. CI runs the same thing (plus range-scoped DCO/trailer
 checks).
 
+
+## Contract amendments
+
+After the P5 freeze, changing a frozen `xr.mojom` contract or a listed contract
+doc requires an **approved RFC**: add `docs/rfcs/RFC-<n>.md` (from
+`docs/rfcs/0000-template.md`, status APPROVED by a human) and carry the trailer
+`Contract-Amendment: RFC-<n>` on the commit. `tools/amend_guard.py` enforces
+this (warn-only before a contract is stamped in `docs/contracts/FROZEN.yaml`,
+blocking after). See `docs/contracts/contract-amendment-rfc.md`.
+
 ## 6. Reporting security issues
 
 Do not open a public issue. See `SECURITY.md` (coordinated disclosure,
