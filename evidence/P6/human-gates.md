@@ -42,3 +42,11 @@ already registered by the plan for PrefService/mojom).
   (fixed: pid-unique trees) and re-run from scratch; only the re-run is cited.
 - `amend_guard.py` had a directory-wide guard contradicting its own per-file
   law; fixed toward the law with 4 new direction-proving tests (R10).
+- **First P6 push went red on CI** (run 34167592053): ubuntu-24.04 runners
+  build fortified by default and a stray discarded-`fopen` line in
+  `test_store.cc` tripped `-Werror=unused-result` there while passing on the
+  un-fortified sandbox toolchain. Fixed (stray line deleted) AND prevented
+  (`-D_FORTIFY_SOURCE=2` pinned into the tests Makefile — local builds are
+  now exactly as strict; full fortified build clean). A second latent lane
+  failure (bench grep on redirected stdout) was caught by step inspection
+  and fixed in the same push. See research-log R11.

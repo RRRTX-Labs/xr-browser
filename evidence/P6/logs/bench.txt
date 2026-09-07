@@ -1,0 +1,11 @@
+# make bench (fortified build, -D_FORTIFY_SOURCE=2; exact CI lane form)
+
+make: Entering directory '/home/user/xr-core/policy/tests'
+make: Leaving directory '/home/user/xr-core/policy/tests'
+
+--- build/bench-results.json ---
+benchmark (us)                      p50        p99      p99.9  budget
+resolve_cold                      4.840      9.155     35.303  cold <=200us: MET
+cache_warm_pinned_read            0.065      0.162      0.208  warm <=5us: MET
+snapshot_apply_40               649.508   8832.532  12855.953  apply <=2000us: DEVIATION
+{"budgets":{"cache_warm_pinned_read_us":5,"resolve_cold_us":200,"snapshot_apply_us":2000},"cache_warm_pinned_read":{"p50":0.065,"p99":0.162,"p99.9":0.208},"environment":{"compiler":"g++ 14.2.0 (recorded in build log)","flags":"-std=c++20 -O2 -Wall -Wextra -Werror -D_FORTIFY_SOURCE=2"},"iterations":100000,"resolve_cold":{"p50":4.84,"p99":9.155,"p99.9":35.303},"snapshot_apply_40":{"p50":649.508,"p99":8832.532,"p99.9":12855.953},"unit":"microseconds","verdicts":{"cache_warm_pinned_read":"MET","resolve_cold":"MET","snapshot_apply_40":"DEVIATION"},"warmup_excluded":true}

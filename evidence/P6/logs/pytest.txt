@@ -8,4 +8,4 @@ SKIP: SKIP (tool absent: codesign) — needed for: macOS TEST signing passthroug
 SKIP: SKIP (tool absent: signtool) — needed for: Windows TEST signing passthrough (P2-T7); install hint: Windows SDK (Windows runners only)
 SKIP: SKIP (tool absent: actionlint) — needed for: deep check of .github/workflows expressions and schema (P4) — a compile error there yields a run with zero jobs and no logs; the always-on half of build/workflow_lint.py still runs without it; install hint: github.com/rhysd/actionlint releases (CI installs it pinned by version + tarball sha256)
 3 external tool(s) absent on this host: the dependent tests SKIP with the reason above (never a silent pass).
-303 passed, 1 skipped in 34.78s
+303 passed, 1 skipped in 53.52s

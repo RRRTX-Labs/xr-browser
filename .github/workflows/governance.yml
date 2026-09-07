@@ -166,10 +166,17 @@ jobs:
 
       - name: Policy bench (P6, record-only; budgets re-checked HG-28)
         run: |
-          make -C ../xr-core/policy/tests bench 2>&1 | tee /tmp/bench-ci.txt
-          # Record-only, but the verdicts must be present and honest:
-          grep -q "cold <=200us: MET\|cold <=200us: DEVIATION" /tmp/bench-ci.txt
-          grep -c "MET\|DEVIATION" /tmp/bench-ci.txt
+          # The tests Makefile redirects bench_main's stdout into
+          # build/bench-results.json (human table + canonical JSON), so the
+          # verdicts are read from that file — piping `make bench` captures
+          # nothing.
+          make -C ../xr-core/policy/tests bench
+          cat ../xr-core/policy/tests/build/bench-results.json
+          # Record-only, but the verdicts must be present and honest
+          # (MET or an explicit DEVIATION — never silent):
+          grep -q "cold <=200us: MET\|cold <=200us: DEVIATION" \
+            ../xr-core/policy/tests/build/bench-results.json
+          grep -c "MET\|DEVIATION" ../xr-core/policy/tests/build/bench-results.json
 
       # ------------------------------------------------------------------
       # P3: upstream-treadmill gates. All offline (fixtures / committed

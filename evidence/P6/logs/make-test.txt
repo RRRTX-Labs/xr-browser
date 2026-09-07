@@ -9,7 +9,7 @@ test_cache: 400031 checks, 0 failures
 == test_snapshot ==
 test_snapshot: 53 checks, 0 failures
 == test_store ==
-test_store: 850 checks, 0 failures
+test_store: 849 checks, 0 failures
 == test_events ==
 test_events: 31 checks, 0 failures
 == test_enterprise ==

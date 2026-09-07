@@ -154,3 +154,31 @@ Decision recorded: my first registration attempt edited INDEX.md and
 was reworked (pre-push) so no commit in the pushed range touches a
 frozen register at all — history kept clean instead of relying on the
 new exemption semantics.
+
+## R11 — CI parity incident (run 34167592053; VERIFIED by reproduction)
+
+The first P6 push went red on the hosted governance lane. Root cause from
+the job log: ubuntu-24.04 runners compile fortified by default (their gcc
+enables `_FORTIFY_SOURCE` at `-O2`), where `fopen` carries
+`warn_unused_result`; a stray leftover line
+`XR_EXPECT(std::fopen(path.c_str(), "wb") != nullptr || true);`
+(the very next lines perform the same open PROPERLY) tripped
+`-Werror=unused-result` on the runner while compiling clean on this
+sandbox's glibc, which does not mark `fopen`. Reproduced the IDENTICAL
+error locally with `-D_FORTIFY_SOURCE=2` before touching anything.
+
+Fix, both directions:
+- xr-core: stray line deleted; `-D_FORTIFY_SOURCE=2` pinned into the tests
+  Makefile so the local build is exactly as strict as CI's (a discarded
+  stdio result can never again pass here and fail there). Full fortified
+  build of every TU is clean — the four suites the CI never reached
+  (events/enterprise/json/service) had no further latent instances. The
+  bench record's hardcoded flags string updated to match.
+- xr-browser: a SECOND latent CI failure was caught by reading the job's
+  own steps: the bench lane grepped `make bench` stdout, which the
+  Makefile redirects into `build/bench-results.json` (an empty-pipe grep
+  would have failed the lane after the compile fix). Now reads the
+  results file.
+Operational lesson recorded: glibc/gcc fortify differences are a real
+CI-vs-sandbox divergence class for C++ test code — mirror the stricter
+environment locally (same reasoning as the actionlint install, P4).
