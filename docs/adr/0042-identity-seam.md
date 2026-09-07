@@ -178,3 +178,27 @@ decision register row is never silently edited. If F1/F2/F3 fire, the
 recommended path is the T9 fallback design
 (`docs/spike-identity/fallback-design.md`), recorded in a new ADR — **the
 number 0042 is never reused**.
+
+## Disposition (2026-09-08, orchestrator)
+
+Recorded by P5-T0. P4 *reported* two conflicts rather than resolving them
+(extension-chokepoint cap; `is_in_memory` GN-vs-CHECK divergence). The
+orchestrator has now RULED. This section records the rulings verbatim; it does
+not relitigate them. A third ruling (HG-25 pre-v1 evidence exemption) is
+recorded here for a single audit home.
+
+1. **Extension-chokepoint cap conflict** (P4 census est. 8 files vs §1.2 cap 2):
+   **cap stands** — `guard.mojom` is designed so the GuardLedger/Guard consult
+   funnels through the ONE upstream dispatch chokepoint (per §1.12/§12.5
+   "extension dispatch funnel" and the assumption-suite row); all guard logic
+   lives in `//xr`; the 8-file census estimate becomes a binding *redesign
+   constraint* on P21 (and §12.5's upstream-PR-or-delete is the escalation path,
+   not a cap bump).
+
+2. **`is_in_memory` GN-vs-CHECK divergence** (P4 finding): **runtime reality
+   governs contracts** — Vault/Ephemeral semantics in fakes+vectors assert
+   "zero persistent *data* writes" (directory skeleton tolerated), §11.4 probe
+   definition per P4 probe-matrix.
+
+3. **HG-25 pre-v1 evidence exemption**: **accepted** — `evidence_check --strict`
+   stays scoped P3+; agents never re-author P1/P2 claims.

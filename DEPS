@@ -9,7 +9,10 @@
 #
 # Field -> task map (each entry is tied to the P2 task that created it):
 #   chromium_rev   P2-T1 (research item #2, live-verified 2026-09-07)
-#   xr_core_rev    P2-T3 (xr-core P2 commit — published to origin by P3 T0.1)
+#   xr_core_rev    lineage: P2-T3 created the pin; P4 advanced it to the
+#                  identity-seam spike kit (1ee5f4c); P5-T* advances it again
+#                  to the contract-freeze commit (mojom/ + fakes/ + l10n/),
+#                  pair-bumped same-day per docs/process/cross-repo-pin.md.
 #   gclient_url_scheme  P2-T1 (pinned https remotes only; no ssh, no file://)
 #
 # Chromium pin provenance (see docs/state/research-log-P2.md R1):
