@@ -34,7 +34,7 @@ will land, so nobody builds in the wrong place.
 |---|---|---|
 | `LICENSE`, `README.md`, `CONTRIBUTING.md`, `.gitignore`, `.clang-format` | ✅ | repo root artifacts |
 | `CODEOWNERS`, `OWNERS` | ✅ | S0 path protection (placeholder handles until HG-3) |
-| `mojom/`, `policy/`, `identity/`, `net/`, `vault/`, `extensions/` | 📋 planned | S0 product surfaces — **do not create stubs now** (P4/P5+; anti-stub rule, plan §0.4/L5). `mojom/` freezes at P5. |
+| `mojom/`, `policy/`, `identity/`, `net/`, `vault/`, `extensions/` | 📋 planned | S0 product surfaces — **do not create stubs now** (P4/P5+; anti-stub rule, plan §0.4/L5). `mojom/` freezes at P5. `policy/` landed at P6 (resolver core); the rest stay planned. |
 | `patches/` | ✅ P2 | `manifest.yaml` (schema v1) + `branding/0001-brand-ui/` (patch + patchinfo) |
 
 ## Helpers (not yet created)
@@ -133,3 +133,32 @@ will land, so nobody builds in the wrong place.
 | `fakes/` | ✅ new | 8 behavioral fakes + `_base.py` + `README.md` (stdio JSON protocol) |
 | `fakes/fixtures/` | ✅ new | per-contract fixture sets + example manifests |
 | `l10n/isolation_card.json` | ✅ new | contract #14: measured disclosure strings, evidence-mapped, legal PENDING-HG-1 |
+
+## P6 — policy resolver v1 (§637)
+
+### xr-browser
+
+| Path | Change | Contents |
+|---|---|---|
+| `tools/mode_lint.py` | ✅ new | L3 one-brain ban (mode logic only in the resolver) + L13 intent headers; negative corpus; `--json` |
+| `tools/mutation_test.py` | ✅ new | operator-based mutant generation over the C++ core; score ≥90% + deny-guard 100% gates; survivor ±diffs; pid-unique scratch; `--sample/--seed/--timebox` |
+| `tools/policy_fuzz.py` | ✅ new | determinism + envelope + enum invariants; corruption corpus (truncate/flip/dup-key/deep/oversize/garbage/NUL); >60KB + NUL via stdin; `--timebox 600` CI lane (24h = HG-28) |
+| `tools/xrctl_policy.py` | ✅ new | `xrctl policy resolve\|dump\|watch\|snapshot-stats` (`--backend fake\|cpp`); wired into `tools/xrctl.py` |
+| `tools/vectors_to_md.py` | ✅ new | generates `docs/contracts/policy.md` from the 66 vectors; `--check` = CI law (no hand drift) |
+| `tools/tests/test_p6_policy_tools.py` | ✅ new | 14 tests: mode_lint ±fixtures, full parity matrix both backends, layer probes, budget, absence laws, smokes |
+| `docs/contracts/policy.md` | ✅ new (generated) | the resolver dial table + precedence ladder + golden-vector table; regenerate, never hand-edit |
+| `docs/contracts/policy-change-event-v1.{schema.json,md}` | ✅ new | contract #15; deltas/summary/undo, no score/risk/grade (absence-linted), no auto-reload |
+| `docs/contracts/tests/golden-policy-change-event.json` | ✅ new | generator-byte-verified golden event |
+| `tools/run_checks.sh`, `tools/run_negatives.sh`, `.github/workflows/governance.yml` | ✏️ edit | P6 gates + 5 new negatives + CI lanes (mutation sample, fuzz timebox, bench record) |
+| `docs/{limitations.md,process/s0-paths.yaml}`, `docs/state/research-log-P6.md` | ✏️ edit / new | P6 limitation rows; evidence trail |
+
+### xr-core
+
+| Path | Change | Contents |
+|---|---|---|
+| `policy/core/` | ✅ new | json/json_parse/sha256/effective_policy/resolve/resolve_io/cache/snapshot/store/events/service (+service_mojom.h) — std-C++20, no Chromium includes, `-Wall -Wextra -Werror`, all <400 LOC |
+| `policy/enterprise/managed_source.{h,cc}` | ✅ new | file-based managed source; minisign-verified ⇒ enforced, else IGNORED + ledger row |
+| `policy/host/policy_host.cc` | ✅ new | stdio binary: `resolve\|snapshot\|watch\|dump` (same protocol xrctl speaks) |
+| `policy/bench/bench_main.cc` | ✅ new | p50/p99/p99.9, 10⁵ ops, warmup excluded, canonical JSON + verdicts |
+| `policy/tests/` | ✅ new | 10 suites, 1.23M checks: vectors parity, resolve, purity, cache TOCTOU, snapshot, store migration, events goldens, enterprise signed-path, json edge corpus, service integration |
+| `policy/BUILD.gn`, `policy/README.md`, `policy/mode_lint.cfg` | ✅ new | policy_core std-only / enterprise / host targets; L3+L13 config |

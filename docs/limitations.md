@@ -71,3 +71,28 @@ otherwise.
   `docs/contracts/effective-policy-v1.schema.json`; the deny rows are pinned in
   `docs/contracts/vectors/policy-resolver-v1.json` and the purity/determinism
   of the function is a contract test (`docs/contracts/tests/test_policy_determinism.py`).
+
+## Policy resolver (P6 implementation)
+
+* **The C++ JSON layer is strict-int, not arbitrary-precision.** Out-of-int64
+  integers degrade to doubles, and doubles are formatted by `std::to_chars`
+  rather than Python's float repr — both diverge from the Python fake on
+  round-trips of arbitrary JSON. This is deny-safe (every strict validator in
+  the policy path rejects doubles where integers are expected) and no frozen
+  contract carries floats; pinned in `xr-core/policy/tests/test_json.cc`.
+* **The cache invalidation is generational, not evented.** Watch is
+  poll-mode (`snapshot seq` + `generation` counters over the stdio protocol);
+  no push channel exists yet (nothing upstream subscribes in P6 — P21 wires
+  Guard dispatch).
+* **The enterprise managed source requires the `minisign` binary.** Absent
+  tool ⇒ managed policy is IGNORED (visible SKIP, ledger row) — never
+  partially enforced. Tests exercise the signed path only where minisign is
+  installed; CI installs it pinned (HG-7 pattern).
+* **Bench budgets are two-core sandbox numbers.** p99 ≤5µs warm / ≤200µs
+  cold / ≤2ms snapshot-apply were measured on the 2-core dev sandbox;
+  reference-hardware re-measurement is HG-28. Verdicts are emitted by the
+  bench binary itself (`MET`/`DEVIATION`), not post-hoc eyeballing.
+* **The 24h fuzz campaign and full-matrix mutation run are farm-gated**
+  (HG-28); the repo lane runs a 10-minute fuzz timebox and a deterministic
+  90-mutant sample with the same gates (score ≥90%, deny-guard 100%).
+
