@@ -1,0 +1,7 @@
+// migration note: none. test fixture.
+module xr.mojom;
+const int32 kContractVersion = 1;
+interface Dup {
+  Ping() => (int32 r);
+  Ping() => (int32 r);
+};

@@ -1,0 +1,6 @@
+// migration note: none. test fixture.
+module xr.mojom;
+const int32 kContractVersion = 1;
+interface S {
+  Feed(handle<data_stream> pipe) => (int32 r);
+};

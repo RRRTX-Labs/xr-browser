@@ -1,0 +1,5 @@
+// migration note: none. test fixture.
+module xr.mojom;
+interface Ok {
+  Ping() => (int32 r);
+};

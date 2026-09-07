@@ -1,0 +1,5 @@
+module xr.mojom;
+const int32 kContractVersion = 1;
+interface Ok {
+  Ping() => (int32 r);
+};
