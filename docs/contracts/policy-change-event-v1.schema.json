@@ -1,0 +1,33 @@
+{
+ "$schema-note": "Hand-rolled strict subset (no jsonschema dependency, per DEPENDENCY RULES). Validated by tools/xr_schema.py. additionalProperties is false everywhere. ABSENCE LAWS (schema-enforced + absence-lint tested): NO numeric judgment/quality fields of any kind; NO auto-refresh field — absence IS the contract (auto-reload is not a P6 behavior). Generator: xr-core/policy/core/events.cc (golden strings tested).",
+ "contract": "policy-change-event",
+ "contract_version": 1,
+ "type": "object",
+ "additionalProperties": false,
+ "required": ["event", "contract_version", "identity", "site", "previous_trust", "new_trust", "deltas", "summary", "undo"],
+ "properties": {
+  "event": { "const": "policy_changed" },
+  "contract_version": { "type": "integer", "const": 1 },
+  "identity": { "type": "string" },
+  "site": { "type": "string" },
+  "previous_trust": { "type": "string", "enum": ["kStandard", "kShield", "kFortress", ""] },
+  "new_trust": { "type": "string", "enum": ["kStandard", "kShield", "kFortress", ""] },
+  "deltas": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["path", "from", "to", "change", "human"],
+    "properties": {
+     "path": { "type": "string" },
+     "from": { "type": "string" },
+     "to": { "type": "string" },
+     "change": { "type": "string" },
+     "human": { "type": "string" }
+    }
+   }
+  },
+  "summary": { "type": "string" },
+  "undo": { "type": "boolean" }
+ }
+}

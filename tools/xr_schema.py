@@ -26,6 +26,7 @@ EXIT_PASS, EXIT_FAIL, EXIT_USAGE = 0, 1, 2
 SCHEMA_DIR = "docs/contracts"
 SCHEMAS = {
     "effective-policy": "effective-policy-v1.schema.json",
+    "policy-change-event": "policy-change-event-v1.schema.json",
     "command-descriptor": "command-descriptor-v1.schema.json",
     "list-bundle": "list-bundle-manifest-v1.schema.json",
     "update-manifest": "update-manifest-31.schema.json",
