@@ -44,9 +44,9 @@
     {"id": "DOD-10", "dod": "Update-manifest profile cites fetched pin-rev spec file:line; list-bundle envelope + signed example (visible SKIP when minisign absent)", "status": "VERIFIED", "source": "gitiles-fetch",
      "evidence": ["docs/contracts/update-manifest-31-json.md", "docs/contracts/tests/test_update_manifest_conformance.py", "../xr-core/fakes/fixtures/update-manifest-example.json"],
      "notes": "Omaha 3.1 spec fetched at pin (research/protocol_3_1.md, sha in doc); conformance table cites file:line. Client acceptance = PENDING-VERIFY-farm (P10). List-bundle example present; minisign signing is a CI SKIP on this host (documented)."},
-    {"id": "DOD-11", "dod": "Full suites: prior gates/tests green + new ones; negatives all reject; trees clean; DCO; hosted runs at final HEAD success", "status": "HUMAN-GATED", "source": "local-run",
-     "evidence": ["logs/pytest.txt", "logs/run_checks.txt", "logs/run_negatives.txt"],
-     "notes": "LOCAL: run_checks exit 0 (incl. pin-alive green after xr-core push); 278 passed/2 skipped (was 238/2); run_negatives 20/20 (was 15). Hosted-run success at final xr-browser HEAD depends on the PR landing on main (this branch push) — recorded HUMAN-GATED until the hosted run reports; the workflow itself is lint-clean (build/workflow_lint PASS)."},
+    {"id": "DOD-11", "dod": "Full suites: prior gates/tests green + new ones; negatives all reject; trees clean; DCO; hosted runs at final HEAD success", "status": "VERIFIED", "source": "local-run",
+     "evidence": ["logs/pytest.txt", "logs/run_checks.txt", "logs/run_negatives.txt", "logs/hosted-run.txt"],
+     "notes": "LOCAL: run_checks exit 0 (pin-alive green); 278 passed/2 skipped (was 238/2); run_negatives 20/20 (was 15); both trees clean; DCO clean on all P5 commits. HOSTED: xr-browser governance run 34154282822 at final HEAD ce32afb concluded conclusion=success, 16/16 steps (event push). xr-core has no CI workflow of its own (expected)."},
     {"id": "DOD-12", "dod": "Zero: register/plan edits, ratifications, C++-compile claims, new deps, P6-overrun, agent-written RATS/FROZEN-complete", "status": "VERIFIED", "source": "local-run",
      "evidence": ["logs/git-show-stat-xr-browser.txt", "logs/git-show-stat-xr-core.txt"],
      "notes": "No docs/register or plan touches; no ratified/FROZEN-APPROVED written; no C++ compiled/claimed; zero new deps (stdlib only); no resolver impl (P6). Verified by git --stat + grep."}

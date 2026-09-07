@@ -1,0 +1,9 @@
+Hosted CI — xr-browser governance.yml
+run id:      34154282822
+event:       push
+head_sha:    ce32afbe4b33b63234277dc8555349a56a550ec7  (final xr-browser P5 HEAD)
+status:      completed
+conclusion:  success
+job:         governance — success, 16/16 steps ok
+prior green: 34145994694 (7f85599, P4 HEAD), 34145834427 (c0af9d2)
+xr-core:     no workflow of its own (expected; gated via xr-browser DEPS + pin-alive)
