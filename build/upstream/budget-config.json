@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source": "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md \u00a71.2 (pinned, sha-checked by tools/plan_pin_check.py)",
+  "total_cap": 150,
+  "caps": {
+    "branding": null,
+    "hook_points": 45,
+    "blink_seams": 25,
+    "content_seams": 30,
+    "network_seams": 20,
+    "ui": 35,
+    "extension_chokepoint": 2
+  },
+  "rules": {
+    "unregistered_diff": "any diff in src/ outside src/xr not registered in the manifest fails CI (Plan \u00a712.2)",
+    "count_published": "patch count published in every release note (Plan \u00a712.2)",
+    "exceeding_budget": "exceeding budget = architecture review, never silent scope (Plan \u00a71.2)"
+  }
+}
