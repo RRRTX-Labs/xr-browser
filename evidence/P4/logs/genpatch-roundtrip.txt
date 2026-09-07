@@ -1,0 +1,31 @@
+=== genpatch round-trip (pinned Chromium d04cdb24d67b081f6cf80200ffc5233f44b61109) ===
+generated: 2026-09-07T16:33:07Z
+rev            : d04cdb24d67b081f6cf80200ffc5233f44b61109
+patch          : 19214 B  sha256 cf0b020fd33ed6d0…
+never-list     : PASS (targets restricted to chrome/browser/**)
+  chrome/browser/ui/navigator/browser_navigator.cc            46882 B
+  chrome/browser/ui/navigator/BUILD.gn                         4240 B
+  chrome/browser/xr/xr_identity.h                              5963 B
+  chrome/browser/xr/xr_identity.cc                             5052 B
+  chrome/browser/xr/xr_seam_override.h                         1660 B
+  chrome/browser/xr/xr_seam_override.cc                        1746 B
+apply          : PASS
+verify         : PASS
+revert         : PASS (byte-exact: True)
+negative       : expected FAIL (the patch is bound to the pinned bytes, so upstream drift at promotion time is detectable), observed FAIL
+PASS: genpatch round-trip
+$ /usr/local/bin/python3 /home/user/xr-browser/build/spike/genpatch.py --xr-core ../xr-core --out work/spike-checkout
+
+=== emitted artifact ===
+total 20
+-rw-r--r-- 1 user user 19214 Sep  7 16:33 0042-seam-hook.patch
+=== sha256 of the candidate patch ===
+cf0b020fd33ed6d02b62016dfc4ba156f0ddf714e717ebaedf3341e28a4979d9  work/spike-checkout/0042-seam-hook.patch
+=== diffstat ===
+ chrome/browser/ui/navigator/BUILD.gn             |   10 +
+ chrome/browser/ui/navigator/browser_navigator.cc |   34 ++++
+ chrome/browser/xr/xr_identity.cc                 |  176 ++++++++++++++++++++++
+ chrome/browser/xr/xr_identity.h                  |  156 ++++++++++++++++++++
+ chrome/browser/xr/xr_seam_override.cc            |   47 ++++++
+ chrome/browser/xr/xr_seam_override.h             |   43 +++++
+ 6 files changed, 466 insertions(+)

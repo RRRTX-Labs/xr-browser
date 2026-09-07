@@ -2,7 +2,7 @@
 
 | Number | Reserved for | Status | Set by |
 |---|---|---|---|
-| 0042 | **P4 identity-seam ADR** — "identity seam": primary per-WebContents `StoragePartitionConfig` model vs. `BrowserContext` fallback, papercut census result, patch estimate (Plan §4 Phase P4, tasks T8/T9; Plan §12/§15 inputs; DR-25) | RESERVED — no content until P4 executes | ADR-0002, 2026-09-07 |
+| 0042 | **P4 identity-seam ADR** — "identity seam": primary per-WebContents `StoragePartitionConfig` model vs. `BrowserContext` fallback, papercut census result, patch estimate (Plan §4 Phase P4, tasks T8/T9; Plan §12/§15 inputs; DR-25) | **IN USE** — `docs/adr/0042-identity-seam.md`, status PROPOSED (ratification HUMAN-GATED, HG-23). The reservation is consumed; the number is never reused for another topic. | ADR-0002, 2026-09-07 · used 2026-09-07 (P4) |
 
 **Rules**
 

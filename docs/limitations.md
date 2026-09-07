@@ -19,3 +19,45 @@ suite) requires a row added here in the same commit (Plan §9.1 / §11.4).
 This page is a *shipped surface*, not a footnote — its copy is legal-
 reviewed and its drift from measured suites is a release blocker (L5,
 §17 "Documentation" row: "threat model = shipped reality, bot-checked").
+
+---
+
+## Measured cross-profile-shared disclosure (P4, static evidence only)
+
+Added by P4, from `docs/spike-identity/measured-shared-state.md`. Only rows
+with static `file:line@pin` evidence appear here; every row is
+machine-re-audited (`./scripts/build spike citation-audit`) and **runtime
+confirmation is PENDING-FARM (HG-21)**. This block is data-driven from the
+isolation matrix, not prose — it is the seed for the Isolation Card.
+
+With identity implemented as a per-tab `StoragePartitionConfig` domain
+(ADR-0042, PROPOSED), **partitioned** by identity:
+
+* cookies, LocalStorage, IndexedDB, CacheStorage and ServiceWorker state
+  (`services/network/public/mojom/network_context.mojom:282`);
+* the HTTP cache, including its directory
+  (`…network_context.mojom:242`);
+* HSTS / transport-security state (`…network_context.mojom:307`);
+* HTTP/QUIC server-property hints (`…network_context.mojom:302`);
+* proxy configuration, bound per NetworkContext at creation
+  (`…network_context.mojom:443`;
+  `content/browser/storage_partition_impl.cc:3506`);
+* renderer processes — reuse requires the same StoragePartition
+  (`content/browser/renderer_host/render_process_host_impl.cc:4952`).
+
+**Still shared across identities** (the honest part of the card):
+
+* site permissions (`HostContentSettingsMap`), History, Bookmarks, the
+  password/autofill store, the extension registry and the Downloads DB —
+  all Profile-level;
+* the favicon cache — a shared cache hit discloses whether another identity
+  has visited a site;
+* **DNS**: the per-context host cache is partition-local, but the
+  `HostResolverManager` is one per NetworkService
+  (`services/network/network_service.cc:492`) and the OS resolver cache is
+  outside the browser entirely;
+* the GPU process and the OS clipboard.
+
+Identity partitions are a **storage and process** boundary, not a full-profile
+boundary. Nothing about them is airtight, and the product must not imply
+otherwise.

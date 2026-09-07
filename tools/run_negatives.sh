@@ -180,6 +180,59 @@ expect_reject "fetch chokepoint: urlopen outside the chokepoint" \
   'network import outside the chokepoint' \
   "$PY" "$F/tools/fetch_allowlist_check.py"
 
+
+# --- 11. spike candidate outside spike/ without the NOT-YET header -----------
+S="$TMP/cand"; mkdir -p "$S/patches/branding/0009-sneaky" "$S/spike/patches/0001-bad"
+cp ../xr-core/patches/manifest.yaml "$S/patches/manifest.yaml" 2>/dev/null \
+  || cp docs/state/license-allowlist.yaml "$S/patches/manifest.yaml"
+printf -- '--- a/a.txt\n+++ b/a.txt\n@@ -1 +1 @@\n-x\n+y\n' \
+  > "$S/patches/branding/0009-sneaky/0009.patch"
+printf '# 0009\n\n- **status:** candidate\n' > "$S/patches/branding/0009-sneaky/patchinfo.md"
+printf -- '--- a/b.txt\n+++ b/b.txt\n@@ -1 +1 @@\n-x\n+y\n' \
+  > "$S/spike/patches/0001-bad/0001.patch"
+printf '# 0001 candidate\n\n- **status:** CANDIDATE\n' \
+  > "$S/spike/patches/0001-bad/patchinfo.md"
+expect_reject "candidate: unmanifested patch dir outside spike/" \
+  'unmanifested patch dir' \
+  "$PY" build/patching/apply.py lint --manifest "$S/patches/manifest.yaml" --xr-core "$S"
+expect_reject "candidate: spike patch without manifest-entry: NOT-YET" \
+  'must carry .manifest-entry: NOT-YET' \
+  "$PY" build/patching/apply.py lint --manifest "$S/patches/manifest.yaml" --xr-core "$S"
+
+# --- 12. spike: census missing the Plan's named surfaces ---------------------
+CN="$TMP/census"; mkdir -p "$CN"
+printf '| id | surface | what breaks | repro | severity | owner | patch estimate (files x category) | landing phase | attacker-observable cross-identity |\n|---|---|---|---|---|---|---|---|---|\n| C-01 | downloads | x | y | S1 | B | 2 files x ui | P14 | yes |\n' > "$CN/census.md"
+expect_reject "spike: census missing named surfaces" \
+  'named surface missing' \
+  "$PY" build/spike/census_lint.py --doc "$CN/census.md"
+
+# --- 13. spike: genpatch refuses a patch that targets content/** -------------
+# End-to-end, not a unit test: run the real genpatch against a spec whose
+# targets include a content/ path. The tool must refuse before fetching.
+GS="$TMP/spike"; mkdir -p "$GS"
+cp build/_common.py build/spike/genpatch.py build/spike/seam_spec.py "$GS/"
+"$PY" - "$GS" <<'NEG'
+import sys
+from pathlib import Path
+d = Path(sys.argv[1])
+s = (d / "seam_spec.py").read_text()
+s = s.replace('NAVIGATOR = "chrome/browser/ui/navigator/browser_navigator.cc"',
+              'NAVIGATOR = "content/browser/site_instance_impl.cc"')
+(d / "seam_spec.py").write_text(s)
+NEG
+expect_reject "spike: genpatch refuses a content/** target (never-list)" \
+  'never-list refusal' \
+  "$PY" "$GS/genpatch.py" --xr-core ../xr-core --out "$GS/out"
+
+# --- 14. evidence bundle: a VERIFIED row citing a missing artifact -----------
+EV="$TMP/ev"; mkdir -p "$EV/evidence/PX"
+printf '{"phase":"PX","generated":"2026-09-07","plan":"p","dod_rows":[{"id":"E1","dod":"d","status":"VERIFIED","evidence":["logs/nope.txt"]}]}' \
+  > "$EV/evidence/PX/evidence.json"
+expect_reject "evidence: VERIFIED row citing a missing artifact (strict)" \
+  'cites missing artifact|missing or empty human-gates' \
+  "$PY" tools/evidence_check.py --repo "$EV" --strict
+
+echo
 echo
 if [ "$FAILURES" -ne 0 ]; then
   echo "NEGATIVE GATE FAILED: at least one gate accepted bad input or failed for the wrong reason"

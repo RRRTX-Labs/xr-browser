@@ -45,6 +45,7 @@ SUBCOMMANDS: dict[str, str] = {
     "assumptions": "upstream/assumptions.py",
     "retire": "upstream/retirements.py",
     "fork-health": "upstream/fork_health.py",
+    "spike": "spike/spike.py",
     "test": None,  # special: pytest runner, handled below
 }
 
@@ -69,6 +70,7 @@ USAGE_NOTES = {
     "assumptions": "upstream-assumptions suite (§12.4, P3-T6)",
     "retire": "seam-retirement ledger (P3-T7)",
     "fork-health": "fork-health headline chart → docs/state/fork-health.md (P3-T7)",
+    "spike": "identity-seam spike kit: genpatch / citation-audit / census-lint / probe",
     "test": "run the pytest suites (tools/tests + build/**/tests)",
 }
 

@@ -1,0 +1,5 @@
+scanned 346 file(s) under /home/user/xr-browser and /home/user/xr-core (excluding .git)
+token-pattern matches: 0
+  (none)
+
+verdict: CLEAN

@@ -1,0 +1,19 @@
+=== run A: bare host (minisign REMOVED) — the fresh-clone case ===
+minisign: absent (confirmed)
+==================== optional external tools (SKIP policy) =====================
+SKIP: SKIP (tool absent: minisign) — needed for: TEST-ONLY artifact signature in the fast-lane drill (P3-T5); install hint: apt-get install -y minisign (Ubuntu universe)
+SKIP: SKIP (tool absent: codesign) — needed for: macOS TEST signing passthrough (P2-T7); install hint: Xcode command line tools (macOS runners only)
+SKIP: SKIP (tool absent: signtool) — needed for: Windows TEST signing passthrough (P2-T7); install hint: Windows SDK (Windows runners only)
+3 external tool(s) absent on this host: the dependent tests SKIP with the reason above (never a silent pass).
+=========================== short test summary info ============================
+SKIPPED [1] build/skip_policy.py:87: SKIP (tool absent: minisign) — needed for: TEST-ONLY artifact signature in the fast-lane drill (P3-T5); install hint: apt-get install -y minisign (Ubuntu universe)
+140 passed, 1 skipped in 9.32s
+=== run B: helper tools installed — the CI case ===
+/usr/bin/minisign
+minisign 0.12
+.....................................................................    [100%]
+==================== optional external tools (SKIP policy) =====================
+SKIP: SKIP (tool absent: codesign) — needed for: macOS TEST signing passthrough (P2-T7); install hint: Xcode command line tools (macOS runners only)
+SKIP: SKIP (tool absent: signtool) — needed for: Windows TEST signing passthrough (P2-T7); install hint: Windows SDK (Windows runners only)
+2 external tool(s) absent on this host: the dependent tests SKIP with the reason above (never a silent pass).
+141 passed in 9.63s

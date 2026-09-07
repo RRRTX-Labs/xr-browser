@@ -41,6 +41,7 @@ from _common import (  # noqa: E402
     mock_enabled,
     repo_root,
 )
+from candidate import CANDIDATE_HEADER, lint_candidate_dirs  # noqa: E402
 from categories import PLAN_CAPS, TOTAL_CAP, validate_category  # noqa: E402
 
 DEFAULT_ROOTS = ["chrome/app/"]
@@ -225,6 +226,7 @@ def select_patches(manifest: dict[str, Any], only_id: str | None) -> list[dict[s
     return patches
 
 
+
 def _missing_manifest_error(manifest_path: Path) -> ToolError:
     """D2 regression (P3 T0.3): absent manifest must fail clean, never crash."""
     rev = "<unknown>"
@@ -250,8 +252,16 @@ def cmd(args: argparse.Namespace) -> int:
     fails = lint_manifest(manifest, manifest_path)
 
     if args.cmd == "lint":
-        return emit(args.json, {"tool": "xr-patch", "cmd": "lint", "manifest": str(manifest_path),
-                                "patches": len(manifest.get("patches", []))}, failures=fails)
+        root = Path(args.xr_core).resolve() if getattr(args, "xr_core", None) \
+            else manifest_path.parent.parent
+        manifest_ids = {str(p.get("id")) for p in manifest.get("patches", [])}
+        candidates = lint_candidate_dirs(root, manifest_ids)
+        return emit(args.json, {"tool": "xr-patch", "cmd": "lint",
+                                "manifest": str(manifest_path),
+                                "patches": len(manifest.get("patches", [])),
+                                "candidate_root": str(root),
+                                "candidate_dirs": "checked"},
+                    failures=fails + candidates)
 
     if fails:
         return emit(args.json, {"tool": "xr-patch", "cmd": args.cmd}, failures=fails)
@@ -330,6 +340,8 @@ def main() -> None:
         if name != "retire":
             sp.add_argument("--id", help="operate on a single patch id")
         sp.add_argument("--json", action="store_true", help="emit JSON")
+        if name == "lint":
+            sp.add_argument("--xr-core", help="xr-core root to scan for candidate (spike/) patches")
         if name == "retire":
             sp.add_argument("--id", required=True, help="patch id to retire")
             sp.add_argument("--mechanism", required=True,

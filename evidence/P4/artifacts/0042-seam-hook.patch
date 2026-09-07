@@ -1,0 +1,519 @@
+diff --git a/chrome/browser/ui/navigator/BUILD.gn b/chrome/browser/ui/navigator/BUILD.gn
+index d23e37f..909ca65 100644
+--- a/chrome/browser/ui/navigator/BUILD.gn
++++ b/chrome/browser/ui/navigator/BUILD.gn
+@@ -87,6 +87,16 @@ source_set("impl") {
+       "browser_navigator_tab_modal.cc",
+     ]
+ 
++    if (enable_xr_spike) {
++      sources += [
++        "../../xr/xr_identity.cc",
++        "../../xr/xr_identity.h",
++        "../../xr/xr_seam_override.cc",
++        "../../xr/xr_seam_override.h",
++      ]
++      deps += [ "//chrome/browser/xr:identity_seam" ]
++    }
++
+     deps += [
+       "//chrome/browser/apps/app_service",
+       "//chrome/browser/apps/link_capturing",
+diff --git a/chrome/browser/ui/navigator/browser_navigator.cc b/chrome/browser/ui/navigator/browser_navigator.cc
+index a3a2000..223dce1 100644
+--- a/chrome/browser/ui/navigator/browser_navigator.cc
++++ b/chrome/browser/ui/navigator/browser_navigator.cc
+@@ -43,6 +43,8 @@
+ #include "chrome/browser/ui/tabs/split_tab_metrics.h"
+ #include "chrome/browser/ui/tabs/tab_strip_model.h"
+ #include "chrome/browser/ui/tabs/tab_strip_user_gesture_details.h"
++#include "chrome/browser/xr/xr_identity.h"
++#include "chrome/browser/xr/xr_seam_override.h"
+ #include "chrome/browser/ui/web_applications/app_browser_controller.h"
+ #include "chrome/browser/ui/web_applications/navigation_capturing_process.h"
+ #include "chrome/browser/ui/web_applications/web_app_launch_navigation_handle_user_data.h"
+@@ -481,6 +483,38 @@ std::unique_ptr<content::WebContents> CreateTargetContents(
+                     : tab_util::GetSiteInstanceForNewTab(
+                           params.browser->GetProfile(), url);
+ 
++#if BUILDFLAG(ENABLE_XR_SPIKE)
++  // XR identity seam (P4 spike). When this navigation requests an identity,
++  // replace the initial SiteInstance with one pinned to that identity's
++  // StoragePartition — BEFORE the WebContents exists, which is the only
++  // ordering the seam allows:
++  //   * browsing_instance.cc:178-183 pins the partition on the first
++  //     registered SiteInstance and CHECK_EQ()s every later one;
++  //   * browsing_instance.cc:264-267 propagates it to SiteInstances created
++  //     by subsequent navigations (including cross-site OOPIFs).
++  // A WebContentsUserData consulted during partition selection would race the
++  // first navigation; this hook is why the spike does not need one.
++  if (!params.opener) {
++    std::optional<xr::Identity> xr_identity =
++        xr::IdentityForNewTab(params.browser->GetProfile(), url);
++    if (xr_identity.has_value()) {
++      scoped_refptr<content::SiteInstance> xr_site_instance =
++          xr::SiteInstanceForIdentity(params.browser->GetProfile(), url,
++                                      *xr_identity);
++      if (xr_site_instance) {
++        initial_site_instance_for_new_contents = std::move(xr_site_instance);
++      } else {
++        // SPIKE-ONLY fail-open. Production must fail closed (Plan §8.3):
++        // an identity that cannot be bound to its partition must not open a
++        // tab in the default partition. Recorded in ADR-0042.
++        LOG(ERROR) << "xr: identity " << xr_identity->partition_domain()
++                   << " could not be bound to a StoragePartition; opening the "
++                   << "tab in the profile default (SPIKE-ONLY fail-open)";
++      }
++    }
++  }
++#endif  // BUILDFLAG(ENABLE_XR_SPIKE)
++
+   WebContents::CreateParams create_params(
+       params.browser->GetProfile(), initial_site_instance_for_new_contents);
+   create_params.main_frame_name = params.frame_name;
+diff --git a/chrome/browser/xr/xr_identity.cc b/chrome/browser/xr/xr_identity.cc
+new file mode 100644
+index 0000000..62e537d
+--- /dev/null
++++ b/chrome/browser/xr/xr_identity.cc
+@@ -0,0 +1,176 @@
++// Copyright 2026 RRRTX Labs
++// Use of this source code is governed by the MPL-2.0 license that can be
++// found in the LICENSE file.
++//
++// SPIKE KIT (P4) — not a product component. See README.md before use.
++
++#include "chrome/browser/xr/xr_identity.h"
++
++#include <utility>
++
++#include "base/no_destructor.h"
++#include "chrome/browser/profiles/profile.h"
++#include "content/public/browser/browser_context.h"
++#include "content/public/browser/site_instance.h"
++#include "url/gurl.h"
++
++namespace xr {
++
++namespace {
++
++// A partition domain is `xr:` + a UUIDv4 (8-4-4-4-12 hex). Anything else is
++// rejected: the domain is a storage-keying primitive and must not be
++// attacker- or user-influenced text.
++bool IsWellFormedDomain(const std::string& domain) {
++  if (domain.compare(0, 3, kPartitionDomainPrefix) != 0) {
++    return false;
++  }
++  const std::string uuid = domain.substr(3);
++  if (uuid.size() != 36) {
++    return false;
++  }
++  for (size_t i = 0; i < uuid.size(); ++i) {
++    const size_t dash = (i == 8 || i == 13 || i == 18 || i == 23);
++    const char c = uuid[i];
++    if (dash) {
++      if (c != '-') {
++        return false;
++      }
++    } else if (!base::IsHexDigit(c)) {
++      return false;
++    }
++  }
++  return true;
++}
++
++bool IsWellFormedId(const std::string& id) {
++  return IsWellFormedDomain(kPartitionDomainPrefix + id);
++}
++
++}  // namespace
++
++std::string Identity::partition_domain() const {
++  return kPartitionDomainPrefix + id;
++}
++
++content::StoragePartitionConfig StoragePartitionConfigForIdentity(
++    Profile* profile,
++    const Identity& identity) {
++  CHECK(profile);
++  // content/browser/browser_context.cc:144-151 CHECKs that an off-the-record
++  // profile only ever gets in-memory partitions, so mirror that here instead
++  // of letting the CHECK fire deeper in the stack.
++  const bool in_memory = identity.ephemeral || profile->IsOffTheRecord();
++  return content::StoragePartitionConfig::Create(
++      profile, identity.partition_domain(), identity.partition_name,
++      in_memory);
++}
++
++scoped_refptr<content::SiteInstance> SiteInstanceForIdentity(
++    Profile* profile,
++    const GURL& url,
++    const Identity& identity) {
++  if (!profile || !IsWellFormedId(identity.id)) {
++    return nullptr;
++  }
++  const content::StoragePartitionConfig config =
++      StoragePartitionConfigForIdentity(profile, identity);
++  if (config.is_default()) {
++    return nullptr;  // CreateForFixedStoragePartition CHECKs non-default.
++  }
++  return content::SiteInstance::CreateForFixedStoragePartition(profile, url,
++                                                               config);
++}
++
++namespace {
++
++// Spike-only, test-only: the identity the next new tab will request.
++// A real implementation resolves this from the navigation request itself.
++std::optional<Identity>& PendingIdentity() {
++  static std::optional<Identity> pending;
++  return pending;
++}
++
++}  // namespace
++
++std::optional<Identity> IdentityForNewTab(Profile* profile, const GURL& url) {
++  if (!profile) {
++    return std::nullopt;
++  }
++  std::optional<Identity> pending = PendingIdentity();
++  PendingIdentity().reset();  // consumed: one pending identity, one new tab.
++  if (pending && !IsWellFormedId(pending->id)) {
++    return std::nullopt;
++  }
++  return pending;
++}
++
++void SetPendingIdentityForNewTabForTesting(std::optional<Identity> identity) {
++  PendingIdentity() = std::move(identity);
++}
++
++// --- XRIdentityTabData ------------------------------------------------------
++
++XRIdentityTabData::XRIdentityTabData(
++    content::WebContents* contents,
++    Identity identity,
++    content::StoragePartitionConfig config)
++    : content::WebContentsUserData<XRIdentityTabData>(*contents),
++      identity_(std::move(identity)),
++      partition_config_(std::move(config)) {}
++
++XRIdentityTabData::~XRIdentityTabData() = default;
++
++bool XRIdentityTabData::PartitionMatchesLiveSiteInstance() const {
++  content::SiteInstance* live = nullptr;
++  if (auto* contents = GetWebContentsForTesting()) {
++    live = contents->GetSiteInstance();
++  }
++  if (!live) {
++    return false;
++  }
++  return live->GetStoragePartitionConfig() == partition_config_;
++}
++
++WEB_CONTENTS_USER_DATA_KEY_IMPL(XRIdentityTabData);
++
++// --- IdentityRegistry -------------------------------------------------------
++
++IdentityRegistry::IdentityRegistry() = default;
++
++IdentityRegistry& IdentityRegistry::Get() {
++  static base::NoDestructor<IdentityRegistry> instance;
++  return *instance;
++}
++
++bool IdentityRegistry::Register(Identity identity) {
++  if (!IsWellFormedId(identity.id)) {
++    return false;
++  }
++  for (const Identity& existing : identities_) {
++    if (existing.id == identity.id) {
++      return false;
++    }
++  }
++  identities_.push_back(std::move(identity));
++  return true;
++}
++
++std::optional<Identity> IdentityRegistry::Lookup(const std::string& id) const {
++  for (const Identity& identity : identities_) {
++    if (identity.id == id) {
++      return identity;
++    }
++  }
++  return std::nullopt;
++}
++
++std::vector<Identity> IdentityRegistry::All() const {
++  return identities_;
++}
++
++void IdentityRegistry::ClearForTesting() {
++  identities_.clear();
++}
++
++}  // namespace xr
+diff --git a/chrome/browser/xr/xr_identity.h b/chrome/browser/xr/xr_identity.h
+new file mode 100644
+index 0000000..493cda8
+--- /dev/null
++++ b/chrome/browser/xr/xr_identity.h
+@@ -0,0 +1,156 @@
++// Copyright 2026 RRRTX Labs
++// Use of this source code is governed by the MPL-2.0 license that can be
++// found in the LICENSE file.
++//
++// SPIKE KIT (P4) — not a product component. See README.md before use.
++
++#ifndef CHROME_BROWSER_XR_XR_IDENTITY_H_
++#define CHROME_BROWSER_XR_XR_IDENTITY_H_
++
++#include <optional>
++#include <string>
++#include <vector>
++
++#include "base/memory/scoped_refptr.h"
++#include "content/public/browser/storage_partition_config.h"
++#include "content/public/browser/web_contents_user_data.h"
++
++class GURL;
++class Profile;
++
++namespace content {
++class SiteInstance;
++class WebContents;
++}  // namespace content
++
++namespace xr {
++
++// The partition-domain prefix every XR identity lives under. Storage keys are
++// `xr:<uuid>`; the prefix is what makes them sort outside any upstream domain
++// and keeps them greppable in a StoragePartitionConfig dump.
++inline constexpr char kPartitionDomainPrefix[] = "xr:";
++
++// An identity: one storage partition domain inside one Profile.
++struct Identity {
++  // Stable, random UUIDv4. Never derived from a name, a URL or a user string:
++  // a guessable partition domain is a cross-identity correlation primitive.
++  std::string id;
++
++  // Partition domain handed to StoragePartitionConfig::Create().
++  std::string partition_domain() const;
++
++  // Ephemeral identities resolve to an in-memory partition (no disk writes).
++  bool ephemeral = false;
++
++  // Partition name within the domain. Empty = the domain's default partition,
++  // which is what a top-level identity tab wants.
++  std::string partition_name;
++
++  bool operator==(const Identity& other) const = default;
++};
++
++// The storage-partition configuration for `identity` under `profile`.
++//
++// NOTE (measured at pin d04cdb24…, see docs/spike-identity/
++// measured-shared-state.md row S-02): when `profile` is off-the-record the
++// returned config is in-memory regardless of `identity.ephemeral`, because
++// content/browser/browser_context.cc:144-151 CHECKs it.
++content::StoragePartitionConfig StoragePartitionConfigForIdentity(
++    Profile* profile,
++    const Identity& identity);
++
++// The SiteInstance a new identity tab must start in.
++//
++// This is the seam: content/public/browser/site_instance.h:252-256
++// `SiteInstance::CreateForFixedStoragePartition(browser_context, url,
++// partition_config)` creates a SiteInstance in a new BrowsingInstance whose
++// StoragePartition "is preserved across navigations". Every later SiteInstance
++// in that BrowsingInstance inherits the config (browsing_instance.cc:264-267)
++// and a mismatch is CHECK-failed (browsing_instance.cc:183).
++//
++// Returns nullptr when `identity` is not usable (bad domain, OTR mismatch) —
++// callers must fall back to the default tab SiteInstance, never CHECK.
++scoped_refptr<content::SiteInstance> SiteInstanceForIdentity(
++    Profile* profile,
++    const GURL& url,
++    const Identity& identity);
++
++// Which identity a new tab should open in, if any.
++//
++// SPIKE SCAFFOLD — clearly non-production. A real implementation reads the
++// identity from the navigation's own context (a P5 `IdentityProvisioning`
++// request), not from process-local state. This exists so the probes can ask
++// "open this tab as identity X" without first designing that request surface;
++// see ADR-0042 ("Contracts out") for what P5 inherits from this.
++std::optional<Identity> IdentityForNewTab(Profile* profile, const GURL& url);
++
++// Sets the identity the next new tab will request (and consumes it).
++// Test-only: no production caller may depend on this.
++void SetPendingIdentityForNewTabForTesting(std::optional<Identity> identity);
++
++// Per-tab record of which identity a WebContents belongs to.
++//
++// Timing (the spike's #1 risk, resolved): the SiteInstance that fixes the
++// partition is built BEFORE WebContents::Create, so the partition is already
++// decided when the first navigation starts. This UserData is attached
++// immediately after Create() and is therefore only a *record* for later
++// lookups — it is not what establishes the partition. Depending on it for
++// isolation would be a race; see README.md "What this spike disproves".
++class XRIdentityTabData
++    : public content::WebContentsUserData<XRIdentityTabData> {
++ public:
++  XRIdentityTabData(const XRIdentityTabData&) = delete;
++  XRIdentityTabData& operator=(const XRIdentityTabData&) = delete;
++  ~XRIdentityTabData() override;
++
++  const Identity& identity() const { return identity_; }
++  const content::StoragePartitionConfig& partition_config() const {
++    return partition_config_;
++  }
++
++  // True when the tab's live SiteInstance still resolves to the recorded
++  // partition. A false result is a seam break, not a benign drift: it means
++  // the tab has moved to a different StoragePartition.
++  bool PartitionMatchesLiveSiteInstance() const;
++
++ private:
++  friend class content::WebContentsUserData<XRIdentityTabData>;
++
++  XRIdentityTabData(content::WebContents* contents,
++                    Identity identity,
++                    content::StoragePartitionConfig config);
++
++  Identity identity_;
++  content::StoragePartitionConfig partition_config_;
++
++  WEB_CONTENTS_USER_DATA_KEY_DECL();
++};
++
++// Test/spike-only registry: the identities this browser instance knows about.
++// Deliberately in-memory and process-local — a real implementation stores
++// identity metadata encrypted in the Profile (P5/P12 work), and a spike must
++// not invent that storage.
++class IdentityRegistry {
++ public:
++  static IdentityRegistry& Get();
++
++  // Registers `identity`. Returns false (and registers nothing) when the id is
++  // malformed or already taken.
++  bool Register(Identity identity);
++
++  // Look up by id; nullopt when unknown.
++  std::optional<Identity> Lookup(const std::string& id) const;
++
++  std::vector<Identity> All() const;
++
++  // Test seam: drops every identity. Not exposed to production callers.
++  void ClearForTesting();
++
++ private:
++  IdentityRegistry();
++  std::vector<Identity> identities_;
++};
++
++}  // namespace xr
++
++#endif  // CHROME_BROWSER_XR_XR_IDENTITY_H_
+diff --git a/chrome/browser/xr/xr_seam_override.cc b/chrome/browser/xr/xr_seam_override.cc
+new file mode 100644
+index 0000000..de4a5a9
+--- /dev/null
++++ b/chrome/browser/xr/xr_seam_override.cc
+@@ -0,0 +1,47 @@
++// Copyright 2026 RRRTX Labs
++// Use of this source code is governed by the MPL-2.0 license that can be
++// found in the LICENSE file.
++//
++// SPIKE KIT (P4) — not a product component. See README.md before use.
++
++#include "chrome/browser/xr/xr_seam_override.h"
++
++#include "chrome/browser/profiles/profile.h"
++#include "content/public/browser/browser_context.h"
++#include "url/gurl.h"
++
++namespace xr {
++
++namespace {
++
++// Sites whose partition is decided by the site itself, independent of any
++// identity. Kept in one place so a reviewer can see the whole policy.
++// Anything not matched here falls through to the default partition.
++bool IsSchemeScopedPartition(const GURL& site) {
++  return site.SchemeIs("chrome-extension") ||
++         site.SchemeIs("isolated-app") || site.SchemeIs("chrome");
++}
++
++}  // namespace
++
++content::StoragePartitionConfig GetStoragePartitionConfigForSite(
++    content::BrowserContext* browser_context,
++    const GURL& site) {
++  Profile* profile = Profile::FromBrowserContext(browser_context);
++
++  // No opinion: return the profile default. This is the common case, and it
++  // is deliberately NOT where identity is applied — see the header comment.
++  // The identity partition is fixed at SiteInstance creation time instead
++  // (xr::SiteInstanceForIdentity), which is the only point at which "which
++  // tab is this?" is answerable.
++  if (!IsSchemeScopedPartition(site)) {
++    return content::StoragePartitionConfig::CreateDefault(profile);
++  }
++
++  // Scheme-scoped cases are left to upstream's own routing: returning the
++  // default here preserves Chrome's behaviour for extensions / IWA / WebUI
++  // rather than re-deriving it in a spike.
++  return content::StoragePartitionConfig::CreateDefault(profile);
++}
++
++}  // namespace xr
+diff --git a/chrome/browser/xr/xr_seam_override.h b/chrome/browser/xr/xr_seam_override.h
+new file mode 100644
+index 0000000..f93b7cb
+--- /dev/null
++++ b/chrome/browser/xr/xr_seam_override.h
+@@ -0,0 +1,43 @@
++// Copyright 2026 RRRTX Labs
++// Use of this source code is governed by the MPL-2.0 license that can be
++// found in the LICENSE file.
++//
++// SPIKE KIT (P4) — not a product component. See README.md before use.
++
++#ifndef CHROME_BROWSER_XR_XR_SEAM_OVERRIDE_H_
++#define CHROME_BROWSER_XR_XR_SEAM_OVERRIDE_H_
++
++#include "content/public/browser/storage_partition_config.h"
++
++class GURL;
++
++namespace content {
++class BrowserContext;
++}  // namespace content
++
++namespace xr {
++
++// The embedder consult for a storage partition, evaluated for a site.
++//
++// IMPORTANT — this is NOT the identity seam, and the spike exists partly to
++// prove that it cannot be. Its signature is
++// (BrowserContext*, const GURL& site): it has no tab, no SiteInstance and no
++// identity in scope, so it must return the SAME config for every tab of a
++// profile visiting the same site. Two identities browsing `example.com` in one
++// profile are indistinguishable here (measured at pin d04cdb24…,
++// content/public/browser/content_browser_client.h:1208; see
++// docs/spike-identity/measured-shared-state.md row S-01).
++//
++// What it IS for: scheme-level partition decisions (extension / IWA / WebUI),
++// exactly the cases upstream Chrome already handles. It is wired in the kit so
++// the farm can measure the collision directly rather than take our word for it.
++//
++// Returns the default config when XR has no opinion, so callers keep upstream
++// behaviour unless a decision is genuinely made.
++content::StoragePartitionConfig GetStoragePartitionConfigForSite(
++    content::BrowserContext* browser_context,
++    const GURL& site);
++
++}  // namespace xr
++
++#endif  // CHROME_BROWSER_XR_XR_SEAM_OVERRIDE_H_

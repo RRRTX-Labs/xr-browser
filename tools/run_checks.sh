@@ -49,4 +49,29 @@ echo "== CODEOWNERS / S0 path sync =="
 echo "== test suites =="
 "$PY" -m pytest tools/tests/ -q
 
+# ---------------------------------------------------------------------------
+# P4 gates. Network: citation-audit and check-pin-alive fetch read-only
+# upstream/git bytes through the allowlisted choke points (build/upstream/
+# fetch.py; unauthenticated git ls-remote). They fail closed on no network.
+# ---------------------------------------------------------------------------
+echo "== evidence bundles (contract: docs/contracts/evidence-bundle-v1.md) =="
+"$PY" tools/evidence_check.py
+# strict: P3+ bundles — cited artifact paths must resolve, source labels required
+"$PY" tools/evidence_check.py --strict --only P3,P4
+
+echo "== spike: every file:line citation re-verified at the pin =="
+"$PY" build/spike/citation_audit.py
+
+echo "== spike: papercut census schema =="
+"$PY" build/spike/census_lint.py
+
+echo "== spike: probe driver static + fixture lanes =="
+"$PY" build/spike/probe_driver.py --offline
+
+echo "== cross-repo pin alive (DEPS xr_core_rev reachable from origin) =="
+"$PY" build/sync.py check-pin-alive
+
+echo "== patch ledger incl. candidate (spike/) dirs =="
+"$PY" build/patching/apply.py lint --manifest ../xr-core/patches/manifest.yaml --xr-core ../xr-core
+
 echo "== ALL GOVERNANCE CHECKS PASSED =="

@@ -1,0 +1,28 @@
+# citation audit — pinned Chromium d04cdb24d67b081f6cf80200ffc5233f44b61109
+rows checked: 23
+results: {'PASS': 23, 'FAIL': 0, 'DRIFT': 0, 'BLOCKED-NET': 0}
+method: re-fetch each cited file at the pin through build/upstream/fetch.py; assert the quote is present within 2 lines of the cited line number; assert the runtime cell is PENDING-FARM.
+
+PASS        S-01   content/public/browser/content_browser_client.h:1208 (found 1208)  'virtual StoragePartitionConfig GetStoragePartitionConfigForSite('
+PASS        S-02   content/browser/site_info.cc:819 (found 819)  'return GetContentClient()->browser()->GetStoragePartitionConfigForSite'
+PASS        S-03   content/public/browser/site_instance.h:255 (found 255)  'static scoped_refptr<SiteInstance> CreateForFixedStoragePartition('
+PASS        S-04   content/browser/site_instance_impl.cc:249 (found 249)  'CHECK(!partition_config.is_default());'
+PASS        S-05   content/browser/browsing_instance.cc:183 (found 183)  'CHECK_EQ(storage_partition_config_.value(), storage_partition_config);'
+PASS        S-06   content/browser/browsing_instance.cc:179 (found 179)  'We should only use a single StoragePartition within a BrowsingInstance'
+PASS        S-07   content/browser/browsing_instance.cc:263 (found 263)  'UrlInfo url_info_with_partition ='
+PASS        S-08   content/browser/renderer_host/render_process_host_impl.cc:4952 (found 4952)  'if (!host->InSameStoragePartition(dest_partition)) {'
+PASS        S-09   content/browser/renderer_host/render_process_host_impl.h:197 (found 197)  'A RenderProcessHost is also associated with one and only one'
+PASS        S-10   content/browser/storage_partition_impl.cc:3506 (found 3506)  'GetContentClient()->browser()->ConfigureNetworkContextParams('
+PASS        S-11   services/network/public/mojom/network_context.mojom:443 (found 443)  'ProxyConfigWithAnnotation? initial_proxy_config;'
+PASS        S-12   services/network/public/mojom/network_context.mojom:307 (found 307)  'mojo_base.mojom.FilePath? transport_security_persister_file_name;'
+PASS        S-13   services/network/public/mojom/network_context.mojom:242 (found 242)  'TransferableDirectory? http_cache_directory;'
+PASS        S-14   services/network/public/mojom/network_context.mojom:282 (found 282)  'mojo_base.mojom.FilePath? cookie_database_name;'
+PASS        S-15   services/network/public/mojom/network_context.mojom:302 (found 302)  'mojo_base.mojom.FilePath? http_server_properties_file_name;'
+PASS        S-16   services/network/network_context.cc:2234 (found 2234)  'net::HostResolver* internal_resolver = url_request_context_->host_reso'
+PASS        S-17   services/network/network_service.cc:492 (found 492)  'host_resolver_manager_ = std::make_unique<net::HostResolverManager>('
+PASS        S-18   content/browser/browser_context.cc:148 (found 148)  'CHECK(storage_partition_config.in_memory());'
+PASS        S-19   content/browser/storage_partition_impl.cc:3380 (found 3380)  'if (is_in_memory()) {'
+PASS        S-20   content/browser/storage_partition_impl_map.cc:294 (found 294)  'base::FilePath StoragePartitionImplMap::GetStoragePartitionPath('
+PASS        S-21   content/public/browser/storage_partition_config.h:44 (found 44)  'static StoragePartitionConfig Create(BrowserContext* browser_context,'
+PASS        S-22   content/public/browser/storage_partition_config.h:37 (found 37)  'be an empty string. Within a domain, partitions can be uniquely identi'
+PASS        S-23   chrome/browser/profiles/profile.h:274 (found 274)  'virtual Profile* GetOriginalProfile() = 0;'

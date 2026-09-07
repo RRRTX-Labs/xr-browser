@@ -100,3 +100,31 @@ their absence as a release blocker.
 | Version | Date | Change |
 |---|---|---|
 | v0 | 2026-09-07 | Initial transcription of Plan §9.1 adversary classes T1–T11 + §1.13 limitations + §1.12 invariants (Phase P1, XR-P1-T4). Pre-implementation posture; every protection statement is target, not shipped. |
+
+## P4 identity-seam findings (static measurement, pin d04cdb24…)
+
+Added by P4. These are **measured at source**, not assumed: each row cites
+`file:line@pin` and is machine-re-audited by `./scripts/build spike
+citation-audit`. Runtime confirmation of every row is **PENDING-FARM (HG-21)**.
+
+The seam itself holds: a per-tab `StoragePartitionConfig` domain gives
+partition-scoped storage and upstream-enforced renderer non-sharing
+(`content/browser/renderer_host/render_process_host_impl.cc:4952`,
+`content/browser/browsing_instance.cc:183`). What follows is what the seam
+does **not** isolate — these are the rows the Isolation Card copy must carry.
+
+| id | adversary | cross-identity observable | citation / census row | status |
+|----|-----------|---------------------------|-----------------------|--------|
+| TM-P4-1 | T2 | that an identity downloaded a file (name, time) — Downloads DB is Profile-level | census C-01 | static-confirmed, PENDING-FARM |
+| TM-P4-2 | T5 | other identities' tab titles and URLs — DevTools target registry is browser-wide | census C-03 | static-confirmed, PENDING-FARM |
+| TM-P4-3 | T2 | whether another identity visited a site — shared favicon cache hit timing | census C-12; `services/network/public/mojom/network_context.mojom:302` | static-confirmed, PENDING-FARM |
+| TM-P4-4 | T2 | full browsing history of other identities via the omnibox History provider | census C-04 | static-confirmed, PENDING-FARM |
+| TM-P4-5 | T2 | saved credentials/addresses offered across identities | census C-10 | static-confirmed, PENDING-FARM |
+| TM-P4-6 | T2 | a complete cross-identity activity map via a global tab index | census C-11 | static-confirmed, PENDING-FARM |
+| TM-P4-7 | T5 | correlation through extension messaging (one registry per Profile) | census C-15 | static-confirmed, PENDING-FARM |
+| TM-P4-8 | T6 | DNS as a side channel — the `HostResolverManager` is one per NetworkService and the OS resolver cache is outside the browser | `services/network/network_service.cc:492`; measured row S-16/S-17 | static-confirmed, PENDING-FARM |
+| TM-P4-9 | T8 | GPU-process and clipboard are shared by construction | measured rows P-8/P-9 | static-confirmed, PENDING-FARM |
+
+**Does NOT protect against (P4 scope statement):** none of the nine rows above.
+Identity partitions isolate *storage and renderer processes*; they are not a
+full-profile boundary, and this document must not be read as claiming they are.

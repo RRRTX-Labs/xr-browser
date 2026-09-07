@@ -1,0 +1,55 @@
+=== negatives (full) ===
+ok: license: injected GPL sample in code (rejected with expected reason)
+ok: dco: unsigned commit (rejected with expected reason)
+ok: registry: hand-edited features.yaml (rejected with expected reason)
+ok: vocab: banned words in new doc (rejected with expected reason)
+ok: register: invalid status enum (rejected with expected reason)
+ok: threat model: emptied honesty cell (T2) (rejected with expected reason)
+ok: plan pin: tampered plan copy (rejected with expected reason)
+ok: budget: over-cap manifest fails the gate (rejected with expected reason)
+ok: retirement: removal without a ledger entry (rejected with expected reason)
+ok: fetch chokepoint: urlopen outside the chokepoint (rejected with expected reason)
+ok: candidate: unmanifested patch dir outside spike/ (rejected with expected reason)
+ok: candidate: spike patch without manifest-entry: NOT-YET (rejected with expected reason)
+ok: spike: census missing named surfaces (rejected with expected reason)
+ok: spike: genpatch refuses a content/** target (never-list) (rejected with expected reason)
+ok: evidence: VERIFIED row citing a missing artifact (strict) (rejected with expected reason)
+
+
+ALL NEGATIVE CASES REJECTED AS EXPECTED
+
+=== check-pin-alive ===
+{
+  "tool": "check-pin-alive",
+  "pinned_rev": "c34cd6651ec5b4c4db0dbefa13357b1376057c25",
+  "origin_main": "c34cd6651ec5b4c4db0dbefa13357b1376057c25",
+  "remote": "https://github.com/RRRTX-Labs/xr-core.git",
+  "object_present": true,
+  "ancestor_of_main": true,
+  "verified_by": "git ls-remote + fetch + merge-base --is-ancestor",
+  "auth": "unauthenticated (public repo, no token)",
+  "source": "real-fetch",
+  "status": "pass"
+}
+
+=== spike --offline ===
+      "claim": "the client refuses a non-loopback target",
+      "expectation": "as stated in docs/spike-identity/probe-matrix.md",
+      "measured": "CdpError raised",
+      "source": "fixture",
+      "pin_sha": "d04cdb24d67b081f6cf80200ffc5233f44b61109",
+      "verdict": "PASS"
+    },
+    {
+      "probe": "driver.fixture.origin",
+      "claim": "probe fixtures use RFC 2606 / .test origins only",
+      "expectation": "as stated in docs/spike-identity/probe-matrix.md",
+      "measured": "7 file(s) scanned; 0 real-domain token(s)",
+      "source": "fixture",
+      "pin_sha": "d04cdb24d67b081f6cf80200ffc5233f44b61109",
+      "verdict": "PASS"
+    }
+  ],
+  "status": "pass"
+}
+$ /usr/local/bin/python3 /home/user/xr-browser/build/spike/probe_driver.py --offline --json

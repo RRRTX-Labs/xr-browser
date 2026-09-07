@@ -1,0 +1,253 @@
+{
+  "schema_note": "docs/contracts/evidence-bundle-v1.md (validator: tools/evidence_check.py --strict)",
+  "phase": "P4 \u2014 Identity-seam spike (go/no-go) + P3 debt closure",
+  "generated": "2026-09-07",
+  "plan": "docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md",
+  "plan_sha256": "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b",
+  "supersedes": "evidence/P3 (retrofitted by P4-T0.3) \u2014 the P3 bundle records the pre-fix measurements",
+  "pin": {
+    "chromium_rev": "d04cdb24d67b081f6cf80200ffc5233f44b61109",
+    "chromium_version": "152.0.7977.82",
+    "xr_core_rev": "c34cd6651ec5b4c4db0dbefa13357b1376057c25"
+  },
+  "repos": {
+    "xr-browser (meta)": "local branch at P4 close; DEPS chromium_rev unchanged, xr_core_rev bump pending push (see human-gates.md HG-P4-PUSH)",
+    "xr-core (product)": "local commits 56b4ebb (BUILD.gn + mount doc, D-B) and 1ee5f4c (spike kit + 0042 candidate); both pending push"
+  },
+  "verdict_vocabulary": [
+    "VERIFIED",
+    "HUMAN-GATED",
+    "SIMULATED",
+    "BLOCKED"
+  ],
+  "source_labels": [
+    "static",
+    "fixture",
+    "real-fetch",
+    "hosted-ci",
+    "local-run"
+  ],
+  "policy": "Static measurement + committed spike kit, per the orchestrator's binding ruling: no runtime result is claimed anywhere. Every runtime row reads PENDING-FARM (HG-21). Every citation is machine-re-audited at the pin (citation-audit, 23/23). The genpatch round-trip is real: pinned bytes fetched, patch applied, verified, reverted byte-exact.",
+  "falsification_status": {
+    "verdict": "QUALIFIED at source level",
+    "detail": "Plan \u00a71.4's named mechanism is FALSIFIED (the symbol does not exist at the pin, and its signature could not carry per-tab identity); the ARCHITECTURAL PROPERTY is CONFIRMED via a different, public embedder API (SiteInstance::CreateForFixedStoragePartition).",
+    "evidence": [
+      "docs/spike-identity/measured-shared-state.md",
+      "docs/adr/0042-identity-seam.md",
+      "docs/state/research-log-P4.md"
+    ]
+  },
+  "dod_rows": [
+    {
+      "id": "DOD-1",
+      "dod": "T0 closed: fresh-clone ./scripts/build test green without minisign (SKIPs shown); run_checks.sh exit 0",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/fresh-clone-tests.txt",
+        "build/skip_policy.py",
+        "build/tests/test_skip_policy.py"
+      ],
+      "notes": "Measured twice on the same host: minisign absent -> 140 passed, 1 skipped (SKIP reason printed by the conftest summary and by pytest -rs); minisign present -> 141 passed, 0 skipped. tools/run_checks.sh exit 0 with all P4 gates wired."
+    },
+    {
+      "id": "DOD-1b",
+      "dod": "All hosted GitHub runs conclude success at the pushed HEAD (run IDs cited)",
+      "status": "BLOCKED-PENDING-PUSH",
+      "source": "hosted-ci",
+      "gate": "HG-P4-PUSH",
+      "evidence": [
+        ".github/workflows/governance.yml",
+        "logs/hosted-runs-before.txt"
+      ],
+      "notes": "Before: 9/9 runs failure (IDs in logs/hosted-runs-before.txt), at e35f332 runs 34136342074 (governance) and 34136342970 (spurious nightly push). Two root causes fixed in P4-T0.1: the 404 clone URL (ahmadrrrtx/xr-core -> RRRTX-Labs/xr-core) and the absent minisign. Re-measurement requires pushing, which needs the human's token; no agent handles a token."
+    },
+    {
+      "id": "DOD-1c",
+      "dod": "xr-core BUILD.gn (//xr:xr_all) + scripts/mount.md on origin; DEPS pin-alive lint green",
+      "status": "BLOCKED-PENDING-PUSH",
+      "source": "local-run",
+      "gate": "HG-P4-PUSH",
+      "evidence": [
+        "logs/gates.txt",
+        "docs/process/cross-repo-pin.md",
+        "build/sync.py"
+      ],
+      "notes": "Delivered as xr-core commit 56b4ebb; `./scripts/build sync check-pin-alive` PASS locally (pinned_rev c34cd66\u2026 = origin main, ancestor_of_main true). Push + paired DEPS bump pending."
+    },
+    {
+      "id": "DOD-1d",
+      "dod": "evidence/P3 retrofitted and schema-valid",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "evidence/P3/evidence.json",
+        "evidence/P3/human-gates.md",
+        "tools/evidence_check.py"
+      ],
+      "notes": "12 DoD rows, all source-labelled and citing paths that resolve; passes `tools/evidence_check.py --strict`. human-gates.md records HG-16..HG-21 + HG-P4-PUSH."
+    },
+    {
+      "id": "DOD-1e",
+      "dod": "draft-issue-0002 dispositions recorded",
+      "status": "VERIFIED",
+      "source": "static",
+      "evidence": [
+        "docs/adr/draft-issue-0002-p3-deviations.md"
+      ],
+      "notes": "All three ACCEPTED (A2 evolved symbols; retire --evidence kept; pre-GA advisory SLA accepted with MANDATORY hardening at P9). draft-issue-0001 SECURITY_NOTES falsification accepted."
+    },
+    {
+      "id": "DOD-2",
+      "dod": "Spike kit committed: override + xr_identity_data + probes, gn-format clean, compile gate at runner capability",
+      "status": "VERIFIED",
+      "source": "static",
+      "evidence": [
+        "logs/genpatch-roundtrip.txt",
+        "build/spike/tests/test_spike.py"
+      ],
+      "notes": "xr-core commit 1ee5f4c: xr_identity.{h,cc}, xr_seam_override.{h,cc}, spike/BUILD.gn, probes (5 browsertests), README. `gn format` and `clang --parse-only` are NOT available on this host, so the compile gate is reported as BLOCKED-TOOLING rather than claimed: structural checks (never-list paths, LOC, header guards, include order) run in CI."
+    },
+    {
+      "id": "DOD-2b",
+      "dod": "C++ compile gate (gn format / clang --parse-only) on the runner",
+      "status": "BLOCKED-TOOLING",
+      "source": "static",
+      "evidence": [
+        "logs/gates.txt",
+        ".github/workflows/governance.yml"
+      ],
+      "notes": "No gn/clang toolchain in this environment and no Chromium checkout (HG-9), so the C++ cannot be compiled here. Recorded as BLOCKED, not passed."
+    },
+    {
+      "id": "DOD-3",
+      "dod": "genpatch real round-trip against actual pinned files: apply -> verify -> revert byte-exact",
+      "status": "VERIFIED",
+      "source": "real-fetch",
+      "evidence": [
+        "logs/genpatch-roundtrip.txt",
+        "artifacts/0042-seam-hook.patch",
+        "build/spike/genpatch.py"
+      ],
+      "notes": "Fetched 2 pinned files (46882 B + 4240 B) + 4 spike payloads; patch 19214 B, sha256 cf0b020fd33ed6d02b62016dfc4ba156f0ddf714e717ebaedf3341e28a4979d9; 6 files, 466 insertions. apply PASS, verify PASS, revert PASS byte-exact (sha256 of every file compared pre/post, no residual paths). Negative proven: perturbing a line inside the hunk context makes `git apply --check` fail ('patch does not apply'), so upstream drift at promotion time is detectable."
+    },
+    {
+      "id": "DOD-4",
+      "dod": "Measured shared-state table: 100% rows carry file:line + quote; citation-audit PASS; runtime column PENDING-FARM",
+      "status": "VERIFIED",
+      "source": "real-fetch",
+      "evidence": [
+        "logs/citation-audit.txt",
+        "docs/spike-identity/measured-shared-state.md",
+        "build/spike/citation_audit.py"
+      ],
+      "notes": "23 rows checked, 23 PASS, 0 DRIFT, 0 BLOCKED-NET. The audit re-fetches each cited file at the pin and asserts the quote is within 2 lines of the cited line number; a row whose runtime cell is not PENDING-FARM fails."
+    },
+    {
+      "id": "DOD-5",
+      "dod": "Census: the Plan's named surfaces present with all fields; lint green; negative proven",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "docs/spike-identity/papercut-census.md",
+        "build/spike/census_lint.py",
+        "logs/gates.txt"
+      ],
+      "notes": "15 rows covering all 13 named surfaces + session restore + extension messaging. Lint enforces 9 columns, owner letters, S1/S2/S3, phase tokens and parseable '<n> files x <category>' estimates against the \u00a71.2 categories."
+    },
+    {
+      "id": "DOD-6",
+      "dod": "ADR-0042 PROPOSED complete (falsification triggers, patch estimates, cross-identity attacker observations, contingency clause); RESERVED.md updated; fallback design enumerates P14 registry rows",
+      "status": "VERIFIED",
+      "source": "static",
+      "evidence": [
+        "docs/adr/0042-identity-seam.md",
+        "docs/adr/RESERVED.md",
+        "docs/spike-identity/fallback-design.md"
+      ],
+      "notes": "Ratification is HUMAN-GATED (HG-23). 7 falsification triggers F1-F7, patch estimate table against \u00a71.2 caps (with the extension_chokepoint overage reported, not hidden), 9 attacker-observable rows, contingency clause. Fallback design enumerates all 6 P14 registry rows from docs/registry/features.yaml."
+    },
+    {
+      "id": "DOD-6b",
+      "dod": "ADR-0042 ratified by Platform + Security leads",
+      "status": "HUMAN-GATED",
+      "source": "static",
+      "gate": "HG-23",
+      "evidence": [
+        "docs/adr/0042-identity-seam.md"
+      ],
+      "notes": "Agents draft; humans decide (L24)."
+    },
+    {
+      "id": "DOD-7",
+      "dod": "T1'/CI additions wired (candidate-lint, census-lint, citation-audit, pin-alive); run_checks.sh grows gates and stays green; new negatives all reject with reasons",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/gates.txt",
+        "tools/run_checks.sh",
+        "tools/run_negatives.sh"
+      ],
+      "notes": "run_checks.sh exit 0 with 6 new gates; run_negatives.sh 14/14 rejected (was 10/10), including the unmanifested-patch-dir, missing-NOT-YET-header, incomplete-census, content/**-target and missing-artifact negatives."
+    },
+    {
+      "id": "DOD-8",
+      "dod": "\u00a711.4 probe-matrix + limitations disclosure block committed; vocab-lint green",
+      "status": "VERIFIED",
+      "source": "static",
+      "evidence": [
+        "docs/spike-identity/probe-matrix.md",
+        "docs/limitations.md",
+        "docs/threat-model.md"
+      ],
+      "notes": "probe-matrix maps 18 probes to adversaries and future iso-matrix row ids; limitations.md gained a measured cross-profile-shared block (static evidence only); threat-model.md gained 9 TM-P4 rows. vocab_lint and check_threat_model both PASS."
+    },
+    {
+      "id": "DOD-9",
+      "dod": "No register edits; no Plan edits; DR-06 untouched; both repos clean; DCO everywhere; files <400 LOC",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/gates.txt",
+        "docs/state/repo-map.md",
+        "build/tests/test_file_size_law.py"
+      ],
+      "notes": "docs/register/decisions.yaml and the pinned plan are untouched (plan_pin_check + registry_lint + dr_parse all PASS). DCO checked over the full history. The 400-LOC house law was a convention with nothing enforcing it: apply.py reached 418 lines in this phase, so the candidate lint was split into build/patching/candidate.py (60 lines) and build/tests/test_file_size_law.py now fails on any .py/.sh over 400 lines (negative proven against a 450-line probe)."
+    },
+    {
+      "id": "DOD-10",
+      "dod": "P5 contracts informed by IdentityProvisioning findings (drafting surface)",
+      "status": "VERIFIED",
+      "source": "static",
+      "evidence": [
+        "docs/adr/0042-identity-seam.md",
+        "docs/spike-identity/measured-shared-state.md"
+      ],
+      "notes": "ADR-0042 'Contracts out' gives P5 four requirements: UUIDv4 domain, pre-navigation provisioning, fail-closed on bind failure, ephemeral = in_memory. Freeze is P5's and is gated on HG-21.",
+      "gate": "HG-24"
+    }
+  ],
+  "human_gates": {
+    "HG-20": "Human revokes the over-scoped `ahmadrrrtx` PAT (repo + workflow). Repo verified clean of token strings; no agent handles a token.",
+    "HG-21": "Farm executes the runtime identity-seam probes: `./scripts/build spike --farm --binary <built browsertest> --checkout <chromium>` (upstream: `./scripts/build spike probe --farm`).",
+    "HG-22": "Org settings, only if hosted-green needs admin action (badges/permissions). Not currently indicated.",
+    "HG-23": "Platform + Security lead ratification of ADR-0042.",
+    "HG-24": "P5 identity-adjacent contract freeze happens only after HG-21 results; drafting is allowed now.",
+    "HG-P4-PUSH": "Push order: `git -C xr-core push origin main` then bump DEPS xr_core_rev in xr-browser and push (docs/process/cross-repo-pin.md).",
+    "HG-25": "Retrofit evidence/P1 and evidence/P2 to evidence-bundle-v1, or explicitly grandfather them in the contract. 21 strict failures, inventoried in logs/p1p2-contract-gap.txt. The re-labelling touches claims made in earlier phases, so it wants a human reviewer rather than an agent."
+  },
+  "not_done_by_design": [
+    "No runtime probe execution \u2014 HG-21, farm hardware (HG-9 open).",
+    "No gn/clang compile of the spike C++ \u2014 no toolchain and no Chromium checkout here.",
+    "No push \u2014 the token is the human's; the agent never sees it.",
+    "No register or plan edits; DR-06 locked and untouched.",
+    "No upstream corpus archaeology (site_isolation_browsertest.cc, Brave containers) \u2014 recorded as a research gap, not guessed."
+  ],
+  "known_limitations": [
+    "Every runtime row is PENDING-FARM; the ADR is PROPOSED, not accepted.",
+    "The spike patch is fail-open on bind failure (documented); production must fail closed (\u00a78.3).",
+    "The extension_chokepoint budget is exceeded 4x by census C-03/C-15; that is a plan conflict to resolve, not a rounding error.",
+    "TLS/QUIC session-cache scoping was not pinned to a citable line this phase and is deliberately absent from the measured table.",
+    "DEBT D-E (new, opened by P4): evidence/P1 (2 failures) and evidence/P2 (19) do not satisfy evidence-bundle-v1 \u2014 12 rows use qualified statuses where the contract wants a bare token and 9 P2 rows claim VERIFIED while citing no artifact path. tools/run_checks.sh runs --strict on P3,P4 only, and CI therefore does not check these two bundles. Closing it means re-labelling claims authored in earlier phases; recommended as a human-reviewed pass, not an agent edit. Inventory: logs/p1p2-contract-gap.txt."
+  ]
+}

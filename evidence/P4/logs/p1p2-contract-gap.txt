@@ -1,0 +1,15 @@
+command: python3 tools/evidence_check.py --strict   (all 4 bundles)
+exit: 1   failures: 21
+per bundle: {'P1': 2, 'P2': 19}
+
+== evidence/P1 ==
+  other: 2 row(s) -> E3 E6
+
+== evidence/P2 ==
+  VERIFIED with no artifact path: 9 row(s) -> T1 T2 T3 T4 T5 T6 T8 T9 T10
+  qualified status (not a bare vocabulary token): 10 row(s) -> T1 T2 T3 T4 T5 T6 T7 T8 T9 T10
+
+meaning: P1/P2 predate docs/contracts/evidence-bundle-v1.md, so their rows carry
+parenthetical qualifiers where the contract wants a bare token, and 9 P2 rows
+claim VERIFIED while citing no artifact path. Not dishonesty — a schema version
+gap — but it is exactly the pattern v1 forbids, so it is recorded, not hidden.
