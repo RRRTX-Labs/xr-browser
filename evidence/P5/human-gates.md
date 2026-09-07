@@ -38,3 +38,5 @@ process requires the pinned rev to be an ancestor of origin `main`). The
 xr-browser P5 branch push is recorded in the evidence; merging it to `main` is
 a human action (PR review), consistent with the S0 dual-review model.
 **The supplied token should be revoked now.**
+
+HG-20: tracked in evidence/P4/human-gates.md (citation fix for P5 report)
