@@ -28,7 +28,15 @@ for _p in [Path(__file__).resolve().parent, *Path(__file__).resolve().parents]:
         sys.path.insert(0, str(_p))
         break
 
-from _common import ToolError, add_common_flags, emit, main_with_guard, mock_enabled  # noqa: E402
+from _common import (  # noqa: E402
+    ToolError,
+    add_common_flags,
+    emit,
+    load_deps,
+    main_with_guard,
+    mock_enabled,
+    repo_root,
+)
 from categories import PLAN_CAPS, TOTAL_CAP, validate_category  # noqa: E402
 
 DEFAULT_ROOTS = ["chrome/app/"]
@@ -213,11 +221,27 @@ def select_patches(manifest: dict[str, Any], only_id: str | None) -> list[dict[s
     return patches
 
 
+def _missing_manifest_error(manifest_path: Path) -> ToolError:
+    """D2 regression (P3 T0.3): absent manifest must fail clean, never crash."""
+    rev = "<unknown>"
+    try:
+        rev = str(load_deps(repo_root()).get("xr_core_rev", "<unknown>"))
+    except ToolError:
+        pass  # not run from a repo — no DEPS context to cite
+    return ToolError(
+        f"manifest not found at {manifest_path} (xr-core rev {rev}? run build sync)")
+
+
 def cmd(args: argparse.Namespace) -> int:
-    manifest_path = Path(args.manifest).resolve() if args.manifest else None
-    if manifest_path is None:
-        checkout = Path(args.checkout).resolve()
+    # Default checkout mirrors sync.py's `_checkout_root`: <cwd>/chromium
+    # (the gclient solution root: chromium at src/, xr-core at src/xr).
+    checkout = Path(args.checkout).resolve() if args.checkout else Path.cwd() / "chromium"
+    if args.manifest:
+        manifest_path = Path(args.manifest).resolve()
+    else:
         manifest_path = checkout / "src" / "xr" / "patches" / "manifest.yaml"
+    if not manifest_path.exists():
+        raise _missing_manifest_error(manifest_path)
     manifest = _load_yaml(manifest_path)
     fails = lint_manifest(manifest, manifest_path)
 
@@ -228,7 +252,6 @@ def cmd(args: argparse.Namespace) -> int:
     if fails:
         return emit(args.json, {"tool": "xr-patch", "cmd": args.cmd}, failures=fails)
 
-    checkout = Path(args.checkout).resolve()
     pin = args.pin
     if not pin:
         raise ToolError("--pin is required for apply/verify/revert")

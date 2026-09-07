@@ -115,3 +115,46 @@ def test_missing_patchinfo_field(fixture, tmp_path):
     r = _run("lint", "--manifest", str(m))
     assert r.returncode == 1
     assert "missing mandatory field" in r.stdout + r.stderr
+
+
+# --- P3 T0.3 (D2 regression): absent manifest must fail CLEAN, never crash ---
+
+def test_lint_no_args_outside_checkout_fails_clean(tmp_path, monkeypatch):
+    """No --manifest, no --checkout, cwd has no chromium/ checkout: the exact
+    D2 path that used to die with TypeError(NoneType)."""
+    monkeypatch.chdir(tmp_path)  # outside any git repo / checkout
+    r = _run("lint", cwd=tmp_path)
+    assert r.returncode == 1
+    assert "manifest not found at" in r.stderr
+    assert "run build sync" in r.stderr
+    assert "Traceback" not in r.stderr + r.stdout
+    assert "TypeError" not in r.stderr + r.stdout
+
+
+def test_lint_missing_manifest_explicit_path_fails_clean(tmp_path):
+    r = _run("lint", "--manifest", str(tmp_path / "nope" / "manifest.yaml"))
+    assert r.returncode == 1
+    assert "manifest not found at" in r.stderr
+    assert "run build sync" in r.stderr
+    assert "Traceback" not in r.stderr + r.stdout
+
+
+def test_lint_missing_manifest_from_repo_cites_deps_pin(tmp_path):
+    """Run from the real repo (no checkout present): error cites the DEPS
+    xr_core_rev so the operator knows which rev to sync."""
+    repo = HERE.parents[2]  # .../xr-browser (tests -> patching -> buildsys -> repo)
+    r = _run("lint", cwd=repo)
+    assert r.returncode == 1
+    msg = r.stderr
+    assert "manifest not found at" in msg
+    assert "run build sync" in msg
+    import re
+    m = re.search(r"xr-core rev ([0-9a-f]{40}|\S+)", msg)
+    assert m, f"no xr-core rev cited in: {msg}"
+    if m.group(1) != "<unknown>":  # repo present -> must be the DEPS pin
+        deps_pin = None
+        for line in (repo / "DEPS").read_text().splitlines():
+            if line.startswith("xr_core_rev:"):
+                deps_pin = line.split('"')[1]
+        assert m.group(1) == deps_pin
+    assert "Traceback" not in msg
