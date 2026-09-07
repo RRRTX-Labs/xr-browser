@@ -77,4 +77,30 @@ echo "== patch ledger incl. candidate (spike/) dirs =="
 echo "== workflow files: expressions + schema (compile error = zero jobs) =="
 "$PY" build/workflow_lint.py
 
+# ---------------------------------------------------------------------------
+# P5 contract-freeze gates (§1.11). mojom_lint/contracts_manifest/vectors/
+# freeze run offline; amend_guard is warn-only pre-stamp and enforcing post.
+# ---------------------------------------------------------------------------
+echo "== P5: mojom structural lint (banned surface, kVersion, budgets) =="
+"$PY" tools/mojom_lint.py --roundtrip ../xr-core/mojom
+
+echo "== P5: §1.11 contracts manifest (14 items) + §2.10 reserved surface =="
+"$PY" tools/contracts_manifest.py
+
+echo "== P5: golden-vector fake parity (byte-stable) =="
+"$PY" tools/vectors_check.py
+
+echo "== P5: contract freeze register (FROZEN.yaml, ratified=PENDING) =="
+"$PY" tools/freeze_check.py
+
+echo "== P5: contract-amendment RFC trailer gate (T10) =="
+if [ -n "$RANGE" ]; then
+  "$PY" tools/amend_guard.py --range "$RANGE"
+else
+  "$PY" tools/amend_guard.py --range HEAD~1..HEAD
+fi
+
+echo "== P5: isolation-card l10n well-formed + vocab-clean =="
+"$PY" -c "import json,sys; d=json.load(open('../xr-core/l10n/isolation_card.json')); assert d['legal']=='PENDING-HG-1'; assert d['strings']; print('isolation-card OK', len(d['strings']),'strings')"
+
 echo "== ALL GOVERNANCE CHECKS PASSED =="

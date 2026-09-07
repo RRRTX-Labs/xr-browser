@@ -232,6 +232,51 @@ expect_reject "evidence: VERIFIED row citing a missing artifact (strict)" \
   'cites missing artifact|missing or empty human-gates' \
   "$PY" tools/evidence_check.py --repo "$EV" --strict
 
+# --- 15. P5 mojom_lint: banned method name in a mojom fixture ----------------
+expect_reject "mojom_lint: banned method (GetDatabase)" \
+  'R4 BANNED method' \
+  "$PY" tools/mojom_lint.py tools/tests/fixtures/mojom/banned_getdatabase.mojom
+
+# --- 16. P5 mojom_lint: stringly-typed error field ---------------------------
+expect_reject "mojom_lint: stringly-typed error field" \
+  'R5 stringly-typed error' \
+  "$PY" tools/mojom_lint.py tools/tests/fixtures/mojom/stringly_error.mojom
+
+# --- 17. P5 contracts_manifest: a contract missing its fake ------------------
+# Build a scratch repo view where one fake is absent -> manifest fails.
+CM="$TMP/cm"; mkdir -p "$CM"
+cp -r docs "$CM/docs"
+# point --repo at a tree whose sibling xr-core lacks the fakes dir
+mkdir -p "$CM/../xr-core-empty"
+expect_reject "contracts_manifest: missing fake (no xr-core fakes)" \
+  'not found|missing part' \
+  "$PY" tools/contracts_manifest.py --repo "$CM"
+
+# --- 18. P5 freeze_check: agent-written RATIFIED in FROZEN.yaml ---------------
+FZ="$TMP/fz"; mkdir -p "$FZ/docs/contracts/review"
+sed 's/ratified: PENDING/ratified: RATIFIED/' docs/contracts/FROZEN.yaml > "$FZ/docs/contracts/FROZEN.yaml"
+cp docs/contracts/review/*.md "$FZ/docs/contracts/review/"
+expect_reject "freeze_check: agent-written RATIFIED (HG-26 human-only)" \
+  'ratified verdict|must be PENDING' \
+  "$PY" tools/freeze_check.py --repo "$FZ"
+
+# --- 19. P5 vectors_check: drift between fake and vectors ---------------------
+VD="$TMP/vd"; mkdir -p "$VD/docs/contracts/vectors"
+"$PY" - "$VD" <<'NEG'
+import json, sys
+from pathlib import Path
+d = Path(sys.argv[1])
+src = Path("docs/contracts/vectors/policy-resolver-v1.json")
+doc = json.loads(src.read_text())
+doc["vectors"][0]["expected"] = {"ok": {"tampered": True}}
+(d / "docs/contracts/vectors/policy-resolver-v1.json").write_text(json.dumps(doc))
+route = Path("docs/contracts/vectors/route-manager-v1.json")
+(d / "docs/contracts/vectors/route-manager-v1.json").write_text(route.read_text())
+NEG
+expect_reject "vectors_check: fake-vs-vector drift (id cited)" \
+  'fake output != vector' \
+  "$PY" tools/vectors_check.py --repo "$VD" --fakes ../xr-core/fakes
+
 echo
 echo
 if [ "$FAILURES" -ne 0 ]; then

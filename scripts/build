@@ -47,6 +47,7 @@ SUBCOMMANDS: dict[str, str] = {
     "fork-health": "upstream/fork_health.py",
     "spike": "spike/spike.py",
     "workflow-lint": "workflow_lint.py",
+    "contracts": "contracts.py",
     "test": None,  # special: pytest runner, handled below
 }
 
@@ -73,7 +74,8 @@ USAGE_NOTES = {
     "fork-health": "fork-health headline chart → docs/state/fork-health.md (P3-T7)",
     "spike": "identity-seam spike kit: genpatch / citation-audit / census-lint / probe",
     "workflow-lint": "lint .github/workflows expressions + schema (actionlint when installed)",
-    "test": "run the pytest suites (tools/tests + build/**/tests)",
+    "contracts": "P5 contract-freeze gates: manifest|lint|vectors|freeze|all",
+    "test": "run the pytest suites (tools/tests + build/**/tests + docs/contracts/tests)",
 }
 
 
@@ -102,7 +104,7 @@ def main() -> int:
     env["PYTHONPATH"] = str(BUILD) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
     if sub == "test":
         # -rs: print skip reasons (L6 — a skip is visible, never silent)
-        cmd = [sys.executable, "-m", "pytest", "tools/tests", "build", "-q", "-rs", *rest]
+        cmd = [sys.executable, "-m", "pytest", "tools/tests", "build", "docs/contracts/tests", "-q", "-rs", *rest]
         cwd = ROOT
     else:
         cmd = [sys.executable, str(BUILD / SUBCOMMANDS[sub]), *rest]

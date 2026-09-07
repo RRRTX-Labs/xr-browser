@@ -124,6 +124,19 @@ jobs:
           python3 build/gn/resolve_args.py --validate   # argset allowlist consistency
 
       # ------------------------------------------------------------------
+      # P5: contract-freeze gates. Offline (mojom structural lint, §1.11
+      # manifest, golden-vector fake parity, freeze register). The C++ mojom
+      # bindings compile is farm-gated (HG-9/HG-27) and is NOT run here.
+      # ------------------------------------------------------------------
+      - name: Contract-freeze gates (P5)
+        run: |
+          ./scripts/build contracts all           # mojom_lint + manifest + vectors + freeze
+          # fake-parity: golden vectors reproduced byte-for-byte by the fakes
+          python3 tools/vectors_check.py --json > /dev/null
+          # xrctl smoke: every interface returns a typed result
+          python3 -m pytest docs/contracts/tests -q
+
+      # ------------------------------------------------------------------
       # P3: upstream-treadmill gates. All offline (fixtures / committed
       # config); the live lanes run in nightly-rebase-build.yml instead.
       # ------------------------------------------------------------------
