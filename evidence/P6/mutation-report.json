@@ -2,7 +2,7 @@
  "deny_guard_killed": 124,
  "deny_guard_mutants": 124,
  "deny_guard_survivors": 0,
- "elapsed_seconds": 481.7,
+ "elapsed_seconds": 528.3,
  "gate": "PASS",
  "killed": 777,
  "operators": [

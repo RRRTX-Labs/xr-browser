@@ -7,8 +7,8 @@
   "supersedes": "evidence/P5",
   "pin": "chromium d04cdb24d67b081f6cf80200ffc5233f44b61109 (unchanged; P6 touches no Chromium code)",
   "repos": {
-    "xr-browser": "d3a4ec972f31dff2e69f9363632ab3ad66560db5 (DEPS pair-bump; evidence bundle follows)",
-    "xr-core": "ae017fe358cbd1c9594848d6b29f10204ca4dcea"
+    "xr-browser": "e337beabe2062caf1d2c586b62dcaef4f8176d3d (DEPS pair-bump to a45fc88; evidence refresh follows)",
+    "xr-core": "a45fc88e7a5bcadda05a5e19faeaf7353c2ccd26 (policy resolver v1 + fortified test build)"
   },
   "verdict_vocabulary": [
     "VERIFIED",
@@ -81,7 +81,7 @@
         "mutation-report.md",
         "logs/mutation-full.txt"
       ],
-      "notes": "FULL matrix (not a sample): 777 mutants, 777 killed, 100.00%; deny-guard 124/124. Two earlier survivors were REAL test gaps, closed (store once-scope battery; cache capacity coexistence pin) and hand-verified killed. CI lane runs a deterministic 90-mutant sample with the same gates."
+      "notes": "FULL matrix (not a sample), re-run through the FORTIFIED build (-D_FORTIFY_SOURCE=2, CI parity): 777 mutants, 777 killed, 100.00%; deny-guard 124/124. Two earlier survivors were REAL test gaps, closed (store once-scope battery; cache capacity coexistence pin) and hand-verified killed. CI lane runs a deterministic 90-mutant sample with the same gates (simulated locally: 90/90, PASS)."
     },
     {
       "id": "DOD-6",
@@ -137,7 +137,7 @@
         "bench-results.json",
         "logs/bench.txt"
       ],
-      "notes": "2-core sandbox, -O2, 10^5 iters, warmup excluded: cold 8.959us p99 (budget 200), warm pinned read 0.070us p99 (budget 5), snapshot_apply_40 1070.977us p99 (budget 2000). All MET with headroom. Reference-HW re-measurement = HG-28 (documented in docs/limitations.md)."
+      "notes": "2-core sandbox, -O2 -D_FORTIFY_SOURCE=2, 10^5 iters, warmup excluded: cold p99 10.35us (budget 200), warm pinned read 0.068us (budget 5), snapshot_apply_40 p99 1622.66us (budget 2000). All MET. Reference-HW re-measurement = HG-28 (documented in docs/limitations.md)."
     },
     {
       "id": "DOD-11",
