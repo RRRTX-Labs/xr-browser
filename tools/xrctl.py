@@ -91,8 +91,14 @@ def main(argv: list[str]) -> int:
     c.add_argument("method")
     c.add_argument("args_json")
     sub.add_parser("list", help="list interfaces")
+    # P6-T6: the policy surface (fake + cpp backends).
+    import xrctl_policy
+    xrctl_policy.build_parser(sub)
     args = p.parse_args(argv)
-    return {"call": cmd_call, "list": cmd_list}[args.cmd](args)
+    handlers = {"call": cmd_call, "list": cmd_list}
+    if args.cmd == "policy":
+        return xrctl_policy.run(args)
+    return handlers[args.cmd](args)
 
 
 if __name__ == "__main__":
