@@ -1,0 +1,29 @@
+# Dependency evaluation: GitHub REST API (api.github.com) — the future issues path
+project: "GitHub REST API v3 — https://docs.github.com/en/rest"
+role: "READ-ONLY discovery for the upstream treadmill (P3): release/commit metadata cross-checks for ahmadrrrtx/xr-browser and ahmadrrrtx/xr-core via build/upstream/fetch.py. The AUTHENTICATED issues-creation path (bot filing rebase-conflict bundles as GitHub issues) is a DOCUMENTED STUB until HG-16 — the bot holds no credentials and opens nothing (L24)."
+plan_refs: ["P3-T2", "§12.2", "L24", "HG-16"]
+current_status: "stable public API; allowlisted as a fetch.py host (api.github.com) at P3; only unauthenticated reads"
+version_pin_policy: "N/A (service, not a vendored artifact); the client is stdlib urllib via fetch.py — zero new vendored deps (L9)"
+licenses:
+  code: "N/A — no code distributed into the product or repo; API terms of service govern use"
+  data: "GitHub ToS; metadata read is public-repo only; no user content is stored beyond CI artifacts"
+health:
+  last_release: "continuous (REST v3, versioned via per-endpoint docs, 2026-09-07)"
+  bus_factor: "GitHub, Inc. — platform-critical vendor"
+  open_critical_advisories: "none affecting read-only public-metadata access as of 2026-09-07"
+security_posture: "unauthenticated reads of public repos only; no tokens in the bot (HG-16); responses are cross-checked against gitiles/chromiumdash, never trusted as the sole source for a gate decision; network chokepoint (fetch.py) applies the same allowlist to this host as to Chromium hosts"
+maintenance_burden: "minimal: read-only endpoints used only for cross-checks; removable without touching any gate"
+link_policy: "permissive — nothing is linked; service metadata only"
+use_verdict: "USE (read-only, unauthenticated, cross-check-only)"
+alternatives_rejected:
+  - "gh CLI: not installable in the pinned CI image without adding a vendored dep; stdlib urllib through the chokepoint keeps zero-dep law"
+  - "GraphQL v4: requires a token for anything useful — contradicts HG-16 (no credential reads by the bot)"
+  - "authenticated issue creation now: explicitly deferred to HG-16; conflict bundles are FILES the owner files themselves (documented in docs/contracts/patch-ledger-v1.md §2)"
+exit_plan: "delete the allowlist entry; every consumer treats api.github.com as an optional cross-check, never a dependency of a gate"
+owner: "A lead (Platform/Chromium) — tooling track"
+evaluated_on: 2026-09-07
+refresh_by: "2026-12-06"
+sources:
+  - url: "https://docs.github.com/en/rest"
+    accessed: 2026-09-07
+    quote: "You can access the REST API directly from GitHub.com ... most endpoints can also be used without authentication for public data"

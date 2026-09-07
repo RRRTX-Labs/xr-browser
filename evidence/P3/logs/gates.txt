@@ -1,0 +1,15 @@
+$ ./scripts/build test
+................................                                         [100%]
+104 passed in 6.19s
+$ tools/run_negatives.sh
+
+ALL NEGATIVE CASES REJECTED AS EXPECTED
+$ governance P3 gates (local, as CI runs them)
+PASS: budget config matches the pinned plan §1.2 and categories.py
+| **total** | **1** | **150** |
+PASS: budget_meter
+PASS: budget_meter
+selftest: 5-patch classification drill PASS (clean/drift/moved/deleted/semantic)
+PASS: assumptions registry (7 rows)
+PASS: retirement-lint (0 ledger rows)
+PASS: fetch_allowlist_check (62 files scanned; chokepoint build/upstream/fetch.py)

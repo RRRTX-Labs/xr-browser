@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "tool": "xr-fork-health",
+  "meta": {
+    "generated_at": "2026-09-07T15:01:58+00:00",
+    "manifest": "/home/user/xr-core/patches/manifest.yaml",
+    "note": "generated page \u2014 do not edit by hand; regenerate via `./scripts/build fork-health`"
+  },
+  "rows": [
+    {
+      "metric": "budget:blink_seams",
+      "value": "0/25",
+      "status": "OK",
+      "source": "manifest"
+    },
+    {
+      "metric": "budget:branding",
+      "value": "1/\u221e",
+      "status": "OK",
+      "source": "manifest"
+    },
+    {
+      "metric": "budget:content_seams",
+      "value": "0/30",
+      "status": "OK",
+      "source": "manifest"
+    },
+    {
+      "metric": "budget:extension_chokepoint",
+      "value": "0/2",
+      "status": "OK",
+      "source": "manifest"
+    },
+    {
+      "metric": "budget:hook_points",
+      "value": "0/45",
+      "status": "OK",
+      "source": "manifest"
+    },
+    {
+      "metric": "budget:network_seams",
+      "value": "0/20",
+      "status": "OK",
+      "source": "manifest"
+    },
+    {
+      "metric": "budget:ui",
+      "value": "0/35",
+      "status": "OK",
+      "source": "manifest"
+    },
+    {
+      "metric": "budget:TOTAL",
+      "value": "1/150",
+      "status": "OK",
+      "source": "manifest"
+    },
+    {
+      "metric": "seams-retired (\u00a712.5 reward metric)",
+      "value": "0",
+      "status": "SKIP",
+      "source": "retirements ledger"
+    },
+    {
+      "metric": "rebase canary (last run)",
+      "value": "verdict=GREEN (0 patch(es) non-clean, real lane, -> c60b3b1cdb2f)",
+      "status": "OK",
+      "source": "rebase-report.json"
+    },
+    {
+      "metric": "assumptions \u00a712.4",
+      "value": "6 PASS / 1 SKIP / 0 FAIL",
+      "status": "OK",
+      "source": "assumptions-run.json"
+    },
+    {
+      "metric": "fastlane drills",
+      "value": "last: breach \u2192 PASS (SIMULATED; 80.0h simulated)",
+      "status": "OK",
+      "source": "work/upstream-cache/fastlane/drill2-breach/drill-report-breach.json"
+    },
+    {
+      "metric": "feature-freeze marker",
+      "value": "PRESENT (advisory pre-GA; HARD at P9)",
+      "status": "DRIFT",
+      "source": "feature-freeze.json"
+    }
+  ]
+}

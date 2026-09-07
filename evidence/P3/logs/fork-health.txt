@@ -1,0 +1,17 @@
+$ ./scripts/build fork-health
+OK     budget:blink_seams: 0/25
+OK     budget:branding: 1/∞
+OK     budget:content_seams: 0/30
+OK     budget:extension_chokepoint: 0/2
+OK     budget:hook_points: 0/45
+OK     budget:network_seams: 0/20
+OK     budget:ui: 0/35
+OK     budget:TOTAL: 1/150
+SKIP   seams-retired (§12.5 reward metric): 0
+OK     rebase canary (last run): verdict=GREEN (0 patch(es) non-clean, real lane, -> c60b3b1cdb2f)
+OK     assumptions §12.4: 6 PASS / 1 SKIP / 0 FAIL
+OK     fastlane drills: last: breach → PASS (SIMULATED; 80.0h simulated)
+DRIFT  feature-freeze marker: PRESENT (advisory pre-GA; HARD at P9)
+
+wrote docs/state/fork-health.md + docs/state/fork-health.json
+(2 row(s) SKIP/OVER/DRIFT — visible by design, L6)

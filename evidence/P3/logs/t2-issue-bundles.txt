@@ -1,0 +1,31 @@
+fixture range A->B verdict: BROKEN (expect BROKEN: moved+deleted+semantic)
+issue bundles written: 4
+  - 20260907T145123Z-F-0002-drift.md: # [XR-REBASE] patch `F-0002-drift` needs owner action (textual-drift(3way-ok)) / - **Owner (from manifest):** @xr/platform / - **Classification:** `textual-drift(3way-ok)`
+  - 20260907T145123Z-F-0003-moved.md: # [XR-REBASE] patch `F-0003-moved` needs owner action (file-moved) / - **Owner (from manifest):** @xr/platform / - **Classification:** `file-moved`
+  - 20260907T145123Z-F-0004-deleted.md: # [XR-REBASE] patch `F-0004-deleted` needs owner action (file-deleted) / - **Owner (from manifest):** @xr/platform / - **Classification:** `file-deleted`
+  - 20260907T145123Z-F-0005-semantic.md: # [XR-REBASE] patch `F-0005-semantic` needs owner action (semantic) / - **Owner (from manifest):** @xr/security / - **Classification:** `semantic`
+
+--- sample bundle (F-0005-semantic) ---
+# [XR-REBASE] patch `F-0004-deleted` needs owner action (file-deleted)
+
+- **Owner (from manifest):** @xr/platform
+- **Classification:** `file-deleted`
+- **Category:** hook_points (patch budget class, §1.2)
+- **Range:** `aaaaaaaaaaaa…` → `bbbbbbbbbbbb…` (fixture data)
+- **Generated:** 2026-09-07T14:51:23+00:00Z
+- **Suggested action:** upstream deleted the target — retirement review required (§12.3) or re-anchor onto the successor surface
+
+## Files
+### `chrome/app/gone/FOUR` — file-deleted
+- target file absent at to-rev
+
+## Upstream context (range log, newest first)
+
+Path-scoped last-touch attribution is not anonymously available on gitiles (403, research log R1); the range log below is the public context of record.
+- `bbbbbbbbbbbb` ? — ?
+
+## Rules of engagement
+
+- Resolve in **patch semantics**; `disable & TODO` is forbidden (§12.3).
+- Patch changes go through the xr-patch machinery / ledger, never ad-hoc edits (L10).
+- This bundle was prepared by a read-only bot; a human applies and reviews.

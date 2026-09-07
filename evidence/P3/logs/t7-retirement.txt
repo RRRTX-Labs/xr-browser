@@ -1,0 +1,42 @@
+=== positive: xr-patch retire on a COPY of xr-core (ledger row + removal + rollback) ===
+retired 0001-brand-ui (upstreamed) — ledger row written, patch removed
+  ledger: build/upstream/retirements.json (meta repo — commit it)
+  xr-core: manifest + branding/0001-brand-ui removed — commit the sibling repo
+  both commits together close the retirement (retirement-lint enforces linkage)
+{
+  "tool": "xr-patch",
+  "cmd": "retire",
+  "retired": {
+    "id": "0001-brand-ui",
+    "rev_retired_at": "d04cdb24d67b081f6cf80200ffc5233f44b61109",
+    "mechanism": "upstreamed",
+    "evidence": "EVIDENCE drill (fixture)",
+    "note": "EVIDENCE DRILL: synthetic retirement on a copy; the real ledger stays zero-baseline",
+    "retired_at": "2026-09-07T14:51:50+00:00",
+    "retired_by": "t@t"
+  },
+  "status": "pass"
+}
+--- ledger after (copy-side drill row) ---
+{
+  "id": "0001-brand-ui",
+  "rev_retired_at": "d04cdb24d67b081f6cf80200ffc5233f44b61109",
+  "mechanism": "upstreamed",
+  "evidence": "EVIDENCE drill (fixture)",
+  "note": "EVIDENCE DRILL: synthetic retirement on a copy; the real ledger stays zero-baseline",
+  "retired_at": "2026-09-07T14:51:50+00:00",
+  "retired_by": "t@t"
+}
+--- lint vs the retired copy (expect PASS) ---
+PASS: retirement-lint (1 ledger rows)
+rc=0
+
+=== negative: raw removal WITHOUT ledger (fresh copy, git-committed) ===
+FAIL: patch '0001-brand-ui' was removed from the manifest without a ledger entry — the ONLY sanctioned removal path is `xr-patch retire` (P3-T7 law)
+FAIL: retirement-lint (0 ledger rows)
+rc=1 (MUST be 1)
+
+=== baseline restored ===
+(no retirements recorded — the documented zero baseline)
+PASS: retirement-lint (0 ledger rows)
+rc=0

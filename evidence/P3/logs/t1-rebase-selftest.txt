@@ -1,0 +1,5 @@
+range -> bbbbbbbb: verdict=BROKEN (clean=clean, drift=textual-drift, moved=file-moved, deleted=file-deleted, semantic=semantic)
+range -> cccccccc: verdict=BROKEN (clean=clean, drift=textual-drift, moved=file-moved, deleted=file-deleted, semantic=semantic)
+range -> dddddddd: verdict=GREEN (clean=clean, drift=clean, moved=clean, deleted=clean, semantic=clean)
+selftest: 5-patch classification drill PASS (clean/drift/moved/deleted/semantic)
+selftest rc=0

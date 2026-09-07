@@ -1,0 +1,19 @@
+$ ./scripts/build fastlane drill (post-split re-verification)
+drill in-window: PASS (apply=ok verify=ok sign=ok unsigned-refused=True breach=False freeze=False) [SIMULATED; elapsed 0.14s real, 30.0h simulated]
+drill breach: PASS (apply=ok verify=ok sign=ok unsigned-refused=True breach=True freeze=True) [SIMULATED; elapsed 0.13s real, 80.0h simulated]
+drills: 2/2 PASS (SIMULATED)
+$ ./scripts/build sla --since 152.0.7977.83 --severity critical (real tag, pre-GA advisory)
+{
+  "tool": "xr-sla",
+  "since_tag": "152.0.7977.83",
+  "severity": "critical",
+  "tag_published_at": "2026-09-03T18:49:05.300000+00:00",
+  "deadline": "2026-09-06T18:49:05.300000+00:00",
+  "now": "2026-09-07T15:01:48.878271+00:00",
+  "remaining_hours": -20.21,
+  "breached": true,
+  "law": "measured from TAG PUBLICATION, not announcement (docs/contracts/sla-metrics-v1.md)",
+  "on_breach": "feature-freeze marker feature-freeze.json (\u00a715-R1 kill-switch; advisory in CI now, HARD in P9's dashboard \u2014 stated)",
+  "pre_ga_note": "XR has no stable release until P10; pre-GA breach markers are ADVISORY ONLY \u2014 the kill-switch arms at the first stable promotion"
+}
+BREACH: feature-freeze marker written: work/upstream-cache/feature-freeze.json (§15-R1; advisory in CI now, HARD in P9 dashboard — stated)

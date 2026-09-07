@@ -1,0 +1,11 @@
+$ ./scripts/build assumptions validate
+PASS: assumptions registry (7 rows)
+$ ./scripts/build assumptions run --use-deps (live gitiles at pin)
+SKIP  A1   Site Isolation partition-suitability rule                      - behavioral rule (which origins are isolated) needs runtime Site Isolation tests 
+PASS  A2   GetStoragePartitionConfigForSiteInstance contract              
+PASS  A3   per-partition NetworkContext                                   
+PASS  A4   HCMS mediation points                                          
+PASS  A5   extension dispatch funnel                                      
+PASS  A6   component-updater signature path                               
+PASS  A7   Safe Browsing v5 mode APIs                                     
+ totals: 6 PASS / 1 SKIP / 0 FAIL

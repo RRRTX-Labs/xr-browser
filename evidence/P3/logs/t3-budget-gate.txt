@@ -1,0 +1,27 @@
+$ ./scripts/build budget --manifest ../xr-core/patches/manifest.yaml --release-note-snippet
+- Upstream patches carried: 1 of 150 budgeted files (branding=1) — Plan §12.2
+| category | patches | cap |
+|---|---|---|
+| blink_seams | 0 | 25 |
+| branding | 1 | unlimited |
+| content_seams | 0 | 30 |
+| extension_chokepoint | 0 | 2 |
+| hook_points | 0 | 45 |
+| network_seams | 0 | 20 |
+| ui | 0 | 35 |
+| **total** | **1** | **150** |
+PASS: budget_meter
+$ ./scripts/build audit --manifest ../xr-core/patches/manifest.yaml
+| category | patches | cap |
+|---|---|---|
+| blink_seams | 0 | 25 |
+| branding | 1 | unlimited |
+| content_seams | 0 | 30 |
+| extension_chokepoint | 0 | 2 |
+| hook_points | 0 | 45 |
+| network_seams | 0 | 20 |
+| ui | 0 | 35 |
+| **total** | **1** | **150** |
+PASS: budget_meter
+$ gen_budget_config --check
+PASS: budget config matches the pinned plan §1.2 and categories.py

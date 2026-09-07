@@ -1,0 +1,9 @@
+# real-ranges lane (gitiles TEXT only, XR_LIVE_NET=1) — 2026-09-07
+$ ./scripts/build rebase rebase --to e3b770a134146aa3cec66e48c14249aaadd06a24 --dry-run --explain
+GREEN: all patches apply cleanly at the target rev — proceed to promotion/DEPS-bump review (human presses the button; L24)
+wall-clock 1.697s, 32186 B fetched, mode=dry-run, source=real
+$ ./scripts/build rebase rebase --to c60b3b1cdb2f50cad46c89c5603274e6f3ab98c7 --explain
+GREEN: all patches apply cleanly at the target rev — proceed to promotion/DEPS-bump review (human presses the button; L24)
+wall-clock 0.708s, 29615 B fetched, mode=classified, source=real
+$ git branch --list 'rebase/*' (LOCAL only, never pushed — L24)
+  rebase/chromium-c60b3b1cdb2f

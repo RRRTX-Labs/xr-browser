@@ -1,0 +1,9 @@
+series: Extended M152 latest 152.0.7977.83
+candidate rev: 79460ebecaa5625e57a5fb679a735659e73dc687
+  PASS: argsets-validate
+  PASS: brand-fixture
+  PASS: brand-endpoint-scan
+  PASS: sbom-fixture+gate
+  PASS: patch-roundtrip-at-candidate
+  PASS: assumptions-blocking
+verdict: promo-ready — bundle in work/upstream-cache/promotion (execution = on-call human, HG-18)
