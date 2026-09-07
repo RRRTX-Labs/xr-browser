@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "chromium_rev": "d04cdb24d67b081f6cf80200ffc5233f44b61109",
+  "captured_on": "2026-09-07",
+  "source_note": "Every value below is transcribed from the pinned Chromium tree at chromium_rev (raw fetches via chromium.googlesource.com, ?format=TEXT) or recorded from a fetched artifact \u2014 none is typed from memory. Capture commands in build/toolchain/README.md; provenance.py --verify re-checks them.",
+  "clang": {
+    "version": "llvmorg-23-init-19482-g53d18800-1",
+    "release_version": "23",
+    "source": "tools/clang/scripts/update.py:42-47 (CLANG_REVISION + CLANG_SUB_REVISION + RELEASE_VERSION)",
+    "linux_artifact_sha256": "e22e06c05fe1657f48f988b15804b8226e691addb00abba5b984a5c99ac98c42",
+    "linux_artifact_url": "https://commondatastorage.googleapis.com/chromium-browser-clang/Linux_x64/clang-llvmorg-23-init-19482-g53d18800-1.tar.xz",
+    "capture_cmd": "sha256sum <(curl -L https://commondatastorage.googleapis.com/chromium-browser-clang/Linux_x64/clang-llvmorg-23-init-19482-g53d18800-1.tar.xz)"
+  },
+  "sysroot": [
+    {
+      "arch": "amd64",
+      "pkg": "debian_bullseye_amd64_sysroot.tar.xz",
+      "sha256": "52d61d4446ffebfaa3dda2cd02da4ab4876ff237853f46d273e7f9b666652e1d"
+    },
+    {
+      "arch": "arm64",
+      "pkg": "debian_bullseye_arm64_sysroot.tar.xz",
+      "sha256": "c7176a4c7aacbf46bda58a029f39f79a68008d3dee6518f154dcf5161a5486d8"
+    },
+    {
+      "arch": "armhf",
+      "pkg": "debian_bullseye_armhf_sysroot.tar.xz",
+      "sha256": "b45a7f586a107380ca6141b00d74321922b41d6d327dc33e74a2f82fd454304c"
+    },
+    {
+      "arch": "i386",
+      "pkg": "debian_bullseye_i386_sysroot.tar.xz",
+      "sha256": "3de724b0d63478e1ae35f07b95d02261581a66e05c19aebe4e443d76179a565e"
+    },
+    {
+      "arch": "mips64el",
+      "pkg": "debian_bullseye_mips64el_sysroot.tar.xz",
+      "sha256": "c847a32ae492aa14688be47fa696026e8dae8d9f4f589ec42fad29862bf311b3"
+    },
+    {
+      "arch": "mipsel",
+      "pkg": "debian_bullseye_mipsel_sysroot.tar.xz",
+      "sha256": "82e930d6fa5d5ab1172cabc63b911ec800b182b4f8c14a273a89596541fe8658"
+    },
+    {
+      "arch": "ppc64el",
+      "pkg": "debian_bullseye_ppc64el_sysroot.tar.xz",
+      "sha256": "8b37b8eefac38284c327146c05fa315b392c90a559888790a12b05a28fbcee40"
+    },
+    {
+      "arch": "s390x",
+      "pkg": "debian_bullseye_s390x_sysroot.tar.xz",
+      "sha256": "46d561a32665a7ef4db334d66ba10b0db7750eea3fed1fee4896c2f5c4f87167"
+    },
+    {
+      "arch": "riscv64",
+      "pkg": "debian_trixie_riscv64_sysroot.tar.xz",
+      "sha256": "2df6a2698a25258871b45a50d8b5079947b1ad1c63920c944690dfc2a71aab51"
+    }
+  ],
+  "sysroot_source": "build/linux/sysroot_scripts/sysroots.json (all nine entries, transcribed verbatim); download is content-addressed per install-sysroot.py: url = URL + '/' + Sha256Sum",
+  "sysroot_url_base": "https://commondatastorage.googleapis.com/chrome-linux-sysroot",
+  "mac": {
+    "sdk_policy": "hermetic: build with the SDK version mac_sdk_official_version (bots use exactly this; Xcode only supplies the SDK \u2014 Xcode-as-IDE is unsupported)",
+    "sdk_version": "26.5",
+    "sdk_build_version": "25F70",
+    "min_system_version": "13.0",
+    "source": "build/config/mac/mac_sdk.gni (mac_sdk_official_version, mac_sdk_official_build_version, mac_min_system_version)"
+  },
+  "win": {
+    "sdk": "10.0.26100.0",
+    "wdk": "CIPD-pinned (build/vs_toolchain.py TOOLCHAIN_HASH); captured on a synced checkout via provenance.py --record",
+    "source": "build/vs_toolchain.py:63 (SDK_VERSION), :27-30 (TOOLCHAIN_HASH doc)"
+  },
+  "depot_tools": {
+    "revision": "81577f19a8497ba7e41afac322e8f03553a863ec",
+    "source": "git ls-remote https://chromium.googlesource.com/chromium/tools/depot_tools.git HEAD (2026-09-07)"
+  }
+}

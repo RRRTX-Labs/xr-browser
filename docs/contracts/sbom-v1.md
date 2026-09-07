@@ -1,12 +1,15 @@
 # Contract — build-time SBOM (v1)
 
-- **Status:** PUBLISHED (P2-T9). Consumed by the release pipeline (P10) and
-  the SBOM gate (`buildsys/sbom/sbom_gate.py`). Schema: **CycloneDX JSON 1.6**
-  (vendored `buildsys/sbom/cyclonedx-schema-1.6.json`, Apache-2.0 data).
+- **Status:** PUBLISHED (P2-T9)
+- **Amendment 2026-09-07 (P3 T0.4):** tooling paths renamed
+  `buildsys/` → `build/`, dispatcher `./build` → `./scripts/build` (ADR-0006).
+  No schema or field changes — path references only.. Consumed by the release pipeline (P10) and
+  the SBOM gate (`build/sbom/sbom_gate.py`). Schema: **CycloneDX JSON 1.6**
+  (vendored `build/sbom/cyclonedx-schema-1.6.json`, Apache-2.0 data).
 
 ## 1. Shape
 
-`buildsys/sbom/emit_sbom.py` emits a CycloneDX 1.6 document:
+`build/sbom/emit_sbom.py` emits a CycloneDX 1.6 document:
 
 - `bomFormat: CycloneDX`, `specVersion: "1.6"`.
 - `serialNumber`: deterministic `urn:uuid` (uuid5 over the sorted component

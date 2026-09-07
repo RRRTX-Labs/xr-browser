@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+"""scripts/build — the XR build entrypoint (Plan §7.1 "entrypoints (python,
+typed)"; P2 Objective: the `./build x` command).
+
+Single dispatcher for the typed Python tools under build/. Subcommands are
+declarative: each maps to one tool module, executed with argv passthrough.
+Mock mode: XR_ALLOW_MOCK=1 in the environment allows --mock paths; every line
+then carries "MOCK MODE — not a build" (mock tests plumbing, never evidence).
+
+ADR-0006 (PROPOSED): the P2 root-level `./build` shell file could not coexist
+with the `build/` directory mandated by Plan §7.1 / P3-T0.4, so the
+entrypoint lives here and the invocation is `./scripts/build <sub>`.
+"""
+from __future__ import annotations
+
+import argparse
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parent
+BUILD = ROOT / "build"
+
+# subcommand -> tool module under build/ (single source of dispatch truth)
+SUBCOMMANDS: dict[str, str] = {
+    "sync": "sync.py",
+    "refresh": "sync.py",
+    "preflight": "preflight.py",
+    "gen": "gn/gen.py",
+    "compile": "gn/compile.py",
+    "patch": "patching/apply.py",
+    "sbom": "sbom/emit_sbom.py",
+    "sbom-gate": "sbom/sbom_gate.py",
+    "brand-check": "branding/brand_check.py",
+    "version": "branding/gen_version.py",
+    "sign": "signing/sign_artifact.py",
+    "budget": "farm/budget_meter.py",
+    "test": None,  # special: pytest runner, handled below
+}
+
+USAGE_NOTES = {
+    "sync": "create/verify the pinned checkout (+ xr-core mount at src/xr)",
+    "refresh": "create a pin-refresh branch (never pushes)",
+    "preflight": "refuse under-provisioned hosts; record nproc/RAM/disk",
+    "gen": "resolve argsets + run gn gen",
+    "compile": "run ninja on a target (default //xr:xr_all)",
+    "patch": "apply|verify|revert|lint the patch manifest",
+    "sbom": "emit a CycloneDX 1.6 SBOM",
+    "sbom-gate": "validate an SBOM against the vendored schema",
+    "brand-check": "verify de-branding (binary) or endpoint-deny scan",
+    "version": "build the version string",
+    "sign": "TEST-ONLY signing scaffold",
+    "budget": "patch-budget meter (gate mode blocks CI; P3)",
+    "test": "run the pytest suites (tools/tests + build/**/tests)",
+}
+
+
+def main() -> int:
+    argv = sys.argv[1:]
+    if argv and argv[0] == "--mock":
+        if os.environ.get("XR_ALLOW_MOCK") != "1":
+            print("error: --mock requires XR_ALLOW_MOCK=1 in the environment (Plan P2).",
+                  file=sys.stderr)
+            return 2
+        argv = argv[1:]
+
+    if not argv or argv[0] in {"-h", "--help", "help"}:
+        print(__doc__)
+        print("subcommands:")
+        for name, note in USAGE_NOTES.items():
+            print(f"  {name:<12} {note}")
+        return 0 if argv else 2
+
+    sub, rest = argv[0], argv[1:]
+    if sub not in SUBCOMMANDS:
+        print(f"error: unknown subcommand {sub!r}", file=sys.stderr)
+        return 2
+
+    env = dict(os.environ)
+    env["PYTHONPATH"] = str(BUILD) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
+    if sub == "test":
+        cmd = [sys.executable, "-m", "pytest", "tools/tests", "build", "-q", *rest]
+        cwd = ROOT
+    else:
+        cmd = [sys.executable, str(BUILD / SUBCOMMANDS[sub]), *rest]
+        cwd = ROOT
+    return subprocess.run(cmd, cwd=cwd, env=env).returncode
+
+
+if __name__ == "__main__":
+    sys.exit(main())

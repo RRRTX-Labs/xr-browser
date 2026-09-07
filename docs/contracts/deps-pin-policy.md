@@ -1,7 +1,10 @@
 # Contract — DEPS pin policy (v1)
 
-- **Status:** PUBLISHED (P2-T1). Consumed by P3's rebase bot (`./build refresh`
-  is the only writer of pin changes) and by `buildsys/sync.py`.
+- **Status:** PUBLISHED (P2-T1)
+- **Amendment 2026-09-07 (P3 T0.4):** tooling paths renamed
+  `buildsys/` → `build/`, dispatcher `./build` → `./scripts/build` (ADR-0006).
+  No schema or field changes — path references only.. Consumed by P3's rebase bot (`./scripts/build refresh`
+  is the only writer of pin changes) and by `build/sync.py`.
 - **File:** `DEPS` (repo root). Schema version 1 (YAML, safe-loaded).
 
 ## 1. The pin is the truth
@@ -17,24 +20,24 @@
 ## 2. Remotes
 
 - `gclient_url_scheme` is `https` and only `https`. No `ssh://`, no `file://`,
-  no `git://`. The synth-synced DEPS produced by `buildsys/sync.py` must contain
+  no `git://`. The synth-synced DEPS produced by `build/sync.py` must contain
   only `https` URLs; a non-https URL is a data error (sync refuses).
 
 ## 3. Write path
 
-- `./build refresh --to <sha>` is the only pin writer. It:
+- `./scripts/build refresh --to <sha>` is the only pin writer. It:
   1. creates branch `refresh/chromium-<n>` (n = next integer, never re-used),
   2. edits `DEPS` (chromium_rev),
-  3. runs `./build preflight` + (if a checkout exists) `gn parse` of the
+  3. runs `./scripts/build preflight` + (if a checkout exists) `gn parse` of the
      argsets against the new rev,
   4. emits PR-body markdown with the dependency-eval refresh reminder (L9),
   5. **never auto-pushes**.
-- Direct hand-edits of `DEPS` are caught by CI: `buildsys/tests/` asserts the
+- Direct hand-edits of `DEPS` are caught by CI: `build/tests/` asserts the
   file parses, has 40-char SHAs, and `schema_version == 1`.
 
 ## 4. Offline-after-sync (zero-egress build rule)
 
-- After `./build sync`, build time performs **no fetches**. The egress manifest
+- After `./scripts/build sync`, build time performs **no fetches**. The egress manifest
   (`<checkout>/.xr/egress.json`, every URL contacted + timestamp) is the
   checkable property. Any build-time network need is a stop-condition: design it
-  in, never smuggle it (buildsys/net-audit.md).
+  in, never smuggle it (build/net-audit.md).

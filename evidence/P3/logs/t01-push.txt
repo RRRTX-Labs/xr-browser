@@ -1,0 +1,18 @@
+=== T0.1 PUSH LOG — executed 2026-09-07T13:22:44Z ===
+Authorization: RRRTX-OPS kickoff follow-up (2026-09-07): 'do it carefully then push all changes to repos'
+Token identity: ahmadrrrtx (Muhammad Ahmad) — repo+workflow scopes; credential read from
+/home/user/.git-credentials (git credential store, never committed, snapshot-excluded path).
+
+--- push 1/2: xr-core (plain, fast-forward over P1 head; sanctioned T0.1 restoration) ---
+$ git -c credential.helper='store --file /home/user/.git-credentials' push origin main
+    To https://github.com/RRRTX-Labs/xr-core.git
+       6fb5411..6416bf1  main -> main
+
+--- push 2/2: xr-browser (sanctioned one-time history restoration, force-with-lease) ---
+$ git -c credential.helper='store --file /home/user/.git-credentials' push --force-with-lease=main:d792824b287eb2d2500b015d843bd2424b0e0a80 origin main
+    To https://github.com/RRRTX-Labs/xr-browser.git
+     + d792824...e31c94a main -> main (forced update)
+
+--- post-push origin verification (ls-remote) ---
+    e31c94a5262833b876402eb2a999270f15b40d83	refs/heads/main
+    6416bf16a47f53b616d38b8cc6172633c5f3c8b9	refs/heads/main

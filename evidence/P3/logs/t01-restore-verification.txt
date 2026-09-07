@@ -1,0 +1,28 @@
+=== T0.1 RESTORATION VERIFICATION — executed 2026-09-07T13:22:02Z ===
+
+[1] Archives (source of truth for the true history):
+    /home/user/releases/xr-browser-phase2.zip  (sha256 1dfd1c2adcdabf7c4e21661f734d8be08097ad948e8d4853519ddaccd30c160f)
+    /home/user/releases/xr-core-phase2.zip      (sha256 07c64a2fc92a861a416be1f98047dea16603fde1afef1e1f68bf3d2473091b88)
+    Downloaded from RRRTX-OPS-provided Drive folder (kickoff follow-up, 2026-09-07).
+
+[2] Unpacked repo integrity:
+--- xr-browser ---
+fsck exit: clean (one dangling object: 53bf387 = pre-amend twin of e31c94a, same subject+date — packaging amend leftover)
+commit count: 30  (expected 30: 18 P1 + 12 P2)
+HEAD: e31c94a5262833b876402eb2a999270f15b40d83 e31c94a (expected true P2 tip)
+--- xr-core ---
+fsck exit: clean
+commit count: 4  (expected 4: 3 P1 + 1 P2)
+HEAD: 6416bf16a47f53b616d38b8cc6172633c5f3c8b9 6416bf1 (expected P2 commit)
+
+[3] REQUIRED PRE-PUSH CHECK — git diff d792824(origin-squashed) e31c94a(true tip):
+    diffstat (empty = trees byte-identical):
+    >>> EMPTY — trees are byte-identical; the restore changes provenance only, zero content change.
+
+[4] Squash content check — git diff --stat d792824 17ab59e(P1 tip) shows ALL P2 content in d792824:
+ evidence/P2/logs/p2-verification.txt               |  55 ----
+ evidence/P2/logs/patch-roundtrip.txt               |  51 ----
+ 73 files changed, 16 insertions(+), 4173 deletions(-)
+
+[5] DCO on the restored 30-commit history (pre-push, in restored tree):
+    run_checks.sh exit 0, 55/55 tools tests (full suite below in [6])

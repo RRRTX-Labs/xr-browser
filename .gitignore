@@ -14,3 +14,7 @@ Thumbs.db
 out/
 build-xr/
 *.log
+
+# P2/P3 working dirs (never committed)
+chromium/          # default pinned checkout (build/sync.py convention)
+work/              # upstream-tracking workspace (P3 rebase bot, work/upstream-cache/)

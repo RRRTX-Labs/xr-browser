@@ -13,7 +13,7 @@ name: build-lane
 on:
   pull_request:
     paths:
-      - "buildsys/**"
+      - "build/**"
       - "DEPS"
       - "ci/**"
       - "xr-core/**"          # mirror hook if a combined checkout is used
@@ -27,7 +27,7 @@ jobs:
       - id: tier
         run: |
           # tiny: tooling/docs only -> subset. S0 -> full relevant suites.
-          if git diff --name-only origin/main...HEAD | grep -qE '^(docs/|buildsys/farm/|ci/)'; then
+          if git diff --name-only origin/main...HEAD | grep -qE '^(docs/|build/farm/|ci/)'; then
             echo "tier=tiny" >> "$GITHUB_OUTPUT"
           else
             echo "tier=s0" >> "$GITHUB_OUTPUT"
@@ -59,7 +59,7 @@ jobs:
     timeout-minutes: 600
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
-      - run: ./build preflight --checkout ./chromium
-      - run: ./build sync --checkout ./chromium
-      - run: ./build gen --checkout ./chromium --argset ${{ matrix.argset }}
-      - run: ./build compile --checkout ./chromium --argset ${{ matrix.argset }}
+      - run: ./scripts/build preflight --checkout ./chromium
+      - run: ./scripts/build sync --checkout ./chromium
+      - run: ./scripts/build gen --checkout ./chromium --argset ${{ matrix.argset }}
+      - run: ./scripts/build compile --checkout ./chromium --argset ${{ matrix.argset }}

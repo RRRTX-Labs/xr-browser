@@ -1,11 +1,14 @@
 # Contract — patch-manifest format v1
 
-- **Status:** PUBLISHED (P2-T3). Consumed by P3's rebase bot (which keys its
+- **Status:** PUBLISHED (P2-T3)
+- **Amendment 2026-09-07 (P3 T0.4):** tooling paths renamed
+  `buildsys/` → `build/`, dispatcher `./build` → `./scripts/build` (ADR-0006).
+  No schema or field changes — path references only.. Consumed by P3's rebase bot (which keys its
   re-apply logic off the ledger `<checkout>/.xr/patch-apply.json`) and by the
-  budget meter (`buildsys/farm/budget_meter.py`). P3 may extend the schema;
+  budget meter (`build/farm/budget_meter.py`). P3 may extend the schema;
   it may not rename fields without a register note.
 - **Manifest lives at:** `xr-core/patches/manifest.yaml` (the product repo).
-  The applicator (`buildsys/patching/apply.py`) reads it from
+  The applicator (`build/patching/apply.py`) reads it from
   `<checkout>/src/xr/patches/manifest.yaml`.
 
 ## 1. Schema (YAML, safe-loaded)

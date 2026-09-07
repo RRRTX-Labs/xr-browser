@@ -4,7 +4,7 @@
 # revision. Everything else in the tree (GN argsets, toolchain pins, patch
 # manifest) is *derived* from these two pins and may not re-pin inside the
 # pins (Plan §4 P2 "do not re-pin inside pins"). The gclient-synthesized DEPS
-# produced by buildsys/sync.py is generated FROM this file, never edited by
+# produced by build/sync.py is generated FROM this file, never edited by
 # hand. Policy contract: docs/contracts/deps-pin-policy.md.
 #
 # Field -> task map (each entry is tied to the P2 task that created it):

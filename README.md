@@ -14,7 +14,7 @@ the [Developer Certificate of Origin](https://developercertificate.org)
 Phase P2 (hermetic Chromium build) is **implemented and mock-verified**:
 the `./build` entrypoint, DEPS pinning, GN argsets, patch-manifest
 applicator, toolchain pins (digests captured), de-branding + SBOM
-tooling, and the build-farm/CI definitions all live under `buildsys/`,
+tooling, and the build-farm/CI definitions all live under `build/`,
 `ci/`, and `docs/contracts/`. The P2 DoD items that need real hardware
 or a human actor (3-OS nightly green for two weeks, external-rebuild
 proof, real signing) remain human-gated — recorded, never fabricated.
@@ -72,7 +72,7 @@ cover sync, gen, compile, patching, SBOM, brand-check, signing scaffold,
 budget meter, and the test suite. Reproduce an XR build from pinned
 sources per `BUILDING.md` (the external-rebuild doc, P2-T7). The build
 tools are stdlib-first and mock-verifiable without a checkout
-(`XR_ALLOW_MOCK=1 ./build --mock <sub>`).
+(`XR_ALLOW_MOCK=1 ./scripts/build --mock <sub>`).
 
 ## Honest status of protections
 

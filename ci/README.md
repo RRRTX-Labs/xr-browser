@@ -6,7 +6,7 @@ No pipeline is *running* yet: the build farm and self-hosted runners
 land via human gate HG-9. The one executable pipeline of the project is
 the **governance gate**, defined in `.github/workflows/governance.yml`
 and run locally via `tools/run_checks.sh` + `tools/run_negatives.sh`
-(plus the P2 build-system gates — `./build test`, provenance verify,
+(plus the P2 build-system gates — `./scripts/build test`, provenance verify,
 brand-check scan, argset validate).
 
 ## Conventions (binding from commit 1)

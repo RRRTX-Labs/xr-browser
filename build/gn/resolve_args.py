@@ -1,0 +1,180 @@
+"""build/gn/resolve_args.py — merge + validate the XR GN argsets.
+
+Merge order: xr_common.gni (base) then the selected argset (overrides). Every
+flag must be present in argsets/flags.yaml (the allowlist); an unknown flag is
+a data error. `--explain` prints provenance per flag (file + citation).
+`--validate` is the CI mode: it checks all argset files + the allowlist for
+consistency and rejects any `PENDING-pin-verify` marker or unknown flag.
+"""
+
+from __future__ import annotations
+
+import argparse
+import re
+import sys
+from pathlib import Path
+from typing import Any
+
+# Locate build/_common.py regardless of invocation dir (walk up to it).
+for _p in [Path(__file__).resolve().parent, *Path(__file__).resolve().parents]:
+    if (_p / "_common.py").exists():
+        sys.path.insert(0, str(_p))
+        break
+
+from _common import ToolError, add_common_flags, emit, main_with_guard, repo_root  # noqa: E402
+
+ARGSETS_DIR = "build/gn/argsets"
+COMMON = "xr_common.gni"
+SELECTABLE = ["xr_release.gn", "xr_debug.gn", "xr_component.gn"]
+FLAGS_FILE = "flags.yaml"
+KV_RE = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$")
+
+
+def _load_yaml(path: Path) -> dict[str, Any]:
+    import yaml
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        raise ToolError(f"{path.name}: YAML parse failure: {exc}") from exc
+    if not isinstance(data, dict):
+        raise ToolError(f"{path.name}: top level must be a mapping")
+    return data
+
+
+def parse_argset(path: Path) -> dict[str, str]:
+    """Parse `name = value` lines; comments/blank skipped. Duplicates within a
+    file are an error (no silent shadowing)."""
+    out: dict[str, str] = {}
+    for lineno, raw in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        line = raw.split("#", 1)[0].strip()
+        if not line:
+            continue
+        m = KV_RE.match(line)
+        if not m:
+            raise ToolError(f"{path.name}:{lineno}: unparseable line: {raw!r}")
+        name, value = m.group(1), m.group(2).strip()
+        if name in out:
+            raise ToolError(f"{path.name}:{lineno}: duplicate flag {name!r} in one file")
+        out[name] = value
+    return out
+
+
+def load_allowlist(dir_: Path) -> dict[str, dict[str, Any]]:
+    allow = _load_yaml(dir_ / FLAGS_FILE)
+    flags = allow.get("flags")
+    if not isinstance(flags, dict) or not flags:
+        raise ToolError(f"{FLAGS_FILE}: expected a non-empty 'flags' mapping")
+    for name, meta in flags.items():
+        if not isinstance(meta, dict) or meta.get("kind") not in ("chromium", "xr"):
+            raise ToolError(f"{FLAGS_FILE}: flag {name!r} needs kind=chromium|xr")
+        if meta.get("kind") == "chromium" and not meta.get("read_at"):
+            raise ToolError(f"{FLAGS_FILE}: chromium flag {name!r} missing read_at citation")
+    return flags
+
+
+def merge_argsets(common: dict[str, str], over: dict[str, str]) -> tuple[dict[str, str], list[dict[str, str]]]:
+    merged = dict(common)
+    overrides: list[dict[str, str]] = []
+    for k, v in over.items():
+        if k in merged and merged[k] != v:
+            overrides.append({"flag": k, "base": merged[k], "override": v})
+        merged[k] = v
+    return merged, overrides
+
+
+def validate(merged: dict[str, str], allowlist: dict[str, dict[str, Any]]) -> list[str]:
+    failures: list[str] = []
+    for name in merged:
+        if name not in allowlist:
+            failures.append(
+                f"flag {name!r} is not in the argsets allowlist "
+                f"({ARGSETS_DIR}/{FLAGS_FILE}); add a read-at citation before shipping"
+            )
+    return failures
+
+
+def cmd_resolve(args: argparse.Namespace) -> int:
+    root = repo_root()
+    d = root / ARGSETS_DIR
+    allow = load_allowlist(d)
+
+    if args.validate:
+        failures: list[str] = []
+        try:
+            common = parse_argset(d / COMMON)
+        except ToolError as e:
+            failures.append(str(e))
+            common = {}
+        for f in SELECTABLE:
+            try:
+                parse_argset(d / f)
+            except ToolError as e:
+                failures.append(str(e))
+        failures.extend(validate(common, allow))
+        for name in common:
+            if "PENDING-pin-verify" in str(allow.get(name, {}).get("read_at", "")):
+                failures.append(f"flag {name!r} read_at is PENDING-pin-verify")
+        return emit(args.json, {"tool": "resolve_args", "mode": "validate",
+                                "flags_allowlisted": sorted(allow)}, failures=failures)
+
+    if args.argset not in SELECTABLE:
+        raise ToolError(f"--argset must be one of {SELECTABLE} (got {args.argset!r})")
+    common = parse_argset(d / COMMON)
+    over = parse_argset(d / (args.argset if args.argset.endswith(".gn") else args.argset))
+    merged, overrides = merge_argsets(common, over)
+    failures = validate(merged, allow)
+
+    lines = [
+        "# Generated by build/gn/resolve_args.py — do not edit by hand.",
+        f"# argset: {args.argset} (+ {COMMON}); pin {allow.get('pin', 'see DEPS')}",
+    ]
+    for name, value in merged.items():
+        meta = allow.get(name, {})
+        cite = meta.get("read_at") or meta.get("note") or "xr-owned"
+        lines.append(f"{name} = {value}  # {cite}")
+    lines.append("")
+    rendered = "\n".join(lines)
+
+    if args.out:
+        Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.out).write_text(rendered, encoding="utf-8")
+
+    result = {
+        "tool": "resolve_args",
+        "mode": "resolve",
+        "argset": args.argset,
+        "flags": merged,
+        "overrides": overrides,
+    }
+    if args.explain:
+        for name, value in merged.items():
+            origin = "override" if name in over else COMMON
+            print(f"{name} = {value}   <- {origin}")
+            if overrides and any(o["flag"] == name for o in overrides):
+                o = next(o for o in overrides if o["flag"] == name)
+                print(f"    override: base {o['base']} -> {o['override']}")
+    if failures:
+        result["failures"] = failures
+    if args.out:
+        result["wrote"] = args.out
+    return emit(args.json, result, failures=failures)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        prog="build/gn/resolve_args.py",
+        description="Merge and validate the XR GN argsets (xr_common + release/debug/component).",
+    )
+    parser.add_argument("--argset", choices=SELECTABLE, help="argset to merge (default: xr_release.gn)")
+    parser.add_argument("--explain", action="store_true", help="print per-flag provenance")
+    parser.add_argument("--validate", action="store_true", help="CI mode: validate all argsets + allowlist")
+    parser.add_argument("--out", help="write merged args.gn to this path")
+    add_common_flags(parser)
+    args = parser.parse_args()
+    if not args.validate and not args.argset:
+        parser.error("either --argset or --validate is required")
+    main_with_guard(lambda: cmd_resolve(args))
+
+
+if __name__ == "__main__":
+    main()

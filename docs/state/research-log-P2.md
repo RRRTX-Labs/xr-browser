@@ -1,3 +1,9 @@
+> **Post-P2 path note (2026-09-07, P3 T0.4):** the `buildsys/` directory was
+> renamed to `build/` and the `./build` dispatcher moved to `./scripts/build`
+> (ADR-0006). Tool references below that say `buildsys/…` or `./build …`
+> resolve to `build/…` / `./scripts/build …` today; entries are otherwise
+> unchanged (historical record).
+
 # Research log — P2 (build system & hermetic Chromium build)
 
 Every entry records **URL + date + verbatim quote**. Anything unreachable or

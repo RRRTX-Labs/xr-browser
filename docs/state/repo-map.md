@@ -23,7 +23,7 @@ will land, so nobody builds in the wrong place.
 | `.github/workflows/governance.yml` | ✅ | CI definition (actions pinned by full SHA) |
 | `evidence/P1/` | ✅ | evidence.json, human-gates.md, logs/, research-log-links.txt, registry-recount.md |
 | `build` | ✅ P2 | the `./build` entrypoint dispatcher (sync/gen/compile/patch/sbom/brand-check/sign/budget/test) |
-| `buildsys/` | ✅ P2 | `_common.py` (tool contract), `sync.py`, `preflight.py`, `net-audit.md`, `gn/` (argsets + resolve + gen/compile), `patching/` (manifest applicator), `farm/` (budget/ccache/runners), `toolchain/` (pins + provenance), `branding/` (version/brand-check/icons), `signing/` (test scaffold), `sbom/` (emit/gate/schema), tests |
+| `build/` | ✅ P2 | `_common.py` (tool contract), `sync.py`, `preflight.py`, `net-audit.md`, `gn/` (argsets + resolve + gen/compile), `patching/` (manifest applicator), `farm/` (budget/ccache/runners), `toolchain/` (pins + provenance), `branding/` (version/brand-check/icons), `signing/` (test scaffold), `sbom/` (emit/gate/schema), tests |
 | `ci/` | ✅ P2 | README + `build-lane.yml` (PR compile lane) + `nightly-rebase-build.yml` (3-OS matrix definition; not yet running — HG-9) |
 | `docs/contracts/` | ✅ P2 | `deps-pin-policy.md`, `patch-manifest-v1.md`, `sbom-v1.md` (P2 contracts; the P5 IDL contracts will join later) |
 

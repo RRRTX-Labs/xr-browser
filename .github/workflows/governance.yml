@@ -66,7 +66,7 @@ jobs:
 
       - name: Build-system gates (P2)
         run: |
-          ./build test                                    # buildsys + tools test suites
-          python3 buildsys/toolchain/provenance.py --verify # toolchain digests (R0)
-          ./build brand-check --scan                       # endpoint-deny over the build surface
-          python3 buildsys/gn/resolve_args.py --validate   # argset allowlist consistency
+          ./scripts/build test                                    # build + tools test suites
+          python3 build/toolchain/provenance.py --verify # toolchain digests (R0)
+          ./scripts/build brand-check --scan                       # endpoint-deny over the build surface
+          python3 build/gn/resolve_args.py --validate   # argset allowlist consistency
