@@ -1,0 +1,20 @@
+# xrctl demo transcript — one call per interface (T7)
+$ xrctl call policy_resolver Resolve {standard/https/nav}
+{"ok":{"blocking":{"block_network_ads":true,"block_trackers":true,"upgrade_to_https":true},"cosmetic":{"block_scriptlets":false,"hide_cosmetic":false},"egress":{"block_third_party":false,"route":"kDirect"},"fingerprint":{"mode":"kReduce"},"letterbox":false,"permissions":{"camera":"kAsk","geolocation":"kAsk","microphone":"kAsk","notifications":"kAsk"},"process_policy":{"dedicated_process":false,"site_isolated":true},"storage_scope":{"in_memory":false,"scope":"kIdentityScoped"},"vault_scope":{"autofill_allowed":true,"export_allowed":false},"version":{"contract_version":1}}}
+$ xrctl call identity Create {standard}
+{"ok":{"grade":"kStandard","id":{"value":"xr:00000000-0000-4000-8000-000000000001"},"in_memory":false,"state":"kActive"}}
+$ xrctl call shield Status
+{"ok":{"blocked_count":0,"enabled":true}}
+$ xrctl call route_manager LoseAllFailClosed
+{"ok":{"route":"kDirect","state":"kFailClosed","user_ack_required":true}}
+$ xrctl call vault GetField totp_seed (must deny)
+{"error":"kNotPermitted"}
+$ xrctl call vault Totp
+{"ok":"000000"}
+$ xrctl call guard Dispatch {unknown api => deny}
+{"ok":"kDeny"}
+$ xrctl call downloads Scan {safe media}
+{"ok":{"direct_media_affordance":true,"quarantine":"kReleased","verdict":"kSafe"}}
+$ xrctl call activity_log Query
+{"ok":[]}
+# schema-only contracts (EffectivePolicy/command/list-bundle/update/isolation-card/settings) are driven via xr_schema.py + fixtures

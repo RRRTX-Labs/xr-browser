@@ -1,0 +1,17 @@
+{
+  "tool": "mojom_lint",
+  "files": [
+    "activity_log.mojom",
+    "downloads.mojom",
+    "guard.mojom",
+    "identity.mojom",
+    "policy_resolver.mojom",
+    "route_manager.mojom",
+    "shield.mojom",
+    "vault.mojom",
+    "xr_common.mojom",
+    "xr_types.mojom"
+  ],
+  "status": "pass",
+  "failures": []
+}

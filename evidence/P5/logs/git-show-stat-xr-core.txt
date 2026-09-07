@@ -1,0 +1,125 @@
+commit ef24bcf8e4fd556ceed4f7ef8a52a481f0619a4a
+Author: XR P5 Agent <p5-agent@users.noreply.github.com>
+Date:   Mon Sep 7 19:02:50 2026 +0000
+
+    mojom(contracts): add per-file kContractVersion stamps + budget comments; fixtures (XR-P5-T1)
+    
+    Follow-up to the freeze commit: each mojom file now carries the per-file
+    `const int32 kContractVersion = 1;` freeze stamp and every batch/streamed
+    method carries a `// budget:` comment (mojom_lint R1/R8). Adds fakes/fixtures/
+    (per-contract fixture sets + example manifests) consumed by contracts_manifest
+    and the conformance tests. NOTE (HG-27): whether N per-file module-scoped const
+    declarations compile without redefinition is a farm-compile question, recorded
+    BLOCKED-TOOLING in evidence; the structural freeze requirement is met now.
+    
+    Signed-off-by: XR P5 Agent <p5-agent@users.noreply.github.com>
+
+ fakes/fixtures/activity-log-v1.json         | 1 +
+ fakes/fixtures/command-descriptor-v1.json   | 1 +
+ fakes/fixtures/downloads-v1.json            | 1 +
+ fakes/fixtures/guard-v1.json                | 1 +
+ fakes/fixtures/identity-v1.json             | 1 +
+ fakes/fixtures/list-bundle-example.json     | 1 +
+ fakes/fixtures/settings-example.json        | 1 +
+ fakes/fixtures/shield-v1.json               | 1 +
+ fakes/fixtures/update-manifest-example.json | 1 +
+ fakes/fixtures/vault-v1.json                | 1 +
+ mojom/activity_log.mojom                    | 2 ++
+ mojom/downloads.mojom                       | 2 ++
+ mojom/guard.mojom                           | 2 ++
+ mojom/identity.mojom                        | 2 ++
+ mojom/policy_resolver.mojom                 | 2 ++
+ mojom/route_manager.mojom                   | 2 ++
+ mojom/shield.mojom                          | 2 ++
+ mojom/vault.mojom                           | 3 +++
+ mojom/xr_common.mojom                       | 2 ++
+ 19 files changed, 29 insertions(+)
+
+commit 2b6f14419a1f9edce04634e2662d8b054bae4c05
+Author: XR P5 Agent <p5-agent@users.noreply.github.com>
+Date:   Mon Sep 7 18:44:29 2026 +0000
+
+    l10n(isolation-card): measured disclosure strings v1 (en-US) (XR-P5-T1)
+    
+    Contract #14: localizable Isolation-Card strings derived from P4's measured
+    shared-state rows, each with an `evidence:` sibling (row ids + file:line@pin).
+    Strings are measured facts, not promises (L5); vocab-lint clean. legal status
+    is honestly PENDING-HG-1 (counsel review not simulated).
+    
+    Signed-off-by: XR P5 Agent <p5-agent@users.noreply.github.com>
+
+ l10n/isolation_card.json | 73 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
+
+commit 88da4adbe6b736ff27df6dda11b4713a0121c023
+Author: XR P5 Agent <p5-agent@users.noreply.github.com>
+Date:   Mon Sep 7 18:44:29 2026 +0000
+
+    fakes(xr.mojom): python behavioral fakes + stdio protocol (XR-P5-T1)
+    
+    One deterministic, deny-default behavioral fake per §1.11 interface, usable by
+    dependent tracks (P6-P10) at freeze time over a documented stdio JSON protocol
+    (fakes/README.md). These are NOT bindings (farm-gated); no fake claims C++ works.
+    
+      policy_resolver.py  total/pure resolver; ground truth = golden vectors
+      identity.py         demonstrates attach-after-nav rejection (P4 timing)
+      shield.py, route_manager.py (L6 fail-closed), vault.py (no seed/export),
+      guard.py (single chokepoint), downloads.py, activity_log.py (bounded ring)
+      _base.py            canonical JSON + typed ErrorCode helpers
+    
+    Signed-off-by: XR P5 Agent <p5-agent@users.noreply.github.com>
+
+ fakes/README.md          |  80 ++++++++++++++++++++
+ fakes/_base.py           |  50 +++++++++++++
+ fakes/activity_log.py    |  55 ++++++++++++++
+ fakes/downloads.py       |  42 +++++++++++
+ fakes/guard.py           |  44 +++++++++++
+ fakes/identity.py        | 115 +++++++++++++++++++++++++++++
+ fakes/policy_resolver.py | 188 +++++++++++++++++++++++++++++++++++++++++++++++
+ fakes/route_manager.py   |  72 ++++++++++++++++++
+ fakes/shield.py          |  51 +++++++++++++
+ fakes/vault.py           |  82 +++++++++++++++++++++
+ 10 files changed, 779 insertions(+)
+
+commit 9085e5c28db99102b3ccd02a97befd0f58fcddf0
+Author: XR P5 Agent <p5-agent@users.noreply.github.com>
+Date:   Mon Sep 7 18:44:29 2026 +0000
+
+    mojom(contracts): freeze xr.mojom v1 surface — 10 files + BUILD.gn (XR-P5-T1)
+    
+    The §1.11 interface surface, versioned and typed, for the P5 freeze. Ten
+    .mojom files under module xr.mojom (research R2 conventions):
+    
+      xr_types.mojom        shared ids/enums/typed ErrorCode (no stringly errors)
+      xr_common.mojom       small cross-iface Ack
+      policy_resolver.mojom PolicyResolver — pure/total/deterministic; EffectivePolicy
+                            carries §2.10 reserved fields (fingerprint/letterbox/
+                            storage-scope) — deny-default throughout
+      identity.mojom        IdentityManager (§1.11 name) — encodes P4 provisioning
+                            timing (attach before first SiteInstance; fail-closed)
+      shield.mojom          Shield + BlockEvent (§1.5 event tuple, all typed)
+      route_manager.mojom   RouteManager — LoseAllFailClosed is law (L6)
+      vault.mojom           VaultService — absence-is-contract (no export surface)
+      guard.mojom           GuardLedger — single Dispatch chokepoint (T0 ruling 1)
+      downloads.mojom       DownloadSafety — direct-media affordance (§2.6)
+      activity_log.mojom    ActivityLog — bounded ring (L17)
+    
+    Each file: const int32 kContractVersion = 1; migration-note pointer; // budget:
+    comments on batch/streamed methods. mojom/BUILD.gn lists all 10; bindings
+    generation is FARM-GATED (HG-9/HG-27) — gn format is a visible SKIP on this
+    host, never a silent pass.
+    
+    Signed-off-by: XR P5 Agent <p5-agent@users.noreply.github.com>
+
+ mojom/BUILD.gn              |  35 +++++++++++++
+ mojom/activity_log.mojom    |  49 +++++++++++++++++
+ mojom/downloads.mojom       |  50 ++++++++++++++++++
+ mojom/guard.mojom           |  65 +++++++++++++++++++++++
+ mojom/identity.mojom        |  76 +++++++++++++++++++++++++++
+ mojom/policy_resolver.mojom | 125 ++++++++++++++++++++++++++++++++++++++++++++
+ mojom/route_manager.mojom   |  48 +++++++++++++++++
+ mojom/shield.mojom          |  54 +++++++++++++++++++
+ mojom/vault.mojom           |  70 +++++++++++++++++++++++++
+ mojom/xr_common.mojom       |  18 +++++++
+ mojom/xr_types.mojom        |  70 +++++++++++++++++++++++++
+ 11 files changed, 660 insertions(+)

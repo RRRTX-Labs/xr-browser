@@ -1,0 +1,6 @@
+78cbc87 build(deps): re-point xr_core_rev to pushed P5 HEAD ef24bcf (XR-P5)
+771551b build(deps): pair-bump xr_core_rev to P5 freeze; docs flips (XR-P5)
+c4b77e4 ci(gates): wire P5 contract gates + 5 new negatives into CI (XR-P5)
+e920963 tools(contracts): mojom_lint, manifest, vectors, freeze, amend_guard, schema, xrctl (XR-P5)
+026f04b contracts(freeze): §1.11 docs, schemas, vectors, packets, FROZEN.yaml (XR-P5)
+4920489 docs(disposition): record 3 orchestrator rulings; fix DEPS lineage (XR-P5-T0)

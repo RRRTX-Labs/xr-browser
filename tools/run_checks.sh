@@ -57,7 +57,7 @@ echo "== test suites =="
 echo "== evidence bundles (contract: docs/contracts/evidence-bundle-v1.md) =="
 "$PY" tools/evidence_check.py
 # strict: P3+ bundles — cited artifact paths must resolve, source labels required
-"$PY" tools/evidence_check.py --strict --only P3,P4
+"$PY" tools/evidence_check.py --strict --only P3,P4,P5
 
 echo "== spike: every file:line citation re-verified at the pin =="
 "$PY" build/spike/citation_audit.py

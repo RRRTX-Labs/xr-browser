@@ -1,0 +1,72 @@
+== plan pin ==
+PASS: plan_pin_check
+== feature registry (plan §2 ↔ docs/registry/*) ==
+PASS: registry_lint
+== decision register (schema) ==
+PASS: dr_parse
+== decision register (Register-Change trailers) ==
+PASS: dr_parse
+== license audit (canonical MPL-2.0 + copyleft scan) ==
+PASS: license_audit
+== DCO signoff ==
+PASS: dco_check
+== threat model v0 structure ==
+PASS: check_threat_model
+== banned-vocabulary lint ==
+PASS: vocab_lint
+== CODEOWNERS / S0 path sync ==
+PASS: owners_sync
+== test suites ==
+........................................................................ [ 92%]
+......                                                                   [100%]
+78 passed in 5.80s
+== evidence bundles (contract: docs/contracts/evidence-bundle-v1.md) ==
+PASS: evidence/P1/evidence.json (structural)
+PASS: evidence/P2/evidence.json (structural)
+PASS: evidence/P3/evidence.json (structural)
+PASS: evidence/P4/evidence.json (structural)
+PASS: evidence_check (4 bundle(s), 0 failure(s))
+PASS: evidence/P3/evidence.json (strict)
+PASS: evidence/P4/evidence.json (strict)
+PASS: evidence_check (2 bundle(s), 0 failure(s))
+== spike: every file:line citation re-verified at the pin ==
+rows checked: 23  {'PASS': 23, 'FAIL': 0, 'DRIFT': 0, 'BLOCKED-NET': 0}
+log: evidence/P4/logs/citation-audit.txt
+PASS: citation-audit
+== spike: papercut census schema ==
+census rows: 15  named surfaces required: 13
+PASS: census-lint
+== spike: probe driver static + fixture lanes ==
+PASS  driver.policy.isolation_bypass           isolation-bypass flag(s) refused: --disable-site-isolation-t
+PASS  driver.policy.clean_flags                no refusal
+PASS  driver.fsdiff.detect                     {"added": ["a/y.bin"], "removed": [], "changed": ["a/x.bin"]
+PASS  driver.fsdiff.stable                     {"added": [], "removed": [], "changed": []}
+PASS  driver.cdp.roundtrip                     {"echo": "SystemInfo.getInfo"}
+PASS  driver.cdp.loopback_only                 CdpError raised
+PASS  driver.fixture.origin                    7 file(s) scanned; 0 real-domain token(s)
+PASS: probe-driver (7 row(s), 0 failure(s))
+== cross-repo pin alive (DEPS xr_core_rev reachable from origin) ==
+PASS: check-pin-alive
+== patch ledger incl. candidate (spike/) dirs ==
+PASS: xr-patch
+== workflow files: expressions + schema (compile error = zero jobs) ==
+  checked: .github/workflows/governance.yml
+  checked: .github/workflows/nightly-rebase-build.yml
+  actionlint: SKIP (tool absent: actionlint) — needed for: deep check of .github/workflows expressions and schema (P4) — a compile error there yields a run with zero jobs and no logs; the always-on half of build/workflow_lint.py still runs without it; install hint: github.com/rhysd/actionlint releases (CI installs it pinned by version + tarball sha256)
+PASS: workflow-lint
+== P5: mojom structural lint (banned surface, kVersion, budgets) ==
+PASS: mojom_lint (10 files)
+== P5: §1.11 contracts manifest (14 items) + §2.10 reserved surface ==
+PASS: contracts_manifest (14 items)
+== P5: golden-vector fake parity (byte-stable) ==
+  policy-resolver-v1.json: 66/66 ok  sha256=8d35c4c33adcc050…
+  route-manager-v1.json: 9/9 ok  sha256=a57c3252fbcc45e4…
+PASS: vectors_check
+== P5: contract freeze register (FROZEN.yaml, ratified=PENDING) ==
+PASS: freeze_check
+== P5: contract-amendment RFC trailer gate (T10) ==
+PASS: amend_guard (stamped=True)
+== P5: isolation-card l10n well-formed + vocab-clean ==
+isolation-card OK 8 strings
+== ALL GOVERNANCE CHECKS PASSED ==
+run_checks exit=0

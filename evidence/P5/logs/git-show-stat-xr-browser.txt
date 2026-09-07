@@ -1,0 +1,151 @@
+commit 78cbc877f6c3ec474d5dd8579b37d9d6da37d55c
+Author: XR P5 Agent <p5-agent@users.noreply.github.com>
+Date:   Mon Sep 7 19:03:15 2026 +0000
+
+    build(deps): re-point xr_core_rev to pushed P5 HEAD ef24bcf (XR-P5)
+    
+    The xr-core P5 freeze landed on origin main as ef24bcf (mojom stamps + budget
+    comments + fakes/fixtures folded in). Re-point DEPS to the pushed ancestor;
+    check-pin-alive is now green.
+    
+    Signed-off-by: XR P5 Agent <p5-agent@users.noreply.github.com>
+
+ DEPS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit 771551b14b858d3dd58405c36be873e7c26e12a3
+Author: XR P5 Agent <p5-agent@users.noreply.github.com>
+Date:   Mon Sep 7 19:01:22 2026 +0000
+
+    build(deps): pair-bump xr_core_rev to P5 freeze; docs flips (XR-P5)
+    
+    DEPS xr_core_rev -> 2b6f144 (xr-core P5: mojom/ + fakes/ + l10n/), paired
+    same-day per docs/process/cross-repo-pin.md. NOTE: pin-alive goes green only
+    once the xr-core P5 commit is on origin main (cross-repo PR pair; xr-core
+    merges first). repo-map (both repos), limitations.md (resolver-total row),
+    threat-model (contract-enforcement links, structure-checker intact), and
+    CONTRIBUTING (amendment-RFC line) updated.
+    
+    Signed-off-by: XR P5 Agent <p5-agent@users.noreply.github.com>
+
+ CONTRIBUTING.md        | 10 ++++++++++
+ DEPS                   |  2 +-
+ docs/limitations.md    | 10 ++++++++++
+ docs/state/repo-map.md | 32 ++++++++++++++++++++++++++++++++
+ docs/threat-model.md   | 19 +++++++++++++++++++
+ 5 files changed, 72 insertions(+), 1 deletion(-)
+
+commit c4b77e4d77aa6d6a82c7fd9f4bad858618eb6506
+Author: XR P5 Agent <p5-agent@users.noreply.github.com>
+Date:   Mon Sep 7 19:01:22 2026 +0000
+
+    ci(gates): wire P5 contract gates + 5 new negatives into CI (XR-P5)
+    
+    run_checks.sh grows the P5 block (mojom_lint, contracts_manifest, vectors_check,
+    freeze_check, amend_guard, isolation-card lint) and stays green.
+    run_negatives.sh 20/20 (was 15): banned-method, stringly-error, missing-fake,
+    agent-RATIFIED, vector-drift. governance.yml adds a Contract-freeze step;
+    scripts/build gains the `contracts` subcommand and runs docs/contracts/tests.
+    
+    Signed-off-by: XR P5 Agent <p5-agent@users.noreply.github.com>
+
+ .github/workflows/governance.yml | 13 ++++++++++++
+ scripts/build                    |  6 ++++--
+ tools/run_checks.sh              | 26 +++++++++++++++++++++++
+ tools/run_negatives.sh           | 45 ++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 88 insertions(+), 2 deletions(-)
+
+commit e9209630e01fd9e0eb463c4218594dd89c07abe9
+Author: XR P5 Agent <p5-agent@users.noreply.github.com>
+Date:   Mon Sep 7 19:01:22 2026 +0000
+
+    tools(contracts): mojom_lint, manifest, vectors, freeze, amend_guard, schema, xrctl (XR-P5)
+    
+    Seven P5 tools (stdlib, --json, exit {0,1,2}, <400 LOC):
+      mojom_lint         structural parser + banned-surface/kVersion/budget lint
+      contracts_manifest §1.11 14-item completeness + §2.10 reserved-surface checks
+      vectors_check      golden-vector fake-parity, byte-stable (sha emitted)
+      freeze_check       FROZEN.yaml gate; bans agent-written RATIFIED (test-encoded)
+      amend_guard        T10 RFC-trailer gate (warn pre-stamp, block post-stamp)
+      xr_schema          strict validation + forward-only migration (downgrade-reject)
+      xrctl              dev-only CLI driving the fakes over stdio JSON
+    Plus build/contracts.py dispatcher, unit tests, amend_guard synthetic-repo
+    tests, and 9 mojom negative fixtures (one per lint rule).
+    
+    Signed-off-by: XR P5 Agent <p5-agent@users.noreply.github.com>
+
+ build/contracts.py                                 |  43 ++++
+ tools/amend_guard.py                               | 104 ++++++++++
+ tools/contracts_manifest.py                        | 217 +++++++++++++++++++++
+ tools/freeze_check.py                              | 131 +++++++++++++
+ tools/mojom_lint.py                                | 203 +++++++++++++++++++
+ tools/tests/fixtures/mojom/banned_execute.mojom    |   6 +
+ .../tests/fixtures/mojom/banned_getdatabase.mojom  |   6 +
+ tools/tests/fixtures/mojom/datastream.mojom        |   6 +
+ tools/tests/fixtures/mojom/dup_method.mojom        |   7 +
+ tools/tests/fixtures/mojom/enableif.mojom          |   7 +
+ tools/tests/fixtures/mojom/missing_migration.mojom |   5 +
+ tools/tests/fixtures/mojom/missing_version.mojom   |   5 +
+ tools/tests/fixtures/mojom/nobudget.mojom          |   6 +
+ tools/tests/fixtures/mojom/stringly_error.mojom    |   6 +
+ tools/tests/test_amend_guard.py                    |  82 ++++++++
+ tools/tests/test_p5_contract_tools.py              | 127 ++++++++++++
+ tools/vectors_check.py                             | 134 +++++++++++++
+ tools/xr_schema.py                                 | 143 ++++++++++++++
+ tools/xrctl.py                                     |  99 ++++++++++
+ 19 files changed, 1337 insertions(+)
+
+commit 026f04b8d332a37397876a09c9b202f8b383658b
+Author: XR P5 Agent <p5-agent@users.noreply.github.com>
+Date:   Mon Sep 7 19:01:22 2026 +0000
+
+    contracts(freeze): §1.11 docs, schemas, vectors, packets, FROZEN.yaml (XR-P5)
+    
+    The xr-browser side of the P5 freeze: INDEX mapping table (§1.11↔file↔§2.10),
+    EffectivePolicy v1 schema+doc (strict, total, deny-default), per-contract docs
+    (list-bundle signed envelope, command-descriptor, update-manifest 3.1 profile
+    with file:line conformance cites, xr-schema/settings/theme, amendment-RFC
+    procedure), strict hand-rolled schemas, 66 policy-resolver + 9 route-manager
+    golden vectors, 14 review packets (import-law + threat links + human sign-off
+    pending), contract tests (determinism, all-interface parity, updater
+    conformance), FROZEN.yaml (14 rows REVIEW-COMPLETE, ratified PENDING — HG-26),
+    and the RFC template.
+    
+    Signed-off-by: XR P5 Agent <p5-agent@users.noreply.github.com>
+
+ docs/contracts/FROZEN.yaml                         |   69 +
+ docs/contracts/INDEX.md                            |   62 +
+ docs/contracts/command-descriptor-v1.md            |   17 +
+ docs/contracts/command-descriptor-v1.schema.json   |   15 +
+ docs/contracts/contract-amendment-rfc.md           |   21 +
+ docs/contracts/effective-policy-v1.md              |   33 +
+ docs/contracts/effective-policy-v1.schema.json     |   22 +
+ docs/contracts/list-bundle-manifest-v1.md          |   26 +
+ docs/contracts/list-bundle-manifest-v1.schema.json |   15 +
+ docs/contracts/review/01-effective-policy-v1.md    |   29 +
+ docs/contracts/review/02-policy-resolver-v1.md     |   29 +
+ docs/contracts/review/03-identity-manager-v1.md    |   29 +
+ docs/contracts/review/04-shield-v1.md              |   29 +
+ docs/contracts/review/05-route-manager-v1.md       |   29 +
+ docs/contracts/review/06-vault-service-v1.md       |   29 +
+ docs/contracts/review/07-guard-ledger-v1.md        |   29 +
+ docs/contracts/review/08-download-safety-v1.md     |   29 +
+ docs/contracts/review/09-activity-log-v1.md        |   29 +
+ docs/contracts/review/10-command-descriptor-v1.md  |   29 +
+ .../contracts/review/11-list-bundle-manifest-v1.md |   29 +
+ docs/contracts/review/12-update-manifest-v1.md     |   29 +
+ docs/contracts/review/13-isolation-card-v1.md      |   34 +
+ .../review/14-settings-theme-schema-v1.md          |   29 +
+ docs/contracts/settings-schema-v1.md               |   12 +
+ docs/contracts/tests/conftest.py                   |    6 +
+ docs/contracts/tests/test_all_interfaces_parity.py |   49 +
+ docs/contracts/tests/test_policy_determinism.py    |   43 +
+ .../tests/test_update_manifest_conformance.py      |   51 +
+ docs/contracts/theme-tokens-v1.md                  |   12 +
+ docs/contracts/update-manifest-31-json.md          |   38 +
+ docs/contracts/update-manifest-31.schema.json      |   21 +
+ docs/contracts/vectors/policy-resolver-v1.json     | 3633 ++++++++++++++++++++
+ docs/contracts/vectors/route-manager-v1.json       |  168 +
+ docs/contracts/xr-schema-v1.md                     |   25 +
+ docs/rfcs/0000-template.md                         |   23 +
+ 35 files changed, 4772 insertions(+)

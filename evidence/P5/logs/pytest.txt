@@ -1,0 +1,14 @@
+........................................................................ [ 25%]
+........................................................................ [ 51%]
+........................................................................ [ 77%]
+..........................................s...........s.........         [100%]
+==================== optional external tools (SKIP policy) =====================
+SKIP: SKIP (tool absent: minisign) — needed for: TEST-ONLY artifact signature in the fast-lane drill (P3-T5); install hint: apt-get install -y minisign (Ubuntu universe)
+SKIP: SKIP (tool absent: codesign) — needed for: macOS TEST signing passthrough (P2-T7); install hint: Xcode command line tools (macOS runners only)
+SKIP: SKIP (tool absent: signtool) — needed for: Windows TEST signing passthrough (P2-T7); install hint: Windows SDK (Windows runners only)
+SKIP: SKIP (tool absent: actionlint) — needed for: deep check of .github/workflows expressions and schema (P4) — a compile error there yields a run with zero jobs and no logs; the always-on half of build/workflow_lint.py still runs without it; install hint: github.com/rhysd/actionlint releases (CI installs it pinned by version + tarball sha256)
+4 external tool(s) absent on this host: the dependent tests SKIP with the reason above (never a silent pass).
+=========================== short test summary info ============================
+SKIPPED [1] build/tests/test_workflow_lint.py:120: SKIP (tool absent: actionlint) — needed for: deep check of .github/workflows expressions and schema (P4) — a compile error there yields a run with zero jobs and no logs; the always-on half of build/workflow_lint.py still runs without it; install hint: github.com/rhysd/actionlint releases (CI installs it pinned by version + tarball sha256)
+SKIPPED [1] build/skip_policy.py:95: SKIP (tool absent: minisign) — needed for: TEST-ONLY artifact signature in the fast-lane drill (P3-T5); install hint: apt-get install -y minisign (Ubuntu universe)
+278 passed, 2 skipped in 10.22s

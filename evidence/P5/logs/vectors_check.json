@@ -1,0 +1,16 @@
+{
+  "tool": "vectors_check",
+  "files": {
+    "policy-resolver-v1.json": {
+      "count": 66,
+      "passed": 66,
+      "sha256": "8d35c4c33adcc050743af664d69042cf507c9f5e04a3a10a10b4b5e1fdcc29bb"
+    },
+    "route-manager-v1.json": {
+      "count": 9,
+      "passed": 9,
+      "sha256": "a57c3252fbcc45e4ee37cd3e49280f0d321afc7e2c263ceb97f76392b3eef663"
+    }
+  },
+  "status": "pass"
+}
