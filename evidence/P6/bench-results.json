@@ -1,0 +1,5 @@
+benchmark (us)                      p50        p99      p99.9  budget
+resolve_cold                      4.795      8.959     27.906  cold <=200us: MET
+cache_warm_pinned_read            0.067      0.070      0.197  warm <=5us: MET
+snapshot_apply_40               650.570   1070.977   1420.922  apply <=2000us: MET
+{"budgets":{"cache_warm_pinned_read_us":5,"resolve_cold_us":200,"snapshot_apply_us":2000},"cache_warm_pinned_read":{"p50":0.067,"p99":0.07,"p99.9":0.197},"environment":{"compiler":"g++ 14.2.0 (recorded in build log)","flags":"-std=c++20 -O2 -Wall -Wextra -Werror"},"iterations":100000,"resolve_cold":{"p50":4.795,"p99":8.959,"p99.9":27.906},"snapshot_apply_40":{"p50":650.57,"p99":1070.977,"p99.9":1420.922},"unit":"microseconds","verdicts":{"cache_warm_pinned_read":"MET","resolve_cold":"MET","snapshot_apply_40":"MET"},"warmup_excluded":true}

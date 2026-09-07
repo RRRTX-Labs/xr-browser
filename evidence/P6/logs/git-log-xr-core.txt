@@ -1,0 +1,113 @@
+ae017fe P6-T4: pin cache capacity semantics (mutation survivor #2 killed)
+ policy/tests/test_cache.cc | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+330b96d P6-T4: close mutation-found test gaps; real minisign signed path
+ .gitignore                            |   1 +
+ policy/README.md                      |   2 +-
+ policy/enterprise/managed_source.cc   |   8 +-
+ policy/enterprise/managed_source.h    |   2 +-
+ policy/tests/Makefile                 |   2 +-
+ policy/tests/build/bench_main         | Bin 483248 -> 0 bytes
+ policy/tests/build/cache.o            | Bin 30288 -> 0 bytes
+ policy/tests/build/effective_policy.o | Bin 63208 -> 0 bytes
+ policy/tests/build/events.o           | Bin 107992 -> 0 bytes
+ policy/tests/build/json.o             | Bin 24280 -> 0 bytes
+ policy/tests/build/json_parse.o       | Bin 45224 -> 0 bytes
+ policy/tests/build/managed_source.o   | Bin 38400 -> 0 bytes
+ policy/tests/build/policy_host        | Bin 474344 -> 0 bytes
+ policy/tests/build/resolve.o          | Bin 15912 -> 0 bytes
+ policy/tests/build/resolve_io.o       | Bin 51728 -> 0 bytes
+ policy/tests/build/service.o          | Bin 181400 -> 0 bytes
+ policy/tests/build/sha256.o           | Bin 10904 -> 0 bytes
+ policy/tests/build/snapshot.o         | Bin 157352 -> 0 bytes
+ policy/tests/build/store.o            | Bin 95720 -> 0 bytes
+ policy/tests/build/test_cache         | Bin 485040 -> 0 bytes
+ policy/tests/build/test_enterprise    | Bin 474936 -> 0 bytes
+ policy/tests/build/test_events        | Bin 491528 -> 0 bytes
+ policy/tests/build/test_purity        | Bin 482800 -> 0 bytes
+ policy/tests/build/test_resolve       | Bin 479088 -> 0 bytes
+ policy/tests/build/test_snapshot      | Bin 522304 -> 0 bytes
+ policy/tests/build/test_store         | Bin 518264 -> 0 bytes
+ policy/tests/build/test_vectors       | Bin 483432 -> 0 bytes
+ policy/tests/test_enterprise.cc       |   2 +-
+ policy/tests/test_json.cc             | 141 +++++++++++++++++++++++
+ policy/tests/test_service.cc          | 205 ++++++++++++++++++++++++++++++++++
+ policy/tests/test_store.cc            |  20 ++++
+ 31 files changed, 376 insertions(+), 7 deletions(-)
+4620d29 build(gn): wire //xr/policy into xr_all; README + mode_lint baseline (XR-P6)
+ BUILD.gn             |  7 +++--
+ policy/BUILD.gn      | 79 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ policy/README.md     | 77 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ policy/mode_lint.cfg | 34 ++++++++++++++++++++++
+ 4 files changed, 194 insertions(+), 3 deletions(-)
+ae44e18 policy(tests): 8 C++ suites + bench — vectors parity, purity, TOCTOU storm, corrupt battery, migrations, goldens (XR-P6-T4)
+ policy/bench/bench_main.cc            | 152 +++++++++++++++++++++
+ policy/tests/Makefile                 |  77 +++++++++++
+ policy/tests/build/bench_main         | Bin 0 -> 483248 bytes
+ policy/tests/build/cache.o            | Bin 0 -> 30288 bytes
+ policy/tests/build/effective_policy.o | Bin 0 -> 63208 bytes
+ policy/tests/build/events.o           | Bin 0 -> 107992 bytes
+ policy/tests/build/json.o             | Bin 0 -> 24280 bytes
+ policy/tests/build/json_parse.o       | Bin 0 -> 45224 bytes
+ policy/tests/build/managed_source.o   | Bin 0 -> 38400 bytes
+ policy/tests/build/policy_host        | Bin 0 -> 474344 bytes
+ policy/tests/build/resolve.o          | Bin 0 -> 15912 bytes
+ policy/tests/build/resolve_io.o       | Bin 0 -> 51728 bytes
+ policy/tests/build/service.o          | Bin 0 -> 181400 bytes
+ policy/tests/build/sha256.o           | Bin 0 -> 10904 bytes
+ policy/tests/build/snapshot.o         | Bin 0 -> 157352 bytes
+ policy/tests/build/store.o            | Bin 0 -> 95720 bytes
+ policy/tests/build/test_cache         | Bin 0 -> 485040 bytes
+ policy/tests/build/test_enterprise    | Bin 0 -> 474936 bytes
+ policy/tests/build/test_events        | Bin 0 -> 491528 bytes
+ policy/tests/build/test_purity        | Bin 0 -> 482800 bytes
+ policy/tests/build/test_resolve       | Bin 0 -> 479088 bytes
+ policy/tests/build/test_snapshot      | Bin 0 -> 522304 bytes
+ policy/tests/build/test_store         | Bin 0 -> 518264 bytes
+ policy/tests/build/test_vectors       | Bin 0 -> 483432 bytes
+ policy/tests/harness.h                |  69 ++++++++++
+ policy/tests/test_cache.cc            | 145 ++++++++++++++++++++
+ policy/tests/test_enterprise.cc       | 141 +++++++++++++++++++
+ policy/tests/test_events.cc           | 103 ++++++++++++++
+ policy/tests/test_purity.cc           |  87 ++++++++++++
+ policy/tests/test_resolve.cc          | 246 ++++++++++++++++++++++++++++++++++
+ policy/tests/test_snapshot.cc         | 241 +++++++++++++++++++++++++++++++++
+ policy/tests/test_store.cc            | 220 ++++++++++++++++++++++++++++++
+ policy/tests/test_vectors.cc          |  69 ++++++++++
+ 33 files changed, 1550 insertions(+)
+fbb8bbc policy(service): resolver service + stdio façade; mojom half farm-gated (XR-P6-T3b)
+ policy/core/service.cc      | 287 ++++++++++++++++++++++++++++++++++++++++++++
+ policy/core/service.h       |  83 +++++++++++++
+ policy/core/service_mojom.h |  46 +++++++
+ policy/host/policy_host.cc  | 133 ++++++++++++++++++++
+ 4 files changed, 549 insertions(+)
+9b46547 policy(enterprise): managed source — signed-or-ignored, precedence as a layer (XR-P6-T7)
+ policy/enterprise/managed_source.cc | 172 ++++++++++++++++++++++++++++++++++++
+ policy/enterprise/managed_source.h  |  56 ++++++++++++
+ 2 files changed, 228 insertions(+)
+787228e policy(events): policy-change events — concrete deltas, undo affordance, no scores (XR-P6-T5)
+ policy/core/events.cc | 160 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ policy/core/events.h  |  49 ++++++++++++++++
+ 2 files changed, 209 insertions(+)
+bc0fcb9 policy(store): pref docs + forward migrations; downgrade = data-preserving no-op (XR-P6-T2)
+ policy/core/store.cc | 360 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ policy/core/store.h  |  95 ++++++++++++++
+ 2 files changed, 455 insertions(+)
+b8e4122 policy(snapshot): versioned-blob codec — full + incremental diff, ≤32KB, deny-on-corrupt (XR-P6-T3a)
+ policy/core/snapshot.cc | 327 ++++++++++++++++++++++++++++++++++++++++++++++++
+ policy/core/snapshot.h  |  94 ++++++++++++++
+ 2 files changed, 421 insertions(+)
+3485a85 policy(core): resolver v1 — pure, total, byte-parity with the frozen fake (XR-P6-T1)
+ policy/core/cache.cc            |  99 ++++++++++++
+ policy/core/cache.h             | 106 +++++++++++++
+ policy/core/effective_policy.cc | 254 +++++++++++++++++++++++++++++++
+ policy/core/effective_policy.h  |  70 +++++++++
+ policy/core/json.cc             | 210 ++++++++++++++++++++++++++
+ policy/core/json.h              |  91 +++++++++++
+ policy/core/json_parse.cc       | 324 ++++++++++++++++++++++++++++++++++++++++
+ policy/core/resolve.cc          | 195 ++++++++++++++++++++++++
+ policy/core/resolve.h           | 139 +++++++++++++++++
+ policy/core/resolve_io.cc       | 294 ++++++++++++++++++++++++++++++++++++
+ policy/core/sha256.cc           |  97 ++++++++++++
+ policy/core/sha256.h            |  28 ++++
+ 12 files changed, 1907 insertions(+)

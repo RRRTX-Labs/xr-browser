@@ -1,0 +1,20 @@
+commit ae017fe358cbd1c9594848d6b29f10204ca4dcea
+Author: XR P6 Agent <p6-agent@users.noreply.github.com>
+Date:   Mon Sep 7 21:50:25 2026 +0000
+
+    P6-T4: pin cache capacity semantics (mutation survivor #2 killed)
+    
+    The full-matrix run (99.87%, one survivor) exposed that FIFO eviction
+    was only asserted negatively (size <= cap, evictions >= n) — a
+    degenerate capacity-1 cache passes both. Now pinned positively:
+    newest-cap entries coexist and are retrievable, older ones miss, and
+    PolicyCache(0) clamps to exactly 1 (evicts on the second Put).
+    
+    Hand-verified kill: applying the surviving ROR (== -> !=) to the
+    capacity-clamp ctor makes test_cache fail 4 assertions (4->0 of
+    400,031 checks). test_cache: 400,016 -> 400,031 checks, 0 failures.
+    
+    Signed-off-by: XR P6 Agent <p6-agent@users.noreply.github.com>
+
+ policy/tests/test_cache.cc | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)

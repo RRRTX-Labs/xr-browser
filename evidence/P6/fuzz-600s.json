@@ -1,0 +1,13 @@
+{
+ "crashes": 0,
+ "elapsed_seconds": 600.0,
+ "farm_campaign_note": "24h campaign is HG-28 (farm); command: python3 tools/policy_fuzz.py --timebox 86400 --seed <fixed>",
+ "first_violation": null,
+ "gate": "PASS",
+ "host": "/home/user/xr-core/policy/tests/build/policy_host",
+ "iterations": 303405,
+ "seed": 20260908,
+ "timebox": 600,
+ "tool": "policy_fuzz",
+ "violations": 0
+}

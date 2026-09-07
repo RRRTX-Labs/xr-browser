@@ -1,0 +1,24 @@
+commit bdbdf2bcee0b0911c5c72e83b7065f843a294e88
+Author: XR P6 Agent <p6-agent@users.noreply.github.com>
+Date:   Mon Sep 7 22:36:44 2026 +0000
+
+    fix(amend_guard): scope the amendment gate per-file, as its law states
+    
+    The guard sealed the whole docs/contracts/ directory post-stamp, but
+    its own law (and the plan) is per-contract: FROZEN-listed files and
+    the registers are frozen; unlisted files are post-freeze drafting
+    (warn-only, never silent). Also closes a hole: a commit that re-stamps
+    FROZEN.yaml is now exempt only when it carries no frozen-listed or
+    mojom change — a stamp can no longer smuggle an amendment.
+    
+    4 new synthetic-repo tests prove both directions (new-contract warn;
+    listed-file fail; register-edit fail; stamp+smuggle fail). Full range
+    564016d..HEAD now passes with warn-only drafting rows for the P6-born
+    contracts (policy.md, policy-change-event-v1, review/15, registry).
+    
+    Signed-off-by: XR P6 Agent <p6-agent@users.noreply.github.com>
+
+ docs/state/research-log-P6.md   | 27 ++++++++++++++
+ tools/amend_guard.py            | 75 +++++++++++++++++++++++++++++++-------
+ tools/tests/test_amend_guard.py | 79 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 169 insertions(+), 12 deletions(-)

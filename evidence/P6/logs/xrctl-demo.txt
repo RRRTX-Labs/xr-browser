@@ -1,0 +1,22 @@
+# xrctl policy demo (both backends agree byte-for-byte)
+
+## $ xrctl policy resolve (Fortress tier, cpp backend)
+{"ok":{"blocking":{"block_network_ads":true,"block_trackers":true,"upgrade_to_https":true},"cosmetic":{"block_scriptlets":false,"hide_cosmetic":false},"egress":{"block_third_party":false,"route":"kDirect"},"fingerprint":{"mode":"kReduce"},"letterbox":false,"permissions":{"camera":"kAsk","geolocation":"kAsk","microphone":"kAsk","notifications":"kAsk"},"process_policy":{"dedicated_process":true,"site_isolated":true},"storage_scope":{"in_memory":false,"scope":"kFortressPartition"},"vault_scope":{"autofill_allowed":true,"export_allowed":false},"version":{"contract_version":1}}}
+
+## $ xrctl policy resolve (unknown identity => deny)
+{"ok":{"blocking":{"block_network_ads":true,"block_trackers":true,"upgrade_to_https":true},"cosmetic":{"block_scriptlets":true,"hide_cosmetic":true},"egress":{"block_third_party":true,"route":"kDirect"},"fingerprint":{"mode":"kStrict"},"letterbox":true,"permissions":{"camera":"kDeny","geolocation":"kDeny","microphone":"kDeny","notifications":"kDeny"},"process_policy":{"dedicated_process":true,"site_isolated":true},"storage_scope":{"in_memory":true,"scope":"kEphemeral"},"vault_scope":{"autofill_allowed":false,"export_allowed":false},"version":{"contract_version":1}}}
+
+## $ xrctl policy snapshot-stats
+== xr policy snapshot stats (cpp backend) ==
+full snapshot:  172 bytes (within 32 KB budget)
+diff snapshot:  206 bytes (within 32 KB budget)
+
+## $ xrctl policy watch (counters)
+global_generation=0 invalidations_all=0 invalidations_identity=0
+
+## $ xrctl policy dump (head)
+== xr policy (fake backend — stateless) ==
+fixture identities:
+  xr:00000000-0000-4000-8000-000000000001
+  xr:00000000-0000-4000-8000-000000000002
+  xr:00000000-0000-4000-8000-0000000000ef

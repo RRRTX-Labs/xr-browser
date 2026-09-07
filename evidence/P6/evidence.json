@@ -1,0 +1,201 @@
+{
+  "schema_note": "Conforms to docs/contracts/evidence-bundle-v1.md. Every VERIFIED row cites >=1 real artifact path (source: label required). BLOCKED-* rows are honest and never softened.",
+  "phase": "P6",
+  "generated": "2026-09-08",
+  "plan": "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
+  "plan_sha256": "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b",
+  "supersedes": "evidence/P5",
+  "pin": "chromium d04cdb24d67b081f6cf80200ffc5233f44b61109 (unchanged; P6 touches no Chromium code)",
+  "repos": {
+    "xr-browser": "d3a4ec972f31dff2e69f9363632ab3ad66560db5 (DEPS pair-bump; evidence bundle follows)",
+    "xr-core": "ae017fe358cbd1c9594848d6b29f10204ca4dcea"
+  },
+  "verdict_vocabulary": [
+    "VERIFIED",
+    "HUMAN-GATED",
+    "SIMULATED",
+    "BLOCKED-TOOLING",
+    "BLOCKED-PENDING-PUSH"
+  ],
+  "source_labels": [
+    "local-run",
+    "gitiles-fetch",
+    "synthetic-repo"
+  ],
+  "policy": "P6 proof bar = pure/total resolver + byte parity on all vectors + mutation >=90% (deny-guard 100%) + lint ban + fuzz + budgets. mojom/PrefService integration is farm-gated (HG-29) and reported BLOCKED-TOOLING, never claimed. Vectors are the arbiter in any dispute (frozen contract law).",
+  "dod_rows": [
+    {
+      "id": "DOD-1",
+      "dod": "T1 resolver core: pure, total, deny-default Resolve() in std-C++20, no Chromium includes, -Wall -Wextra -Werror, files <400 LOC",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/make-test.txt",
+        "../xr-core/policy/core/",
+        "../xr-core/policy/BUILD.gn"
+      ],
+      "notes": "10/10 suites, 1,232,361 checks. Purity: 912 checks (no clock/RNG/env/IO reads; now/session_id are input fields). Totality: unknown identity/origin/class/malformed => full-deny EffectivePolicy."
+    },
+    {
+      "id": "DOD-2",
+      "dod": "Frozen-core parity: byte-identical canonical JSON vs the Python fake on ALL 66 golden vectors, both directions (fake and C++ policy_host), via xrctl --backend fake|cpp",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/make-test.txt",
+        "logs/run_checks.txt",
+        "../xr-core/policy/tests/test_vectors.cc"
+      ],
+      "notes": "C++ vectors suite (271 checks) + run_checks C++ lane + tools/tests/test_p6_policy_tools.py full-matrix parity test. Vectors are the frozen arbiter."
+    },
+    {
+      "id": "DOD-3",
+      "dod": "T2 pref schemas + migrations: identity-list-v1, trust-bindings-v1, exceptions-v1(+v2), fingerprint/permission sub-policies as data; downgrade = data-preserving no-op",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/make-test.txt",
+        "../xr-core/policy/core/store.cc"
+      ],
+      "notes": "test_store: 850 checks incl. corrupt battery (once/7d/session scope validation), v1->v2 granted_by migration, future-version + downgrade no-op round-trips, atomic save."
+    },
+    {
+      "id": "DOD-4",
+      "dod": "T3 snapshot distribution: versioned blob, incremental diff, <=32KB budget, deny-on-corrupt; cache with generational invalidation + pinned reads (TOCTOU law)",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/make-test.txt",
+        "bench-results.json",
+        "logs/xrctl-demo.txt"
+      ],
+      "notes": "test_snapshot 53 + test_cache 400,031 checks (incl. race storm + capacity pins). Full snapshot 172B / max diff 206B, budget enforced at encode (kBudgetExceeded). Network-service/renderer distribution is P11/P16 (out of scope)."
+    },
+    {
+      "id": "DOD-5",
+      "dod": "T4 golden-vector runner in CI + mutation-tested: score >=90%, deny-guard mutants 100% killed",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "mutation-report.json",
+        "mutation-report.md",
+        "logs/mutation-full.txt"
+      ],
+      "notes": "FULL matrix (not a sample): 777 mutants, 777 killed, 100.00%; deny-guard 124/124. Two earlier survivors were REAL test gaps, closed (store once-scope battery; cache capacity coexistence pin) and hand-verified killed. CI lane runs a deterministic 90-mutant sample with the same gates."
+    },
+    {
+      "id": "DOD-6",
+      "dod": "T5 policy-change event stream: concrete deltas, no scores, no auto-reload (absence-linted), C++ generator with golden strings",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "docs/contracts/policy-change-event-v1.schema.json",
+        "docs/contracts/policy-change-event-v1.md",
+        "docs/contracts/tests/golden-policy-change-event.json",
+        "docs/contracts/registry-post-freeze.md"
+      ],
+      "notes": "Golden byte-verified against the generator (first hand-draft drifted and was regenerated from actual output). test_events: 31 checks, 18 leaf paths. Registered post-freeze (FROZEN.yaml untouched); HG-26 ratification pending."
+    },
+    {
+      "id": "DOD-7",
+      "dod": "T6 xrctl policy dump/resolve/watch/snapshot-stats with --backend fake|cpp",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/xrctl-demo.txt",
+        "logs/pytest.txt"
+      ],
+      "notes": "Backends agree byte-for-byte on the full vector matrix (test pins it); snapshot-stats shows 172B/206B within budget; watch shows generation counters; dump labeled sections (fake is stateless-honest, labeled)."
+    },
+    {
+      "id": "DOD-8",
+      "dod": "T7 enterprise seam: managed source signed-or-ignored, enforcement preempts user settings, ledger row per non-enforced load",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/make-test.txt",
+        "../xr-core/policy/enterprise/managed_source.cc"
+      ],
+      "notes": "Real minisign keypair generated at test time; verified => trust_floor clamps a Standard request UP (never widens); unsigned/bad-sig/absent-tool => IGNORED + ledger row (visible SKIP when tool absent). Two real-world catches: .minisig extension convention; minisign stdout silencing (host stdout is protocol)."
+    },
+    {
+      "id": "DOD-9",
+      "dod": "Fuzz: corrupt prefs/payloads => deny-default, no crash (24h = HG-28)",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "fuzz-600s.json"
+      ],
+      "notes": "600s timebox, seed 20260908: 303,405 iterations, 0 crashes, 0 violations. Drives the REAL policy_host binary; corpus: truncate/byte-flip/dup-key/deep-nest 40-4000/oversize 1KB-200KB/garbage incl. NUL + invalid UTF-8; >60KB and NUL payloads via stdin. 24h campaign = HG-28 farm."
+    },
+    {
+      "id": "DOD-10",
+      "dod": "Perf: Resolve() p99 <=5us cached / <=200us cold; snapshot apply <=2ms",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "bench-results.json",
+        "logs/bench.txt"
+      ],
+      "notes": "2-core sandbox, -O2, 10^5 iters, warmup excluded: cold 8.959us p99 (budget 200), warm pinned read 0.070us p99 (budget 5), snapshot_apply_40 1070.977us p99 (budget 2000). All MET with headroom. Reference-HW re-measurement = HG-28 (documented in docs/limitations.md)."
+    },
+    {
+      "id": "DOD-11",
+      "dod": "Manual row (static half): rogue mode checks fail the build (mode_lint); single source of truth enforced",
+      "status": "VERIFIED",
+      "source": "synthetic-repo",
+      "evidence": [
+        "logs/run_negatives.txt",
+        "tools/mode_lint.py",
+        "docs/state/research-log-P6.md"
+      ],
+      "notes": "Negative 21: injected rogue mode check outside the resolver => mode_lint fails citing file:line. Negative 22: missing // Intent: header fails. Live dev-build dial-flip half is deferred to P7+ (needs a browser shell; nothing to flip yet)."
+    },
+    {
+      "id": "DOD-12",
+      "dod": "DoD: CI matrix green incl. mutation >=90%; lint bans subsystem-private mode logic",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/run_checks.txt",
+        "logs/run_negatives.txt",
+        "logs/pytest.txt"
+      ],
+      "notes": "run_checks ALL PASS (incl. mode_lint + policy.md --check + events schema + full C++ suite); 25/25 negatives; 303 passed/1 visible SKIP (actionlint absent locally; CI installs it). Governance workflow gained mutation-sample, fuzz-timebox and bench-record lanes."
+    },
+    {
+      "id": "DOD-13",
+      "dod": "Artifacts: resolver lib+service, policy docs, truth tables in docs/contracts/policy.md",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "docs/contracts/policy.md",
+        "../xr-core/policy/README.md"
+      ],
+      "notes": "policy.md is GENERATED from the 66 vectors (13,739B, 82 rows); regeneration --check is a CI gate (hand edits = drift = fail)."
+    },
+    {
+      "id": "DOD-14",
+      "dod": "T3 mojom service over xr.mojom.PolicyResolver in the browser process (real PrefService/mojom plumbing)",
+      "status": "BLOCKED-TOOLING",
+      "source": "local-run",
+      "evidence": [
+        "../xr-core/policy/core/service_mojom.h",
+        "human-gates.md"
+      ],
+      "notes": "Guarded by XR_HAVE_MOJOM_BINDINGS (default OFF); the stdio policy_host speaks the same protocol xrctl speaks, so the seam is testable now. Real bindings need the farm (HG-27/HG-29). Never simulated."
+    },
+    {
+      "id": "DOD-15",
+      "dod": "24h fuzz campaign + full mutation matrix + bench on reference hardware",
+      "status": "HUMAN-GATED",
+      "source": "local-run",
+      "evidence": [
+        "fuzz-600s.json",
+        "mutation-report.json",
+        "bench-results.json"
+      ],
+      "notes": "HG-28 (farm). This bundle's full-matrix mutation run (777/777) and 600s fuzz stand in locally; the farm re-runs all three on reference HW."
+    }
+  ]
+}

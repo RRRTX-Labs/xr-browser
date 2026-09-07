@@ -1,0 +1,46 @@
+bdbdf2b fix(amend_guard): scope the amendment gate per-file, as its law states
+ docs/state/research-log-P6.md   | 27 ++++++++++++++
+ tools/amend_guard.py            | 75 +++++++++++++++++++++++++++++++-------
+ tools/tests/test_amend_guard.py | 79 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 169 insertions(+), 12 deletions(-)
+7fc0bbd P6-T5: register policy-change-event in the post-freeze registry
+ docs/contracts/registry-post-freeze.md             | 13 +++++
+ docs/contracts/review/15-policy-change-event-v1.md | 62 ++++++++++++++++++++++
+ docs/state/research-log-P6.md                      | 21 ++++++++
+ 3 files changed, 96 insertions(+)
+c99e559 P6 docs: limitations, repo-map delta, research log
+ docs/limitations.md           |  25 ++++++++++
+ docs/state/repo-map.md        |  31 +++++++++++-
+ docs/state/research-log-P6.md | 108 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 163 insertions(+), 1 deletion(-)
+d8b2c52 P6 CI wiring: gates, negatives, workflow lanes
+ .github/workflows/governance.yml | 35 +++++++++++++++++++++++++++++
+ tools/run_checks.sh              | 21 ++++++++++++++++++
+ tools/run_negatives.sh           | 48 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 104 insertions(+)
+968ff11 P6-T4: tool-side test battery (parity matrix, budgets, absence laws)
+ tools/tests/test_p6_policy_tools.py | 227 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 227 insertions(+)
+48a6d74 P6-T5: policy-change-event-v1 contract (concrete deltas, no scores)
+ docs/contracts/policy-change-event-v1.md           | 64 ++++++++++++++++++++++
+ docs/contracts/policy-change-event-v1.schema.json  | 33 +++++++++++
+ .../tests/golden-policy-change-event.json          |  1 +
+ tools/xr_schema.py                                 |  1 +
+ 4 files changed, 99 insertions(+)
+1b6fef5 P6-T6: xrctl policy surface + generated policy.md (dial/truth tables)
+ docs/contracts/policy.md | 147 +++++++++++++++++++++++++++++++++++
+ tools/vectors_to_md.py   | 195 +++++++++++++++++++++++++++++++++++++++++++++++
+ tools/xrctl.py           |   8 +-
+ tools/xrctl_policy.py    | 189 +++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 538 insertions(+), 1 deletion(-)
+7a7bcd7 P6-T0: mode_lint + mutation_test + policy_fuzz (the three gates with teeth)
+ tools/mode_lint.py     | 151 +++++++++++++++++++++++++++
+ tools/mutation_test.py | 277 +++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/policy_fuzz.py   | 243 +++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 671 insertions(+)
+eab6395 evidence(P5): close HG-20 mis-citation — tracked in evidence/P4/human-gates.md (XR-P6-T0)
+ evidence/P5/human-gates.md | 2 ++
+ 1 file changed, 2 insertions(+)
+8681885 docs(pin): record push-mode ruling — main-push sanctioned until HG-3/HG-10 (XR-P6-T0)
+ docs/process/cross-repo-pin.md | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
