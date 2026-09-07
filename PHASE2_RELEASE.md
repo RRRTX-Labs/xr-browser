@@ -195,3 +195,20 @@ git -C /path/to/xr-core    fetch origin && git -C /path/to/xr-core    status -sb
 No `git add`/`git commit` is needed — everything is committed with DCO
 sign-off; if `git status` shows anything untracked/modified on your machine,
 do **not** commit it without review (the ZIPs are the clean source of truth).
+
+---
+
+## Post-release note (origin divergence, 2026-09-07)
+
+Between this release's packaging and 2026-09-07 the published origin repos
+diverged from the state documented above: a **squashed** P2 commit
+`d792824` (sign-off email ≠ committer email → `dco_check` FAIL at origin)
+replaced the 12-commit P2 history, and xr-core's P2 commit `6416bf1` was
+never pushed, leaving `DEPS` pointing at a manifest-less tree. P3's T0
+remediation (2026-09-07) restored the true history — xr-browser `main` =
+`e31c94a` (this document's state, via sanctioned `--force-with-lease` over
+`d792824`; trees byte-identical, provenance only) and xr-core `main` =
+`6416bf1` — then re-pinned `DEPS`, made `xr-patch` fail clean on a missing
+manifest, renamed `buildsys/` → `build/` with the dispatcher at
+`./scripts/build` (ADR-0006), and filed the missing ADR-0004/0005 drafts
+and `evidence/P2/human-gates.md`. Full trail: `evidence/P3/logs/t01-*`.
