@@ -9,5 +9,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 for p in [ROOT, ROOT / "patching", ROOT / "gn", ROOT / "branding",
-          ROOT / "sbom", ROOT / "signing", ROOT / "farm", ROOT / "toolchain"]:
+          ROOT / "sbom", ROOT / "signing", ROOT / "farm", ROOT / "toolchain",
+          ROOT / "upstream"]:
     sys.path.insert(0, str(p))
