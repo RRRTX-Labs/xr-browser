@@ -1,0 +1,33 @@
+# build/upstream/promotion-config.yaml — the promotion job's DATA (P3-T4).
+#
+# Plan law: shipping lines follow the 8-week Extended-Stable-equivalent
+# (even-milestone) series (§12.1, R9); "milestone promotion" is a POLICY
+# OUTPUT, not an obligation. Cadence is DATA here — never hard-coded week
+# math — so a further upstream cadence change is a config/registry edit and
+# a research-log row, not a code change (date-sensitivity rule).
+#
+# Live state transcribed at P3 execution (2026-09-07, research log R3):
+#   Stable 153.0.8010.27 (M153 — first two-week-cadence series, live)
+#   Extended 152.0.7977.83 (M152 — the current even-milestone series)
+#   Beta 154.0.8037.0 (M154 branched)
+
+schema_version: 1
+series:
+  channel: "Extended"            # the promotion series follows Extended Stable
+  milestone_parity: "even"       # §12.1: even-milestone Extended-Stable-equivalent
+  discovery: "chromiumdash:fetch_releases"   # allowlisted live source (R3)
+  tag_resolution: "gitiles:refs/tags/<version>"  # version tag -> chromium sha
+schedule:
+  # committed DEFINITION only — nothing "runs weekly" until HG-19 enables it
+  cron: "0 5 * * 1"              # Mondays 05:00 UTC (off-hours promotion window)
+  workflow_dispatch: true
+policy:
+  execution: "on-call human (HG-18: 2 consecutive real promotions, <=2 person-h each)"
+  abort_rollback: "promotion abort ⇒ stay on prior milestone (Plan §4 P3 Rollback)"
+  compat_smoke:
+    - "argsets: build/gn/resolve_args.py --validate"
+    - "patch-roundtrip: xr-patch apply/verify/revert at the candidate rev (scratch tree, no build — v0)"
+    - "branding: build/branding/brand_check.py --fixture + --scan"
+    - "sbom: build/sbom/emit_sbom.py --fixture + sbom_gate"
+    - "assumptions: build/upstream/assumptions.py run --rev <candidate> (blocking, §12.4)"
+  green_means: "promo-ready (bundle prepared; a human executes and approves — L24)"
