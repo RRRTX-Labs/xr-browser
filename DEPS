@@ -9,7 +9,7 @@
 #
 # Field -> task map (each entry is tied to the P2 task that created it):
 #   chromium_rev   P2-T1 (research item #2, live-verified 2026-09-07)
-#   xr_core_rev    P2-T0/T-final (xr-core HEAD after this phase's commits)
+#   xr_core_rev    P2-T3 (xr-core P2 commit — published to origin by P3 T0.1)
 #   gclient_url_scheme  P2-T1 (pinned https remotes only; no ssh, no file://)
 #
 # Chromium pin provenance (see docs/state/research-log-P2.md R1):
@@ -22,7 +22,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "6fb5411bab4d95800a3e56848cecb3013f9bd33f"     # xr-core HEAD — re-pinned at T-final
+xr_core_rev: "6416bf16a47f53b616d38b8cc6172633c5f3c8b9"     # xr-core P2: branding patch 0001 + patch manifest
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

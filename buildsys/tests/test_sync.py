@@ -24,8 +24,8 @@ def test_synthesize_https_only():
 
 def test_synthesize_mounts_xr_at_src_xr():
     g = synthesize_gclient({"chromium_rev": "d04cdb24d67b081f6cf80200ffc5233f44b61109",
-                            "xr_core_rev": "6fb5411bab4d95800a3e56848cecb3013f9bd33f",
+                            "xr_core_rev": "6416bf16a47f53b616d38b8cc6172633c5f3c8b9",
                             "gclient_url_scheme": "https"})
     assert '"src/xr"' in g
-    assert "xr-core.git@6fb5411bab4d95800a3e56848cecb3013f9bd33f" in g
+    assert "xr-core.git@6416bf16a47f53b616d38b8cc6172633c5f3c8b9" in g
     assert "chromium/src.git@d04cdb24d67b081f6cf80200ffc5233f44b61109" in g
