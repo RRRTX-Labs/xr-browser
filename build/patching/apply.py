@@ -6,6 +6,10 @@ Idempotent, auditable, fail-loud (Plan L6 / §15-R1). Subcommands:
   verify  — report which patches are currently applied (reverse-check).
   revert  — reverse applied patches (reverse order); round-trips to original.
   lint    — validate the manifest + patchinfo + path policy (no checkout).
+  retire  — THE ONLY SANCTIONED REMOVAL PATH (P3-T7): appends the
+            seam-retirement ledger row (build/upstream/retirements.json,
+            meta repo) and removes the patch from the manifest + tree.
+            Removal without a ledger entry fails retirement-lint (CI).
 
 Safety: refuses any checkout it cannot verify is Chromium-at-pin
 (src/chrome/VERSION + git HEAD == --pin); refuses patch paths outside the
@@ -317,14 +321,30 @@ def main() -> None:
                                      description="Apply/verify/revert XR patches against a pinned checkout; or lint the manifest.")
     sub = parser.add_subparsers(dest="cmd", required=True)
     for name, help_ in [("apply", "apply patches (idempotent)"), ("verify", "report applied state"),
-                        ("revert", "reverse applied patches"), ("lint", "validate manifest (no checkout)")]:
+                        ("revert", "reverse applied patches"), ("lint", "validate manifest (no checkout)"),
+                        ("retire", "retire a patch (ledger entry + removal; the only sanctioned path)")]:
         sp = sub.add_parser(name, help=help_)
         sp.add_argument("--checkout", help="checkout root (contains src/)")
         sp.add_argument("--manifest", help="manifest path (default: <checkout>/src/xr/patches/manifest.yaml)")
         sp.add_argument("--pin", help="chromium pin (40-char SHA); required for apply/verify/revert")
-        sp.add_argument("--id", help="operate on a single patch id")
+        if name != "retire":
+            sp.add_argument("--id", help="operate on a single patch id")
         sp.add_argument("--json", action="store_true", help="emit JSON")
+        if name == "retire":
+            sp.add_argument("--id", required=True, help="patch id to retire")
+            sp.add_argument("--mechanism", required=True,
+                            help="upstreamed | obsoleted | dropped-with-review")
+            sp.add_argument("--note", required=True,
+                            help="user-visible consequence + review entry (§12.3)")
+            sp.add_argument("--evidence", required=True,
+                            help="upstream CL / bug / obsolescence reference")
+            sp.add_argument("--rev-retired-at", default=None,
+                            help="chromium rev at retirement (default: DEPS pin)")
     args = parser.parse_args()
+    if args.cmd == "retire":
+        from retire import cmd_retire  # build/patching/retire.py (P3-T7)
+        main_with_guard(lambda: cmd_retire(args))
+        return
     main_with_guard(lambda: cmd(args))
 
 
