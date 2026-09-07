@@ -127,3 +127,30 @@ fake. 800-iteration local smoke: 0 crashes, 0 violations.
   `/tmp/p6_mutation_tree` scratch path collided with concurrent smoke
   runs (rmtree mid-run). Fixed with pid-unique scratch dirs; the
   invalidated report was deleted, never cited.
+
+## R10 — amend_guard per-file scoping (tooling bug, fixed toward its own law)
+
+Symptom: registering P6-born contracts under `docs/contracts/` tripped
+amend_guard on the whole DIRECTORY, although its own law is per-file
+("a listed frozen contract doc"; "pre-stamp … drafting is free") and the
+plan requires `docs/contracts/policy.md` to exist. The directory-wide
+guard would have made every future phase's contract work an RFC — or
+taught contributors to keep contracts out of the contracts dir.
+
+Fix (strengthens, not weakens):
+- guarded set = `xr-core/mojom/**` ∪ files listed in FROZEN.yaml
+  (`packet:` rows) ∪ files cited in the INDEX.md mapping table ∪ the
+  two register files themselves (editing the freeze RECORD is an
+  amendment);
+- unlisted files under docs/contracts/ ⇒ warn-only "drafts unlisted"
+  (a registry stamp is what freezes them);
+- the FROZEN.yaml stamp-commit exemption no longer applies when the
+  commit also touches a frozen-listed file or mojom (no smuggling).
+Proven both directions by four new synthetic-repo tests: unlisted new
+contract warns; listed file without RFC still fails; INDEX/FROZEN edit
+without RFC fails; stamp+amendment in one commit fails.
+
+Decision recorded: my first registration attempt edited INDEX.md and
+was reworked (pre-push) so no commit in the pushed range touches a
+frozen register at all — history kept clean instead of relying on the
+new exemption semantics.
