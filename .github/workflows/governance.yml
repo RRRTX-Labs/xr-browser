@@ -137,6 +137,41 @@ jobs:
           python3 -m pytest docs/contracts/tests -q
 
       # ------------------------------------------------------------------
+      # P6: policy-resolver gates. The C++ core builds and runs its full
+      # suite here (runners have g++); mode_lint/policy.md/events schema
+      # run inside run_checks.sh. Heavier lanes below: mutation (sampled,
+      # deterministic seed; full matrix + 24h fuzz = HG-28 farm), fuzz
+      # timebox, bench (record-only, budget verdicts text-checked).
+      # ------------------------------------------------------------------
+      - name: Policy mutation gate (P6, sampled; full = HG-28)
+        run: |
+          # Deterministic sample keeps CI time bounded (~10 min on 2 cores);
+          # the score gate (>=90%) and deny-guard 100% apply to the sample.
+          # evidence/P6/mutation-report.* records the full-matrix run.
+          python3 tools/mutation_test.py --sample 90 --seed 20260908 \
+            --timebox 900 --json > /tmp/mutation-ci.json
+          cat /tmp/mutation-ci.json
+          python3 - <<'PY'
+          import json
+          r = json.load(open("/tmp/mutation-ci.json"))
+          assert r["gate"] == "PASS", f"mutation gate FAIL: score {r['score_pct']}%"
+          assert r["deny_guard_survivors"] == 0, "deny-guard mutant survived"
+          PY
+
+      - name: Policy fuzz timebox (P6; 24h campaign = HG-28)
+        run: |
+          python3 tools/policy_fuzz.py --timebox 600 --seed 20260908 \
+            --report /tmp/fuzz-ci.json --json
+          cat /tmp/fuzz-ci.json
+
+      - name: Policy bench (P6, record-only; budgets re-checked HG-28)
+        run: |
+          make -C ../xr-core/policy/tests bench 2>&1 | tee /tmp/bench-ci.txt
+          # Record-only, but the verdicts must be present and honest:
+          grep -q "cold <=200us: MET\|cold <=200us: DEVIATION" /tmp/bench-ci.txt
+          grep -c "MET\|DEVIATION" /tmp/bench-ci.txt
+
+      # ------------------------------------------------------------------
       # P3: upstream-treadmill gates. All offline (fixtures / committed
       # config); the live lanes run in nightly-rebase-build.yml instead.
       # ------------------------------------------------------------------

@@ -277,6 +277,54 @@ expect_reject "vectors_check: fake-vs-vector drift (id cited)" \
   'fake output != vector' \
   "$PY" tools/vectors_check.py --repo "$VD" --fakes ../xr-core/fakes
 
+# --- P6 negatives (policy resolver gates must have teeth) -------------------
+
+# 21. mode_lint: injected rogue mode check outside the resolver => fail
+#     citing file:line (the static half of the plan's Manual row).
+R="$TMP/rogue"; mkdir -p "$R/net"
+printf '// Copyright 2026 RRRTX Labs\nint f(const char* t) {\n  return t == "kShield" ? 1 : 0;\n}\n' > "$R/net/rogue.cc"
+expect_reject "mode_lint: injected rogue mode check (file:line cited)" \
+  'rogue\.cc:3.*\[mode-logic\]' \
+  "$PY" tools/mode_lint.py --root "$R" --config ../xr-core/policy/mode_lint.cfg
+
+# 22. mode_lint: policy file without L13 intent header => fail.
+H="$TMP/hdr"; mkdir -p "$H/policy"
+printf '// Copyright 2026 RRRTX Labs\nint g() { return 0; }\n' > "$H/policy/no_header.cc"
+expect_reject "mode_lint: missing // Intent: header (L13)" \
+  'missing-intent-header' \
+  "$PY" tools/mode_lint.py --root "$H" --config ../xr-core/policy/mode_lint.cfg
+
+# 23. mutation gate: hollowed tests => survivors => score gate fails.
+#     (Copy the real tree, neuter test_vectors so mutants survive; the gate
+#     must trip — a score gate that cannot fail is decoration.)
+if command -v g++ >/dev/null 2>&1; then
+  M="$TMP/mut"; cp -r ../xr-core "$M"
+  printf '// hollowed for the negative fixture\nint main() { return 0; }\n' > "$M/policy/tests/test_vectors.cc"
+  expect_reject "mutation: hollowed test suite => score dips below gate" \
+  '"gate": "FAIL"' \
+  "$PY" tools/mutation_test.py --xr-core "$M" --sample 6 --seed 31337 --timebox 300 --json
+else
+  echo "SKIP: SKIP (tool absent: g++) — needed for: mutation negative (hollowed suite); CI runners have g++ and run it"
+fi
+
+# 24. fuzz gate: a crashing host binary => violation detected (exit 1).
+F="$TMP/crashhost"
+printf '#!/bin/sh\ncase "$1" in *identity*) kill -SEGV $$;; esac\nprintf \x27{"ok":{}}\x27\n' > "$F"
+chmod +x "$F"
+expect_reject "policy_fuzz: crashing host detected (never a silent pass)" \
+  'exit code|crashes' \
+  "$PY" tools/policy_fuzz.py --host "$F" --iterations 40 --timebox 60 --seed 5
+
+# 25. snapshot verify: corrupt blob => typed error, exit 1 (never a guess).
+HOST=../xr-core/policy/tests/build/policy_host
+if [ -x "$HOST" ]; then
+  expect_reject "policy_host snapshot --verify: corrupt blob rejected" \
+  'kMalformedInput|kHashMismatch' \
+  "$HOST" snapshot --verify '{"schema":"xr-policy-snapshot","schema_version":1,"kind":"full","seq":1,"base_seq":1,"hash":"deadbeef","entries":[]}'
+else
+  echo "SKIP: SKIP (tool absent: policy_host not built) — needed for: corrupt-blob negative; build with g++ present"
+fi
+
 echo
 echo
 if [ "$FAILURES" -ne 0 ]; then

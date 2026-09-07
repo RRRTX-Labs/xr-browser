@@ -103,4 +103,25 @@ fi
 echo "== P5: isolation-card l10n well-formed + vocab-clean =="
 "$PY" -c "import json,sys; d=json.load(open('../xr-core/l10n/isolation_card.json')); assert d['legal']=='PENDING-HG-1'; assert d['strings']; print('isolation-card OK', len(d['strings']),'strings')"
 
+# ---------------------------------------------------------------------------
+# P6 gates (policy resolver v1). All offline except the C++ suite, which
+# requires g++ and SKIPs VISIBLY when absent (skip-policy law) — the hosted
+# lane has g++ and runs it for real.
+# ---------------------------------------------------------------------------
+echo "== P6: mode_lint — L3 one-brain ban + L13 intent headers =="
+"$PY" tools/mode_lint.py --root ../xr-core
+
+echo "== P6: policy.md regeneration diff-clean (generated, no hand drift) =="
+"$PY" tools/vectors_to_md.py --check
+
+echo "== P6: policy-change-event-v1 schema validates (incl. absence laws) =="
+"$PY" tools/xr_schema.py validate policy-change-event docs/contracts/tests/golden-policy-change-event.json
+
+echo "== P6: C++ policy core — build + all suites (vectors parity incl.) =="
+if command -v g++ >/dev/null 2>&1 && command -v make >/dev/null 2>&1; then
+  XR_BROWSER_ROOT="$(pwd)" make -C ../xr-core/policy/tests test
+else
+  echo "SKIP: SKIP (tool absent: g++/make) — needed for: the C++ policy core suites incl. the 66-vector byte-parity matrix (P6); CI runners have g++ and run them; local hint: apt-get install g++ make (build-essential)"
+fi
+
 echo "== ALL GOVERNANCE CHECKS PASSED =="
