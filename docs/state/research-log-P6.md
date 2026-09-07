@@ -106,3 +106,24 @@ Corruption corpus: truncate / byte-flip / duplicate-key / deep-nest
 Payloads >~60KB or containing NUL cannot pass through argv (E2BIG /
 embedded-NUL) — they go via stdin, which the protocol shares with the
 fake. 800-iteration local smoke: 0 crashes, 0 violations.
+
+## R9 — Process notes (honesty rows)
+
+- **Build binaries briefly tracked.** `git add -A` in the tests commit
+  swept `policy/tests/build/*` (23 objects, ~7 MB) into history before
+  `.gitignore` covered it. They are REMOVED from tracking two commits
+  later and the path is ignored now; per the no-rewrite rule the blobs
+  remain in the two local commits' history rather than being filtered
+  out. (The one commit created-and-amended within the same minute before
+  push never carried them.)
+- **DCO sign-off email mismatch.** Nine commits (7 xr-browser, 2 xr-core)
+  were signed `Agent <agent@rrrtx-labs.local>` while the committer
+  identity is `XR P6 Agent <p6-agent@users.noreply.github.com>` — caught
+  by `tools/dco_check.py` (CI would have failed). Fixed BEFORE push by
+  rewriting the sign-off line on those local-only commits
+  (`filter-branch --msg-filter`, trees verified byte-identical, no
+  pushed history touched).
+- **First full-matrix mutation run invalidated.** A shared
+  `/tmp/p6_mutation_tree` scratch path collided with concurrent smoke
+  runs (rmtree mid-run). Fixed with pid-unique scratch dirs; the
+  invalidated report was deleted, never cited.
