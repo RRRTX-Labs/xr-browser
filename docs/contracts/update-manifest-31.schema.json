@@ -1,0 +1,21 @@
+{
+  "contract": "update-manifest-31",
+  "contract_version": 1,
+  "note": "Strict subset of Omaha 3.1 update-check response. Cited: docs/contracts/update-manifest-31-json.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["response"],
+  "properties": {
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["protocol", "app"],
+      "properties": {
+        "protocol": {"const": "3.1"},
+        "server": {"type": "string"},
+        "daystart": {"type": "object"},
+        "app": {"type": "array"}
+      }
+    }
+  }
+}

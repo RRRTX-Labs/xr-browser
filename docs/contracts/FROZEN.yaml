@@ -1,0 +1,69 @@
+# FROZEN.yaml — the P5 contract-freeze register (§1.11, DoD #8).
+#
+# One row per §1.11 item. `status: REVIEW-COMPLETE` means the review packet
+# exists with all required checklist rows and the mechanical gates pass.
+# `ratified: PENDING` is CORRECT at this stage — ratification is HG-26, a
+# HUMAN act. An agent NEVER writes `ratified: RATIFIED`/`true`; freeze_check.py
+# encodes that ban as a test. Sign-off name fields are human-pending.
+
+schema_version: 1
+freeze_phase: P5
+plan_pin: "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b"
+
+contracts:
+  - id: effective-policy
+    packet: review/01-effective-policy-v1.md
+    status: REVIEW-COMPLETE
+    ratified: PENDING
+  - id: policy-resolver
+    packet: review/02-policy-resolver-v1.md
+    status: REVIEW-COMPLETE
+    ratified: PENDING
+  - id: identity-manager
+    packet: review/03-identity-manager-v1.md
+    status: REVIEW-COMPLETE
+    ratified: PENDING
+  - id: shield
+    packet: review/04-shield-v1.md
+    status: REVIEW-COMPLETE
+    ratified: PENDING
+  - id: route-manager
+    packet: review/05-route-manager-v1.md
+    status: REVIEW-COMPLETE
+    ratified: PENDING
+  - id: vault-service
+    packet: review/06-vault-service-v1.md
+    status: REVIEW-COMPLETE
+    ratified: PENDING
+  - id: guard-ledger
+    packet: review/07-guard-ledger-v1.md
+    status: REVIEW-COMPLETE
+    ratified: PENDING
+  - id: download-safety
+    packet: review/08-download-safety-v1.md
+    status: REVIEW-COMPLETE
+    ratified: PENDING
+  - id: activity-log
+    packet: review/09-activity-log-v1.md
+    status: REVIEW-COMPLETE
+    ratified: PENDING
+  - id: command-descriptor
+    packet: review/10-command-descriptor-v1.md
+    status: REVIEW-COMPLETE
+    ratified: PENDING
+  - id: list-bundle-manifest
+    packet: review/11-list-bundle-manifest-v1.md
+    status: REVIEW-COMPLETE
+    ratified: PENDING
+  - id: update-manifest
+    packet: review/12-update-manifest-v1.md
+    status: REVIEW-COMPLETE
+    ratified: PENDING
+  - id: isolation-card
+    packet: review/13-isolation-card-v1.md
+    status: REVIEW-COMPLETE
+    ratified: PENDING
+  - id: settings-theme-schema
+    packet: review/14-settings-theme-schema-v1.md
+    status: REVIEW-COMPLETE
+    ratified: PENDING

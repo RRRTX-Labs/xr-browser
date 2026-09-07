@@ -1,0 +1,22 @@
+{
+  "$schema-note": "Hand-rolled strict subset (no jsonschema dependency, per DEPENDENCY RULES). Validated by tools/xr_schema.py --validate effective-policy. additionalProperties is false everywhere (deny-strict); every field has a deny-safe default.",
+  "contract": "effective-policy",
+  "contract_version": 1,
+  "type": "object",
+  "additionalProperties": false,
+  "total_function": true,
+  "deny_default_doc": "The resolver is TOTAL: unknown identity/origin/request-class/malformed input resolves to the fully-denying EffectivePolicy (all blocking true, all permissions kDeny, egress kDirect+block_third_party, fingerprint kStrict, storage kEphemeral+in_memory, no autofill/export, letterbox true). There is no unset=>allow state.",
+  "required": ["version", "blocking", "cosmetic", "permissions", "egress", "fingerprint", "storage_scope", "vault_scope", "process_policy", "letterbox"],
+  "properties": {
+    "version": {"type": "object", "additionalProperties": false, "required": ["contract_version"], "properties": {"contract_version": {"type": "integer"}}},
+    "blocking": {"type": "object", "additionalProperties": false, "required": ["block_network_ads", "block_trackers", "upgrade_to_https"], "properties": {"block_network_ads": {"type": "boolean"}, "block_trackers": {"type": "boolean"}, "upgrade_to_https": {"type": "boolean"}}},
+    "cosmetic": {"type": "object", "additionalProperties": false, "required": ["hide_cosmetic", "block_scriptlets"], "properties": {"hide_cosmetic": {"type": "boolean"}, "block_scriptlets": {"type": "boolean"}}},
+    "permissions": {"type": "object", "additionalProperties": false, "required": ["geolocation", "camera", "microphone", "notifications"], "properties": {"geolocation": {"enum": ["kDeny", "kAsk", "kAllow"]}, "camera": {"enum": ["kDeny", "kAsk", "kAllow"]}, "microphone": {"enum": ["kDeny", "kAsk", "kAllow"]}, "notifications": {"enum": ["kDeny", "kAsk", "kAllow"]}}},
+    "egress": {"type": "object", "additionalProperties": false, "required": ["block_third_party", "route"], "properties": {"block_third_party": {"type": "boolean"}, "route": {"enum": ["kDirect", "kProxy", "kWireguard", "kTor"]}}},
+    "fingerprint": {"type": "object", "additionalProperties": false, "required": ["mode"], "properties": {"mode": {"enum": ["kOff", "kReduce", "kStrict"]}}},
+    "storage_scope": {"type": "object", "additionalProperties": false, "required": ["scope", "in_memory"], "properties": {"scope": {"enum": ["kEphemeral", "kIdentityScoped", "kFortressPartition"]}, "in_memory": {"type": "boolean"}}},
+    "vault_scope": {"type": "object", "additionalProperties": false, "required": ["autofill_allowed", "export_allowed"], "properties": {"autofill_allowed": {"type": "boolean"}, "export_allowed": {"const_false": true, "type": "boolean"}}},
+    "process_policy": {"type": "object", "additionalProperties": false, "required": ["site_isolated", "dedicated_process"], "properties": {"site_isolated": {"type": "boolean"}, "dedicated_process": {"type": "boolean"}}},
+    "letterbox": {"type": "boolean"}
+  }
+}

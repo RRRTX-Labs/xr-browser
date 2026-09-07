@@ -1,0 +1,15 @@
+{
+  "contract": "list-bundle-manifest",
+  "contract_version": 1,
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "bundle_id", "created_epoch", "lists", "key_pin"],
+  "properties": {
+    "schema_version": {"type": "integer"},
+    "bundle_id": {"type": "string"},
+    "created_epoch": {"type": "integer"},
+    "last_known_good_bundle_id": {"type": "string"},
+    "lists": {"type": "array"},
+    "key_pin": {"type": "array"}
+  }
+}

@@ -1,0 +1,168 @@
+{
+ "contract": "route-manager",
+ "contract_version": 1,
+ "count": 9,
+ "note": "Golden vectors for RouteManager L6 fail-closed. Ground truth for tools/vectors_check.py.",
+ "vectors": [
+  {
+   "args": {
+    "identity": {
+     "value": "xr:00000000-0000-4000-8000-000000000001"
+    },
+    "route": "kDirect"
+   },
+   "expected": {
+    "ok": {
+     "route": "kDirect",
+     "state": "kBound",
+     "user_ack_required": false
+    }
+   },
+   "method": "Bind",
+   "name": "bind-direct"
+  },
+  {
+   "args": {
+    "identity": {
+     "value": "xr:00000000-0000-4000-8000-000000000001"
+    },
+    "route": "kTor"
+   },
+   "expected": {
+    "ok": {
+     "route": "kTor",
+     "state": "kBound",
+     "user_ack_required": false
+    }
+   },
+   "method": "Bind",
+   "name": "bind-tor"
+  },
+  {
+   "args": {
+    "identity": {
+     "value": "xr:00000000-0000-4000-8000-000000000001"
+    }
+   },
+   "expected": {
+    "ok": {
+     "route": "kDirect",
+     "state": "kUnbound",
+     "user_ack_required": false
+    }
+   },
+   "method": "Status",
+   "name": "status-unbound"
+  },
+  {
+   "args": {},
+   "expected": {
+    "ok": {
+     "route": "kDirect",
+     "state": "kFailClosed",
+     "user_ack_required": true
+    }
+   },
+   "method": "LoseAllFailClosed",
+   "name": "lose-all-fail-closed"
+  },
+  {
+   "args": {
+    "_seq": [
+     {
+      "args": {},
+      "method": "LoseAllFailClosed"
+     }
+    ],
+    "identity": {
+     "value": "xr:00000000-0000-4000-8000-000000000001"
+    }
+   },
+   "expected": {
+    "ok": {
+     "route": "kDirect",
+     "state": "kFailClosed",
+     "user_ack_required": true
+    }
+   },
+   "method": "Status",
+   "name": "status-after-loss"
+  },
+  {
+   "args": {
+    "_seq": [
+     {
+      "args": {},
+      "method": "LoseAllFailClosed"
+     }
+    ],
+    "identity": {
+     "value": "xr:00000000-0000-4000-8000-000000000001"
+    },
+    "route": "kProxy"
+   },
+   "expected": {
+    "ok": {
+     "route": "kProxy",
+     "state": "kFailClosed",
+     "user_ack_required": true
+    }
+   },
+   "method": "Bind",
+   "name": "recover-no-ack"
+  },
+  {
+   "args": {
+    "_seq": [
+     {
+      "args": {},
+      "method": "LoseAllFailClosed"
+     }
+    ],
+    "identity": {
+     "value": "xr:00000000-0000-4000-8000-000000000001"
+    },
+    "route": "kProxy",
+    "user_ack": true
+   },
+   "expected": {
+    "ok": {
+     "route": "kProxy",
+     "state": "kBound",
+     "user_ack_required": false
+    }
+   },
+   "method": "Bind",
+   "name": "recover-with-ack"
+  },
+  {
+   "args": {
+    "identity": {
+     "value": "xr:00000000-0000-4000-8000-000000000001"
+    }
+   },
+   "expected": {
+    "ok": {
+     "route": "kDirect",
+     "state": "kUnbound",
+     "user_ack_required": false
+    }
+   },
+   "method": "Unbind",
+   "name": "unbind"
+  },
+  {
+   "args": {
+    "identity": {
+     "value": ""
+    },
+    "route": "kTor"
+   },
+   "expected": {
+    "error": "kUnknownIdentity"
+   },
+   "method": "Bind",
+   "name": "bind-unknown-identity"
+  }
+ ]
+}

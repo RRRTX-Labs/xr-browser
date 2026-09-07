@@ -1,0 +1,15 @@
+{
+  "contract": "command-descriptor",
+  "contract_version": 1,
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "title", "attention_tier", "danger_class", "surface", "handler"],
+  "properties": {
+    "id": {"type": "string"},
+    "title": {"type": "string"},
+    "attention_tier": {"enum": ["tier0", "tier1", "tier2"]},
+    "danger_class": {"enum": ["safe", "caution", "destructive"]},
+    "surface": {"type": "string"},
+    "handler": {"type": "string"}
+  }
+}
