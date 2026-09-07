@@ -28,6 +28,30 @@ concurrency:
 
 jobs:
   treadmill:
+    # ------------------------------------------------------------------
+    # P4-T0.1 — spurious-push-trigger guard.
+    #
+    # Measured facts (2026-09-07, public API, unauthenticated):
+    #   * run 34136342970 = this workflow, event "push", head e35f332,
+    #     conclusion "failure", created_at == updated_at (15:04:10Z),
+    #     and jobs_url returns {"total_count": 0, "jobs": []}.
+    #   * the workflow file at that head declares ONLY `schedule` and
+    #     `workflow_dispatch` (verified byte-for-byte via
+    #     raw.githubusercontent.com at e35f332) — there is no `push:` key.
+    #   * the file was introduced by that same push (commit 958d04f).
+    #
+    # Conclusion: this is the platform-side misfire documented in
+    # actions/runner#4001 ("workflow_dispatch-only workflows incorrectly
+    # triggered on push events"), not a defect in this YAML. Nothing in the
+    # repo can prevent GitHub from *creating* such a run, but this `if:`
+    # encodes the workflow's true semantics (schedule | dispatch only), so
+    # that whenever GitHub does evaluate this file for a push event the job
+    # is SKIPPED rather than executed or half-parsed.
+    #
+    # This is not a fake-green guard: no check is removed, no assertion is
+    # weakened, and scheduled/dispatch runs are unaffected.
+    # ------------------------------------------------------------------
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
@@ -39,17 +63,30 @@ jobs:
           fetch-depth: 0
 
       - name: Checkout xr-core at the DEPS pin
+        # P4-T0.1: was https://github.com/ahmadrrrtx/xr-core.git (404 for an
+        # unauthenticated runner); the org repo is RRRTX-Labs/xr-core.
         run: |
           pin=$(grep -oP 'xr_core_rev: "\K[0-9a-f]{40}' DEPS)
-          git clone -q https://github.com/ahmadrrrtx/xr-core.git ../xr-core
+          git clone -q https://github.com/RRRTX-Labs/xr-core.git ../xr-core
           git -C ../xr-core checkout -q "$pin"
+          git -C ../xr-core rev-parse HEAD
 
       - name: Set up Python 3.12
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
-        python-version: "3.12"
+        with:
+          python-version: "3.12"
 
       - name: Install pinned dev dependencies
         run: python -m pip install --require-hashes -r tools/requirements-dev.txt
+
+      - name: Install optional helper tools (P4-T0.1)
+        # The fast-lane drill signs a fixture artifact with minisign (TEST
+        # keys). Not a repo dependency; absent -> visible SKIP, present ->
+        # real round-trip. docs/dependencies/helper-tools.yaml.
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq minisign
+          minisign -v
 
       - name: Resolve the canary target (latest main via gitiles TEXT only)
         run: |

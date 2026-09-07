@@ -226,7 +226,16 @@ def test_sla_clock_from_tag_publication():
 
 
 def test_fastlane_drills(tmp_path):
-    """Both drills PASS: in-window no freeze; breach writes the marker."""
+    """Both drills PASS: in-window no freeze; breach writes the marker.
+
+    P4-T0.1: the drill shell out to `minisign` (TEST keys) to sign the
+    fixture artifact. On a host without it (bare clone, GitHub-hosted
+    runner) the test SKIPS with a visible reason instead of failing —
+    L6, never a silent pass, never a deleted test. When minisign IS
+    installed the full round-trip below executes unchanged.
+    """
+    import skip_policy
+    skip_policy.pytest_skip_if_absent("minisign")
     xr_root = Path(rebase_bot.__file__).resolve().parents[2]
     ok = fastlane_mod.run_drill(out_dir=tmp_path / "drill1-in-window",
                                 root=xr_root, label="in-window",

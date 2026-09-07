@@ -32,3 +32,50 @@ sources:
   - url: "https://pypi.org/project/pytest/"
     accessed: 2026-09-07
     quote: "PyPI metadata: pytest 9.0.3, License: MIT"
+
+# ---------------------------------------------------------------------------
+# P4-T0.1 ADDENDUM — optional external helper tools (NOT vendored, NOT pip).
+#
+# These are OS/host tools that some build+test paths shell out to. They are
+# deliberately NOT vendored (zero-new-dependency rule) and NOT required: any
+# test that needs one SKIPS with a visible reason when it is absent
+# (build/skip_policy.py, L6 — never a silent pass, never a deleted test).
+#
+# CI is the environment where they SHOULD be present: governance.yml installs
+# them explicitly so the hosted lane exercises the full round-trip.
+# ---------------------------------------------------------------------------
+tools:
+  - name: minisign
+    role: "TEST-ONLY artifact signature in the P3 fast-lane drill (sign the fixture artifact with the TEST key material from build/signing/testkeys/). Never used for a release artifact: real HSM-backed signing lands P10 (ADR-0004)."
+    required: false
+    policy: "absent -> dependent test SKIPs with 'SKIP (tool absent: minisign)' (visible in the ./scripts/build test summary); present -> full round-trip runs"
+    install_ci: "sudo apt-get update && sudo apt-get install -y minisign   # Ubuntu universe, 0.11-1 (noble)"
+    install_dev: "apt-get install minisign | brew install minisign"
+    license: "ISC (jedisct1/minisign) — permissive, non-copyleft; installed as an OS package, neither vendored nor linked"
+    source_url: "https://github.com/jedisct1/minisign"
+    rationale: "Adds zero repo dependencies (no pip, no vendored code, no build-graph change); the drill's cryptographic operation is real when the tool exists and visibly absent when it does not — never simulated. Alternative rejected: signing in pure Python would mean inventing/duplicating crypto primitives (forbidden by the phase rules); alternative rejected: deleting the sign step from the drill would hide a real P10 integration risk."
+    owner: "E (Release engineering)"
+    added_on: 2026-09-07
+    added_by: "P4-T0.1 (self-containment debt D-A)"
+
+  - name: codesign
+    role: "macOS TEST signing passthrough (P2-T7 sign_artifact.py)"
+    required: false
+    policy: "absent -> SKIP visible; macOS runners provide it"
+    install_ci: "preinstalled on GitHub-hosted macos runners (Xcode CLT)"
+    license: "Apple proprietary tooling, not distributed with this repo"
+    rationale: "Platform tool; cannot be vendored. Test path only."
+    owner: "E (Release engineering)"
+    added_on: 2026-09-07
+    added_by: "P4-T0.1"
+
+  - name: signtool
+    role: "Windows TEST signing passthrough (P2-T7 sign_artifact.py)"
+    required: false
+    policy: "absent -> SKIP visible; Windows runners provide it"
+    install_ci: "preinstalled on GitHub-hosted windows runners (Windows SDK)"
+    license: "Microsoft proprietary tooling, not distributed with this repo"
+    rationale: "Platform tool; cannot be vendored. Test path only."
+    owner: "E (Release engineering)"
+    added_on: 2026-09-07
+    added_by: "P4-T0.1"

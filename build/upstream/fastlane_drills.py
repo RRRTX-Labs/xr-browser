@@ -54,12 +54,24 @@ def _fixture_security_repo(root: Path) -> tuple[Path, str, str]:
 
 
 def run_drill(*, out_dir: Path, root: Path, label: str,
-              published_hours_ago: float, expect_breach: bool) -> dict[str, Any]:
+              published_hours_ago: float, expect_breach: bool,
+              guard: bool = True) -> dict[str, Any]:
     """One synthetic fast-lane drill: detect → plan → apply → verify → sign(test) → report.
-    Everything is fixture data; every artifact carries source:"fixture" + SIMULATED."""
+    Everything is fixture data; every artifact carries source:"fixture" + SIMULATED.
+
+    `guard` (default True, P4-T0.1): the sign step shells out to `minisign`,
+    an external helper tool that is absent on bare machines and on
+    GitHub-hosted runners. With the guard on, the drill SKIPS with a visible
+    reason instead of raising FileNotFoundError (L6: never silent, never a
+    deleted test). Turn it off only for callers that never reach sign().
+    """
     import subprocess as sp
     import time as _time
     import shutil
+
+    if guard:
+        import skip_policy
+        skip_policy.pytest_skip_if_absent("minisign")
     t0 = _time.monotonic()
     if out_dir.exists():  # drills are idempotent: always start from a clean dir
         shutil.rmtree(out_dir)

@@ -46,13 +46,28 @@ jobs:
         run: |
           python -m pip install --require-hashes -r tools/requirements-dev.txt
 
+      - name: Install optional helper tools (P4-T0.1)
+        # These are NOT repo dependencies (no pip, nothing vendored — see
+        # docs/dependencies/helper-tools.yaml). Where they are absent the
+        # dependent test SKIPs with a visible reason (L6); on CI we install
+        # them so the lane exercises the real round-trip instead.
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq minisign
+          minisign -v
+
       - name: Checkout xr-core at the DEPS pin
         # P3 gates (budget / retirement-lint) read the sibling patch repo at
         # the pin recorded in DEPS (single source of truth).
+        #
+        # P4-T0.1: this URL was https://github.com/ahmadrrrtx/xr-core.git,
+        # which is 404 for an unauthenticated runner (the org repo is
+        # RRRTX-Labs/xr-core). Every hosted run failed here before this fix.
         run: |
           pin=$(grep -oP 'xr_core_rev: "\K[0-9a-f]{40}' DEPS)
-          git clone -q https://github.com/ahmadrrrtx/xr-core.git ../xr-core
+          git clone -q https://github.com/RRRTX-Labs/xr-core.git ../xr-core
           git -C ../xr-core checkout -q "$pin"
+          git -C ../xr-core rev-parse HEAD
 
       - name: Governance checks
         # Concrete SHAs (always resolvable with fetch-depth: 0):
