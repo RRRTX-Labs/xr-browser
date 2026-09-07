@@ -12,8 +12,8 @@
 #   xr_core_rev    lineage: P2-T3 created the pin; P4 advanced it to the
 #                  identity-seam spike kit (1ee5f4c); P5 advanced it to the
 #                  contract-freeze commit (ef24bcf); P6 advances it to the
-#                  policy-resolver commit (policy/), pair-bumped same-day per
-#                  docs/process/cross-repo-pin.md.
+#                  policy-resolver commits (policy/, + CI-parity fortify fix),
+#                  pair-bumped same-day per docs/process/cross-repo-pin.md.
 #   gclient_url_scheme  P2-T1 (pinned https remotes only; no ssh, no file://)
 #
 # Chromium pin provenance (see docs/state/research-log-P2.md R1):
@@ -26,7 +26,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "ae017fe358cbd1c9594848d6b29f10204ca4dcea"     # xr-core P6: policy resolver v1 (policy/ std-C++20 core + tests + bench)
+xr_core_rev: "a45fc88e7a5bcadda05a5e19faeaf7353c2ccd26"     # xr-core P6: policy resolver v1 + fortified test build (CI parity)
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"
