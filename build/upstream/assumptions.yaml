@@ -1,0 +1,94 @@
+# build/upstream/assumptions.yaml — the §12.4 upstream-assumptions registry (P3-T6).
+#
+# Plan §12.4 (verbatim list): "XR depends on behaviors upstream may change —
+# Site Isolation partition-suitability rule, GetStoragePartitionConfigForSiteInstance
+# contract, per-partition NetworkContext, HCMS mediation points, extension
+# dispatch funnel, component-updater signature path, Safe Browsing v5 mode
+# APIs. Each gets an assumption test (asserts the invariant holds in *this*
+# Chromium rev) that runs per rebase; failures = P0 to the owning team
+# *before the promotion lands*."
+#
+# P3 builds the harness + registry with file/contract-inspection checks only
+# (no compiled code exists yet). Later phases UPGRADE their rows by editing
+# this registry — the mechanism never fakes a pass:
+#   file-contract  : fetch <file> at the rev via the allowlisted choke point
+#                    and assert every <contains> string is present. FAIL =
+#                    surface drift = P0 to <owner> before promotion.
+#   pending-feature: cannot be checked without compiled code/runtime; every
+#                    run prints the SKIP + reason — a SKIP is never a PASS
+#                    (L6) and is shown in the fork-health headline table.
+#
+# Surface notes (research log P3, R-assumptions, live at pin d04cdb24…):
+#   A2: the Plan's symbol has evolved upstream — the pin's surface is
+#       SiteInfo::GetStoragePartitionConfigForUrl + GetSecurityPrincipal()
+#       .GetStoragePartitionConfig() (content/browser/browser_context.cc).
+#       The check encodes the CURRENT surface; further drift must fail.
+
+schema_version: 1
+rows:
+  - id: A1
+    assumption: "Site Isolation partition-suitability rule"
+    owner: "@xr/security"
+    check_type: pending-feature
+    reason: "behavioral rule (which origins are isolated) needs runtime Site
+      Isolation tests — lands with the P4 identity spike / P12 assumption
+      suite; surface-level cousin is A2"
+    since_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"
+
+  - id: A2
+    assumption: "GetStoragePartitionConfigForSiteInstance contract"
+    owner: "@xr/security"
+    check_type: file-contract
+    file: "content/browser/browser_context.cc"
+    contains:
+      - "GetStoragePartitionConfig"
+      - "GetStoragePartitionConfigForUrl"
+    note: "plan symbol evolved upstream; see header comment"
+    since_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"
+
+  - id: A3
+    assumption: "per-partition NetworkContext"
+    owner: "@xr/net"
+    check_type: file-contract
+    file: "services/network/public/mojom/network_context.mojom"
+    contains:
+      - "interface NetworkContext"
+    since_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"
+
+  - id: A4
+    assumption: "HCMS mediation points"
+    owner: "@xr/platform"
+    check_type: file-contract
+    file: "components/permissions/permission_context_base.h"
+    contains:
+      - "class PermissionContextBase"
+    note: "mediation *behavior* tests land with P15 (PermissionManager overlay);
+      this row pins the mediation base surface"
+    since_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"
+
+  - id: A5
+    assumption: "extension dispatch funnel"
+    owner: "@xr/security"
+    check_type: file-contract
+    file: "extensions/browser/extension_function_dispatcher.h"
+    contains:
+      - "class ExtensionFunctionDispatcher"
+    since_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"
+
+  - id: A6
+    assumption: "component-updater signature path"
+    owner: "@xr/platform"
+    check_type: file-contract
+    file: "components/crx_file/crx_verifier.h"
+    contains:
+      - "VerifierResult Verify("
+    since_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"
+
+  - id: A7
+    assumption: "Safe Browsing v5 mode APIs"
+    owner: "@xr/net"
+    check_type: file-contract
+    file: "components/safe_browsing/core/browser/db/v5_get_hash_protocol_manager.h"
+    contains:
+      - "V5"
+    since_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"
