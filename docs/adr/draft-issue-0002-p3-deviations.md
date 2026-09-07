@@ -32,3 +32,44 @@ All are honest-surface decisions; each needs a human call to accept or amend.
    stable promotion arms it. DECISION NEEDED: confirm the arming point
    (P10 first stable) is the intended semantics, vs. arming at first
    nightly (P9) instead.
+
+---
+
+## Disposition (2026-09-08, orchestrator)
+
+Recorded by P4-T0.4 (debt D-D). The orchestrator has RULED on all three
+deviations; this section records the ruling, it does not relitigate it.
+All three are **ACCEPTED**.
+
+1. **§12.4 symbol evolution — ACCEPTED.**
+   A2 pins the *evolved* partition-config symbols; that is precisely what an
+   upstream-assumption suite is for — it must assert the surface that exists at
+   the pin, so that drift from today's reality fails the suite. Pinning the
+   verbatim plan symbol would encode a dead symbol and fail forever.
+   *P4 measurement note (2026-09-07, at pin d04cdb24…):* the embedder override
+   in `content/public/browser/content_browser_client.h:1208` is
+   `GetStoragePartitionConfigForSite(BrowserContext*, const GURL&)`; no
+   `…ForSiteInstance` exists anywhere at this rev. See
+   `docs/spike-identity/measured-shared-state.md` row S-01 and
+   `docs/adr/0042-identity-seam.md`.
+
+2. **`xr-patch retire --evidence` — ACCEPTED.**
+   The extra required flag strengthens the ledger and is kept. Retiring a seam
+   without an upstream CL / bug / obsolescence reference produces exactly the
+   record a later audit cannot trust (L5).
+
+3. **Pre-GA advisory SLA markers — ACCEPTED, with mandatory hardening at P9.**
+   Advisory-until-first-stable is the correct semantics while XR has no
+   release. **The arming point is P9 (first nightly), not P10**, and the
+   hardening is mandatory work in P9, not optional follow-up: the
+   fast-lane docs and `docs/runbooks/fastlane-runbook.md` must carry that P9
+   hardening obligation explicitly so the advisory marker becomes a real
+   kill-switch before any user-facing build exists.
+
+### Also recorded: draft-issue-0001 (SECURITY_NOTES falsification)
+
+The proposed falsification is **accepted**. The fast-lane's primary signal is
+the release/tag channel via chromiumdash — already implemented in
+`build/upstream/fastlane.py` — and that remains the primary signal. The
+source-fixture note is kept: it documents why the source path was rejected as
+primary, so the decision is auditable rather than forgotten.

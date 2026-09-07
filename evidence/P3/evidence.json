@@ -1,0 +1,176 @@
+{
+  "schema_note": "docs/contracts/evidence-bundle-v1.md (validator: tools/evidence_check.py)",
+  "phase": "P3 \u2014 Upstream treadmill: rebase engine, patch budget, security fast-lane",
+  "generated": "2026-09-07",
+  "retrofitted": "2026-09-07 by P4-T0.3 (debt D-C: P3 shipped logs/ only \u2014 no evidence.json, no human-gates.md)",
+  "plan": "docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md",
+  "plan_sha256": "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b",
+  "repos": {
+    "xr-browser (meta)": "main @ e35f3323462d065aa6f8851aaacd6fe481c37b60 at P3 close (44 commits: P1 18 + restored P2 12 + P3 T0 6 + P3 body 8)",
+    "xr-core (product)": "main @ c34cd6651ec5b4c4db0dbefa13357b1376057c25 (DEPS xr_core_rev at P3 close)"
+  },
+  "verdict_vocabulary": [
+    "VERIFIED",
+    "HUMAN-GATED",
+    "SIMULATED",
+    "BLOCKED"
+  ],
+  "source_labels": [
+    "static",
+    "fixture",
+    "real-fetch",
+    "hosted-ci",
+    "local-run"
+  ],
+  "policy": "Every row cites an artifact under evidence/P3/logs/ (or a repo path) that exists on disk; every row carries a source label. The test-suite and hosted-CI rows state the measured result on a bare clone as well as in the P3 agent environment \u2014 the two differed, and that difference is recorded here rather than smoothed over. Rows that need a human or a push are HUMAN-GATED/BLOCKED-PENDING-PUSH, never VERIFIED.",
+  "dod_rows": [
+    {
+      "id": "P3-T0",
+      "dod": "Restore P2 history integrity (squashed commit gone, restored history present, no junk commits) and re-pin DEPS to a published xr-core rev",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/t01-restore-verification.txt",
+        "logs/t01-push.txt",
+        "DEPS"
+      ],
+      "notes": "e31c94a confirmed as an ancestor of main; squashed d792824 absent; DEPS xr_core_rev re-pinned to published 6416bf1 (later c34cd66)."
+    },
+    {
+      "id": "P3-T1",
+      "dod": "Rebase engine (rebase_bot.py) classifies patch applicability against a target upstream rev, offline-drilled and run against real pinned ranges",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/t1-rebase-selftest.txt",
+        "logs/t1-real-ranges.txt"
+      ],
+      "notes": "5-patch classification drill (clean/drift/moved/deleted/semantic) PASS; real-ranges run against the pinned origin reproduced in logs/t1-real-ranges.txt."
+    },
+    {
+      "id": "P3-T2",
+      "dod": "Owner-routed conflict bundles (issues.py) \u2014 per-owner artifacts prepared locally; never pushed by the bot (L24)",
+      "status": "VERIFIED",
+      "source": "fixture",
+      "evidence": [
+        "logs/t2-issue-bundles.txt"
+      ],
+      "notes": "Bundles are fixture/offline; live issue creation requires gh auth => HUMAN-GATED (HG-16)."
+    },
+    {
+      "id": "P3-T3",
+      "dod": "Patch-budget gate blocking in CI: config matches Plan \u00a71.2 caps; manifest under budget; state doc not stale",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/t3-budget-gate.txt"
+      ],
+      "notes": "gen_budget_config --check passes; budget_meter --gate passes at 1/150 (one branding patch); categories match categories.py."
+    },
+    {
+      "id": "P3-T4",
+      "dod": "Promotion job: extended-stable series discovery as data (cadence, not a hard-coded milestone)",
+      "status": "VERIFIED",
+      "source": "fixture",
+      "evidence": [
+        "logs/t4-promotion-run.txt"
+      ],
+      "notes": "Discovery offline over fixture release rows; live series state recorded in research-log-P3 R9."
+    },
+    {
+      "id": "P3-T5",
+      "dod": "Security fast-lane: watch + SLA clock + two synthetic drills (in-window, breach) with honest SIMULATED labelling",
+      "status": "VERIFIED",
+      "source": "fixture",
+      "evidence": [
+        "logs/t5-fastlane-drills.txt"
+      ],
+      "notes": "Drills PASS in a pre-seeded environment (minisign present). On a bare clone this row FAILS \u2014 see P3-TEST-SUITE. Drills are SIMULATED and labelled as such (elapsed_real_seconds vs simulated_elapsed_hours kept apart)."
+    },
+    {
+      "id": "P3-T6",
+      "dod": "Upstream-assumptions suite (\u00a712.4): registry schema-valid; file-contract rows checked at the pin; SKIP never counts as PASS",
+      "status": "VERIFIED",
+      "source": "fixture",
+      "evidence": [
+        "logs/t6-assumptions-run.txt",
+        "build/upstream/assumptions.yaml"
+      ],
+      "notes": "7 rows: 6 PASS / 1 SKIP (pending-feature), SKIP printed with its reason (L6)."
+    },
+    {
+      "id": "P3-T7",
+      "dod": "Seam-retirement ledger (retirements.py) + fork-health headline chart; removals without a ledger entry are detected",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/t7-retirement.txt",
+        "logs/fork-health.txt",
+        "docs/state/fork-health.md"
+      ],
+      "notes": "0 ledger rows at P3 close (honest zero, not a placeholder); retirement-lint detects raw manifest removal; fork-health chart driven by real measurements with SIMULATED-labelled drills."
+    },
+    {
+      "id": "P3-GATES-LOCAL",
+      "dod": "Local governance gates green (run_checks.sh, run_negatives.sh, build-system gates, treadmill gates)",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/gates.txt",
+        "logs/tests.txt"
+      ],
+      "notes": "gates.txt records '104 passed in 6.19s', negatives 'ALL NEGATIVE CASES REJECTED AS EXPECTED', and the P3 treadmill gates (budget config, rebase selftest, assumptions validate, retire lint, fetch chokepoint 62 files) all PASS."
+    },
+    {
+      "id": "P3-TEST-SUITE",
+      "dod": "Test suite green on a FRESH CLONE (self-containment)",
+      "status": "BLOCKED-BARE-CLONE",
+      "source": "local-run",
+      "evidence": [
+        "logs/gates.txt",
+        "../../build/tests/test_skip_policy.py",
+        "../../build/skip_policy.py"
+      ],
+      "notes": "MEASURED CONTRADICTION OF THE P3 REPORT. P3 reported '104 passed'. That is true only in a pre-seeded environment. Measured on a fresh clone in P4 (2026-09-07): 103 passed, 1 FAILED \u2014 test_fastlane_drills, FileNotFoundError: 'minisign' (a subprocess-exec of an external tool that is not installed on bare machines or GitHub-hosted runners). Fixed in P4-T0.1 (build/skip_policy.py): absent => 111 passed / 1 SKIPPED with a visible reason; present => 112 passed. Both branches executed in P4 and recorded in evidence/P4/logs/."
+    },
+    {
+      "id": "P3-HOSTED-CI",
+      "dod": "Hosted GitHub Actions green at the pushed HEAD",
+      "status": "BLOCKED-PENDING-PUSH",
+      "source": "hosted-ci",
+      "evidence": [
+        "logs/t01-push.txt",
+        "../../.github/workflows/governance.yml"
+      ],
+      "notes": "MEASURED RED. Public API (unauthenticated) at 2026-09-07: 9 workflow runs, 9 conclusion=failure. At e35f332: governance run 34136342074 (failure) and spurious nightly push run 34136342970 (failure). Earlier runs: 34128516437 (1914412), 34127018881 (e31c94a), 34067200262 (d792824), 34066373103 (0e0e2d5), 34066355519 (17ab59e), 34066199834 (2107b6f), 34061069528 (17ab59e). Two root causes found and fixed in P4-T0.1: (1) both workflows cloned https://github.com/ahmadrrrtx/xr-core.git, which is HTTP 404 for an unauthenticated runner (verified via api.github.com/repos/ahmadrrrtx/xr-core -> 404); the org repo is RRRTX-Labs/xr-core. (2) minisign absent (see P3-TEST-SUITE). The spurious nightly push run is the platform misfire documented in actions/runner#4001 \u2014 head file has no push trigger, run has 0 jobs and created_at == updated_at; guarded with an explicit job-level if:. Re-verification requires pushing the P4 branch (token in the human's hands): HUMAN-GATED.",
+      "gate": "HG-P4-PUSH"
+    },
+    {
+      "id": "P3-XRCORE-BUILD",
+      "dod": "xr-core root BUILD.gn (//xr:xr_all) + scripts/mount.md on origin (P2 DoD items carried as P3 debt D-B)",
+      "status": "BLOCKED-PENDING-PUSH",
+      "source": "local-run",
+      "evidence": [
+        "../../docs/process/cross-repo-pin.md",
+        "../../build/sync.py"
+      ],
+      "notes": "Delivered in P4-T0.2 as xr-core commit 56b4ebb (local); reachable-ancestor lint (./scripts/build sync check-pin-alive) implemented and green here. The DEPS bump that consumes it and the push that makes it reachable are HUMAN-GATED on the token.",
+      "gate": "HG-P4-PUSH"
+    }
+  ],
+  "human_gates": {
+    "HG-16": "GitHub auth for the issue bot: live owner-routed issue creation (bundles are prepared offline today)",
+    "HG-17": "On-call roster for the fast lane (who acts on a breach)",
+    "HG-18": "Promotion drills executed by a human against the real extended-stable series",
+    "HG-19": "Cron activation of nightly-rebase-build.yml + first scheduled green (workflow_dispatch is the on-call's act)",
+    "HG-20": "PAT revocation \u2014 the over-scoped `ahmadrrrtx` token (repo + workflow scope) used for P3 pushes must be revoked by the human NOW. The repo itself is clean of token strings (verified). No agent ever handles the token.",
+    "HG-21": "Farm execution of the P4 runtime identity-seam probes (needs a compiled browser \u2014 HG-9 open)",
+    "HG-P4-PUSH": "Push the P4 branch to origin so the hosted-CI rows above can be re-measured (token is the human's; agent never sees it)"
+  },
+  "not_done_by_design": [
+    "No live issue creation (L24: the bot prepares, humans merge).",
+    "No Chromium build/compile \u2014 the farm does not exist yet (HG-9).",
+    "No runtime identity-seam measurement \u2014 that is P4's farm work (HG-21).",
+    "No token/credential handling of any kind."
+  ]
+}
