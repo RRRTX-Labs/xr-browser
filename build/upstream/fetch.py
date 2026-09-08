@@ -14,6 +14,10 @@ Security model:
     refused (test-covered, including a mock server that tries).
   - read-only: GET only; the module has no write/push/credential path and
     writes nothing outside work/upstream-cache/ (the disk cache).
+  - fail-closed with bounded transient retry: a genuine 404 / non-allowlisted
+    host / bad-redirect fails on the FIRST attempt (never retried); only a
+    transient network blip or 5xx is retried (3 attempts, backoff) before
+    failing closed — a retry can never turn a failure into a pass.
   - gitiles content at an immutable rev is cached forever under
     work/upstream-cache/http/; mutable endpoints (branch logs, chromiumdash
     releases) are never cached.
@@ -55,7 +59,11 @@ USER_AGENT = "xr-browser-upstream-bot/1.0 (read-only; +rrrtx-labs/xr-browser)"
 
 
 class FetchError(ToolError):
-    """Network/allowlist failure — fail-closed, never retried silently."""
+    """Network/allowlist failure. Fail-closed: a genuine error (404,
+    non-allowlisted host, bad redirect) is raised on the first attempt and is
+    never retried or masked. Only transient network/5xx blips are retried
+    (bounded) before failing closed — a retry can never turn a failure into a
+    pass."""
 
 
 def assert_url_allowed(url: str) -> None:
@@ -82,18 +90,39 @@ class _AllowlistRedirectHandler(urllib.request.HTTPRedirectHandler):
 
 _OPENER = urllib.request.build_opener(_AllowlistRedirectHandler())
 
+# Bounded retry for TRANSIENT blips only — a shared-CI gitiles hiccup (dropped
+# connection, timeout, 5xx) must not red the governance gate. Genuine failures
+# (HTTP 4xx, a redirect/allowlist FetchError, a decode error) still fail CLOSED
+# on the first attempt: retry never masks a real failure, it only survives a
+# momentary blip, and it gives up (fail-closed) after _HTTP_MAX_ATTEMPTS.
+_RETRYABLE_HTTP = frozenset({408, 429, 500, 502, 503, 504})
+_HTTP_MAX_ATTEMPTS = 3
+_HTTP_BACKOFF_S = (0.5, 2.0)  # sleep before attempt 2, then before attempt 3
+
 
 def http_get(url: str, *, timeout: int = FETCH_TIMEOUT_S) -> bytes:
-    """Allowlisted, redirected-checked GET. The only network call in the tree."""
-    assert_url_allowed(url)
+    """Allowlisted, redirected-checked GET. The only network call in the tree.
+
+    Transient errors (connection reset/timeout, HTTP 408/429/5xx) are retried
+    with backoff and then fail closed; genuine errors (404, a non-allowlisted
+    host, a bad redirect) fail immediately."""
+    assert_url_allowed(url)  # allowlist enforced once, up front (never retried)
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    try:
-        with _OPENER.open(req, timeout=timeout) as resp:
-            return resp.read()
-    except urllib.error.HTTPError as exc:
-        raise FetchError(f"HTTP {exc.code} fetching {url}") from exc
-    except (urllib.error.URLError, TimeoutError, OSError) as exc:
-        raise FetchError(f"fetch failed for {url}: {exc}") from exc
+    last: Exception | None = None
+    for attempt in range(_HTTP_MAX_ATTEMPTS):
+        if attempt:
+            time.sleep(_HTTP_BACKOFF_S[attempt - 1])
+        try:
+            with _OPENER.open(req, timeout=timeout) as resp:
+                return resp.read()
+        except urllib.error.HTTPError as exc:
+            if exc.code not in _RETRYABLE_HTTP:
+                raise FetchError(f"HTTP {exc.code} fetching {url}") from exc
+            last = exc
+        except (urllib.error.URLError, TimeoutError, OSError) as exc:
+            last = exc
+    raise FetchError(
+        f"fetch failed for {url} after {_HTTP_MAX_ATTEMPTS} attempts: {last}")
 
 
 def _strip_magic(raw: bytes) -> bytes:
