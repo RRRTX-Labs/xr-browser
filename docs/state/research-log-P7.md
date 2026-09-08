@@ -4,6 +4,58 @@ The P7 working notes: what was decided, what was found, and why. This doubles as
 the review packet for the new `command-host-protocol v1` contract registered in
 `docs/contracts/registry-post-freeze.md` (P6-T5 pattern).
 
+## Research items — cites / UNVERIFIED (the brief's 8 RESEARCH REQUIRED)
+
+Each item is either **cited** (a fetch settles it in-sandbox) or **UNVERIFIED**
+(deferred to a named phase; nothing asserted from memory as fact).
+
+1. **Lit pin.** CITED — `lit@3.3.3`, BSD-3-Clause, live-verified 2026-09-08
+   against `registry.npmjs.org` (reachable in-sandbox); integrity hash in
+   `ui/toolchain/package-lock.json`; eval `docs/dependencies/lit.yaml` (P1) +
+   the npm-integrity pins. Lit renders the views; no state logic in TS.
+2. **WebUI + CSP at the pin.** PARTIALLY CITED — the CSP we target
+   (`script-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'`),
+   no inline JS, and external-script-only shell are the standard Chromium
+   `chrome://` model; the built bundle is re-scanned by `check-bundle.js`.
+   **UNVERIFIED:** the exact `content/browser/webui/` file:line that emits the
+   served-page CSP header at pin `d04cdb24` — to be confirmed at P16 glue (the
+   off-tree toolchain does not depend on it; the header contract is documented
+   as data in `docs/webui-toolchain.md`).
+3. **UI hook points at the pin.** CITED for the 4 registered hooks (fetched at
+   `d04cdb24` through `build/upstream/fetch.py` + round-tripped):
+   `chrome/browser/ui/views/BUILD.gn`, `…/toolbar/app_menu.cc`,
+   `…/toolbar/toolbar_view.cc`, `…/frame/browser_frame_view.cc`. **UNVERIFIED:**
+   the tabstrip per-tab tint path (Brave `brave_tab_container` prior art) and
+   the `ui/base/accelerators/` table are not fetched in-sandbox (deferred to
+   P16; the ≤12 patch does not touch them).
+4. **Palette ranking.** CITED — subsequence-fuzzy scoring + deterministic
+   tie-breaks implemented in `commands/core/matcher.cc`; complexity target
+   (2000 commands × 32-char query ≤ 5 ms p99 core) **met in-sandbox at 972 µs**
+   (`bench-results.json`, seed 20260908); tie-break determinism pinned by
+   `golden-rankings.json` + the matcher tests. The 50/150 ms *end-to-end* is
+   HG-31 (farm), not claimed in-sandbox.
+5. **Shortcut conflict detection.** CITED by design — the conflict classes
+   (reserved-by-browser, system-reserved, duplicate) mirror the standard
+   Chromium accelerator-reservation model and are implemented + tested in
+   `commands/core/shortcuts.cc` (browser-reserved F11/CTRL+SHIFT+I/F12,
+   system-reserved ALT+F4/CTRL+ESC, deny-by-default). **UNVERIFIED:** the exact
+   `chrome/browser/ui/…/global_shortcut*` file:line at the pin (deferred P16).
+6. **a11y / RTL rule sets.** CITED — ARIA APG "Combobox with Listbox Popup"
+   (the `aria-activedescendant` SR path), `:focus-visible` rings, and CSS
+   logical properties for RTL are encoded as structural linters
+   (`tools/a11y_lint.py`, `tools/rtl_lint.py`); the linters are ours (not
+   axe-core). **UNVERIFIED:** specific axe-core rule IDs/versions (we encode the
+   structural law, not axe-core itself).
+7. **Reproducible bundling.** CITED — `esbuild@0.28.2` + integrity,
+   `npm ci --ignore-scripts` (0 vulnerabilities, `npm audit` 2026-09-08),
+   no-sourcemap/no-clock bundle; two-build byte-identity asserted by
+   `repro-check.sh` (sha256 `96159b4b…`).
+8. **Menu-model generation.** CITED by design — the registry→MenuModel-JSON
+   generator (`tools/menu_model_check.py` via the ref-fake) emits data
+   (`menu-model.json`) testable headlessly today; `--check` goldens it.
+   **UNVERIFIED:** the exact Chromium `ToolbarActionView`/`MenuModel` file:line
+   mapping (P16 glue consumes the JSON).
+
 ## Decisions
 
 - **Four views over ONE registry.** The palette, menus, shortcut editor and help
