@@ -1,0 +1,5 @@
+repro-check: bundle build_a=2eb5c99c9481740a63031ccd006e120f53fedb453a3e70331466f812783024f7
+repro-check: bundle build_b=2eb5c99c9481740a63031ccd006e120f53fedb453a3e70331466f812783024f7
+repro-check: all    build_a=96159b4b178a60ac1057e47ac97b67b939e5602f8ff41ae268e5ebbbd1175a83
+repro-check: all    build_b=96159b4b178a60ac1057e47ac97b67b939e5602f8ff41ae268e5ebbbd1175a83
+repro-check: PASS — two independent builds are byte-identical (R1 repro rung)

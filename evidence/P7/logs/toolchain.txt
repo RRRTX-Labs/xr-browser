@@ -1,0 +1,7 @@
+toolchain: npm ci --ignore-scripts (lock-pinned, --ignore-scripts)
+toolchain: tsc -p /home/user/xr-core/ui (strict)
+toolchain: node build.mjs (deterministic bundle)
+  build: built dist/ (bundle.js + index.html + tokens.css)
+toolchain: node check-bundle.js (CSP on output)
+  csp: check-bundle: PASS (CSP-strict: no inline JS/eval, no runtime network, no sourcemap)
+toolchain: PASS (tsc-strict + deterministic bundle + CSP-clean) in /home/user/xr-core/ui/toolchain

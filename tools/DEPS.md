@@ -28,6 +28,26 @@ sdists for the pure packages). Install:
   validation (e.g. update-manifest profile at P10), pin it here with
   hashes in the same commit that adds the consumer.
 
+## WebUI build toolchain (P7 — build-time ONLY, lives in xr-core)
+
+The command-registry WebUI is built by a lock-pinned npm toolchain in
+`xr-core/ui/toolchain/` (not this repo's Python tooling). Exactly **three**
+packages, all **build-time** (they emit a bundle + type-check; none ships,
+none runs in the browser — zero-network-at-runtime). Each has a full L9 eval
+in `docs/dependencies/` and an integrity pin in the lock:
+
+| Package | Version | License | Role | Eval |
+|---|---|---|---|---|
+| lit | 3.3.3 | BSD-3-Clause | WebUI component framework | `docs/dependencies/lit.yaml` |
+| esbuild | 0.28.2 | MIT | deterministic bundle builder | `docs/dependencies/esbuild.yaml` |
+| typescript | 5.9.3 | Apache-2.0 | `tsc --strict` gate | `docs/dependencies/typescript.yaml` |
+
+Supply-chain posture: `npm ci --ignore-scripts` (no install scripts),
+integrity-pinned lock, `npm audit` = 0 vulnerabilities (2026-09-08), and the
+built bundle is re-scanned by `check-bundle.js`. Any **fourth** npm package is
+a P7 stop-condition (a reviewed supply-chain edge, not an add-on). See
+`docs/webui-toolchain.md`.
+
 ## Never allowed here
 
 - Any dependency whose license is not MIT-compatible with MPL-2.0

@@ -126,4 +126,52 @@ else
   echo "SKIP: SKIP (tool absent: g++/make) — needed for: the C++ policy core suites incl. the 66-vector byte-parity matrix (P6); CI runners have g++ and run them; local hint: apt-get install g++ make (build-essential)"
 fi
 
+# ---------------------------------------------------------------------------
+# P7 gates (one command registry, four views, window-chrome skeleton). The C++
+# commands core requires g++/make (SKIP-visibly when absent). The WebUI
+# toolchain requires node/npm and SKIPs VISIBLY (exit 77) when the registry is
+# unreachable — sources + config always ship (P7 #5 failure condition).
+# ---------------------------------------------------------------------------
+echo "== P7: C++ commands core — build + all 8 suites + bench + 31-case parity =="
+if command -v g++ >/dev/null 2>&1 && command -v make >/dev/null 2>&1; then
+  XR_BROWSER_ROOT="$(pwd)" make -C ../xr-core/commands/tests test
+else
+  echo "SKIP: SKIP (tool absent: g++/make) — needed for: the C++ commands core suites (descriptor/registry/matcher/availability/dispatch/shortcuts/dial/host) + the in-sandbox bench; local hint: apt-get install g++ make"
+fi
+
+echo "== P7: ≤12 hook patch round-trip vs the pinned Chromium rev =="
+"$PY" build/webui/patch_roundtrip.py --xr-core ../xr-core
+
+echo "== P7: WebUI reproducible toolchain (tsc-strict + deterministic bundle + CSP) =="
+if bash build/webui/toolchain.sh; then :; elif [ $? -eq 77 ]; then
+  echo "SKIP: WebUI toolchain skipped (node/npm or npm registry unavailable) — sources+config shipped"
+else
+  echo "FAIL: WebUI toolchain gate failed"; exit 1
+fi
+
+echo "== P7: WebUI reproducibility — two builds byte-identical (R1 rung) =="
+if bash build/webui/repro-check.sh; then :; elif [ $? -eq 77 ]; then
+  echo "SKIP: WebUI repro skipped (node/npm or npm registry unavailable)"
+else
+  echo "FAIL: WebUI repro gate failed"; exit 1
+fi
+
+echo "== P7: CSP lint — no runtime network/eval in ui/** + commands/** =="
+"$PY" tools/csp_lint.py
+
+echo "== P7: a11y lint — ARIA APG combobox + aria-live + focus-visible =="
+"$PY" tools/a11y_lint.py
+
+echo "== P7: RTL lint — logical-properties-only CSS =="
+"$PY" tools/rtl_lint.py
+
+echo "== P7: commands.md regeneration diff-clean (roster → doc, no hand drift) =="
+"$PY" tools/descriptors_to_docs.py --check
+
+echo "== P7: menu model — Tier-1 ≤9 + tier separation + golden diff =="
+"$PY" tools/menu_model_check.py --check
+
+echo "== P7: §10 coverage ratchet (every future surface maps to a command) =="
+"$PY" tools/coverage_check.py
+
 echo "== ALL GOVERNANCE CHECKS PASSED =="

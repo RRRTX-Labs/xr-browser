@@ -1,0 +1,22 @@
+make: Entering directory '/home/user/xr-core/commands/tests'
+== test_descriptor ==
+test_descriptor: 22 checks, 0 failures
+== test_registry ==
+test_registry: 33 checks, 0 failures
+== test_matcher ==
+test_matcher: 31 checks, 0 failures
+== test_availability ==
+test_availability: 16 checks, 0 failures
+== test_dispatch ==
+test_dispatch: 35 checks, 0 failures
+== test_shortcuts ==
+test_shortcuts: 26 checks, 0 failures
+== test_dial ==
+test_dial: 17 checks, 0 failures
+== test_host ==
+test_host: 48 checks, 0 failures
+== test_fuzz ==
+  fuzz: seed 20260908, dispatch 20000 iters (bad-source 15472, unknown-id 15968, destructive 468, authorized 825), json 20000 iters, descriptor 7 directed
+test_fuzz: 32744 checks, 0 failures
+ALL C++ COMMANDS TESTS PASSED
+make: Leaving directory '/home/user/xr-core/commands/tests'

@@ -1,0 +1,49 @@
+# Dependency evaluation: TypeScript (WebUI type-checker — build-time ONLY)
+project: "TypeScript — https://github.com/microsoft/TypeScript"
+role: "Strict type-checker for the command-registry WebUI views (P7-T8). The
+  `tsc --strict` lane is a build-time gate (no `any`, noUnused*, strictNullChecks)
+  that keeps the thin TS views honest. BUILD-TIME ONLY — it emits no shipped
+  artifact (the bundle is esbuild's); tsc runs with --noEmit."
+plan_refs: ["§8.6", "§8.9", "P7-T8"]
+current_status: "first-party Microsoft, effectively ubiquitous. Pinned to 5.9.3
+  (the latest 5.x stable; the native TS 7 preview is deliberately NOT adopted —
+  the classic `tsc --strict` CLI is the stable, reviewed lane). Live-verified
+  2026-09-08 via the npm registry."
+version_pin_policy: "exact version 5.9.3 in ui/toolchain/package.json +
+  integrity hash in package-lock.json. Bump = lock refresh; the strict flag set
+  (tsconfig.json) is independent of the minor version."
+licenses:
+  code: "Apache-2.0 (LICENSE live-verified 2026-09-08)"
+  data: "—"
+health:
+  last_release: "continuous; 5.9.3 current 5.x stable as of 2026-09-08"
+  bus_factor: "Microsoft first-party — strong"
+  open_critical_advisories: "none found as of 2026-09-08 (npm audit on the lock:
+    0 vulnerabilities)"
+security_posture: "BUILD-TIME, --noEmit: it never ships and never runs in the
+  browser. Posture identical to esbuild (lock + integrity + --ignore-scripts);
+  risk class is build-tool supply-chain, not runtime."
+maintenance_burden: "low: one pinned version + integrity; the strict config is
+  our own tsconfig.json (stable across 5.x)"
+link_policy: "permissive — Apache-2.0 (DR-04 satisfied); build-time, links into
+  nothing shipped"
+use_verdict: "INTEGRATE (build-time, pinned, integrity-locked)"
+alternatives_rejected:
+  - "TS 7 (native preview): the `tsgo` CLI is still stabilizing; the 5.x
+    `tsc --strict` is the reviewed, reproducible lane (choosing preview over
+    stable for a security-gated build is not worth it)"
+  - "no type-checker (plain JS + linter): the phase rule is strict:true + no
+    `any`; a type-checker is the only way to enforce that structurally"
+exit_plan: "the views are plain TS; dropping the checker is a config change
+  (tsconfig), swapping versions is a lock change — no TS-specific runtime
+  semantics are baked into the views"
+owner: "E lead (UX Engineering)"
+evaluated_on: 2026-09-08
+refresh_by: 2026-12-07
+sources:
+  - url: "https://github.com/microsoft/TypeScript/blob/main/LICENSE"
+    accessed: 2026-09-08
+    quote: "Apache License, Version 2.0 — Copyright (c) Microsoft Corporation."
+  - url: "https://registry.npmjs.org/typescript/5.9.3"
+    accessed: 2026-09-08
+    quote: "version 5.9.3 present; 0 vulnerabilities (npm audit on the lock)"

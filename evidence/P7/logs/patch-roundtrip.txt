@@ -1,0 +1,11 @@
+rev            : d04cdb24d67b081f6cf80200ffc5233f44b61109
+patch          : 11661 B  sha256 45cc95d34a14d503…
+hook files (4): chrome/browser/ui/views/BUILD.gn, chrome/browser/ui/views/toolbar/app_menu.cc, chrome/browser/ui/views/toolbar/toolbar_view.cc, chrome/browser/ui/views/frame/browser_frame_view.cc
+payload files (5): chrome/browser/ui/xr/BUILD.gn, chrome/browser/ui/xr/xr_command_bridge.cc, chrome/browser/ui/xr/xr_command_bridge.h, chrome/browser/ui/xr/xr_identity_color_bar.cc, chrome/browser/ui/xr/xr_identity_color_bar.h
+total files    : 9 (cap ≤12)
+never-list     : PASS (all files under chrome/browser/ui/**)
+apply          : PASS
+verify         : PASS
+revert         : PASS (byte-exact: True)
+negative       : expected FAIL (patch is bound to the pinned bytes), observed FAIL
+PASS: ui-skeleton patch round-trip

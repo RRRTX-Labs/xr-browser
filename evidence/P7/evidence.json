@@ -1,0 +1,136 @@
+{
+  "schema_note": "Conforms to docs/contracts/evidence-bundle-v1.md. Every VERIFIED row cites >=1 real artifact (source label required). Browser-runtime claims are HUMAN-GATED (HG-31 farm), never marked met-in-sandbox. Core budget IS met in-sandbox with recorded numbers.",
+  "phase": "P7",
+  "generated": "2026-09-08",
+  "plan": "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
+  "plan_sha256": "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b",
+  "supersedes": "evidence/P6",
+  "pin": "chromium d04cdb24d67b081f6cf80200ffc5233f44b61109 (UNCHANGED — the <=12 hook patch round-trips against these exact pinned bytes)",
+  "repos": {
+    "xr-browser": "P7 commit follows this bundle in the git log (DEPS pair-bumped to xr-core P7 below)",
+    "xr-core": "379c00e840d91dde11025c5188a72eaaa4af7ffb (commands core + fakes ref-fake + ui views + toolchain + ui-skeleton patch + host_protocol + BUILD.gn)"
+  },
+  "verdict_vocabulary": ["VERIFIED", "HUMAN-GATED", "SIMULATED", "BLOCKED-TOOLING", "BLOCKED-PENDING-PUSH"],
+  "source_labels": ["local-run", "gitiles-fetch", "local-fuzz", "synthetic-repo"],
+  "policy": "P7 proof bar = one registry + four views with ALL logic in the C++ host (parity-locked), <=5ms p99 core budget met in-sandbox (972us), <=12 hook patch round-trip-proven at pin, reproducible CSP-strict WebUI (two builds byte-identical), zero runtime network (scan-clean), dispatch spoof matrix + seeded fuzz 0-violations. Browser-runtime budgets (50/150ms end-to-end, type->execute E2E, cold-start) are HUMAN-GATED (HG-31) and NEVER claimed met-in-sandbox.",
+  "dod_rows": [
+    {
+      "id": "DOD-1",
+      "dod": "T0 landed: strict evidence gate auto-covers new bundles (a broken P7 bundle fails CI) — one commit",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": ["tools/evidence_check.py", "tools/run_negatives.sh", "logs/run-negatives.txt"],
+      "notes": "strict_default_phases discovers every evidence/P<n> with n>2 (P1/P2 exempt per HG-25). The broken-bundle negative (run_negatives #14, numeric P7 phase) is rejected with 'cites missing artifact'. T0 commit 2488cc80 (base of this phase)."
+    },
+    {
+      "id": "DOD-2",
+      "dod": "Registry service + 20 commands wired; placeholders disabled-with-reason per the T5 roster (all 20 present); dial steps toggle P6 policy state end-to-end",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": ["docs/contracts/commands.md", "../xr-core/commands/core/roster_v1.json", "logs/make-test.txt", "logs/parity.txt"],
+      "notes": "commands.md: '20 commands registered; 7 in Tier-1 (<=9)'. tor.open registered + disabled via tor.engine-ready predicate ('Tor engine not wired (P31)'). test_dial 17 checks + test_host 48 prove the dial set-* / reset toggle the P6 policy state through the host."
+    },
+    {
+      "id": "DOD-3",
+      "dod": "Four views: palette (Lit, tsc-clean, logic via host), menu model (generated + golden + tier rules), shortcut editor (conflict UX + kill-durable store), help index + printable cheatsheet (no coming-soon rails)",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": ["../xr-core/ui/palette/", "../xr-core/ui/shortcut-editor/", "../xr-core/ui/help-index/", "docs/contracts/menu-model.json", "logs/tsc.txt", "logs/toolchain.txt"],
+      "notes": "tsc --strict clean (empty log). menu-model golden + Tier-1<=9 + tier separation (menu_model_check). shortcut-editor renders the conflict payload BEFORE binding (conflicting command named). help-index renders the full roster; disabled rows carry a reason (no coming-soon rail)."
+    },
+    {
+      "id": "DOD-4",
+      "dod": "Chrome skeleton data surfaces + identity color-bar; all <=12 hook files round-trip-proven at pin, counted in budget (1+<=12 <=150)",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": ["../xr-core/patches/ui-skeleton/0100-ui-skeleton/", "logs/patch-roundtrip.txt", "../xr-core/patches/manifest.yaml", "../xr-core/patches/ui-skeleton/0100-ui-skeleton/patchinfo.md"],
+      "notes": "9 files (4 hook + 5 payload) <= 12; apply/verify/revert byte-exact vs pin d04cdb24; negative (perturbed anchor) observed FAIL; never-list (all chrome/browser/ui/**) PASS. patchinfo carries risk + retirement plan. ui-skeleton payload = xr_command_bridge (S1 seam) + xr_identity_color_bar (the §1.4 identity/trust color vocabulary)."
+    },
+    {
+      "id": "DOD-5",
+      "dod": "WebUI toolchain: npm pins + integrity + repro bundles byte-identical; CSP/a11y/RTL lints green on real source, each rule negative-proven; webui-toolchain.md lets P8/P13 start day-1",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": ["../xr-core/ui/toolchain/package.json", "../xr-core/ui/toolchain/package-lock.json", "logs/repro.txt", "logs/toolchain.txt", "docs/webui-toolchain.md", "logs/run-negatives.txt"],
+      "notes": "3 packages (lit/esbuild/typescript) exact-pinned + integrity; npm audit 0 vulns; --ignore-scripts. Two independent builds byte-identical (sha256 96159b4b...). csp/a11y/rtl lints 0 violations on real source; each has a negative (run_negatives #26-28). docs/webui-toolchain.md is the stable-for-other-tracks deliverable."
+    },
+    {
+      "id": "DOD-6",
+      "dod": "Coverage check shipped + baseline + future-bite proven (fixture)",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": ["tools/coverage_check.py", "docs/contracts/coverage-allowlist.yaml", "logs/run-negatives.txt"],
+      "notes": "ratchet armed now: 4 future surfaces (settings x3, panel x1) pre-declared with roster covering commands that must stay registered. Future-bite proven: a landed ui/settings/rogue-section.ts with no command => 'has no command registered' (run_negatives #30)."
+    },
+    {
+      "id": "DOD-7",
+      "dod": "Flag xr_command_registry_v1: both states tested; kept-until-P13 note in two places",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": ["build/gn/argsets/flags.yaml", "build/gn/argsets/xr_common.gni", "docs/contracts/registry-post-freeze.md", "../xr-core/commands/host_protocol.md"],
+      "notes": "OFF: flag-status=off, list empty (0), query empty, invoke rejected 'feature flag ... is off (stock chrome)', menu-model empty. ON: list count 20. Both captured in the parity/off-state logs. Expiry note 1/2 in flags.yaml (default + EXPIRY), 2/2 in registry-post-freeze.md."
+    },
+    {
+      "id": "DOD-8",
+      "dod": "Security: dispatch spoof matrix + fuzz clean; no-egress scan clean; budget-cap negative",
+      "status": "VERIFIED",
+      "source": "local-fuzz",
+      "evidence": ["../xr-core/commands/tests/test_fuzz.cc", "logs/make-test.txt", "logs/run-negatives.txt", "tools/csp_lint.py"],
+      "notes": "test_fuzz (seed 20260908, 40000 iters): non-whitelisted source rejected before id lookup (15472 cases), unknown id never executes (15968), destructive-without-confirmed never auto-runs (468), authorized handler matches registry (825) — 0 crashes, 0 violations. No-egress: csp_lint 0 violations (run_checks) + csp_lint negative (run_negatives #26). Budget-cap: over-cap manifest negative (run_negatives #8)."
+    },
+    {
+      "id": "DOD-9",
+      "dod": "Parity: python ref-fake <-> C++ green on full suite (unblocks other tracks)",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": ["tools/tests/test_p7_commands_tools.py", "logs/parity.txt", "../xr-core/fakes/commands.py"],
+      "notes": "31 valid + 1 malformed, 0 mismatches. Valid responses byte-identical (canonical ensure_ascii=True); the malformed case compared by error code (top-level error object differs only in key order). Folded into the house test so every `pytest tools/tests/` run re-proves it. This unblocks P8/P13 WebUI tracks to consume the host protocol today."
+    },
+    {
+      "id": "DOD-10",
+      "dod": "run_checks all gates incl. new ones; negatives count grew; zero pre-existing regressions; both trees clean; DCO 100% both repos; hosted CI green at final HEAD (IDs cited)",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": ["logs/run-checks.txt", "logs/run-negatives.txt", "logs/pytest-totals.txt"],
+      "notes": "run_checks: ALL GOVERNANCE CHECKS PASSED (10 P7 gate lines; 114 pytest passed). Negatives grew 25->31 (6 new P7: #26 csp fetch, #27 a11y combobox, #28 rtl physical, #29 tier-1 budget, #30 coverage bite, #31 commands_host page-reject; also fixed pre-existing #14 PX->P7). Zero pre-existing regressions. DCO 100% both repos (run_checks dco_check). HOSTED CI at final HEAD = see BLOCKED-PENDING-PUSH row below (runs on push)."
+    },
+    {
+      "id": "DOD-10b",
+      "dod": "Hosted CI green at the final HEAD of both repos (run IDs cited)",
+      "status": "BLOCKED-PENDING-PUSH",
+      "source": "local-run",
+      "evidence": ["logs/run-checks.txt"],
+      "notes": "Local run_checks + run_negatives are green (the same gates CI runs). Hosted GitHub CI executes on push; the run IDs are captured by the orchestrator/CI after this push and are not known pre-push (honest: not claimed green before the runs exist)."
+    },
+    {
+      "id": "DOD-11",
+      "dod": "registry-post-freeze entries + packets; FROZEN.yaml byte-identical; plan pin intact; register untouched; no new runtime deps (exactly the three dev-tool ones, evaluated)",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": ["docs/contracts/registry-post-freeze.md", "docs/dependencies/esbuild.yaml", "docs/dependencies/typescript.yaml", "docs/dependencies/lit.yaml", "tools/DEPS.md"],
+      "notes": "command-host-protocol v1 registered in the post-freeze registry (P6-T5 pattern) with packet docs/state/research-log-P7.md; FROZEN.yaml untouched (amend_guard PASS). Exactly 3 npm deps (lit/esbuild/typescript), each L9-evaluated (docs/dependencies/*.yaml) + tools/DEPS.md line + lock integrity + npm audit 0. No runtime deps (all build-time)."
+    },
+    {
+      "id": "DOD-12",
+      "dod": "Evidence bundle strict-PASS with honest HG rows (browser-runtime budgets NOT marked met-in-sandbox; core budget met with recorded numbers)",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": ["evidence.json", "human-gates.md", "logs/bench.json", "logs/make-test.txt"],
+      "notes": "This bundle. Core budget met in-sandbox: 972us p99 <= 5ms (bench.json, seed 20260908, 2000 corpus, 32-char query, 20000 iters, warmup 200). Browser-runtime 50/150ms end-to-end + type->execute E2E + cold-start are HUMAN-GATED (HG-31), NOT claimed met-in-sandbox."
+    }
+  ],
+  "human_gates": [
+    {"id": "HG-31", "gate": "farm browser E2E: type->execute, visual snapshot matrix (identity-color x themes), palette 50/150ms end-to-end, cold-start <=10% nightly", "status": "HUMAN-GATED", "runbook": "docs/webui-e2e.md", "note": "commands + harnesses + budgets shipped; execution needs the HG-31 farm (browser runtime)."},
+    {"id": "HG-32", "gate": "a11y engineer keyboard-only walkthrough of Tier-2 (SR-first palette)", "status": "HUMAN-GATED", "runbook": "docs/webui-e2e.md (keyboard model table)"},
+    {"id": "HG-33", "gate": "power-user dogfood, week 1", "status": "HUMAN-GATED", "runbook": "docs/webui-e2e.md"},
+    {"id": "HG-26", "gate": "contract ratification — command-host-protocol v1 now two consumers deep (P7 registry + this bundle); escalate to principals", "status": "HUMAN-GATED", "runbook": "docs/contracts/registry-post-freeze.md"},
+    {"id": "HG-34", "gate": "branch protection still open — PR-flow switch per P6 T0 policy", "status": "HUMAN-GATED", "runbook": "docs/process/cross-repo-pin.md"}
+  ],
+  "carried_hg": ["HG-9", "HG-21", "HG-28", "HG-29"],
+  "not_done_by_design": [
+    "Settings pages (P8), XR Panel tabs (P13) — the coverage ratchet pre-declares them; they land later.",
+    "Real chrome:// integration / mojom glue (P16) — ui/BUILD.gn is a placeholder naming the farm grit integration (no fake integration).",
+    "URL-field display logic (P16), onboarding (P37), Tor/VPN engines (P31 — the command is a disabled placeholder).",
+    "Telemetry of any kind (L16 — local counters only, and those are P8+)."
+  ]
+}

@@ -19,6 +19,18 @@ flags:
   xr_channel:
     kind: xr
     note: "dev | beta | stable. Consumed by branding/gen_version.py (version string builder)."
+  xr_command_registry_v1:
+    kind: xr
+    default: true
+    note: >-
+      P7 command registry / four views / window-chrome skeleton on|off.
+      OFF (false) => STOCK chrome and an EMPTY registry: the palette, menus,
+      shortcut editor and help index all render nothing and commands_host
+      reports flag-status "off" (the Plan P7 rollback row). This is the
+      kill-switch for the whole P7 surface — flipping it false restores the
+      stock browser with zero P7 code path active.
+      EXPIRY (1/2): kept until P13 (XR Panel lands); the plan to retire it and
+      the second expiry note live in docs/registry/registry-post-freeze.md.
   # -- Chromium flags (read-at cited in the pinned rev) --
   enable_widevine:
     kind: chromium

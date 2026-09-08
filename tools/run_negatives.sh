@@ -225,9 +225,11 @@ expect_reject "spike: genpatch refuses a content/** target (never-list)" \
   "$PY" "$GS/genpatch.py" --xr-core ../xr-core --out "$GS/out"
 
 # --- 14. evidence bundle: a VERIFIED row citing a missing artifact -----------
-EV="$TMP/ev"; mkdir -p "$EV/evidence/PX"
-printf '{"phase":"PX","generated":"2026-09-07","plan":"p","dod_rows":[{"id":"E1","dod":"d","status":"VERIFIED","evidence":["logs/nope.txt"]}]}' \
-  > "$EV/evidence/PX/evidence.json"
+EV="$TMP/ev"; mkdir -p "$EV/evidence/P7"
+# Phase dir must be a numeric P<n> (>P2) so --strict auto-covers it; a bare
+# "PX" is skipped by strict_default_phases and the gate never sees the row.
+printf '{"phase":"P7","generated":"2026-09-07","plan":"p","dod_rows":[{"id":"E1","dod":"d","status":"VERIFIED","evidence":["logs/nope.txt"]}]}' \
+  > "$EV/evidence/P7/evidence.json"
 expect_reject "evidence: VERIFIED row citing a missing artifact (strict)" \
   'cites missing artifact|missing or empty human-gates' \
   "$PY" tools/evidence_check.py --repo "$EV" --strict
@@ -323,6 +325,77 @@ if [ -x "$HOST" ]; then
   "$HOST" snapshot --verify '{"schema":"xr-policy-snapshot","schema_version":1,"kind":"full","seq":1,"base_seq":1,"hash":"deadbeef","entries":[]}'
 else
   echo "SKIP: SKIP (tool absent: policy_host not built) — needed for: corrupt-blob negative; build with g++ present"
+fi
+
+# --- P7 negatives (command-registry + WebUI gates must have teeth) ----------
+
+# 26. csp_lint: a WebUI view that reaches the network at runtime => fail.
+CU="$TMP/cspui"; mkdir -p "$CU"
+printf '// Copyright 2026 RRRTX Labs\nexport async function load() {\n  return await fetch("https://example.com");\n}\n' > "$CU/rogue.ts"
+expect_reject "csp_lint: runtime fetch( in ui/** (no runtime egress)" \
+  'fetch\(' \
+  "$PY" tools/csp_lint.py --ui-root "$CU" --commands-root "$TMP/does-not-exist"
+
+# 27. a11y_lint: a palette missing the SR-critical aria-activedescendant => fail.
+AP="$TMP/a11y"; mkdir -p "$AP/palette" "$AP/help-index"
+printf 'export class X { render() { return `<div role="combobox"></div>`; } }\n' > "$AP/palette/palette.ts"
+printf 'export class Y { render() { return `<div aria-live="polite"></div>`; } }\n' > "$AP/help-index/help-index.ts"
+printf ':focus-visible { outline: 1px solid red; }\n' > "$AP/tokens.css"
+expect_reject "a11y_lint: palette missing ARIA APG combobox token" \
+  'aria-activedescendant' \
+  "$PY" tools/a11y_lint.py --palette-dir "$AP/palette" --ui-dir "$AP"
+
+# 28. rtl_lint: physical margin-left / text-align:left in the WebUI CSS => fail.
+RT="$TMP/rtl"; mkdir -p "$RT"
+printf '.x { margin-left: 8px; text-align: left; }\n' > "$RT/bad.css"
+expect_reject "rtl_lint: physical left/right CSS (logical-only law)" \
+  'margin-left/right' \
+  "$PY" tools/rtl_lint.py --ui-dir "$RT"
+
+# 29. menu_model_check: a 10-tier-1 roster => rejected (Tier-1 always-visible <=9).
+MM="$TMP/tier1"; mkdir -p "$MM"
+"$PY" - "$MM" <<'NEG'
+import json, sys, pathlib
+src = pathlib.Path("../xr-core/commands/core/roster_v1.json")
+reg = json.loads(src.read_text())
+n = 0
+for c in reg["commands"]:
+    c["descriptor"]["attention_tier"] = "tier1"
+    n += 1
+    if n >= 10:
+        break
+(pathlib.Path(sys.argv[1]) / "roster10.json").write_text(json.dumps(reg))
+NEG
+expect_reject "menu_model_check: 10-tier-1 roster breaches the Attention Budget" \
+  'tier1|Tier-1' \
+  "$PY" tools/menu_model_check.py --roster "$MM/roster10.json" --out "$MM/x.json"
+
+# 30. coverage_check: a LANDED surface with no registered command => bite.
+CV="$TMP/cov"; mkdir -p "$CV/ui/settings"
+printf 'export class Rogue {}\n' > "$CV/ui/settings/rogue-section.ts"
+expect_reject "coverage_check: landed settings surface maps to no command (§10)" \
+  'has no command registered' \
+  "$PY" tools/coverage_check.py --ui-root "$CV/ui"
+
+# 31. commands_host: a PAGE-originated invoke => rejected + ledger (never a handler).
+# The page-reject is IN-BAND: the host process succeeds (rc=0) and reports
+# status:"rejected" inside the ok payload (the security gate is the dispatch,
+# not a process failure). Assert the in-band rejection + the ledger row.
+CH=../xr-core/commands/tests/build/commands_host
+if [ -x "$CH" ]; then
+  mkdir -p "$TMP/ch"   # the host persists the seeded registry into --store-dir
+  OUT="$("$CH" --store-dir "$TMP/ch" --roster ../xr-core/commands/core/roster_v1.json \
+        --flag xr_command_registry_v1=on \
+        '{"method":"invoke","args":{"id":"tab.new","source":"page"}}' 2>&1)"
+  if printf '%s' "$OUT" | grep -qE '"status":"rejected"' \
+     && printf '%s' "$OUT" | grep -qE 'not whitelisted|page'; then
+    echo "ok: commands_host: page-originated invoke rejected in-band (source-tag whitelist)"
+  else
+    echo "NEGATIVE-FAIL: commands_host page-reject — expected in-band \"status\":\"rejected\", got: $OUT"
+    FAILURES=1
+  fi
+else
+  echo "SKIP: SKIP (tool absent: commands_host not built) — needed for: page-reject negative; CI has g++"
 fi
 
 echo

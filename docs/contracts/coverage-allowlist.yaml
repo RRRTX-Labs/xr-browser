@@ -1,0 +1,32 @@
+# docs/contracts/coverage-allowlist.yaml — §10 command-coverage ratchet (P7-T9).
+#
+# `tools/coverage_check.py` enforces the §10 law verbatim: "any feature without
+# a command does not ship (CI check: every `Settings` section and panel tab maps
+# to a command)." Settings pages (P8) and XR Panel tabs (P13) don't exist yet,
+# so this file ARMS the ratchet NOW: each future surface is pre-declared with the
+# roster command that must cover it. The check then fails if (a) a declared
+# surface's covering command drifts out of the registry, or (b) a surface LANDS
+# in the tree (a `ui/settings/<x>` or `ui/panel/<x>` source) without a registered
+# covering command — the "future-bite" (fixture-proven in the P7 test).
+#
+# This is the P6-T5 "allowlist that turns into a ratchet" pattern: the entries
+# are obligations, not permissions, and they bite the moment the surface lands.
+
+schema: xr-coverage-allowlist
+schema_version: 1
+
+surfaces:
+  # --- Settings sections (land in P8) — each maps to a roster settings-jump. ---
+  - surface: settings/network
+    command: settings.network
+    phase: P8
+  - surface: settings/privacy
+    command: settings.privacy
+    phase: P8
+  - surface: settings/identity
+    command: settings.identity
+    phase: P8
+  # --- XR Panel (lands in P13) — maps to the tier-1 panel.open command. -------
+  - surface: panel/xr
+    command: panel.open
+    phase: P13

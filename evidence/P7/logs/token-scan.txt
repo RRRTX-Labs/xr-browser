@@ -1,0 +1,6 @@
+# token hygiene scan (ghp_|gho_|github_pat_) — both repos, tracked files, 2026-09-08T14:05:18Z
+--- xr-browser ---
+(no matches)
+--- xr-core ---
+(no matches)
+RESULT: clean — no live credential tokens found (the scan pattern itself is not committed)

@@ -1,0 +1,17 @@
+{
+  "tool": "commands-bench",
+  "sub_budget_us_p99": 5000,
+  "plan_budget_note": "core sub-budget (5ms p99) supports the plan's 50ms interactive-warm / 150ms cold browser budget, which is HUMAN-GATED on the farm (HG-31) and NOT measured here",
+  "seed": 20260908,
+  "corpus_size": 2000,
+  "query_len": 32,
+  "query_pool": 200,
+  "iterations": 20000,
+  "warmup_excluded": 200,
+  "sample_query": "clear search index cqujsrkbhvnnc",
+  "p50_us": 765,
+  "p95_us": 822,
+  "p99_us": 972,
+  "hardware": "Intel(R) Xeon(R) Processor @ 2.60GHz (nproc via /proc; sandbox)",
+  "verdict": "MET"
+}

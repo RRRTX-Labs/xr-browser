@@ -1,0 +1,53 @@
+# Dependency evaluation: esbuild (WebUI bundler — build-time ONLY)
+project: "esbuild — https://github.com/evanw/esbuild"
+role: "WebUI bundle builder for the command-registry UI (P7-T8). Bundles the
+  strict-TypeScript Lit views into a deterministic, CSP-strict ESM bundle.
+  BUILD-TIME ONLY — it produces an artifact; it is not shipped and has no
+  runtime presence (zero-network-at-runtime law, P7)."
+plan_refs: ["§8.6", "§8.9", "P7-T8"]
+current_status: "very active; Go-native bundler, the de-facto standard for fast
+  deterministic JS bundling. Version 0.28.2 pinned (live-verified 2026-09-08
+  via the npm registry, registry.npmjs.org reachable in-sandbox)."
+version_pin_policy: "exact version 0.28.2 in ui/toolchain/package.json +
+  integrity hash in package-lock.json (the only trusted network input). The
+  platform binary (@esbuild/linux-x64) ships as an integrity-pinned
+  optionalDependency, so `npm ci --ignore-scripts` runs no postinstall. Any
+  version bump is a review + the two-build byte-identity check must re-pass
+  (repro-check.sh)."
+licenses:
+  code: "MIT (LICENSE live-verified 2026-09-08)"
+  data: "—"
+health:
+  last_release: "continuous; 0.28.2 current as of 2026-09-08"
+  bus_factor: "single primary maintainer (evanw) with large contributor base —
+    monitored via the P9-T9 advisory feed once wired"
+  open_critical_advisories: "none found as of 2026-09-08 (npm audit run on the
+    lock: 0 vulnerabilities across the 3 pinned packages)"
+security_posture: "BUILD-TIME supply-chain edge. Posture: lock-pinned +
+  integrity + --ignore-scripts (no install scripts run). Output is re-scanned
+  by check-bundle.js (no eval/inline-JS/network). Because it never runs in the
+  browser, its risk class is 'build tool' (advisory = supply-chain), not a
+  runtime RCE path."
+maintenance_burden: "low: one pinned version + integrity; bump = lock refresh +
+  repro re-check"
+link_policy: "permissive — MIT (DR-04 satisfied); build-time so it links into
+  nothing shipped"
+use_verdict: "INTEGRATE (build-time, pinned, integrity-locked)"
+alternatives_rejected:
+  - "webpack: heaviest; non-repro by default (content-hashing, timestamps) —
+    fails the R1 byte-identity rung out of the box"
+  - "rollup: solid but a second ecosystem to pin; esbuild's Go core is
+    deterministic and faster for this surface"
+exit_plan: "the bundle is a pure artifact; swapping bundlers is a toolchain
+  change (new lock + re-run repro-check), not a code change — the views are
+  plain TS and remain bundler-agnostic"
+owner: "E lead (UX Engineering)"
+evaluated_on: 2026-09-08
+refresh_by: 2026-12-07
+sources:
+  - url: "https://github.com/evanw/esbuild/blob/main/LICENSE.md"
+    accessed: 2026-09-08
+    quote: "MIT License — Copyright (c) 2020 Evan Wallace"
+  - url: "https://registry.npmjs.org/esbuild/0.28.2"
+    accessed: 2026-09-08
+    quote: "version 0.28.2 present; 0 vulnerabilities (npm audit on the lock)"

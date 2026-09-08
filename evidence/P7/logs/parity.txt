@@ -1,0 +1,10 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.14, pytest-9.0.3, pluggy-1.6.0 -- /usr/local/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/user/xr-browser
+plugins: anyio-4.14.2
+collecting ... collected 1 item
+
+tools/tests/test_p7_commands_tools.py::test_parity_31_valid_plus_1_malformed PASSED [100%]
+
+============================== 1 passed in 1.36s ===============================
