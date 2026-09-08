@@ -11,7 +11,7 @@ from the xr-core patch manifest at the DEPS pin. Config source: docs/plans/XR_BR
 | extension_chokepoint | 0 | 2 |
 | hook_points | 0 | 45 |
 | network_seams | 0 | 20 |
-| ui | 0 | 35 |
-| **total** | **1** | **150** |
+| ui | 1 | 35 |
+| **total** | **2** | **150** |
 
-_Total 1 / 150 upstream-touched files; the count is published in every release note (Plan §12.2)._ (regenerated: see git log)
+_Total 2 / 150 upstream-touched files; the count is published in every release note (Plan §12.2)._ (regenerated: see git log)

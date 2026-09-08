@@ -34,6 +34,22 @@ EXEMPT_FILES: dict[str, str] = {
     "build/sync.py":
         "P2 checkout tool: git-clone subprocess only (chromium + xr-core + "
         "depot_tools URLs feed `git clone`, not an HTTP client).",
+    # P4 identity-seam spike kit (0c32c09, ADR-0042). These use a LOCAL CDP
+    # loopback socket + example/scan-token URL data; NONE of them reaches the
+    # external network, so the chokepoint (external network only) does not
+    # apply. The raw `import socket` / URL-literal heuristic would otherwise
+    # false-positive on the loopback client.
+    "build/spike/cdp.py":
+        "P4 identity-seam spike: local CDP WebSocket client — connect() REFUSES "
+        "any host other than 127.0.0.1/localhost/::1, so it never reaches the "
+        "external network (raw loopback socket, not an HTTP client).",
+    "build/spike/probe_driver.py":
+        "P4 identity-seam spike driver: the www/URL literals are scan TOKENS "
+        "matched against probe output (data), never fetched; network use is "
+        "cdp.py's local-only socket + a loopback fixture server.",
+    "build/spike/tests/cdp_fixture.py":
+        "P4 spike test fixture: a stdlib loopback socket SERVER (127.0.0.1) "
+        "emulating CDP for tests; never the external network.",
 }
 # URL literals that are test/fixture DATA (never fetched): example namespaces
 EXAMPLE_URL = re.compile(r"\.(example|invalid|test)/")
