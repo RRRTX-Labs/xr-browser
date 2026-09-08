@@ -43,8 +43,7 @@ expect_reject "license: injected GPL sample in code" \
 # --- 2. DCO: unsigned commit (Plan P1 DoD) ----------------------------------
 D="$TMP/dco"; mkdir -p "$D"; cd "$D"
 git init -q -b main .
-git config user.name "Nevil N"
-git config user.email "nevil@example.invalid"
+git config user.name "Nevil N"; git config user.email "nevil@example.invalid"
 echo 1 > f.txt
 git add f.txt
 git commit -q -m "chore: unsigned"
@@ -80,8 +79,7 @@ expect_reject "vocab: banned words in new doc" \
 # --- 5. register: bad status enum -------------------------------------------
 G="$TMP/reg"; mkdir -p "$G/docs/register"; cd "$G"
 git init -q -b main .
-git config user.name "Nevil N"
-git config user.email "nevil@example.invalid"
+git config user.name "Nevil N"; git config user.email "nevil@example.invalid"
 "$PY" - <<'EOF'
 import yaml
 rows = [
@@ -129,7 +127,6 @@ printf 'tampered\n' >> "$P/docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md"
 expect_reject "plan pin: tampered plan copy" \
   'plan pin mismatch' \
   "$PY" tools/plan_pin_check.py --repo "$P"
-
 
 # --- 8. budget: over-cap manifest must fail the gate (Plan P3 DoD) ----------
 B="$TMP/budget"; mkdir -p "$B/inj"
@@ -180,7 +177,6 @@ expect_reject "fetch chokepoint: urlopen outside the chokepoint" \
   'network import outside the chokepoint' \
   "$PY" "$F/tools/fetch_allowlist_check.py"
 
-
 # --- 11. spike candidate outside spike/ without the NOT-YET header -----------
 S="$TMP/cand"; mkdir -p "$S/patches/branding/0009-sneaky" "$S/spike/patches/0001-bad"
 cp ../xr-core/patches/manifest.yaml "$S/patches/manifest.yaml" 2>/dev/null \
@@ -207,8 +203,7 @@ expect_reject "spike: census missing named surfaces" \
   "$PY" build/spike/census_lint.py --doc "$CN/census.md"
 
 # --- 13. spike: genpatch refuses a patch that targets content/** -------------
-# End-to-end, not a unit test: run the real genpatch against a spec whose
-# targets include a content/ path. The tool must refuse before fetching.
+# End-to-end (not a unit test): real genpatch on a content/ target; refuse before fetch.
 GS="$TMP/spike"; mkdir -p "$GS"
 cp build/_common.py build/spike/genpatch.py build/spike/seam_spec.py "$GS/"
 "$PY" - "$GS" <<'NEG'
@@ -226,8 +221,7 @@ expect_reject "spike: genpatch refuses a content/** target (never-list)" \
 
 # --- 14. evidence bundle: a VERIFIED row citing a missing artifact -----------
 EV="$TMP/ev"; mkdir -p "$EV/evidence/P7"
-# Phase dir must be a numeric P<n> (>P2) so --strict auto-covers it; a bare
-# "PX" is skipped by strict_default_phases and the gate never sees the row.
+# Phase dir must be a numeric P<n> (>P2) so --strict auto-covers it (a bare "PX" is skipped).
 printf '{"phase":"P7","generated":"2026-09-07","plan":"p","dod_rows":[{"id":"E1","dod":"d","status":"VERIFIED","evidence":["logs/nope.txt"]}]}' \
   > "$EV/evidence/P7/evidence.json"
 expect_reject "evidence: VERIFIED row citing a missing artifact (strict)" \
@@ -281,8 +275,7 @@ expect_reject "vectors_check: fake-vs-vector drift (id cited)" \
 
 # --- P6 negatives (policy resolver gates must have teeth) -------------------
 
-# 21. mode_lint: injected rogue mode check outside the resolver => fail
-#     citing file:line (the static half of the plan's Manual row).
+# 21. mode_lint: injected rogue mode check outside the resolver => fail (file:line cited)
 R="$TMP/rogue"; mkdir -p "$R/net"
 printf '// Copyright 2026 RRRTX Labs\nint f(const char* t) {\n  return t == "kShield" ? 1 : 0;\n}\n' > "$R/net/rogue.cc"
 expect_reject "mode_lint: injected rogue mode check (file:line cited)" \
@@ -297,8 +290,7 @@ expect_reject "mode_lint: missing // Intent: header (L13)" \
   "$PY" tools/mode_lint.py --root "$H" --config ../xr-core/policy/mode_lint.cfg
 
 # 23. mutation gate: hollowed tests => survivors => score gate fails.
-#     (Copy the real tree, neuter test_vectors so mutants survive; the gate
-#     must trip — a score gate that cannot fail is decoration.)
+#     (Copy the tree, neuter test_vectors so mutants survive; the gate must trip.)
 if command -v g++ >/dev/null 2>&1; then
   M="$TMP/mut"; cp -r ../xr-core "$M"
   printf '// hollowed for the negative fixture\nint main() { return 0; }\n' > "$M/policy/tests/test_vectors.cc"
@@ -378,9 +370,8 @@ expect_reject "coverage_check: landed settings surface maps to no command (§10)
   "$PY" tools/coverage_check.py --ui-root "$CV/ui"
 
 # 31. commands_host: a PAGE-originated invoke => rejected + ledger (never a handler).
-# The page-reject is IN-BAND: the host process succeeds (rc=0) and reports
-# status:"rejected" inside the ok payload (the security gate is the dispatch,
-# not a process failure). Assert the in-band rejection + the ledger row.
+# IN-BAND: the host exits 0 and reports status:"rejected" inside the ok payload (the
+# gate is the dispatch, not a process failure); assert the in-band rejection + ledger.
 CH=../xr-core/commands/tests/build/commands_host
 if [ -x "$CH" ]; then
   mkdir -p "$TMP/ch"   # the host persists the seeded registry into --store-dir
