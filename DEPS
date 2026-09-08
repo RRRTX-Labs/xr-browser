@@ -14,8 +14,9 @@
 #                  contract-freeze commit (ef24bcf); P6 advanced it to the
 #                  policy-resolver commits (policy/, + CI-parity fortify fix);
 #                  P7 advances it to the command-registry + four-views +
-#                  window-chrome-skeleton commit (379c00e), pair-bumped
-#                  same-day per docs/process/cross-repo-pin.md.
+#                  window-chrome-skeleton commit (379c00e), then to the
+#                  commands/tests Makefile default-goal CI fix (7e2cff2),
+#                  pair-bumped same-day per docs/process/cross-repo-pin.md.
 #   gclient_url_scheme  P2-T1 (pinned https remotes only; no ssh, no file://)
 #
 # Chromium pin provenance (see docs/state/research-log-P2.md R1):
@@ -28,7 +29,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "379c00e840d91dde11025c5188a72eaaa4af7ffb"     # xr-core P7: command registry + four views + window-chrome skeleton (pair-bumped from a45fc88)
+xr_core_rev: "7e2cff24c8b0739322c7dbf8651fdd8921076b61"     # xr-core P7: command registry + four views + window-chrome skeleton; Makefile default-goal CI fix (paired from 379c00e)
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"
