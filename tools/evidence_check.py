@@ -16,6 +16,10 @@ Checks
   rows          every DoD/task row has id + text + status + >=1 evidence item
   citations     --strict: every evidence item that looks like a path resolves
                 (relative to the phase dir, else the repo root)
+  strict scope  --strict with no --only auto-covers every P<n> newer than the
+                P2 legacy exemption (P3+); P1/P2 stay exempt (HG-25). A new
+                phase is gated the moment its bundle lands — the list that used
+                to be hardcoded in run_checks.sh is now derived (debt T0).
   human-gates   evidence/<phase>/human-gates.md exists and is non-empty
   honesty       --strict: rows may not claim a verdict whose vocabulary is
                 not declared, and a VERIFIED row must cite >=1 real artifact
@@ -52,6 +56,29 @@ OPTIONAL_KEYS = {
 DEFAULT_VOCAB = ["VERIFIED", "HUMAN-GATED", "SIMULATED", "BLOCKED"]
 BLOCKED_RE = re.compile(r"^BLOCKED(?:-[A-Z0-9_]+)*$")
 PATHISH_RE = re.compile(r"^[\w./-]+\.\w{1,8}$")
+
+# P1/P2 bundles ship qualified statuses (e.g. "VERIFIED (mock; ...)"). The
+# HG-25 ruling keeps them on the tolerant legacy path; every phase newer than
+# P2 is strict (bare tokens, resolved citations, source labels). A hardcoded
+# list here was the P6/P7 debt T0 closes: it silently skipped new bundles.
+LEGACY_EXEMPT_MAX_PHASE = 2
+_PHASE_DIR_RE = re.compile(r"^P(\d+)$")
+
+
+def strict_default_phases(root: Path) -> list[str]:
+    """Phase dirs strict mode auto-covers when no explicit --only is given.
+
+    Every ``P<n>`` bundle with ``n > LEGACY_EXEMPT_MAX_PHASE`` (i.e. newer
+    than the P2 legacy exemption), sorted numerically. New phases are covered
+    automatically — nothing to remember to add to a gate list.
+    """
+    out: list[str] = []
+    if root.is_dir():
+        for d in root.iterdir():
+            m = _PHASE_DIR_RE.fullmatch(d.name) if d.is_dir() else None
+            if m and int(m.group(1)) > LEGACY_EXEMPT_MAX_PHASE:
+                out.append(d.name)
+    return sorted(out, key=lambda n: int(_PHASE_DIR_RE.fullmatch(n).group(1)))
 
 
 def _status_token(status: str) -> str:
@@ -158,9 +185,12 @@ def main() -> int:
     ap.add_argument("--repo", default=".", help="repository root (default: cwd)")
     ap.add_argument("--dir", default="evidence", help="evidence root (default: evidence)")
     ap.add_argument("--strict", action="store_true",
-                    help="also require cited artifact paths to exist + source labels")
+                    help="also require cited artifact paths to exist + source "
+                         "labels; with no --only, auto-covers every P<n> newer "
+                         "than the P2 legacy exemption (P3+)")
     ap.add_argument("--only", default="",
-                    help="comma-separated phase dirs to check (default: all)")
+                    help="comma-separated phase dirs to check (default: all; "
+                         "in --strict mode without --only, auto P3+)")
     ap.add_argument("--json", action="store_true", help="emit JSON")
     args = ap.parse_args()
 
@@ -173,8 +203,16 @@ def main() -> int:
     if args.only:
         wanted = {x.strip() for x in args.only.split(",") if x.strip()}
         files = [f for f in files if f.parent.name in wanted]
+    elif args.strict:
+        # strict with no explicit list auto-covers every bundle newer than the
+        # P2 legacy exemption (P3+), so a new phase is gated the moment it lands.
+        wanted = set(strict_default_phases(root))
+        files = [f for f in files if f.parent.name in wanted]
     if not files:
-        print(f"error: no evidence/*/evidence.json under {root}", file=sys.stderr)
+        scope = (f" strict-auto P>{LEGACY_EXEMPT_MAX_PHASE}"
+                 if (args.strict and not args.only) else "")
+        print(f"error: no evidence/*/evidence.json under {root}{scope}",
+              file=sys.stderr)
         return 2
 
     results: dict[str, list[str]] = {}

@@ -76,11 +76,20 @@ measurement.
 4. Nothing may be recorded as executed when it was not; un-run work is
    `BLOCKED-*` or `HUMAN-GATED`, never `VERIFIED`.
 
+## Strict scope (auto-covers new bundles — T0)
+
+`--strict` with no `--only` covers **every `P<n>` bundle newer than the P2
+legacy exemption (P3+)**, discovered from the `evidence/` directory — P1/P2
+stay exempt per the HG-25 ruling (their qualified statuses). A new phase is
+gated the moment its bundle lands; there is no hardcoded list to forget (the
+P6/P7 debt this rule closes — `run_checks.sh` used to pin `--only P3,P4,P5`).
+
 ## Running it
 
 ```bash
 python3 tools/evidence_check.py                 # structural, all bundles
-python3 tools/evidence_check.py --strict        # + paths resolve + source labels
+python3 tools/evidence_check.py --strict        # auto-covers P3+ (paths + source labels)
+python3 tools/evidence_check.py --strict --only P6,P7   # or an explicit list
 python3 tools/evidence_check.py --json
 ```
 

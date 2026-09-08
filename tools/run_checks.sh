@@ -56,8 +56,10 @@ echo "== test suites =="
 # ---------------------------------------------------------------------------
 echo "== evidence bundles (contract: docs/contracts/evidence-bundle-v1.md) =="
 "$PY" tools/evidence_check.py
-# strict: P3+ bundles — cited artifact paths must resolve, source labels required
-"$PY" tools/evidence_check.py --strict --only P3,P4,P5
+# strict: auto-covers every bundle newer than the P2 legacy exemption (P3+);
+# P1/P2 stay exempt per the HG-25 ruling. A new phase is covered automatically
+# — no hardcoded list to forget (the P6/P7 debt closed by T0, XR-P7-T0).
+"$PY" tools/evidence_check.py --strict
 
 echo "== spike: every file:line citation re-verified at the pin =="
 "$PY" build/spike/citation_audit.py
