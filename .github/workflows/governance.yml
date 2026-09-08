@@ -28,7 +28,11 @@ concurrency:
 jobs:
   governance:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Backstop for the whole gate suite. The P6 fuzz timebox alone is a 600s
+    # floor; with the P7 commands-core build + pinned-rev fetch added to the
+    # 'Governance checks' step, the realistic full run is ~16 min. 25 leaves
+    # headroom for shared-runner variability without changing any gate.
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
