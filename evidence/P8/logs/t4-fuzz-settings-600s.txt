@@ -1,0 +1,3 @@
+settings_fuzz: 188416 checks, 22434 router-ok, 52833 router-typed-error, 0 violations (seed 20260909, 600 s budget, queries in-memory only)
+suite: 5 checks, 0 failures
+test_settings_fuzz: 5 checks, 0 failures

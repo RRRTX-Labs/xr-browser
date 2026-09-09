@@ -1,0 +1,8 @@
+== grdp_check ==
+grdp_check: xr_strings.grdp OK (59 messages, isolation-card cross-check clean)
+== l10n_extract ==
+l10n_extract: 13 files, 0 raw-string violations, 0 missing ids -> CLEAN
+== help_deep_link ==
+help_deep_link: OK (3 sections, 19 enabled commands, contract markers present)
+== tsc strict (ui) ==
+tsc: 0 errors (strict)

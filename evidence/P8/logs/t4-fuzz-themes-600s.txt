@@ -1,0 +1,2 @@
+themes_fuzz: 7891840 checks, 996999 accepts, 6894841 refusals, 0 violations (seed 20260909, 600 s budget, 7891836 iters)
+themes_fuzz: 1 checks, 0 failures

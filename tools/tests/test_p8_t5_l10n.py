@@ -45,7 +45,7 @@ def run(tool: str, *args: str, cwd: Path | None = None) -> subprocess.CompletedP
 def test_real_grdp_passes_strict_gate() -> None:
     r = run("grdp_check.py", "--ids-from-schema")
     assert r.returncode == 0, r.stderr
-    assert "OK (58 messages" in r.stdout
+    assert "OK (59 messages" in r.stdout
 
 
 def test_grdp_name_xrid_mismatch_fails(tmp_path: Path) -> None:

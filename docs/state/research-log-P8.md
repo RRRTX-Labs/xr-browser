@@ -158,6 +158,65 @@ One JSON source -> two generated consumers, diff-checked:
 - Host/fake durability semantics divergence fixed in the fake to mirror the
   host: missing store dir is a typed `kIoError` refusal, never auto-created.
 
+## T5 — l10n string source + id-driven views (xr-core 3ff27e2)
+
+Single source of every user-visible XR string: `xr-core/l10n/xr_strings.grdp`
+(59 messages; Chromium-style GRIT part, explicit `xr-id` attributes, desc on
+each message, `<ph>/<ex>` placeholders with UPPER_SNAKE tokens). Coverage:
+all 25 settings-schema ids + settings chrome + palette + shortcut-editor +
+help-index chrome. Views render only message ids via `ui/i18n.ts` `text()`
+(unknown param tokens stay literal — a missing param can never crash a
+render; an absent strings map renders the id itself: visible, honest).
+
+- Gates: `tools/grdp_check.py` (name<->xr-id parity, ph rules, vocab law,
+  bidi-isolate safety, schema-id coverage, isolation-card cross-check) and
+  `tools/l10n_extract.py` (raw user-visible literal lint over ui/**/*.ts and
+  the xr payload .cc files + id cross-check incl. the local `t()` alias).
+  Both wired into run_checks (P8-T5 lanes); 16 tool tests.
+- Evidence: t5 = `evidence/P8/logs/t7-help-deep-link-gates.txt` (grdp_check
+  OK 59 / l10n CLEAN / tsc strict 0 errors — the extractor+validator runs
+  are the same transcript captured for T7's gate evidence).
+- Open (deferred, not claimed): `.xtb` production without grit (open item 3)
+  and Chromium `qyy` pseudo-locale semantics (open item 4) — the pseudo-loc
+  build remains P36/apply-tool work, not part of what T5 claims.
+
+## T6 — attention-budget ledger v0: policy of record (counters stayed core)
+
+The counter ledger (`xr-core/settings/core/counters.{h,cc}`) shipped inside
+the T1 settings tree (host wires OpenSection/AcceptQuery/SettingChanged;
+`counters-dump` diagnostic; fuzz in-memory). T6 completes the milestone
+surface:
+
+- `docs/state/attention-budget.md` — the policy of record that counters.h
+  cites: local counters only, no upload/no network path, UTC-day buckets,
+  rolling 90-day retention enforced on Save, tmp->fsync->rename durability,
+  deny-preserve on corrupt/mismatched ledgers, disposable sessions write
+  zero bytes, boundaries (never content/identity/behavioral). Tier metadata
+  (`attention_tier`) lives per setting row in settings_schema_v1.json for
+  later L12 consumption; the ledger itself stores flat day buckets per key.
+- run_checks P8-T6 lane refuses a dangling citation or drifted law
+  (markers: no upload, LOCAL COUNTERS ONLY, 90, day, deny-preserve, zero
+  bytes).
+- Suite transcript: `evidence/P8/logs/t6-counters-suites.txt` (host 46 +
+  counters 35 + fuzz 40960 checks / 0 violations, seed 20260909).
+
+## T7 — help <-> settings deep-link contract v1 (xr-core bace205)
+
+- Grammar: `xr://help/<command-id>` (command registry is the authority) and
+  `xr://settings/<section>[/<setting-key>]` (schema sections +
+  `anchor_root: xr://settings`). Mapping law both directions: every section
+  S has an enabled `settings.S` command and vice versa; v1 anchors are
+  command-granular for help, per-key only inside settings (per-key help
+  content is P36/P37 scope).
+- View: `xr-help-index` takes an `anchor`; rows carry `id=xr-help-<id>`,
+  target rows scroll into view on anchor/commands change; unknown ids show
+  the honest `help.no-entry` status and the index stays visible (fallback,
+  never a fabricated entry). grdp message count 58 -> 59.
+- `docs/contracts/help-deep-link-v1.md` + `tools/help_deep_link.py`
+  (schema<->registry parity both directions, anchor_root, contract marker
+  gate) + P8-T7 run_checks lane + 6 tool tests.
+- Gate transcript: `evidence/P8/logs/t7-help-deep-link-gates.txt`.
+
 ## Open research items (P8's eight; filled as they settle)
 
 1. NativeTheme observation surface for the payload (views-side light/dark +
@@ -180,7 +239,13 @@ One JSON source -> two generated consumers, diff-checked:
 6. Chromium forced-colors/`forced-colors-adjust` CSS conventions.
 7. npm dev-dep status re-check at work date (lit/esbuild/typescript) + stdlib
    GRD-parse confirmation.
-8. Isolation-card ↔ grdp interplay decision (fold vs. keep-both + gate).
+8. Isolation-card ↔ grdp interplay decision — **settled at T5: keep-both +
+   gate** (xr-browser afd15f3). The card (`l10n/isolation_card.json`)
+   remains the legal-gated source of its own measured facts (legal
+   PENDING-HG-1, asserted by the P5 lane); `xr_strings.grdp` is the single
+   source for every other view string; `grdp_check` refuses card-id
+   redefinition and re-asserts the card's gate, so the two can never drift
+   or double-claim.
 
 ## Locked decisions (P8) — recorded with rationale
 

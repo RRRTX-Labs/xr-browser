@@ -1,0 +1,27 @@
+== test_settings_schema ==
+suite: 60 checks, 0 failures
+test_settings_schema: 60 checks, 0 failures
+== test_sections ==
+suite: 55 checks, 0 failures
+test_sections: 55 checks, 0 failures
+== test_settings_search ==
+suite: 57 checks, 0 failures
+test_settings_search: 57 checks, 0 failures
+== test_recall_corpus ==
+recall 200/200 = 100.0% (bar: >=95% top-3)
+suite: 6 checks, 0 failures
+test_recall_corpus: 6 checks, 0 failures
+== test_router ==
+suite: 79 checks, 0 failures
+test_router: 79 checks, 0 failures
+== test_settings_host ==
+suite: 46 checks, 0 failures
+test_settings_host: 46 checks, 0 failures
+== test_counters ==
+suite: 35 checks, 0 failures
+test_counters: 35 checks, 0 failures
+== test_settings_fuzz ==
+settings_fuzz: 40960 checks, 4892 router-ok, 11479 router-typed-error, 0 violations (seed 20260909, 30 s budget, queries in-memory only)
+suite: 5 checks, 0 failures
+test_settings_fuzz: 5 checks, 0 failures
+ALL C++ SETTINGS TESTS PASSED
