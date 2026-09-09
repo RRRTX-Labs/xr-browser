@@ -127,15 +127,29 @@ def validate(doc: dict, path: Path) -> list[str]:
         for p in row.get("pairing", []) or []:
             if p not in names:
                 fails.append(f"token {name}: pairing {p!r} is not a token")
-    # values: every theme covers every token, nothing extra.
+    # values: every theme covers every token, nothing extra (a theme-level
+    # "waivers" key carries the machine-readable contrast waivers — T3).
     for tname, values in themes.items():
         if not isinstance(values, dict):
             fails.append(f"theme {tname}: values must be an object")
             continue
+        wv = values.get("waivers")
+        if wv is not None:
+            if not isinstance(wv, list):
+                fails.append(f"theme {tname}: waivers must be a list")
+            else:
+                for row in wv:
+                    if not isinstance(row, dict) or not all(
+                            k in row for k in ("token", "pair", "best",
+                                               "reason")):
+                        fails.append(f"theme {tname}: waiver row must carry "
+                                     "token/pair/best/reason")
         for name in names:
             if name not in values:
                 fails.append(f"theme {tname}: missing value for token {name!r}")
         for name in values:
+            if name == "waivers":
+                continue
             if name not in meta:
                 fails.append(f"theme {tname}: value for unknown token {name!r}")
             elif name in meta:
@@ -153,6 +167,25 @@ def validate(doc: dict, path: Path) -> list[str]:
                     if not isinstance(v, str) or not v.strip() or \
                             FONT_BAD.search(v):
                         fails.append(f"theme {tname}: {name} unsafe font string")
+    # system resolution (T3): the System built-in is a resolver, not a
+    # palette; modes must point at shipped built-ins.
+    sysr = doc.get("system_resolution")
+    if not isinstance(sysr, dict):
+        fails.append("system_resolution object required (System resolver)")
+    else:
+        sd = sysr.get("default")
+        modes = sysr.get("modes")
+        if not isinstance(sd, str) or not isinstance(modes, dict):
+            fails.append("system_resolution.default/modes required")
+        else:
+            for mode, target in modes.items():
+                if mode not in ("light", "dark", "high-contrast"):
+                    fails.append(f"unknown system mode {mode!r}")
+                if not isinstance(target, str) or target not in themes:
+                    fails.append(f"system mode {mode!r} target must be a "
+                                 "shipped built-in theme")
+            if sd not in modes:
+                fails.append("system_resolution.default must name a mode")
     # reserved law: critical-red reserved in data + validator.
     cr = meta.get("critical-red")
     if cr is None:
@@ -171,7 +204,11 @@ def validate(doc: dict, path: Path) -> list[str]:
             r = int(h[0:2], 16)
             g = int(h[2:4], 16)
             b = int(h[4:6], 16)
-            if not (r >= 0x90 and r > 2 * g and r > 2 * b):
+            # Recorded alarming-family law (identical in theme.cc +
+            # fakes/themes.py): r >= 0x60, red-dominant, and the gap
+            # r - min(g,b) >= 0x60 (pale pastels and calm colors refused).
+            if not (r >= 0x60 and r >= max(g, b) and
+                    (r - min(g, b)) >= 0x60):
                 fails.append(f"theme {tname}: critical-red {v} is not in the "
                              "canonical alarming family (reserved law)")
     return fails

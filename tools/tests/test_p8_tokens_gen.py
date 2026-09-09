@@ -149,3 +149,52 @@ def test_partial_theme_rejected(tmp_path: Path) -> None:
     r = _run_on(p)
     assert r.returncode == 1
     assert "missing value" in r.stdout
+
+
+def test_waiver_row_must_carry_all_keys(tmp_path: Path) -> None:
+    # A waiver row without token/pair/best/reason is refused (T3: machine-
+    # readable waivers with a reason — a comment is not auditable).
+    themes = json.loads(json.dumps(VALID["themes"]))
+    themes["light"] = dict(themes["light"])
+    themes["light"]["waivers"] = [{"token": "critical-red",
+                                   "pair": "surface",
+                                   "best": 4.77}]  # reason missing
+    p = _fixture(tmp_path, themes=themes)
+    r = _run_on(p)
+    assert r.returncode == 1
+    assert "waiver row" in r.stdout
+
+
+def test_waivers_non_list_rejected(tmp_path: Path) -> None:
+    themes = json.loads(json.dumps(VALID["themes"]))
+    themes["light"] = dict(themes["light"])
+    themes["light"]["waivers"] = {"token": "critical-red"}
+    p = _fixture(tmp_path, themes=themes)
+    r = _run_on(p)
+    assert r.returncode == 1
+    assert "waivers must be a list" in r.stdout
+
+
+def test_system_resolution_target_must_be_shipped_builtin(tmp_path: Path) -> None:
+    doc = json.loads(SRC.read_text(encoding="utf-8"))
+    doc["system_resolution"] = {
+        "default": "light",
+        "modes": {"light": "light", "dark": "neon", "high-contrast": "hc"}}
+    p = _fixture(tmp_path, extra={"system_resolution":
+                                 doc["system_resolution"]},
+                 themes=doc["themes"])
+    r = _run_on(p)
+    assert r.returncode == 1
+    assert "must be a shipped built-in theme" in r.stdout
+
+
+def test_critical_red_calm_red_refused(tmp_path: Path) -> None:
+    # The recorded alarming-family law: pale pastels are NOT alarming —
+    # #ffaeae (r>=0x60 but r-min(g,b) < 0x60) must be refused.
+    themes = json.loads(json.dumps(VALID["themes"]))
+    themes["light"] = dict(themes["light"])
+    themes["light"]["critical-red"] = "#ffaeae"
+    p = _fixture(tmp_path, themes=themes)
+    r = _run_on(p)
+    assert r.returncode == 1
+    assert "alarming" in r.stdout
