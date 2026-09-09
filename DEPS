@@ -15,7 +15,9 @@
 #                  policy-resolver commits (policy/, + CI-parity fortify fix);
 #                  P7 advances it to the command-registry + four-views +
 #                  window-chrome-skeleton commit (379c00e), then to the
-#                  commands/tests Makefile default-goal CI fix (7e2cff2),
+#                  commands/tests Makefile default-goal CI fix (7e2cff2);
+#                  P8-T1 advances it to the settings tree (65639bf);
+#                  P8-T2 advances it to the token pipeline (de28f80),
 #                  pair-bumped same-day per docs/process/cross-repo-pin.md.
 #   gclient_url_scheme  P2-T1 (pinned https remotes only; no ssh, no file://)
 #
@@ -29,7 +31,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "65639bf3c9c3eafb70016de0fe422d88ca08c17d"     # xr-core P8-T1: settings tree (schema/sections/search/router/counters/host + fake + views); paired from 7e2cff2
+xr_core_rev: "de28f80b893f3215892cbb190a63d2381ee5d31b"     # xr-core P8-T2: token pipeline (tokens.json -> tokens.h + tokens.css); paired from 65639bf
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"
