@@ -106,6 +106,17 @@ echo "== P5: isolation-card l10n well-formed + vocab-clean =="
 "$PY" -c "import json,sys; d=json.load(open('../xr-core/l10n/isolation_card.json')); assert d['legal']=='PENDING-HG-1'; assert d['strings']; print('isolation-card OK', len(d['strings']),'strings')"
 
 # ---------------------------------------------------------------------------
+# P8-T5 gates (one l10n string source). xr_strings.grdp is the only place
+# user-visible text may be authored; the extractor lint refuses raw literals
+# in the views/payload and cross-checks every referenced id against the grdp.
+# ---------------------------------------------------------------------------
+echo "== P8-T5: l10n string source — xr_strings.grdp strict gate (schema ids, ph, desc, vocab, bidi, isolation-card) =="
+"$PY" tools/grdp_check.py --ids-from-schema
+
+echo "== P8-T5: raw-string lint — no user-visible literals outside ids (ui/ + payload), id cross-check =="
+"$PY" tools/l10n_extract.py --check
+
+# ---------------------------------------------------------------------------
 # P6 gates (policy resolver v1). All offline except the C++ suite, which
 # requires g++ and SKIPs VISIBLY when absent (skip-policy law) — the hosted
 # lane has g++ and runs it for real.
