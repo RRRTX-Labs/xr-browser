@@ -1,0 +1,44 @@
+{
+  "schema_note": "P8 bundle — built incrementally per task commit (DOD rows land with their task). Conforms to docs/contracts/evidence-bundle-v1.md. VERIFIED rows cite artifacts that exist in this repo at the cited path. Browser-runtime/visual/SR rows are HUMAN-GATED (see human-gates.md), never marked met in-sandbox.",
+  "phase": "P8",
+  "generated": "2026-09-09",
+  "plan": "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
+  "plan_sha256": "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b",
+  "supersedes": "evidence/P7",
+  "pin": "chromium d04cdb24d67b081f6cf80200ffc5233f44b61109 (UNCHANGED — 152.0.7977.82; the 0100-ui-skeleton patch round-trips against these exact pinned bytes); xr-core advanced per commit (DEPS pair-bumped same-day)",
+  "repos": {
+    "xr-browser": "P8 commits follow this bundle in the git log (see each DOD row's notes for the commit)",
+    "xr-core": "xr-core P8 commits (settings/, themes/, ui/, l10n/) — see repo-map + DEPS pair-bumps"
+  },
+  "verdict_vocabulary": ["VERIFIED", "HUMAN-GATED", "SIMULATED", "BLOCKED", "NOT-BY-DESIGN"],
+  "source_labels": ["local-run", "fixture", "ci-run", "UNVERIFIED"],
+  "policy": "P8 proof bar = settings/theme logic lives in std-only C++20 cores (byte-parity with Python reference fakes over >=30 cases per host), search recall >=95% top-3 on the committed 200-phrase corpus, token pipeline one-source/two-consumers diff-clean, theme loader refuses failing themes (never-accept fuzz invariant, 0 violations), attention ledger local-only with disposable-writes-nothing proven, i18n real-or-visibly-skipped (never faked), mutation >=95% kill with survivors dispositioned. Browser-runtime budgets, no-reload theme switch and visual snapshots are HG-35/HG-31/HG-32 farm rows, never met-in-sandbox.",
+  "dod_rows": [
+    {
+      "id": "DOD-1",
+      "dod": "T0 landed as its own commit: added-file classification in the pure engine + promotion-smoke fix + on-push live smoke; no gate semantics weakened",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/t0-red-before.txt",
+        "logs/t0-green-after.txt",
+        "docs/state/research-log-P8.md",
+        "build/upstream/classify.py",
+        "build/upstream/tests/test_upstream_suite.py"
+      ],
+      "notes": "Red: `./scripts/build rebase rebase --to refs/heads/main --dry-run --explain` died at the pin-side fetch of chrome/browser/ui/xr/BUILD.gn (HTTP 404, exit 1) — rebase_bot.py fetched every manifest file at the pin with no 404 tolerance while the target side already tolerated absence. Green: same canary from the pin to the pin (d04cdb24…) → verdict GREEN exit 0 (wall-clock 5.4 s warm / 8.0 s in the run_checks lane). classify.py now treats a manifest file missing at the pin as an ADDITION (clean when also absent at the target; BROKEN path-collision when upstream now owns the path; moved-detection never attempted for additions). promotion.py compat smoke materializes 404-at-candidate files as absent and lets apply decide (an added file is created — clean; an upstream-deleted hook fails the apply — refusal). Fixture tests: added-file clean / path-collision BROKEN / mixed entry / engine-misuse rejections / run_rebase rows / promotion smoke both ways. On-push coverage: new run_checks.sh lane runs the exact code path live (pin→pin, fetch.py only)."
+    }
+  ],
+  "human_gates": [
+    {"id": "HG-20", "gate": "user action: PAT revocation still unconfirmed", "status": "HUMAN-GATED", "runbook": "evidence/P8/human-gates.md", "note": "The phase brief's PAT (ghp_…) remains live/unrevoked per user silence."},
+    {"id": "HG-26", "gate": "contract ratification — three phases consuming PENDING contracts", "status": "HUMAN-GATED", "runbook": "evidence/P8/human-gates.md", "note": "P8 consumes settings-schema-v1 + theme-tokens-v1 (both REVIEW-COMPLETE/ratified PENDING) and the P7 command-descriptor surface via the roster commands covering settings sections."},
+    {"id": "HG-35", "gate": "browser-side settings/theme budgets + no-reload theme switch + visual x-theme snapshots (farm)", "status": "HUMAN-GATED", "runbook": "docs/webui-e2e.md", "note": "NEW in P8. Core-side apply <=100 ms IS measured in-sandbox (themes/bench); the browser rows (300 ms first paint, mid-window no-reload switch, snapshots x 6 themes x 4 views) are farm work."},
+    {"id": "HG-32", "gate": "a11y keyboard/SR walk extended to settings + High-Contrast", "status": "HUMAN-GATED", "runbook": "docs/webui-e2e.md", "note": "EXTENDED (P8): settings shell keyboard model + SR over settings + forced-colors walk."},
+    {"id": "HG-28", "gate": "24 h fuzz + reference-hardware bench", "status": "HUMAN-GATED", "runbook": "evidence/P8/logs", "note": "P8 in-sandbox campaigns are 600 s seeded each; 24 h fleet + reference hardware remain."},
+    {"id": "HG-31", "gate": "farm browser E2E (P8 settings/theme flows added to webui-e2e.md)", "status": "HUMAN-GATED", "runbook": "docs/webui-e2e.md", "note": ""},
+    {"id": "HG-33", "gate": "power-user dogfood week 1", "status": "HUMAN-GATED", "runbook": "docs/webui-e2e.md", "note": ""},
+    {"id": "HG-34", "gate": "branch protection/PR flow", "status": "HUMAN-GATED", "runbook": "evidence/P8/human-gates.md", "note": "Direct push to main remains sanctioned (P6-T0 push-mode ruling)."}
+  ],
+  "carried_hg": ["HG-20", "HG-26", "HG-28", "HG-31", "HG-32", "HG-33", "HG-34"],
+  "not_done_by_design": []
+}

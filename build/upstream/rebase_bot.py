@@ -147,8 +147,19 @@ def run_rebase(*, to: str, manifest_path: Path, source, from_rev: str,
 
         pin_files: dict[str, str] = {}
         target_files: dict[str, str | None] = {}
+        additions: list[str] = []
         for f in p.get("files", []):
-            pin_files[f] = source.file_text(from_rev, f)
+            try:
+                pin_files[f] = source.file_text(from_rev, f)
+            except FetchError as exc:
+                # T0: a manifest file absent at the pin is a patch ADDITION
+                # (the patch creates it — e.g. XR-owned payload files that
+                # exist at no upstream rev). A genuine 404 is the only
+                # "missing" signal: any other FetchError still fails closed
+                # (allowlist/redirect/decode failures are never absences).
+                if "HTTP 404" not in str(exc):
+                    raise
+                additions.append(f)
             try:
                 target_files[f] = source.file_text(to_resolved, f)
             except FetchError:
@@ -156,12 +167,14 @@ def run_rebase(*, to: str, manifest_path: Path, source, from_rev: str,
 
         moved: dict[str, str] = {}
         for f, tgt in target_files.items():
-            if tgt is None:
+            # moved-detection hashes pin bytes — never attempted for
+            # additions (they have none); only pin-present files can move.
+            if tgt is None and f not in additions:
                 moved = {**moved, **_moved_targets(source, f, pin_files[f], to_resolved)}
 
         result: PatchResult = classify_patch(
             pid, p.get("owner", "?"), p.get("category", "?"),
-            patch_text, pin_files, target_files, moved)
+            patch_text, pin_files, target_files, additions, moved)
         patches_out.append({
             "id": result.id, "owner": result.owner, "category": result.category,
             "cls": result.cls, "source": source_label,
@@ -252,7 +265,7 @@ def _prepare_deps_bump_branch(root: Path, to_sha: str, work_dir: Path) -> str:
 
 
 def selftest() -> int:
-    """The Plan's synthetic drill, offline: 5 patches, 3 sequential ranges."""
+    """The Plan's synthetic drill, offline: 6 patches, 3 sequential ranges."""
     import fixtures
     corpus = fixtures.build_corpus()
     source = fixtures.fixture_source_for(corpus)
@@ -274,7 +287,7 @@ def selftest() -> int:
             for f in failures:
                 print(f"FAIL: {f}")
             return 1
-        print("selftest: 5-patch classification drill PASS (clean/drift/moved/deleted/semantic)")
+        print("selftest: 6-patch classification drill PASS (clean/drift/moved/deleted/semantic/added)")
         return 0
 
 
@@ -293,7 +306,7 @@ def main() -> int:
                    help="report only — never cited as applied state, no branch prep")
     r.add_argument("--explain", action="store_true", help="one-glance verdict + next action")
     r.add_argument("--json", action="store_true", help="emit the report as JSON")
-    sub.add_parser("selftest", help="offline 5-patch synthetic drill (Plan P3 Tests)")
+    sub.add_parser("selftest", help="offline 6-patch synthetic drill (Plan P3 Tests)")
 
     argv = sys.argv[1:]
     if argv and argv[0] == "selftest":

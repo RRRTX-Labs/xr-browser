@@ -1,0 +1,2 @@
+GREEN: all patches apply cleanly at the target rev — proceed to promotion/DEPS-bump review (human presses the button; L24)
+wall-clock 5.351s, 21 B fetched, mode=dry-run, source=real

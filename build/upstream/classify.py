@@ -19,10 +19,18 @@ Classification classes (Plan §4 P3-T2, phase prompt §12.3):
                          review per §12.3 — user-visible consequence)
   stale-base             patch does not apply against its OWN recorded pin
                          (manifest rot; the manifest/patch pair is inconsistent)
+  (added file, T0)       a manifest file ABSENT at the pin is a patch
+                         ADDITION (the patch creates it; e.g. XR-owned
+                         payload files that exist at no upstream rev):
+                           addition + absent at target  -> clean
+                           addition + PRESENT at target -> path-collision
+                         (upstream now owns our path — human work item,
+                         BROKEN verdict; never silently renamed)
 
 Verdicts: GREEN (all clean) / DRIFT (moved or textual-drift: mechanical
-re-anchor) / BROKEN (semantic, deleted or stale-base: human work item).
-Conflicts are work items, not outages (§12.1) — exit code 1 + routed bundle.
+re-anchor) / BROKEN (semantic, path-collision, deleted or stale-base: human
+work item). Conflicts are work items, not outages (§12.1) — exit code 1 +
+routed bundle.
 """
 from __future__ import annotations
 
@@ -37,16 +45,19 @@ CLASS_SEMANTIC = "semantic"
 CLASS_MOVED = "file-moved"
 CLASS_DELETED = "file-deleted"
 CLASS_STALE_BASE = "stale-base"
+CLASS_PATH_COLLISION = "path-collision"
 
-# worst -> best ordering for patch-level aggregation
-_SEVERITY = [CLASS_STALE_BASE, CLASS_SEMANTIC, CLASS_DELETED,
-             CLASS_MOVED, CLASS_DRIFT, CLASS_CLEAN]
+# worst -> best ordering for patch-level aggregation. path-collision is a
+# BROKEN human work item (T0: upstream now owns a path our patch adds).
+_SEVERITY = [CLASS_STALE_BASE, CLASS_SEMANTIC, CLASS_PATH_COLLISION,
+             CLASS_DELETED, CLASS_MOVED, CLASS_DRIFT, CLASS_CLEAN]
 
 VERDICT_GREEN = "GREEN"
 VERDICT_DRIFT = "DRIFT"
 VERDICT_BROKEN = "BROKEN"
 
-_BROKEN_CLASSES = {CLASS_STALE_BASE, CLASS_SEMANTIC, CLASS_DELETED}
+_BROKEN_CLASSES = {CLASS_STALE_BASE, CLASS_SEMANTIC, CLASS_DELETED,
+                   CLASS_PATH_COLLISION}
 _DRIFT_CLASSES = {CLASS_MOVED, CLASS_DRIFT}
 
 VALID_SOURCES = {"real", "fixture"}
@@ -156,17 +167,36 @@ def classify_patch(patch_id: str, owner: str, category: str,
                    patch_text: str,
                    pin_files: dict[str, str],
                    target_files: dict[str, str | None],
+                   additions: list[str] | None = None,
                    moved_targets: dict[str, str] | None = None) -> PatchResult:
     """Classify one patch against pin/target file contents.
 
     pin_files: path -> content at the from-rev (the patch's recorded base)
     target_files: path -> content at the to-rev (None = absent)
+    additions: manifest paths ABSENT at the from-rev (patch-ADDED files that
+               exist at no upstream rev — the T0 addition semantics: absent
+               at the pin is an addition, never a fetch error)
     moved_targets: path -> new path when an identical blob was located elsewhere
     """
+    additions = list(additions or [])
+    if len(set(additions)) != len(additions):
+        raise ClassifyError(f"duplicate addition path in patch {patch_id}")
+    overlap = set(additions) & set(pin_files)
+    if overlap:
+        raise ClassifyError(f"path in both pin_files and additions: "
+                            f"{sorted(overlap)} (manifest inconsistency)")
     moved_targets = moved_targets or {}
+    # moved detection is byte-hash-based; additions have no pin bytes, so a
+    # moved entry for an added path is engine misuse (never attempted).
+    if set(additions) & set(moved_targets):
+        raise ClassifyError("moved_targets must never contain an added path "
+                            "(no pin bytes to hash)")
     res = PatchResult(id=patch_id, owner=owner, category=category)
+    all_files = sorted(set(pin_files) | set(additions))
 
-    # 1. the patch must apply at its own recorded pin (stale-base check)
+    # 1. the patch must apply at its own recorded pin (stale-base check).
+    # Added files are absent at the pin by definition: the pin scratch tree
+    # holds only pin-present files and `git apply` creates the additions.
     with tempfile.TemporaryDirectory(prefix="xr-pin-") as td:
         pin_scratch = Path(td)
         _write_tree(pin_scratch, pin_files)
@@ -178,7 +208,7 @@ def classify_patch(patch_id: str, owner: str, category: str,
         patched_files = {p: (pin_scratch / p).read_text(encoding="utf-8")
                          for p in pin_files}
 
-    # 2. clean-at-target check (whole patch, all files present at target)
+    # 2. clean-at-target check (whole patch; additions are created by apply).
     if all(target_files.get(p) is not None for p in pin_files):
         with tempfile.TemporaryDirectory(prefix="xr-tgt-") as td:
             tgt_scratch = Path(td)
@@ -186,12 +216,28 @@ def classify_patch(patch_id: str, owner: str, category: str,
                                       if t is not None})
             ok, _err = apply_check(tgt_scratch, patch_text)
             if ok:
-                res.files = [FileResult(p, CLASS_CLEAN) for p in sorted(pin_files)]
+                for p in all_files:
+                    detail = ("patch-added file: absent at pin AND at target — "
+                              "apply creates it (whole-patch clean; T0)"
+                              if p in additions else "")
+                    res.files.append(FileResult(p, CLASS_CLEAN, detail))
                 res.cls = CLASS_CLEAN
                 return res
 
-    # 3. per-file classification
-    for path in sorted(pin_files):
+    # 3. per-file classification (additions first — they have no pin bytes).
+    for path in all_files:
+        if path in additions:
+            if target_files.get(path) is None:
+                res.files.append(FileResult(
+                    path, CLASS_CLEAN,
+                    "patch-added file: absent at pin AND at target — apply "
+                    "creates it (T0 addition semantics)"))
+            else:
+                res.files.append(FileResult(
+                    path, CLASS_PATH_COLLISION,
+                    "path-collision: upstream now owns a path this patch "
+                    "ADDS — human work item, never silently renamed (T0)"))
+            continue
         if path in moved_targets:
             res.files.append(FileResult(
                 path, CLASS_MOVED,

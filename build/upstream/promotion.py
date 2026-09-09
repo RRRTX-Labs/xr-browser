@@ -143,7 +143,17 @@ def _patch_roundtrip_at(source: GitilesFetchSource, manifest_path: Path,
                 try:
                     files[f] = source.file_text(candidate_rev, f)
                 except FetchError as exc:
-                    return False, f"patch {p.get('id')}: target file {f} not fetchable at {candidate_rev[:12]}… — {exc}"
+                    # T0: a file absent at the candidate rev is materialized
+                    # as ABSENT and `apply_patch` decides. An added file (absent
+                    # at the pin by definition, so absent at any candidate too)
+                    # is CREATED by the apply — clean, and the compat smoke no
+                    # longer refuses it. A hooked file upstream DELETED fails
+                    # the apply (refusal: a real re-anchor work item). Only a
+                    # genuine 404 is an absence; any other FetchError still
+                    # refuses (fail-closed — an absence is never guessed).
+                    if "HTTP 404" not in str(exc):
+                        return False, (f"patch {p.get('id')}: target file {f} "
+                                       f"not fetchable at {candidate_rev[:12]}… — {exc}")
             for rel, text in files.items():
                 fp = tree / rel
                 fp.parent.mkdir(parents=True, exist_ok=True)

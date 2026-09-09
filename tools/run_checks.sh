@@ -174,4 +174,20 @@ echo "== P7: menu model — Tier-1 ≤9 + tier separation + golden diff =="
 echo "== P7: §10 coverage ratchet (every future surface maps to a command) =="
 "$PY" tools/coverage_check.py
 
+# ---------------------------------------------------------------------------
+# P8-T0 gates (added-file upstream debt). The canary that used to die at the
+# 02:00 UTC nightly: a manifest entry that ADDS files (absent at the pin) was
+# an unhandled 404. This lane runs the EXACT code path every push — real
+# fetch.py classification from the pin to the pin (--to <chromium_rev>): a
+# regression turns the governance gate red instead of a nightly.
+# ---------------------------------------------------------------------------
+echo "== T0: upstream added-file canary — live pin->pin classification (fetch.py) =="
+CHROMIUM_REV="$(sed -n 's/^chromium_rev: \"\([0-9a-f]\{40\}\)\".*/\1/p' DEPS)"
+if [ -n "$CHROMIUM_REV" ] && [ -d ../xr-core/patches ]; then
+  "$PY" build/upstream/rebase_bot.py rebase --to "$CHROMIUM_REV" --dry-run --explain \
+    --out "$(mktemp -d)/xr-t0-canary"
+else
+  echo "SKIP: SKIP (tool absent: ../xr-core sibling or DEPS chromium_rev) — needed for: the T0 live added-file canary (real fetch.py pin->pin classification); fixture coverage runs in pytest regardless"
+fi
+
 echo "== ALL GOVERNANCE CHECKS PASSED =="

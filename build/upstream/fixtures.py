@@ -6,13 +6,16 @@ injection fails CI." Fixtures are MINIMAL SYNTHETIC TREES authored here —
 never copied Chromium blobs (research fixtures rule); real-upstream data is
 fetched live by the real lane and stamped source:"real".
 
-Corpus (5 patches, one per classification):
+Corpus (6 patches, one per classification):
   F-0001-clean     target identical to pin
   F-0002-drift     upstream drift on a hunk-context line (direct apply fails,
                    three-way merge clean)  -> textual-drift(3way-ok)
   F-0003-moved     target path absent; identical content under a new path
   F-0004-deleted   target path absent, content gone
   F-0005-semantic  upstream rewrote the exact line the patch touches
+  F-0006-added     patch-ADDED file that exists at NO upstream rev (T0: a
+                   manifest file missing at the pin is an addition; clean at
+                   every range — the apply creates it)
 
 All files share a canonical 4-line shape so the generated hunks are valid at
 the pin rev; drift/semantic events modify specific lines (see REV_* below).
@@ -33,6 +36,7 @@ F2 = "chrome/app/theme/xr/TWO"
 F3 = "chrome/app/moved/THREE"
 F4 = "chrome/app/gone/FOUR"
 F5 = "chrome/app/semantic/FIVE"
+F6 = "chrome/app/theme/xr/SIX"
 
 
 def _canon(payload: str) -> str:
@@ -42,6 +46,13 @@ def _canon(payload: str) -> str:
 def _patch(path: str, old: str, new: str) -> str:
     return (f"--- a/{path}\n+++ b/{path}\n@@ -1,4 +1,4 @@\n"
             f" context-one\n context-two\n-{old}\n+{new}\n context-three\n")
+
+
+def _added_patch(path: str, payload: str) -> str:
+    """A 'new file' unified diff (git apply creates it on any target tree)."""
+    lines = payload.splitlines()
+    return (f"--- /dev/null\n+++ b/{path}\n@@ -0,0 +1,{len(lines)} @@\n"
+            + "".join(f"+{l}\n" for l in lines))
 
 
 PIN_FILES = {
@@ -76,6 +87,10 @@ PATCHES = [
      "files": [F4], "patch": _patch(F4, "original-four", "XR-four")},
     {"id": "F-0005-semantic", "owner": "@xr/security", "category": "content_seams",
      "files": [F5], "patch": _patch(F5, "original-five", "XR-five")},
+    # T0: an added file exists at no upstream rev (patch payloads like
+    # chrome/browser/ui/xr/*). Absent at pin => addition; clean at any range.
+    {"id": "F-0006-added", "owner": "@xr/platform", "category": "ui",
+     "files": [F6], "patch": _added_patch(F6, "XR-added-line-one\nXR-added-line-two")},
 ]
 
 REV_FILES = {REV_A: PIN_FILES, REV_B: FILES_B, REV_C: FILES_C, REV_D: FILES_D}
@@ -151,9 +166,9 @@ def expected_classes(rev: str) -> dict[str, str]:
     if rev == REV_B or rev == REV_C:
         return {"F-0001-clean": "clean", "F-0002-drift": "textual-drift(3way-ok)",
                 "F-0003-moved": "file-moved", "F-0004-deleted": "file-deleted",
-                "F-0005-semantic": "semantic"}
+                "F-0005-semantic": "semantic", "F-0006-added": "clean"}
     if rev == REV_D:
         return {"F-0001-clean": "clean", "F-0002-drift": "clean",
                 "F-0003-moved": "clean", "F-0004-deleted": "clean",
-                "F-0005-semantic": "clean"}
+                "F-0005-semantic": "clean", "F-0006-added": "clean"}
     raise ValueError(f"unknown fixture rev {rev!r}")
