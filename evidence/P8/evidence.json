@@ -48,7 +48,7 @@
     "xr-core@65639bf (settings tree)",
     "xr-browser@effe2bf (DEPS pair-bump) + @d4f5120 (parity gate)",
     "docs/state/research-log-P8.md (T1 section)",
-    "xr-core/settings/tests/bench-results.json"
+    "../xr-core/settings/tests/bench-results.json"
    ],
    "notes": "Settings v0: 3 sections + 11 typed settings from one schema source; search core C++ ranks (host renders); recall 200/200 = 100.0% top-3 on the committed generated corpus (bar >=95%); suites 0 failures (settings_host 46 checks); future-scale bench (2000-entry corpus) p99 24 us \u2014 MET vs 5000 us sub-budget; counters local-only day-granular envelope, tmp->fsync->rename, deny-preserve on corrupt ledger; disposable sessions write zero bytes."
   },
@@ -60,7 +60,8 @@
    "evidence": [
     "xr-core@de28f80 (token pipeline)",
     "xr-browser@15bcd12 + @6a5fbad (generator + self-negatives)",
-    "docs/state/research-log-P8.md (T2 section)"
+    "docs/state/research-log-P8.md (T2 section)",
+    "../xr-core/ui/themes/tokens.json"
    ],
    "notes": "ui/themes/tokens.json is the single source; generated header consumed by the 0100-ui-skeleton payload at the pin (xr/ui/themes/tokens.h include replaces hand-literal tables); generator self-negatives (duplicate keys, unknown token/meta field, unsafe font, partial theme, reserved-law) all refuse; tokens_gen --check diff-clean."
   },
@@ -75,7 +76,7 @@
     "logs/t3-cpp-suites.txt",
     "logs/t3-bench.txt",
     "logs/t3-parity.txt",
-    "xr-core/themes/tests/bench-results.json",
+    "../xr-core/themes/tests/bench-results.json",
     "docs/state/research-log-P8.md (T3 section + locked decisions)"
    ],
    "notes": "Themes: light (9 exact waiver rows in data), dark, high-contrast, +2 curated dusk/prairie (AAA on every security_critical pair: 7.05-8.86:1); System is a resolver following system_resolution modes. C++ suites: theme 39 / contrast 343 / loader 35 / host 37 / fuzz unit-lane 30 s \u2014 all 0 failures, seed 20260909. Bench: 6-case corpus x 400 iters, avg custom-import ~41 us, builtin-apply ~20 us, worst single ~155 us \u2014 MET (budget 100000 us). Parity: 31 valid rows byte-identical, 12 hostile rows code-identical, durability state file byte-identical. The 600 s fuzz campaign + mutation gate are T4's rows."
