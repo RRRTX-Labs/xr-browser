@@ -80,6 +80,80 @@
     "docs/state/research-log-P8.md (T3 section + locked decisions)"
    ],
    "notes": "Themes: light (9 exact waiver rows in data), dark, high-contrast, +2 curated dusk/prairie (AAA on every security_critical pair: 7.05-8.86:1); System is a resolver following system_resolution modes. C++ suites: theme 39 / contrast 343 / loader 35 / host 37 / fuzz unit-lane 30 s \u2014 all 0 failures, seed 20260909. Bench: 6-case corpus x 400 iters, avg custom-import ~41 us, builtin-apply ~20 us, worst single ~155 us \u2014 MET (budget 100000 us). Parity: 31 valid rows byte-identical, 12 hostile rows code-identical, durability state file byte-identical. The 600 s fuzz campaign + mutation gate are T4's rows."
+  },
+  {
+   "id": "DOD-5",
+   "dod": "T4 landed: loader hostile negatives 5g-5j (invalid UTF-8, depth 70 vs cap 64, 2^63, 1e999) on the strict parser; two 600 s seeded fuzz campaigns (themes 7,891,840 checks, settings 188,416 checks, both 0 violations, seed 20260909); full mutation lanes on all three cores \u2014 policy 777/777, settings 485/485, themes 386/386 killed, each 100.00% vs >=90% gate, deny-guards 124/124, 28/28, 21/21 killed; no survivors to waive",
+   "evidence": [
+    "../xr-core@887e96b (loader 5g-5j)",
+    "logs/t4-fuzz-themes-600s.txt",
+    "logs/t4-fuzz-settings-600s.txt",
+    "logs/t4-mutation-policy.txt",
+    "logs/t4-mutation-settings.txt",
+    "logs/t4-mutation-themes.txt",
+    "docs/state/research-log-P8.md (T4 section)"
+   ],
+   "source": "local-run",
+   "status": "VERIFIED",
+   "notes": "In-sandbox seeded campaigns only; the 24 h fleet row remains HG-28 (human). Suites at 0 failures (theme 39/contrast 343/loader 40/host 37)."
+  },
+  {
+   "id": "DOD-6",
+   "dod": "T5 landed: one l10n string source (xr-core/l10n/xr_strings.grdp, 59 messages, xr-id per message, desc + ph/ex) covering all 25 settings-schema ids plus settings/palette/shortcut/help chrome; views render only message ids (ui/i18n.ts text()); grdp_check strict gate + l10n_extract raw-literal lint wired into run_checks with 16 tool tests; isolation-card kept as its own legal-gated source (keep-both + gate)",
+   "evidence": [
+    "../xr-core@3ff27e2 (l10n string source + id-driven views)",
+    "tools/grdp_check.py",
+    "tools/l10n_extract.py",
+    "tools/tests/test_p8_t5_l10n.py",
+    "logs/t7-help-deep-link-gates.txt",
+    "docs/state/research-log-P8.md (T5 section)"
+   ],
+   "source": "local-run",
+   "status": "VERIFIED",
+   "notes": "tsc strict 0 errors; l10n_extract CLEAN (13 files, 0 missing ids); .xtb/qyy pseudo-locale production remain open items (P36/apply tool), recorded not claimed."
+  },
+  {
+   "id": "DOD-7",
+   "dod": "T6 landed: attention-budget ledger v0 policy of record (docs/state/attention-budget.md \u2014 local counters only, UTC-day buckets, 90-day rolling retention, tmp->fsync->rename durability, deny-preserve on corrupt ledgers, disposable zero-byte sessions) with a wrap-safe run_checks lane; counters core + suites + fuzz all green",
+   "evidence": [
+    "../xr-core/settings/core/counters.h",
+    "../xr-core/settings/core/counters.cc",
+    "docs/state/attention-budget.md",
+    "tools/run_checks.sh",
+    "logs/t6-counters-suites.txt",
+    "docs/state/research-log-P8.md (T6 section)"
+   ],
+   "source": "local-run",
+   "status": "VERIFIED",
+   "notes": "host 46 + counters 35 checks, fuzz 40960 checks, 0 violations (seed 20260909, 30 s unit budget)."
+  },
+  {
+   "id": "DOD-8",
+   "dod": "T7 landed: help<->settings deep-link contract v1 (docs/contracts/help-deep-link-v1.md) with machine-checked mapping law both directions (3 schema sections <-> settings.network/privacy/identity commands, schema anchor_root); xr-help-index anchor target rows + help.no-entry fallback; tools/help_deep_link.py lint + 6 tool tests wired into run_checks",
+   "evidence": [
+    "../xr-core@bace205 (help-deep-link anchors + no-entry fallback)",
+    "docs/contracts/help-deep-link-v1.md",
+    "tools/help_deep_link.py",
+    "tools/tests/test_p8_t7_help_deep_link.py",
+    "logs/t7-help-deep-link-gates.txt",
+    "docs/state/research-log-P8.md (T7 section)"
+   ],
+   "source": "local-run",
+   "status": "VERIFIED",
+   "notes": "grdp 59 messages; tsc strict clean; unknown-anchor fallback is the honest no-entry status, never a fabricated entry."
+  },
+  {
+   "id": "DOD-9",
+   "dod": "T8 machine-side wrap landed: governance suite green end-to-end (evidence bundles structural+strict PASS incl. P8, all tools pytest 150+, T5/T6/T7 lanes green) with the unpushed-pin gate as the ONLY local red (push pending PAT/HG-20); E2E runbook extended to the P8 settings/themes flows (HG-31/HG-35 farm rows in docs/webui-e2e.md); visual/snapshot + browser-budget rows stay HUMAN-GATED on the farm; no RATIFIED or pushed claims anywhere",
+   "evidence": [
+    "docs/webui-e2e.md (P8 runbook section)",
+    "docs/state/research-log-P8.md",
+    "evidence/P8/human-gates.md",
+    "tools/run_checks.sh"
+   ],
+   "source": "local-run",
+   "status": "VERIFIED",
+   "notes": "Remainder is human/push-gated by design: HG-20 (PAT), HG-26 (ratification), HG-28 (24 h fleet), HG-31/32/33/35 (farm), pushes of the pair-bumped pins."
   }
  ],
  "human_gates": [

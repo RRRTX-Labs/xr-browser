@@ -158,6 +158,26 @@ One JSON source -> two generated consumers, diff-checked:
 - Host/fake durability semantics divergence fixed in the fake to mirror the
   host: missing store dir is a typed `kIoError` refusal, never auto-created.
 
+## T4 — loader hostile negatives, 600 s fuzz campaigns, full mutation lanes
+
+- Loader hostile group 5g-5j (xr-core 887e96b): invalid UTF-8, nesting
+  depth 70 vs cap 64, integer 2^63, out-of-range double `1e999` — loader
+  40 checks / 0 failures; full themes suite re-run: theme 39 / contrast
+  343 / loader 40 / host 37, fuzz unit lane 421084 checks, 0 violations.
+- 600 s seeded campaigns (seed 20260909; transcripts in
+  `evidence/P8/logs/`): themes fuzz 7,891,840 checks, 996,999 accepts,
+  6,894,841 refusals, 0 violations; settings fuzz 188,416 checks, 0
+  violations (router-ok 22,434 / router-typed-error 52,833; queries
+  in-memory only). In-sandbox seeded evidence; the 24 h fleet row stays
+  HG-28.
+- Full mutation lanes (tools/mutation_test.py, generalized policy/settings/
+  themes): policy 777 mutants killed 777 (deny-guard 124/124), settings 485
+  killed 485 (28/28), themes 386 killed 386 (21/21) — each 100.00% vs the
+  >=90% gate; no survivors, so the two earlier sample-disposition items
+  (settings/core/json_parse.cc depth boundary, settings_schema.cc string
+  content) are killed by the full suites and need no waiver. Transcripts:
+  `evidence/P8/logs/t4-mutation-{policy,settings,themes}.txt`.
+
 ## T5 — l10n string source + id-driven views (xr-core 3ff27e2)
 
 Single source of every user-visible XR string: `xr-core/l10n/xr_strings.grdp`

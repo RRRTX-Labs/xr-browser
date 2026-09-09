@@ -119,3 +119,60 @@ and trust are *never* a "container" (they are first-class chrome).
 
 The palette is the *only* surface that reorders on keystrokes; the menus,
 shortcut editor and help index are static renderings of the same registry.
+
+## P8 stage: settings + themes E2E runbook (farm rows — HG-31 / HG-35)
+
+P8 adds the settings shell (search-first, deep-linkable) and the theme
+engine (4+2 built-ins, contrast-enforced loader) to the WebUI surfaces.
+Everything below is a FARM row (HG-31 hardware / HG-35 budgets), executed
+by the named humans in the runbook; nothing here is implied PASS from the
+in-sandbox core suites.
+
+### Flow 1 — settings search → jump → toggle → deep link → back
+
+1. Open `xr://settings` (flag `xr_settings_v0=true`). Assert first paint
+   ≤ 300 ms cold (HG-35 budget) and the focus lands in the search box.
+2. Type a query that matches a section (e.g. "network") and one that
+   matches a setting alias (e.g. "containers" → identity kind). Assert
+   live results with a count (`settings.results-count`), arrow-key
+   navigation, Enter jumps (`xr://settings/<section>/<key>`), and the
+   "Jumped to" status naming key + anchor.
+3. Toggle a setting. Assert the change persists across a store reload and
+   is refused with the typed policy reason when the row is policy-surfaced
+   (`preempted` / `read-only in v0` badges).
+4. Re-open the deep link in a fresh view; assert the section/key scroll
+   target and that an out-of-range key shows the honest
+   section-unavailable state — nothing silently last-wins.
+5. Back/forward navigation restores the previous settings state.
+6. Registry flag off (`xr_settings_v0=false`): assert the flag-off empty
+   state and that no settings view renders (stock chrome only).
+   Registry flag on + command flag off (`xr_command_registry_v1=false`):
+   assert palette/help flag-off states and that `xr://help` still renders
+   the roster with disabled reasons — never a "coming soon" rail.
+
+### Flow 2 — theme switching (no reload) + token-map event
+
+1. Open `xr://settings`, switch theme Light → Dark → System → High
+   Contrast → dusk → prairie. Assert the switch applies MID-WINDOW with NO
+   page reload and a published token-map event is observable to the
+   host glue.
+2. Apply budget: theme apply ≤ 100 ms (HG-35; core-side bench MET
+   in-sandbox, browser-side row measured here).
+3. High-Contrast + settings under forced-colors: assert readable rows and
+   the security-critical token contrast (AAA where practical) on the
+   settings surface (HG-32 row is the SR pass; this row is visual).
+
+### Flow 3 — visual snapshots (×themes ×views)
+
+Publish snapshots of all 4+2 themes across the four views + settings
+shell + the identity color bar, one canonical image set per theme
+(light/dark/system/high-contrast/dusk/prairie), committed with the
+release evidence. Any color that fails the contrast audit must not render
+— the loader refuses such themes at import (in-sandbox proof), and the
+snapshot set is the browser-side proof.
+
+### Help deep links (contract v1)
+
+- `xr://help/settings.network` (etc.) scrolls to the row and shows it
+  enabled; a nonexistent id (e.g. `xr://help/tab.nope`) leaves the index
+  visible with the `help.no-entry` status naming the id.
