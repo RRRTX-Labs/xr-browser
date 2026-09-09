@@ -31,7 +31,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "8102a92b893f3215892cbb190a63d2381ee5d31b"     # xr-core P8-T3: theme engine v0 (five built-ins + contrast core + host/fake); paired from de28f80
+xr_core_rev: "3ff27e22c2a9441856463cf44cdde0963b0b6075"     # xr-core P8-T5: l10n string source (58 msgs) + id-driven views; from 8102a92 (loader 5g-5j)
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"
