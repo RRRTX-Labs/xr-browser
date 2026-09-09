@@ -1,0 +1,3 @@
+themes_bench: corpus=6 cases x 400 iters; avg per apply: custom-import 40.9 us, builtin-apply 19.6 us; worst-case single 155.2 us; verdict MET (budget 100000 us); bad=0
+seed 20260909, iterations 400, machine sandbox (host cpu as reported by uname -m)
+BENCH_RC=0

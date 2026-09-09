@@ -1,0 +1,26 @@
+g++ -std=c++20 -O2 -Wall -Wextra -Werror -D_FORTIFY_SOURCE=2 -I../.. -c ../../themes/core/json.cc -o build/themes/core/json.o
+g++ -std=c++20 -O2 -Wall -Wextra -Werror -D_FORTIFY_SOURCE=2 -I../.. -c ../../themes/core/json_parse.cc -o build/themes/core/json_parse.o
+g++ -std=c++20 -O2 -Wall -Wextra -Werror -D_FORTIFY_SOURCE=2 -I../.. -c ../../themes/core/sha256.cc -o build/themes/core/sha256.o
+g++ -std=c++20 -O2 -Wall -Wextra -Werror -D_FORTIFY_SOURCE=2 -I../.. -c ../../themes/core/theme.cc -o build/themes/core/theme.o
+g++ -std=c++20 -O2 -Wall -Wextra -Werror -D_FORTIFY_SOURCE=2 -I../.. -c ../../themes/core/contrast.cc -o build/themes/core/contrast.o
+g++ -std=c++20 -O2 -Wall -Wextra -Werror -D_FORTIFY_SOURCE=2 -I../.. -c ../../themes/core/loader.cc -o build/themes/core/loader.o
+g++ -std=c++20 -O2 -Wall -Wextra -Werror -D_FORTIFY_SOURCE=2 -I../.. ../../themes/host/themes_host.cc build/themes/core/json.o build/themes/core/json_parse.o build/themes/core/sha256.o build/themes/core/theme.o build/themes/core/contrast.o build/themes/core/loader.o -o build/themes_host
+g++ -std=c++20 -O2 -Wall -Wextra -Werror -D_FORTIFY_SOURCE=2 -I../.. ../../themes/bench/bench_main.cc build/themes/core/json.o build/themes/core/json_parse.o build/themes/core/sha256.o build/themes/core/theme.o build/themes/core/contrast.o build/themes/core/loader.o -o build/bench_main
+g++ -std=c++20 -O2 -Wall -Wextra -Werror -D_FORTIFY_SOURCE=2 -I../.. test_theme.cc build/themes/core/json.o build/themes/core/json_parse.o build/themes/core/sha256.o build/themes/core/theme.o build/themes/core/contrast.o build/themes/core/loader.o -o build/test_theme
+g++ -std=c++20 -O2 -Wall -Wextra -Werror -D_FORTIFY_SOURCE=2 -I../.. test_contrast.cc build/themes/core/json.o build/themes/core/json_parse.o build/themes/core/sha256.o build/themes/core/theme.o build/themes/core/contrast.o build/themes/core/loader.o -o build/test_contrast
+g++ -std=c++20 -O2 -Wall -Wextra -Werror -D_FORTIFY_SOURCE=2 -I../.. test_loader.cc build/themes/core/json.o build/themes/core/json_parse.o build/themes/core/sha256.o build/themes/core/theme.o build/themes/core/contrast.o build/themes/core/loader.o -o build/test_loader
+g++ -std=c++20 -O2 -Wall -Wextra -Werror -D_FORTIFY_SOURCE=2 -I../.. test_host.cc build/themes/core/json.o build/themes/core/json_parse.o build/themes/core/sha256.o build/themes/core/theme.o build/themes/core/contrast.o build/themes/core/loader.o -o build/test_host
+g++ -std=c++20 -O2 -Wall -Wextra -Werror -D_FORTIFY_SOURCE=2 -I../.. test_fuzz.cc build/themes/core/json.o build/themes/core/json_parse.o build/themes/core/sha256.o build/themes/core/theme.o build/themes/core/contrast.o build/themes/core/loader.o -o build/test_fuzz
+== test_theme ==
+theme: 39 checks, 0 failures
+== test_contrast ==
+contrast: 343 checks, 0 failures
+== test_loader ==
+loader: 35 checks, 0 failures
+== test_host ==
+themes-host: 37 checks, 0 failures
+== test_fuzz ==
+themes_fuzz: 419797 checks, 53009 accepts, 366788 refusals, 0 violations (seed 20260909, 30 s budget, 419793 iters)
+themes_fuzz: 1 checks, 0 failures
+ALL C++ THEMES TESTS PASSED
+MAKE_TEST_RC=0

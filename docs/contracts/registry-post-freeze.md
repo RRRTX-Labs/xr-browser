@@ -52,3 +52,28 @@ is an RFC through this same registry (P6-T5 pattern), not an in-place edit.
   flag is retired (removed from `flags.yaml` + `xr_common.gni`) only after the
   registry is the default. Retirement is itself a post-freeze registry change (a
   row above + an RFC), so the kill-switch cannot be silently dropped.
+
+| settings-host-protocol v1 | P8 (T1) | `settings/host_protocol.md` (the stdio method table + flag + availability semantics; byte-parity-locked against `fakes/settings.py`) | `docs/state/research-log-P8.md` | REVIEW-COMPLETE (ratification: PENDING, HG-26) |
+| theme-host-protocol v1 | P8 (T3) | `themes/host_protocol.md` (the stdio method table incl. the validate→audit→refuse law; byte-parity-locked against `fakes/themes.py`) | `docs/state/research-log-P8.md` | REVIEW-COMPLETE (ratification: PENDING, HG-26) |
+
+## P8 — settings v0 + theme tokens v1 (consuming the frozen `settings-schema-v1` + `theme-tokens-v1`)
+
+P8 implements to the two frozen contracts (`settings-schema-v1.md`,
+`theme-tokens-v1.md`) and **never redefines them.** A theme is declarative
+JSON only (no CSS/JS/urls/remote fonts); the token-name set is fixed per
+version and unknown tokens are rejected; the contrast validator consumes the
+contract without extending it. Settings sections/anchors/rows are generated
+from the schema data; the router and the settings host protocol add no
+hand-maintained surface lists.
+
+| Extension point | How P8 extends | Gate that bites |
+|---|---|---|
+| theme value set | new built-in THEME rows (declarative data under `ui/themes/tokens.json`); the System resolver follows `system_resolution` modes and carries no palette of its own | tokens_gen schema check + waiver/audit gates (`tokens_gen --check`, themes C++ suites) |
+| custom theme import | session-scoped custom docs through `import`/`validate-doc` (hostile-by-default; custom imports may NOT carry waivers) | 64 KiB cap + duplicate-key scan + strict parse + contrast audit (never accept a failing theme) |
+| settings host surface | new host methods are protocol rows above, byte-parity-locked against the fake | parity gate (>=30 cases per host) |
+| xr help deep links | `xr://help#<anchor>` anchors generated from the same data as the router | help_anchor_check (dangling impossible) |
+
+New *landed* settings sections beyond the schema's own sections are gated by
+the §10 coverage ratchet (coverage-allowlist) exactly as P7 surfaces are;
+settings sections are consumed by the registered roster commands (P8 row in
+`docs/contracts/commands.md`).

@@ -1,0 +1,27 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.14, pytest-9.0.3, pluggy-1.6.0 -- /usr/local/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/user/xr-browser/tools
+plugins: anyio-4.14.2
+collecting ... collected 17 items
+
+tests/test_p8_themes_tools.py::test_themes_parity_valid_cases PASSED     [  5%]
+tests/test_p8_themes_tools.py::test_themes_parity_malformed PASSED       [ 11%]
+tests/test_p8_themes_tools.py::test_themes_durability_session_parity PASSED [ 17%]
+tests/test_p8_themes_tools.py::test_themes_tokens_corpus_structure PASSED [ 23%]
+tests/test_p8_themes_tools.py::test_themes_reference_audit_zero_hard_failures PASSED [ 29%]
+tests/test_p8_settings_themes.py::test_settings_parity_valid_cases PASSED [ 35%]
+tests/test_p8_settings_themes.py::test_settings_parity_malformed PASSED  [ 41%]
+tests/test_p8_settings_themes.py::test_settings_session_counters_parity PASSED [ 47%]
+tests/test_p8_settings_themes.py::test_settings_recall_corpus_structure PASSED [ 52%]
+tests/test_p8_tokens_gen.py::test_real_source_is_valid_and_check_diff_clean PASSED [ 58%]
+tests/test_p8_tokens_gen.py::test_critical_red_reserved_law PASSED       [ 64%]
+tests/test_p8_tokens_gen.py::test_critical_red_missing_rejected PASSED   [ 70%]
+tests/test_p8_tokens_gen.py::test_unknown_token_rejected PASSED          [ 76%]
+tests/test_p8_tokens_gen.py::test_unknown_meta_field_rejected PASSED     [ 82%]
+tests/test_p8_tokens_gen.py::test_duplicate_keys_rejected PASSED         [ 88%]
+tests/test_p8_tokens_gen.py::test_unsafe_font_rejected PASSED            [ 94%]
+tests/test_p8_tokens_gen.py::test_partial_theme_rejected PASSED          [100%]
+
+============================== 17 passed in 5.35s ==============================
+PYTEST_RC=0
