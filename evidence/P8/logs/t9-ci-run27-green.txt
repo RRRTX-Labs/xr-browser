@@ -1,0 +1,34 @@
+# t9 hosted CI — run 27 GREEN (post tokens_gen 400-LOC fix)
+
+Workflow: governance (push) · Run id: 34378140954 · run_number 27
+Head: xr-browser 016f5667 (main, pushed 2026-09-09T16:39Z)
+xr-core at DEPS pin: bace205b42c17adb7e6f03379b85e65d0717de9e (pushed first,
+now live on RRRTX-Labs/xr-core origin/main)
+Trigger: push · Started 2026-09-09T16:39:57Z · conclusion: success (~16.6 min)
+
+Fix under test: 74b4300 split tools/tokens_gen.py (463 lines > 400-LOC law,
+the run-26 failure at step 11) -> tokens_gen.py 311 + tokens_gen_css.py 164.
+
+Job: governance — ALL 19 STEPS SUCCESS:
+  1  Set up job                          success
+  2  Checkout                           success
+  3  Set up Python 3.12                 success
+  4  Install pinned dev dependencies    success
+  5  Install optional helper tools (P4) success
+  6  Checkout xr-core at the DEPS pin   success   (fresh clone, bace205 reachable)
+  7  Cross-repo pin is alive (P4-T0.2)  success
+  8  Governance checks                  success   (run_checks.sh full history)
+  9  Workflow files lint (P4)           success   (actionlint installed on runner)
+ 10  Negative fixtures                  success
+ 11  Build-system gates (P2)            success   <-- was FAILING on run 26 (6a5fbad)
+ 12  Contract-freeze gates (P5)         success
+ 13  Policy mutation gate (P6, sampled) success
+ 14  Policy fuzz timebox (P6)           success
+ 15  Policy bench (P6, record-only)     success
+ 16  Upstream treadmill gates (P3)      success
+ 31  Post Set up Python 3.12            success
+ 32  Post Checkout                      success
+ 33  Complete job                       success
+
+Conclusion: ALL GOVERNANCE CHECKS PASSED on the hosted runner.
+Source: GitHub Actions API (Authorization Bearer, repo RRRTX-Labs/xr-browser).
