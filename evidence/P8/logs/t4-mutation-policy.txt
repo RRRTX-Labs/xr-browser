@@ -1,0 +1,2 @@
+mutation[policy]: 777 mutants, killed 777, survived 0, score 100.00% (gate >= 90.0%), deny-guard 124/124, elapsed 1321.2s -> PASS
+mutation: targets=policy -> PASS
