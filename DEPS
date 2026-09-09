@@ -29,7 +29,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "7e2cff24c8b0739322c7dbf8651fdd8921076b61"     # xr-core P7: command registry + four views + window-chrome skeleton; Makefile default-goal CI fix (paired from 379c00e)
+xr_core_rev: "65639bf3c9c3eafb70016de0fe422d88ca08c17d"     # xr-core P8-T1: settings tree (schema/sections/search/router/counters/host + fake + views); paired from 7e2cff2
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"
