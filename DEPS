@@ -31,7 +31,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "bace205b42c17adb7e6f03379b85e65d0717de9e"     # xr-core P8-T7: l10n string source (58 msgs) + id-driven views; from 8102a92 (loader 5g-5j)
+xr_core_rev: "bace205b42c17adb7e6f03379b85e65d0717de9e"     # xr-core P8-T7: help-deep-link anchors (grdp 59 msgs); T5 string source 3ff27e2, loader 887e96b
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"
