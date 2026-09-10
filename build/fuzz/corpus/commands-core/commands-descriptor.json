@@ -1,0 +1,1 @@
+{"id":"identity.new","title":"New Identity","attention_tier":"tier1","danger_class":"safe","surface":"command-palette","handler":"action.identity.create"}

@@ -1,0 +1,1 @@
+{"args":{"theme-doc":"{\"base\": \"light\", \"overrides\": {\"trust-standard\": \"#4caf50\"}}"},"expect":"reject","method":"import"}

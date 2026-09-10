@@ -1,0 +1,54 @@
+# The fuzz fleet (P9-T8) — one row per C++ core that exists today.
+# `runner` is the in-house seeded fuzzer (g++ here AND the Makefile lane);
+# `libfuzzer_target` is the CI-side clang/libFuzzer entry (build/fuzz/
+# libfuzzer/, built only where clang exists — never in this sandbox).
+# Timebox law: >=60 s in the gate, >=600 s in evidence (XR_FUZZ_SECONDS).
+schema_version: 1
+timebox_gate_s: 60
+timebox_evidence_s: 600
+min_iters: 100
+targets:
+  - id: policy-core
+    core: policy
+    runner_makefile: "../xr-core/policy/tests"
+    runner_binary: "build/policy_fuzz"      # placeholder — policy core fuzz is
+                                             # tools/policy_fuzz.py (python)
+    runner: "python-tool"
+    tool: "tools/policy_fuzz.py"
+    libfuzzer_target: "policy_resolve_fuzz"
+    corpus_dir: "build/fuzz/corpus/policy-core"
+    owner_phase: "P6"
+  - id: commands-core
+    core: commands
+    runner_makefile: "../xr-core/commands/tests"
+    runner_binary: "build/test_fuzz"
+    runner: "make-test"
+    libfuzzer_target: "commands_dispatch_fuzz"
+    corpus_dir: "build/fuzz/corpus/commands-core"
+    owner_phase: "P7"
+  - id: settings-core
+    core: settings
+    runner_makefile: "../xr-core/settings/tests"
+    runner_binary: "build/test_settings_fuzz"
+    runner: "make-test"
+    libfuzzer_target: "settings_core_fuzz"
+    corpus_dir: "build/fuzz/corpus/settings-core"
+    owner_phase: "P8"
+  - id: themes-core
+    core: themes
+    runner_makefile: "../xr-core/themes/tests"
+    runner_binary: "build/test_fuzz"
+    runner: "make-test"
+    libfuzzer_target: "themes_loader_fuzz"
+    corpus_dir: "build/fuzz/corpus/themes-core"
+    owner_phase: "P8"
+not_yet:
+  # No Rust code exists and rustc is absent here — the plan's Rust targets are
+  # accounted for as not-yet with their owning phase (never fabricated).
+  - {id: kdbx-stub, kind: rust, owner_phase: "P11"}
+  - {id: list-parser, kind: rust, owner_phase: "P11"}
+  - {id: theme-parser, kind: rust, owner_phase: "P29"}
+  - {id: archive-sniff, kind: rust, owner_phase: "P11"}
+  # Mojo bind-side fuzzing needs clang + a browser process (farm); the
+  # contract-driven GENERATOR (tools/mojom_fuzz_gen.py) runs today.
+  - {id: mojom-bind-fuzz, kind: mojo, owner_phase: "P16"}

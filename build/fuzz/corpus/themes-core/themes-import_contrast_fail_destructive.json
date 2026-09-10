@@ -1,0 +1,1 @@
+{"args":{"theme-doc":"{\"base\": \"light\", \"overrides\": {\"danger-destructive\": \"#ff9d9d\"}}"},"expect":"reject","method":"import"}

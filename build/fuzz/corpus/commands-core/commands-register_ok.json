@@ -1,0 +1,1 @@
+{"args":{"descriptor":{"attention_tier":"tier1","danger_class":"safe","handler":"noop","id":"test.cmd","surface":"palette","title":"Test Cmd"},"registry":{"registry_id":"reg1"}},"expect":"ok","method":"register"}

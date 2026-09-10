@@ -170,6 +170,9 @@ def main(argv: list[str]) -> int:
     p.add_argument("--iterations", type=int, default=0,
                    help="exact iteration count (0 = until timebox)")
     p.add_argument("--timebox", type=int, default=600, help="seconds (CI lane)")
+    p.add_argument("--min-iters", type=int, default=100,
+                   help="minimum iterations a run must execute; a run that "
+                        "executed nothing is a FAIL (P9 empty-run law)")
     p.add_argument("--seed", type=int, default=20260908)
     p.add_argument("--report", default=None, help="write JSON report here")
     p.add_argument("--json", action="store_true")
@@ -218,9 +221,16 @@ def main(argv: list[str]) -> int:
                 first_violation = first_violation or f"non-deterministic on {payload[:200]!r}"
                 break
 
+    if n < args.min_iters:
+        # the empty-run law: a fuzz gate that executed nothing certifies
+        # nothing. Never a silent pass.
+        print(f"FAIL: policy_fuzz executed {n} iteration(s) < --min-iters "
+              f"{args.min_iters} (empty-run law)")
+        return EXIT_FAIL
     report = {
         "tool": "policy_fuzz", "host": str(host), "seed": args.seed,
         "iterations": n, "crashes": crashes, "violations": violations,
+        "min_iters": args.min_iters,
         "elapsed_seconds": round(time.monotonic() - t0, 1),
         "timebox": args.timebox if not args.iterations else None,
         "first_violation": first_violation,
