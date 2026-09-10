@@ -96,3 +96,18 @@ otherwise.
   (HG-28); the repo lane runs a 10-minute fuzz timebox and a deterministic
   90-mutant sample with the same gates (score ≥90%, deny-guard 100%).
 
+
+## §1.13 exception ledger rows
+
+Machine-checked by `tools/exception_ledger_check.py`: every `exception` cell
+in the isolation matrix must have a row here (owner + expiry) in the same
+commit — plan §11.4 / §9.1. A row without a matrix cell is an orphan and
+fails too (a stale disclosure is drift). Do not add a row without adding the
+matrix cell it discharges.
+
+| mechanism | owner | expiry | note |
+|---|---|---|---|
+| dns-cache-observable | A lead (Platform/Chromium) | 2027-06-01 | per-context host cache is partition-local; the OS resolver cache is outside the browser (measured-shared-state, P4) |
+| gpu-texture-side-channel | A lead (Platform/Chromium) | 2027-06-01 | GPU process texture state is shared across identities — documented, not asserted-closed (§11.4) |
+| favicon-cache | A lead (Platform/Chromium) | 2027-06-01 | shared favicon cache discloses visit history across identities |
+| http-auth-cache | A lead (Platform/Chromium) | 2027-06-01 | HTTP-auth cache is Profile-level (shared across identities) |
