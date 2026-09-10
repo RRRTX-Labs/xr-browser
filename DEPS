@@ -20,7 +20,11 @@
 #                  P8-T2 advances it to the token pipeline (de28f80),
 #                  pair-bumped same-day per docs/process/cross-repo-pin.md;
 #                  P9-T0-a advances it to the themes refusal-text
-#                  canonicalization (e1fc22e).
+#                  canonicalization (e1fc22e);
+#                  P9-T1..T4/T7 advance it through the browser-test fixtures
+#                  (5fcc5a1), isolation matrix (30ed5ee), compat corpus
+#                  (730584a), and the axe-core toolchain + npm allowlist
+#                  (89bd2ed).
 #   gclient_url_scheme  P2-T1 (pinned https remotes only; no ssh, no file://)
 #
 # Chromium pin provenance (see docs/state/research-log-P2.md R1):
@@ -33,7 +37,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "e1fc22eac965e1c89cb6121ffc13e7ab89e8d10d"     # xr-core P9-T0-a: canonical refusal text (loader.cc + fakes/themes.py + test_host pin)
+xr_core_rev: "89bd2ed252cd7b040fc7aeeaeaa874fc4f6c485c"     # xr-core P9-T7: axe-core 4.13.0 dev-dep + npm-allowlist (toolchain)
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"
