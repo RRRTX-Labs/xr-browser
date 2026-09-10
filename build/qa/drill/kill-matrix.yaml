@@ -1,0 +1,54 @@
+# The §11.10 process-type kill matrix under load (P9-T11) — as DATA.
+#
+# Eight process types from the plan (browser/renderer/network/vaultd/tord/
+# wgd/inspect/gpu), each killed under load with per-type assertions. Every
+# assertion maps to a plan §11.10 clause; every row is owned. Execution is
+# farm work (HG-33, browser + VM required); tools/drill_check.py validates
+# this DATA (empty-run law + canary), and build/qa/drill/drill_run.sh is the
+# farm runner (visible SKIP here, never a fake result).
+schema_version: 1
+load_profile: "50-workspace × 40-tab"     # plan §11.10 under-load condition
+kill_signals: ["SIGKILL", "SIGTERM"]
+rows:
+  - process: browser
+    kill: SIGKILL
+    assertions:
+      - "session-restore: tabs/windows/identity mapping survive"
+      - "no-identity-bleed: restored tabs land in their own partition"
+      - "crash-loop-safe-mode: 3 quick kills -> safe-mode offer"
+  - process: renderer
+    kill: SIGKILL
+    assertions:
+      - "session-restore: renderer respawns, page state recovered"
+      - "no-identity-bleed: renderer never reattaches across partitions"
+      - "ephemeral-zero-residue: in-memory partition leaves no FS trace"
+  - process: network
+    kill: SIGKILL
+    assertions:
+      - "fail-closed: route dies closed, no clear-text fallback"
+      - "session-restore: requests retry on the SAME identity context"
+  - process: vaultd
+    kill: SIGKILL
+    assertions:
+      - "fail-closed: UI shows Vault unavailable [retry]/[continue locked]"
+      - "no-plaintext-on-restart: zero key material in memory dumps"
+  - process: tord
+    kill: SIGKILL
+    assertions:
+      - "fail-closed: Tor contexts hard-fail (no non-Tor egress)"
+      - "bootstrap-recovery: recovery card (Retry/Bridges/Diagnostics)"
+  - process: wgd
+    kill: SIGKILL
+    assertions:
+      - "fail-closed: WireGuard contexts hard-fail, no identity bleed"
+  - process: inspect
+    kill: SIGTERM
+    assertions:
+      - "no-identity-bleed: xr-inspect death leaks no stream to page"
+  - process: gpu
+    kill: SIGKILL
+    assertions:
+      - "session-restore: gpu respawns, no crash loop"
+      - "ephemeral-zero-residue: no GPU-cache residue in ephemeral mode"
+metrics:
+  - "beta cohort crash-rate <= 1.2x prior stable (auto-halt wired)"

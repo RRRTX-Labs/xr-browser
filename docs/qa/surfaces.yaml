@@ -1,0 +1,126 @@
+# §11 verification-surface inventory (P9-T12) — the completeness gate's data.
+#
+# Every §11 surface has a home: a tool that runs in this repo, a farm row
+# (HG-xx, browser/VM/clang/rustc required — SKIP-visible here, never a fake
+# pass), a named+staffed+scheduled human surface (§11.14), or a not_yet row
+# owned by the phase that builds it. A surface with NO home is the plan's
+# stop-condition; tools/surfaces_check.py turns it red.
+schema_version: 1
+surfaces:
+  - id: "11.1"
+    name: unit
+    home: tool
+    tools:
+      - "tools/run_checks.sh"           # pytest (tools/tests) + go gates
+    farm: "make -C xr-core/{policy,commands,settings,themes}/tests test"
+    green: "C++ suites green + pytest green (run_checks.sh exit 0)"
+  - id: "11.2"
+    name: browser tests
+    home: tool
+    tools:
+      - "tools/browser_test_lint.py"    # fixtures lint-only here
+    farm: "HG-31 (browser_tests harness — P14)"
+    green: "browser_test_lint clean; harness rows HG-31"
+  - id: "11.3"
+    name: E2E
+    home: tool
+    tools:
+      - "tools/xrctl.py"                # dev CLI over the P5 fakes
+    farm: "HG-31 (headed E2E incl. mac keychain realism)"
+    green: "xrctl self-test + fake-mode scenario green"
+  - id: "11.4"
+    name: isolation matrix
+    home: tool
+    tools:
+      - "tools/isolation_matrix.py"
+    farm: "HG-31 (adversarial 50-tab mode — browser required)"
+    green: "fake-mode cells green-or-documented"
+  - id: "11.5"
+    name: vault suite
+    home: not_yet
+    owner_phase: "P28"
+    green: "KDBX golden corpus + KATs + autofill attack suite (P28)"
+  - id: "11.6"
+    name: UI / a11y / copy
+    home: tool
+    tools:
+      - "tools/a11y_tree.py"
+      - "tools/a11y_lint.py"
+      - "tools/copy_lint.py"
+      - "tools/keyboard_tasks_check.py"
+      - "tools/pseudo_locale.py"
+    farm: "HG-31 axe run · HG-32 SR/human passes"
+    green: "a11y/copy gates green; axe + 12 keyboard tasks HG-31"
+  - id: "11.7"
+    name: performance budgets
+    home: tool
+    tools:
+      - "tools/perf_gate.py"
+      - "build/qa/perf/gen_perf_budgets.py"
+    farm: "HG-35 (dedicated bench rigs, docs/hw.md)"
+    green: "perf_gate 0 MISSED; generated budgets --check diff-clean"
+  - id: "11.8"
+    name: privacy & leak
+    home: tool
+    tools:
+      - "tools/leaktest.py"
+    farm: "HG-36 (per-route pcap capture + endpoint audit — root/browser)"
+    green: "loopback 0 leaks; capture rows SKIP-visible here, HG-36 on farm"
+  - id: "11.9"
+    name: extension compat & update-diff
+    home: not_yet
+    owner_phase: "P21"
+    green: "top-100 CWS corpus + DNR coexistence + update-diff alerts (P21)"
+  - id: "11.10"
+    name: crash / restart / recovery
+    home: tool
+    tools:
+      - "tools/drill_check.py"
+    farm: "HG-33 (build/qa/drill/drill_run.sh kill-matrix — browser+VM)"
+    green: "kill-matrix data complete + runner SKIP-honest"
+  - id: "11.11"
+    name: upgrade / downgrade / migration
+    home: tool
+    tools:
+      - "tools/drill_check.py"
+    farm: "HG-34 (drill_run.sh update-drill — per-OS VM farm)"
+    green: "update-drill data complete + runner SKIP-honest"
+  - id: "11.12"
+    name: compatibility
+    home: tool
+    tools:
+      - "tools/compat.py"
+      - "tools/wpt_delta.py"
+    farm: "HG-31 (live corpus replay + real WPT — browser)"
+    green: "validate + replay green; WPT delta comparator exercised"
+  - id: "11.13"
+    name: fuzzing
+    home: tool
+    tools:
+      - "tools/fuzz_fleet.py"
+      - "tools/mojom_fuzz_gen.py"
+      - "tools/seed_corpus.py"
+      - "tools/policy_fuzz.py"
+    farm: "HG-28 (24h campaign) · HG-29 (Mojo bind fuzz, clang+browser)"
+    green: "fleet 4 targets clean + corpus seeded; libFuzzer CI-side"
+  - id: "11.14"
+    name: cannot-automate
+    home: manual
+    green: "every row owned + scheduled; findings land in the same evidence store as CI links"
+    rows:
+      - {item: "SR/keyboard human passes", owner: "A lead (Platform/Chromium)", cadence: "per-release + P36"}
+      - {item: "12-user studies (identity comprehension, mixed-split, recovery ceremony)", owner: "B lead (Usability)", cadence: "per §17 gates"}
+      - {item: "pen tests", owner: "security lead", cadence: "P38 + annual"}
+      - {item: "red-team leak weeks", owner: "security lead", cadence: "per release train"}
+      - {item: "phishing-corpus freshness review", owner: "A lead (Platform/Chromium)", cadence: "per release"}
+      - {item: "Widevine / streaming real-world checks", owner: "media lead", cadence: "per release"}
+      - {item: "captive-portal / hotel / conference field days", owner: "networking lead", cadence: "per release"}
+      - {item: "enterprise-policy MDM interop", owner: "enterprise lead", cadence: "per release"}
+      - {item: "theme-gallery curation QA", owner: "themes lead", cadence: "post-GA"}
+      - {item: "§9.11 claims review", owner: "copy lead", cadence: "per release"}
+  - id: "11.15"
+    name: evidence standard
+    home: tool
+    tools:
+      - "tools/evidence_check.py"
+    green: "evidence_check --strict green for every phase bundle"

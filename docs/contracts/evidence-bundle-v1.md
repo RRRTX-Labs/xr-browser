@@ -84,6 +84,23 @@ stay exempt per the HG-25 ruling (their qualified statuses). A new phase is
 gated the moment its bundle lands; there is no hardcoded list to forget (the
 P6/P7 debt this rule closes — `run_checks.sh` used to pin `--only P3,P4,P5`).
 
+## Machine-side green + run ids (P9-T12)
+
+Plan §11.15 fixes the evidence row shape as `{suite, run_id, commit,
+artifact_url, verdict, links}`, and P9-T12's convention: **"green" is
+defined machine-side**. In this repo that means:
+
+1. A verdict is only `VERIFIED` when a runner computed it; the artifact it
+   cites is the runner's output (a `logs/*` transcript), and the row's
+   `notes` records the command that produced it.
+2. Where a runner emits a run id (hosted CI), the row cites it under
+   `run_id`; in-workspace runs cite the command + a git commit instead of
+   inventing an id. A `run_id` is never fabricated.
+3. Nothing here is green by assertion: `run_checks.sh`,
+   `tools/evidence_check.py --strict`, and the §11 surface gate
+   (`tools/surfaces_check.py`) *compute* the green, and a human edit to a
+   verdict without an attached ADR is an anti-fabrication violation (L11).
+
 ## Running it
 
 ```bash

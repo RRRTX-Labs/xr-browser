@@ -1,0 +1,28 @@
+# The §11.11 update-drill matrix (P9-T10) — as DATA.
+#
+# P10's acceptance tool, registered now: per-OS snapshot/restore with a
+# "kill mid-update" interruption per OS, and the rollback assertion. Every
+# row is owned; execution is farm work (HG-34, per-OS VM farm with
+# snapshot/restore). tools/drill_check.py validates this DATA; the farm
+# runner is build/qa/drill/drill_run.sh (visible SKIP here).
+schema_version: 1
+snapshot_base: "pre-update healthy state (per OS)"
+rows:
+  - os: linux
+    kill_point: "mid-payload (50% of download)"
+    assertions:
+      - "resume-or-rollback: no bricked state, updater restarts cleanly"
+      - "rollback: prior version boots, data intact"
+  - os: macos
+    kill_point: "mid-apply (post-download, during install)"
+    assertions:
+      - "resume-or-rollback: Gatekeeper coexistence not broken"
+      - "rollback: prior version boots, data intact"
+  - os: windows
+    kill_point: "mid-apply (MoTW propagation window)"
+    assertions:
+      - "resume-or-rollback: Mark-of-the-Web propagation intact"
+      - "rollback: prior version boots, data intact"
+extra:
+  - "update epoch revocation drill (P10-T9): forced out-of-band release"
+  - "failed state with manual-download pointer (no silent failures — law)"
