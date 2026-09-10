@@ -12,7 +12,10 @@ Owner tool: `tools/leaktest.py` · Result schema:
 
 `loopback` proves the harness can see a leak. `capture` proves there is no
 leak to see. Neither substitutes for the other, and the runner never reports
-one as the other (`--mode capture` SKIPs visibly when tcpdump is absent).
+one as the other (`--mode capture` SKIPs visibly on any non-farm host: either
+tcpdump is absent, or tcpdump is present without the browser + CAP_NET_RAW
+farm harness — GitHub's ubuntu-latest ships tcpdump, which must not flip the
+lane to a spurious FAIL).
 
 ## Self-verification (mandatory, the point of the harness)
 

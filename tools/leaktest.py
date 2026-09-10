@@ -89,17 +89,27 @@ def self_test(repo: Path, as_of: str) -> int:
 def run(repo: Path, mode: str, as_of: str, as_json: bool) -> int:
     probes, states = load(repo)
     if mode == "capture":
+        # capture is a farm-only lane (docs/qa/leaktest.md: "automatable:
+        # no"). tcpdump/libpcap is necessary but NOT sufficient — the real
+        # capture also needs the browser and CAP_NET_RAW (root). So the lane
+        # SKIPs visibly (77) on every non-farm host, naming the missing part:
+        # tcpdump when it is absent, the farm harness when tcpdump merely
+        # ships with the OS image (GitHub's ubuntu-latest does). A FAIL here
+        # would turn governance red on any host that happens to have tcpdump,
+        # and a fabricated capture is forbidden — off-farm is always a
+        # visible SKIP, never a PASS and never a spurious FAIL.
         if shutil.which("tcpdump") is None:
             return c.skip_visible(
                 "leaktest(capture)",
                 "SKIP (tool absent: tcpdump/libpcap) — needed for: privileged "
-                "whole-tree capture of the endpoint audit; this sandbox has "
-                "no CAP_NET_RAW; farm runbook: docs/qa/leaktest.md")
-        # On a host with tcpdump the capture lane runs the real capture; the
-        # invocation is documented in docs/qa/leaktest.md (never simulated).
-        print("FAIL: capture lane needs the farm runbook orchestration "
-              "(see docs/qa/leaktest.md); not automated here")
-        return c.EXIT_FAIL
+                "whole-tree capture of the endpoint audit; this host has no "
+                "tcpdump; farm runbook: docs/qa/leaktest.md")
+        return c.skip_visible(
+            "leaktest(capture)",
+            "SKIP (farm-only lane) — needed for: the real capture (tcpdump "
+            "is present here but the browser + CAP_NET_RAW farm harness is "
+            "not); the capture is never simulated; farm runbook: "
+            "docs/qa/leaktest.md")
     result = engine.run_loopback(probes, states)
     result["as_of"] = c.iso(as_of)
     result["mode"] = "loopback"

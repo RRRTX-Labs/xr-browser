@@ -1,6 +1,7 @@
 """tools/tests/test_p9_leaktest.py — P9-T3 leaktest harness self-verification."""
 from __future__ import annotations
 
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -34,12 +35,19 @@ def test_loopback_is_deterministic_same_as_of() -> None:
     assert a.stdout == b.stdout
 
 
-def test_capture_lane_skips_visibly_without_tcpdump() -> None:
+def test_capture_lane_skips_visibly_off_farm() -> None:
     r = run("--mode", "capture")
-    # tcpdump is absent in this sandbox; the lane must SKIP (exit 77),
-    # never fabricate a capture.
+    # capture is a farm-only lane (docs/qa/leaktest.md: "automatable: no").
+    # Off-farm it must SKIP (exit 77) with a visible reason — never a
+    # fabricated capture, and never a spurious FAIL: GitHub's ubuntu-latest
+    # image ships tcpdump, and a host that merely has tcpdump (without the
+    # browser + CAP_NET_RAW farm harness) must not flip this lane to red.
+    # The reason names the missing part: tcpdump when absent, farm when present.
     assert r.returncode == 77, r.stdout + r.stderr
-    assert "tcpdump" in r.stdout
+    if shutil.which("tcpdump") is None:
+        assert "tcpdump" in r.stdout
+    else:
+        assert "farm" in r.stdout
 
 
 def test_engine_flags_planted_egress() -> None:
