@@ -108,3 +108,41 @@ case_sast_check_dead_rule() {
     "$PY" tools/sast_check.py --repo "$B"
 }
 neg_register sast_check_dead_rule
+
+# --- 45. evidence (P9+): an open row with empty not_done_by_design ----------
+case_evidence_open_row_notdone() {
+  local EV="$NEG_TMP/ev9a"; mkdir -p "$EV/evidence/P9"
+  printf '# P9 gates\n\nfarm rows HG-31..HG-37.\n' > "$EV/evidence/P9/human-gates.md"
+  printf '{"phase":"P9","generated":"2026-09-10","plan":"p","not_done_by_design":[],"dod_rows":[{"id":"E1","dod":"d","status":"BLOCKED-NET","evidence":["HG-31"]}]}' \
+    > "$EV/evidence/P9/evidence.json"
+  neg_expect_reject "evidence: open row with empty not_done_by_design flagged" \
+    'not_done_by_design' \
+    "$PY" tools/evidence_check.py --repo "$EV" --strict
+}
+neg_register evidence_open_row_notdone
+
+# --- 46. evidence (P9+): a local-run row must cite a logs/* transcript -----
+case_evidence_localrun_no_log() {
+  local EV="$NEG_TMP/ev9b"; mkdir -p "$EV/evidence/P9" "$EV/docs/qa"
+  printf '# P9 gates\n\nfarm rows HG-31..HG-37.\n' > "$EV/evidence/P9/human-gates.md"
+  printf 'x\n' > "$EV/docs/qa/x.md"
+  printf '{"phase":"P9","generated":"2026-09-10","plan":"p","source_labels":["local-run"],"dod_rows":[{"id":"E1","dod":"d","status":"VERIFIED","source":"local-run","evidence":["docs/qa/x.md"]}]}' \
+    > "$EV/evidence/P9/evidence.json"
+  neg_expect_reject "evidence: local-run row without a logs transcript flagged" \
+    'transcript' \
+    "$PY" tools/evidence_check.py --repo "$EV" --strict
+}
+neg_register evidence_localrun_no_log
+
+# --- 47. evidence (P9+): a ci-run row must carry ci_run + ci_job ids --------
+case_evidence_cirun_no_ids() {
+  local EV="$NEG_TMP/ev9c"; mkdir -p "$EV/evidence/P9/logs"
+  printf '# P9 gates\n\nfarm rows HG-31..HG-37.\n' > "$EV/evidence/P9/human-gates.md"
+  printf 'ok\n' > "$EV/evidence/P9/logs/x.txt"
+  printf '{"phase":"P9","generated":"2026-09-10","plan":"p","source_labels":["ci-run"],"dod_rows":[{"id":"E1","dod":"d","status":"VERIFIED","source":"ci-run","evidence":["logs/x.txt"]}]}' \
+    > "$EV/evidence/P9/evidence.json"
+  neg_expect_reject "evidence: ci-run row without ci_run/ci_job ids flagged" \
+    'ci_job' \
+    "$PY" tools/evidence_check.py --repo "$EV" --strict
+}
+neg_register evidence_cirun_no_ids

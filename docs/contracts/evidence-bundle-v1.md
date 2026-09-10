@@ -88,18 +88,27 @@ P6/P7 debt this rule closes — `run_checks.sh` used to pin `--only P3,P4,P5`).
 
 Plan §11.15 fixes the evidence row shape as `{suite, run_id, commit,
 artifact_url, verdict, links}`, and P9-T12's convention: **"green" is
-defined machine-side**. In this repo that means:
+defined machine-side**. In this repo that means the validator itself
+enforces (for every `P<n>` bundle with `n >= 9`):
 
-1. A verdict is only `VERIFIED` when a runner computed it; the artifact it
-   cites is the runner's output (a `logs/*` transcript), and the row's
-   `notes` records the command that produced it.
-2. Where a runner emits a run id (hosted CI), the row cites it under
-   `run_id`; in-workspace runs cite the command + a git commit instead of
-   inventing an id. A `run_id` is never fabricated.
-3. Nothing here is green by assertion: `run_checks.sh`,
-   `tools/evidence_check.py --strict`, and the §11 surface gate
-   (`tools/surfaces_check.py`) *compute* the green, and a human edit to a
-   verdict without an attached ADR is an anti-fabrication violation (L11).
+1. **(a) ci-run rows.** A row with `source: ci-run` must carry `ci_run` and
+   `ci_job` ids. Under `--strict` the validator resolves them through
+   `build/upstream/fetch.py` (the chokepoint; api.github.com is allowlisted):
+   a run whose job did not conclude `success`, or whose `head_sha` is not a
+   commit the bundle's `pin`/`repos` block records, is a FAIL; offline is a
+   visible `SKIP` (printed to stderr). A run id is never fabricated.
+2. **(b) explained open rows.** Any row whose status is
+   `PARTIAL`/`BLOCKED*`/`HUMAN-GATED` requires the bundle's
+   `not_done_by_design` to be a non-empty list — P8 shipped `[]` while work
+   was partial; that hole closes here.
+3. **(c) transcripts.** A `local-run` row must cite at least one `logs/*`
+   transcript (and every cited path must exist, per the citation rule).
+
+P1–P8 predate these rules and stay grandfathered (P6 has a HUMAN-GATED row
+with no `not_done_by_design`); P9's own bundle is the first checked under
+them. A verdict is only `VERIFIED` when a runner computed it, and a human
+edit to a verdict without an attached ADR is an anti-fabrication violation
+(L11).
 
 ## Running it
 

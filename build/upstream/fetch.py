@@ -125,6 +125,44 @@ def http_get(url: str, *, timeout: int = FETCH_TIMEOUT_S) -> bytes:
         f"fetch failed for {url} after {_HTTP_MAX_ATTEMPTS} attempts: {last}")
 
 
+class CiRunNotFound(FetchError):
+    """The run/job id resolves to nothing (HTTP 404) — a real red, not a skip."""
+
+
+def resolve_ci_run(run_id: int, job_id: int, *,
+                   org: str = "RRRTX-Labs", repo: str = "xr-browser",
+                   timeout: int = FETCH_TIMEOUT_S) -> dict[str, Any]:
+    """Resolve a hosted-CI run + job through the ONLY network path (P9-T12).
+
+    Feeds tools/evidence_check.py's machine-side "green" rule: a `ci-run`
+    evidence row is certifiable only when the job concluded `success` and the
+    run's `head_sha` is a commit the bundle records. Read-only, https-only,
+    api.github.com already allowlisted. A genuine 404 raises CiRunNotFound
+    (fail-closed: a cited run that does not exist is a red, never a skip);
+    a network/transient failure raises FetchError (the caller turns that into
+    a visible SKIP — offline is not the same as fabricated).
+    """
+    run_url = f"https://api.github.com/repos/{org}/{repo}/actions/runs/{run_id}"
+    job_url = f"https://api.github.com/repos/{org}/{repo}/actions/jobs/{job_id}"
+    try:
+        run_raw = http_get(run_url, timeout=timeout)
+        job_raw = http_get(job_url, timeout=timeout)
+    except FetchError as exc:
+        if "HTTP 404" in str(exc):
+            raise CiRunNotFound(
+                f"ci run {run_id} (job {job_id}) not found: {exc}") from exc
+        raise
+    run = json.loads(run_raw)
+    job = json.loads(job_raw)
+    return {
+        "conclusion": job.get("conclusion"),
+        "status": run.get("status"),
+        "head_sha": run.get("head_sha"),
+        "name": run.get("name"),
+        "html_url": run.get("html_url"),
+    }
+
+
 def _strip_magic(raw: bytes) -> bytes:
     """gitiles JSON responses start with the XSSI guard line )]}' — strip it."""
     if raw.startswith(b")]}'"):

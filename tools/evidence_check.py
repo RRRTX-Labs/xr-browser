@@ -23,6 +23,15 @@ Checks
   human-gates   evidence/<phase>/human-gates.md exists and is non-empty
   honesty       --strict: rows may not claim a verdict whose vocabulary is
                 not declared, and a VERIFIED row must cite >=1 real artifact
+  P9-T12        (P9+ bundles) three machine-side "green" amendments:
+                (a) a ci-run row must carry ci_run+ci_job ids, and --strict
+                    resolves them through build/upstream/fetch.py (the
+                    chokepoint) — conclusion != success or a head_sha the
+                    bundle does not record is a FAIL, offline is a visible
+                    SKIP;
+                (b) any PARTIAL/BLOCKED/HUMAN-GATED row requires a non-empty
+                    not_done_by_design list (P8 shipped [] with partial work);
+                (c) every local-run row must cite a logs/* transcript.
 
 Exit: 0 pass · 1 fail (with reasons) · 2 usage.
 """
@@ -63,6 +72,15 @@ PATHISH_RE = re.compile(r"^[\w./-]+\.\w{1,8}$")
 # list here was the P6/P7 debt T0 closes: it silently skipped new bundles.
 LEGACY_EXEMPT_MAX_PHASE = 2
 _PHASE_DIR_RE = re.compile(r"^P(\d+)$")
+
+# P9-T12: the machine-side "green" amendments bind P9+ bundles only. P3-P8
+# predate the rule (P6 has a HUMAN-GATED row and no not_done_by_design, for
+# one) — grandfathered, exactly like the P2 legacy exemption. P9's own bundle
+# is the first checked under them.
+T12_MIN_PHASE = 9
+CI_RUN_LABEL = "ci-run"
+_COMMIT_RE = re.compile(r"\b[0-9a-f]{7,40}\b", re.IGNORECASE)
+_OPEN_STATUS_PREFIXES = ("PARTIAL", "BLOCKED", "HUMAN-GATED")
 
 
 def strict_default_phases(root: Path) -> list[str]:
@@ -112,6 +130,97 @@ def _rows(doc: dict[str, Any]) -> list[dict[str, Any]]:
                         "status": v.get("status", ""),
                         "evidence": [v.get("artifact", "")]})
     return out
+
+
+def _phase_number(dirname: str) -> int | None:
+    m = _PHASE_DIR_RE.fullmatch(dirname)
+    return int(m.group(1)) if m else None
+
+
+def _is_open_status(status: str) -> bool:
+    """PARTIAL / BLOCKED* / HUMAN-GATED — work shipped but not as done."""
+    return status.strip().upper().startswith(_OPEN_STATUS_PREFIXES)
+
+
+def _bundle_commits(doc: dict[str, Any]) -> set[str]:
+    """Commit shas the bundle records (pin + repos block), for ci-run head
+    matching. A ci-run row is green only if its head_sha is one of these."""
+    commits: set[str] = set()
+    for key in ("pin",):
+        if isinstance(doc.get(key), str):
+            commits.update(_COMMIT_RE.findall(doc[key]))
+    repos = doc.get("repos")
+    if isinstance(repos, dict):
+        for value in repos.values():
+            texts = value if isinstance(value, list) else [value]
+            for t in texts:
+                if isinstance(t, str):
+                    commits.update(_COMMIT_RE.findall(t))
+    return commits
+
+
+def _load_upstream_fetch() -> Any:
+    """Lazy, collision-safe load of build/upstream/fetch.py (the chokepoint).
+
+    fetch.py does a bare `from _common import ToolError, main_with_guard`; in
+    a shared process (./scripts/build test) whichever `_common` landed in
+    sys.modules first wins, and it may be tools/_common.py, which lacks
+    main_with_guard (see ef6771f). Preload build/_common.py under that name
+    for the duration of fetch.py's exec, then restore. The gate itself runs
+    evidence_check as a subprocess (fresh interpreter), where this is a no-op.
+    """
+    import importlib.util
+
+    root = Path(__file__).resolve().parents[1]
+    saved = sys.modules.get("_common")
+    cspec = importlib.util.spec_from_file_location(
+        "_common", root / "build" / "_common.py")
+    cmod = importlib.util.module_from_spec(cspec)
+    sys.modules["_common"] = cmod
+    try:
+        cspec.loader.exec_module(cmod)
+        fspec = importlib.util.spec_from_file_location(
+            "upstream_fetch", root / "build" / "upstream" / "fetch.py")
+        fmod = importlib.util.module_from_spec(fspec)
+        sys.modules["upstream_fetch"] = fmod
+        fspec.loader.exec_module(fmod)
+        return fmod
+    finally:
+        if saved is None:
+            sys.modules.pop("_common", None)
+        else:
+            sys.modules["_common"] = saved
+
+
+def _default_ci_resolver(run_id: int, job_id: int,
+                         bundle_commits: set[str]) -> bool | str:
+    """Resolve a hosted-CI run via the chokepoint (fetch.py).
+
+    True = verified green; False = verified not-green (must FAIL the bundle);
+    a str = SKIP reason (offline / chokepoint unavailable). Never fabricates
+    an id: the ids come from the row, the verdict from the public API.
+    """
+    try:
+        fetch = _load_upstream_fetch()
+    except Exception as exc:  # import/layout trouble == cannot verify
+        return f"offline (cannot load the fetch chokepoint): {exc}"
+    try:
+        res = fetch.resolve_ci_run(int(run_id), int(job_id))
+    except fetch.CiRunNotFound as exc:
+        return False  # a cited run that does not exist is a red, not a skip
+    except Exception as exc:  # network/transient — fetch.py retried already
+        return f"offline (api.github.com unreachable): {exc}"
+    if res.get("conclusion") != "success":
+        return False
+    head = str(res.get("head_sha") or "")
+    if head and bundle_commits and not any(
+            head.startswith(c) or c.startswith(head) for c in bundle_commits):
+        return False
+    return True
+
+
+# Tests monkeypatch this to exercise the content-mismatch paths offline.
+CI_RESOLVER = _default_ci_resolver
 
 
 def check_file(path: Path, repo: Path, strict: bool) -> list[str]:
@@ -172,6 +281,48 @@ def check_file(path: Path, repo: Path, strict: bool) -> list[str]:
                 c = cite.strip()
                 if not ((phase_dir / c).exists() or (repo / c).exists()):
                     fails.append(f"{path}: row {rid} cites missing artifact {c!r}")
+
+    phase_num = _phase_number(path.parent.name)
+    if strict and phase_num is not None and phase_num >= T12_MIN_PHASE:
+        # (b) a PARTIAL/BLOCKED/HUMAN-GATED row must be explained: the bundle
+        # carries a non-empty not_done_by_design (P8 shipped [] with partial
+        # work — that hole closes here).
+        if any(_is_open_status(str(r.get("status", ""))) for r in rows):
+            ndbd = doc.get("not_done_by_design")
+            if not isinstance(ndbd, list) or not ndbd:
+                fails.append(f"{path}: a PARTIAL/BLOCKED/HUMAN-GATED row "
+                             f"requires a non-empty not_done_by_design list "
+                             f"(P9-T12)")
+        # (a) ci-run rows: ids required; --strict resolves them machine-side.
+        bundle_commits = _bundle_commits(doc)
+        for row in rows:
+            if row.get("source") != CI_RUN_LABEL:
+                continue
+            rid = row.get("id", "<no id>")
+            run_id, job_id = row.get("ci_run"), row.get("ci_job")
+            if not run_id or not job_id:
+                fails.append(f"{path}: ci-run row {rid} must carry ci_run "
+                             f"and ci_job ids (P9-T12)")
+                continue
+            verdict = CI_RESOLVER(int(run_id), int(job_id), bundle_commits)
+            if verdict is True:
+                continue
+            if verdict is False:
+                fails.append(f"{path}: ci-run row {rid} run {run_id}/"
+                             f"{job_id} is not certifiably green (P9-T12)")
+            else:
+                print(f"SKIP: ci-run verification for {rid}: {verdict}",
+                      file=sys.stderr)
+        # (c) a local-run row must name its logs/* transcript.
+        for row in rows:
+            if row.get("source") != "local-run":
+                continue
+            rid = row.get("id", "<no id>")
+            cites = [str(e).strip() for e in (row.get("evidence") or [])
+                     if isinstance(e, str) and PATHISH_RE.match(str(e).strip())]
+            if not any(c.startswith("logs/") for c in cites):
+                fails.append(f"{path}: local-run row {rid} must cite a "
+                             f"logs/* transcript (P9-T12)")
 
     gates = path.parent / "human-gates.md"
     if not gates.exists() or not gates.read_text(encoding="utf-8").strip():
