@@ -62,9 +62,18 @@ def test_fleet_yaml_discovers_four_cores() -> None:
                 f"{t['libfuzzer_target']}.cc").exists()
 
 
-def test_policy_fuzz_min_iters_floor_bites() -> None:
-    # an impossible-to-reach iteration floor must fail, not pass
-    r = run_tool("policy_fuzz.py", "--repo", str(REPO), "--iterations", "1",
-                 "--min-iters", "2")
+def test_policy_fuzz_min_iters_floor_bites(tmp_path: Path) -> None:
+    # The empty-run law (n < --min-iters with no crash/violation => FAIL) is
+    # a verdict over the run's own counters, so it must be provable without
+    # the C++ policy_host binary (which a fresh clone has not built yet —
+    # citing it here is a leftover-artifact trap). A fake host that answers
+    # every request with a known-good error lets the harness execute exactly
+    # --iterations 1 and trip the floor.
+    host = tmp_path / "okhost"
+    host.write_text("#!/bin/sh\nprintf '{\"error\":\"kVersionMismatch\"}\\n'\n",
+                    encoding="utf-8")
+    host.chmod(0o755)
+    r = run_tool("policy_fuzz.py", "--host", str(host),
+                 "--iterations", "1", "--min-iters", "2")
     assert r.returncode == 1
     assert "empty-run law" in r.stdout

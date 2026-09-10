@@ -76,8 +76,16 @@ def test_empty_input_fails(tmp_path: Path) -> None:
 
 
 def test_real_benches_pass_on_trend_rig() -> None:
-    r = run_tool("perf_gate.py", "--repo", str(REPO),
-                 "--bench", str(REPO / "../xr-core/policy/tests/build/bench-results.json"),
-                 "--bench", str(REPO / "../xr-core/themes/tests/bench-results.json"))
+    # Real COMMITTED benches only. The policy/commands/settings bench JSONs
+    # are `make bench` build artifacts under gitignored build/ dirs, so a
+    # test that cites them fails on a fresh clone (leftover-artifact trap).
+    # The trend-rig bench is committed in this repo; the themes bench is a
+    # committed xr-core file when the sibling checkout is present.
+    benches = [REPO / "docs" / "state" / "bench-trend.json"]
+    themes = REPO / "../xr-core/themes/tests/bench-results.json"
+    if themes.exists():
+        benches.append(themes)
+    args = [a for b in benches for a in ("--bench", str(b))]
+    r = run_tool("perf_gate.py", "--repo", str(REPO), *args)
     assert r.returncode == 0, r.stdout
     assert "rig trend" in r.stdout

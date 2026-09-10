@@ -229,6 +229,11 @@ def main(argv: list[str]) -> int:
     except c.RunnerError as exc:
         print(f"FAIL: {exc}")
         return c.EXIT_FAIL
+    except OSError as exc:
+        # a bench path that cannot be read is a loud FAIL, never a traceback
+        # (a missing build-artifact bench is a run you must not pretend ran)
+        print(f"FAIL: bench file unreadable: {exc}")
+        return c.EXIT_FAIL
 
     total_missed = sum(r["missed"] for r in results)
     total_neutral = sum(r["neutral"] for r in results)
