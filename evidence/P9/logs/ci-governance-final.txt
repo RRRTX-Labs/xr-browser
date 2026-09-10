@@ -18,7 +18,7 @@ step conclusions (jobs API):
   Build-system gates (P2)                         -> success   (542 passed, 0 skipped; codesign = macOS-only external-tool notice)
   Contract-freeze gates (P5)                      -> success
   Policy mutation gate (P6, sampled)              -> success
-  Policy fuzz timebox (P6; 24h = HG-28)           -> success   (600s, violations=0, iterations=431691)
+  Policy fuzz timebox (P6; 24h = HG-28)           -> success   (600s, violations=0, iterations=518166)
   Policy bench (P6, record-only)                  -> success
   Upstream treadmill gates (P3)                   -> success
   Complete job                                    -> success
@@ -33,3 +33,4 @@ CI-red closure (this phase):
   run 31 (6835f86)  Governance checks FAIL   -> leaktest capture lane FAIL on tcpdump-present host (fixed 7af350a)
   run 32 (7af350a)  cancelled at 25-min job timeout (fuzz step had finished; budget raised e404ac5 -> 45 min)
   run 33 (e404ac5)  success (this run)
+  run 34 (52f956f)  success (evidence commit; the same gate suite re-verified green)
