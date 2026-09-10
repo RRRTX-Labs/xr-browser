@@ -1,0 +1,8 @@
+== tools/tests pytest (via run_checks.sh) ==
+247 passed in 83.13s (0:01:23)
+
+== ./scripts/build test (tools/tests + build/**/tests + docs/contracts/tests) ==
+534 passed, 2 skipped in 88.88s (0:01:28)
+
+== run_negatives ==
+ALL NEGATIVE CASES REJECTED AS EXPECTED (N=44)
