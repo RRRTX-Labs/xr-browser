@@ -1,0 +1,1 @@
+{"name":"trend-rig benches (policy resolve + themes apply)","rig_class":"trend","unit":"us","rows":[{"metric":"cache_warm_pinned_read_us","value_us":0.121,"unit":"us"},{"metric":"resolve_cold_us","value_us":10.503,"unit":"us"},{"metric":"snapshot_apply_us","value_us":1383.273,"unit":"us"},{"metric":"theme_apply_us","value_us":157.6,"unit":"us"}]}

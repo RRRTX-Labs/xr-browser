@@ -247,4 +247,55 @@ else
   echo "SKIP: SKIP (tool absent: g++/make) — needed for: the byte-differential oracle (compiled C++ hosts vs Python fakes); local hint: apt-get install g++ make (build-essential)"
 fi
 
+# ---------------------------------------------------------------------------
+# P9-T1..T12 gates (Test & Benchmarking Infrastructure v1). Every runner's
+# gate mode: canary + empty-input law. The fuzz fleet is wall-clock under the
+# timebox law (>=60 s gate / >=600 s evidence via XR_FUZZ_SECONDS).
+# ---------------------------------------------------------------------------
+echo "== P9-T1: browser-test fixture lint (fixtures are the spec) =="
+"$PY" tools/browser_test_lint.py --repo .
+
+echo "== P9-T2: isolation-matrix fake cells (identity x mechanism) =="
+"$PY" tools/isolation_matrix.py --repo . --check
+
+echo "== P9-T3: leaktest self-test + loopback canary (0 leaks) =="
+"$PY" tools/leaktest.py --repo . --self-test
+"$PY" tools/leaktest.py --repo . --mode loopback
+
+echo "== P9-T4: compat corpus validate + offline replay =="
+"$PY" tools/compat.py --repo . validate
+"$PY" tools/compat.py --repo . replay
+
+echo "== P9-T5: perf budgets (plan-transcribed, diff-clean) + gate =="
+"$PY" build/qa/perf/gen_perf_budgets.py --repo . --check
+"$PY" tools/perf_gate.py --repo . --bench docs/state/bench-trend.json \
+  --check --as-of 2026-09-10
+
+echo "== P9-T6: visual-diff stdlib engine self-test =="
+"$PY" tools/visual_diff.py --self-test
+
+echo "== P9-T7: npm allowlist + copy lint + AXTree snapshot + keyboard tasks =="
+"$PY" tools/npm_allowlist_check.py --repo .
+"$PY" tools/copy_lint.py --repo .
+"$PY" tools/a11y_tree.py --repo . --check
+"$PY" tools/keyboard_tasks_check.py --repo .
+
+echo "== P9-T8: fuzz corpus seeds + contract generator + fleet (timebox law) =="
+"$PY" tools/seed_corpus.py --repo . --check
+"$PY" tools/mojom_fuzz_gen.py --repo . --count 1000 --seed 20260910
+if command -v g++ >/dev/null 2>&1 && command -v make >/dev/null 2>&1; then
+  "$PY" tools/fuzz_fleet.py --repo . --timebox 60
+else
+  echo "SKIP: SKIP (tool absent: g++/make) — needed for: the four in-house fuzz targets; local hint: apt-get install g++ make (build-essential)"
+fi
+
+echo "== P9-T9: SAST rule registry (canary + real-tree clean) =="
+"$PY" tools/sast_check.py --repo .
+
+echo "== P9-T10/T11: drill matrices (kill matrix + update drill, complete) =="
+"$PY" tools/drill_check.py --repo .
+
+echo "== P9-T12: §11 surface completeness (every surface homed) =="
+"$PY" tools/surfaces_check.py --repo .
+
 echo "== ALL GOVERNANCE CHECKS PASSED =="

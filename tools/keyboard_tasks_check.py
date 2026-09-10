@@ -23,9 +23,9 @@ TASKS_YAML = "docs/qa/keyboard-tasks.yaml"
 REQUIRED_COUNT = 12
 
 
-def check(repo: Path) -> tuple[list[str], int]:
+def check(repo: Path, *, tasks_path: Path | None = None) -> tuple[list[str], int]:
     import yaml
-    path = repo / TASKS_YAML
+    path = tasks_path or (repo / TASKS_YAML)
     if not path.exists():
         return [f"missing {TASKS_YAML}"], 0
     doc = yaml.safe_load(path.read_text(encoding="utf-8"))
@@ -50,10 +50,12 @@ def main(argv: list[str]) -> int:
     p = argparse.ArgumentParser(prog="keyboard_tasks_check",
                                 description=__doc__)
     p.add_argument("--repo", default=".")
+    p.add_argument("--tasks", default="", help="override path (fixtures)")
     p.add_argument("--json", action="store_true")
     args = p.parse_args(argv)
     repo = Path(args.repo).resolve()
-    fails, n = check(repo)
+    tp = Path(args.tasks) if args.tasks else None
+    fails, n = check(repo, tasks_path=tp)
     if args.json:
         print(json.dumps({"tool": "keyboard_tasks_check", "tasks": n,
                           "count": len(fails), "violations": fails,

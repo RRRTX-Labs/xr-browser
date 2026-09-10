@@ -221,9 +221,10 @@ def main(argv: list[str]) -> int:
                 first_violation = first_violation or f"non-deterministic on {payload[:200]!r}"
                 break
 
-    if n < args.min_iters:
+    if n < args.min_iters and crashes == 0 and violations == 0:
         # the empty-run law: a fuzz gate that executed nothing certifies
-        # nothing. Never a silent pass.
+        # nothing. A run that already found a crash/violation is a valid red
+        # regardless of how few iterations it took to find it.
         print(f"FAIL: policy_fuzz executed {n} iteration(s) < --min-iters "
               f"{args.min_iters} (empty-run law)")
         return EXIT_FAIL
