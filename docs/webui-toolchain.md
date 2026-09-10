@@ -18,7 +18,9 @@ xr-core/ui/
   help-index/              view #4 — printable cheatsheet, no coming-soon rails
   BUILD.gn                 farm-integration placeholder (grit lands in P16)
   toolchain/
-    package.json           EXACTLY three packages: lit, esbuild, typescript
+    package.json           lit + esbuild + typescript + axe-core (P9-T7), governed
+                           by npm-allowlist.json (no magic package count)
+    npm-allowlist.json     the audited allowlist (tools/npm_allowlist_check.py)
     package-lock.json      integrity-pinned (the only trusted network input)
     build.mjs              deterministic esbuild bundle (no sourcemap, no clock)
     check-bundle.js        CSP lint on the OUTPUT (no inline JS / eval / network)
@@ -38,8 +40,13 @@ npm ci --ignore-scripts --no-audit --no-fund
   (`@esbuild/linux-x64`) ships as an integrity-pinned *optionalDependency*, so
   nothing is needed from a postinstall — `--ignore-scripts` is both safe and
   correct.
-- `lit`, `esbuild`, `typescript` are the **only** packages. Any fourth is a P7
-  stop-condition (a new supply-chain edge that has not been reviewed).
+- The package set is governed by `npm-allowlist.json` (audited entries with
+  version/license/role/docs link) and `tools/npm_allowlist_check.py` fails on
+  any lockfile package outside it. `axe-core` (4.13.0, MPL-2.0) joined in
+  P9-T7 as the phase's single authorized new package — its evaluation is
+  `docs/dependencies/axe-core.yaml`. Any future package is a DEPENDENCY
+  RULES ceremony (eval YAML + exact pin + `npm ci --ignore-scripts`), never a
+  silent `package.json` edit.
 
 If node/npm is absent or the registry is unreachable, the build **SKIPs VISIBLY**
 (`build/webui/toolchain.sh` exit 77) and the sources + config still ship — the

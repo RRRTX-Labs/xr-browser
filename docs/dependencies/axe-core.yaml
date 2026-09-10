@@ -1,0 +1,60 @@
+# Dependency evaluation: axe-core (a11y engine — dev/build-time ONLY)
+project: "axe-core — https://github.com/dequelabs/axe-core (Deque Systems)"
+role: "Automated accessibility engine for the WebUI (Plan §11.6: 'axe-core
+  gates (waiver registry with expiries)'). DEV-TIME ONLY: it runs against the
+  built bundle on the farm's browser (or against our AXTree snapshot
+  fixtures); it is never shipped, never linked, and has zero runtime presence
+  (zero-network-at-runtime law). This is the phase's ONLY new package."
+plan_refs: ["§11.6", "P9-T7", "DEPENDENCY RULES (exactly one new package)"]
+current_status: "actively maintained (Deque Systems); 4.13.0 is the current
+  release at evaluation (2026-09-10, registry.npmjs.org live-verified
+  in-sandbox). Zero runtime dependencies (deps: {}), so the dependency
+  closure does not grow the tree."
+version_pin_policy: "exact version 4.13.0 in ui/toolchain/package.json +
+  integrity hash in package-lock.json (the only trusted network input);
+  installed via `npm ci --ignore-scripts` (no install scripts run). A bump is
+  a review + the a11y lane's canary must re-pass."
+licenses:
+  code: "MPL-2.0 (same as this repo — no copyleft, no viral clause; verified
+  from the registry metadata + the repo LICENSE at evaluation)"
+  data: "—"
+health:
+  last_release: "4.13.0 current at 2026-09-10"
+  bus_factor: "Deque Systems (a commercial a11y vendor) + large open-source
+    community — infrastructure-grade"
+  open_critical_advisories: "none found as of 2026-09-10 (`npm audit` on the
+    lock reports 0 vulnerabilities)"
+security_posture: "BUILD/DEV-TIME edge only. Posture: lock-pinned + integrity
+  + --ignore-scripts. It inspects the DOM, never executes product code; the
+  AXTree snapshot path (build/qa/a11y) means we do not feed it live user
+  state in CI. A compromised axe-core could at worst misreport a11y results,
+  never touch the browser's security boundary."
+maintenance_burden: "low: one pin, dev-only, farm-executed; a bump is a
+  one-line edit + lockfile refresh + canary re-run"
+link_policy: "permissive — MPL-2.0 (DR-04 satisfied); dev-only, so the link
+  question does not arise for shipped binaries"
+use_verdict: "USE (dev/build-time only, plan-mandated §11.6)"
+alternatives_rejected:
+  - "Pa11y: wraps headless browsers — needs a browser in CI (which this phase
+    cannot provide) and pulls a second dependency tree."
+  - "@axe-core/playwright: also needs a real browser runtime — same
+    stop-condition."
+  - "jsdom-based axe run in-sandbox: jsdom is a SECOND package (not
+    authorized); the 'which DOM shim' decision is architectural and belongs
+    to a human review, not a lockfile — so the in-sandbox lane uses the
+    AXTree snapshot fixtures instead (decided from evidence, recorded in
+    docs/qa/a11y-contract.md)."
+  - "hand-rolled a11y checks only (a11y_lint.py): structural lint is the
+    floor; axe adds the rule engine the plan names for §11.6."
+exit_plan: "replaceable one-for-one behind the a11y lane's snapshot fixture
+  format; dev-only, so an exit costs a tooling PR, not a product change"
+owner: "A lead (Platform/Chromium) — a11y track"
+evaluated_on: 2026-09-10
+refresh_by: 2026-12-09
+sources:
+  - url: "https://registry.npmjs.org/axe-core/latest"
+    accessed: 2026-09-10
+    quote: "version 4.13.0, license MPL-2.0, dependencies {}"
+  - url: "https://github.com/dequelabs/axe-core"
+    accessed: 2026-09-10
+    quote: "Deque Systems' accessibility rules engine (repo live; license MPL-2.0)"

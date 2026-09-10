@@ -1,0 +1,54 @@
+# The 12 core tasks (P9-T7) — the "keyboard-only completion of the 12 core
+# tasks" list from plan §11.6, as DATA with owners. Execution is farm work
+# (HG-31); this file is what the farm runs and what the a11y contract cites.
+# A task with no owner is a gate failure (tools/keyboard_tasks_check.py).
+schema_version: 1
+tasks:
+  - id: kt-01
+    task: "Open the palette (Ctrl+K) and run a command by keyboard only"
+    surface: "palette"
+    owner: "A lead (Platform/Chromium) — a11y track"
+  - id: kt-02
+    task: "Switch identity via the identity pill menu"
+    surface: "window toolbar"
+    owner: "A lead (Platform/Chromium) — a11y track"
+  - id: kt-03
+    task: "Adjust the trust dial (Shield tier) and confirm the announcement"
+    surface: "trust dial"
+    owner: "A lead (Platform/Chromium) — a11y track"
+  - id: kt-04
+    task: "Open settings, search, and toggle a setting row"
+    surface: "settings"
+    owner: "A lead (Platform/Chromium) — a11y track"
+  - id: kt-05
+    task: "Edit a shortcut in the shortcut editor and resolve a conflict"
+    surface: "shortcut editor"
+    owner: "A lead (Platform/Chromium) — a11y track"
+  - id: kt-06
+    task: "Navigate the help index and deep-link into a settings anchor"
+    surface: "help index"
+    owner: "A lead (Platform/Chromium) — a11y track"
+  - id: kt-07
+    task: "Create a disposable identity and destroy it"
+    surface: "identity menu"
+    owner: "A lead (Platform/Chromium) — a11y track"
+  - id: kt-08
+    task: "Read an attention-budget notification and dismiss it"
+    surface: "toast"
+    owner: "A lead (Platform/Chromium) — a11y track"
+  - id: kt-09
+    task: "Toggle a Shield per-site exception and undo"
+    surface: "shield chip"
+    owner: "A lead (Platform/Chromium) — a11y track"
+  - id: kt-10
+    task: "Open the vault and copy a credential to the clipboard"
+    surface: "vault panel"
+    owner: "A lead (Platform/Chromium) — a11y track"
+  - id: kt-11
+    task: "Complete a forced-colors theme pass of the palette"
+    surface: "themes"
+    owner: "A lead (Platform/Chromium) — a11y track"
+  - id: kt-12
+    task: "Run the full keyboard traversal of the settings shell (Tab cycle)"
+    surface: "settings shell"
+    owner: "A lead (Platform/Chromium) — a11y track"

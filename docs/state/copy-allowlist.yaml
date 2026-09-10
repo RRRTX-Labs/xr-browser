@@ -1,0 +1,10 @@
+# Copy-lint allowlist (P9-T7) — score-looking numbers that are genuinely
+# data values, with a justification each (the same discipline as
+# vocab-allowlist.yaml). An entry is (xr_id, pattern) — line-precise: it
+# stops being valid if the string's number changes. "qyy" as xr_id covers a
+# pattern surviving pseudo-localization in the rendered artifact.
+#
+# A number followed by a unit (px/ms/MB/fps/…) is exempt BY RULE and needs
+# no entry here. Only score-looking numbers that are really data belong.
+schema_version: 1
+allowlist: []
