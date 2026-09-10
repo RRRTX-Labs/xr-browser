@@ -47,12 +47,24 @@ import re
 from pathlib import Path
 from typing import Any
 
-from _common import (
-    ToolError,
-    add_common_flags,
-    emit,
-    main_with_usage_guard,
-)
+import importlib.util as _ilu
+import sys as _sys
+
+# tools/_common.py is one of three `_common` modules in this tree
+# (tools/_common.py, build/_common.py, build/qa/_common.py). A bare
+# `from _common import ...` is order-dependent when tests import tools
+# in-process: whichever `_common` landed in sys.modules first wins. Load our
+# own sibling under an unambiguous name so the import never collides.
+_TOOLS_COMMON = str(Path(__file__).resolve().parent / "_common.py")
+_TC_SPEC = _ilu.spec_from_file_location("tools_common", _TOOLS_COMMON)
+_TC = _ilu.module_from_spec(_TC_SPEC)
+_sys.modules["tools_common"] = _TC
+_TC_SPEC.loader.exec_module(_TC)
+
+ToolError = _TC.ToolError
+add_common_flags = _TC.add_common_flags
+emit = _TC.emit
+main_with_usage_guard = _TC.main_with_usage_guard
 
 ALLOWLIST_FILE = "docs/state/vocab-allowlist.yaml"
 
