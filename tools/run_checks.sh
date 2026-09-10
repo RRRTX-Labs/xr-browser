@@ -298,4 +298,7 @@ echo "== P9-T10/T11: drill matrices (kill matrix + update drill, complete) =="
 echo "== P9-T12: §11 surface completeness (every surface homed) =="
 "$PY" tools/surfaces_check.py --repo .
 
+echo "== P9 meta: mutation-check the checker (3 runners, defect must escape) =="
+"$PY" build/qa/tools/test_checker_mutation.py --repo .
+
 echo "== ALL GOVERNANCE CHECKS PASSED =="
