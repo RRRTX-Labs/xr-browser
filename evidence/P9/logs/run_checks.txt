@@ -17,11 +17,11 @@ PASS: vocab_lint
 == CODEOWNERS / S0 path sync ==
 PASS: owners_sync
 == test suites ==
-........................................................................ [ 29%]
-........................................................................ [ 58%]
-........................................................................ [ 87%]
-...............................                                          [100%]
-247 passed in 84.40s (0:01:24)
+........................................................................ [ 28%]
+........................................................................ [ 57%]
+........................................................................ [ 85%]
+....................................                                     [100%]
+252 passed in 81.20s (0:01:21)
 == evidence bundles (contract: docs/contracts/evidence-bundle-v1.md) ==
 PASS: evidence/P1/evidence.json (structural)
 PASS: evidence/P2/evidence.json (structural)
@@ -145,7 +145,7 @@ PASS: menu_model_check (Tier-1 ≤9, tier separation, stable order)
 PASS: coverage_check
 == T0: upstream added-file canary — live pin->pin classification (fetch.py) ==
 GREEN: all patches apply cleanly at the target rev — proceed to promotion/DEPS-bump review (human presses the button; L24)
-wall-clock 8.54s, 21 B fetched, mode=dry-run, source=real
+wall-clock 3.038s, 21 B fetched, mode=dry-run, source=real
 == P9-T0-a: parity completeness (every protocol method has corpus cases) ==
 PASS: themes: methods covered by parity corpus
 PASS: settings: methods covered by parity corpus
@@ -153,10 +153,10 @@ PASS: commands: methods covered by parity corpus
 PASS: policy: methods covered by parity corpus
 PASS: parity_completeness (4 pair(s), 0 failure(s))
 == P9-T0-a: byte-differential fuzz (C++ host vs fake, seeded) ==
-pair themes: 832 requests, 0 divergences
-pair settings: 821 requests, 0 divergences
-pair commands: 807 requests, 0 divergences
-PASS: differential_fuzz (2460 requests, 0 divergences)
+pair themes: 866 requests, 0 divergences
+pair settings: 848 requests, 0 divergences
+pair commands: 840 requests, 0 divergences
+PASS: differential_fuzz (2554 requests, 0 divergences)
 == P9-T1: browser-test fixture lint (fixtures are the spec) ==
 browser_test_lint: 0 violation(s) (PASS)
 == P9-T2: isolation-matrix fake cells (identity x mechanism) ==
@@ -191,5 +191,10 @@ sast_check: 10 rule(s), 0 violation(s) (PASS)
 drill_check: 0 violation(s) (PASS)
 == P9-T12: §11 surface completeness (every surface homed) ==
 surfaces_check: 15 surface(s), 0 violation(s) (PASS)
+== P9 meta: mutation-check the checker (3 runners, defect must escape) ==
+tools/perf_gate.py: control=tripped, mutation=escaped
+tools/surfaces_check.py: control=tripped, mutation=escaped
+tools/evidence_check.py: control=tripped, mutation=escaped
+test_checker_mutation: 3 target(s), 0 failure(s) (PASS)
 == ALL GOVERNANCE CHECKS PASSED ==
 run_checks rc=0

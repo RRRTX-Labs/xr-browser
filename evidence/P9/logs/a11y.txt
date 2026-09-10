@@ -1,0 +1,5 @@
+== P9-T7: npm allowlist + copy lint + AXTree snapshot + keyboard tasks ==
+npm_allowlist_check: 35 package(s) checked, 0 violation(s) (PASS)
+copy_lint: 59 string(s) checked, 0 violation(s) (PASS)
+PASS: a11y_tree --check (25 nodes, diff-clean)
+keyboard_tasks_check: 12 task(s), 0 violation(s) (PASS)

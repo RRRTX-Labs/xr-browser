@@ -23,6 +23,15 @@
   "ci-run",
   "UNVERIFIED"
  ],
+ "not_done_by_design": [
+  "No real axe-core DOM run — axe-core needs a real DOM; jsdom would be a second (unauthorized) package, so the browser-side run is farm row HG-31 over the committed AXTree snapshot fixtures.",
+  "No live-corpus replay or real WPT — no browser here; live mode requires XR_LIVE_NET=1 + an allowlisted host (none added) and is farm row HG-31.",
+  "No per-route pcap capture — needs root/pcap; the loopback lane is real here, capture is SKIP-visible (exit 77) and farm row HG-36.",
+  "No Gold integration or real captures — engine is real (stdlib PNG codec + comparator); the Gold bridge is farm row HG-37.",
+  "No kill-matrix / update-drill execution — needs a browser/VM; data + runner ship here (drill_run.sh SKIP-visible), execution is farm rows HG-33/HG-34.",
+  "No libFuzzer build (no clang) and no Rust lanes (no rustc) — entry points + configs ship; the clang build and Rust targets are CI-side/farm, owners recorded in docs/qa/surfaces.yaml.",
+  "No hosted-CI rows in this bundle — every row is local-run (ci-run rows are machine-verified via the public API by tools/evidence_check.py --strict once a phase records them)."
+ ],
  "policy": "P9 proof bar = every §11 verification surface exists as automated infrastructure before the feature phases need it, and every runner can turn red (canary + empty-input law). In-sandbox: all runners green against fakes + P2/P7/P8 actuals (247 pytest, 4 C++ lanes, fleet, SAST, a11y, perf, compat, leak, drill, surfaces). Browser/VM/clang/rustc rows (axe run, live corpus, per-route capture, Gold, kill-matrix execution, libFuzzer, cargo gates) are farm rows (HG-28..HG-37) or HUMAN-GATED — recorded, never fabricated.",
  "dod_rows": [
   {
@@ -88,7 +97,8 @@
     "tools/perf_gate.py",
     "docs/state/bench-trend.json",
     "docs/state/perf-budgets.md",
-    "docs/hw.md"
+    "docs/hw.md",
+    "logs/perf-gate.txt"
    ],
    "notes": "gen_perf_budgets --check: 17 rows transcribed, diff-clean (budgets are data, never folklore); perf_gate on a frozen trend-rig bench: 4 rows, 0 MISSED, 0 NEUTRAL; report diff-clean; rig-class law (trend rig asserting a browser-side row is REFUSED) + empty-run law enforced."
   },
@@ -101,7 +111,8 @@
     "build/qa/visual/pngcodec.py",
     "build/qa/visual/engine.py",
     "tools/visual_diff.py",
-    "docs/qa/gold-triage.md"
+    "docs/qa/gold-triage.md",
+    "logs/visual-diff.txt"
    ],
    "notes": "Self-test PASS (identical clean; 1px/theme/RTL flagged; threshold honored; expired waiver red; valid waiver green). Gold-bridge integration is a farm row (HG-37), never met in-sandbox."
   },
@@ -115,7 +126,8 @@
     "xr-browser@f57975e (npm_allowlist_check + a11y_tree + copy_lint)",
     "docs/dependencies/axe-core.yaml",
     "docs/qa/axtree-snapshot.json",
-    "docs/qa/keyboard-tasks.yaml"
+    "docs/qa/keyboard-tasks.yaml",
+    "logs/a11y.txt"
    ],
    "notes": "The phase's single authorized package: axe-core 4.13.0 (MPL-2.0, zero runtime deps, 0 advisories), exact-pinned, npm ci --ignore-scripts; lockfile diff = +11 insertions, zero modified entries. npm_allowlist_check: 35 packages, 0 violations. AXTree snapshot: 25 nodes, golden diff-clean, nameless-button canary. copy_lint: 59 strings, 0 violations (incl. the §11.6 no-score-number check). keyboard-tasks: 12 core tasks as data. axe browser-side run is HG-31 (axe needs a real DOM; jsdom = second package, not authorized)."
   },
@@ -144,7 +156,8 @@
     "build/sast/rules/semgrep/banned-apis.yaml",
     "tools/sast_check.py",
     "docs/dependencies/sast-tooling.yaml",
-    ".github/workflows/sast.yml"
+    ".github/workflows/sast.yml",
+    "logs/sast.txt"
    ],
    "notes": "Rule registry as data: 10 rules, every active rule has a canary fixture that must trip it, negative fixtures trip nothing, real-tree scan clean (node_modules + .d.ts excluded). clang-tidy/rust-clippy/cargo-vet/cargo-audit/Semgrep-CLI recorded CI-side with exact commands (no clang/rustc/semgrep host here — never fabricated). sast.yml is schedule+dispatch only."
   },
@@ -158,7 +171,8 @@
     "build/qa/drill/update-drill.yaml",
     "build/qa/drill/drill_run.sh",
     "tools/drill_check.py",
-    "docs/qa/drill.md"
+    "docs/qa/drill.md",
+    "logs/drill.txt"
    ],
    "notes": "Kill matrix: all 8 §11.10 process types with assertions; update drill: all 3 OS with kill-mid-update points + rollback assertions. drill_run.sh is SKIP-visible (exit 77) without the farm browser; drill_check enforces empty-run + completeness + runner honesty."
   },
@@ -171,9 +185,10 @@
     "docs/qa/surfaces.yaml",
     "tools/surfaces_check.py",
     "docs/qa/qa-surfaces.md",
-    "docs/contracts/evidence-bundle-v1.md"
+    "docs/contracts/evidence-bundle-v1.md",
+    "logs/surfaces.txt"
    ],
-   "notes": "All 15 §11 surfaces inventoried with a home (tool path / farm row / manual owner+cadence / not_yet owner phase) and a machine-side green clause; surfaces_check: 15 surfaces, 0 violations; the 'surface without a home' stop-condition turns red. evidence-bundle-v1.md gains the P9-T12 machine-side-green + run-id convention."
+   "notes": "All 15 §11 surfaces inventoried with a home (tool path / farm row / manual owner+cadence / not_yet owner phase) and a machine-side green clause; surfaces_check: 15 surfaces, 0 violations; the 'surface without a home' stop-condition turns red. evidence-bundle-v1.md gains the P9-T12 machine-side-green + run-id convention, and tools/evidence_check.py --strict enforces the three T12 amendments for P9+ bundles: ci-run rows carry ci_run+ci_job and are resolved through build/upstream/fetch.py (api.github.com, SKIP-visible offline), any PARTIAL/BLOCKED/HUMAN-GATED row needs a non-empty not_done_by_design, and every local-run row cites a logs/* transcript."
   },
   {
    "id": "DOD-11",
@@ -185,7 +200,7 @@
     "logs/pytest-totals.txt",
     "logs/secret-grep.txt"
    ],
-   "notes": "run_checks.sh: ALL GOVERNANCE CHECKS PASSED (rc=0) — 247 pytest passed (tools/tests), 4 C++ suite lanes (policy 10 / commands 9 / settings 8 / themes 5 checks) green, differential fuzz 120 s clean, fleet 60 s x 4 clean. run_negatives.sh: ALL NEGATIVE CASES REJECTED AS EXPECTED (N=44). ./scripts/build test: 534 passed, 2 skipped (actionlint + minisign absent — SKIP-visible). P1–P8 bundles still pass evidence_check --strict."
+   "notes": "run_checks.sh: ALL GOVERNANCE CHECKS PASSED (rc=0) — 252 pytest passed (tools/tests), 4 C++ suite lanes (policy 10 / commands 9 / settings 8 / themes 5 checks) green, differential fuzz 120 s clean, fleet 60 s x 4 clean, mutation meta-check 3/3 escaped. run_negatives.sh: ALL NEGATIVE CASES REJECTED AS EXPECTED (N=47). ./scripts/build test: 540 passed, 2 skipped (actionlint + minisign absent — SKIP-visible). P1–P8 bundles still pass evidence_check --strict."
   }
  ]
 }

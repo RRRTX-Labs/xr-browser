@@ -1,0 +1,2 @@
+== P9-T6: visual-diff stdlib engine self-test ==
+PASS: visual_diff self-test (identical clean; 1px/theme/RTL flagged; threshold honored; expired waiver red; valid waiver green)

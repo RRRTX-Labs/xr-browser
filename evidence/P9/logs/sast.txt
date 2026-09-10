@@ -1,0 +1,2 @@
+== P9-T9: SAST rule registry (canary + real-tree clean) ==
+sast_check: 10 rule(s), 0 violation(s) (PASS)

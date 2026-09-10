@@ -1,0 +1,5 @@
+== P9-T5: perf budgets (plan-transcribed, diff-clean) + gate ==
+PASS: gen_perf_budgets --check (17 rows transcribed, diff-clean)
+PASS: perf_gate --check (report diff-clean)
+== rig-class refusal (trend rig asserting a browser-side row) ==
+trend-rig bench: PASS (reference-only law enforced in compare(); see tools/tests/test_p9_perf.py::test_trend_rig_refused_on_browser_side_row)
