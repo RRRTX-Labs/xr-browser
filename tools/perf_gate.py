@@ -202,7 +202,10 @@ def main(argv: list[str]) -> int:
                    help="bench JSON file (repeatable; in-repo shapes or "
                         "normalized)")
     p.add_argument("--report-json", default="")
-    p.add_argument("--report-md", default=REPORT_MD)
+    p.add_argument("--report-md", default="",
+                   help="write the generated report here (explicit; the "
+                        "report is never written unless asked — a bare "
+                        "comparison must not mutate the repo)")
     p.add_argument("--check", action="store_true",
                    help="fail if the committed report drifted")
     p.add_argument("--json", action="store_true")
@@ -238,10 +241,11 @@ def main(argv: list[str]) -> int:
                         "rig_class": results[0]["rig_class"],
                         "rows": [x for r in results for x in r["rows"]]},
                        args.as_of)
-    md_path = Path(args.report_md)
-    if not md_path.is_absolute():
-        md_path = repo / md_path
     if args.check:
+        md_path = Path(args.report_md) if args.report_md else \
+            Path(REPORT_MD)
+        if not md_path.is_absolute():
+            md_path = repo / md_path
         ok = md_path.exists() and \
             md_path.read_text(encoding="utf-8") == new_md
         if not ok:
@@ -255,7 +259,13 @@ def main(argv: list[str]) -> int:
         if not jp.is_absolute():
             jp = repo / jp
         c.write_stable(jp, payload, as_of=args.as_of)
-    md_path.write_text(new_md, encoding="utf-8")
+    if args.report_md:
+        # the report is written ONLY when explicitly requested — a bare
+        # comparison (tests, canaries) must never mutate the committed report.
+        md_path = Path(args.report_md)
+        if not md_path.is_absolute():
+            md_path = repo / md_path
+        md_path.write_text(new_md, encoding="utf-8")
 
     if args.json:
         print(c.stable_json({"tool": "perf_gate", **payload,
