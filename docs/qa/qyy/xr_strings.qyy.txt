@@ -1,0 +1,60 @@
+# qyy pseudo-locale render — as-of 2026-09-10 (deterministic)
+settings.heading	IDS_XR_SETTINGS_HEADING	‏«Séttîñgs ēx»
+settings.search-label	IDS_XR_SETTINGS_SEARCH_LABEL	‏«Séárçh séttîñgs ēxðañ»
+settings.search-results	IDS_XR_SETTINGS_SEARCH_RESULTS	‏«Séárçh résûlts ēxða»
+settings.no-results	IDS_XR_SETTINGS_NO_RESULTS	‏«Nõ séttîñgs mátçh thîs qûéry. ēxðañd ēxð»
+settings.results-count	IDS_XR_SETTINGS_RESULTS_COUNT	‏«résûlts ē»
+settings.no-sections	IDS_XR_SETTINGS_NO_SECTIONS	‏«Nõ séttîñgs séçtîõñs áré áváîláblé. ēxðañd ēxðañd»
+settings.host-unavailable	IDS_XR_SETTINGS_HOST_UNAVAILABLE	‏«Séttîñgs dátá îs ûñáváîláblé. ēxðañd ēxð»
+settings.section-unavailable	IDS_XR_SETTINGS_SECTION_UNAVAILABLE	‏«séçtîõñ ûñáváîláblé ēxðañd»
+settings.flag-off	IDS_XR_SETTINGS_FLAG_OFF	‏«Séttîñgs áré õff (xr_séttîñgs_v0=fálsé). ēxðañd ēxðañd ē»
+settings.jumped-to	IDS_XR_SETTINGS_JUMPED_TO	‏«Jûmpéd tõ  ēxð{KEY} ({ANCHOR}).»
+settings.badge.preempted	IDS_XR_SETTINGS_BADGE_PREEMPTED	‏«préémptéd ēx»
+settings.badge.readonly-v0	IDS_XR_SETTINGS_BADGE_READONLY_V0	‏«réád-õñly îñ v0 ēxðañ»
+settings.section.network	IDS_XR_SETTINGS_SECTION_NETWORK	‏«Nétwõrk ē»
+settings.section.privacy	IDS_XR_SETTINGS_SECTION_PRIVACY	‏«Prîváçy ē»
+settings.section.identity	IDS_XR_SETTINGS_SECTION_IDENTITY	‏«Idéñtîty ēx»
+settings.network.adblock.title	IDS_XR_SETTINGS_NETWORK_ADBLOCK_TITLE	‏«Ad blõçkîñg ēxð»
+settings.network.adblock.desc	IDS_XR_SETTINGS_NETWORK_ADBLOCK_DESC	‏«Whéthér áds áré blõçkéd. Sûrfáçéd frõm põlîçy îñ v0; ñõt ûsér-wrîtáblé. ēxðañd ēxðañd ēxðañd ēxðañd»
+settings.network.tracker-block.title	IDS_XR_SETTINGS_NETWORK_TRACKER_BLOCK_TITLE	‏«Tráçkér blõçkîñg ēxðañ»
+settings.network.tracker-block.desc	IDS_XR_SETTINGS_NETWORK_TRACKER_BLOCK_DESC	‏«Whéthér çrõss-sîté tráçkérs áré blõçkéd. Sûrfáçéd frõm põlîçy îñ v0. ēxðañd ēxðañd ēxðañd ēxðañ»
+settings.network.https-upgrade.title	IDS_XR_SETTINGS_NETWORK_HTTPS_UPGRADE_TITLE	‏«HTTPS ûpgrádé ēxða»
+settings.network.https-upgrade.desc	IDS_XR_SETTINGS_NETWORK_HTTPS_UPGRADE_DESC	‏«Whéthér pláîñ-HTTP réqûésts ûpgrádé tõ HTTPS. ēxðañd ēxðañd ēx»
+settings.network.route.title	IDS_XR_SETTINGS_NETWORK_ROUTE_TITLE	‏«Rõûtîñg ē»
+settings.network.route.desc	IDS_XR_SETTINGS_NETWORK_ROUTE_DESC	‏«Hõw tráffîç îs rõûtéd, îñçlûdîñg prõxy séttîñgs. Sûrfáçéd frõm põlîçy îñ v0. ēxðañd ēxðañd ēxðañd ēxðañd ē»
+settings.privacy.notifications.title	IDS_XR_SETTINGS_PRIVACY_NOTIFICATIONS_TITLE	‏«Nõtîfîçátîõñs ēxða»
+settings.privacy.notifications.desc	IDS_XR_SETTINGS_PRIVACY_NOTIFICATIONS_DESC	‏«Whéthér sîtés máy ásk tõ séñd ñõtîfîçátîõñs. ēxðañd ēxðañd ēx»
+settings.privacy.storage-in-memory.title	IDS_XR_SETTINGS_PRIVACY_STORAGE_IN_MEMORY_TITLE	‏«Iñ-mémõry stõrágé ēxðañ»
+settings.privacy.storage-in-memory.desc	IDS_XR_SETTINGS_PRIVACY_STORAGE_IN_MEMORY_DESC	‏«Whéthér thîs îdéñtîty kééps îts sîté dátá îñ mémõry õñly, wîth ñõ õñ-dîsk páth. ēxðañd ēxðañd ēxðañd ēxðañd ēx»
+settings.privacy.letterbox.title	IDS_XR_SETTINGS_PRIVACY_LETTERBOX_TITLE	‏«Léttérbõxîñg ēxð»
+settings.privacy.letterbox.desc	IDS_XR_SETTINGS_PRIVACY_LETTERBOX_DESC	‏«Whéthér thé wîñdõw îs léttérbõxéd tõ résîst sçrééñ-sîzé fîñgérprîñtîñg. ēxðañd ēxðañd ēxðañd ēxðañd»
+settings.privacy.vault-export.title	IDS_XR_SETTINGS_PRIVACY_VAULT_EXPORT_TITLE	‏«Váûlt éxpõrt ēxð»
+settings.privacy.vault-export.desc	IDS_XR_SETTINGS_PRIVACY_VAULT_EXPORT_DESC	‏«Whéthér éxpõrtîñg thé îdéñtîty váûlt îs állõwéd. Sûrfáçéd frõm põlîçy îñ v0. ēxðañd ēxðañd ēxðañd ēxðañd ē»
+settings.identity.kind.title	IDS_XR_SETTINGS_IDENTITY_KIND_TITLE	‏«Idéñtîty kîñd ēxða»
+settings.identity.kind.desc	IDS_XR_SETTINGS_IDENTITY_KIND_DESC	‏«Thé îdéñtîty typé, éphémérál õr dûráblé. ēxðañd ēxðañd ē»
+settings.identity.storage.title	IDS_XR_SETTINGS_IDENTITY_STORAGE_TITLE	‏«Stõrágé ē»
+settings.identity.storage.desc	IDS_XR_SETTINGS_IDENTITY_STORAGE_DESC	‏«Whéré thîs îdéñtîty's sîté dátá lîvés. ēxðañd ēxðañd »
+settings.identity.default_grade.title	IDS_XR_SETTINGS_IDENTITY_DEFAULT_GRADE_TITLE	‏«Défáûlt grádé ēxða»
+settings.identity.default_grade.desc	IDS_XR_SETTINGS_IDENTITY_DEFAULT_GRADE_DESC	‏«Thé défáûlt prõtéçtîõñ grádé ápplîéd tõ ñéw sîtés fõr thîs îdéñtîty. ēxðañd ēxðañd ēxðañd ēxðañ»
+palette.command-label	IDS_XR_PALETTE_COMMAND_LABEL	‏«Cõmmáñd ē»
+palette.commands-aria	IDS_XR_PALETTE_COMMANDS_ARIA	‏«Cõmmáñds ēx»
+palette.registry-off	IDS_XR_PALETTE_REGISTRY_OFF	‏«Cõmmáñd régîstry îs õff (stõçk çhrõmé). ēxðañd ēxðañd »
+palette.empty	IDS_XR_PALETTE_EMPTY	‏«Nõ çõmmáñds mátçh “ ēxðañd{QUERY}”.»
+shortcuts.title	IDS_XR_SHORTCUTS_TITLE	‏«Shõrtçûts ēx»
+shortcuts.current-aria	IDS_XR_SHORTCUTS_CURRENT_ARIA	‏«Cûrréñt shõrtçûts ēxðañ»
+shortcuts.empty	IDS_XR_SHORTCUTS_EMPTY	‏«Nõ shõrtçûts bõûñd yét. ēxðañd ē»
+shortcuts.cannot-bind	IDS_XR_SHORTCUTS_CANNOT_BIND	‏«Cáññõt bîñd: ēxð»
+shortcuts.conflict-duplicate	IDS_XR_SHORTCUTS_CONFLICT_DUPLICATE	‏«“{ACCELERATOR}” îs álréády bõûñd tõ  ēxðañd {COMMAND}. Chõõsé á dîfféréñt áççélérátõr õr ûñbîñd ît fîrst. ēxðañd ēxðañd ēxðañ»
+shortcuts.conflict-browser	IDS_XR_SHORTCUTS_CONFLICT_BROWSER	‏«“{ACCELERATOR}” îs résérvéd by thé brõwsér (déñîéd by défáûlt). ēxðañd ēxðañd ēxða»
+shortcuts.conflict-system	IDS_XR_SHORTCUTS_CONFLICT_SYSTEM	‏«“{ACCELERATOR}” îs résérvéd by thé OS (déñîéd by défáûlt). ēxðañd ēxðañd ēx»
+shortcuts.another-command	IDS_XR_SHORTCUTS_ANOTHER_COMMAND	‏«áñõthér çõmmáñd ēxðañ»
+help.title	IDS_XR_HELP_TITLE	‏«Hélp — Cõmmáñd Iñdéx ēxðañd »
+help.intro	IDS_XR_HELP_INTRO	‏«Evéry çõmmáñd, évéry grõûp. Dîsábléd çõmmáñds áré shõwñ wîth thé réásõñ — ñõthîñg héré îs á “çõmîñg sõõñ” pláçéhõldér. ēxðañd ēxðañd ēxðañd ēxðañd ēxðañd ēxðañd ēxða»
+help.col-command	IDS_XR_HELP_COL_COMMAND	‏«Cõmmáñd ē»
+help.col-tier	IDS_XR_HELP_COL_TIER	‏«Tîér »
+help.col-class	IDS_XR_HELP_COL_CLASS	‏«Cláss ē»
+help.col-status	IDS_XR_HELP_COL_STATUS	‏«Státûs ē»
+help.status-enabled	IDS_XR_HELP_STATUS_ENABLED	‏«éñábléd ē»
+help.status-disabled	IDS_XR_HELP_STATUS_DISABLED	‏«dîsábléd —  ēxð{REASON}»
+help.empty	IDS_XR_HELP_EMPTY	‏«Nõ çõmmáñds (régîstry flág õff). ēxðañd ēxða»
+help.no-entry	IDS_XR_HELP_NO_ENTRY	‏«Nõ hélp éñtry fõr “ ēxðañd{ID}”.»

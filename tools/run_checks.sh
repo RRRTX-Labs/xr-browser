@@ -117,6 +117,15 @@ echo "== P8-T5: raw-string lint — no user-visible literals outside ids (ui/ + 
 "$PY" tools/l10n_extract.py --check
 
 # ---------------------------------------------------------------------------
+# P9-T0-b (P8-T5 open item closed): deterministic qyy pseudo-locale render.
+# Committed golden diff-check + self-test (canaries) + fixed-width law.
+# ---------------------------------------------------------------------------
+echo "== P9-T0-b: qyy pseudo-locale render (deterministic) + self-test =="
+"$PY" tools/pseudo_locale.py --self-test
+"$PY" tools/pseudo_locale.py --in ../xr-core/l10n/xr_strings.grdp \
+  --out docs/qa/qyy/xr_strings.qyy.txt --as-of 2026-09-10 --check
+
+# ---------------------------------------------------------------------------
 # P8-T6 gate (attention-budget ledger v0 — local counters only). The policy
 # doc is the statement of record that counters.h cites; the gate refuses a
 # dangling citation or a drifted law (retention/granularity/no-upload).
