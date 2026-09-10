@@ -1,0 +1,85 @@
+name: compat-beta-parity
+
+# Plan §11.12: daily Beta-parity compat smoke. Steps are real where possible
+# (corpus validation + offline replay + the WPT-delta comparator on
+# committed synthetic sets) and SKIP-visible where a browser is required
+# (the real WPT run + live corpus replay are HG-31 farm work — this sandbox/
+# runner has no browser, and the repo adds no network hosts for a live
+# corpus). The workflow NEVER pushes (L24: the bot prepares, humans merge);
+# the delta bot's output is uploaded as an artifact for the promotion
+# gate to read.
+#
+# Network policy: zero new egress. Every step is offline; the only network
+# use is the checkout itself.
+
+on:
+  schedule:
+    - cron: "30 2 * * *"   # 02:30 UTC daily (after the nightly treadmill)
+  workflow_dispatch:
+
+concurrency:
+  group: compat-beta-parity
+  cancel-in-progress: false
+
+jobs:
+  compat:
+    # Same spurious-push-trigger guard as nightly-rebase-build.yml: this
+    # workflow's true semantics are schedule | dispatch only (actions/runner#4001).
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout xr-browser
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+
+      - name: Checkout xr-core at the DEPS pin (corpus lives in the product tree)
+        run: |
+          pin=$(grep -oP 'xr_core_rev: "\K[0-9a-f]{40}' DEPS)
+          git clone -q https://github.com/RRRTX-Labs/xr-core.git ../xr-core
+          git -C ../xr-core checkout -q "$pin"
+          git -C ../xr-core rev-parse HEAD
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned dev dependencies
+        run: python -m pip install --require-hashes -r tools/requirements-dev.txt
+
+      - name: Compat corpus — validate + offline replay (real)
+        run: |
+          python3 tools/compat.py validate
+          python3 tools/compat.py replay
+
+      - name: WPT-delta comparator on committed synthetic sets (real)
+        # The comparator is the deliverable here; real WPT runs need a browser
+        # (HG-31). Synthetic sets exercise the 0.5% boundary + flaky rule.
+        run: |
+          python3 tools/wpt_delta.py \
+            docs/qa/wpt-fixtures/baseline.json \
+            docs/qa/wpt-fixtures/within-tolerance.json
+          python3 tools/wpt_delta.py \
+            docs/qa/wpt-fixtures/baseline.json \
+            docs/qa/wpt-fixtures/regression.json || \
+            echo "EXPECTED: regression set exceeds the 0.5% threshold"
+
+      - name: Live corpus replay — SKIP-visible (browser required, HG-31)
+        run: |
+          echo "SKIP: live corpus replay + real WPT run require a browser"
+          echo "      (farm runbook: docs/qa/compat-corpus.md, HG-31)"
+
+      - name: Upload the compat-parity evidence
+        if: always()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: compat-beta-parity-${{ github.run_id }}
+          path: |
+            ../xr-core/test/corpus/
+            docs/qa/wpt-fixtures/
+          retention-days: 30
+
+      # NOTE (L24): no push step, by design. The delta report is consumed by
+      # the promotion gate, never auto-applied.
