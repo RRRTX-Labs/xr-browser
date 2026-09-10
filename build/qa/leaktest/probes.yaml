@@ -1,0 +1,62 @@
+# leaktest probe definitions (P9-T3) — one module per plan §11.8 probe.
+#
+# `documented_targets` is the set of hosts[:port] the PRODUCT is documented to
+# contact for this probe. Today that set is EMPTY for every probe (the
+# browser does not exist yet: zero-default-telemetry, no update server until
+# P10, no Safe Browsing until P11, no NTP/geo ever). The endpoint-audit law
+# (§11.8) therefore says: any observed contact is a leak. When an owning
+# phase documents a real contact, it adds the host HERE (same commit as the
+# feature) — that is the only sanctioned way the documented set grows, and
+# the loopback lane turns red if a probe ever emits something not on it.
+#
+# `owner_phase` = the phase that will document real targets (P10/P11/...).
+schema_version: 1
+
+# The endpoint-audit matrix rows from §11.8: "fresh profile / after import /
+# after each S0 toggle flip". Every probe runs in each state.
+policy_states:
+  - fresh-profile
+  - after-import
+  - after-toggle
+
+probes:
+  - id: dns-egress
+    description: "DNS resolution attempts (should be partition-local; OS resolver cache is a documented §1.13 exception)"
+    documented_targets: []
+    owner_phase: "P11"
+  - id: webrtc-ice
+    description: "WebRTC ICE candidate egress (host-reflexive candidates leak the real IP)"
+    documented_targets: []
+    owner_phase: "P11"
+  - id: prefetch
+    description: "speculative prefetch/preconnect of link targets"
+    documented_targets: []
+    owner_phase: "P11"
+  - id: captive-portal
+    description: "captive-portal detection probes"
+    documented_targets: []
+    owner_phase: "P11"
+  - id: extension-origin
+    description: "requests originating from extensions' background contexts"
+    documented_targets: []
+    owner_phase: "P13"
+  - id: xr-subresource
+    description: "subresources loaded from xr:// pages"
+    documented_targets: []
+    owner_phase: "P16"
+  - id: update-check
+    description: "component/update-client checks (update server lands P10)"
+    documented_targets: []
+    owner_phase: "P10"
+  - id: sb-lookup
+    description: "Safe Browsing v5 lookups (lands P11)"
+    documented_targets: []
+    owner_phase: "P11"
+  - id: ocsp-crl
+    description: "OCSP/CRL revocation fetch path"
+    documented_targets: []
+    owner_phase: "P11"
+  - id: ntp-geo
+    description: "network-time / geolocation lookups (plan: NTP/geo absent proof)"
+    documented_targets: []
+    owner_phase: "P11"

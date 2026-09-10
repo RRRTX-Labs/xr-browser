@@ -45,3 +45,12 @@ remote, no `pip install`). CI's `endpoint-scan` step (see
 `google|gvt1|update\.chromium|update\.googleapis` against this repo's own
 files. A build step that needs network is a stop-condition: design it in
 (ADR + register), never smuggle it.
+
+## 4. Runtime egress (P9-T3 — xr-leaktest)
+
+The build-time discipline above now has a runtime counterpart:
+`tools/leaktest.py` (loopback lane here, capture lane farm-side) applies the
+same declared-vs-observed equality to the *browser's* sockets. The declared
+set for each §11.8 probe lives in `build/qa/leaktest/probes.yaml` and grows
+only in the same commit as the feature that documents the contact. See
+`docs/qa/leaktest.md` for the privilege model and the farm capture runbook.
