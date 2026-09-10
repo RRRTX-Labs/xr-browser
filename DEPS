@@ -18,7 +18,9 @@
 #                  commands/tests Makefile default-goal CI fix (7e2cff2);
 #                  P8-T1 advances it to the settings tree (65639bf);
 #                  P8-T2 advances it to the token pipeline (de28f80),
-#                  pair-bumped same-day per docs/process/cross-repo-pin.md.
+#                  pair-bumped same-day per docs/process/cross-repo-pin.md;
+#                  P9-T0-a advances it to the themes refusal-text
+#                  canonicalization (e1fc22e).
 #   gclient_url_scheme  P2-T1 (pinned https remotes only; no ssh, no file://)
 #
 # Chromium pin provenance (see docs/state/research-log-P2.md R1):
@@ -31,7 +33,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "bace205b42c17adb7e6f03379b85e65d0717de9e"     # xr-core P8-T7: help-deep-link anchors (grdp 59 msgs); T5 string source 3ff27e2, loader 887e96b
+xr_core_rev: "e1fc22eac965e1c89cb6121ffc13e7ab89e8d10d"     # xr-core P9-T0-a: canonical refusal text (loader.cc + fakes/themes.py + test_host pin)
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"
