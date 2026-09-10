@@ -164,12 +164,12 @@ echo "== P6: policy.md regeneration diff-clean (generated, no hand drift) =="
 echo "== P6: policy-change-event-v1 schema validates (incl. absence laws) =="
 "$PY" tools/xr_schema.py validate policy-change-event docs/contracts/tests/golden-policy-change-event.json
 
-echo "== P6: C++ policy core — build + all suites (vectors parity incl.) =="
-if command -v g++ >/dev/null 2>&1 && command -v make >/dev/null 2>&1; then
-  XR_BROWSER_ROOT="$(pwd)" make -C ../xr-core/policy/tests test
-else
-  echo "SKIP: SKIP (tool absent: g++/make) — needed for: the C++ policy core suites incl. the 66-vector byte-parity matrix (P6); CI runners have g++ and run them; local hint: apt-get install g++ make (build-essential)"
-fi
+echo "== P6/P7/P8/P9-T0-c: discovered C++ suite lanes (every xr-core/*/tests/Makefile) =="
+# T0-c: the discovered set is the source of truth — no hand-written lanes
+# (a hand-written list is exactly how settings/themes suites escaped the
+# governance gate before). ci_lane_discovery runs every Makefile, fails on
+# drift from docs/state/ci-lanes.json, and SKIPs visibly without g++/make.
+"$PY" tools/ci_lane_discovery.py
 
 # ---------------------------------------------------------------------------
 # P7 gates (one command registry, four views, window-chrome skeleton). The C++
@@ -177,13 +177,6 @@ fi
 # toolchain requires node/npm and SKIPs VISIBLY (exit 77) when the registry is
 # unreachable — sources + config always ship (P7 #5 failure condition).
 # ---------------------------------------------------------------------------
-echo "== P7: C++ commands core — build + all 8 suites + bench + 31-case parity =="
-if command -v g++ >/dev/null 2>&1 && command -v make >/dev/null 2>&1; then
-  XR_BROWSER_ROOT="$(pwd)" make -C ../xr-core/commands/tests test
-else
-  echo "SKIP: SKIP (tool absent: g++/make) — needed for: the C++ commands core suites (descriptor/registry/matcher/availability/dispatch/shortcuts/dial/host) + the in-sandbox bench; local hint: apt-get install g++ make"
-fi
-
 echo "== P7: ≤12 hook patch round-trip vs the pinned Chromium rev =="
 "$PY" build/webui/patch_roundtrip.py --xr-core ../xr-core
 
