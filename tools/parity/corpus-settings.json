@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "pair": "settings",
+  "protocol": "settings/host_protocol.md",
+  "provenance": "P9-T0-a. Method-coverage corpus for the parity-completeness gate: one representative case per method in settings/host_protocol.md (flag-status, sections, search, get, set, router-resolve, counters-dump, schema-dump). The exhaustive byte-parity execution for settings lives in tools/tests/test_p8_settings_themes.py (PARITY_CASES + NOVEL_QUERIES, 36 cases); this file is the machine-readable coverage set the gate and the differential oracle inventory consume.",
+  "cases": [
+    {"id": "flag_status", "method": "flag-status", "args": {}, "expect": "ok"},
+    {"id": "sections", "method": "sections", "args": {}, "expect": "ok"},
+    {"id": "search_ads", "method": "search", "args": {"query": "ads"}, "expect": "ok"},
+    {"id": "get_default", "method": "get", "args": {"key": "privacy.letterbox"}, "expect": "ok"},
+    {"id": "get_unknown", "method": "get", "args": {"key": "ghost.key"}, "expect": "ok"},
+    {"id": "set_unknown", "method": "set", "args": {"key": "ghost.key", "value": true}, "expect": "ok"},
+    {"id": "router_home", "method": "router-resolve", "args": {"anchor": ""}, "expect": "ok"},
+    {"id": "counters_dump", "method": "counters-dump", "args": {}, "expect": "ok"},
+    {"id": "schema_dump", "method": "schema-dump", "args": {}, "expect": "ok"}
+  ]
+}

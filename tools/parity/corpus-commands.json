@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "pair": "commands",
+  "protocol": "commands/host_protocol.md",
+  "provenance": "P9-T0-a. Method-coverage corpus for the parity-completeness gate: one representative case per method in commands/host_protocol.md (flag-status, list, query, invoke, bindings-set, bindings-list, bindings-clear, menu-model, register). The exhaustive byte-parity execution for commands lives in tools/tests/test_p7_commands_tools.py (31 valid + 1 malformed); this file is the machine-readable coverage set the gate and the differential oracle inventory consume.",
+  "cases": [
+    {"id": "flag_status", "method": "flag-status", "args": {}, "expect": "ok"},
+    {"id": "list_all", "method": "list", "args": {}, "expect": "ok"},
+    {"id": "query_new", "method": "query", "args": {"query": "new"}, "expect": "ok"},
+    {"id": "invoke_palette", "method": "invoke", "args": {"id": "tab.new", "source": "palette"}, "expect": "ok"},
+    {"id": "invoke_page_rejected", "method": "invoke", "args": {"id": "tab.new", "source": "page"}, "expect": "ok"},
+    {"id": "bindings_set", "method": "bindings-set", "args": {"accelerator": "CTRL+K", "command_id": "tab.new"}, "expect": "ok"},
+    {"id": "bindings_list", "method": "bindings-list", "args": {}, "expect": "ok"},
+    {"id": "bindings_clear", "method": "bindings-clear", "args": {}, "expect": "ok"},
+    {"id": "menu_model", "method": "menu-model", "args": {}, "expect": "ok"},
+    {"id": "register_ok", "method": "register",
+     "args": {"descriptor": {"id": "test.cmd", "title": "Test Cmd",
+                             "attention_tier": "tier1", "danger_class": "safe",
+                             "surface": "palette", "handler": "noop"},
+              "registry": {"registry_id": "reg1"}}, "expect": "ok"}
+  ]
+}

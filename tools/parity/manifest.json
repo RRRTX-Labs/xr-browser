@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "note": "P9-T0-a parity machinery manifest. Each pair names its protocol markdown (the source of truth for the method set) and its parity corpus. The policy pair has no {method,args} stdio protocol table — policy_host is a subcommand host (resolve/dump/watch/snapshot) whose parity is enforced by tools/vectors_check.py + tools/mutation_test.py, not by this gate. Pairs listed here with protocol:null are accounted-for, never silently dropped.",
+  "pairs": [
+    {
+      "id": "themes",
+      "protocol": "../xr-core/themes/host_protocol.md",
+      "corpus": "tools/parity/corpus-themes.json"
+    },
+    {
+      "id": "settings",
+      "protocol": "../xr-core/settings/host_protocol.md",
+      "corpus": "tools/parity/corpus-settings.json"
+    },
+    {
+      "id": "commands",
+      "protocol": "../xr-core/commands/host_protocol.md",
+      "corpus": "tools/parity/corpus-commands.json"
+    },
+    {
+      "id": "policy",
+      "protocol": null,
+      "corpus": null,
+      "covered_by": "tools/vectors_check.py (golden-vector fake parity) + tools/mutation_test.py (777 mutants) — policy_host is a subcommand host, not a {method,args} stdio protocol; no Methods table to auto-discover."
+    }
+  ]
+}

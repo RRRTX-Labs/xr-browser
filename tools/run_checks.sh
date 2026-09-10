@@ -226,4 +226,23 @@ else
   echo "SKIP: SKIP (tool absent: ../xr-core sibling or DEPS chromium_rev) — needed for: the T0 live added-file canary (real fetch.py pin->pin classification); fixture coverage runs in pytest regardless"
 fi
 
+# ---------------------------------------------------------------------------
+# P9-T0-a gates (byte-parity anti-drift). The parity-completeness gate fails
+# when a host_protocol.md method has zero corpus cases (auto-discovered from
+# the protocol table); the differential oracle runs BOTH backends on a seeded
+# request stream and fails on any byte difference (g++ only; SKIPs visibly
+# otherwise). Evidence runs use XR_DIFF_FUZZ_SECONDS=600.
+# ---------------------------------------------------------------------------
+echo "== P9-T0-a: parity completeness (every protocol method has corpus cases) =="
+"$PY" tools/parity_completeness.py
+
+echo "== P9-T0-a: byte-differential fuzz (C++ host vs fake, seeded) =="
+DIFF_FUZZ_SECONDS="${XR_DIFF_FUZZ_SECONDS:-120}"
+if command -v g++ >/dev/null 2>&1 && command -v make >/dev/null 2>&1; then
+  "$PY" tools/differential_fuzz.py --timebox "$DIFF_FUZZ_SECONDS" \
+    --min-iters 200 --seed 20260910
+else
+  echo "SKIP: SKIP (tool absent: g++/make) — needed for: the byte-differential oracle (compiled C++ hosts vs Python fakes); local hint: apt-get install g++ make (build-essential)"
+fi
+
 echo "== ALL GOVERNANCE CHECKS PASSED =="
