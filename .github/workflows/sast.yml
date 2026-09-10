@@ -1,0 +1,59 @@
+name: sast
+
+# Plan P9-T9 SAST lane. The steps here are the in-sandbox gates — every one
+# of them is green today and runs offline. The heavy tools (Semgrep CLI,
+# clang-tidy custom checks, cargo vet/audit) are CI-side-only and recorded
+# in build/sast/rules/README.md; they are NOT wired here because they cannot
+# be made green in this runner (no clang/rustc/semgrep) and a red or
+# always-skip step is forbidden by the workflow policy.
+#
+# Network policy: zero new egress. Every step is offline; the only network
+# use is the checkout.
+
+on:
+  schedule:
+    - cron: "17 4 * * 1"   # 04:17 UTC Mondays (weekly)
+  workflow_dispatch:
+
+concurrency:
+  group: sast
+  cancel-in-progress: false
+
+jobs:
+  sast:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout xr-browser
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Checkout xr-core at the DEPS pin
+        run: |
+          pin=$(grep -oP 'xr_core_rev: "\\K[0-9a-f]{40}' DEPS)
+          git clone -q https://github.com/RRRTX-Labs/xr-core.git ../xr-core
+          git -C ../xr-core checkout -q "$pin"
+          git -C ../xr-core rev-parse HEAD
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned dev dependencies
+        run: python -m pip install --require-hashes -r tools/requirements-dev.txt
+
+      - name: SAST rule registry gate (canary + literal scan)
+        run: python3 tools/sast_check.py --repo .
+
+      - name: Mode-logic lint (one brain, L3)
+        run: python3 tools/mode_lint.py --root ../xr-core
+
+      - name: License audit (GPL-link hard fail)
+        run: python3 tools/license_audit.py --repo .
+
+      - name: npm allowlist (axe-core ceremony)
+        run: python3 tools/npm_allowlist_check.py --repo .
+
+      - name: Copy lint (banned vocab + no score numbers)
+        run: python3 tools/copy_lint.py --repo .

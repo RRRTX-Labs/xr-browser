@@ -1,0 +1,97 @@
+# Semgrep rules — the banned-API depth twin of tools/sast_check.py (P9-T9).
+# Run CI-side (HG-30): semgrep --config build/sast/rules/semgrep/ --error
+# xr-core xr-browser/tools. The in-sandbox literal subset is the gate; these
+# are structural (AST) where the literal scan is textual.
+rules:
+  - id: cpp-memory-unsafe-stdlib
+    severity: ERROR
+    message: >
+      Unchecked C stdlib string ops are banned in core paths (Chromium
+      style). Use std::string / std::format.
+    languages: [cpp]
+    paths:
+      include:
+        - "*/core/*"
+    patterns:
+      - pattern-either:
+          - pattern: strcpy(...)
+          - pattern: strcat(...)
+          - pattern: sprintf(...)
+          - pattern: gets(...)
+
+  - id: cpp-no-shellout-in-core
+    severity: ERROR
+    message: >
+      Core parse/resolve/load paths are pure: never shell out. Separate
+      processes are for the minisign adapter and test fixtures only.
+    languages: [cpp]
+    paths:
+      include:
+        - "*/core/*"
+    patterns:
+      - pattern-either:
+          - pattern: system(...)
+          - pattern: popen(...)
+
+  - id: cpp-no-pref-read-bypass-resolver
+    severity: ERROR
+    message: >
+      No direct preference reads used for policy decisions: route through
+      Resolve(). (AST twin of the clang-tidy custom check xr-no-pref-bypass.)
+    languages: [cpp]
+    paths:
+      include:
+        - "policy/**"
+    patterns:
+      - pattern-either:
+          - pattern: prefs::$METHOD(...)
+          - pattern: $P.GetPrefs()
+          - pattern: $P.GetPrefs().GetBoolean(...)
+          - pattern: $P.GetPrefs().GetString(...)
+
+  - id: ts-no-eval
+    severity: ERROR
+    message: "Dynamic code execution is banned in WebUI (CSP law)."
+    languages: [ts]
+    paths:
+      include:
+        - "ui/**"
+    patterns:
+      - pattern-either:
+          - pattern: eval(...)
+          - pattern: new Function(...)
+
+  - id: ts-no-document-write-innerhtml
+    severity: ERROR
+    message: "Render via Lit templates, never raw HTML sinks."
+    languages: [ts]
+    paths:
+      include:
+        - "ui/**"
+    patterns:
+      - pattern-either:
+          - pattern: document.write(...)
+          - pattern: $EL.innerHTML = ...
+
+  - id: ts-no-raw-crypto-vault
+    severity: ERROR
+    message: "The vault WebUI client holds no key material."
+    languages: [ts]
+    paths:
+      include:
+        - "ui/**"
+    patterns:
+      - pattern-either:
+          - pattern: crypto.subtle.$OP(...)
+          - pattern: crypto.subtle.importKey(...)
+          - pattern: crypto.subtle.deriveKey(...)
+
+  - id: py-no-pickle
+    severity: ERROR
+    message: "Never deserialize untrusted bytes with pickle."
+    languages: [python]
+    paths:
+      include:
+        - "tools/**"
+        - "build/**"
+    pattern: pickle.loads(...)

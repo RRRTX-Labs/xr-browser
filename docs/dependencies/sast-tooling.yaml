@@ -1,0 +1,67 @@
+# Dependency ceremony — CI-side SAST tooling (P9-T9)
+#
+# Per DEPENDENCY RULES, any new tooling needs an evaluation artifact. These
+# tools run CI-side only (HG-30); NONE is installed in the P9 sandbox, so
+# this ceremony records the evaluation and the zero-new-host posture rather
+# than a lockfile entry.
+
+entries:
+  - tool: semgrep
+    kind: CI-side static-analysis engine
+    license: LGPL-2.1 (Semgrep CLI) — separate-process tool, never linked
+    why: >
+      Plan P9-T9 names Semgrep for banned-API rules (str::crypto*, raw net
+      in the vault client, plus the C++/TS rules in
+      build/sast/rules/semgrep/). The in-sandbox twin is the literal-subset
+      scan in tools/sast_check.py; Semgrep provides the AST depth CI-side.
+    host: >
+      GitHub Actions marketplace (CI-side fetch, allowed by the network
+      policy). NOT fetched in the P9 sandbox — no new sandbox host.
+    verification: >
+      Rule files in build/sast/rules/semgrep/ are YAML-validated by
+      tools/sast_check.py (rules: list required). CLI execution is CI-side.
+    alternatives_rejected: >
+      Running Semgrep locally would add a pip/pypi dependency beyond the
+      pinned requirements-dev.txt (violates the single-new-package budget);
+      CodeQL covers similar ground but duplicates the plan's named tool.
+    exit_plan: >
+      Remove build/sast/rules/semgrep/ and the HG-30 step; tools/sast_check.py
+      remains the gate.
+
+  - tool: clang-tidy (custom xr-* checks)
+    kind: CI-side C++ linter
+    license: Apache-2.0 (LLVM)
+    why: >
+      Plan P9-T9's two custom checks (no mode-logic outside //xr/policy; no
+      direct pref reads bypassing the resolver). The mode-logic check's
+      static twin (tools/mode_lint.py) is green in-sandbox today; the
+      pref-bypass literal subset is a sast_check rule.
+    host: >
+      CI runner toolchain (clang). Absent in the P9 sandbox — recorded, not
+      fabricated.
+    verification: >
+      Check intents are specified in build/sast/rules/sast-rules.yaml and
+      README.md; CI-side execution (HG-30).
+    alternatives_rejected: >
+      Running clang-tidy locally needs clang (absent); mode_lint.py already
+      enforces the mode-logic rule statically without a compiler.
+    exit_plan: >
+      Drop the CI clang-tidy step; the static twins remain the gate.
+
+  - tool: cargo clippy / cargo vet / cargo audit
+    kind: CI-side Rust gates
+    license: MIT/Apache-2.0 (Rust toolchain)
+    why: >
+      Plan P9-T9: rust-clippy + cargo-vet + cargo-audit gates. No Rust code
+      exists yet (P11 is the first crate); registered so the gate surface
+      exists before the code does.
+    host: >
+      CI runner toolchain (rustc/cargo). Absent in the P9 sandbox.
+    verification: >
+      Recorded in sast-rules.yaml `gates:` with the exact CI command.
+    alternatives_rejected: >
+      Nothing to run against today; a fabricated "green" cargo audit would be
+      theater.
+    exit_plan: >
+      n/a — the gates activate with P11; there is nothing to remove before
+      then.

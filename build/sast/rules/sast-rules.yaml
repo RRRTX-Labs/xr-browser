@@ -1,0 +1,178 @@
+# SAST rule registry (P9-T9) — the rule set as DATA.
+#
+# Every `active` rule states: the literal patterns its in-sandbox scan
+# enforces (tools/sast_check.py), the scope, and a fixture that MUST trigger
+# it (the canary law: a rule whose fixture can't fire is red). Rules whose
+# tool needs clang/rustc/semgrep are `home: CI` with the exact CI command in
+# build/sast/rules/README.md; they are recorded, never fabricated.
+schema_version: 1
+
+rules:
+  - id: cpp-memory-unsafe-stdlib
+    title: "No unchecked C stdlib string ops in core paths"
+    tool: semgrep
+    home: both
+    severity: high
+    scope: ["../xr-core/policy/core", "../xr-core/commands/core",
+            "../xr-core/settings/core", "../xr-core/themes/core"]
+    exts: [".cc", ".h"]
+    patterns: ["strcpy(", "strcat(", "sprintf(", "gets("]
+    fixture: build/sast/fixtures/cpp-memory-unsafe-stdlib/bad.cc
+    intent: >
+      Chromium style: core parse/resolve/load paths never use unchecked C
+      string copies or format. (Test harnesses and the enterprise minisign
+      adapter are separate processes / fixtures, out of scope by design.)
+  - id: cpp-no-shellout-in-core
+    title: "No shell-out in core paths"
+    tool: semgrep
+    home: both
+    severity: high
+    scope: ["../xr-core/policy/core", "../xr-core/commands/core",
+            "../xr-core/settings/core", "../xr-core/themes/core"]
+    exts: [".cc", ".h"]
+    patterns: ["system(", "popen("]
+    fixture: build/sast/fixtures/cpp-no-shellout-in-core/bad.cc
+    intent: >
+      The resolver/loader/router edge is pure and total: it never shells
+      out. Separate-process tools (minisign verify, test sandbox setup) live
+      outside core/ and are the documented exception.
+  - id: cpp-mode-logic-outside-resolver
+    title: "No mode/trust logic outside the policy resolver"
+    tool: mode_lint
+    home: sandbox
+    severity: critical
+    scope: ["../xr-core"]
+    exts: [".cc", ".h", ".py", ".mojom", ".gn"]
+    local_scan: false     # enforced by tools/mode_lint.py (L3 "one brain")
+    patterns: ["TrustContext", "kFortress"]
+    fixture: build/sast/fixtures/cpp-mode-logic-outside-resolver/bad.cc
+    intent: >
+      Plan L3 / clang-tidy check intent #1: subsystem-private trust/mode
+      decisions are a second brain and fail the build. tools/mode_lint.py is
+      the in-repo enforcement; the clang-tidy AST check (CI) is the depth
+      twin recorded in build/sast/rules/README.md.
+  - id: cpp-no-pref-read-bypass-resolver
+    title: "No direct pref reads bypassing the resolver"
+    tool: clang-tidy-custom
+    home: both
+    severity: critical
+    scope: ["../xr-core/policy"]
+    exts: [".cc", ".h"]
+    patterns: ["prefs::", "GetPrefs()", "->GetBoolean(", "->GetString("]
+    fixture: build/sast/fixtures/cpp-no-pref-read-bypass-resolver/bad.cc
+    intent: >
+      Plan clang-tidy check intent #2: nothing reads preference state to
+      make policy decisions except through Resolve(). The literal subset
+      (pref accessors) is enforced in-sandbox; the AST check is CI-side.
+  - id: ts-no-eval
+    title: "No eval / dynamic code in WebUI"
+    tool: semgrep
+    home: both
+    severity: critical
+    scope: ["../xr-core/ui"]
+    exts: [".ts"]
+    patterns: ["eval(", "new Function("]
+    fixture: build/sast/fixtures/ts-no-eval/bad.ts
+    intent: >
+      CSP law (no inline JS): the bundle must contain no dynamic code
+      execution. tools/csp_lint.py owns the bundle; this rule owns the
+      source, so the pattern is killed before bundling.
+  - id: ts-no-document-write-innerhtml
+    title: "No document.write / innerHTML sinks in WebUI"
+    tool: semgrep
+    home: both
+    severity: high
+    scope: ["../xr-core/ui"]
+    exts: [".ts"]
+    patterns: ["document.write(", ".innerHTML ="]
+    fixture: build/sast/fixtures/ts-no-document-write-innerhtml/bad.ts
+    intent: >
+      WebUI renders via Lit templates, never via raw HTML sinks (XSS-by-
+      construction). The literal subset catches the direct sinks.
+  - id: ts-no-raw-crypto-vault
+    title: "No raw WebCrypto / plaintext handling in vault client"
+    tool: semgrep
+    home: both
+    severity: critical
+    scope: ["../xr-core/ui"]
+    exts: [".ts"]
+    patterns: ["crypto.subtle", "importKey(", "deriveKey("]
+    fixture: build/sast/fixtures/ts-no-raw-crypto-vault/bad.ts
+    intent: >
+      Vault cryptography happens in the vault daemon (P28), never in the
+      WebUI client; the client holds no key material. The rule exists now so
+      a naive client-side crypto addition fails immediately.
+  - id: py-no-pickle
+    title: "No untrusted deserialization in tooling"
+    tool: semgrep
+    home: both
+    severity: high
+    scope: ["tools", "build"]
+    exts: [".py"]
+    patterns: ["pickle.loads("]
+    fixture: build/sast/fixtures/py-no-pickle/bad.py
+    intent: >
+      Tooling consumes only JSON/own formats; never pickle from untrusted
+      bytes (RCE-by-construction).
+  - id: rust-no-crypto-str
+    title: "No `str::crypto*`-style hand-rolled crypto in Rust"
+    tool: semgrep
+    home: CI
+    severity: critical
+    scope: []
+    exts: [".rs"]
+    patterns: []
+    fixture: build/sast/fixtures/rust-no-crypto-str/bad.rs
+    status: not_yet
+    owner_phase: "P11"
+    intent: >
+      Plan P9-T9 Semgrep rule for the future Rust code (kdbx stub, list
+      parser, archive sniff). No Rust exists today; the rule is registered
+      with its fixture so it is ready the moment .rs lands.
+  - id: rust-no-raw-net-vault
+    title: "No raw networking in the vault client"
+    tool: semgrep
+    home: CI
+    severity: critical
+    scope: []
+    exts: [".rs"]
+    patterns: []
+    fixture: build/sast/fixtures/rust-no-raw-net-vault/bad.rs
+    status: not_yet
+    owner_phase: "P11"
+    intent: >
+      Plan P9-T9: vault networking goes through the guarded egress path,
+      never raw sockets. Registered with fixture, no Rust today.
+
+gates:
+  - id: clang-tidy-custom
+    tool: clang-tidy
+    home: CI
+    status: not_yet            # needs clang (absent in the P9 sandbox)
+    checks: ["xr-mode-logic-outside-policy", "xr-no-pref-bypass"]
+    ci_command: >
+      clang-tidy -p build/compile_commands.json -checks=-*,xr-*
+      $(find xr-core -name '*.cc') 2>&1 | tee sast-clang-tidy.log
+    intent: >
+      The plan's two custom checks. The mode-logic check's static twin is
+      tools/mode_lint.py (green in-sandbox today); the pref-bypass check's
+      literal subset is rule cpp-no-pref-read-bypass-resolver.
+  - id: cargo-vet-audit
+    tool: cargo
+    home: CI
+    status: not_yet            # no Rust code, no rustc (absent in sandbox)
+    ci_command: "cargo vet --locked && cargo audit --deny warnings"
+    intent: >
+      Plan P9-T9 rust-clippy + cargo vet + cargo audit gates. They activate
+      with the first Rust crate (P11); registered now so the gate surface
+      exists before the code does.
+  - id: semgrep-run
+    tool: semgrep
+    home: CI
+    status: not_yet            # semgrep binary is CI-side (no new sandbox host)
+    ci_command: >
+      semgrep --config build/sast/rules/semgrep/ --error --strict
+      xr-core/xr xr-browser/tools 2>&1 | tee sast-semgrep.log
+    intent: >
+      The Semgrep rules in build/sast/rules/semgrep/ (banned APIs) run in
+      CI; the in-sandbox twin is tools/sast_check.py (the literal subset).
