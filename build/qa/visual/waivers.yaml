@@ -1,0 +1,8 @@
+# Visual-diff waiver registry (P9-T6). A waiver covers a SPECIFIC
+# (snapshot name, reference hash) pair: if the candidate differs from the
+# reference and an unexpired waiver matches, the row is WAIVED; if the waiver
+# has expired, the row is RED (a waived snapshot must re-assert — expiry
+# forces the owning phase to look again). Waivers are never blanket: they
+# name one snapshot + one hash.
+schema_version: 1
+waivers: []
