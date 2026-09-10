@@ -1,0 +1,35 @@
+== hosted governance run (public API, fetched 2026-09-10) ==
+run_id:    34511850763
+job_id:    102987644207
+head_sha:  e404ac508e6898c0b96552a05ddbcc38e85400a6
+conclusion: success
+
+step conclusions (jobs API):
+  Set up job                                      -> success
+  Checkout                                        -> success
+  Set up Python 3.12                              -> success
+  Install pinned dev dependencies                 -> success
+  Install optional helper tools (P4-T0.1)         -> success   (minisign + actionlint pinned)
+  Checkout xr-core at the DEPS pin                -> success   (89bd2ed)
+  Cross-repo pin is alive (P4-T0.2)               -> success
+  Governance checks                               -> success   (tools/run_checks.sh; tail: "== ALL GOVERNANCE CHECKS PASSED ==")
+  Workflow files lint (P4)                        -> success
+  Negative fixtures (gates must fail on bad input)-> success   (ALL NEGATIVE CASES REJECTED AS EXPECTED (N=47))
+  Build-system gates (P2)                         -> success   (542 passed, 0 skipped; codesign = macOS-only external-tool notice)
+  Contract-freeze gates (P5)                      -> success
+  Policy mutation gate (P6, sampled)              -> success
+  Policy fuzz timebox (P6; 24h = HG-28)           -> success   (600s, violations=0, iterations=431691)
+  Policy bench (P6, record-only)                  -> success
+  Upstream treadmill gates (P3)                   -> success
+  Complete job                                    -> success
+
+governance step pytest summary: 245 passed, 7 skipped
+  (the 7 skips are the P6 policy_tools C++-host tests: the policy_host binary
+   is compiled later by the C++ lane step; skip-policy law, not a failure.)
+
+CI-red closure (this phase):
+  run 29 (0ec33c6)  Build-system gates FAIL  -> vocab_lint `_common` collision (fixed ef6771f)
+  run 30 (668998b)  Governance checks FAIL   -> fuzz/perf artifact traps + leaktest tcpdump (fixed 920f4e9 + 7af350a)
+  run 31 (6835f86)  Governance checks FAIL   -> leaktest capture lane FAIL on tcpdump-present host (fixed 7af350a)
+  run 32 (7af350a)  cancelled at 25-min job timeout (fuzz step had finished; budget raised e404ac5 -> 45 min)
+  run 33 (e404ac5)  success (this run)

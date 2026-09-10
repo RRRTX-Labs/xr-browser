@@ -7,7 +7,7 @@
  "supersedes": "evidence/P8",
  "pin": "chromium d04cdb24d67b081f6cf80200ffc5233f44b61109 (UNCHANGED — 152.0.7977.82); xr-core advanced e1fc22e -> 89bd2ed (T1 browser fixtures, T2 isolation matrix, T4 compat corpus, T7 axe-core toolchain + npm allowlist), DEPS pair-bumped same-day (4daa575).",
  "repos": {
-  "xr-browser": "P9 commits: T0-a..T0-d, then T1..T12 (f309a50 -> ef6771f); see git log.",
+  "xr-browser": "P9 commits: T0-a..T0-d, then T1..T12 (f309a50 -> ef6771f); CI-red closure: 7af350a9421e64059d6c026c6bbe4ab488ad729b (leaktest capture off-farm SKIP fix), e404ac508e6898c0b96552a05ddbcc38e85400a6 (governance job budget 45 min).",
   "xr-core": "P9 commits: 5fcc5a1 (T1), 30ed5ee (T2), 730584a (T4), 89bd2ed (T7)."
  },
  "verdict_vocabulary": [
@@ -29,10 +29,9 @@
   "No per-route pcap capture — needs root/pcap; the loopback lane is real here, capture is SKIP-visible (exit 77) and farm row HG-36.",
   "No Gold integration or real captures — engine is real (stdlib PNG codec + comparator); the Gold bridge is farm row HG-37.",
   "No kill-matrix / update-drill execution — needs a browser/VM; data + runner ship here (drill_run.sh SKIP-visible), execution is farm rows HG-33/HG-34.",
-  "No libFuzzer build (no clang) and no Rust lanes (no rustc) — entry points + configs ship; the clang build and Rust targets are CI-side/farm, owners recorded in docs/qa/surfaces.yaml.",
-  "No hosted-CI rows in this bundle — every row is local-run (ci-run rows are machine-verified via the public API by tools/evidence_check.py --strict once a phase records them)."
+  "No libFuzzer build (no clang) and no Rust lanes (no rustc) — entry points + configs ship; the clang build and Rust targets are CI-side/farm, owners recorded in docs/qa/surfaces.yaml."
  ],
- "policy": "P9 proof bar = every §11 verification surface exists as automated infrastructure before the feature phases need it, and every runner can turn red (canary + empty-input law). In-sandbox: all runners green against fakes + P2/P7/P8 actuals (247 pytest, 4 C++ lanes, fleet, SAST, a11y, perf, compat, leak, drill, surfaces). Browser/VM/clang/rustc rows (axe run, live corpus, per-route capture, Gold, kill-matrix execution, libFuzzer, cargo gates) are farm rows (HG-28..HG-37) or HUMAN-GATED — recorded, never fabricated.",
+ "policy": "P9 proof bar = every §11 verification surface exists as automated infrastructure before the feature phases need it, and every runner can turn red (canary + empty-input law). In-sandbox: all runners green against fakes + P2/P7/P8 actuals (247 pytest, 4 C++ lanes, fleet, SAST, a11y, perf, compat, leak, drill, surfaces). Browser/VM/clang/rustc rows (axe run, live corpus, per-route capture, Gold, kill-matrix execution, libFuzzer, cargo gates) are farm rows (HG-28..HG-37) or HUMAN-GATED — recorded, never fabricated. Hosted CI red at the pre-fix HEAD is closed and proven: run 34511850763 (job 102987644207) is success at e404ac508e6898c0b96552a05ddbcc38e85400a6 with every governance step green.",
  "dod_rows": [
   {
    "id": "DOD-0",
@@ -200,7 +199,19 @@
     "logs/pytest-totals.txt",
     "logs/secret-grep.txt"
    ],
-   "notes": "run_checks.sh: ALL GOVERNANCE CHECKS PASSED (rc=0) — 252 pytest passed (tools/tests), 4 C++ suite lanes (policy 10 / commands 9 / settings 8 / themes 5 checks) green, differential fuzz 120 s clean, fleet 60 s x 4 clean, mutation meta-check 3/3 escaped. run_negatives.sh: ALL NEGATIVE CASES REJECTED AS EXPECTED (N=47). ./scripts/build test: 540 passed, 2 skipped (actionlint + minisign absent — SKIP-visible). P1–P8 bundles still pass evidence_check --strict."
+   "notes": "run_checks.sh: ALL GOVERNANCE CHECKS PASSED (rc=0) — 252 pytest passed locally (245 passed + 7 C++-host skips on the hosted runner, where the policy_host binary is compiled later by the C++ lane step; skip-policy law), 4 C++ suite lanes green (policy 10 / commands 9 / settings 8 / themes 5), differential fuzz 120s clean (2960 requests, 0 divergences), fleet 60s x 4 clean, mutation meta-check 3/3 escaped. run_negatives.sh: ALL NEGATIVE CASES REJECTED AS EXPECTED (N=47). ./scripts/build test: 542 passed, 0 skipped on the hosted runner (541 passed + 1 actionlint SKIP locally, actionlint absent in-sandbox). P1-P8 bundles still pass evidence_check --strict. Hosted governance green at final HEAD - see DOD-12."
+  },
+  {
+   "id": "DOD-12",
+   "dod": "Hosted governance = success at the final pushed HEAD (public-API verified)",
+   "status": "VERIFIED",
+   "source": "ci-run",
+   "ci_run": 34511850763,
+   "ci_job": 102987644207,
+   "evidence": [
+    "logs/ci-governance-final.txt"
+   ],
+   "notes": "Hosted governance at e404ac508e6898c0b96552a05ddbcc38e85400a6: every step success (Governance checks, Workflow files lint, Negative fixtures N=47, Build-system gates 542 passed, Contract-freeze, Policy mutation, Policy fuzz 600s violations=0, Policy bench, Upstream treadmill). The two CI-red root causes closed this phase: (1) the leaktest capture lane FAILing on ubuntu-latest's preinstalled tcpdump (7af350a makes it an off-farm visible SKIP 77); (2) the P9 gate additions exceeding the 25-min job budget (e404ac5 raises it to 45)."
   }
  ]
 }
