@@ -1,0 +1,44 @@
+{
+  "contract": "release-attestation",
+  "contract_version": 1,
+  "note": "P10-T6 living contract: the release attestation format v1 (in-toto/SLSA-style statement; subject = artifact digests, predicate = build materials incl. the pinned chromium_rev + plan pin + SBOM digest + evidence digest). Signed over canonical statement bytes with the epoch root key (TEST-ONLY stub material in this phase — HG-36). See docs/contracts/release-attestation-v1.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["predicate", "schema", "schema_version", "signature", "subject", "type"],
+  "properties": {
+    "schema": {"const": "xr-release-attestation"},
+    "schema_version": {"const": 1},
+    "type": {"const": "xr-release-attestation-v1"},
+    "subject": {
+      "type": "array"
+    },
+    "predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["builder", "build_type", "chromium_rev", "plan_pin"],
+      "properties": {
+        "builder": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id"],
+          "properties": {"id": {"type": "string"}}
+        },
+        "build_type": {"type": "string"},
+        "chromium_rev": {"type": "string"},
+        "plan_pin": {"type": "string"},
+        "sbom_sha256": {"type": ["string", "null"]},
+        "evidence_sha256": {"type": ["string", "null"]}
+      }
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alg", "key_id", "sig"],
+      "properties": {
+        "alg": {"const": "minisign-ed25519"},
+        "key_id": {"type": "string"},
+        "sig": {"type": "string"}
+      }
+    }
+  }
+}

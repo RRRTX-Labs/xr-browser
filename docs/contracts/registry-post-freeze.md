@@ -77,3 +77,35 @@ New *landed* settings sections beyond the schema's own sections are gated by
 the §10 coverage ratchet (coverage-allowlist) exactly as P7 surfaces are;
 settings sections are consumed by the registered roster commands (P8 row in
 `docs/contracts/commands.md`).
+
+## P10 — update, signing & release engineering (consumes the frozen `update-manifest-31`; adds the release living contracts)
+
+P10 implements to the frozen `update-manifest-31` contract and **never
+redefines it** (FROZEN.yaml/INDEX.md byte-identical; the verifier core
+`xr-core/update/core/manifest.cc` refuses unknown fields, and the strict
+3.1 subset is what the server renders). New LIVING contracts registered
+this phase (schemas validated by `tools/xr_schema.py`, review-packet rows
+in the existing format):
+
+| Contract | Schema (tool contract id) | Consumer(s) | Byte-law |
+|---|---|---|---|
+| `server-version-graph-v1` | `server-version-graph` | refimpl + Rust deployable | heads only; linear per channel |
+| `server-channels-v1` | `server-channels` | both backends | pause ⇒ `error-pausedChannel` |
+| `server-cohorts-v1` | `server-cohorts` | both backends + `update/core/cohort.cc` | in-ramp iff `bucket < ramp_percent` |
+| `server-epochs-v1` | `server-epochs` | both backends + `epoch-apply` | seq monotonic; revocation sticky |
+| `release-attestation-v1` | `release-attestation` | `tools/attest.py` | canonical bytes; pinned-key offline verify |
+| `update-host-protocol` (doc: `xr-core/update/host_protocol.md`) | — | `update_host` + `fakes/update.py` | 73 golden vectors byte-parity across backends |
+
+### `xr_updater_v0` flag — expiry/retirement note + both-state convention
+
+`xr_updater_v0` (kind: xr, default **true**, `build/gn/argsets/flags.yaml`
++ `xr_common.gni`) is the kill-switch for the whole P10 update surface.
+OFF ⇒ `update_host` answers every verify with the typed refusal ("feature
+flag xr_updater_v0 is off — stock chrome update behavior") and stock
+chrome update behavior stands; **both states are tested**
+(`test_update_host`, golden vectors, `about-state` matrix). Expiry: kept
+until the P16-exit review of the dev-only channel gate; retirement plan
+mirrors the P7 flag's two-note convention (this note + flags.yaml). A
+third network egress for the update server itself is HG-38 (hosting +
+egress approval) — `release/egress-allowlist.json` is the reviewable
+data, never an edit to `fetch.py`.

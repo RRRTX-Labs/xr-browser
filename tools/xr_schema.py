@@ -30,10 +30,33 @@ SCHEMAS = {
     "command-descriptor": "command-descriptor-v1.schema.json",
     "list-bundle": "list-bundle-manifest-v1.schema.json",
     "update-manifest": "update-manifest-31.schema.json",
+    # P10-T2: the release-server living contracts (spec YAMLs validate
+    # through the same table; the loader accepts .yaml/.yml inputs).
+    "server-version-graph": "server-version-graph-v1.schema.json",
+    "server-channels": "server-channels-v1.schema.json",
+    "server-cohorts": "server-cohorts-v1.schema.json",
+    "server-epochs": "server-epochs-v1.schema.json",
+    # P10-T6: the release attestation format v1.
+    "release-attestation": "release-attestation-v1.schema.json",
 }
 
 
-def _validate(node: Any, schema: dict[str, Any], path: str, errs: list[str]) -> None:
+def _deref(schema: dict[str, Any], root: dict[str, Any]) -> dict[str, Any]:
+    """Resolves a single in-document {"$ref": "#/a/b"} pointer (P10)."""
+    ref = schema.get("$ref")
+    if not ref:
+        return schema
+    node: Any = root
+    for part in ref.lstrip("#/").split("/"):
+        node = node[part]
+    return node
+
+
+def _validate(node: Any, schema: dict[str, Any], path: str, errs: list[str],
+              root: dict[str, Any] | None = None) -> None:
+    if root is None:
+        root = schema
+    schema = _deref(schema, root)
     t = schema.get("type")
     if t == "object":
         if not isinstance(node, dict):
@@ -49,7 +72,7 @@ def _validate(node: Any, schema: dict[str, Any], path: str, errs: list[str]) -> 
                 errs.append(f"{path}.{req}: required property missing")
         for k, sub in props.items():
             if k in node:
-                _validate(node[k], sub, f"{path}.{k}", errs)
+                _validate(node[k], sub, f"{path}.{k}", errs, root)
     elif t == "array":
         if not isinstance(node, list):
             errs.append(f"{path}: expected array")
@@ -76,7 +99,14 @@ def cmd_validate(args) -> int:
         print(f"FAIL: unknown contract/schema: {args.contract}", file=sys.stderr)
         return EXIT_FAIL
     schema = json.loads(schema_path.read_text())
-    doc = json.loads(Path(args.file).read_text())
+    source = Path(args.file)
+    if source.suffix in (".yaml", ".yml"):
+        # YAML inputs (P10 server spec): PyYAML is the pinned dev dep
+        # (tools/DEPS.md); parsed with the safe loader, fail-closed.
+        import yaml  # type: ignore[import-untyped]
+        doc = yaml.safe_load(source.read_text(encoding="utf-8"))
+    else:
+        doc = json.loads(source.read_text())
     errs: list[str] = []
     _validate(doc, schema, "$", errs)
     if args.json:

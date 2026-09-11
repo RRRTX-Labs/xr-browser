@@ -1,0 +1,5 @@
+material: ROOT-PUB-KEY
+# PINNED TEST-ONLY verification key for release-attestation-v1 (offline
+# verifiability DEMONSTRATED with a stub; the production key is HSM-born
+# at the HG-36 ceremony — no real key exists, ADR-0004).
+banner: TEST-ONLY — NOT A RELEASE SIGNING PATH
