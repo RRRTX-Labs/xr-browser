@@ -55,7 +55,8 @@ def main() -> int:
     ap.add_argument("--xr-core", default=None)
     a = ap.parse_args()
     repo = Path(a.repo).resolve()
-    xr_core = Path(a.xr_core).resolve() if a.xr_core else (repo.parent / DEFAULT_XR_CORE).resolve()
+    xr_core = Path(a.xr_core).resolve() if a.xr_core else \
+        (repo / DEFAULT_XR_CORE).resolve()  # tools/ -> repo/ -> ../xr-core
 
     vec_path = repo / VECTORS
     try:
