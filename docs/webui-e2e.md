@@ -176,3 +176,26 @@ snapshot set is the browser-side proof.
 - `xr://help/settings.network` (etc.) scrolls to the row and shows it
   enabled; a nonexistent id (e.g. `xr://help/tab.nope`) leaves the index
   visible with the `help.no-entry` status naming the id.
+
+### About / update flows (P10-T8)
+
+- `xr://about` renders `<xr-about>`: version, Chromium base + pinned rev,
+  build hash, signature status — including **"not signed: dev channel"**
+  verbatim on dev (`about.not-signed-dev-channel` id; the raw-string lint
+  forbids literals) — and rollback availability.
+- **Both-flags matrix**: `xr_updater_v0=on` runs the full state machine
+  (idle → checking → available/downloading → ready, error → failed);
+  `xr_updater_v0=off` answers every host call with the typed refusal and
+  the view's failed arm renders it with the reason + manual path — the
+  same matrix pattern as the P8/P9 runbooks.
+- **Failed-state path (the no-silent-failures law)**: a failed/refused
+  state MUST render (a) the typed reason (`about.state-failed` /
+  `about.state-refused`, `{REASON}` substituted), (b) the manual-download
+  pointer (`about.manual-download`), and (c) the "check again"
+  affordance. `tools/about_state_check.py` fails the build if the view's
+  switch drops any host state (`tools/negatives/p10_release.sh` carries
+  the missing-`failed` negative). `refused` is TERMINAL (epoch kill
+  switch, threat row 14) — the drill proves `epoch-revoked` forces it.
+- Roster: `update.about` / `update.check-now` /
+  `update.manual-download` (tier-2, safe; Tier-1 stays ≤9 at 7) — the
+  §10 ratchet rows landed in the same commit.

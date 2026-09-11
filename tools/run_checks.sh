@@ -316,6 +316,12 @@ done
 XR_FUZZ_SECONDS="${XR_FUZZ_SECONDS:-30}" "$PY" release/server/tests/test_server_fuzz.py
 "$PY" tools/server_size_check.py
 
+echo "== P10-T5/T7/T8: rollout drill + claims/notes + about-state coverage =="
+"$PY" tools/rollout_drill.py
+"$PY" tools/release_notes.py --train 152 --out release/notes/train-152.md --check
+"$PY" tools/claims_lint.py
+"$PY" tools/about_state_check.py
+
 echo "== P10-T3: key-ceremony docs + the both-repos secret absence proof =="
 "$PY" tools/secret_scan.py --all
 "$PY" tools/ceremony_check.py
@@ -327,6 +333,9 @@ else
   echo "FAIL: signing matrix gate failed"; exit 1
 fi
 "$PY" tools/packaging_matrix_check.py
+
+echo "== P10-T7: license report + unknown-license-fails-build law =="
+"$PY" build/sbom/license_report.py
 
 echo "== P10-T0-b: kill matrix, hosts-local EXECUTION (the P9 deferral closed) =="
 if bash build/qa/drill/drill_run.sh hosts-local; then :; elif [ $? -eq 77 ]; then

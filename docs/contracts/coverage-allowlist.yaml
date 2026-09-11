@@ -26,6 +26,16 @@ surfaces:
   - surface: settings/identity
     command: settings.identity
     phase: P8
+  # --- About/update surface (lands in P10-T8) — ratchet-safe tier-2 trio. ----
+  - surface: about/update
+    command: update.about
+    phase: P10
+  - surface: about/check-now
+    command: update.check-now
+    phase: P10
+  - surface: about/manual-download
+    command: update.manual-download
+    phase: P10
   # --- XR Panel (lands in P13) — maps to the tier-1 panel.open command. -------
   - surface: panel/xr
     command: panel.open
