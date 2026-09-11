@@ -141,7 +141,7 @@ jobs:
         # Exit 77 (api.github.com unreachable) is a VISIBLE SKIP per the
         # skip-policy, never a silent pass; governance re-checks every push.
         run: |
-          python3 tools/scheduled_lane_check.py; rc=$?
+          python3 tools/scheduled_lane_check.py --own-lane nightly-rebase-build.yml; rc=$?
           if [ "$rc" -eq 77 ]; then
             echo "SKIP: api.github.com unreachable/rate-limited from this runner — visible SKIP; governance re-checks on every push"
             exit 0

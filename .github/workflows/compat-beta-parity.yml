@@ -107,7 +107,7 @@ jobs:
         # runner) is a VISIBLE SKIP per the skip-policy — same pattern as
         # run_checks.sh — never a silent pass.
         run: |
-          python3 tools/scheduled_lane_check.py; rc=$?
+          python3 tools/scheduled_lane_check.py --own-lane compat-beta-parity.yml; rc=$?
           if [ "$rc" -eq 77 ]; then
             echo "SKIP: api.github.com unreachable/rate-limited from this runner — visible SKIP; governance re-checks on every push and run_checks proves the checker offline (--self-test)"
             exit 0

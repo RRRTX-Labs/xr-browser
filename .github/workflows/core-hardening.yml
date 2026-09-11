@@ -280,7 +280,7 @@ jobs:
 
       - name: Scheduled-lane health (a red nightly reddens within a day)
         run: |
-          python3 tools/scheduled_lane_check.py; rc=$?
+          python3 tools/scheduled_lane_check.py --own-lane core-hardening.yml; rc=$?
           if [ "$rc" -eq 77 ]; then
             echo "SKIP: api.github.com unreachable/rate-limited from this runner — visible SKIP; governance re-checks on every push"
             exit 0
