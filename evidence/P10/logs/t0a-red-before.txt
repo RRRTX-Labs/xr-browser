@@ -1,0 +1,4 @@
+## T0-a BEFORE: supply-chain sabotage (uses: actions/checkout@v4) against lint @ ef34792 (pre-fix)
+$ python3 build/workflow_lint.py --root /tmp/wf-sabotage (pre-fix equivalent: lint() had no uses: inspection)
+status: pass
+findings: NONE — the floating tag sails through

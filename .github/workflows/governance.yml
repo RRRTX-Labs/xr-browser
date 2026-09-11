@@ -28,6 +28,8 @@ concurrency:
 jobs:
   governance:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     # Backstop for the whole gate suite. Post-P9 the steps sum to roughly
     # 13 min (governance: pytest + C++ lanes + differential fuzz 120s +
     # fuzz fleet 4x60s + T1-T12 gates) + 10 min (P6 fuzz timebox 600s) +

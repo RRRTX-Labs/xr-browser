@@ -53,6 +53,8 @@ jobs:
     # ------------------------------------------------------------------
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     timeout-minutes: 45
     env:
       XR_LIVE_NET: "1"          # gates every live fetch inside fetch.py

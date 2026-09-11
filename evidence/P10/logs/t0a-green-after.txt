@@ -1,0 +1,15 @@
+## T0-a AFTER: same sabotage against the armed lint (this commit)
+$ python3 build/workflow_lint.py --root /tmp/wf-sabotage; echo "exit=$?"
+  checked: .github/workflows/governance.yml
+  actionlint: SKIP (tool absent: actionlint) — needed for: deep check of .github/workflows expressions and schema (P4) — a compile error there yields a run with zero jobs and no logs; the always-on half of build/workflow_lint.py still runs without it; install hint: github.com/rhysd/actionlint releases (CI installs it pinned by version + tarball sha256)
+  FAIL: .github/workflows/governance.yml:40: uses: 'actions/checkout@v4' is not pinned to a full 40-hex commit SHA — floating tags (@v4), branch names (@main) and short SHAs are rejected; pin like actions/checkout@11d5960a326750d5838078e36cf38b85af677262 (supply-chain discipline, plan §9.11/§13)
+  FAIL: .github/workflows/governance.yml: job 'governance' declares no permissions: — least privilege requires an explicit grant (default `permissions: contents: read`, elevations explicit)
+FAIL: workflow-lint (2 finding(s))
+exit=1
+
+$ python3 build/workflow_lint.py   # shipped workflows, armed rules
+  actionlint: SKIP (tool absent: actionlint) — needed for: deep check of .github/workflows expressions and schema (P4) — a compile error there yields a run with zero jobs and no logs; the always-on half of build/workflow_lint.py still runs without it; install hint: github.com/rhysd/actionlint releases (CI installs it pinned by version + tarball sha256)
+PASS: workflow-lint
+
+## run_negatives (3 new cases registered, N=47 -> 50)
+ALL NEGATIVE CASES REJECTED AS EXPECTED (N=50)

@@ -125,3 +125,110 @@ def test_actionlint_runs_clean_over_the_shipped_workflows():
         REPO, workflow_lint.workflow_files(REPO))
     assert skip_reason is None
     assert findings == [], findings
+
+
+# ---------------------------------------------------------------------------
+# P10-T0-a: the supply-chain rules are code now, not a docstring claim.
+# ---------------------------------------------------------------------------
+
+WF_PINNED = """\
+name: ok
+on: push
+jobs:
+  j:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+      - run: echo hi
+"""
+
+
+def test_shipped_workflows_pass_supply_chain_checks():
+    for wf in sorted((REPO / ".github" / "workflows").glob("*.yml")):
+        findings = workflow_lint.check_supply_chain(wf.read_text(encoding="utf-8"), wf.name)
+        assert findings == [], f"{wf.name}: {findings}"
+
+
+def test_pinned_workflow_with_comment_passes():
+    assert workflow_lint.check_supply_chain(WF_PINNED, "ok.yml") == []
+
+
+def test_floating_tag_is_rejected():
+    bad = WF_PINNED.replace(
+        "actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0",
+        "actions/checkout@v4")
+    findings = workflow_lint.check_supply_chain(bad, "bad.yml")
+    assert any("not pinned to a full 40-hex" in f for f in findings), findings
+
+
+def test_branch_ref_is_rejected():
+    bad = WF_PINNED.replace(
+        "actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0",
+        "actions/checkout@main")
+    findings = workflow_lint.check_supply_chain(bad, "bad.yml")
+    assert any("not pinned to a full 40-hex" in f for f in findings), findings
+
+
+def test_short_sha_is_rejected():
+    bad = WF_PINNED.replace(
+        "@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0",
+        "@11d5960 # v4.4.0")
+    findings = workflow_lint.check_supply_chain(bad, "bad.yml")
+    assert any("not pinned to a full 40-hex" in f for f in findings), findings
+
+
+def test_missing_version_comment_is_rejected():
+    bad = WF_PINNED.replace(
+        "actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0",
+        "actions/checkout@11d5960a326750d5838078e36cf38b85af677262")
+    findings = workflow_lint.check_supply_chain(bad, "bad.yml")
+    assert any("lacks the version comment" in f for f in findings), findings
+
+
+def test_local_action_needs_no_pin():
+    ok = WF_PINNED.replace(
+        "uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0",
+        "uses: ./.github/actions/local-step")
+    assert workflow_lint.check_supply_chain(ok, "ok.yml") == []
+
+
+def test_docker_without_digest_is_rejected():
+    bad = WF_PINNED.replace(
+        "uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0",
+        "uses: docker://alpine:latest")
+    findings = workflow_lint.check_supply_chain(bad, "bad.yml")
+    assert any("sha256 digest" in f for f in findings), findings
+
+
+def _jobless(template: str, drop: str) -> str:
+    return template.replace(drop, "")
+
+
+def test_missing_permissions_is_rejected():
+    bad = _jobless(WF_PINNED, "    permissions:\n      contents: read\n")
+    findings = workflow_lint.check_supply_chain(bad, "bad.yml")
+    assert any("declares no permissions:" in f for f in findings), findings
+
+
+def test_write_all_permissions_is_rejected():
+    bad = WF_PINNED.replace("      contents: read\n", "      write-all\n")
+    # write-all may be spelled as the bare string form too
+    findings = workflow_lint.check_supply_chain(bad, "bad.yml")
+    assert any("write-all" in f for f in findings), findings
+
+
+def test_missing_timeout_is_rejected():
+    bad = _jobless(WF_PINNED, "    timeout-minutes: 10\n")
+    findings = workflow_lint.check_supply_chain(bad, "bad.yml")
+    assert any("declares no timeout-minutes:" in f for f in findings), findings
+
+
+def test_non_integer_timeout_is_rejected():
+    bad = WF_PINNED.replace("timeout-minutes: 10", "timeout-minutes: forever")
+    findings = workflow_lint.check_supply_chain(bad, "bad.yml")
+    assert any("positive integer" in f for f in findings), findings
