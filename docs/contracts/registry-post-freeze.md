@@ -96,6 +96,18 @@ in the existing format):
 | `release-attestation-v1` | `release-attestation` | `tools/attest.py` | canonical bytes; pinned-key offline verify |
 | `update-host-protocol` (doc: `xr-core/update/host_protocol.md`) | — | `update_host` + `fakes/update.py` | 73 golden vectors byte-parity across backends |
 
+> **Correction (2026-09-11, P11-T0-a, appended — the row above is NOT rewritten):**
+> at P10 close the cited doc `xr-core/update/host_protocol.md` did not exist
+> (`find xr-core -name host_protocol.md` returned only commands/, settings/,
+> themes/), and `tools/parity_completeness.py` could not see the omission
+> because its pair list was a hand-written manifest ("4 pair(s), 0
+> failure(s)"). The doc now exists (xr-core `c5034ec`, written from the
+> dispatch as built: 7 methods, response law, `kUnknownMethod` refusal,
+> TEST-ONLY verifier binding), the pair list is DERIVED from
+> `tools/host_protocol_check.py` discovery (5 pairs incl. update, with
+> `tools/parity/corpus-update.json`), and the 73-vector byte-parity law in
+> the row above is unchanged and was always real.
+
 ### `xr_updater_v0` flag — expiry/retirement note + both-state convention
 
 `xr_updater_v0` (kind: xr, default **true**, `build/gn/argsets/flags.yaml`
