@@ -66,18 +66,14 @@
    "status": "VERIFIED"
   },
   {
-   "dod": "T2: server spec/refimpl/Rust trio; corpus >=40 cases green vs reference HERE; Rust lane = hosted (runner-ready; no cargo in sandbox \u2014 recorded debt)",
+   "dod": "T2: server spec/refimpl/Rust trio; corpus >=40 cases byte-exact vs reference HERE (51/51) AND hosted (core-hardening acbcfc6, rustc 1.98.1); server fuzz 600s 0 violations",
    "evidence": [
-    "release/server/ (spec/refimpl/rust trio)",
-    "release/server/tests/conformance.json (51 cases byte-exact vs reference here)",
-    "release/server/rust/tests/conformance.rs (hosted runner)",
-    "evidence/P10/logs/t2-server-fuzz-600s.txt (0 violations)",
-    "tools/server_size_check.py (1379B raw / 435B gzip <= 2048B)",
-    "logs/t2-server-fuzz-600s.txt"
+    "logs/t2-server-fuzz-600s.txt",
+    "logs/research8-runner-probe.txt"
    ],
    "id": "P10-DOD-2",
    "source": "local-run",
-   "status": "BLOCKED"
+   "status": "VERIFIED"
   },
   {
    "dod": "T3: key hierarchy + ceremony docs + ceremony_check + secret_scan green; NO real/generated-for-release keys; release-channel keygen refused",
@@ -190,7 +186,6 @@
  ],
  "generated": "2026-09-11",
  "not_done_by_design": [
-  "Rust server conformance vs the deployable: the dev sandbox has no cargo/rustc; the corpus is byte-exact against the REFERENCE here (test_conformance_ref.py, 51/51) and the deployable half is runner-ready (release/server/rust/tests/conformance.rs) pending the hosted run \u2014 recorded debt, lane kept, SKIP-visible.",
   "Hosted-runner capability probe (research item 8): requires an actual GitHub Actions run at this push; the lane prints cargo/rustc/go versions and SKIPs visibly if absent. Never asserted from belief.",
   "Transparency --publish / external verifiability: needs transparency-log credentials + egress (HG-38). --publish SKIPs visibly (77); --check-inclusion reports NOT-RUN; the plan's externally-verifiable DoD row stays BLOCKED/human-gated.",
   "Real code-signing certs, Apple Developer ID/notarytool, SmartScreen enrollment, HSM key ceremony: HG-36/HG-37 human gates with exact operator runbooks (docs/release/signing-runbook.md, release/keys/ceremony.md). The tooling refuses release-channel signatures fail-closed.",

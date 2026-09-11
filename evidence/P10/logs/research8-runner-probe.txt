@@ -17,3 +17,11 @@ first local compile+conformance (rustc 1.85.0 via apt): 51/51 corpus cases
 byte-identical to the reference after fixing the blind-write compile errors
 (as_bool helper, one clone, sig truncation 16 BYTES -> 8 BYTES) — the
 off-by-two the no-local-toolchain rule predicted, caught by the corpus.
+
+RESOLUTION (same day): the lane fixes landed and the hosted runs went
+GREEN at acbcfc663 — core-hardening SUCCESS (7/7 jobs: fuzz-fleet x4 at
+600 s/target violations==0, mutation x4, freshness, server-conformance
+REPLAYING the 51-case corpus byte-exactly on rustc 1.98.1) and
+governance SUCCESS (the full run_checks lane set + negatives + P2
+build-system gates, 590 tests). The "Rust deployable compiles" debt is
+CLOSED on the hosted runner, not just locally.
