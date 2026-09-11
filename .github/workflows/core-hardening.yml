@@ -231,11 +231,12 @@ jobs:
           git -C ../xr-core checkout --quiet "$XR_CORE_REV"
       - name: Install pinned PyYAML (hosted python carries none; tools/DEPS.md pin)
         run: python3 -m pip install --quiet pyyaml==6.0.3
-      - name: Build the in-house fuzz binaries (make test = build-then-run at the pin)
+      - name: Build the in-house fuzz binaries (at the pin; policy_host feeds the python tool too)
         run: |
-          make -C ../xr-core/commands/tests test
-          make -C ../xr-core/settings/tests test
-          make -C ../xr-core/themes/tests test
+          make -C ../xr-core/policy/tests build
+          make -C ../xr-core/commands/tests build
+          make -C ../xr-core/settings/tests build
+          make -C ../xr-core/themes/tests build
       - name: Fuzz fleet timebox (600 s, all four cores)
         run: |
           python3 tools/fuzz_fleet.py --repo . --timebox 600 --seed 20260911 --json \
