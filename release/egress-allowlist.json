@@ -1,0 +1,10 @@
+{
+ "comment": "P10-T2/T-docs: the release-server egress policy as REVIEWABLE DATA (HG-38 decides; this file is what a reviewer reads — fetch.py ALLOWED_HOSTS is untouched by P10). An update client may talk ONLY to the update origin; the server itself is egress-FREE (stateless renderer: it calls nothing, logs nothing).",
+ "schema": "xr-release-egress-allowlist",
+ "schema_version": 1,
+ "client_egress": [
+  {"host": "updates.rrrtx.labs", "port": 443, "purpose": "update-check + artifact download (the ONLY origin a release client contacts for updates)", "reviewer": "HG-38"}
+ ],
+ "server_egress": [],
+ "refused": "any CDN/telemetry/crash/OCSP-spouse-of-convenience endpoint: the update channel must not become a data channel (privacy law, docs/release/PRIVACY.md)"
+}
