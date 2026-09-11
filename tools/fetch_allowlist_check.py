@@ -2,7 +2,8 @@
 
 Law: ALL network access in this repository flows through
 build/upstream/fetch.py, whose allowlist is: chromium.googlesource.com,
-commondatastorage.googleapis.com, chromiumdash.appspot.com, api.github.com.
+commondatastorage.googleapis.com, chromiumdash.appspot.com, api.github.com,
+static.crates.io (P11-T1, ADR-0044 ceremony — pinned crate tarballs only).
 
 This static check fails when any Python file OUTSIDE the chokepoint (or the
 vendored-schema-free governance tools that must not talk to the network at
@@ -50,6 +51,17 @@ EXEMPT_FILES: dict[str, str] = {
     "build/spike/tests/cdp_fixture.py":
         "P4 spike test fixture: a stdlib loopback socket SERVER (127.0.0.1) "
         "emulating CDP for tests; never the external network.",
+    # P11-T1 rows (research-log-P11.md R7 records both, per this dict's law):
+    "build/qa/leaktest/engine.py":
+        "P9-T3 leaktest harness: a userspace TCP tap bound to 127.0.0.1 ONLY "
+        "(docs/qa/leaktest.md; 'No network beyond 127.0.0.1 — zero new "
+        "egress'). It OBSERVES probe egress and never itself reaches the "
+        "external network — same class as build/spike/cdp.py above.",
+    "build/signing/platform_argv.py":
+        "P10 signing argv builder: the timestamp.digicert.com literal is "
+        "ARGV DATA handed to the platform signer (signtool/codesign) at the "
+        "HG-36/37 human ceremony; this Python never opens a socket or "
+        "fetches it — same class as the probe_driver scan tokens.",
 }
 # URL literals that are test/fixture DATA (never fetched): example namespaces
 EXAMPLE_URL = re.compile(r"\.(example|invalid|test)/")
@@ -130,7 +142,8 @@ def main() -> int:
     # sync.py's three pinned clone URLs are its documented exception
     for host in re.findall(r"[\"']([a-z0-9.-]+\.[a-z]{2,})[\"']", fetch_code):
         if host not in {"chromium.googlesource.com", "commondatastorage.googleapis.com",
-                        "chromiumdash.appspot.com", "api.github.com"} and \
+                        "chromiumdash.appspot.com", "api.github.com",
+                        "static.crates.io"} and \
                 not host.endswith(".chromium.googlesource.com"):
             violations.append({"file": CHOKEPOINT, "line": host,
                                "why": "host outside the committed allowlist"})

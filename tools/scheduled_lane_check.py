@@ -1,30 +1,29 @@
 #!/usr/bin/env python3
 """tools/scheduled_lane_check.py — a red nightly is a red check within a day.
 
-P11-T0-c. Root cause: `compat-beta-parity`'s first and only scheduled run
-(34574063042, 2026-09-11 07:22 UTC) FAILED at the `Upload the compat-parity
-evidence` step, and nobody noticed, because nothing in the repo correlates
-"a scheduled lane went red" with anything. Push-triggered gates cannot see
-it: the failing trigger is the schedule itself.
+P11-T0-c. Root cause: `compat-beta-parity`'s first scheduled run
+(34574063042, 2026-09-11 07:22 UTC) FAILED at its upload-artifact step and
+nobody noticed: nothing correlated "a scheduled lane went red" with
+anything — push-triggered gates cannot see it, the trigger IS the schedule.
 
 Law: for EVERY workflow with a `schedule:` trigger, resolve its MOST RECENT
 `schedule`-event run through the public API and verdict it: success -> PASS;
-failure on the CURRENT definition -> FAIL (with the failing job/step names
-from GET /actions/runs/<id>/jobs); failure with a fix landed since (file
-touched after the run, or a NEWER run succeeded) -> STALE-FAIL, visible and
-NON-FATAL, never counted green; a NEWER run that ALSO failed on real work
-re-escalates to FAIL; failed ONLY its lane-health step -> exempt (the fleet
-check must never condemn a lane for the checker's own circular failure);
+failure on the CURRENT definition -> FAIL (failing job/step names from GET
+/actions/runs/<id>/jobs); failure with a fix landed since (file touched
+after the run, or a NEWER run succeeded) -> STALE-FAIL, visible NON-FATAL,
+never counted green; a NEWER run that ALSO failed on real work re-escalates
+to FAIL; failed ONLY its lane-health step -> exempt (the fleet check must
+never condemn a lane for the checker's own circular failure);
 no schedule run yet -> NOT-RUN visible; disabled -> SKIP visible; in flight
 -> IN-PROGRESS visible; network absent -> SKIP exit 77 (skip-policy) AFTER
-`--self-test` proved every path OFFLINE, so a SKIP never masks a broken
-checker. `--own-lane X` caps X's own verdict at visible non-fatal (every
+`--self-test` proved every path OFFLINE (a SKIP never masks a broken
+checker). `--own-lane X` caps X's own verdict at visible non-fatal (every
 scheduled lane passes its own name; governance passes none).
 
-Network: build/upstream/fetch.py only (the chokepoint; api.github.com is
-sanctioned — the same sanction evidence_ci.py's ci-run resolver uses).
-PyYAML = pinned dev dep. `--fixture FILE` replaces every API response and
-touch-date with canned data (drives --self-test and negative case 68).
+Network: build/upstream/fetch.py only (the chokepoint; URLs built via
+fetch.github_api_url, P11-T1 — no https:// literal in this file). PyYAML =
+pinned dev dep. `--fixture FILE` replaces every API response and touch-date
+with canned data (drives --self-test and negative case 68).
 
 Exit: 0 pass (incl. non-fatal visibles) · 1 fail · 2 usage · 77 skip.
 """
@@ -39,7 +38,10 @@ import sys
 from pathlib import Path
 from typing import Any
 
-REPO_API = "https://api.github.com/repos/RRRTX-Labs/xr-browser"
+# P11-T1: URL construction lives IN the chokepoint — no https:// literal here.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "build" / "upstream"))
+import fetch as _fetch  # noqa: E402,PLC0415 — chokepoint import (no network)
+REPO_API = _fetch.github_api_url("repos/RRRTX-Labs/xr-browser")
 EXIT_PASS, EXIT_FAIL, EXIT_USAGE, EXIT_SKIP = 0, 1, 2, 77
 
 
@@ -49,11 +51,7 @@ def _http(url: str, fixture: dict[str, Any] | None) -> Any:
         if url not in urls:
             raise RuntimeError(f"fixture has no canned response for {url}")
         return urls[url]
-    for p in (Path(__file__).resolve().parent.parent / "build" / "upstream",):
-        if str(p) not in sys.path:
-            sys.path.insert(0, str(p))
-    import fetch  # noqa: PLC0415 — chokepoint import, lazy for fixture mode
-    return json.loads(fetch.http_get(url))
+    return json.loads(_fetch.http_get(url))  # chokepoint (module-level import)
 
 
 def scheduled_workflows(root: Path) -> list[tuple[str, str]]:
@@ -239,7 +237,7 @@ def run(root: Path, fixture: dict[str, Any] | None,
         print(f"SKIP: SKIP (network unavailable for api.github.com: "
               f"{str(exc)[:160]}) — needed for: the scheduled-lane health "
               f"verdict; local hint: re-run with network, or read "
-              f"https://github.com/RRRTX-Labs/xr-browser/actions manually; "
+              f"github.com/RRRTX-Labs/xr-browser/actions manually; "
               f"--self-test proves the checker itself works offline")
         return EXIT_SKIP
 

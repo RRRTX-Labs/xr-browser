@@ -1,47 +1,61 @@
 {
- "comment": "P10-T0-c/T1: recorded mutation scores per xr-core core. Law: a score is a statement about specific bytes \u2014 each record pins the xr-core commit whose core/** the FULL matrix ran against (sampled:false); tools/mutation_freshness.py fails the gate when a core's core/** changes without a fresh transcript. Survivor dispositions are mandatory.",
+ "comment": "P10-T0-c/T1: recorded mutation scores per xr-core core. Law: a score is a statement about specific bytes \u2014 each record pins the xr-core commit whose core/** the FULL matrix ran against (sampled:false); tools/mutation_freshness.py fails the gate when a core's core/** changes without a fresh transcript. Survivor dispositions are mandatory. P11 re-arm (2026-09-11): all six cores re-run FULL (sampled:false) at the T0-b dedup pin 85289cd \u2014 freshness debt from the shared-primitives move paid, and `common` scored for the first time. The dedup shrank the per-core mutant surfaces (the moved files are now mutated ONCE, under common).",
  "cores": {
   "commands": {
-   "killed": 414,
-   "mutants": 414,
-   "note": "re-run at e2566bb after roster_v1.json grew (+3 About commands); the matrix mutates commands/core/*.cc (data file unchanged mutant set), suites incl. test_host@23",
+   "killed": 215,
+   "mutants": 215,
+   "note": "re-arm at the T0-b dedup pin: 414->215 mutants (dedup move); 100% killed incl. the roster-driven About commands.",
    "score_pct": 100.0,
    "seed": 20260911,
    "survivors": [],
-   "transcript": "evidence/P10/logs/t0c-mutation-commands.json",
-   "xr_core_commit": "e2566bb914853751cc0328e0f879ef0a4e5c946a"
+   "transcript": "evidence/P11/logs/t1-mutation-commands.json",
+   "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
+  },
+  "common": {
+   "killed": 199,
+   "mutants": 199,
+   "note": "FIRST SCORE for the T0-b shared-primitives core: 199 mutants over common/core/{sha256,json,json_parse}.cc killed 100% by the shared KAT (test_sha256_kat, 10 vectors incl. the 2^29-bit length case) + the moved parser corpus (test_json, 66 checks); deny-guard 10/10.",
+   "score_pct": 100.0,
+   "seed": 20260911,
+   "survivors": [],
+   "transcript": "evidence/P11/logs/t1-mutation-common.json",
+   "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
   },
   "policy": {
-   "killed": 777,
-   "mutants": 777,
+   "killed": 578,
+   "mutants": 578,
+   "note": "re-arm at the T0-b dedup pin: mutant surface shrank 777->578 because sha256.cc/json.cc/json_parse.cc moved to common/core (now scored separately as `common`); every remaining mutant killed, deny-guard included.",
    "score_pct": 100.0,
-   "seed": 20260908,
+   "seed": 20260911,
    "survivors": [],
-   "transcript": "evidence/P10/logs/t0c-mutation-policy.json",
-   "xr_core_commit": "89bd2ed252cd7b040fc7aeeaeaa874fc4f6c485c"
+   "transcript": "evidence/P11/logs/t1-mutation-policy.json",
+   "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
   },
   "settings": {
-   "killed": 485,
-   "mutants": 485,
+   "killed": 286,
+   "mutants": 286,
+   "note": "re-arm at the T0-b dedup pin: 485->286 mutants (the five deduped files now live in common/core, scored there); 100% killed.",
    "score_pct": 100.0,
-   "seed": 20260908,
+   "seed": 20260911,
    "survivors": [],
-   "transcript": "evidence/P10/logs/t0c-mutation-settings.json",
-   "xr_core_commit": "89bd2ed252cd7b040fc7aeeaeaa874fc4f6c485c"
+   "transcript": "evidence/P11/logs/t1-mutation-settings.json",
+   "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
   },
   "themes": {
-   "killed": 386,
-   "mutants": 386,
+   "killed": 187,
+   "mutants": 187,
+   "note": "re-arm at the T0-b dedup pin: 386->187 mutants (dedup move); 100% killed.",
    "score_pct": 100.0,
-   "seed": 20260908,
+   "seed": 20260911,
    "survivors": [],
-   "transcript": "evidence/P10/logs/t0c-mutation-themes.json",
-   "xr_core_commit": "89bd2ed252cd7b040fc7aeeaeaa874fc4f6c485c"
+   "transcript": "evidence/P11/logs/t1-mutation-themes.json",
+   "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
   },
   "update": {
-   "killed": 414,
-   "mutants": 415,
-   "score_pct": 99.76,
+   "killed": 215,
+   "mutants": 216,
+   "note": "re-arm at the T0-b dedup pin: 415->216 mutants (dedup move); the ONE survivor is the same equivalent mutant P10 dispositioned (clamp boundary coincides at d==0 \u2014 no test can distinguish identical behavior); disposition carried forward verbatim.",
+   "score_pct": 99.54,
    "seed": 20260911,
    "survivors": [
     {
@@ -50,8 +64,8 @@
      "operator": "ROR:> -> >="
     }
    ],
-   "transcript": "evidence/P10/logs/t0c-mutation-update.json",
-   "xr_core_commit": "c16c9631c13ec46a4b57e144d5f2a5596d8270a7"
+   "transcript": "evidence/P11/logs/t1-mutation-update.json",
+   "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
   }
  },
  "schema": "xr-mutation-scores",

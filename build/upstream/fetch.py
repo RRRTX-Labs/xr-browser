@@ -10,6 +10,9 @@ Security model:
       commondatastorage.googleapis.com (toolchain/host artifacts)
       chromiumdash.appspot.com         (milestone/release truth — R3)
       api.github.com                   (optional issue-bot surface, HG-16)
+      static.crates.io                 (crates.io CDN: pinned .crate tarballs,
+                                        P11-T1/ADR-0044; every byte sha256-
+                                        pinned by the upstream Cargo.lock)
   - redirects are validated hop-by-hop: a redirect out of the allowlist is
     refused (test-covered, including a mock server that tries).
   - read-only: GET only; the module has no write/push/credential path and
@@ -51,6 +54,14 @@ ALLOWED_HOSTS: frozenset[str] = frozenset({
     "commondatastorage.googleapis.com",
     "chromiumdash.appspot.com",
     "api.github.com",
+    # P11-T1 (ADR-0044 ceremony): the crates.io CDN, for fetching pinned
+    # .crate tarballs into xr-core/third_party/rust/vendor/. Read-only GETs
+    # of immutable content-addressed artifacts; every tarball's sha256 is
+    # pinned by adblock-rust's own Cargo.lock at the vendored tag, so the
+    # host can serve wrong bytes but never unverified ones. NOTE: the
+    # crates.io INDEX/API hosts (index.crates.io, crates.io) stay OFF the
+    # list — resolution truth comes from the lock file, not live queries.
+    "static.crates.io",
 })
 CHROMIUM_GITILES = "https://chromium.googlesource.com/chromium/src"
 CHROMIUMDASH = "https://chromiumdash.appspot.com"
@@ -123,6 +134,31 @@ def http_get(url: str, *, timeout: int = FETCH_TIMEOUT_S) -> bytes:
             last = exc
     raise FetchError(
         f"fetch failed for {url} after {_HTTP_MAX_ATTEMPTS} attempts: {last}")
+
+
+GITHUB_API = "https://api.github.com"
+CRATES_IO_CDN = "https://static.crates.io"
+
+
+def crates_io_crate_url(name: str, version: str) -> str:
+    """Pinned .crate tarball URL, built IN the chokepoint (P11-T1/ADR-0044);
+    the bytes it names are sha256-pinned by the upstream lock at extraction."""
+    url = f"{CRATES_IO_CDN}/crates/{name}/{name}-{version}.crate"
+    assert_url_allowed(url)
+    return url
+
+
+def github_api_url(path: str) -> str:
+    """Build + validate an api.github.com URL INSIDE the chokepoint (P11-T1).
+
+    Governance tools that query the GitHub API import this instead of
+    carrying their own https:// literal — fetch_allowlist_check's URL-in-code
+    law then holds with zero exemptions for genuine API callers. Pure string
+    construction + allowlist assertion; no network here (http_get does that).
+    """
+    url = f"{GITHUB_API}/{path.lstrip('/')}"
+    assert_url_allowed(url)
+    return url
 
 
 class CiRunNotFound(FetchError):
