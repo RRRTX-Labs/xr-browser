@@ -152,6 +152,58 @@ jobs:
           assert r["gate"] == "PASS", f"themes mutation gate FAIL: {r['score_pct']}% (< 95)"
           EOF
 
+  mutation-update:
+    # P10-T1 hard gate: the update verifier core at >=95% killed.
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+      - name: Set up Python 3.12
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+      - name: Checkout xr-core at the DEPS pin
+        run: |
+          XR_CORE_REV="$(sed -n 's/^xr_core_rev: "\([0-9a-f]\{40\}\)".*/\1/p' DEPS)"
+          git clone --quiet https://github.com/RRRTX-Labs/xr-core.git ../xr-core
+          git -C ../xr-core checkout --quiet "$XR_CORE_REV"
+      - name: Update mutation gate (sampled; >=95 = the T1 hard gate)
+        run: |
+          python3 tools/mutation_test.py --targets update --sample 90 \
+            --seed 20260911 --timebox 900 --jobs 2 --score-gate 95 --json \
+            > /tmp/mutation-update.json
+          cat /tmp/mutation-update.json
+          python3 - <<'EOF'
+          import json
+          r = json.load(open("/tmp/mutation-update.json"))
+          assert r["gate"] == "PASS", f"update mutation gate FAIL: {r['score_pct']}% (< 95)"
+          EOF
+
+  server-conformance:
+    # P10-T2: the Rust deployable replays the committed corpus byte-exactly
+    # (the reference half runs in governance here; no divergence is allowed).
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Rust toolchain versions (recorded for research item 8)
+        run: |
+          cargo --version || echo "SKIP: cargo absent on this runner image"
+          rustc --version || echo "SKIP: rustc absent on this runner image"
+      - name: Rust conformance (byte parity with the reference corpus)
+        run: |
+          cd release/server/rust
+          cargo test --locked 2>&1 | tee /tmp/rust-conformance.log
+          grep -q "test result: ok" /tmp/rust-conformance.log
+
   fuzz-fleet:
     # One fleet lane covers the fuzz-timebox duty for all four cores
     # (discovered from build/fuzz/fleet.yaml — the P9 machinery, reused).
