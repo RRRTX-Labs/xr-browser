@@ -161,3 +161,39 @@ PY
     "$PY" tools/parity_completeness.py --repo . --xr-core "$CORE" --manifest "$M"
 }
 neg_register parity_completeness_exception_abuse
+
+# --- 63. no_new_crypto_check: a planted sixth copy of SHA-256 must redden ---
+case_no_new_crypto_planted_copy() {
+  local CORE="$NEG_TMP/core-crypto"
+  mkdir -p "$CORE/common/core" "$CORE/evil/core"
+  printf '// sanctioned\n' > "$CORE/common/core/sha256.cc"
+  printf '// sanctioned\n' > "$CORE/common/core/sha256.h"
+  printf '// sanctioned\n' > "$CORE/common/core/json.cc"
+  printf '// sanctioned\n' > "$CORE/common/core/json_parse.cc"
+  cat > "$CORE/evil/core/copy.cc" <<'CC'
+#include <cstdint>
+static const uint32_t H0 = 0x6a09e667u;  // a planted SHA-256 copy
+CC
+  neg_expect_reject "no_new_crypto_check: planted algorithm constants reddens" \
+    'algorithm constant|single-copy law' \
+    "$PY" tools/no_new_crypto_check.py --xr-core "$CORE"
+}
+neg_register no_new_crypto_planted_copy
+
+# --- 64. no_new_crypto_check: undispositioned std::hash must redden ---------
+case_no_new_crypto_std_hash() {
+  local CORE="$NEG_TMP/core-hash"
+  mkdir -p "$CORE/common/core" "$CORE/evil2/core"
+  for f in sha256.cc sha256.h json.cc json_parse.cc; do
+    printf '// sanctioned\n' > "$CORE/common/core/$f"
+  done
+  cat > "$CORE/evil2/core/h.cpp_hash.cc" <<'CC'
+#include <functional>
+#include <string>
+size_t Fingerprint(const std::string& s) { return std::hash<std::string>{}(s); }
+CC
+  neg_expect_reject "no_new_crypto_check: std::hash without disposition reddens" \
+    'std::hash without a recorded disposition' \
+    "$PY" tools/no_new_crypto_check.py --xr-core "$CORE"
+}
+neg_register no_new_crypto_std_hash

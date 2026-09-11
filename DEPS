@@ -24,7 +24,11 @@
 #                  P9-T1..T4/T7 advance it through the browser-test fixtures
 #                  (5fcc5a1), isolation matrix (30ed5ee), compat corpus
 #                  (730584a), and the axe-core toolchain + npm allowlist
-#                  (89bd2ed).
+#                  (89bd2ed); P10-T1 to the update verifier core (e2566bb);
+#                  P11-T0-a/b to the published update host_protocol.md
+#                  (c5034ec) and the single shared common/core primitives
+#                  move (895ae6f), pair-bumped same-day per
+#                  docs/process/cross-repo-pin.md.
 #   gclient_url_scheme  P2-T1 (pinned https remotes only; no ssh, no file://)
 #
 # Chromium pin provenance (see docs/state/research-log-P2.md R1):
@@ -37,7 +41,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "e2566bb914853751cc0328e0f879ef0a4e5c946a"     # xr-core P10-T1: update verifier core + host + 9 green suites + BUILD.gn
+xr_core_rev: "895ae6fa645705e5cd9a103f67912685136cac4f"     # xr-core P11-T0-b: ONE shared json/sha256 copy in common/core (KAT in every lane)
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

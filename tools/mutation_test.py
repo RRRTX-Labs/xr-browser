@@ -204,6 +204,12 @@ def main(argv: list[str]) -> int:
             shutil.rmtree(tmp)
         tmp.mkdir(parents=True)
         shutil.copytree(root / target, tmp / target)
+        # P11-T0-b: every suite lane now compiles the SINGLE shared copy of
+        # json/sha256 from ../../common/core — the shared core must exist in
+        # the tmp tree for every target (copytree keeps mtimes, so a target's
+        # prebuilt common objects stay up-to-date and are never mutated).
+        if target != "common" and (root / "common").is_dir():
+            shutil.copytree(root / "common", tmp / "common")
 
         t0 = time.monotonic()
         killed = survived = build_fail = 0

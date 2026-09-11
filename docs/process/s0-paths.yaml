@@ -35,7 +35,27 @@ repos:
       - "/net/"                   # RouteManager, leak policies (S0)
       - "/vault/"                 # vault client + mediation (S0)
       - "/extensions/"            # Guard chokepoint (S0)
-    s1_paths: []                  # populated as P5+ directories land
+      - "/common/"                # P11-T0-b: the SINGLE shared copy of the
+                                  # public primitives (SHA-256, strict JSON) —
+                                  # plan §7.2 names crypto as S0; a defect here
+                                  # is a defect in every consumer at once
+      - "/update/"                # P11-T0-b: decides whether a downloaded
+                                  # binary is trusted (verifier/epoch/seen) —
+                                  # trust-deciding core, L13 dual senior review
+      - "/shield/"                # P11-T0-b: the network-path blocking engine
+                                  # orchestration (plan P1-T7: network is S0);
+                                  # classified BEFORE the code lands so P11's
+                                  # own core is born reviewed, not retrofitted
+    s1_paths:
+      - "/commands/"              # P11-T0-b judgment (recorded in ADR-0043):
+                                  # S1, NOT S0 — commands is a UI-action
+                                  # dispatch surface whose availability
+                                  # predicates READ the P6 resolver's pinned
+                                  # snapshot (data in, verdict out; no second
+                                  # brain, no trust decision of its own). It
+                                  # is not in plan §7.2's S0 set (sandbox/
+                                  # Mojo/vault/crypto/network) and holds no
+                                  # key material or network authority.
 
   xr-browser:
     path: "."

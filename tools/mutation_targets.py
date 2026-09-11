@@ -7,10 +7,15 @@ per-mutant maps (their invariants are covered by the unit suites + the
 from __future__ import annotations
 
 SUITE_MAPS = {
+    # P11-T0-b: the shared primitives are their own mutation core — the KAT
+    # pins sha256 (10 vectors incl. the 2^29-bit length case), the moved
+    # parser corpus pins json/json_parse (66 checks).
+    "common": {
+        "sha256.cc": ["test_sha256_kat"],
+        "json.cc": ["test_json"],
+        "json_parse.cc": ["test_json"],
+    },
     "policy": {  # P6 lane — unchanged, byte-for-byte the default path
-        "json.cc": ["test_vectors", "test_resolve", "test_json"],
-        "json_parse.cc": ["test_vectors", "test_resolve", "test_json"],
-        "sha256.cc": ["test_vectors"],
         "effective_policy.cc": ["test_vectors", "test_resolve", "test_snapshot"],
         "resolve.cc": ["test_vectors", "test_resolve"],
         "resolve_io.cc": ["test_vectors", "test_resolve"],
@@ -26,26 +31,17 @@ SUITE_MAPS = {
         "sections.cc": ["test_sections"],
         "router.cc": ["test_router"],
         "counters.cc": ["test_counters"],
-        "json.cc": ["test_settings_schema", "test_settings_search"],
-        "json_parse.cc": ["test_settings_schema", "test_settings_search"],
-        "sha256.cc": ["test_counters"],
     },
     "themes": {
         "theme.cc": ["test_theme"],
         "contrast.cc": ["test_contrast", "test_loader"],
         "loader.cc": ["test_loader", "test_host"],
-        "json.cc": ["test_theme", "test_loader"],
-        "json_parse.cc": ["test_theme", "test_loader"],
-        "sha256.cc": ["test_loader"],
     },
     # P10-T0-c: the commands core joins the matrix (it was the fourth core
     # with no mutation lane — the T0-c debt). Suites follow the same
     # superset-per-TU discipline; the dial test stays out of per-mutant maps
     # except policy_state.cc, which is what it exercises end-to-end.
     "commands": {
-        "json.cc": ["test_registry", "test_dispatch", "test_shortcuts"],
-        "json_parse.cc": ["test_registry", "test_dispatch", "test_shortcuts"],
-        "sha256.cc": ["test_descriptor"],
         "descriptor.cc": ["test_descriptor", "test_registry"],
         "registry.cc": ["test_registry"],
         "matcher.cc": ["test_matcher"],
@@ -61,11 +57,6 @@ SUITE_MAPS = {
     # what a verifier mutation must not survive. apply_and_build() builds
     # build/update_host whenever a host-driving suite is mapped.
     "update": {
-        "json.cc": ["test_manifest_strict", "test_verify_policy",
-                    "test_golden_vectors"],
-        "json_parse.cc": ["test_manifest_strict", "test_verify_policy",
-                          "test_golden_vectors"],
-        "sha256.cc": ["test_manifest_strict", "test_golden_vectors"],
         "manifest.cc": ["test_manifest_strict", "test_golden_vectors"],
         "verify_policy.cc": ["test_verify_policy", "test_monotonic_downgrade",
                              "test_golden_vectors"],

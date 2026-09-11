@@ -2,6 +2,7 @@
   "schema_version": 1,
   "lanes": [
     "commands",
+    "common",
     "policy",
     "settings",
     "themes",

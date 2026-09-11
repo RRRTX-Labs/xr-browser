@@ -155,6 +155,10 @@ echo "== P8-T7: help<->settings deep-link contract lint (schema <-> registry, bo
 # requires g++ and SKIPs VISIBLY when absent (skip-policy law) — the hosted
 # lane has g++ and runs it for real.
 # ---------------------------------------------------------------------------
+echo "== P11-T0-b: no-new-crypto gate (ONE copy of a public algorithm, never a new one — ADR-0043) =="
+"$PY" tools/no_new_crypto_check.py
+"$PY" tools/no_new_crypto_check.py --self-test
+
 echo "== P6: mode_lint — L3 one-brain ban + L13 intent headers =="
 "$PY" tools/mode_lint.py --root ../xr-core
 
