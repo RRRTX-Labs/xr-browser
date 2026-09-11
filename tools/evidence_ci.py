@@ -10,6 +10,7 @@ split, not by compressing comments.
 """
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -72,6 +73,43 @@ def _default_ci_resolver(run_id: int, job_id: int,
             head.startswith(c) or c.startswith(head) for c in bundle_commits):
         return False
     return True
+
+
+# P11-T0-d rule (d): a VERIFIED row whose own text claims hosted execution
+# must carry a machine-resolvable ci-run citation — either itself (source
+# ci-run) or via an APPENDED correction row with "corrects": <row-id>.
+# Append-only law: corrections add rows; they never edit history. This is
+# the rule that makes a hand-flipped "hosted = green" claim impossible:
+# P10-DOD-2 shipped BLOCKED ("no cargo in sandbox"), was flipped in place
+# once the hosted runs went green, and until this rule nothing in the
+# validator could resolve the hosted half of the claim.
+HOSTED_CLAIM_RE = re.compile(
+    r"\bhosted\b|\bGitHub Actions\b|\bon the runner\b", re.I)
+
+
+def hosted_claim_findings(rows: list[dict], path) -> list[str]:
+    corrected = {r.get("corrects") for r in rows
+                 if r.get("source") == "ci-run" and r.get("corrects")}
+    fails: list[str] = []
+    for row in rows:
+        if not str(row.get("status", "")).startswith("VERIFIED"):
+            continue
+        text = " ".join(
+            str(x) for x in [row.get("dod", ""), row.get("notes", "")]
+            + [str(e) for e in (row.get("evidence") or [])])
+        m = HOSTED_CLAIM_RE.search(text)
+        if not m:
+            continue
+        if row.get("source") == "ci-run" or row.get("id") in corrected:
+            continue
+        fails.append(
+            f"{path}: row {row.get('id', '<no id>')} claims hosted "
+            f"execution ({m.group(0)!r}) with source {row.get('source')!r} "
+            "— a hosted claim needs a ci-run citation: source ci-run with "
+            "ci_run/ci_job ids on the row itself, or an appended correction "
+            f"row carrying them with a 'corrects' field naming "
+            f"{row.get('id')!r} (P11-T0-d rule d)")
+    return fails
 
 
 # Tests monkeypatch this to exercise the content-mismatch paths offline.

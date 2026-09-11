@@ -24,7 +24,7 @@ export PY
 # The ordered case-file list (the dispatcher's only hand-written bit; each
 # file must exist or the gate fails closed rather than silently dropping an
 # area). p9_ci.sh carries the T1–T12 runner canaries.
-NEG_FILES=(p1_p2.sh p3_p4.sh p5_p6.sh p7_p8.sh p9_core.sh p9_ci.sh p10_release.sh p11_t0.sh)
+NEG_FILES=(p1_p2.sh p3_p4.sh p5_p6.sh p7_p8.sh p9_core.sh p9_ci.sh p10_release.sh p11_t0.sh p11_t0d.sh)
 
 if [ "${1:-}" = "--self-test" ]; then
   neg_self_test "${NEG_FILES[@]}"

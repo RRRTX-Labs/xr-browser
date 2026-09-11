@@ -1,11 +1,11 @@
 {
- "schema_note": "P9 bundle — Test & Benchmarking Infrastructure v1. Conforms to docs/contracts/evidence-bundle-v1.md. VERIFIED rows cite artifacts that exist at the cited path. Browser/VM/clang/rustc-dependent rows are HUMAN-GATED or recorded as farm rows (HG-28..HG-37), never met-in-sandbox.",
+ "schema_note": "P9 bundle \u2014 Test & Benchmarking Infrastructure v1. Conforms to docs/contracts/evidence-bundle-v1.md. VERIFIED rows cite artifacts that exist at the cited path. Browser/VM/clang/rustc-dependent rows are HUMAN-GATED or recorded as farm rows (HG-28..HG-37), never met-in-sandbox.",
  "phase": "P9",
  "generated": "2026-09-10",
  "plan": "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
  "plan_sha256": "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b",
  "supersedes": "evidence/P8",
- "pin": "chromium d04cdb24d67b081f6cf80200ffc5233f44b61109 (UNCHANGED — 152.0.7977.82); xr-core advanced e1fc22e -> 89bd2ed (T1 browser fixtures, T2 isolation matrix, T4 compat corpus, T7 axe-core toolchain + npm allowlist), DEPS pair-bumped same-day (4daa575).",
+ "pin": "chromium d04cdb24d67b081f6cf80200ffc5233f44b61109 (UNCHANGED \u2014 152.0.7977.82); xr-core advanced e1fc22e -> 89bd2ed (T1 browser fixtures, T2 isolation matrix, T4 compat corpus, T7 axe-core toolchain + npm allowlist), DEPS pair-bumped same-day (4daa575).",
  "repos": {
   "xr-browser": "P9 commits: T0-a..T0-d, then T1..T12 (f309a50 -> ef6771f); CI-red closure: 7af350a9421e64059d6c026c6bbe4ab488ad729b (leaktest capture off-farm SKIP fix), e404ac508e6898c0b96552a05ddbcc38e85400a6 (governance job budget 45 min).",
   "xr-core": "P9 commits: 5fcc5a1 (T1), 30ed5ee (T2), 730584a (T4), 89bd2ed (T7)."
@@ -24,14 +24,14 @@
   "UNVERIFIED"
  ],
  "not_done_by_design": [
-  "No real axe-core DOM run — axe-core needs a real DOM; jsdom would be a second (unauthorized) package, so the browser-side run is farm row HG-31 over the committed AXTree snapshot fixtures.",
-  "No live-corpus replay or real WPT — no browser here; live mode requires XR_LIVE_NET=1 + an allowlisted host (none added) and is farm row HG-31.",
-  "No per-route pcap capture — needs root/pcap; the loopback lane is real here, capture is SKIP-visible (exit 77) and farm row HG-36.",
-  "No Gold integration or real captures — engine is real (stdlib PNG codec + comparator); the Gold bridge is farm row HG-37.",
-  "No kill-matrix / update-drill execution — needs a browser/VM; data + runner ship here (drill_run.sh SKIP-visible), execution is farm rows HG-33/HG-34.",
-  "No libFuzzer build (no clang) and no Rust lanes (no rustc) — entry points + configs ship; the clang build and Rust targets are CI-side/farm, owners recorded in docs/qa/surfaces.yaml."
+  "No real axe-core DOM run \u2014 axe-core needs a real DOM; jsdom would be a second (unauthorized) package, so the browser-side run is farm row HG-31 over the committed AXTree snapshot fixtures.",
+  "No live-corpus replay or real WPT \u2014 no browser here; live mode requires XR_LIVE_NET=1 + an allowlisted host (none added) and is farm row HG-31.",
+  "No per-route pcap capture \u2014 needs root/pcap; the loopback lane is real here, capture is SKIP-visible (exit 77) and farm row HG-36.",
+  "No Gold integration or real captures \u2014 engine is real (stdlib PNG codec + comparator); the Gold bridge is farm row HG-37.",
+  "No kill-matrix / update-drill execution \u2014 needs a browser/VM; data + runner ship here (drill_run.sh SKIP-visible), execution is farm rows HG-33/HG-34.",
+  "No libFuzzer build (no clang) and no Rust lanes (no rustc) \u2014 entry points + configs ship; the clang build and Rust targets are CI-side/farm, owners recorded in docs/qa/surfaces.yaml."
  ],
- "policy": "P9 proof bar = every §11 verification surface exists as automated infrastructure before the feature phases need it, and every runner can turn red (canary + empty-input law). In-sandbox: all runners green against fakes + P2/P7/P8 actuals (247 pytest, 4 C++ lanes, fleet, SAST, a11y, perf, compat, leak, drill, surfaces). Browser/VM/clang/rustc rows (axe run, live corpus, per-route capture, Gold, kill-matrix execution, libFuzzer, cargo gates) are farm rows (HG-28..HG-37) or HUMAN-GATED — recorded, never fabricated. Hosted CI red at the pre-fix HEAD is closed and proven: run 34511850763 (job 102987644207) is success at e404ac508e6898c0b96552a05ddbcc38e85400a6 with every governance step green.",
+ "policy": "P9 proof bar = every \u00a711 verification surface exists as automated infrastructure before the feature phases need it, and every runner can turn red (canary + empty-input law). In-sandbox: all runners green against fakes + P2/P7/P8 actuals (247 pytest, 4 C++ lanes, fleet, SAST, a11y, perf, compat, leak, drill, surfaces). Browser/VM/clang/rustc rows (axe run, live corpus, per-route capture, Gold, kill-matrix execution, libFuzzer, cargo gates) are farm rows (HG-28..HG-37) or HUMAN-GATED \u2014 recorded, never fabricated. Hosted CI red at the pre-fix HEAD is closed and proven: run 34511850763 (job 102987644207) is success at e404ac508e6898c0b96552a05ddbcc38e85400a6 with every governance step green.",
  "dod_rows": [
   {
    "id": "DOD-0",
@@ -43,7 +43,7 @@
     "docs/state/ci-lanes.json",
     "docs/qa/qyy/xr_strings.qyy.txt"
    ],
-   "notes": "T0-a parity completeness gate + byte-differential oracle (8861cda + DEPS pair-bump c055115); T0-b deterministic qyy renderer with committed golden (7d5111a); T0-c lane discovery — 4 discovered C++ lanes, no hand-written list (fb62c0d); T0-d negatives dispatcher split + derived N + self-test (0ec33c6). All green in logs/run_checks.txt."
+   "notes": "T0-a parity completeness gate + byte-differential oracle (8861cda + DEPS pair-bump c055115); T0-b deterministic qyy renderer with committed golden (7d5111a); T0-c lane discovery \u2014 4 discovered C++ lanes, no hand-written list (fb62c0d); T0-d negatives dispatcher split + derived N + self-test (0ec33c6). All green in logs/run_checks.txt."
   },
   {
    "id": "DOD-1",
@@ -57,7 +57,7 @@
     "xr-browser@c4f9cd6 (isolation_matrix)",
     "logs/run_checks.txt"
    ],
-   "notes": "browser_test_lint: 0 violations; isolation_matrix --check diff-clean; the §1.13 documented-exception law (a new exception requires a disclosure row in the same commit) is the exception_ledger_check gate."
+   "notes": "browser_test_lint: 0 violations; isolation_matrix --check diff-clean; the \u00a71.13 documented-exception law (a new exception requires a disclosure row in the same commit) is the exception_ledger_check gate."
   },
   {
    "id": "DOD-2",
@@ -70,11 +70,11 @@
     "build/qa/leaktest/leaktest-result.json",
     "logs/run_checks.txt"
    ],
-   "notes": "Self-test PASS (clean baseline; planted egress detected; blind harness refused); loopback 30 probe x state cells, 0 leaks; capture mode SKIP-visible (exit 77, needs root/pcap) — never a fake pass."
+   "notes": "Self-test PASS (clean baseline; planted egress detected; blind harness refused); loopback 30 probe x state cells, 0 leaks; capture mode SKIP-visible (exit 77, needs root/pcap) \u2014 never a fake pass."
   },
   {
    "id": "DOD-3",
-   "dod": "T4 compat corpus + WPT comparator (delta ≤0.5% law)",
+   "dod": "T4 compat corpus + WPT comparator (delta \u22640.5% law)",
    "status": "VERIFIED",
    "source": "local-run",
    "evidence": [
@@ -128,7 +128,7 @@
     "docs/qa/keyboard-tasks.yaml",
     "logs/a11y.txt"
    ],
-   "notes": "The phase's single authorized package: axe-core 4.13.0 (MPL-2.0, zero runtime deps, 0 advisories), exact-pinned, npm ci --ignore-scripts; lockfile diff = +11 insertions, zero modified entries. npm_allowlist_check: 35 packages, 0 violations. AXTree snapshot: 25 nodes, golden diff-clean, nameless-button canary. copy_lint: 59 strings, 0 violations (incl. the §11.6 no-score-number check). keyboard-tasks: 12 core tasks as data. axe browser-side run is HG-31 (axe needs a real DOM; jsdom = second package, not authorized)."
+   "notes": "The phase's single authorized package: axe-core 4.13.0 (MPL-2.0, zero runtime deps, 0 advisories), exact-pinned, npm ci --ignore-scripts; lockfile diff = +11 insertions, zero modified entries. npm_allowlist_check: 35 packages, 0 violations. AXTree snapshot: 25 nodes, golden diff-clean, nameless-button canary. copy_lint: 59 strings, 0 violations (incl. the \u00a711.6 no-score-number check). keyboard-tasks: 12 core tasks as data. axe browser-side run is HG-31 (axe needs a real DOM; jsdom = second package, not authorized)."
   },
   {
    "id": "DOD-7",
@@ -158,7 +158,7 @@
     ".github/workflows/sast.yml",
     "logs/sast.txt"
    ],
-   "notes": "Rule registry as data: 10 rules, every active rule has a canary fixture that must trip it, negative fixtures trip nothing, real-tree scan clean (node_modules + .d.ts excluded). clang-tidy/rust-clippy/cargo-vet/cargo-audit/Semgrep-CLI recorded CI-side with exact commands (no clang/rustc/semgrep host here — never fabricated). sast.yml is schedule+dispatch only."
+   "notes": "Rule registry as data: 10 rules, every active rule has a canary fixture that must trip it, negative fixtures trip nothing, real-tree scan clean (node_modules + .d.ts excluded). clang-tidy/rust-clippy/cargo-vet/cargo-audit/Semgrep-CLI recorded CI-side with exact commands (no clang/rustc/semgrep host here \u2014 never fabricated). sast.yml is schedule+dispatch only."
   },
   {
    "id": "DOD-9",
@@ -173,11 +173,11 @@
     "docs/qa/drill.md",
     "logs/drill.txt"
    ],
-   "notes": "Kill matrix: all 8 §11.10 process types with assertions; update drill: all 3 OS with kill-mid-update points + rollback assertions. drill_run.sh is SKIP-visible (exit 77) without the farm browser; drill_check enforces empty-run + completeness + runner honesty."
+   "notes": "Kill matrix: all 8 \u00a711.10 process types with assertions; update drill: all 3 OS with kill-mid-update points + rollback assertions. drill_run.sh is SKIP-visible (exit 77) without the farm browser; drill_check enforces empty-run + completeness + runner honesty."
   },
   {
    "id": "DOD-10",
-   "dod": "T12 evidence conventions + §11 surface inventory (every surface homed)",
+   "dod": "T12 evidence conventions + \u00a711 surface inventory (every surface homed)",
    "status": "VERIFIED",
    "source": "local-run",
    "evidence": [
@@ -187,11 +187,11 @@
     "docs/contracts/evidence-bundle-v1.md",
     "logs/surfaces.txt"
    ],
-   "notes": "All 15 §11 surfaces inventoried with a home (tool path / farm row / manual owner+cadence / not_yet owner phase) and a machine-side green clause; surfaces_check: 15 surfaces, 0 violations; the 'surface without a home' stop-condition turns red. evidence-bundle-v1.md gains the P9-T12 machine-side-green + run-id convention, and tools/evidence_check.py --strict enforces the three T12 amendments for P9+ bundles: ci-run rows carry ci_run+ci_job and are resolved through build/upstream/fetch.py (api.github.com, SKIP-visible offline), any PARTIAL/BLOCKED/HUMAN-GATED row needs a non-empty not_done_by_design, and every local-run row cites a logs/* transcript."
+   "notes": "All 15 \u00a711 surfaces inventoried with a home (tool path / farm row / manual owner+cadence / not_yet owner phase) and a machine-side green clause; surfaces_check: 15 surfaces, 0 violations; the 'surface without a home' stop-condition turns red. evidence-bundle-v1.md gains the P9-T12 machine-side-green + run-id convention, and tools/evidence_check.py --strict enforces the three T12 amendments for P9+ bundles: ci-run rows carry ci_run+ci_job and are resolved through build/upstream/fetch.py (api.github.com, SKIP-visible offline), any PARTIAL/BLOCKED/HUMAN-GATED row needs a non-empty not_done_by_design, and every local-run row cites a logs/* transcript."
   },
   {
    "id": "DOD-11",
-   "dod": "Fresh-clone green: run_checks.sh / run_negatives.sh / ./scripts/build test; P1–P8 unregressed",
+   "dod": "Fresh-clone green: run_checks.sh / run_negatives.sh / ./scripts/build test; P1\u2013P8 unregressed",
    "status": "VERIFIED",
    "source": "local-run",
    "evidence": [
@@ -199,7 +199,7 @@
     "logs/pytest-totals.txt",
     "logs/secret-grep.txt"
    ],
-   "notes": "run_checks.sh: ALL GOVERNANCE CHECKS PASSED (rc=0) — 252 pytest passed locally (245 passed + 7 C++-host skips on the hosted runner, where the policy_host binary is compiled later by the C++ lane step; skip-policy law), 4 C++ suite lanes green (policy 10 / commands 9 / settings 8 / themes 5), differential fuzz 120s clean (2960 requests, 0 divergences), fleet 60s x 4 clean, mutation meta-check 3/3 escaped. run_negatives.sh: ALL NEGATIVE CASES REJECTED AS EXPECTED (N=47). ./scripts/build test: 542 passed, 0 skipped on the hosted runner (541 passed + 1 actionlint SKIP locally, actionlint absent in-sandbox). P1-P8 bundles still pass evidence_check --strict. Hosted governance green at final HEAD - see DOD-12."
+   "notes": "run_checks.sh: ALL GOVERNANCE CHECKS PASSED (rc=0) \u2014 252 pytest passed locally (245 passed + 7 C++-host skips on the hosted runner, where the policy_host binary is compiled later by the C++ lane step; skip-policy law), 4 C++ suite lanes green (policy 10 / commands 9 / settings 8 / themes 5), differential fuzz 120s clean (2960 requests, 0 divergences), fleet 60s x 4 clean, mutation meta-check 3/3 escaped. run_negatives.sh: ALL NEGATIVE CASES REJECTED AS EXPECTED (N=47). ./scripts/build test: 542 passed, 0 skipped on the hosted runner (541 passed + 1 actionlint SKIP locally, actionlint absent in-sandbox). P1-P8 bundles still pass evidence_check --strict. Hosted governance green at final HEAD - see DOD-12."
   },
   {
    "id": "DOD-12",
@@ -212,6 +212,18 @@
     "logs/ci-governance-final.txt"
    ],
    "notes": "Hosted governance at e404ac508e6898c0b96552a05ddbcc38e85400a6: every step success (Governance checks, Workflow files lint, Negative fixtures N=47, Build-system gates 542 passed, Contract-freeze, Policy mutation, Policy fuzz 600s violations=0, Policy bench, Upstream treadmill). The two CI-red root causes closed this phase: (1) the leaktest capture lane FAILing on ubuntu-latest's preinstalled tcpdump (7af350a makes it an off-farm visible SKIP 77); (2) the P9 gate additions exceeding the 25-min job budget (e404ac5 raises it to 45)."
+  },
+  {
+   "id": "DOD-11-C1",
+   "corrects": "DOD-11",
+   "dod": "Correction (appended P11-T0-d, dated 2026-09-11; the original row is left exactly as authored): DOD-11's hosted-runner clauses (notes: '245 passed + 7 C++-host skips on the hosted runner', '542 passed, 0 skipped on the hosted runner') now carry a machine-resolved ci-run citation \u2014 the SAME hosted governance run DOD-12 cites (run 34511850763, job 102987644207, head e404ac508e6898c0b96552a05ddbcc38e85400a6), whose step log printed those counts ('Build-system gates 542 passed'). Required by evidence_check --strict rule (d) (P11-T0-d): a VERIFIED hosted claim needs a ci-run row; the original row predates the rule and cited only local transcripts.",
+   "status": "VERIFIED",
+   "source": "ci-run",
+   "ci_run": 34511850763,
+   "ci_job": 102987644207,
+   "evidence": [
+    "logs/ci-governance-final.txt"
+   ]
   }
  ]
 }

@@ -83,7 +83,8 @@ _COMMIT_RE = re.compile(r"\b[0-9a-f]{7,40}\b", re.IGNORECASE)
 _OPEN_STATUS_PREFIXES = ("PARTIAL", "BLOCKED", "HUMAN-GATED")
 
 
-from evidence_ci import CI_RESOLVER  # noqa: E402 - sibling tool module (P10-T0-d split)
+from evidence_ci import CI_RESOLVER, hosted_claim_findings  # noqa: E402
+import runner_caps  # noqa: E402 - sibling tool module (P11-T0-d)
 
 def strict_default_phases(root: Path) -> list[str]:
     """Phase dirs strict mode auto-covers when no explicit --only is given.
@@ -263,6 +264,19 @@ def check_file(path: Path, repo: Path, strict: bool) -> list[str]:
             if not any(c.startswith("logs/") for c in cites):
                 fails.append(f"{path}: local-run row {rid} must cite a "
                              f"logs/* transcript (P9-T12)")
+        # (d) P11-T0-d: a VERIFIED hosted claim needs a ci-run citation —
+        # on the row itself or on an appended correction row ("corrects").
+        fails.extend(hosted_claim_findings(rows, path))
+        # (e) P11-T0-d: a BLOCKED-* row whose blocker tool the capabilities
+        # ledger (hosted, run-cited) or this sandbox proves PRESENT is stale.
+        caps = runner_caps.load_caps(repo)
+        if caps is None:
+            print(f"SKIP: runner-capabilities ledger absent at "
+                  f"{repo / runner_caps.CAPS_RELPATH} — rule (e) "
+                  f"(stale-BLOCKED) inert for this run; visible, never "
+                  f"silent", file=sys.stderr)
+        else:
+            fails.extend(runner_caps.stale_blocked_findings(rows, caps, path))
 
     gates = path.parent / "human-gates.md"
     if not gates.exists() or not gates.read_text(encoding="utf-8").strip():

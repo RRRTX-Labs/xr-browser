@@ -1,0 +1,115 @@
+{
+ "schema": "runner-capabilities-v1",
+ "generated": "2026-09-11",
+ "runner": "ubuntu-latest (GitHub-hosted)",
+ "law": "Every present:true/false entry is proven by a REAL hosted run (ci_run+ci_job) or a run transcript (log) — see tools/runner_caps.py. A capability asserted from a workflow comment, a docs claim or belief is REFUSED by --check. UNOBSERVED entries must say why and never carry a version. Consumer with teeth: evidence_check --strict rule (e) — a BLOCKED-* row whose blocker tool is proven present here (or locally) is STALE and fails.",
+ "provenance_note": "P11-T0-d. Built from P10 research item 8 (evidence/P10/logs/research8-runner-probe.txt) and live API reads of the cited runs on 2026-09-11. Run 34615191984 (core-hardening @ 8fadb0ee4a7cab04762df5c111778c122e0da919) is the brief's hosted-cargo citation: job 103315238760 'server-conformance' SUCCESS with steps 'Rust toolchain versions' and 'Rust conformance (byte parity with the reference corpus)'. Runs 34627026627 (core-hardening) + 34627026351 (governance) at acbcfc6632ed8563213561526b233777f16884de are the full-green P10 final-head runs.",
+ "capabilities": {
+  "cargo": {
+   "present": true,
+   "version": "1.98.1 (797e8a9bc 2026-08-05)",
+   "proven_by": [
+    {
+     "ci_run": 34615191984,
+     "ci_job": 103315238760,
+     "workflow": "core-hardening",
+     "job": "server-conformance",
+     "step": "Rust toolchain versions (recorded for research item 8)",
+     "head": "8fadb0ee4a7cab04762df5c111778c122e0da919",
+     "date": "2026-09-11"
+    },
+    {
+     "ci_run": 34604887643,
+     "ci_job": 103280790981,
+     "workflow": "core-hardening",
+     "job": "server-conformance",
+     "head": "a1ac989b4",
+     "date": "2026-09-11",
+     "log": "evidence/P10/logs/research8-runner-probe.txt",
+     "note": "first observation (versions printed; that job then failed on the missing Cargo.lock — fixed and committed the same day)"
+    }
+   ]
+  },
+  "rustc": {
+   "present": true,
+   "version": "1.98.1 (48a229cea 2026-09-01)",
+   "proven_by": [
+    {
+     "ci_run": 34615191984,
+     "ci_job": 103315238760,
+     "workflow": "core-hardening",
+     "job": "server-conformance",
+     "step": "Rust toolchain versions (recorded for research item 8)",
+     "head": "8fadb0ee4a7cab04762df5c111778c122e0da919",
+     "date": "2026-09-11"
+    }
+   ]
+  },
+  "g++": {
+   "present": true,
+   "version": "ubuntu-latest image default (exact -dumpversion never printed by a lane; presence proven by successful compiles)",
+   "proven_by": [
+    {
+     "ci_run": 34615191984,
+     "ci_job": 103315238419,
+     "workflow": "core-hardening",
+     "job": "mutation-themes (compiles the C++ suite per mutant)",
+     "head": "8fadb0ee4a7cab04762df5c111778c122e0da919",
+     "date": "2026-09-11"
+    },
+    {
+     "ci_run": 34627026351,
+     "ci_job": 103354493992,
+     "workflow": "governance",
+     "job": "governance (run_checks compiles the byte-differential hosts)",
+     "head": "acbcfc6632ed8563213561526b233777f16884de",
+     "date": "2026-09-11"
+    }
+   ]
+  },
+  "make": {
+   "present": true,
+   "proven_by": [
+    {
+     "ci_run": 34615191984,
+     "ci_job": 103315238419,
+     "workflow": "core-hardening",
+     "job": "mutation-themes (make-driven suite builds)",
+     "head": "8fadb0ee4a7cab04762df5c111778c122e0da919",
+     "date": "2026-09-11"
+    }
+   ]
+  },
+  "python3.12": {
+   "present": true,
+   "version": "3.12 via actions/setup-python@v5.6.0 (pinned)",
+   "proven_by": [
+    {
+     "ci_run": 34627026351,
+     "ci_job": 103354493992,
+     "workflow": "governance",
+     "job": "governance (Set up Python 3.12 + the full run_checks lane set)",
+     "head": "acbcfc6632ed8563213561526b233777f16884de",
+     "date": "2026-09-11"
+    }
+   ]
+  },
+  "pyyaml-in-runner-python": {
+   "present": false,
+   "note": "the runner's bare python carries NO PyYAML — ModuleNotFoundError in fuzz-fleet of the probe run until lanes install the hash-pinned requirements-dev (pyyaml==6.0.3). A negative capability, proven by a real failure transcript.",
+   "proven_by": [
+    {
+     "ci_run": 34604887643,
+     "workflow": "core-hardening",
+     "job": "fuzz-fleet",
+     "log": "evidence/P10/logs/research8-runner-probe.txt",
+     "date": "2026-09-11"
+    }
+   ]
+  },
+  "go": {
+   "present": "UNOBSERVED",
+   "note": "claimed ONLY by a core-hardening.yml comment ('ubuntu-latest ships a Rust and Go toolchain'); no lane has ever printed a Go version, so it is NOT recorded as present — a comment is not a run (P10 research item 8, carried forward). If a future lane needs go, print the version in-job and re-record with that citation."
+  }
+ }
+}

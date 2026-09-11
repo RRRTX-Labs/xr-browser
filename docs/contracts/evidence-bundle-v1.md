@@ -120,3 +120,37 @@ python3 tools/evidence_check.py --json
 ```
 
 Exit `0` pass · `1` fail (reasons printed) · `2` usage error.
+
+## P11-T0-d amendments: hosted claims need ci-run rows; stale BLOCKED fails
+
+`--strict` tightening, scoped exactly like the P9-T12 rules (bundles P9+):
+
+1. **(d) A hosted claim needs a ci-run citation.** A VERIFIED row whose own
+   `dod`/`notes`/`evidence` text claims hosted execution (`hosted`,
+   `GitHub Actions`, `on the runner`) passes only if the row itself carries
+   `source: ci-run` (with `ci_run`+`ci_job`, resolved machine-side per rule
+   (a)), OR the bundle carries an APPENDED correction row — `source: ci-run`
+   with `"corrects": "<row-id>"` — supplying the citation. Correction rows
+   are the append-only mechanism: a prior phase's row is NEVER edited to
+   satisfy this rule; its history is recorded once and the correction lands
+   beside it. Motivating case: P10-DOD-2 shipped BLOCKED ("no cargo in
+   sandbox"), was flipped to VERIFIED by hand once the hosted runs went
+   green, and nothing in the validator could resolve the hosted half of the
+   claim until P10-DOD-2-C1 landed.
+2. **(e) A stale BLOCKED row fails.** A BLOCKED-* row whose blocker is the
+   absence of a tool that is PROVEN PRESENT is stale and must be re-run and
+   re-recorded (or re-argued in the row). Presence is proven by
+   `docs/state/runner-capabilities.json` — the runner-capabilities ledger,
+   where every present/absent entry cites the real hosted run(s) or
+   transcript that observed it (`tools/runner_caps.py --check` refuses
+   comment-claims; `go` stays UNOBSERVED because no lane ever printed it) —
+   or by this sandbox (`which`). An absent ledger makes rule (e) inert with
+   a visible SKIP line, never silently.
+
+Row-level fields added by this amendment: `corrects` (string id of the row
+an appended correction row corrects). Ledger schema:
+`runner-capabilities-v1` — `capabilities: {<tool>: {present: true|false|
+"UNOBSERVED", version?, note?, proven_by: [{ci_run, ci_job, workflow?,
+job?, step?, head?, log?, date, note?}]}}`; `present: true/false` requires
+non-empty `proven_by` with `ci_run`+`ci_job` or a `log` path, plus `date`;
+`UNOBSERVED` requires a `note` and forbids `version`.

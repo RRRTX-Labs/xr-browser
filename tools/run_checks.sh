@@ -60,6 +60,12 @@ echo "== evidence bundles (contract: docs/contracts/evidence-bundle-v1.md) =="
 # P1/P2 stay exempt per the HG-25 ruling. A new phase is covered automatically
 # — no hardcoded list to forget (the P6/P7 debt closed by T0, XR-P7-T0).
 "$PY" tools/evidence_check.py --strict
+# P11-T0-d: the runner-capabilities ledger rule (e) consumes must itself obey
+# the citation law — present claims cite real runs (ci_run+ci_job) or
+# transcripts, UNOBSERVED entries say why, comment-claims are refused — and
+# the self-test proves those refusals offline.
+"$PY" tools/runner_caps.py --check
+"$PY" tools/runner_caps.py --self-test
 
 echo "== spike: every file:line citation re-verified at the pin =="
 "$PY" build/spike/citation_audit.py

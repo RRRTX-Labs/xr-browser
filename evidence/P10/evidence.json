@@ -182,6 +182,31 @@
    "id": "P10-DOD-11",
    "source": "local-run",
    "status": "VERIFIED"
+  },
+  {
+   "id": "P10-DOD-2-C1",
+   "corrects": "P10-DOD-2",
+   "dod": "Correction (appended P11-T0-d, dated 2026-09-11; the original row is left exactly as authored): the DOD-2 hosted half \u2014 'the Rust deployable replays the 51-case conformance corpus byte-exactly on a hosted runner' \u2014 now carries its machine-resolved ci-run row: core-hardening run 34615191984 (head 8fadb0ee4a7cab04762df5c111778c122e0da919), job 103315238760 'server-conformance' SUCCESS, steps 'Rust toolchain versions (recorded for research item 8)' (cargo/rustc 1.98.1) and 'Rust conformance (byte parity with the reference corpus)'. History, recorded not rewritten: the row shipped BLOCKED ('no cargo in sandbox' \u2014 true of the dev sandbox; recorded debt); commit b766992 (P10 agent, 2026-09-11) flipped it to VERIFIED IN PLACE once the hosted runs went green at acbcfc6632ed8563213561526b233777f16884de (core-hardening run 34627026627 SUCCESS, 7/7 jobs; governance run 34627026351 SUCCESS) \u2014 that flip predates the P11-T0-d rule (d) requiring a ci-run citation for hosted claims, and per the append-only law this correction row supplies the citation WITHOUT touching the flipped row.",
+   "status": "VERIFIED",
+   "source": "ci-run",
+   "ci_run": 34615191984,
+   "ci_job": 103315238760,
+   "evidence": [
+    "logs/research8-runner-probe.txt",
+    "logs/t2-server-fuzz-600s.txt"
+   ]
+  },
+  {
+   "id": "P10-DOD-11-C1",
+   "corrects": "P10-DOD-11",
+   "dod": "Correction (appended P11-T0-d, dated 2026-09-11; the original row is left exactly as authored): the hosted-runner capability probe now carries a machine-resolved ci-run row for its GREEN citation: core-hardening run 34615191984 (head 8fadb0ee4a7cab04762df5c111778c122e0da919), job 103315238760 'server-conformance' SUCCESS \u2014 its 'Rust toolchain versions' step is the run that printed cargo 1.98.1 (797e8a9bc 2026-08-05) / rustc 1.98.1 (48a229cea 2026-09-01) on a green job. First observation was probe run 34604887643 job 103280790981 (same step; that job then failed on the missing Cargo.lock \u2014 recorded in logs/research8-runner-probe.txt, honest red, fixed same day). 'go' was NEVER observed by any lane and stays UNOBSERVED in docs/state/runner-capabilities.json \u2014 a workflow comment claiming it is not a run. The ledger (P11-T0-d) is the machine-readable form of this row.",
+   "status": "VERIFIED",
+   "source": "ci-run",
+   "ci_run": 34615191984,
+   "ci_job": 103315238760,
+   "evidence": [
+    "logs/research8-runner-probe.txt"
+   ]
   }
  ],
  "generated": "2026-09-11",
@@ -198,7 +223,7 @@
  "plan": "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
  "plan_sha256": "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b",
  "repos": {
-  "xr-browser": "P10 commits: T0-a..T0-d landed pre-phase (1c533dd/06d7e0f/9d7c27c); this phase: mutation+drill evidence (bf494a6), T1 vectors+parity lane (e954f98), T1 GN flag+hygiene, T2 server trio, T3+T4 signing/keys, T5 drill, T6 transparency+notes, T7 SBOM law, T8 about gate, T9 release gate, research log, hardening lanes.",
+  "xr-browser": "P10 commits: T0-a..T0-d landed pre-phase (1c533dd/06d7e0f/9d7c27c); this phase: mutation+drill evidence (bf494a6), T1 vectors+parity lane (e954f98), T1 GN flag+hygiene, T2 server trio, T3+T4 signing/keys, T5 drill, T6 transparency+notes, T7 SBOM law, T8 about gate, T9 release gate, research log, hardening lanes. P11-T0-d correction (appended 2026-09-11, never rewritten): hosted citations recorded at 8fadb0ee4a7cab04762df5c111778c122e0da919 (core-hardening run 34615191984 \u2014 server-conformance job 103315238760 SUCCESS: cargo/rustc 1.98.1 + 51-case corpus byte-exact hosted) and at acbcfc6632ed8563213561526b233777f16884de (core-hardening run 34627026627 + governance run 34627026351, both SUCCESS \u2014 full green at the P10 final head).",
   "xr-core": "P10 commits: 50fcb5f (T1 update core/host/tests/fake), c16c963 (T1 BUILD.gn + README-integration), f8b4cfe (T8 About view + grdp + roster trio)."
  },
  "schema_note": "P10 bundle \u2014 Update, signing & release engineering v1. Conforms to docs/contracts/evidence-bundle-v1.md. VERIFIED rows cite artifacts that exist at the cited path and commands actually run in this sandbox. Human/farm/hosted-dependent rows are HUMAN-GATED, BLOCKED, or recorded debt \u2014 never met-in-sandbox.",

@@ -89,6 +89,47 @@ breath per `docs/process/cross-repo-pin.md`.
   append-only correction and the ci-run rows from here on WITHOUT
   rewriting their commit.
 
+## D3. T0-d resolution — evidence corrections landed APPENDED; --strict tightened
+
+**VERIFIED locally + live API (2026-09-11).** The brief asked to "append a
+correction to evidence/P10 (DOD-2 BLOCKED→VERIFIED with a ci-run row for
+hosted cargo run 34615191984)". Reality on arrival: the P10 agent had
+already flipped DOD-2 to VERIFIED IN PLACE (commit b766992, lines deleted)
+with no ci-run row anywhere. The correction therefore landed as APPENDED
+rows — prior-phase rows left exactly as authored, per the append-only law:
+
+- `P10-DOD-2-C1` + `P10-DOD-11-C1`: `source: ci-run`, run **34615191984**,
+  job **103315238760** (server-conformance SUCCESS at head
+  `8fadb0ee4a7cab04762df5c111778c122e0da919`; steps "Rust toolchain
+  versions" — cargo/rustc 1.98.1 — and "Rust conformance (byte parity with
+  the reference corpus)"). The P10 `repos.xr-browser` text was EXTENDED
+  with both cited heads (`8fadb0ee4…`, `acbcfc663…`) so the resolver's
+  head-match passes; extension, never rewrite.
+- `P9-DOD-11-C1`: rule (d) is scoped P9+ like the P9-T12 rules, and P9's
+  DOD-11 notes claim hosted-runner counts ("542 passed … on the hosted
+  runner") with only local transcripts; its correction cites the same
+  hosted governance run DOD-12 already proves (run **34511850763**, job
+  **102987644207**, head `e404ac508e6898c0b96552a05ddbcc38e85400a6`).
+- Full-green P10 hosted runs, for the record: core-hardening
+  **34627026627** SUCCESS + governance **34627026351** SUCCESS at
+  `acbcfc6632ed8563213561526b233777f16884de` (2026-09-11T17:19Z).
+- Probe run **34604887643** (job 103280790981) is cited as the FIRST
+  toolchain observation, honestly marked: that job then failed on the
+  missing Cargo.lock (fixed same day) — a red observation is still an
+  observation; the GREEN citation is 34615191984.
+
+`evidence_check.py --strict` now enforces, for P9+ bundles: **(d)** a
+VERIFIED row whose text claims hosted execution (`hosted` / `GitHub
+Actions` / `on the runner` — narrow regex; "farm runner" tool names do NOT
+fire) needs a ci-run citation on the row itself or on an appended
+`"corrects"` row; **(e)** a BLOCKED-* row whose blocker tool the
+capabilities ledger or the local `which` proves PRESENT is STALE and fails
+(UNOBSERVED tools never fire — the ledger refuses to certify what no run
+printed). Contract amendment appended to
+docs/contracts/evidence-bundle-v1.md. All 8 strict bundles pass with the
+three new ci-run rows resolved LIVE (head-match + job-success). Negatives
+70–72 (N=72) + 12 unit tests pin both rules and the ledger law.
+
 ## R1. adblock-rust: version, license, advisory state (T1 input)
 
 **VERIFIED (live API reads, 2026-09-11).**
@@ -138,9 +179,12 @@ honesty rule as P10 R1.
 ubuntu-latest: hosted server-conformance run `34615191984` (P10) compiled
 Rust. `g++`, `make`, `python3.12`: every governance/core-hardening run.
 `go`: only claimed in a core-hardening.yml comment — NOT recorded (a
-comment is not a run). These citations seed
-`docs/state/runner-capabilities.json` (T0-d input); an entry without a
-run-id citation is refused by `evidence_check.py --strict`.
+comment is not a run). These citations LANDED in
+`docs/state/runner-capabilities.json` (T0-d, schema runner-capabilities-v1,
+every entry cited above); an entry without a run-id/transcript citation is
+refused by `tools/runner_caps.py --check` (gated in run_checks), and
+evidence_check --strict rule (e) consumes the ledger to fail stale BLOCKED
+rows.
 
 ## R9. Scriptlet security posture + fail-open mechanics — UNVERIFIED (T2/T6)
 
