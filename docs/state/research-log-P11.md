@@ -59,6 +59,36 @@ cases added (`xr-core/policy/tests/test_store.cc`, commit `85289cd`), seeded
 sample now 5/5 killed, deny-guard 3/3. DEPS pin advanced in the same
 breath per `docs/process/cross-repo-pin.md`.
 
+## D2. T0-c same-day verification — the fix chain, run by run (all cited)
+
+**VERIFIED hosted (workflow_dispatch, 2026-09-11).**
+- `34635047137` (dispatch @ `7fa253f`, 18:45 UTC): fired by this agent
+  BEFORE the fix push landed (the push had been rejected — origin had
+  diverged, see below); failed at the upload step on the OLD definition.
+  Expected; kept as the control data point.
+- `34635371904` (dispatch @ `a59c5f0`, 18:48 UTC): the path fix PROVEN —
+  "Stage the compat-parity evidence" and "Upload the compat-parity
+  evidence" both SUCCESS, all work steps green — but the job went red on
+  the new Scheduled-lane health step: the fleet check condemned its own
+  lane from history including the in-flight run itself and the stale-main
+  control. Circular; fixed by `9d24a40`.
+- `34635794078` (dispatch @ `9d24a40`, 18:53 UTC): **FULL SUCCESS**, all
+  14 steps green including upload (path fix) and lane health (circularity
+  guards: --own-lane cap + lane-health-only-failure exemption). The live
+  checker now reports compat as STALE-FAIL "fix VERIFIED — newer
+  workflow_dispatch run 34635794078 … completed SUCCESS"; the next
+  scheduled fire (daily 02:30 UTC) upgrades it to PASS. Evidence:
+  `p11-evidence/logs/t0c-compat-dispatch-watch2.txt` (step-by-step),
+  `t0c-scheduled-lane-check-after-fix.txt` (verdict upgrade).
+- Concurrent-history note: origin/main diverged mid-phase — the P10 agent
+  pushed its finalization commits (`b766992` hosted-green evidence,
+  `7fa253f` final report) at 17:49/18:21 UTC. The four P11 commits were
+  rebased on top (clean, no conflicts); prior-phase material was left
+  exactly as authored. `b766992` rewrote `evidence/P10/evidence.json`
+  in place (DOD-2 BLOCKED→VERIFIED, lines deleted) — T0-d handles the
+  append-only correction and the ci-run rows from here on WITHOUT
+  rewriting their commit.
+
 ## R1. adblock-rust: version, license, advisory state (T1 input)
 
 **VERIFIED (live API reads, 2026-09-11).**
