@@ -19,7 +19,10 @@ mode="${1:-}"
 case "$mode" in
   hosts-local)
     shift
-    ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+    # resolve $0's dir ABSOLUTELY, then step up THREE levels (build/qa/drill
+    # -> repo root). A relative $0 plus a relative ../.. double-resolves
+    # against the caller's cwd; and the depth is 3, not 2.
+    ROOT="$(cd "$(cd "$(dirname "$0")" && pwd)/../../.." && pwd)"
     PY="${PYTHON:-python3}"
     exec "$PY" "$ROOT/tools/kill_matrix.py" --repo "$ROOT" --iterations 4 "$@"
     ;;
