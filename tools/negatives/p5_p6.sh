@@ -90,13 +90,23 @@ case_mode_lint_no_header() {
 neg_register mode_lint_no_header
 
 # --- 23. mutation gate: hollowed tests => survivors => score gate fails -----
+# P11-T0-c: hollows ALL policy suites, not just test_vectors.cc. Hollowing
+# ONE suite was sampling-dependent: after T0-b shrank the policy mutant
+# population (json*.cc moved to common/) and the store battery gained the
+# required-int-field cases (xr-core 85289cd), the seeded sample no longer
+# needed test_vectors to die — the negative PASSED on bad input. Hollowing
+# every suite makes "score dips below gate" structural: whatever the
+# population or the seed, nothing is left to kill anything.
 case_mutation_hollowed() {
   if ! command -v g++ >/dev/null 2>&1; then
     neg_skip "mutation negative (g++ absent — CI runs it)"
     return 0
   fi
   local M="$NEG_TMP/mut"; cp -r ../xr-core "$M"
-  printf '// hollowed for the negative fixture\nint main() { return 0; }\n' > "$M/policy/tests/test_vectors.cc"
+  local t
+  for t in "$M"/policy/tests/test_*.cc; do
+    printf '// hollowed for the negative fixture\nint main() { return 0; }\n' > "$t"
+  done
   neg_expect_reject "mutation: hollowed test suite => score dips below gate" \
     '"gate": "FAIL"' \
     "$PY" tools/mutation_test.py --xr-core "$M" --sample 6 --seed 31337 --timebox 300 --json

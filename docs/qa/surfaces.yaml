@@ -91,8 +91,15 @@ surfaces:
     tools:
       - "tools/compat.py"
       - "tools/wpt_delta.py"
+      - "tools/scheduled_lane_check.py"
     farm: "HG-31 (live corpus replay + real WPT — browser)"
-    green: "validate + replay green; WPT delta comparator exercised"
+    # P11-T0-c honesty fix: this clause used to read "validate + replay
+    # green; WPT delta comparator exercised" — green text that was FALSE at
+    # the time it shipped, because the SCHEDULED compat-beta-parity lane had
+    # failed (run 34574063042, upload step: artifact paths must be
+    # workspace-relative) and no push-triggered gate could see a schedule-
+    # event failure. Green now includes the lane itself being green.
+    green: "validate + replay green; WPT delta comparator exercised; the compat-beta-parity SCHEDULED lane is green — tools/scheduled_lane_check.py resolves the newest schedule-event run of every scheduled workflow and reddens governance within a day of a red nightly (STALE-FAIL/NOT-RUN stay visible and non-fatal, never silently green)"
   - id: "11.13"
     name: fuzzing
     home: tool

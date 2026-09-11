@@ -79,6 +79,19 @@ echo "== patch ledger incl. candidate (spike/) dirs =="
 echo "== workflow files: expressions + schema (compile error = zero jobs) =="
 "$PY" build/workflow_lint.py
 
+echo "== P11-T0-c: scheduled-lane health (a red nightly is a red check within a day) =="
+# Reads the newest schedule-event run of every scheduled workflow through the
+# fetch.py chokepoint. Network absent/rate-limited => visible SKIP (exit 77,
+# skip-policy); the offline self-test runs FIRST so a SKIP can never mask a
+# broken checker. A lane red on its CURRENT definition is a hard failure;
+# STALE-FAIL/NOT-RUN/DISABLED are visible and non-fatal BY RULE.
+"$PY" tools/scheduled_lane_check.py --self-test
+if "$PY" tools/scheduled_lane_check.py; then :; elif [ $? -eq 77 ]; then
+  echo "SKIP: SKIP (network unavailable for api.github.com) — needed for: scheduled-lane verdicts (silent-red-nightly visibility); local hint: re-run with network; the self-test above proved the checker itself"
+else
+  exit 1
+fi
+
 # ---------------------------------------------------------------------------
 # P5 contract-freeze gates (§1.11). mojom_lint/contracts_manifest/vectors/
 # freeze run offline; amend_guard is warn-only pre-stamp and enforcing post.

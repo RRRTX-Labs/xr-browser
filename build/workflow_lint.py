@@ -27,7 +27,12 @@ Always-on checks (no external tool required):
      which is the worst kind of comment;
   5. (P10-T0-a) every job declares `permissions:` (least privilege;
      `write-all` is refused outright) and `timeout-minutes` (a job
-     without a backstop can wedge a runner for 6 hours).
+     without a backstop can wedge a runner for 6 hours);
+  6. (P11-T0-c) the required-grants table in build/workflow_grants.py —
+     empirical permission rules (artifact path law, push/gh write verbs =>
+     their scopes, over-grant detection). Its docstring records the
+     refuted `actions: write` hypothesis from the phase brief, with the
+     job-log proof (run 34574063042 / job 103182443929).
 
 Exit: 0 pass / 1 fail / 2 usage (build tool contract).
 """
@@ -51,6 +56,7 @@ for _p in [Path(__file__).resolve().parent, *Path(__file__).resolve().parents]:
 
 from _common import emit, main_with_guard, repo_root  # noqa: E402
 import skip_policy  # noqa: E402
+from workflow_grants import check_grants  # noqa: E402 — P11-T0-c table
 
 ACTIONLINT = "actionlint"
 EXPR_RE = re.compile(r"\$\{\{(.*?)\}\}", re.DOTALL)
@@ -251,6 +257,7 @@ def lint(root: Path, files: list[Path] | None = None) -> dict[str, Any]:
         text = f.read_text(encoding="utf-8")
         findings.extend(check_expressions(text, rel))
         findings.extend(check_supply_chain(text, rel))
+        findings.extend(check_grants(text, rel))
 
     deep, skip_reason = run_actionlint(root, files)
     findings.extend(deep)

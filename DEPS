@@ -28,7 +28,10 @@
 #                  P11-T0-a/b to the published update host_protocol.md
 #                  (c5034ec) and the single shared common/core primitives
 #                  move (895ae6f), pair-bumped same-day per
-#                  docs/process/cross-repo-pin.md.
+#                  docs/process/cross-repo-pin.md; P11-T0-c to the
+#                  reject-tested required-int-field battery (85289cd) —
+#                  T0-b's resample surfaced a surviving deny-guard mutant
+#                  in policy store.cc and the test debt was paid at once.
 #   gclient_url_scheme  P2-T1 (pinned https remotes only; no ssh, no file://)
 #
 # Chromium pin provenance (see docs/state/research-log-P2.md R1):
@@ -41,7 +44,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "895ae6fa645705e5cd9a103f67912685136cac4f"     # xr-core P11-T0-b: ONE shared json/sha256 copy in common/core (KAT in every lane)
+xr_core_rev: "85289cd719d72b0dc76ac3e38f758bccae0e9362"     # xr-core P11-T0-c: required-int-field branches reject-tested (deny-guard mutant killed)
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

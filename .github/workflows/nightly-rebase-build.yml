@@ -137,6 +137,17 @@ jobs:
             docs/state/fork-health.md
           retention-days: 30
 
+      - name: Scheduled-lane health (P11-T0-c — a red nightly reddens within a day)
+        # Exit 77 (api.github.com unreachable) is a VISIBLE SKIP per the
+        # skip-policy, never a silent pass; governance re-checks every push.
+        run: |
+          python3 tools/scheduled_lane_check.py; rc=$?
+          if [ "$rc" -eq 77 ]; then
+            echo "SKIP: api.github.com unreachable/rate-limited from this runner — visible SKIP; governance re-checks on every push"
+            exit 0
+          fi
+          exit "$rc"
+
       # NOTE (L24): no push step, by design. The on-call reads the artifacts;
       # GREEN canaries become DEPS-bump PRs prepared LOCALLY by xr-rebase
       # (rebase/chromium-<short> branches) that a human reviews and merges.

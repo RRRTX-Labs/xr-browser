@@ -73,15 +73,46 @@ jobs:
           echo "SKIP: live corpus replay + real WPT run require a browser"
           echo "      (farm runbook: docs/qa/compat-corpus.md, HG-31)"
 
+      - name: Stage the compat-parity evidence inside the workspace
+        # P11-T0-c: the upload step failed on its FIRST scheduled run
+        # (run 34574063042, job 103182443929) with
+        #   "Invalid pattern '../xr-core/test/corpus/'. Relative pathing '.'
+        #    and '..' is not allowed."
+        # — upload-artifact refuses `..` pathing (workspace-relative only).
+        # Diagnosis note (recorded, so nobody "fixes" this into a permission
+        # grant later): the failure was NOT a missing `actions: write` —
+        # nightly-rebase-build uploads with this same action and the same
+        # `permissions: contents: read` and its scheduled run 34571026698
+        # passed the upload step. The least-privilege grant stays; the path
+        # law is what workflow_lint now enforces.
+        if: always()
+        run: |
+          mkdir -p compat-parity-evidence/xr-core-corpus
+          cp -r ../xr-core/test/corpus/. compat-parity-evidence/xr-core-corpus/ || true
+          cp -r docs/qa/wpt-fixtures compat-parity-evidence/wpt-fixtures || true
+
       - name: Upload the compat-parity evidence
         if: always()
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: compat-beta-parity-${{ github.run_id }}
           path: |
-            ../xr-core/test/corpus/
-            docs/qa/wpt-fixtures/
+            compat-parity-evidence/
           retention-days: 30
+
+      - name: Scheduled-lane health (P11-T0-c — a red nightly reddens within a day)
+        # This lane is the one that was silently red (run 34574063042): the
+        # fleet check runs from inside every scheduled lane too, so the next
+        # fire self-reports. Exit 77 (api.github.com unreachable from this
+        # runner) is a VISIBLE SKIP per the skip-policy — same pattern as
+        # run_checks.sh — never a silent pass.
+        run: |
+          python3 tools/scheduled_lane_check.py; rc=$?
+          if [ "$rc" -eq 77 ]; then
+            echo "SKIP: api.github.com unreachable/rate-limited from this runner — visible SKIP; governance re-checks on every push and run_checks proves the checker offline (--self-test)"
+            exit 0
+          fi
+          exit "$rc"
 
       # NOTE (L24): no push step, by design. The delta report is consumed by
       # the promotion gate, never auto-applied.

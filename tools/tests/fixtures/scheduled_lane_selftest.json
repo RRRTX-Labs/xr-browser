@@ -1,0 +1,84 @@
+{
+  "comment": "P11-T0-c canned API/touch fixture for tools/scheduled_lane_check.py --self-test (offline proof of every verdict path; skip-policy law: a SKIPping checker must still prove its failure path works). URLs are literal; see REPO_API in the tool.",
+  "urls": {
+    "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/workflows": {
+      "workflows": [
+        {"id": 1, "name": "red-lane", "state": "active", "path": ".github/workflows/red.yml"},
+        {"id": 2, "name": "green-lane", "state": "active", "path": ".github/workflows/green.yml"},
+        {"id": 3, "name": "stale-lane", "state": "active", "path": ".github/workflows/stale.yml"},
+        {"id": 4, "name": "never-lane", "state": "active", "path": ".github/workflows/never.yml"},
+        {"id": 5, "name": "off-lane", "state": "disabled", "path": ".github/workflows/off.yml"},
+        {"id": 6, "name": "verified-lane", "state": "active", "path": ".github/workflows/verified.yml"},
+        {"id": 7, "name": "stillred-lane", "state": "active", "path": ".github/workflows/stillred.yml"}
+      ]
+    },
+    "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/workflows/1/runs?per_page=30": {
+      "workflow_runs": [
+        {"id": 111, "event": "schedule", "status": "completed", "conclusion": "failure", "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "created_at": "2026-09-11T07:22:20Z"}
+      ]
+    },
+    "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/111/jobs": {
+      "jobs": [
+        {"name": "compat", "conclusion": "failure", "steps": [
+          {"name": "Real step", "conclusion": "success"},
+          {"name": "Upload the evidence", "conclusion": "failure"}
+        ]}
+      ]
+    },
+    "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/workflows/2/runs?per_page=30": {
+      "workflow_runs": [
+        {"id": 222, "event": "schedule", "status": "completed", "conclusion": "success", "head_sha": "cccccccccccccccccccccccccccccccccccccccc", "created_at": "2026-09-11T06:41:44Z"}
+      ]
+    },
+    "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/workflows/3/runs?per_page=30": {
+      "workflow_runs": [
+        {"id": 333, "event": "schedule", "status": "completed", "conclusion": "failure", "head_sha": "dddddddddddddddddddddddddddddddddddddddd", "created_at": "2026-09-11T07:22:20Z"}
+      ]
+    },
+    "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/333/jobs": {
+      "jobs": [
+        {"name": "j", "conclusion": "failure", "steps": [{"name": "s", "conclusion": "failure"}]}
+      ]
+    },
+    "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/workflows/4/runs?per_page=30": {
+      "workflow_runs": [
+        {"id": 444, "event": "push", "status": "completed", "conclusion": "success", "head_sha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "created_at": "2026-09-11T05:00:00Z"}
+      ]
+    },
+    "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/workflows/5/runs?per_page=30": {
+      "workflow_runs": []
+    },
+    "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/workflows/6/runs?per_page=30": {
+      "workflow_runs": [
+        {"id": 667, "event": "workflow_dispatch", "status": "completed", "conclusion": "success", "head_sha": "ffffffffffffffffffffffffffffffffffffffff", "created_at": "2026-09-11T12:00:00Z"},
+        {"id": 666, "event": "schedule", "status": "completed", "conclusion": "failure", "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "created_at": "2026-09-11T07:22:20Z"}
+      ]
+    },
+    "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/666/jobs": {
+      "jobs": [
+        {"name": "j", "conclusion": "failure", "steps": [{"name": "s", "conclusion": "failure"}]}
+      ]
+    },
+    "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/workflows/7/runs?per_page=30": {
+      "workflow_runs": [
+        {"id": 777, "event": "workflow_dispatch", "status": "completed", "conclusion": "failure", "head_sha": "ffffffffffffffffffffffffffffffffffffffff", "created_at": "2026-09-11T12:00:00Z"},
+        {"id": 776, "event": "schedule", "status": "completed", "conclusion": "failure", "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "created_at": "2026-09-11T07:22:20Z"}
+      ]
+    },
+    "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/776/jobs": {
+      "jobs": [
+        {"name": "j", "conclusion": "failure", "steps": [{"name": "s", "conclusion": "failure"}]}
+      ]
+    }
+  },
+  "touches": {
+    "red.yml": "2026-09-10T00:00:00+00:00",
+    "stale.yml": "2026-09-11T12:00:00+00:00",
+    "green.yml": "2026-09-10T00:00:00+00:00",
+    "never.yml": "2026-09-10T00:00:00+00:00",
+    "off.yml": "2026-09-10T00:00:00+00:00",
+    "verified.yml": "2026-09-11T11:00:00+00:00",
+    "stillred.yml": "2026-09-11T13:00:00+00:00"
+  },
+  "local": ["red.yml", "green.yml", "stale.yml", "never.yml", "off.yml", "verified.yml", "stillred.yml"]
+}
