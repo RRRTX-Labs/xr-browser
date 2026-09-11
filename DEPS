@@ -44,7 +44,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "6912b3964630a593234bf8cac5f3059fdb1d7fcd"     # xr-core P11-T1: vendored adblock-rust 0.13.3 + 59-crate sha256-sealed build closure (third_party/rust/)
+xr_core_rev: "5a767bdcc3edb28f6cd76239410cbb8951e57a9f"     # xr-core P11-T2: the shield decision core (std-only C++20 + posture law + stdio host + hosted-lane FFI shim skeleton)
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

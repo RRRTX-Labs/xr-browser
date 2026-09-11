@@ -121,3 +121,43 @@ mirrors the P7 flag's two-note convention (this note + flags.yaml). A
 third network egress for the update server itself is HG-38 (hosting +
 egress approval) — `release/egress-allowlist.json` is the reviewable
 data, never an edit to `fetch.py`.
+
+## P11 — XR Shield v1 (consumes the frozen `shield.mojom`/`xr_types.mojom` + `list-bundle-manifest-v1`; adds the shield living contracts)
+
+P11 implements to the frozen Shield mojom surface (`Status`, `RecentEvents`,
+`BlockEvent`, `kContractVersion=1`) and the frozen `list-bundle-manifest-v1`
+document, and **never redefines them** — the frozen fixture case
+(`xr-core/fakes/fixtures/shield-v1.json`) passes byte-identical against the
+new host and fake. New LIVING contracts registered this phase:
+
+| Contract | Phase | Files | Review packet | Freeze status |
+|---|---|---|---|---|
+| shield-host-protocol v1 | P11 (T2) | `xr-core/shield/host_protocol.md` (the stdio method table — TWO vocabularies: the frozen mojom envelope for `Status`/`RecentEvents`, the living host surface for `flag-status`/`bundle-load`/`bundle-check`/`match`/`posture`/`apply`; byte-parity-locked against `fakes/shield.py`) | `docs/state/research-log-P11.md` | REVIEW-COMPLETE (ratification: PENDING, HG-26) |
+| xr-list-bundle v1 (normalized bundle doc) | P11 (T2) | the living bundle shape inside `shield-host-protocol v1` (`schema:"xr-list-bundle"`, v1 filter grammar, per-list attribution INSIDE the digest, compiler refusal table); binds to the frozen manifest via `sha256(canonical per-list bytes)` | `docs/state/research-log-P11.md` | LIVING (T3 pipeline compiles to it) |
+
+Byte-law: 157 golden vectors (`docs/contracts/vectors/shield-v1.json`)
+replayed against BOTH backends (`tools/shield_vectors_check.py`, wired as
+`p11_shield_gates`) + the compiled-side pin
+(`xr-core/shield/tests/test_golden_vectors.cc`) + the derived parity pair
+(`tools/parity/corpus-shield.json`, every documented method covered).
+
+The T3 STOP condition was evaluated and did NOT fire: the frozen
+`list-bundle-manifest-v1` schema leaves `lists[]` items unconstrained
+beyond `{name, sha256, rules}`, so per-list attribution rides INSIDE each
+list's canonical bytes (covered by the entry's `sha256`) — the frozen
+manifest carries it without amendment.
+
+### `xr_shield_v1` flag — both-state convention + expiry note
+
+`xr_shield_v1` is the kill-switch for the whole P11 shield surface. In T2
+it exists at the host-CLI level (`--flag xr_shield_v1=on|off`, default
+`on`); **both states are tested** (golden vectors, `test_shield_host`).
+OFF ⇒ `flag-status` reports `off` and `Status.enabled` is `false`; the
+decision methods stay flag-independent BY DESIGN — the deliberate-off law
+lives in the posture input `kill_switch_on` (fail-OPEN + amber chip:
+"off is a visible state, never a green lie"), while route loss stays
+fail-CLOSED absolutely (the asymmetry is property-tested by exhaustive
+16-combination enumeration in `xr-core/shield/tests/test_posture.cc`).
+T6 adds the `build/gn/argsets/flags.yaml` + `xr_common.gni` entries and
+the xr://shield dev-only surface; expiry/retirement follows the P7/P10
+two-note convention at that row.

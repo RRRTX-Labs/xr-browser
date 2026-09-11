@@ -1,11 +1,12 @@
 {
-  "schema_version": 1,
   "lanes": [
     "commands",
     "common",
     "policy",
     "settings",
+    "shield",
     "themes",
     "update"
-  ]
+  ],
+  "schema_version": 1
 }

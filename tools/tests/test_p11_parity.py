@@ -47,9 +47,11 @@ UPDATE_CORPUS = TOOLS / "parity" / "corpus-update.json"
 
 def test_discovery_finds_every_real_host() -> None:
     hosts = hpc.discover_method_hosts(XR_CORE)
-    # commands/settings/themes/update all dispatch `method == "..."`; policy
-    # is the recorded subcommand-host exception and must NOT be discovered.
-    assert set(hosts) >= {"commands", "settings", "themes", "update"}
+    # commands/settings/themes/update/shield all dispatch `method == "..."`;
+    # policy is the recorded subcommand-host exception and must NOT be
+    # discovered.
+    assert set(hosts) >= {"commands", "settings", "themes", "update",
+                          "shield"}
     assert "policy" not in hosts
 
 
@@ -70,7 +72,7 @@ def test_synthetic_undocumented_host_reddens_both_gates(tmp_path: Path) -> None:
         'if (method == "spin") { return 0; }\n'
         'if (method == "stop") { return 1; }\n', encoding="utf-8")
     # a documented host so discovery is non-empty on its own merits
-    for name in ("commands", "settings", "themes", "update"):
+    for name in ("commands", "settings", "themes", "update", "shield"):
         src = XR_CORE / name
         if src.is_dir():
             shutil.copytree(src / "host", core / name / "host")
@@ -132,7 +134,8 @@ def test_completeness_gate_positive_with_update_pair() -> None:
                         "--repo", str(REPO)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     assert "update: methods covered by parity corpus" in r.stdout
-    assert "5 pair(s), 0 failure(s)" in r.stdout
+    assert "shield: methods covered by parity corpus" in r.stdout
+    assert "6 pair(s), 0 failure(s)" in r.stdout
 
 
 def test_phantom_pair_fails(tmp_path: Path) -> None:
@@ -181,6 +184,40 @@ def test_update_corpus_byte_parity(update_host) -> None:
     for case in doc["cases"]:
         req = corpus.case_to_request(case["id"], case, {})
         rc_h, out_h = _run([update_host], req)
+        rc_f, out_f = _run(fake, req)
+        assert rc_h == rc_f, (case["id"], rc_h, rc_f, out_h, out_f)
+        assert out_h == out_f, (case["id"], out_h, out_f)
+        want = 0 if case["expect"] == "ok" else 1
+        assert rc_h == want, (case["id"], rc_h, out_h)
+        executed += 1
+    assert executed == len(doc["cases"]) > 0
+
+
+@pytest.fixture(scope="module")
+def shield_host() -> str:
+    if not HAVE_CPP:
+        pytest.skip("g++/make absent — C++ parity skipped (skip-policy)")
+    r = subprocess.run(["make", "-C", str(XR_CORE / "shield" / "tests"),
+                        "build"], capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr[-400:]
+    return str(XR_CORE / "shield" / "tests" / "build" / "shield_host")
+
+
+@pytest.mark.skipif(not HAVE_CPP, reason="g++/make absent (skip-policy)")
+def test_shield_corpus_byte_parity(shield_host) -> None:
+    """P11-T2: the shield pair runs BYTE-IDENTICAL between shield_host and
+    fakes/shield.py over corpus-shield.json, with the same exit-class law
+    (ok = exit 0 typed result incl. kRejected + frozen-envelope errors,
+    reject = exit 1 typed error)."""
+    doc = corpus.load_corpus(TOOLS / "parity" / "corpus-shield.json")
+    fake = [sys.executable, str(XR_CORE / "fakes" / "shield.py")]
+    methods = corpus.protocol_methods(XR_CORE / "shield" / "host_protocol.md")
+    counts = corpus.methods_in_corpus(doc)
+    assert all(m in counts for m in methods), "corpus must cover every method"
+    executed = 0
+    for case in doc["cases"]:
+        req = corpus.case_to_request(case["id"], case, {})
+        rc_h, out_h = _run([shield_host], req)
         rc_f, out_f = _run(fake, req)
         assert rc_h == rc_f, (case["id"], rc_h, rc_f, out_h, out_f)
         assert out_h == out_f, (case["id"], out_h, out_f)

@@ -176,13 +176,20 @@ machine-derivable and license-clean; attribution per source is mandatory
 (T3's frozen list-bundle-manifest-v1 either carries it or we STOP per the
 brief).
 
-## R3. Chromium network-service seam at pin d04cdb24 — UNVERIFIED (T2)
+## R3. Chromium network-service seam at pin d04cdb24 — UNVERIFIED (pin read still owed; T2 landed the in-tree half)
 
 The pin (`152.0.7977.82 @ d04cdb24d67b081f6cf80200ffc5233f44b61109`,
 `xr-browser/DEPS`) has no checkout in this sandbox; `path:line` citations
 for the URLLoaderFactory/NetworkContext interception point must come from a
 live read at the pin before the patch manifest grows its third entry. Same
 honesty rule as P10 R1.
+
+T2 status note (2026-09-12): the in-tree half of the seam LANDED — the
+injection contract is `xr-core/shield/core/engine.h` (BlockingEngine, pure
+virtual, no adblock types in the core) plus the hosted-lane FFI shim
+`xr-core/shield/engine/` (C ABI `xr_shield_engine.h`). Nothing binds this
+to Chromium yet; the farm-side seam read and the patch-manifest 3rd entry
+owe exactly what this entry said before T2.
 
 ## R4. MV3/DNR limits (what Shield must NOT promise) — UNVERIFIED (T4/T6)
 
@@ -243,10 +250,80 @@ refused by `tools/runner_caps.py --check` (gated in run_checks), and
 evidence_check --strict rule (e) consumes the ledger to fail stale BLOCKED
 rows.
 
-## R9. Scriptlet security posture + fail-open mechanics — UNVERIFIED (T2/T6)
+## R9. Fail-open mechanics — IMPLEMENTED (T2). Scriptlet posture — UNVERIFIED (T6)
 
-Fail-open (engine death ⇒ allow) vs fail-closed (route loss ⇒ block) is the
-T2 posture asymmetry; the mechanics research lands with `posture.{h,cc}`.
-Scriptlets: v1 executes NONE (the decision is network-block only) — the
-research item records why that boundary is the safe default and what a
-future scriptlet capability would have to prove first.
+### R9a. Fail-open vs fail-closed mechanics in-network — LANDED with `posture.{h,cc}`
+
+The brief asks what "engine death" can concretely look like and how the
+seam must behave so browsing continues while the chip turns amber — and,
+separately, how Guard route-loss stays fail-closed. Both halves are now
+CODE, not prose, in `xr-core/shield/core/posture.{h,cc}`:
+
+**The concrete death modes, and where each is caught:**
+
+1. *Panic in the matcher* (the Rust side): every FFI export in
+   `shield/engine/lib.rs` is total — `catch_unwind` on all of
+   create/alive/match/free, and a caught panic flips `alive` to false
+   (`xr_shield_engine_kill_for_test` in the C ABI `xr_shield_engine.h` is
+   the observable seam the C++ tests drive today; a panic and a kill are
+   the SAME input to the core: `engine_alive=false`).
+2. *Poisoned state / OOM during apply*: `PostureInputs.engine_poisoned`.
+   The apply law (monotonic version, LKG kept, swap only on success —
+   `bundle.cc`) means a failed apply leaves the OLD engine serving; a
+   process-level abort restarts the host into the default posture input
+   (`engine_alive=false`) until the first successful apply — i.e. death
+   degrades to fail-open, never to a half-swapped table.
+3. *Poisoned/absent bundle at load*: NOT death — `create` returns NULL,
+   and match decides `no-bundle` (fail-open + amber, its own reason in
+   the closed vocabulary). Conflating "no engine" with "no lists" would
+   hide which one broke.
+
+**The behavior law (single decision point, pure/total/deterministic):**
+`DecidePosture` fixes precedence route > engine > kill-switch > normal:
+
+* `!route_bound` ⇒ fail-CLOSED, chip red, frozen `kFailClosed` refusal —
+  ALWAYS, whatever else is true (8 of 16 input combinations).
+* `!engine_alive` ⇒ fail-OPEN, chip amber, `engine-dead` — browsing
+  continues, protection is visibly GONE (amber is the "not protecting"
+  state; a green chip over a dead engine is the one outcome the design
+  forbids).
+* `engine_poisoned` ⇒ fail-OPEN, amber, `engine-poisoned`.
+* `kill_switch_on` ⇒ fail-OPEN, amber, `kill-switch` (deliberate off is a
+  visible state, never a green lie; T6 owns the surfaces that flip it).
+* exactly 1 of 16 combinations is normal/green.
+
+**Property-tested, not asserted:** `shield/tests/test_posture.cc`
+enumerates the ENTIRE finite input space (2^4 = 16 combinations) and pins
+the counts (8 fail-closed / 7 fail-open / 1 green), the chip mapping, the
+closed reason vocabulary, and "a kill switch cannot un-fail-close a lost
+route". The Python fake mirrors `DecidePosture` byte-for-byte, and the
+posture combinations are in the 157-case golden vector corpus, so all
+three representations (C++, Python, vectors) are pinned to the same law.
+
+**The Guard distinction (P18 owns Guard; nobody conflates them):** shield
+only CONSUMES `route_bound` — a boolean signal from Guard route integrity.
+Route loss is a SAFETY property (requests refused, red); engine death is a
+COMFORT-feature failure (requests allowed, amber). The two never share a
+code path: `DecidePosture` checks the route law first and returns, so no
+engine state can soften it. When the seam lands (R3), the same order
+applies in-network: refuse before consult.
+
+Citations (in-tree artifacts, this phase): `xr-core/shield/core/posture.h`
+(inputs/enums/law comment), `posture.cc` (DecidePosture + closed reason
+vocabulary), `match.cc` (DecideMatch consults posture before the table),
+`bundle.cc` (apply/LKG law), `tests/test_posture.cc` (exhaustive
+enumeration), `engine/xr_shield_engine.h` + `engine/lib.rs` (totality /
+kill_for_test).
+
+### R9b. Scriptlet security posture — UNVERIFIED (T6)
+
+v1 executes NO scriptlets: the decision surface is network-block only.
+The shim's cargo features back the boundary (`shield/engine/Cargo.toml`:
+no `css-validation`, no `content-blocking`; `resource-assembler` serves
+T8's redirect-resource NAMES only — the C side receives a name, never
+executable bytes, and there is no renderer to execute them). Before ANY
+scriptlet capability is enabled, T6 owes: the sandbox's actual
+prohibitions at the pin (page access? DOM APIs? `window` handles?) cited
+from a live read, plus 2–3 public CVE/advisory examples of scriptlet-class
+bypasses behind the refusal-list entries. No scriptlet claim is made from
+memory anywhere in this phase.

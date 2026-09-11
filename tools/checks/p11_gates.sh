@@ -57,3 +57,18 @@ p11_vendor_gates() {
   "$PY" tools/vendor_check.py --check
   "$PY" tools/fetch_allowlist_check.py
 }
+
+p11_shield_gates() {
+  echo "== P11-T2: shield decision engine (vectors regenerate deterministically + both-backend byte parity) =="
+  # The generator's --check proves the committed vectors are exactly the
+  # Python reference's deterministic output (no clock, no RNG). The checker
+  # replays every case against the COMPILED shield_host and fakes/shield.py:
+  # any byte or exit-code drift reddens. g++/make absent => visible SKIP
+  # (skip-policy law), never a silent pass.
+  "$PY" tools/gen_shield_vectors.py --check
+  if "$PY" tools/shield_vectors_check.py; then :; elif [ $? -eq 77 ]; then
+    echo "SKIP: SKIP (tool absent: g++/make) — needed for: shield-vector byte parity against the compiled shield_host; local hint: apt-get install g++ make (build-essential)"
+  else
+    exit 1
+  fi
+}

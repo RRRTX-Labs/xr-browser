@@ -1,32 +1,37 @@
 {
-  "schema_version": 1,
-  "note": "P9-T0-a parity machinery manifest. Each pair names its protocol markdown (the source of truth for the method set) and its parity corpus. The policy pair has no {method,args} stdio protocol table — policy_host is a subcommand host (resolve/dump/watch/snapshot) whose parity is enforced by tools/vectors_check.py + tools/mutation_test.py, not by this gate. Pairs listed here with protocol:null are accounted-for, never silently dropped.",
-  "pairs": [
-    {
-      "id": "themes",
-      "protocol": "../xr-core/themes/host_protocol.md",
-      "corpus": "tools/parity/corpus-themes.json"
-    },
-    {
-      "id": "settings",
-      "protocol": "../xr-core/settings/host_protocol.md",
-      "corpus": "tools/parity/corpus-settings.json"
-    },
-    {
-      "id": "commands",
-      "protocol": "../xr-core/commands/host_protocol.md",
-      "corpus": "tools/parity/corpus-commands.json"
-    },
-    {
-      "id": "update",
-      "protocol": "../xr-core/update/host_protocol.md",
-      "corpus": "tools/parity/corpus-update.json"
-    },
-    {
-      "id": "policy",
-      "protocol": null,
-      "corpus": null,
-      "covered_by": "tools/vectors_check.py (golden-vector fake parity) + tools/mutation_test.py (777 mutants) — policy_host is a subcommand host, not a {method,args} stdio protocol; no Methods table to auto-discover. Recorded exception row (P11-T0-a: the exception lives HERE as data, not as a code comment); tools/host_protocol_check.py discovery confirms policy/host/*.cc carries no `method ==` dispatch literals."
-    }
-  ]
+ "note": "P9-T0-a parity machinery manifest. Each pair names its protocol markdown (the source of truth for the method set) and its parity corpus. The policy pair has no {method,args} stdio protocol table \u2014 policy_host is a subcommand host (resolve/dump/watch/snapshot) whose parity is enforced by tools/vectors_check.py + tools/mutation_test.py, not by this gate. Pairs listed here with protocol:null are accounted-for, never silently dropped.",
+ "pairs": [
+  {
+   "corpus": "tools/parity/corpus-themes.json",
+   "id": "themes",
+   "protocol": "../xr-core/themes/host_protocol.md"
+  },
+  {
+   "corpus": "tools/parity/corpus-settings.json",
+   "id": "settings",
+   "protocol": "../xr-core/settings/host_protocol.md"
+  },
+  {
+   "corpus": "tools/parity/corpus-commands.json",
+   "id": "commands",
+   "protocol": "../xr-core/commands/host_protocol.md"
+  },
+  {
+   "corpus": "tools/parity/corpus-update.json",
+   "id": "update",
+   "protocol": "../xr-core/update/host_protocol.md"
+  },
+  {
+   "corpus": null,
+   "covered_by": "tools/vectors_check.py (golden-vector fake parity) + tools/mutation_test.py (777 mutants) \u2014 policy_host is a subcommand host, not a {method,args} stdio protocol; no Methods table to auto-discover. Recorded exception row (P11-T0-a: the exception lives HERE as data, not as a code comment); tools/host_protocol_check.py discovery confirms policy/host/*.cc carries no `method ==` dispatch literals.",
+   "id": "policy",
+   "protocol": null
+  },
+  {
+   "corpus": "tools/parity/corpus-shield.json",
+   "id": "shield",
+   "protocol": "../xr-core/shield/host_protocol.md"
+  }
+ ],
+ "schema_version": 1
 }

@@ -1,0 +1,1447 @@
+{
+ "cases": [
+  {
+   "args": {},
+   "expect": "ok",
+   "id": "flag-status-on",
+   "method": "flag-status"
+  },
+  {
+   "args": {
+    "identity": {
+     "value": "xr:...-001"
+    },
+    "origin": {
+     "registrable_domain": "example.com",
+     "scheme": "https"
+    }
+   },
+   "expect": "ok",
+   "id": "status-frozen-fixture",
+   "method": "Status"
+  },
+  {
+   "args": {
+    "identity": {
+     "value": ""
+    },
+    "origin": {
+     "scheme": "https"
+    }
+   },
+   "expect": "ok",
+   "id": "status-unknown-identity",
+   "method": "Status"
+  },
+  {
+   "args": {
+    "identity": {
+     "value": "xr:a"
+    },
+    "origin": {
+     "scheme": "https"
+    },
+    "ring": [
+     {
+      "action": "kBlocked",
+      "identity": {
+       "value": "xr:a"
+      },
+      "list_provenance": "l1",
+      "origin": {
+       "registrable_domain": "tracker.example",
+       "scheme": "https"
+      },
+      "request_class": "kScript",
+      "rule": "||tracker.example^",
+      "tab_id": 7,
+      "target": "https://tracker.example/a.js",
+      "ts_millis": 1000
+     }
+    ]
+   },
+   "expect": "ok",
+   "id": "status-ring-count",
+   "method": "Status"
+  },
+  {
+   "args": {
+    "identity": {
+     "value": "xr:a"
+    },
+    "max_events": 5
+   },
+   "expect": "ok",
+   "id": "events-frozen-sample",
+   "method": "RecentEvents"
+  },
+  {
+   "args": {
+    "identity": {
+     "value": "xr:a"
+    },
+    "max_events": 2,
+    "ring": [
+     {
+      "action": "kBlocked",
+      "identity": {
+       "value": "xr:a"
+      },
+      "list_provenance": "l1",
+      "origin": {
+       "registrable_domain": "tracker.example",
+       "scheme": "https"
+      },
+      "request_class": "kScript",
+      "rule": "||tracker.example^",
+      "tab_id": 7,
+      "target": "https://tracker.example/a.js",
+      "ts_millis": 1000
+     },
+     {
+      "action": "kBlocked",
+      "identity": {
+       "value": "xr:a"
+      },
+      "list_provenance": "l1",
+      "origin": {
+       "registrable_domain": "tracker.example",
+       "scheme": "https"
+      },
+      "request_class": "kScript",
+      "rule": "||tracker.example^",
+      "tab_id": 7,
+      "target": "https://tracker.example/a.js",
+      "ts_millis": 2000
+     }
+    ]
+   },
+   "expect": "ok",
+   "id": "events-ring-view",
+   "method": "RecentEvents"
+  },
+  {
+   "args": {},
+   "expect": "ok",
+   "id": "posture-defaults",
+   "method": "posture"
+  },
+  {
+   "args": {
+    "route_bound": false
+   },
+   "expect": "ok",
+   "id": "posture-route-loss",
+   "method": "posture"
+  },
+  {
+   "args": {
+    "engine_alive": "yes"
+   },
+   "expect": "reject",
+   "id": "posture-not-bool",
+   "method": "posture"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "||tracker.example^",
+         "id": "r1",
+         "kind": "network"
+        },
+        {
+         "action": "allow",
+         "filter": "||tracker.example^ok.js",
+         "id": "r2",
+         "kind": "network"
+        },
+        {
+         "action": "redirect",
+         "filter": "||ads.example/banner",
+         "id": "r3",
+         "kind": "redirect",
+         "resource": "1x1.gif"
+        },
+        {
+         "action": "block",
+         "domains": [
+          "site.example"
+         ],
+         "filter": "||scoped.example^",
+         "id": "r4",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||wild.example*/ad_*.js",
+         "id": "r5",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "|https://anchor.example/x",
+         "id": "r6",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||exact.example/e|",
+         "id": "r7",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "exclude_domains": [
+          "safe.example"
+         ],
+         "filter": "plain-literal.js",
+         "id": "r8",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "cosmetic.example",
+         "id": "r9",
+         "kind": "cosmetic"
+        },
+        {
+         "action": "block",
+         "filter": "||bare.example|",
+         "id": "r10",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||sep.example^a^b",
+         "id": "r11",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    }
+   },
+   "expect": "ok",
+   "id": "bundle-load-summary",
+   "method": "bundle-load"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "##.ad",
+         "id": "r",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    }
+   },
+   "expect": "ok",
+   "id": "bundle-load-grammar-refusal",
+   "method": "bundle-load"
+  },
+  {
+   "args": {
+    "bundle": {
+     "schema": "x"
+    }
+   },
+   "expect": "reject",
+   "id": "bundle-load-malformed",
+   "method": "bundle-load"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "||tracker.example^",
+         "id": "r1",
+         "kind": "network"
+        },
+        {
+         "action": "allow",
+         "filter": "||tracker.example^ok.js",
+         "id": "r2",
+         "kind": "network"
+        },
+        {
+         "action": "redirect",
+         "filter": "||ads.example/banner",
+         "id": "r3",
+         "kind": "redirect",
+         "resource": "1x1.gif"
+        },
+        {
+         "action": "block",
+         "domains": [
+          "site.example"
+         ],
+         "filter": "||scoped.example^",
+         "id": "r4",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||wild.example*/ad_*.js",
+         "id": "r5",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "|https://anchor.example/x",
+         "id": "r6",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||exact.example/e|",
+         "id": "r7",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "exclude_domains": [
+          "safe.example"
+         ],
+         "filter": "plain-literal.js",
+         "id": "r8",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "cosmetic.example",
+         "id": "r9",
+         "kind": "cosmetic"
+        },
+        {
+         "action": "block",
+         "filter": "||bare.example|",
+         "id": "r10",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||sep.example^a^b",
+         "id": "r11",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    },
+    "manifest": {
+     "bundle_id": "xr-default-2026-09",
+     "created_epoch": 1780000000,
+     "key_pin": "ed25519:test",
+     "lists": [
+      {
+       "name": "l1",
+       "rules": 11,
+       "sha256": "9faacd43c7049e0e48ff6a0d44210ae5a9d7a2de06d0a1462739008a385138f1"
+      }
+     ],
+     "schema_version": 1
+    }
+   },
+   "expect": "ok",
+   "id": "bundle-check-bound",
+   "method": "bundle-check"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "||tracker.example^",
+         "id": "r1",
+         "kind": "network"
+        },
+        {
+         "action": "allow",
+         "filter": "||tracker.example^ok.js",
+         "id": "r2",
+         "kind": "network"
+        },
+        {
+         "action": "redirect",
+         "filter": "||ads.example/banner",
+         "id": "r3",
+         "kind": "redirect",
+         "resource": "1x1.gif"
+        },
+        {
+         "action": "block",
+         "domains": [
+          "site.example"
+         ],
+         "filter": "||scoped.example^",
+         "id": "r4",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||wild.example*/ad_*.js",
+         "id": "r5",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "|https://anchor.example/x",
+         "id": "r6",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||exact.example/e|",
+         "id": "r7",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "exclude_domains": [
+          "safe.example"
+         ],
+         "filter": "plain-literal.js",
+         "id": "r8",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "cosmetic.example",
+         "id": "r9",
+         "kind": "cosmetic"
+        },
+        {
+         "action": "block",
+         "filter": "||bare.example|",
+         "id": "r10",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||sep.example^a^b",
+         "id": "r11",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    },
+    "manifest": {
+     "bundle_id": "xr-default-2026-09",
+     "created_epoch": 1780000000,
+     "key_pin": "ed25519:test",
+     "lists": [],
+     "schema_version": 1
+    }
+   },
+   "expect": "ok",
+   "id": "bundle-check-mismatch",
+   "method": "bundle-check"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "||tracker.example^",
+         "id": "r1",
+         "kind": "network"
+        },
+        {
+         "action": "allow",
+         "filter": "||tracker.example^ok.js",
+         "id": "r2",
+         "kind": "network"
+        },
+        {
+         "action": "redirect",
+         "filter": "||ads.example/banner",
+         "id": "r3",
+         "kind": "redirect",
+         "resource": "1x1.gif"
+        },
+        {
+         "action": "block",
+         "domains": [
+          "site.example"
+         ],
+         "filter": "||scoped.example^",
+         "id": "r4",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||wild.example*/ad_*.js",
+         "id": "r5",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "|https://anchor.example/x",
+         "id": "r6",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||exact.example/e|",
+         "id": "r7",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "exclude_domains": [
+          "safe.example"
+         ],
+         "filter": "plain-literal.js",
+         "id": "r8",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "cosmetic.example",
+         "id": "r9",
+         "kind": "cosmetic"
+        },
+        {
+         "action": "block",
+         "filter": "||bare.example|",
+         "id": "r10",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||sep.example^a^b",
+         "id": "r11",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    }
+   },
+   "expect": "reject",
+   "id": "bundle-check-missing-manifest",
+   "method": "bundle-check"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "||tracker.example^",
+         "id": "r1",
+         "kind": "network"
+        },
+        {
+         "action": "allow",
+         "filter": "||tracker.example^ok.js",
+         "id": "r2",
+         "kind": "network"
+        },
+        {
+         "action": "redirect",
+         "filter": "||ads.example/banner",
+         "id": "r3",
+         "kind": "redirect",
+         "resource": "1x1.gif"
+        },
+        {
+         "action": "block",
+         "domains": [
+          "site.example"
+         ],
+         "filter": "||scoped.example^",
+         "id": "r4",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||wild.example*/ad_*.js",
+         "id": "r5",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "|https://anchor.example/x",
+         "id": "r6",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||exact.example/e|",
+         "id": "r7",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "exclude_domains": [
+          "safe.example"
+         ],
+         "filter": "plain-literal.js",
+         "id": "r8",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "cosmetic.example",
+         "id": "r9",
+         "kind": "cosmetic"
+        },
+        {
+         "action": "block",
+         "filter": "||bare.example|",
+         "id": "r10",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||sep.example^a^b",
+         "id": "r11",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    },
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/a.js"
+    }
+   },
+   "expect": "ok",
+   "id": "match-blocked",
+   "method": "match"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "||tracker.example^",
+         "id": "r1",
+         "kind": "network"
+        },
+        {
+         "action": "allow",
+         "filter": "||tracker.example^ok.js",
+         "id": "r2",
+         "kind": "network"
+        },
+        {
+         "action": "redirect",
+         "filter": "||ads.example/banner",
+         "id": "r3",
+         "kind": "redirect",
+         "resource": "1x1.gif"
+        },
+        {
+         "action": "block",
+         "domains": [
+          "site.example"
+         ],
+         "filter": "||scoped.example^",
+         "id": "r4",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||wild.example*/ad_*.js",
+         "id": "r5",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "|https://anchor.example/x",
+         "id": "r6",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||exact.example/e|",
+         "id": "r7",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "exclude_domains": [
+          "safe.example"
+         ],
+         "filter": "plain-literal.js",
+         "id": "r8",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "cosmetic.example",
+         "id": "r9",
+         "kind": "cosmetic"
+        },
+        {
+         "action": "block",
+         "filter": "||bare.example|",
+         "id": "r10",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||sep.example^a^b",
+         "id": "r11",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    },
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/a.js"
+    },
+    "scopes": [
+     {
+      "reason": "user",
+      "rule_id": "r1",
+      "scope_id": "s1"
+     }
+    ]
+   },
+   "expect": "ok",
+   "id": "match-scope-exception",
+   "method": "match"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "||tracker.example^",
+         "id": "r1",
+         "kind": "network"
+        },
+        {
+         "action": "allow",
+         "filter": "||tracker.example^ok.js",
+         "id": "r2",
+         "kind": "network"
+        },
+        {
+         "action": "redirect",
+         "filter": "||ads.example/banner",
+         "id": "r3",
+         "kind": "redirect",
+         "resource": "1x1.gif"
+        },
+        {
+         "action": "block",
+         "domains": [
+          "site.example"
+         ],
+         "filter": "||scoped.example^",
+         "id": "r4",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||wild.example*/ad_*.js",
+         "id": "r5",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "|https://anchor.example/x",
+         "id": "r6",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||exact.example/e|",
+         "id": "r7",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "exclude_domains": [
+          "safe.example"
+         ],
+         "filter": "plain-literal.js",
+         "id": "r8",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "cosmetic.example",
+         "id": "r9",
+         "kind": "cosmetic"
+        },
+        {
+         "action": "block",
+         "filter": "||bare.example|",
+         "id": "r10",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||sep.example^a^b",
+         "id": "r11",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    },
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/a.js"
+    },
+    "route_bound": false
+   },
+   "expect": "ok",
+   "id": "match-route-loss",
+   "method": "match"
+  },
+  {
+   "args": {},
+   "expect": "reject",
+   "id": "match-missing-context",
+   "method": "match"
+  },
+  {
+   "args": {
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/a.js"
+    },
+    "x": 1
+   },
+   "expect": "reject",
+   "id": "match-unknown-field",
+   "method": "match"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "||tracker.example^",
+         "id": "r1",
+         "kind": "network"
+        },
+        {
+         "action": "allow",
+         "filter": "||tracker.example^ok.js",
+         "id": "r2",
+         "kind": "network"
+        },
+        {
+         "action": "redirect",
+         "filter": "||ads.example/banner",
+         "id": "r3",
+         "kind": "redirect",
+         "resource": "1x1.gif"
+        },
+        {
+         "action": "block",
+         "domains": [
+          "site.example"
+         ],
+         "filter": "||scoped.example^",
+         "id": "r4",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||wild.example*/ad_*.js",
+         "id": "r5",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "|https://anchor.example/x",
+         "id": "r6",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||exact.example/e|",
+         "id": "r7",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "exclude_domains": [
+          "safe.example"
+         ],
+         "filter": "plain-literal.js",
+         "id": "r8",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "cosmetic.example",
+         "id": "r9",
+         "kind": "cosmetic"
+        },
+        {
+         "action": "block",
+         "filter": "||bare.example|",
+         "id": "r10",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||sep.example^a^b",
+         "id": "r11",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    },
+    "now_mono": 100,
+    "state": {
+     "active": {
+      "present": false
+     },
+     "last_apply_mono": -1,
+     "lkg": {
+      "present": false
+     },
+     "pins": []
+    }
+   },
+   "expect": "ok",
+   "id": "apply-fresh",
+   "method": "apply"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "||tracker.example^",
+         "id": "r1",
+         "kind": "network"
+        },
+        {
+         "action": "allow",
+         "filter": "||tracker.example^ok.js",
+         "id": "r2",
+         "kind": "network"
+        },
+        {
+         "action": "redirect",
+         "filter": "||ads.example/banner",
+         "id": "r3",
+         "kind": "redirect",
+         "resource": "1x1.gif"
+        },
+        {
+         "action": "block",
+         "domains": [
+          "site.example"
+         ],
+         "filter": "||scoped.example^",
+         "id": "r4",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||wild.example*/ad_*.js",
+         "id": "r5",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "|https://anchor.example/x",
+         "id": "r6",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||exact.example/e|",
+         "id": "r7",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "exclude_domains": [
+          "safe.example"
+         ],
+         "filter": "plain-literal.js",
+         "id": "r8",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "cosmetic.example",
+         "id": "r9",
+         "kind": "cosmetic"
+        },
+        {
+         "action": "block",
+         "filter": "||bare.example|",
+         "id": "r10",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||sep.example^a^b",
+         "id": "r11",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    },
+    "now_mono": 200,
+    "state": {
+     "active": {
+      "bundle_id": "xr-default",
+      "digest": "4e2a696549d6940e7ff6cc6cdb0cc58da13b1417e1e326e3a695a9fc0a2c3f28",
+      "present": true,
+      "version": 3
+     },
+     "last_apply_mono": 100,
+     "lkg": {
+      "present": false
+     },
+     "pins": [
+      {
+       "bundle_id": "xr-default",
+       "digest": "4e2a696549d6940e7ff6cc6cdb0cc58da13b1417e1e326e3a695a9fc0a2c3f28",
+       "present": true,
+       "version": 3
+      }
+     ]
+    }
+   },
+   "expect": "ok",
+   "id": "apply-equal-reoffer",
+   "method": "apply"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "||tracker.example^",
+         "id": "r1",
+         "kind": "network"
+        },
+        {
+         "action": "allow",
+         "filter": "||tracker.example^ok.js",
+         "id": "r2",
+         "kind": "network"
+        },
+        {
+         "action": "redirect",
+         "filter": "||ads.example/banner",
+         "id": "r3",
+         "kind": "redirect",
+         "resource": "1x1.gif"
+        },
+        {
+         "action": "block",
+         "domains": [
+          "site.example"
+         ],
+         "filter": "||scoped.example^",
+         "id": "r4",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||wild.example*/ad_*.js",
+         "id": "r5",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "|https://anchor.example/x",
+         "id": "r6",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||exact.example/e|",
+         "id": "r7",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "exclude_domains": [
+          "safe.example"
+         ],
+         "filter": "plain-literal.js",
+         "id": "r8",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "cosmetic.example",
+         "id": "r9",
+         "kind": "cosmetic"
+        },
+        {
+         "action": "block",
+         "filter": "||bare.example|",
+         "id": "r10",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||sep.example^a^b",
+         "id": "r11",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    },
+    "now_mono": 300,
+    "state": {
+     "active": {
+      "bundle_id": "xr-default",
+      "digest": "4e2a696549d6940e7ff6cc6cdb0cc58da13b1417e1e326e3a695a9fc0a2c3f28",
+      "present": true,
+      "version": 3
+     },
+     "last_apply_mono": 100,
+     "lkg": {
+      "present": false
+     },
+     "pins": []
+    }
+   },
+   "expect": "ok",
+   "id": "apply-hot-pin-out",
+   "method": "apply"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "||tracker.example^",
+         "id": "r1",
+         "kind": "network"
+        },
+        {
+         "action": "allow",
+         "filter": "||tracker.example^ok.js",
+         "id": "r2",
+         "kind": "network"
+        },
+        {
+         "action": "redirect",
+         "filter": "||ads.example/banner",
+         "id": "r3",
+         "kind": "redirect",
+         "resource": "1x1.gif"
+        },
+        {
+         "action": "block",
+         "domains": [
+          "site.example"
+         ],
+         "filter": "||scoped.example^",
+         "id": "r4",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||wild.example*/ad_*.js",
+         "id": "r5",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "|https://anchor.example/x",
+         "id": "r6",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||exact.example/e|",
+         "id": "r7",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "exclude_domains": [
+          "safe.example"
+         ],
+         "filter": "plain-literal.js",
+         "id": "r8",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "cosmetic.example",
+         "id": "r9",
+         "kind": "cosmetic"
+        },
+        {
+         "action": "block",
+         "filter": "||bare.example|",
+         "id": "r10",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||sep.example^a^b",
+         "id": "r11",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    },
+    "state": {
+     "active": {
+      "present": false
+     },
+     "last_apply_mono": -1,
+     "lkg": {
+      "present": false
+     },
+     "pins": []
+    }
+   },
+   "expect": "reject",
+   "id": "apply-missing-now-mono",
+   "method": "apply"
+  }
+ ],
+ "pair": "shield",
+ "protocol": "../xr-core/shield/host_protocol.md",
+ "provenance": "P11-T2: derived pair. Cases are a method-spanning subset of the 157 golden vectors in docs/contracts/vectors/shield-v1.json (byte-parity across both backends is enforced THERE by tools/shield_vectors_check.py + xr-core/shield/tests/test_golden_vectors.cc); this corpus is the completeness-gate artifact: every documented method carries >=1 parity case, with the exit-class law ok=exit 0 typed result (kRejected refusals and frozen-envelope errors included), reject=exit 1 typed error.",
+ "schema_version": 1
+}
