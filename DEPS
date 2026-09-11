@@ -37,7 +37,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "c16c9631c13ec46a4b57e144d5f2a5596d8270a7"     # xr-core P10-T1: update verifier core + host + 9 green suites + BUILD.gn
+xr_core_rev: "e2566bb914853751cc0328e0f879ef0a4e5c946a"     # xr-core P10-T1: update verifier core + host + 9 green suites + BUILD.gn
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"
