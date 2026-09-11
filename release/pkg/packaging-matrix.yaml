@@ -1,0 +1,53 @@
+# release/pkg/packaging-matrix.yaml — the per-OS packaging matrix as data
+# (P10-T4; docs/hw.md style). tools/packaging_matrix_check.py fails if a
+# row lacks an owner, a signing entry, or an update-registration answer.
+schema: xr-packaging-matrix
+schema_version: 1
+rows:
+  - os: linux-deb
+    artifacts: ["xr_<version>_amd64.deb"]
+    install_class: per-machine (apt repo; sudo) or per-user (downloaded .deb via dpkg-deb --install --force-not-root, tier-2)
+    updater_registration: "apt repo in sources.list.d; update metadata = InRelease clearsign (linux_repo_sign.py); client checks xr://about -> manual or repo refresh"
+    signing: {format: "gpg clearsign (Release/InRelease) + detached .asc", tool: "build/signing/linux_repo_sign.py", credential: "xr-signing-linux-repo (HG-36/HG-37 class)"}
+    owner: "release-eng (HG-36/37 gated)"
+    tier: 1
+  - os: linux-rpm
+    artifacts: ["xr-<version>.x86_64.rpm"]
+    install_class: per-machine (dnf repo)
+    updater_registration: "dnf repo; repomd.xml detached signature (.asc) per rpmsign convention"
+    signing: {format: "repomd.xml.asc detached (gpg)", tool: "build/signing/linux_repo_sign.py --mode detach", credential: "xr-signing-linux-repo"}
+    owner: "release-eng (HG-36/37 gated)"
+    tier: 1
+  - os: linux-appimage
+    artifacts: ["XR-<version>-x86_64.AppImage"]
+    install_class: per-user (single file; no root)
+    updater_registration: "embedded XRUPDMETA1 trailer (appimage_meta.py write/check); AppImageUpdate-compatible reader is farm work (HG-31)"
+    signing: {format: "XRUPDMETA1 trailer (stub today; minisign at HG-36)", tool: "build/signing/appimage_meta.py", credential: "xr-signing-appimage"}
+    owner: "release-eng"
+    tier: 1
+  - os: linux-flatpak
+    artifacts: ["com.rrrtx.xr flatpak manifest"]
+    install_class: per-user (flatpak) or per-machine
+    updater_registration: "Flathub auto-update via flatpak; XR updater NOT registered (the sandboxed runtime blocks the stdio host) — see capability statement"
+    signing: {format: "Flathub GPG (the Flathub infra signs; we do not hold keys)", tool: "n/a (Flathub-side)", credential: "Flathub account (HG-38 class)"}
+    owner: "release-eng + Flathub reviewers"
+    tier: 2
+    capability_statement: >-
+      Flatpak is tier-2 BY CAPABILITY, not by preference: the sandboxed
+      runtime cannot spawn our stdio update host against the chromium
+      updater, so auto-update inside Flatpak is Flathub's, not ours.
+      Revocation reach = epoch notice via Flathub metadata only.
+  - os: mac
+    artifacts: ["XR-<version>-mac.dmg", "XR.app (zip for notarization)"]
+    install_class: per-user (/Applications drag)
+    updater_registration: "XR updater host registered at install (launchd agent); update manifests minisign-verified by the core"
+    signing: {format: "codesign --options runtime + notarytool + stapler", tool: "build/signing/platform_argv.py (argv contract; HG-37 execution)", credential: "Apple Developer ID + notary (HG-37)"}
+    owner: "release-eng (HG-37 gated)"
+    tier: 1
+  - os: win
+    artifacts: ["XR-Setup-<version>.exe", "XR-<version>.msix (tier-2)"]
+    install_class: per-user (default) or per-machine (installer flag)
+    updater_registration: "XR updater host registered at install (run key / scheduled task); manifests minisign-verified by the core"
+    signing: {format: "Authenticode (signtool / SHA256 + RFC3161 timestamp; osslsigncode verify)", tool: "build/signing/platform_argv.py (argv contract; HG-37 execution)", credential: "EV code-signing cert + HSM (HG-37; SmartScreen reputation accrual documented in research log item 4)"}
+    owner: "release-eng (HG-37 gated)"
+    tier: 1

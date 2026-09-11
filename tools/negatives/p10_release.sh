@@ -85,3 +85,31 @@ case_mutation_freshness_stale() {
     "$PY" tools/mutation_freshness.py --repo . --scores "$NEG_TMP/stale-scores.json"
 }
 neg_register mutation_freshness_stale
+
+# --- 53. secret_scan: a planted PEM private key must redden the scan -------
+case_secret_scan_planted_key() {
+  local D="$NEG_TMP/planted"; mkdir -p "$D"
+  cat > "$D/leaked.pem" <<'PEM'
+-----BEGIN PRIVATE KEY-----
+MC4CAQAwBQYDK2VwBCIEIK9FaBqPpXq0v00ABVGdDaa6gfgckWKJUTgKqXvI8abc
+-----END PRIVATE KEY-----
+PEM
+  neg_expect_reject "secret_scan: planted PEM flagged" \
+    'PEM private key block' \
+    "$PY" tools/secret_scan.py --repo "$D" --also "$D"
+}
+neg_register secret_scan_planted_key
+
+# --- 54. ceremony_check: a ceremony doc missing a required marker ----------
+case_ceremony_missing_marker() {
+  local D="$NEG_TMP/keys"; mkdir -p "$D"
+  printf '# ceremony stub — missing the air-gap + witness sections\n' \
+    > "$D/ceremony.md"
+  printf 'offline root\nper-platform signing keys\nHSM\nrotation runbook\nepoch revocation\nmanual path\n' \
+    > "$D/key-hierarchy.md"
+  printf 'no real keys\nADR-0004\nHG-36\n' > "$D/README.md"
+  neg_expect_reject "ceremony_check: missing air-gapped section flagged" \
+    "missing required section: 'air-gapped'" \
+    "$PY" tools/ceremony_check.py --keys-dir "$D"
+}
+neg_register ceremony_missing_marker

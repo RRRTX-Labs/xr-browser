@@ -1,0 +1,12 @@
+  ok: gpg keygen — PASS: linux-repo test key generated in /tmp/tmp.i9eDkrdkYi/gnupghome (TEST ONLY — release keys are HSM-born, HG-36)
+  ok: clearsign InRelease
+  ok: verify OK — PASS: signature verified (InRelease against keyring /tmp/tmp.i9eDkrdkYi/gnupghome)
+  ok: one-byte tamper detected (FAIL: verification FAILED (InRelease.tampered): gpg: Signatu...)
+  ok: wrong keyring rejected
+  ok: repomd.xml detached .asc verify
+  ok: appimage write+check — PASS: appimage-meta round-trip (XR-0.9.18.2-x86_64.AppImage: beta 0.9.18.2, digest ok, stub sig ok)
+  ok: tampered image refused (FAIL: XR-0.9.18.2-x86_64.AppImage: payload digest/size misma...)
+  ok: argv-stub matrix (5 exact argv shapes + provider guard, stub-recorded)
+  ok: beta without XR_SIGN_PROVIDER refused — REFUSED: channel 'beta' requires XR_SIGN_PROVIDER (a real si...
+  ok: stable with provider accepted (argv construction only; real sigs = HG-37)
+PASS: signing matrix (14 cells executed: gpg real round-trip, tamper, wrong-key; appimage round-trip; argv-exact; provider guard)

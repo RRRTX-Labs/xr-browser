@@ -1,0 +1,8 @@
+# per-platform signing public key — EXAMPLE ONLY (placeholder; HG-36 creates the real one)
+#
+# This file shows the exact PUBLICATION SHAPE the client pins per epoch
+# (key_id + base64 ed25519 public key, minisign comment line first).
+#
+# untrusted comment: XR per-platform signing key (EXAMPLE — not a key)
+# key_id: xr-signing-2026-09 (EXAMPLE placeholder)
+PUBLIC KEY PLACEHOLDER — created by the HG-36 ceremony, never in this repo before it

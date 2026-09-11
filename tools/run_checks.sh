@@ -304,6 +304,30 @@ echo "== P10-T1: update golden vectors, cross-backend BYTE parity (73 cases) =="
 echo "== P10-T1: std-only core import hygiene (no Chromium includes in core/**) =="
 "$PY" tools/core_hygiene_check.py --xr-core ../xr-core
 
+echo "== P10-T2: update-server spec + conformance (reference) + fuzz + size =="
+for contract in server-version-graph:version-graph server-channels:channels server-cohorts:cohorts server-epochs:epochs; do
+  "$PY" tools/xr_schema.py validate "${contract%%:*}" "release/server/spec/${contract##*:}.yaml"
+done
+"$PY" release/server/refimpl/update_server_ref.py --self-check
+"$PY" release/server/refimpl/update_server_ref.py --gen-spec-readme --check
+"$PY" tools/gen_server_spec_rs.py --check
+"$PY" release/server/tests/gen_conformance.py
+"$PY" release/server/tests/test_conformance_ref.py
+XR_FUZZ_SECONDS="${XR_FUZZ_SECONDS:-30}" "$PY" release/server/tests/test_server_fuzz.py
+"$PY" tools/server_size_check.py
+
+echo "== P10-T3: key-ceremony docs + the both-repos secret absence proof =="
+"$PY" tools/secret_scan.py --all
+"$PY" tools/ceremony_check.py
+
+echo "== P10-T4: signing matrix (gpg REAL in sandbox; argv-exact mac/win) =="
+if bash build/signing/tests/test_signing_p10.sh; then :; elif [ $? -eq 77 ]; then
+  echo "SKIP: signing matrix skipped (gpg absent)"
+else
+  echo "FAIL: signing matrix gate failed"; exit 1
+fi
+"$PY" tools/packaging_matrix_check.py
+
 echo "== P10-T0-b: kill matrix, hosts-local EXECUTION (the P9 deferral closed) =="
 if bash build/qa/drill/drill_run.sh hosts-local; then :; elif [ $? -eq 77 ]; then
   echo "SKIP: kill matrix hosts-local skipped (g++/make absent) — needed for: executing the kill matrix against the discovered //xr host binaries"

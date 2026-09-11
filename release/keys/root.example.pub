@@ -1,0 +1,8 @@
+# root public key — EXAMPLE ONLY (placeholder; HG-36 creates the real one)
+#
+# This file shows the exact PUBLICATION SHAPE the client pins per epoch
+# (key_id + base64 ed25519 public key, minisign comment line first).
+#
+# untrusted comment: XR offline root (EXAMPLE — not a key)
+# key_id: xr-root-1 (EXAMPLE placeholder)
+PUBLIC KEY PLACEHOLDER — created by the HG-36 ceremony, never in this repo before it
