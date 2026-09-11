@@ -78,6 +78,22 @@ SUITE_MAPS = {
         "json_parse.cc": ["test_theme", "test_loader"],
         "sha256.cc": ["test_loader"],
     },
+    # P10-T0-c: the commands core joins the matrix (it was the fourth core
+    # with no mutation lane — the T0-c debt). Suites follow the same
+    # superset-per-TU discipline; the dial test stays out of per-mutant maps
+    # except policy_state.cc, which is what it exercises end-to-end.
+    "commands": {
+        "json.cc": ["test_registry", "test_dispatch", "test_shortcuts"],
+        "json_parse.cc": ["test_registry", "test_dispatch", "test_shortcuts"],
+        "sha256.cc": ["test_descriptor"],
+        "descriptor.cc": ["test_descriptor", "test_registry"],
+        "registry.cc": ["test_registry"],
+        "matcher.cc": ["test_matcher"],
+        "availability.cc": ["test_availability"],
+        "dispatch.cc": ["test_dispatch", "test_host"],
+        "shortcuts.cc": ["test_shortcuts"],
+        "policy_state.cc": ["test_dial"],
+    },
 }
 
 DEFAULT_TARGET = "policy"

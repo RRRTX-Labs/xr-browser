@@ -1,0 +1,8 @@
+## T0-b drill evidence (this commit)
+$ bash build/qa/drill/drill_run.sh hosts-local
+python3: can't open file '/home/user/xr-browser/build/tools/kill_matrix.py': [Errno 2] No such file or directory
+
+## zero-case behavior: empty xr-core fixture
+FAIL: host discovery found no *_host targets — the drill would certify nothing
+FAIL: kill-matrix
+exit=1

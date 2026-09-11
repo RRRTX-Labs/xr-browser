@@ -1,0 +1,2 @@
+mutation[commands]: 414 mutants, killed 414, survived 0, score 100.00% (gate >= 90.0%), deny-guard 18/18, elapsed 201.5s -> PASS
+mutation: targets=commands -> PASS

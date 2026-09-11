@@ -1,0 +1,2 @@
+mutation[themes]: 386 mutants, killed 386, survived 0, score 100.00% (gate >= 90.0%), deny-guard 21/21, elapsed 239.6s -> PASS
+mutation: targets=themes -> PASS

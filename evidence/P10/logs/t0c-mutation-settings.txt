@@ -1,0 +1,2 @@
+mutation[settings]: 485 mutants, killed 485, survived 0, score 100.00% (gate >= 90.0%), deny-guard 28/28, elapsed 317.5s -> PASS
+mutation: targets=settings -> PASS
