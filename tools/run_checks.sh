@@ -9,6 +9,9 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PY="${PYTHON:-python3}"
+# P11-T0-e: the P11 gate bodies live in tools/checks/p11_gates.sh (functions)
+# so this dispatcher stays under the touched-file size law.
+. "$(dirname "$0")/checks/p11_gates.sh"
 RANGE="${1:-}"
 
 echo "== plan pin =="
@@ -54,18 +57,15 @@ echo "== test suites =="
 # upstream/git bytes through the allowlisted choke points (build/upstream/
 # fetch.py; unauthenticated git ls-remote). They fail closed on no network.
 # ---------------------------------------------------------------------------
+p11_size_law
+
 echo "== evidence bundles (contract: docs/contracts/evidence-bundle-v1.md) =="
 "$PY" tools/evidence_check.py
 # strict: auto-covers every bundle newer than the P2 legacy exemption (P3+);
 # P1/P2 stay exempt per the HG-25 ruling. A new phase is covered automatically
 # — no hardcoded list to forget (the P6/P7 debt closed by T0, XR-P7-T0).
 "$PY" tools/evidence_check.py --strict
-# P11-T0-d: the runner-capabilities ledger rule (e) consumes must itself obey
-# the citation law — present claims cite real runs (ci_run+ci_job) or
-# transcripts, UNOBSERVED entries say why, comment-claims are refused — and
-# the self-test proves those refusals offline.
-"$PY" tools/runner_caps.py --check
-"$PY" tools/runner_caps.py --self-test
+p11_caps_gates
 
 echo "== spike: every file:line citation re-verified at the pin =="
 "$PY" build/spike/citation_audit.py
@@ -85,18 +85,7 @@ echo "== patch ledger incl. candidate (spike/) dirs =="
 echo "== workflow files: expressions + schema (compile error = zero jobs) =="
 "$PY" build/workflow_lint.py
 
-echo "== P11-T0-c: scheduled-lane health (a red nightly is a red check within a day) =="
-# Reads the newest schedule-event run of every scheduled workflow through the
-# fetch.py chokepoint. Network absent/rate-limited => visible SKIP (exit 77,
-# skip-policy); the offline self-test runs FIRST so a SKIP can never mask a
-# broken checker. A lane red on its CURRENT definition is a hard failure;
-# STALE-FAIL/NOT-RUN/DISABLED are visible and non-fatal BY RULE.
-"$PY" tools/scheduled_lane_check.py --self-test
-if "$PY" tools/scheduled_lane_check.py; then :; elif [ $? -eq 77 ]; then
-  echo "SKIP: SKIP (network unavailable for api.github.com) — needed for: scheduled-lane verdicts (silent-red-nightly visibility); local hint: re-run with network; the self-test above proved the checker itself"
-else
-  exit 1
-fi
+p11_lane_gates
 
 # ---------------------------------------------------------------------------
 # P5 contract-freeze gates (§1.11). mojom_lint/contracts_manifest/vectors/
@@ -174,9 +163,7 @@ echo "== P8-T7: help<->settings deep-link contract lint (schema <-> registry, bo
 # requires g++ and SKIPs VISIBLY when absent (skip-policy law) — the hosted
 # lane has g++ and runs it for real.
 # ---------------------------------------------------------------------------
-echo "== P11-T0-b: no-new-crypto gate (ONE copy of a public algorithm, never a new one — ADR-0043) =="
-"$PY" tools/no_new_crypto_check.py
-"$PY" tools/no_new_crypto_check.py --self-test
+p11_crypto_gates
 
 echo "== P6: mode_lint — L3 one-brain ban + L13 intent headers =="
 "$PY" tools/mode_lint.py --root ../xr-core
@@ -258,8 +245,7 @@ fi
 # request stream and fails on any byte difference (g++ only; SKIPs visibly
 # otherwise). Evidence runs use XR_DIFF_FUZZ_SECONDS=600.
 # ---------------------------------------------------------------------------
-echo "== P11-T0-a: host protocol doc gate (every method-dispatching host documented, both directions) =="
-"$PY" tools/host_protocol_check.py
+p11_hostdoc_gates
 
 echo "== P9-T0-a: parity completeness (every protocol method has corpus cases) =="
 "$PY" tools/parity_completeness.py

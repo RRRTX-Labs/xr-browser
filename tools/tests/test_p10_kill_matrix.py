@@ -38,9 +38,9 @@ def test_discovery_fails_closed_on_an_empty_core(tmp_path):
 
 @pytest.mark.skipif(not XR_CORE.exists(), reason="sibling xr-core checkout absent")
 def test_drill_executes_cells_and_prints_the_split(capsys):
-    km.XR_CORE = XR_CORE
+    km.set_xr_core(XR_CORE)
     import random
-    km.XR_CORE = XR_CORE
+    km.set_xr_core(XR_CORE)
     rng = random.Random("20260910")
     hosts = km.discover_hosts(XR_CORE)
     result = km.run_host_matrix(hosts, rng, iterations=1)

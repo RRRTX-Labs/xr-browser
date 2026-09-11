@@ -1,0 +1,9 @@
+{
+ "phase": "P11",
+ "base_commit": "7fa253f1dbd827ba66a3cd563536d9932713c09a",
+ "law": "touched-file size law (P11-T0-e): every .py/.sh under build/, tools/, release/ touched between base_commit..HEAD must be <=380 lines — stricter than the whole-tree 400-LOC law; enforced by build/tests/test_file_size_law.py --touched (run_checks p11_size_law + governance) and mirrored in pytest",
+ "note": "base_commit = the parent of the first P11 commit (the P10 final-report commit 7fa253f). Updated at each phase start; prior bases are kept in history (append-only).",
+ "history": [
+  {"phase": "P11", "base_commit": "7fa253f1dbd827ba66a3cd563536d9932713c09a", "recorded": "2026-09-11"}
+ ]
+}
