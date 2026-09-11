@@ -57,9 +57,28 @@ def _run_route(mod, vec: dict[str, Any]) -> Any:
     return mod.call(vec["method"], vec["args"])
 
 
+def _run_update(mod, vec: dict[str, Any]) -> Any:
+    """update-v1 cases carry method/args/expect (not name/args/expected) and
+    verify expectations pin a SUBSET of the output (the host adds
+    seen_size/manifest_id/verifier), so project the fake result through the
+    same expectation semantics the C++ golden test uses."""
+    got = mod.call(vec["method"], vec["args"])
+    want = vec["expect"]
+    if not isinstance(got, dict):
+        return got
+    if "error" in want:
+        # project exactly the keys the expectation pins (error[/reason/detail])
+        return {k: got.get(k) for k in want}
+    if "verdict" in want:
+        return {"verdict": got.get("verdict"), "reason": got.get("reason"),
+                "manual_path": got.get("manual_path")}
+    return got
+
+
 RUNNERS = {
     "policy-resolver-v1.json": ("policy_resolver", _run_policy),
     "route-manager-v1.json": ("route_manager", _run_route),
+    "update-v1.json": ("update", _run_update),
 }
 
 
@@ -78,18 +97,19 @@ def check(repo: Path, fakes_dir: Path) -> tuple[list[str], dict[str, Any]]:
         digest = hashlib.sha256(raw.encode()).hexdigest()
         mod = _load_fake(fakes_dir, module)
         n_ok = 0
-        for vec in doc.get("vectors", []):
+        vectors = doc.get("vectors") or doc.get("cases") or []
+        for vec in vectors:
             got = runner(mod, vec)
-            want = vec["expected"]
+            want = vec.get("expected", vec.get("expect"))
             if canonical(got) != canonical(want):
                 failures.append(
-                    f"{fname}:{vec['name']}: fake output != vector\n"
+                    f"{fname}:{vec.get('name', vec.get('id'))}: fake output != vector\n"
                     f"    want: {canonical(want)}\n    got:  {canonical(got)}"
                 )
             else:
                 n_ok += 1
         info["files"][fname] = {
-            "count": len(doc.get("vectors", [])),
+            "count": len(vectors),
             "passed": n_ok,
             "sha256": digest,
         }

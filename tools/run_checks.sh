@@ -298,6 +298,9 @@ echo "== P9-T10/T11: drill matrices (kill matrix + update drill, complete) =="
 echo "== P10-T0-c: mutation freshness (a stale score is a FAIL, not a note) =="
 "$PY" tools/mutation_freshness.py --repo .
 
+echo "== P10-T1: update golden vectors, cross-backend BYTE parity (73 cases) =="
+"$PY" tools/update_vectors_check.py --repo .
+
 echo "== P10-T0-b: kill matrix, hosts-local EXECUTION (the P9 deferral closed) =="
 if bash build/qa/drill/drill_run.sh hosts-local; then :; elif [ $? -eq 77 ]; then
   echo "SKIP: kill matrix hosts-local skipped (g++/make absent) — needed for: executing the kill matrix against the discovered //xr host binaries"

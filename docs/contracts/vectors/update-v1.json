@@ -1,0 +1,1989 @@
+{
+ "cases": [
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "ok",
+    "verdict": "accept"
+   },
+   "id": "verify-accept-newer",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"2.0.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:c4281da0178ad236\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "ok",
+    "verdict": "accept"
+   },
+   "id": "verify-accept-newer-major",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "0.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"0.0.0.1\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:c16e69bb30800dee\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "ok",
+    "verdict": "accept"
+   },
+   "id": "verify-accept-zero-current",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"mirror.example\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:771fa157e1f036e9\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "ok",
+    "verdict": "accept"
+   },
+   "id": "verify-accept-every-word-server-field",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ],
+    "transport": {
+     "peer": "pin-ok",
+     "tls": true
+    }
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "ok",
+    "verdict": "accept"
+   },
+   "id": "verify-tls-good-good",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ],
+    "transport": {
+     "peer": "pin-ok",
+     "tls": false
+    }
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "ok",
+    "verdict": "accept"
+   },
+   "id": "verify-tls-bad-good",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0000000000000000\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ],
+    "transport": {
+     "peer": "pin-ok",
+     "tls": true
+    }
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "signature-invalid",
+    "verdict": "deny"
+   },
+   "id": "verify-tls-good-badsig",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"},\"xrsig\":\"z\"}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "unknown-field",
+    "verdict": "deny"
+   },
+   "id": "verify-unknown-envelope-level",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"extra\":1,\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "unknown-field",
+    "verdict": "deny"
+   },
+   "id": "verify-unknown-response-level",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"tag\":\"x\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "unknown-field",
+    "verdict": "deny"
+   },
+   "id": "verify-unknown-app-level",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"ttl\":5,\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "unknown-field",
+    "verdict": "deny"
+   },
+   "id": "verify-unknown-updatecheck-level",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"restrict\":\"x\",\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "unknown-field",
+    "verdict": "deny"
+   },
+   "id": "verify-unknown-manifest-level",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"hash\":\"x\",\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "unknown-field",
+    "verdict": "deny"
+   },
+   "id": "verify-unknown-packages-level",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"sha1\":\"x\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "unknown-field",
+    "verdict": "deny"
+   },
+   "id": "verify-unknown-package-level",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"region\":\"us\",\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "unknown-field",
+    "verdict": "deny"
+   },
+   "id": "verify-unknown-urls-level",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\",\"scheme\":\"https\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "unknown-field",
+    "verdict": "deny"
+   },
+   "id": "verify-unknown-url-level",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"note\":\"x\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "unknown-field",
+    "verdict": "deny"
+   },
+   "id": "verify-unknown-epoch-level",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"cert\":\"x\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "unknown-field",
+    "verdict": "deny"
+   },
+   "id": "verify-unknown-signature-level",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.0\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "wrong-protocol",
+    "verdict": "deny"
+   },
+   "id": "verify-wrong-protocol",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{not json",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "malformed-manifest",
+    "verdict": "deny"
+   },
+   "id": "verify-malformed-json",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "malformed-manifest",
+    "verdict": "deny"
+   },
+   "id": "verify-empty-doc",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}},{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "malformed-manifest",
+    "verdict": "deny"
+   },
+   "id": "verify-two-apps",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "malformed-manifest",
+    "verdict": "deny"
+   },
+   "id": "verify-missing-appid",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"ed25519-detached\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "malformed-manifest",
+    "verdict": "deny"
+   },
+   "id": "verify-bad-signature-alg",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "oversize",
+    "verdict": "deny"
+   },
+   "id": "verify-oversize",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": ")]}'\n{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "ok",
+    "verdict": "accept"
+   },
+   "id": "verify-safe-prefix-accepted",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"com.other.browser\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "unknown-appid",
+    "verdict": "deny"
+   },
+   "id": "verify-unknown-appid",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"noupdate\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "no-update-offered",
+    "verdict": "deny"
+   },
+   "id": "verify-noupdate",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"error-internal\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "no-update-offered",
+    "verdict": "deny"
+   },
+   "id": "verify-error-status",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:76dd9fe7466a2ba5\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "non-canonical-version",
+    "verdict": "deny"
+   },
+   "id": "verify-three-part-version",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.02.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:e2360adae2c155f5\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "non-canonical-version",
+    "verdict": "deny"
+   },
+   "id": "verify-leading-zero",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:546c0ba29cea8ff7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "non-canonical-version",
+    "verdict": "deny"
+   },
+   "id": "verify-five-part-version",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"one.two\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:356059537edd1f2f\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "non-canonical-version",
+    "verdict": "deny"
+   },
+   "id": "verify-garbage-version",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "malformed-manifest",
+    "verdict": "deny"
+   },
+   "id": "verify-missing-digest",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"abababababababababababababababab\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "bad-digest",
+    "verdict": "deny"
+   },
+   "id": "verify-short-digest",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"http://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "insecure-url",
+    "verdict": "deny"
+   },
+   "id": "verify-insecure-url",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:ffffffffffffffff\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "signature-invalid",
+    "verdict": "deny"
+   },
+   "id": "verify-bad-signature",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "malformed-manifest",
+    "verdict": "deny"
+   },
+   "id": "verify-missing-signature",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-rogue-key\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-rogue-key\",\"sig\":\"sig:fd1be8bbf982baae\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "unknown-signing-key",
+    "verdict": "deny"
+   },
+   "id": "verify-unknown-signing-key",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": true,
+     "revoked": true,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": true,
+    "reason": "epoch-revoked",
+    "verdict": "deny"
+   },
+   "id": "verify-revoked-epoch",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2025-01",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 2
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "epoch-revoked",
+    "verdict": "deny"
+   },
+   "id": "verify-unknown-epoch",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 9
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "epoch-revoked",
+    "verdict": "deny"
+   },
+   "id": "verify-epoch-regression",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-signing-2026-09",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "unknown-signing-key",
+    "verdict": "deny"
+   },
+   "id": "verify-epoch-key-mismatch",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"0.9.9.9\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:72d305d0ee79eda6\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "downgrade-refused",
+    "verdict": "deny"
+   },
+   "id": "verify-downgrade-refused",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.0.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:b41f6a0851dd8181\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "equal-version-reoffer",
+    "verdict": "deny"
+   },
+   "id": "verify-equal-version-reoffer",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.1.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:755dad662fe724a3\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ],
+    "seen": [
+     "e6013c9213f11f99ba2aca6f6fb77289345751538a127fc838f4ac1d3a89d155"
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "replay-refused",
+    "verdict": "deny"
+   },
+   "id": "verify-replay-refused",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.1.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:755dad662fe724a3\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ],
+    "seen": [
+     "0000000000000000000000000000000000000000000000000000000000000000"
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "ok",
+    "verdict": "accept"
+   },
+   "id": "verify-replay-other-id",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "beta",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "test-verifier-refused",
+    "verdict": "deny"
+   },
+   "id": "verify-release-channel-test-verifier-refused",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "stable",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "manual_path": false,
+    "reason": "test-verifier-refused",
+    "verdict": "deny"
+   },
+   "id": "verify-stable-channel-test-verifier-refused",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "current_version": "1.0.0.0",
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "error": "kMalformedInput"
+   },
+   "id": "verify-missing-envelope",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "channel": "dev",
+    "cookie": "track-me",
+    "current_version": "1.0.0.0",
+    "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ]
+   },
+   "expect": {
+    "error": "kMalformedInput"
+   },
+   "id": "verify-unknown-arg",
+   "method": "verify"
+  },
+  {
+   "args": {
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ],
+    "notice": "{\"body\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"reason\":\"key compromise drill\",\"schema\":\"xr-epoch-revocation\",\"schema_version\":1,\"seq\":4},\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:f221a243b7786a68\"}}"
+   },
+   "expect": {
+    "applied": true,
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": true,
+     "revoked": true,
+     "seq": 4
+    }
+   },
+   "id": "epoch-apply-valid",
+   "method": "epoch-apply"
+  },
+  {
+   "args": {
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ],
+    "notice": "{\"body\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"reason\":\"key compromise drill\",\"schema\":\"xr-epoch-revocation\",\"schema_version\":1,\"seq\":1},\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:c362f58dde1ac1fe\"}}"
+   },
+   "expect": {
+    "applied": false,
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    }
+   },
+   "id": "epoch-apply-stale-ignored",
+   "method": "epoch-apply"
+  },
+  {
+   "args": {
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ],
+    "notice": "{\"body\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"reason\":\"key compromise drill\",\"schema\":\"xr-epoch-revocation\",\"schema_version\":1,\"seq\":4},\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0000000000000000\"}}"
+   },
+   "expect": {
+    "error": "kRejected",
+    "reason": "signature-invalid"
+   },
+   "id": "epoch-apply-bad-signature",
+   "method": "epoch-apply"
+  },
+  {
+   "args": {
+    "epoch": {
+     "epoch_id": "epoch-2026-09",
+     "key_id": "xr-root-1",
+     "manual_path": false,
+     "revoked": false,
+     "seq": 3
+    },
+    "keys": [
+     {
+      "key_id": "xr-root-1",
+      "public_key": "ROOT-PUB-KEY"
+     },
+     {
+      "key_id": "xr-signing-2026-09",
+      "public_key": "SIGNING-PUB-KEY"
+     }
+    ],
+    "notice": "{\"body\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"reason\":\"key compromise drill\",\"schema\":\"xr-epoch-revocation\",\"schema_version\":1,\"seq\":4,\"urgent\":true},\"signature\":{\"sig\":\"x\"}}"
+   },
+   "expect": {
+    "detail": "bad notice (unknown-field)",
+    "error": "kMalformedInput"
+   },
+   "id": "epoch-apply-unknown-field",
+   "method": "epoch-apply"
+  },
+  {
+   "args": {
+    "buckets": 100,
+    "channel": "stable",
+    "install_id": "0f3a1c-device-uuid"
+   },
+   "expect": {
+    "bucket": 79
+   },
+   "id": "cohort-deterministic",
+   "method": "cohort"
+  },
+  {
+   "args": {
+    "buckets": 100,
+    "channel": "stable",
+    "install_id": "0f3a1c-device-uuix"
+   },
+   "expect": {
+    "bucket": 41
+   },
+   "id": "cohort-differs-by-install",
+   "method": "cohort"
+  },
+  {
+   "args": {
+    "buckets": 100,
+    "channel": "nightly",
+    "install_id": "0f3a1c-device-uuid"
+   },
+   "expect": {
+    "bucket": 94
+   },
+   "id": "cohort-differs-by-channel",
+   "method": "cohort"
+  },
+  {
+   "args": {
+    "buckets": 0,
+    "channel": "stable",
+    "install_id": "x"
+   },
+   "expect": {
+    "error": "kMalformedInput"
+   },
+   "id": "cohort-bad-buckets",
+   "method": "cohort"
+  },
+  {
+   "args": {
+    "now_mono": 1000,
+    "state": {
+     "fail_streak": 0,
+     "last_check_mono": -1,
+     "next_allowed_mono": 0
+    }
+   },
+   "expect": {
+    "may_check_now": true,
+    "seconds_until_next": 0,
+    "state": {
+     "fail_streak": 0,
+     "last_check_mono": -1,
+     "next_allowed_mono": 0
+    }
+   },
+   "id": "backoff-fresh-may-check",
+   "method": "backoff"
+  },
+  {
+   "args": {
+    "now_mono": 1000,
+    "outcome": "success",
+    "state": {
+     "fail_streak": 0,
+     "last_check_mono": -1,
+     "next_allowed_mono": 0
+    }
+   },
+   "expect": {
+    "may_check_now": false,
+    "seconds_until_next": 21600,
+    "state": {
+     "fail_streak": 0,
+     "last_check_mono": 1000,
+     "next_allowed_mono": 22600
+    }
+   },
+   "id": "backoff-success-6h-floor",
+   "method": "backoff"
+  },
+  {
+   "args": {
+    "now_mono": 100000,
+    "outcome": "failure",
+    "state": {
+     "fail_streak": 2,
+     "last_check_mono": 90000,
+     "next_allowed_mono": 108000
+    }
+   },
+   "expect": {
+    "may_check_now": false,
+    "seconds_until_next": 21600,
+    "state": {
+     "fail_streak": 3,
+     "last_check_mono": 100000,
+     "next_allowed_mono": 121600
+    }
+   },
+   "id": "backoff-failure-doubles",
+   "method": "backoff"
+  },
+  {
+   "args": {
+    "now_mono": 100000,
+    "outcome": "failure",
+    "state": {
+     "fail_streak": 20,
+     "last_check_mono": 90000,
+     "next_allowed_mono": 108000
+    }
+   },
+   "expect": {
+    "may_check_now": false,
+    "seconds_until_next": 172800,
+    "state": {
+     "fail_streak": 21,
+     "last_check_mono": 100000,
+     "next_allowed_mono": 272800
+    }
+   },
+   "id": "backoff-failure-cap-48h",
+   "method": "backoff"
+  },
+  {
+   "args": {
+    "now_mono": 22600,
+    "state": {
+     "fail_streak": 0,
+     "last_check_mono": 1000,
+     "next_allowed_mono": 22600
+    }
+   },
+   "expect": {
+    "may_check_now": true,
+    "seconds_until_next": 0,
+    "state": {
+     "fail_streak": 0,
+     "last_check_mono": 1000,
+     "next_allowed_mono": 22600
+    }
+   },
+   "id": "backoff-clocked-never-goes-backwards",
+   "method": "backoff"
+  },
+  {
+   "args": {
+    "event": "check",
+    "state": "idle"
+   },
+   "expect": {
+    "state": "checking"
+   },
+   "id": "about-state-1-idle-check",
+   "method": "about-state"
+  },
+  {
+   "args": {
+    "event": "offer",
+    "state": "checking"
+   },
+   "expect": {
+    "state": "available"
+   },
+   "id": "about-state-2-checking-offer",
+   "method": "about-state"
+  },
+  {
+   "args": {
+    "event": "noupdate",
+    "state": "checking"
+   },
+   "expect": {
+    "reason": "up to date",
+    "state": "idle"
+   },
+   "id": "about-state-3-checking-noupdate",
+   "method": "about-state"
+  },
+  {
+   "args": {
+    "event": "download-start",
+    "state": "available"
+   },
+   "expect": {
+    "state": "downloading"
+   },
+   "id": "about-state-4-available-download-start",
+   "method": "about-state"
+  },
+  {
+   "args": {
+    "event": "download-done",
+    "state": "downloading"
+   },
+   "expect": {
+    "state": "ready"
+   },
+   "id": "about-state-5-downloading-download-done",
+   "method": "about-state"
+  },
+  {
+   "args": {
+    "event": "error",
+    "state": "checking"
+   },
+   "expect": {
+    "check_again": true,
+    "manual_download": {
+     "path": "xr://about -> manual download"
+    },
+    "reason": "update failed: reason shown with a manual-download path",
+    "state": "failed"
+   },
+   "id": "about-state-6-checking-error",
+   "method": "about-state"
+  },
+  {
+   "args": {
+    "event": "check",
+    "state": "refused"
+   },
+   "expect": {
+    "manual_download": {
+     "path": "xr://about -> manual download"
+    },
+    "reason": "epoch revoked: manual download required",
+    "state": "refused"
+   },
+   "id": "about-state-7-refused-check",
+   "method": "about-state"
+  },
+  {
+   "args": {
+    "event": "epoch-revoked",
+    "state": "idle"
+   },
+   "expect": {
+    "manual_download": {
+     "path": "xr://about -> manual download"
+    },
+    "reason": "epoch revoked: manual download required",
+    "state": "refused"
+   },
+   "id": "about-state-8-idle-epoch-revoked",
+   "method": "about-state"
+  },
+  {
+   "args": {
+    "event": "offer",
+    "state": "idle"
+   },
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown transition"
+   },
+   "id": "about-state-invalid-transition",
+   "method": "about-state"
+  }
+ ],
+ "note": "Golden vectors for the update surface (P10-T1): typed verdict + reason per case; signatures are the TEST-ONLY fixture value; byte-parity runs across update_host (C++) and fakes/update.py via tools/update_vectors_check.py.",
+ "schema": "xr-update-vectors",
+ "schema_version": 1
+}

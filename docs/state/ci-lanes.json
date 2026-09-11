@@ -4,6 +4,7 @@
     "commands",
     "policy",
     "settings",
-    "themes"
+    "themes",
+    "update"
   ]
 }
