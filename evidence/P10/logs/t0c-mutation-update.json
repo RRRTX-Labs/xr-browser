@@ -1,0 +1,53 @@
+{
+ "deny_guard_killed": 35,
+ "deny_guard_mutants": 35,
+ "deny_guard_survivors": 0,
+ "gate": "PASS",
+ "killed": 414,
+ "operators": [
+  "ROR:== -> !=",
+  "ROR:!= -> ==",
+  "ROR:< -> <=",
+  "ROR:<= -> <",
+  "ROR:> -> >=",
+  "ROR:>= -> >",
+  "LOR:&& -> ||",
+  "LOR:|| -> &&",
+  "BOOL:true -> false",
+  "BOOL:false -> true",
+  "AOR:0 -> 1",
+  "AOR:1 -> 2",
+  "AOR:2 -> 3"
+ ],
+ "sampled": false,
+ "score_gate_pct": 95.0,
+ "score_pct": 99.76,
+ "seed": 20260908,
+ "suites": [
+  "test_backoff",
+  "test_cohort",
+  "test_golden_vectors",
+  "test_manifest_strict",
+  "test_monotonic_downgrade",
+  "test_replay",
+  "test_update_host",
+  "test_verify_policy"
+ ],
+ "survived": 1,
+ "survivors": [
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/backoff.cc",
+   "line": 26,
+   "mutated": "  return d >= 0 ? d : 0;",
+   "operator": "ROR:> -> >=",
+   "orig": "  return d > 0 ? d : 0;",
+   "target": "update"
+  }
+ ],
+ "target": "xr-core/update/core/*.cc",
+ "tool": "mutation_test",
+ "total_mutants": 415,
+ "truncated_by_timebox": false
+}

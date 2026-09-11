@@ -1,0 +1,44 @@
+{
+  "contract": "server-version-graph-v1",
+  "contract_version": 1,
+  "note": "P10-T2 living contract: release/server/spec/version-graph.yaml (language-neutral server spec). Consumed by refimpl + Rust deployable. Linear per-channel graph; the head is the only offered entry.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "schema_version", "channels"],
+  "properties": {
+    "schema": {"const": "xr-server-version-graph"},
+    "schema_version": {"const": 1},
+    "channels": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nightly", "beta", "stable"],
+      "properties": {
+        "nightly": {"$ref": "#/defs/channel"},
+        "beta": {"$ref": "#/defs/channel"},
+        "stable": {"$ref": "#/defs/channel"}
+      }
+    }
+  },
+  "defs": {
+    "channel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["head", "ancestors"],
+      "properties": {
+        "head": {"$ref": "#/defs/entry"},
+        "ancestors": {"type": "array"}
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "hash_sha256", "size", "url"],
+      "properties": {
+        "version": {"type": "string"},
+        "hash_sha256": {"type": "string"},
+        "size": {"type": "integer"},
+        "url": {"type": "string"}
+      }
+    }
+  }
+}

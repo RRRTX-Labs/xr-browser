@@ -37,7 +37,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "89bd2ed252cd7b040fc7aeeaeaa874fc4f6c485c"     # xr-core P9-T7: axe-core 4.13.0 dev-dep + npm-allowlist (toolchain)
+xr_core_rev: "c16c9631c13ec46a4b57e144d5f2a5596d8270a7"     # xr-core P10-T1: update verifier core + host + 9 green suites + BUILD.gn
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

@@ -1,0 +1,58 @@
+{
+ "comment": "P10-T0-c/T1: recorded mutation scores per xr-core core. Law: a score is a statement about specific bytes — each record pins the xr-core commit whose core/** the FULL matrix ran against (sampled:false); tools/mutation_freshness.py fails the gate when a core's core/** changes without a fresh transcript. Survivor dispositions are mandatory.",
+ "cores": {
+  "commands": {
+   "killed": 414,
+   "mutants": 414,
+   "score_pct": 100.0,
+   "seed": 20260908,
+   "survivors": [],
+   "transcript": "evidence/P10/logs/t0c-mutation-commands.json",
+   "xr_core_commit": "89bd2ed252cd7b040fc7aeeaeaa874fc4f6c485c"
+  },
+  "policy": {
+   "killed": 777,
+   "mutants": 777,
+   "score_pct": 100.0,
+   "seed": 20260908,
+   "survivors": [],
+   "transcript": "evidence/P10/logs/t0c-mutation-policy.json",
+   "xr_core_commit": "89bd2ed252cd7b040fc7aeeaeaa874fc4f6c485c"
+  },
+  "settings": {
+   "killed": 485,
+   "mutants": 485,
+   "score_pct": 100.0,
+   "seed": 20260908,
+   "survivors": [],
+   "transcript": "evidence/P10/logs/t0c-mutation-settings.json",
+   "xr_core_commit": "89bd2ed252cd7b040fc7aeeaeaa874fc4f6c485c"
+  },
+  "themes": {
+   "killed": 386,
+   "mutants": 386,
+   "score_pct": 100.0,
+   "seed": 20260908,
+   "survivors": [],
+   "transcript": "evidence/P10/logs/t0c-mutation-themes.json",
+   "xr_core_commit": "89bd2ed252cd7b040fc7aeeaeaa874fc4f6c485c"
+  },
+  "update": {
+   "killed": 414,
+   "mutants": 415,
+   "score_pct": 99.76,
+   "seed": 20260911,
+   "survivors": [
+    {
+     "disposition": "equivalent-mutant: update/core/backoff.cc:26 SecondsUntilNextCheck `d > 0 ? d : 0` mutated to `d >= 0` — at d == 0 the mutant returns d, which IS 0; identical behavior for every input (the clamp and its boundary coincide). No test can distinguish it; killing it would require changing the expression, not the behavior.",
+     "id": "core/backoff.cc:26 ROR:> -> >=",
+     "operator": "ROR:> -> >="
+    }
+   ],
+   "transcript": "evidence/P10/logs/t0c-mutation-update.json",
+   "xr_core_commit": "c16c9631c13ec46a4b57e144d5f2a5596d8270a7"
+  }
+ },
+ "schema": "xr-mutation-scores",
+ "schema_version": 1
+}

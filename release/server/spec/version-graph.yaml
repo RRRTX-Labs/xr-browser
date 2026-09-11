@@ -1,0 +1,39 @@
+# release/server/spec/version-graph.yaml — the language-neutral version
+# graph (P10-T2). Consumed by refimpl/update_server_ref.py AND
+# release/server/rust/ (the deployable). Validated by:
+#   tools/xr_schema.py validate server-version-graph <this file>
+schema: xr-server-version-graph
+schema_version: 1
+# The graph is LINEAR per channel (no branches): an entry is either the
+# channel head or an ancestor. The server offers the head; it never offers
+# an ancestor (the client would refuse it as a downgrade anyway — the
+# monotonic law is enforced on both sides).
+channels:
+  nightly:
+    head:
+      version: "0.9.22.1"
+      hash_sha256: "1111111111111111111111111111111111111111111111111111111111111111"
+      size: 88080384
+      url: "https://updates.rrrtx.labs/nightly/xr-0.9.22.1"
+    ancestors:
+      - version: "0.9.21.0"
+        hash_sha256: "2222222222222222222222222222222222222222222222222222222222222222"
+        size: 87920256
+        url: "https://updates.rrrtx.labs/nightly/xr-0.9.21.0"
+  beta:
+    head:
+      version: "0.9.20.5"
+      hash_sha256: "3333333333333333333333333333333333333333333333333333333333333333"
+      size: 88178176
+      url: "https://updates.rrrtx.labs/beta/xr-0.9.20.5"
+    ancestors: []
+  stable:
+    head:
+      version: "0.9.18.2"
+      hash_sha256: "4444444444444444444444444444444444444444444444444444444444444444"
+      size: 88339232
+      url: "https://updates.rrrtx.labs/stable/xr-0.9.18.2"
+    ancestors: []
+  # dev is NOT served: the dev channel updates only from local builds
+  # (dev-only-until-P16-exit gate, channels.yaml). A dev request gets the
+  # typed noupdate path, never a manifest.

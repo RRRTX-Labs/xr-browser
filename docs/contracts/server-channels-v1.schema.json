@@ -1,0 +1,37 @@
+{
+  "contract": "server-channels-v1",
+  "contract_version": 1,
+  "note": "P10-T2 living contract: release/server/spec/channels.yaml (channel semantics: served/paused/ramp + dev-only-until-P16-exit gate).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "schema_version", "channels", "pause_semantics"],
+  "properties": {
+    "schema": {"const": "xr-server-channels"},
+    "schema_version": {"const": 1},
+    "pause_semantics": {"const": "error-pausedChannel"},
+    "channels": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nightly", "beta", "stable", "dev"],
+      "properties": {
+        "nightly": {"$ref": "#/defs/channel"},
+        "beta": {"$ref": "#/defs/channel"},
+        "stable": {"$ref": "#/defs/channel"},
+        "dev": {"$ref": "#/defs/channel"}
+      }
+    }
+  },
+  "defs": {
+    "channel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["served", "paused", "ramp_percent"],
+      "properties": {
+        "served": {"type": "boolean"},
+        "paused": {"type": "boolean"},
+        "ramp_percent": {"type": "integer"},
+        "note": {"type": "string"}
+      }
+    }
+  }
+}

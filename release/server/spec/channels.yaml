@@ -1,0 +1,34 @@
+# release/server/spec/channels.yaml — channel semantics (P10-T2).
+# Validated by: tools/xr_schema.py validate server-channels <this file>
+schema: xr-server-channels
+schema_version: 1
+channels:
+  nightly:
+    served: true
+    paused: false
+    # Dev-adjacent fast lane; cohort ramp at 100% (everyone on nightly gets
+    # the head). dev-only-until-P16-exit applies to the DEV channel only.
+    ramp_percent: 100
+  beta:
+    served: true
+    paused: false
+    # AUTO-ROLLOUT REFUSED until P38 (staged-rollout control plane) exists:
+    # beta/stable percentage ramps are data the drill may exercise, but the
+    # release gate refuses auto-promotion before P38 (enforced in
+    # tools/release_gate.py + rollout/policy.yaml).
+    ramp_percent: 50
+  stable:
+    served: true
+    paused: false
+    ramp_percent: 100
+  dev:
+    served: false
+    paused: false
+    ramp_percent: 0
+    note: >-
+      dev-only-until-P16-exit: the dev channel never receives served
+      manifests (updates ride local builds only). The gate lifts at P16
+      exit — lifting it earlier is a plan amendment, not a YAML edit.
+# A paused served channel answers updatecheck with the typed
+# "error-pausedChannel" status — byte-stable, no manifest, no urls.
+pause_semantics: "error-pausedChannel"

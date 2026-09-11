@@ -1,0 +1,20 @@
+# release/server/spec/cohorts.yaml — cohort bucketing as the SERVER sees
+# it (P10-T2). The bucket itself is computed CLIENT-SIDE from the local
+# install id (update/core/cohort.cc: sha256(install_id || 0x1f || channel)
+# first 8 bytes big-endian mod buckets) — the server never sees the install
+# id on the wire in the offer decision; the client SENDS its bucket, the
+# server compares it against the channel ramp. No server-side personal
+# state exists (the statelessness law, release/server/README.md).
+# Validated by: tools/xr_schema.py validate server-cohorts <this file>
+schema: xr-server-cohorts
+schema_version: 1
+# Canonical bucket space (must match update/core/cohort.cc + cohort vectors)
+buckets: 100
+# Boundary law: in-ramp iff bucket < ramp_percent (bucket 0 is ALWAYS in;
+# bucket == ramp_percent is OUT — the off-by-one the golden vectors pin).
+ramp_law: "in_ramp = bucket < ramp_percent"
+per_channel:
+  nightly: { ramp_percent: 100, boundary_note: "every bucket 0-99 in-ramp" }
+  beta: { ramp_percent: 50, boundary_note: "0-49 in-ramp; 50-99 out" }
+  stable: { ramp_percent: 100, boundary_note: "every bucket in-ramp" }
+  dev: { ramp_percent: 0, boundary_note: "no bucket in-ramp (dev unserved)" }

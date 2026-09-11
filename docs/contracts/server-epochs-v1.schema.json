@@ -1,0 +1,24 @@
+{
+  "contract": "server-epochs-v1",
+  "contract_version": 1,
+  "note": "P10-T2 living contract: release/server/spec/epochs.yaml (the epoch the server signs under + revocation list).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "schema_version", "active", "revoked"],
+  "properties": {
+    "schema": {"const": "xr-server-epochs"},
+    "schema_version": {"const": 1},
+    "stub_key_material_note": {"type": "string"},
+    "active": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["epoch_id", "key_id", "seq"],
+      "properties": {
+        "epoch_id": {"type": "string"},
+        "key_id": {"type": "string"},
+        "seq": {"type": "integer"}
+      }
+    },
+    "revoked": {"type": "array"}
+  }
+}

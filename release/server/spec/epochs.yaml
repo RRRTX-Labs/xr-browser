@@ -1,0 +1,24 @@
+# release/server/spec/epochs.yaml — the epoch the server signs under and
+# the revocation list it honors (P10-T2). A revoked epoch stops receiving
+# offers SERVER-SIDE (typed refusal) AND client-side (epoch-apply +
+# EpochAcceptable). seq is monotonic per epoch; a notice with seq <= the
+# client's current is stale-ignored (the client law).
+# Validated by: tools/xr_schema.py validate server-epochs <this file>
+schema: xr-server-epochs
+schema_version: 1
+active:
+  epoch_id: "epoch-2026-09"
+  key_id: "xr-signing-2026-09"
+  seq: 3
+# Test-ONLY key material (the no-real-keys law, ADR-0004): this stub is the
+# SAME material the client test fixture pins (ROOT-PUB / SIGNING-PUB in
+# xr-core/update/tests/env_helper.h). A production epoch carries HSM-held
+# key material that never enters a repository (HG-36).
+stub_key_material_note: >-
+  SIGNING-PUB is the TEST-ONLY public material of xr-signing-2026-09;
+  the server renders test signatures only in test/self-check mode.
+revoked: []
+# A revoked entry looks like:
+#   - {epoch_id: "epoch-2026-06", key_id: "xr-signing-2026-06",
+#      seq: 7, reason: "key compromise drill",
+#      client_effect: "forced manual path"}

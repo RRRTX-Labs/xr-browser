@@ -1,0 +1,15 @@
+{
+  "contract": "server-cohorts-v1",
+  "contract_version": 1,
+  "note": "P10-T2 living contract: release/server/spec/cohorts.yaml (bucket space + ramp law; the bucket is computed CLIENT-side from the local install id).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "schema_version", "buckets", "ramp_law", "per_channel"],
+  "properties": {
+    "schema": {"const": "xr-server-cohorts"},
+    "schema_version": {"const": 1},
+    "buckets": {"type": "integer"},
+    "ramp_law": {"const": "in_ramp = bucket < ramp_percent"},
+    "per_channel": {"type": "object"}
+  }
+}

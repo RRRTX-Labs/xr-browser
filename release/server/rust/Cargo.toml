@@ -1,0 +1,25 @@
+# xr-updateserver — the deployable XR update server (P10-T2).
+#
+# STD-ONLY, ZERO CRATES (the §research 7 outcome recorded in
+# docs/state/research-log-P10.md): every line compiles against the Rust
+# standard library alone; `#![forbid(unsafe_code)]` is the source-level
+# law. Byte-parity with release/server/refimpl/update_server_ref.py is
+# enforced by tests/conformance.rs on the hosted runner (no cargo in the
+# dev sandbox — that lane is runner-ready, not local-real).
+[package]
+name = "xr-updateserver"
+version = "0.1.0"
+edition = "2021"
+description = "Stateless XR update-check renderer (reference-parity, std-only)"
+license = "MPL-2.0"
+publish = false
+
+[lib]
+name = "xr_updateserver"
+path = "src/lib.rs"
+
+[[bin]]
+name = "xr-updateserver"
+path = "src/main.rs"
+
+# no [dependencies] section — zero crates is the deliverable
