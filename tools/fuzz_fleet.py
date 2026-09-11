@@ -99,14 +99,16 @@ def main(argv: list[str]) -> int:
                                   fleet.get("timebox_gate_s", 60)))
     targets = list(fleet["targets"])
     if not targets:
-        print("FAIL: fuzz_fleet: zero targets (empty-run law)")
+        print("FAIL: fuzz_fleet: zero targets (empty-run law)",
+              file=sys.stderr)
         return EXIT_FAIL
 
     # a corpus dir that was never seeded is the libFuzzer lane's empty-run
     for t in targets:
         if not corpus_is_seeded(repo, t):
             print(f"FAIL: {t['id']}: corpus dir {t['corpus_dir']} is empty "
-                  f"(a libFuzzer lane with no seeds certifies nothing)")
+                  f"(a libFuzzer lane with no seeds certifies nothing)",
+                  file=sys.stderr)
             return EXIT_FAIL
 
     results: list[dict] = []
@@ -114,18 +116,18 @@ def main(argv: list[str]) -> int:
         try:
             results.append(run_target(repo, t, seconds, args.seed))
         except RunnerError as exc:
-            print(f"FAIL: {exc}")
+            print(f"FAIL: {exc}", file=sys.stderr)
             return EXIT_FAIL
         except subprocess.TimeoutExpired:
-            print(f"FAIL: {t['id']} timed out")
+            print(f"FAIL: {t['id']} timed out", file=sys.stderr)
             return EXIT_FAIL
 
     for r in results:
         if r["rc"] != 0:
-            print(f"FAIL: {r['target']} rc={r['rc']}")
+            print(f"FAIL: {r['target']} rc={r['rc']}", file=sys.stderr)
             tail = r["output"].strip().splitlines()[-4:]
             for line in tail:
-                print("  " + line[:160])
+                print("  " + line[:160], file=sys.stderr)
             return EXIT_FAIL
     require_cases(len(results), "fuzz_fleet")
     if args.json:
