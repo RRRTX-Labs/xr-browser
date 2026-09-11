@@ -10224,6 +10224,362 @@
      "key_pin": "ed25519:test",
      "lists": [
       {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": 11,
+       "sha256": "9faacd43c7049e0e48ff6a0d44210ae5a9d7a2de06d0a1462739008a385138f1"
+      }
+     ],
+     "schema_version": 1
+    }
+   },
+   "expect": {
+    "bound": true,
+    "bundle_version": 3,
+    "digest": "4e2a696549d6940e7ff6cc6cdb0cc58da13b1417e1e326e3a695a9fc0a2c3f28",
+    "list_count": 1
+   },
+   "id": "b-check-entry-attribution-ok",
+   "method": "bundle-check"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "||tracker.example^",
+         "id": "r1",
+         "kind": "network"
+        },
+        {
+         "action": "allow",
+         "filter": "||tracker.example^ok.js",
+         "id": "r2",
+         "kind": "network"
+        },
+        {
+         "action": "redirect",
+         "filter": "||ads.example/banner",
+         "id": "r3",
+         "kind": "redirect",
+         "resource": "1x1.gif"
+        },
+        {
+         "action": "block",
+         "domains": [
+          "site.example"
+         ],
+         "filter": "||scoped.example^",
+         "id": "r4",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||wild.example*/ad_*.js",
+         "id": "r5",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "|https://anchor.example/x",
+         "id": "r6",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||exact.example/e|",
+         "id": "r7",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "exclude_domains": [
+          "safe.example"
+         ],
+         "filter": "plain-literal.js",
+         "id": "r8",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "cosmetic.example",
+         "id": "r9",
+         "kind": "cosmetic"
+        },
+        {
+         "action": "block",
+         "filter": "||bare.example|",
+         "id": "r10",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||sep.example^a^b",
+         "id": "r11",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    },
+    "manifest": {
+     "bundle_id": "xr-default-2026-09",
+     "created_epoch": 1780000000,
+     "key_pin": "ed25519:test",
+     "lists": [
+      {
+       "attribution": "MIT",
+       "name": "l1",
+       "rules": 11,
+       "sha256": "9faacd43c7049e0e48ff6a0d44210ae5a9d7a2de06d0a1462739008a385138f1"
+      }
+     ],
+     "schema_version": 1
+    }
+   },
+   "expect": {
+    "error": "kRejected",
+    "reason": "manifest-attribution:l1"
+   },
+   "id": "b-check-entry-attribution-mismatch",
+   "method": "bundle-check"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "||tracker.example^",
+         "id": "r1",
+         "kind": "network"
+        },
+        {
+         "action": "allow",
+         "filter": "||tracker.example^ok.js",
+         "id": "r2",
+         "kind": "network"
+        },
+        {
+         "action": "redirect",
+         "filter": "||ads.example/banner",
+         "id": "r3",
+         "kind": "redirect",
+         "resource": "1x1.gif"
+        },
+        {
+         "action": "block",
+         "domains": [
+          "site.example"
+         ],
+         "filter": "||scoped.example^",
+         "id": "r4",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||wild.example*/ad_*.js",
+         "id": "r5",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "|https://anchor.example/x",
+         "id": "r6",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||exact.example/e|",
+         "id": "r7",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "exclude_domains": [
+          "safe.example"
+         ],
+         "filter": "plain-literal.js",
+         "id": "r8",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "cosmetic.example",
+         "id": "r9",
+         "kind": "cosmetic"
+        },
+        {
+         "action": "block",
+         "filter": "||bare.example|",
+         "id": "r10",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||sep.example^a^b",
+         "id": "r11",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    },
+    "manifest": {
+     "bundle_id": "xr-default-2026-09",
+     "created_epoch": 1780000000,
+     "key_pin": "ed25519:test",
+     "lists": [
+      {
+       "attribution": 5,
+       "name": "l1",
+       "rules": 11,
+       "sha256": "9faacd43c7049e0e48ff6a0d44210ae5a9d7a2de06d0a1462739008a385138f1"
+      }
+     ],
+     "schema_version": 1
+    }
+   },
+   "expect": {
+    "detail": "bad-manifest-entry",
+    "error": "kMalformedInput"
+   },
+   "id": "b-check-entry-attribution-bad-type",
+   "method": "bundle-check"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "||tracker.example^",
+         "id": "r1",
+         "kind": "network"
+        },
+        {
+         "action": "allow",
+         "filter": "||tracker.example^ok.js",
+         "id": "r2",
+         "kind": "network"
+        },
+        {
+         "action": "redirect",
+         "filter": "||ads.example/banner",
+         "id": "r3",
+         "kind": "redirect",
+         "resource": "1x1.gif"
+        },
+        {
+         "action": "block",
+         "domains": [
+          "site.example"
+         ],
+         "filter": "||scoped.example^",
+         "id": "r4",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||wild.example*/ad_*.js",
+         "id": "r5",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "|https://anchor.example/x",
+         "id": "r6",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||exact.example/e|",
+         "id": "r7",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "exclude_domains": [
+          "safe.example"
+         ],
+         "filter": "plain-literal.js",
+         "id": "r8",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "cosmetic.example",
+         "id": "r9",
+         "kind": "cosmetic"
+        },
+        {
+         "action": "block",
+         "filter": "||bare.example|",
+         "id": "r10",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||sep.example^a^b",
+         "id": "r11",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    },
+    "manifest": {
+     "bundle_id": "xr-default-2026-09",
+     "created_epoch": 1780000000,
+     "key_pin": "ed25519:test",
+     "lists": [
+      {
        "name": "l1",
        "rules": 11,
        "sha256": "abc"

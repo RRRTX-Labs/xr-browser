@@ -1,0 +1,7 @@
+[Adblock Plus 2.0]
+! xr-synthetic-hotpin — self-authored synthetic fixture (CC0-1.0) playing
+! the role of a BAD UPSTREAM LIST: v1 of the hot-pin config ships it, v2
+! hot-pins it OUT (absent from the manifest — dropped without any network
+! access), and a re-offered v1 must be refused by the monotonic apply law.
+||badlist.example^
+||bad-cdn.example/tracker.js

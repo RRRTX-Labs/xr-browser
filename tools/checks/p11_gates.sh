@@ -72,3 +72,26 @@ p11_shield_gates() {
     exit 1
   fi
 }
+
+p11_lists_gates() {
+  echo "== P11-T3: xr-lists pipeline (compile vectors + frozen-schema bundle check + signed round-trip) =="
+  # The compile vectors pin every directive class (>=30-case refusal table);
+  # list_bundle_check pins the FROZEN list-bundle-manifest-v1 sha256 (DoD 5:
+  # consumed untouched, comparison reported), validates the golden package
+  # against the schema itself, and --check regenerates the whole package
+  # byte-identical through the real tools; roundtrip.sh runs the REAL gpg
+  # matrix (sign/verify/tamper/wrong-key/absent-SKIP) + the host binding +
+  # hot-pin-out + replay cells (zero executed cells => FAIL, never a pass).
+  "$PY" tools/gen_lists_compile_vectors.py --check
+  "$PY" tools/list_bundle_check.py --check
+  bash xr-lists/tests/roundtrip.sh
+}
+
+p11_phase_gates() {
+  # The single dispatcher entry for the P11 gate battery: run_checks.sh sits
+  # at the 380-line touched-file law ceiling, so future P11 gates extend
+  # THIS function (checks/*.sh), never the dispatcher file itself.
+  p11_hostdoc_gates
+  p11_shield_gates
+  p11_lists_gates
+}

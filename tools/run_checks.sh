@@ -246,8 +246,7 @@ fi
 # request stream and fails on any byte difference (g++ only; SKIPs visibly
 # otherwise). Evidence runs use XR_DIFF_FUZZ_SECONDS=600.
 # ---------------------------------------------------------------------------
-p11_hostdoc_gates
-p11_shield_gates
+p11_phase_gates
 
 echo "== P9-T0-a: parity completeness (every protocol method has corpus cases) =="
 "$PY" tools/parity_completeness.py

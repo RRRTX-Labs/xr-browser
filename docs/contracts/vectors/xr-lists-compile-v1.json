@@ -1,0 +1,1087 @@
+{
+ "cases": [
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "d-000",
+   "input": "[Adblock Plus 2.0]"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "d-001",
+   "input": "! xr-synthetic-default \u2014 self-authored synthetic fixture (CC0-1.0)."
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "d-002",
+   "input": "! Exercises every ACCEPTED directive class of the xr-lists v1 compiler:"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "d-003",
+   "input": "! domain anchor, exception, $domain (include/exclude/mixed), left anchor,"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "d-004",
+   "input": "! right anchor, both-anchor, wildcard pair, separator class, plain"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "d-005",
+   "input": "! literal, collapsed consecutive wildcards, $redirect to a named"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "d-006",
+   "input": "! resource, and the cosmetic classes"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "d-007",
+   "input": "! (block/exception/domain-scoped). No upstream list bytes are in this"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "d-008",
+   "input": "! repo until R6's licensing posture + the fetch ceremony land (README)."
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "block",
+     "filter": "||tracker.example^",
+     "kind": "network"
+    }
+   },
+   "id": "d-009",
+   "input": "||tracker.example^"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "allow",
+     "filter": "||allowed.example^",
+     "kind": "network"
+    }
+   },
+   "id": "d-010",
+   "input": "@@||allowed.example^"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "block",
+     "domains": [
+      "site.example"
+     ],
+     "filter": "||scoped.example^",
+     "kind": "network"
+    }
+   },
+   "id": "d-011",
+   "input": "||scoped.example^$domain=site.example"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "block",
+     "exclude_domains": [
+      "safe.example"
+     ],
+     "filter": "||notscoped.example^",
+     "kind": "network"
+    }
+   },
+   "id": "d-012",
+   "input": "||notscoped.example^$domain=~safe.example"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "block",
+     "domains": [
+      "a.example"
+     ],
+     "exclude_domains": [
+      "b.example"
+     ],
+     "filter": "||mixed.example^",
+     "kind": "network"
+    }
+   },
+   "id": "d-013",
+   "input": "||mixed.example^$domain=a.example|~b.example"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "block",
+     "filter": "|https://anchor.example/exact.js",
+     "kind": "network"
+    }
+   },
+   "id": "d-014",
+   "input": "|https://anchor.example/exact.js"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "block",
+     "filter": "||right.example/path|",
+     "kind": "network"
+    }
+   },
+   "id": "d-015",
+   "input": "||right.example/path|"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "block",
+     "filter": "||exact.example/e|",
+     "kind": "network"
+    }
+   },
+   "id": "d-016",
+   "input": "||exact.example/e|"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "block",
+     "filter": "||wild.example*/ad_*.js",
+     "kind": "network"
+    }
+   },
+   "id": "d-017",
+   "input": "||wild.example*/ad_*.js"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "block",
+     "filter": "||collapsed**wild.example/x",
+     "kind": "network"
+    }
+   },
+   "id": "d-018",
+   "input": "||collapsed**wild.example/x"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "block",
+     "filter": "||sep.example^a^b",
+     "kind": "network"
+    }
+   },
+   "id": "d-019",
+   "input": "||sep.example^a^b"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "block",
+     "filter": "plain-literal.js",
+     "kind": "network"
+    }
+   },
+   "id": "d-020",
+   "input": "plain-literal.js"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "redirect",
+     "filter": "||ads.example/banner",
+     "kind": "redirect",
+     "resource": "1x1.gif"
+    }
+   },
+   "id": "d-021",
+   "input": "||ads.example/banner$redirect=1x1.gif"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "block",
+     "domains": [
+      "example.com"
+     ],
+     "filter": ".banner-box",
+     "kind": "cosmetic"
+    }
+   },
+   "id": "d-022",
+   "input": "example.com##.banner-box"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "block",
+     "domains": [
+      "news.example",
+      "blog.example"
+     ],
+     "filter": "div.ad-class",
+     "kind": "cosmetic"
+    }
+   },
+   "id": "d-023",
+   "input": "news.example,blog.example##div.ad-class"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "allow",
+     "filter": ".allowed-cosmetic",
+     "kind": "cosmetic"
+    }
+   },
+   "id": "d-024",
+   "input": "#@#.allowed-cosmetic"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "block",
+     "domains": [
+      "partner.example"
+     ],
+     "filter": ".sponsored",
+     "kind": "cosmetic"
+    }
+   },
+   "id": "d-025",
+   "input": "partner.example##.sponsored"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "r-000",
+   "input": "[Adblock Plus 2.0]"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "r-001",
+   "input": "! xr-synthetic-refusals \u2014 self-authored synthetic fixture (CC0-1.0)."
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "r-002",
+   "input": "! Every line below MUST produce a typed refusal (never a silent ignore,"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "r-003",
+   "input": "! never a guessed normalization) \u2014 this is the \u226530-case refusal table"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "r-004",
+   "input": "! the P11 brief requires, and the fixture the compile vectors pin."
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "r-005",
+   "input": "! Scriptlet classes (v1 executes NONE \u2014 ADR-0045, docs/shield/scriptlets.md):"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "##+js(set-constant, documentAds, undefined)",
+      "reason": "unsupported-directive:scriptlet"
+     }
+    ]
+   },
+   "id": "r-006",
+   "input": "##+js(set-constant, documentAds, undefined)"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "#%#//scriptlet('prevent-setTimeout', 'showAd')",
+      "reason": "unsupported-directive:scriptlet"
+     }
+    ]
+   },
+   "id": "r-007",
+   "input": "#%#//scriptlet('prevent-setTimeout', 'showAd')"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "#$#abort-on-property-read adFlag",
+      "reason": "unsupported-directive:scriptlet"
+     }
+    ]
+   },
+   "id": "r-008",
+   "input": "#$#abort-on-property-read adFlag"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "r-009",
+   "input": "! Procedural/extended cosmetic (beyond simple selectors):"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "#@?#div:has(.ad-slot)",
+      "reason": "unsupported-directive:procedural-cosmetic"
+     }
+    ]
+   },
+   "id": "r-010",
+   "input": "#@?#div:has(.ad-slot)"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "#?#span:matches-css(color: red)",
+      "reason": "unsupported-directive:procedural-cosmetic"
+     }
+    ]
+   },
+   "id": "r-011",
+   "input": "#?#span:matches-css(color: red)"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "example.com##div:upward(2)",
+      "reason": "unsupported-directive:procedural-cosmetic"
+     }
+    ]
+   },
+   "id": "r-012",
+   "input": "example.com##div:upward(2)"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "r-013",
+   "input": "! Regex filters (the v1 normalized grammar carries no regex):"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "//regex-refused.example/banner.js/",
+      "reason": "unsupported-directive:regex"
+     }
+    ]
+   },
+   "id": "r-014",
+   "input": "//regex-refused.example/banner.js/"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "r-015",
+   "input": "! Unsupported filter options (engine-supported forms only):"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||imp.example^$important",
+      "reason": "unsupported-option:important"
+     }
+    ]
+   },
+   "id": "r-016",
+   "input": "||imp.example^$important"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||tp.example^$third-party",
+      "reason": "unsupported-option:third-party"
+     }
+    ]
+   },
+   "id": "r-017",
+   "input": "||tp.example^$third-party"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||sc.example^$script",
+      "reason": "unsupported-option:script"
+     }
+    ]
+   },
+   "id": "r-018",
+   "input": "||sc.example^$script"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||is.example^$image,stylesheet",
+      "reason": "unsupported-option:image"
+     },
+     {
+      "directive": "||is.example^$image,stylesheet",
+      "reason": "unsupported-option:stylesheet"
+     }
+    ]
+   },
+   "id": "r-019",
+   "input": "||is.example^$image,stylesheet"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||csp.example^$csp=script-src 'none'",
+      "reason": "unsupported-option:csp"
+     }
+    ]
+   },
+   "id": "r-020",
+   "input": "||csp.example^$csp=script-src 'none'"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||rep.example^$replace=/a/b/",
+      "reason": "unsupported-option:replace"
+     }
+    ]
+   },
+   "id": "r-021",
+   "input": "||rep.example^$replace=/a/b/"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||pop.example^$popup",
+      "reason": "unsupported-option:popup"
+     }
+    ]
+   },
+   "id": "r-022",
+   "input": "||pop.example^$popup"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||gh.example^$generichide",
+      "reason": "unsupported-option:generichide"
+     }
+    ]
+   },
+   "id": "r-023",
+   "input": "||gh.example^$generichide"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||gb.example^$genericblock",
+      "reason": "unsupported-option:genericblock"
+     }
+    ]
+   },
+   "id": "r-024",
+   "input": "||gb.example^$genericblock"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||eh.example^$elemhide",
+      "reason": "unsupported-option:elemhide"
+     }
+    ]
+   },
+   "id": "r-025",
+   "input": "||eh.example^$elemhide"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||fp.example^$first-party",
+      "reason": "unsupported-option:first-party"
+     }
+    ]
+   },
+   "id": "r-026",
+   "input": "||fp.example^$first-party"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||unk.example^$totally-unknown-option",
+      "reason": "unsupported-option:totally-unknown-option"
+     }
+    ]
+   },
+   "id": "r-027",
+   "input": "||unk.example^$totally-unknown-option"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||sub.example^$subdocument",
+      "reason": "unsupported-option:subdocument"
+     }
+    ]
+   },
+   "id": "r-028",
+   "input": "||sub.example^$subdocument"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||obj.example^$object",
+      "reason": "unsupported-option:object"
+     }
+    ]
+   },
+   "id": "r-029",
+   "input": "||obj.example^$object"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||ping.example^$ping",
+      "reason": "unsupported-option:ping"
+     }
+    ]
+   },
+   "id": "r-030",
+   "input": "||ping.example^$ping"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||xhr.example^$xmlhttprequest",
+      "reason": "unsupported-option:xmlhttprequest"
+     }
+    ]
+   },
+   "id": "r-031",
+   "input": "||xhr.example^$xmlhttprequest"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||ws.example^$websocket",
+      "reason": "unsupported-option:websocket"
+     }
+    ]
+   },
+   "id": "r-032",
+   "input": "||ws.example^$websocket"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||doc.example^$document",
+      "reason": "unsupported-option:document"
+     }
+    ]
+   },
+   "id": "r-033",
+   "input": "||doc.example^$document"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "r-034",
+   "input": "! Malformed option values:"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||dom-empty.example^$domain=",
+      "reason": "malformed-option:domain"
+     }
+    ]
+   },
+   "id": "r-035",
+   "input": "||dom-empty.example^$domain="
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||bare-dollar.example^$",
+      "reason": "malformed-option:empty-name"
+     }
+    ]
+   },
+   "id": "r-036",
+   "input": "||bare-dollar.example^$"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||redirect-empty.example^$redirect=",
+      "reason": "malformed-option:redirect"
+     }
+    ]
+   },
+   "id": "r-037",
+   "input": "||redirect-empty.example^$redirect="
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "@@||redirect-exc.example^$redirect=1x1.gif",
+      "reason": "unsupported-option-combination:redirect-on-exception"
+     }
+    ]
+   },
+   "id": "r-038",
+   "input": "@@||redirect-exc.example^$redirect=1x1.gif"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "r-039",
+   "input": "! Cosmetic selectors outside the bundle grammar (# and @ are refused"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "r-040",
+   "input": "! characters; the network engine would refuse them at load, so the"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "r-041",
+   "input": "! compiler refuses them HERE \u2014 a compile leak is a bug, not a fallback):"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "##div#main-ad",
+      "reason": "unsupported-directive:cosmetic-hash"
+     }
+    ]
+   },
+   "id": "r-042",
+   "input": "##div#main-ad"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "##.weird@selector",
+      "reason": "unsupported-directive:at-syntax"
+     }
+    ]
+   },
+   "id": "r-043",
+   "input": "##.weird@selector"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "r-044",
+   "input": "! Network filters outside the v1 grammar:"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||interior.example/a|b",
+      "reason": "unsupported-directive:interior-pipe"
+     }
+    ]
+   },
+   "id": "r-045",
+   "input": "||interior.example/a|b"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||",
+      "reason": "empty-filter"
+     }
+    ]
+   },
+   "id": "r-046",
+   "input": "||"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "$domain=x",
+      "reason": "empty-filter"
+     }
+    ]
+   },
+   "id": "r-047",
+   "input": "$domain=x"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "@@",
+      "reason": "empty-filter"
+     }
+    ]
+   },
+   "id": "r-048",
+   "input": "@@"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "r-049",
+   "input": "! uBO preprocessor conditionals (list-level logic is not data):"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "!#if env_chrome",
+      "reason": "unsupported-directive:preprocessor"
+     }
+    ]
+   },
+   "id": "r-050",
+   "input": "!#if env_chrome"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "e-empty",
+   "input": ""
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "e-blank-space",
+   "input": "   "
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "e-comment",
+   "input": "! a plain comment"
+  },
+  {
+   "expect": {
+    "skip": true
+   },
+   "id": "e-header",
+   "input": "[Adblock Plus 2.0]"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "##",
+      "reason": "empty-filter"
+     }
+    ]
+   },
+   "id": "e-cosmetic-marker-only",
+   "input": "##"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "block",
+     "domains": [
+      "a.com"
+     ],
+     "exclude_domains": [
+      "b.com"
+     ],
+     "filter": ".scoped-cosmetic",
+     "kind": "cosmetic"
+    }
+   },
+   "id": "e-cosmetic-domains-mixed",
+   "input": "a.com,~b.com##.scoped-cosmetic"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "a.com,##.broken-scope",
+      "reason": "malformed-option:domain"
+     }
+    ]
+   },
+   "id": "e-cosmetic-scope-malformed",
+   "input": "a.com,##.broken-scope"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||x.example^$domain=a|~",
+      "reason": "malformed-option:domain"
+     }
+    ]
+   },
+   "id": "e-domain-option-trailing-tilde",
+   "input": "||x.example^$domain=a|~"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||x.example^$redirect=r,$popup",
+      "reason": "unsupported-option:$popup"
+     }
+    ]
+   },
+   "id": "e-redirect-plus-refused-option",
+   "input": "||x.example^$redirect=r,$popup"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "redirect",
+     "domains": [
+      "a.example"
+     ],
+     "filter": "||ok.example^",
+     "kind": "redirect",
+     "resource": "1x1.gif"
+    }
+   },
+   "id": "e-redirect-with-domain-ok",
+   "input": "||ok.example^$domain=a.example,redirect=1x1.gif"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "allow",
+     "exclude_domains": [
+      "a.example"
+     ],
+     "filter": "||exc.example^",
+     "kind": "network"
+    }
+   },
+   "id": "e-exception-with-exclude",
+   "input": "@@||exc.example^$domain=~a.example"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "block",
+     "filter": "||both.example/x|",
+     "kind": "network"
+    }
+   },
+   "id": "e-both-anchors",
+   "input": "||both.example/x|"
+  },
+  {
+   "expect": {
+    "rule": {
+     "action": "block",
+     "filter": "*leading-wild.example",
+     "kind": "network"
+    }
+   },
+   "id": "e-leading-wildcard",
+   "input": "*leading-wild.example"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "/regex/",
+      "reason": "unsupported-directive:regex"
+     }
+    ]
+   },
+   "id": "e-regex-bare",
+   "input": "/regex/"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "##.a:has(.b)",
+      "reason": "unsupported-directive:procedural-cosmetic"
+     }
+    ]
+   },
+   "id": "e-procedural-has",
+   "input": "##.a:has(.b)"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "#%#//anything('x')",
+      "reason": "unsupported-directive:scriptlet"
+     }
+    ]
+   },
+   "id": "e-scriptlet-marker",
+   "input": "#%#//anything('x')"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "!#endif",
+      "reason": "unsupported-directive:preprocessor"
+     }
+    ]
+   },
+   "id": "e-preprocessor-endif",
+   "input": "!#endif"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "$",
+      "reason": "malformed-option:empty-name"
+     }
+    ]
+   },
+   "id": "e-dollar-only",
+   "input": "$"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "||dd.example^$a=b$c",
+      "reason": "unsupported-option:a"
+     }
+    ]
+   },
+   "id": "e-double-dollar",
+   "input": "||dd.example^$a=b$c"
+  },
+  {
+   "expect": {
+    "refusals": [
+     {
+      "directive": "a|b",
+      "reason": "unsupported-directive:interior-pipe"
+     }
+    ]
+   },
+   "id": "e-interior-pipe-plain",
+   "input": "a|b"
+  },
+  {
+   "config": "xr-lists/sources/config.json",
+   "expect": {
+    "digest": "427420d01311e2247b0c8a1f7bba4cefcf8eabbbbb7066044fa0861f4fb6fc5c",
+    "list_rule_counts": {
+     "xr-synthetic-default": 17,
+     "xr-synthetic-refusals": 0
+    },
+    "refusal_entries": 37,
+    "refused_lines": 37
+   },
+   "id": "f-config"
+  },
+  {
+   "config": "xr-lists/sources/config-hotpin-v1.json",
+   "expect": {
+    "digest": "592c081b40e68e78f4a14d6e291b3a317f14e408eb929199dc6516af4057de7b",
+    "list_rule_counts": {
+     "xr-synthetic-default": 17,
+     "xr-synthetic-hotpin": 2
+    },
+    "refusal_entries": 0,
+    "refused_lines": 0
+   },
+   "id": "f-config-hotpin-v1"
+  },
+  {
+   "config": "xr-lists/sources/config-hotpin-v2.json",
+   "expect": {
+    "digest": "1e8981da3d706baa34555cd08ce8d3cbb3f521206607b497e585f361c582dc43",
+    "list_rule_counts": {
+     "xr-synthetic-default": 17
+    },
+    "refusal_entries": 0,
+    "refused_lines": 0
+   },
+   "id": "f-config-hotpin-v2"
+  }
+ ],
+ "note": "Compile vectors for the xr-lists pipeline (P11-T3): every case's expect is the real output of xr-lists/compile.py (parse_line for line cases, compile_config + the frozen digest rule for file-level cases). tools/list_bundle_check.py re-enforces the refusal floor and family coverage against this file; the golden package under xr-lists/testdata/ pins the whole-pipeline bytes.",
+ "schema": "xr-lists-compile-vectors",
+ "schema_version": 1
+}

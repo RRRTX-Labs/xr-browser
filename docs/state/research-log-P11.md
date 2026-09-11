@@ -130,6 +130,25 @@ docs/contracts/evidence-bundle-v1.md. All 8 strict bundles pass with the
 three new ci-run rows resolved LIVE (head-match + job-success). Negatives
 70–72 (N=72) + 12 unit tests pin both rules and the ledger law.
 
+## D4. T3 decision — xr-lists/ lands in xr-browser (recorded per the brief's GIT/CHANGE MANAGEMENT note)
+
+The brief allows `xr-lists/` in either repo but demands the choice be
+recorded in `xr-browser/docs/`. **Chosen: xr-browser.** Reasons, in
+weight order: (1) the TEST-ONLY signing channel the pipeline must use
+(`build/signing/linux_repo_sign.py` + `sign_artifact.py`) lives here —
+putting xr-lists in xr-core would make core reach UP into the browser
+repo, inverting the established cross-repo direction (xr-browser tools
+consume `../xr-core`, never the reverse); (2) the brief itself places
+the gate at `tools/list_bundle_check.py`, and `tools/` + the vectors +
+the gate dispatcher + the negative-canary harness are all here; (3)
+xr-core is the `//xr` C++/Rust tree compiled into the browser (its root
+BUILD.gn aggregates compiled targets only) — a Python data pipeline
+would compile into nothing there and would need a fake GN story; (4) the
+only xr-core touchpoints T3 needs are READ-ONLY (the compiled
+`shield_host` binary for the round-trip's binding/hot-pin cells, reached
+through the DEPS pin like every other lane). Full text also in
+`xr-lists/README.md` §"Repo choice".
+
 ## R1. adblock-rust: version, license, advisory state (T1 input)
 
 **VERIFIED (live API reads, 2026-09-11).**
@@ -195,7 +214,53 @@ owe exactly what this entry said before T2.
 
 ## R5. Brave memory work (adblock-rust in production) — UNVERIFIED (T7)
 
-## R6. EasyList licensing (bundle redistribution) — UNVERIFIED (T3)
+## R6. EasyList licensing (bundle redistribution) — VERIFIED live (T3, 2026-09-12)
+
+Live re-read of https://easylist.to/pages/licence.html TODAY (fetch, not
+memory; the repo's `docs/dependencies/easylist-family.yaml` was
+live-verified 2026-09-07 with the same quotes — both agree):
+
+* **Terms**: the EasyList repository contents are dual licensed
+  **GPL-3.0-or-later OR CC-BY-SA-3.0** (user's choice). Quote: "the
+  contents of the EasyList repository (https://github.com/easylist) is
+  dual licensed under the GNU General Public License version 3 of the
+  License, or (at your option) any later version, and Creative Commons
+  Attribution-ShareAlike 3.0 Unported, or (at your option) any later
+  version."
+* **Attribution obligation** (quote): "if required, 'The EasyList
+  authors (https://easylist.to/)' should be attributed as the source of
+  the material. All relevant licence files are included in the
+  repository." → the exact attribution shape our bundle embeds (R6
+  requirement): `EasyList — © The EasyList authors (https://easylist.to/)
+  — GPL-3.0-or-later OR CC-BY-SA-3.0 — https://easylist.to/pages/
+  licence.html` — four " — "-segments, which is precisely the shape law
+  `xr-lists/attribution.py` enforces (name/holders/SPDX/source), so the
+  default-set lists will pass the gate unchanged when they land.
+* **Redistribution posture**: lists are DATA (DR-04 "never linked as
+  code"; easylist-family.yaml use_verdict INTEGRATE-DATA-ONLY) — we
+  redistribute compiled+signed bundles with the attribution sidecar
+  (`LICENSE.attribution.txt`) and the license text obligations riding in
+  the per-list attribution field INSIDE the digest (cannot be stripped
+  without breaking the binding). ShareAlike applies to the DATA we
+  redistribute (the compiled lists remain under the same dual terms; our
+  compiler/tooling is separate code, not a derivative of the data).
+* **The nuance that needs legal eyes (flagged, NOT self-resolved)**:
+  the licence page warns that "files hosted externally and referenced in
+  the repository, including but not limited to subscriptions other than
+  EasyList, EasyPrivacy, EasyList Germany and EasyList Italy, may be
+  available under other conditions; permission must be granted by the
+  respective copyright holders". So the DEFAULT-SET decision (which
+  companion lists ship enabled) is per-list permission work → **HG-1
+  (legal review, still open)** per the brief's instruction; the pipeline
+  itself needs no exemption — attribution is a required, digest-bound
+  field and the shape law rejects lists without it.
+* Disconnect remains excluded (CC BY-NC-SA 4.0, commercial use needs a
+  paid license — easylist-family.yaml, live-verified 2026-09-07; P39
+  business decision, not ours).
+* No upstream list BYTES are in the repo this phase: the pipeline is
+  proven on self-authored CC0 synthetic fixtures (xr-lists/README.md);
+  fetching real lists needs the chokepoint ceremony (ADR-0044 pattern)
+  plus the HG-1 default-set decision first.
 
 ## R7. cargo-vet in a vendored (non-workspace) layout — DECIDED (T1)
 

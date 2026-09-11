@@ -12,8 +12,8 @@ byte-identical-regen law.
 from __future__ import annotations
 
 from shield_vectors_kit import (  # noqa: E402
-    BUNDLE, CTX, GOOD_MANIFEST, MATCH_URLS, SAMPLE_EVENT, STATE_EMPTY, Gen,
-    canonical, ctx, slot, state_v3,
+    BUNDLE, CTX, GOOD_MANIFEST, LIST1, MATCH_URLS, SAMPLE_EVENT, STATE_EMPTY,
+    Gen, canonical, ctx, slot, state_v3,
 )
 
 
@@ -260,6 +260,20 @@ def fam_bundle(g: Gen) -> None:
     g.add("b-check-unknown-entry-key", "bundle-check",
           {"bundle": BUNDLE, "manifest": {**GOOD_MANIFEST, "lists": [
               {**GOOD_MANIFEST["lists"][0], "license": "MIT"}]}})
+    # T3: the frozen schema leaves manifest lists[] entries free-form, so
+    # the attribution pipeline embeds per-list attribution there; the host
+    # accepts it optionally and BINDS it (a manifest may not claim other
+    # attribution than the pinned bytes carry).
+    g.add("b-check-entry-attribution-ok", "bundle-check",
+          {"bundle": BUNDLE, "manifest": {**GOOD_MANIFEST, "lists": [
+              {**GOOD_MANIFEST["lists"][0],
+               "attribution": LIST1["attribution"]}]}})
+    g.add("b-check-entry-attribution-mismatch", "bundle-check",
+          {"bundle": BUNDLE, "manifest": {**GOOD_MANIFEST, "lists": [
+              {**GOOD_MANIFEST["lists"][0], "attribution": "MIT"}]}})
+    g.add("b-check-entry-attribution-bad-type", "bundle-check",
+          {"bundle": BUNDLE, "manifest": {**GOOD_MANIFEST, "lists": [
+              {**GOOD_MANIFEST["lists"][0], "attribution": 5}]}})
     g.add("b-check-bad-sha-length", "bundle-check",
           {"bundle": BUNDLE, "manifest": {**GOOD_MANIFEST, "lists": [
               {**GOOD_MANIFEST["lists"][0], "sha256": "abc"}]}})

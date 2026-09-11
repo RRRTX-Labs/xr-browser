@@ -1,0 +1,26 @@
+[Adblock Plus 2.0]
+! xr-synthetic-default — self-authored synthetic fixture (CC0-1.0).
+! Exercises every ACCEPTED directive class of the xr-lists v1 compiler:
+! domain anchor, exception, $domain (include/exclude/mixed), left anchor,
+! right anchor, both-anchor, wildcard pair, separator class, plain
+! literal, collapsed consecutive wildcards, $redirect to a named
+! resource, and the cosmetic classes
+! (block/exception/domain-scoped). No upstream list bytes are in this
+! repo until R6's licensing posture + the fetch ceremony land (README).
+||tracker.example^
+@@||allowed.example^
+||scoped.example^$domain=site.example
+||notscoped.example^$domain=~safe.example
+||mixed.example^$domain=a.example|~b.example
+|https://anchor.example/exact.js
+||right.example/path|
+||exact.example/e|
+||wild.example*/ad_*.js
+||collapsed**wild.example/x
+||sep.example^a^b
+plain-literal.js
+||ads.example/banner$redirect=1x1.gif
+example.com##.banner-box
+news.example,blog.example##div.ad-class
+#@#.allowed-cosmetic
+partner.example##.sponsored

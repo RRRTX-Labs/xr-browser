@@ -1,0 +1,16 @@
+{
+  "bundle_name": "xr-default",
+  "bundle_version": 1,
+  "lists": [
+    {
+      "name": "xr-synthetic-default",
+      "path": "xr-synthetic-default.txt",
+      "attribution": "xr-synthetic-default — © RRRTX Labs — CC0-1.0 — self-authored synthetic fixture (no upstream list bytes; see xr-lists/README.md)"
+    },
+    {
+      "name": "xr-synthetic-refusals",
+      "path": "xr-synthetic-refusals.txt",
+      "attribution": "xr-synthetic-refusals — © RRRTX Labs — CC0-1.0 — self-authored refusal-coverage fixture (no upstream list bytes; see xr-lists/README.md)"
+    }
+  ]
+}

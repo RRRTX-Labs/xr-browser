@@ -133,13 +133,35 @@ new host and fake. New LIVING contracts registered this phase:
 | Contract | Phase | Files | Review packet | Freeze status |
 |---|---|---|---|---|
 | shield-host-protocol v1 | P11 (T2) | `xr-core/shield/host_protocol.md` (the stdio method table — TWO vocabularies: the frozen mojom envelope for `Status`/`RecentEvents`, the living host surface for `flag-status`/`bundle-load`/`bundle-check`/`match`/`posture`/`apply`; byte-parity-locked against `fakes/shield.py`) | `docs/state/research-log-P11.md` | REVIEW-COMPLETE (ratification: PENDING, HG-26) |
-| xr-list-bundle v1 (normalized bundle doc) | P11 (T2) | the living bundle shape inside `shield-host-protocol v1` (`schema:"xr-list-bundle"`, v1 filter grammar, per-list attribution INSIDE the digest, compiler refusal table); binds to the frozen manifest via `sha256(canonical per-list bytes)` | `docs/state/research-log-P11.md` | LIVING (T3 pipeline compiles to it) |
+| xr-list-bundle v1 (normalized bundle doc) | P11 (T2) | the living bundle shape inside `shield-host-protocol v1` (`schema:"xr-list-bundle"`, v1 filter grammar, per-list attribution INSIDE the digest, compiler refusal table); binds to the frozen manifest via `sha256(canonical per-list bytes)` | `docs/state/research-log-P11.md` | LIVING — T3 pipeline LANDED (`xr-lists/`, this repo; repo choice recorded as research-log D4) |
 
-Byte-law: 157 golden vectors (`docs/contracts/vectors/shield-v1.json`)
+Byte-law: 160 golden vectors (`docs/contracts/vectors/shield-v1.json`;
+157 at T2 + 3 for the T3 manifest-entry `attribution` loosening below)
 replayed against BOTH backends (`tools/shield_vectors_check.py`, wired as
 `p11_shield_gates`) + the compiled-side pin
 (`xr-core/shield/tests/test_golden_vectors.cc`) + the derived parity pair
 (`tools/parity/corpus-shield.json`, every documented method covered).
+
+T3 (pipeline) byte-laws, same shape: 100 compile vectors
+(`docs/contracts/vectors/xr-lists-compile-v1.json` — 47 refusal cases,
+every reachable refusal family covered, ≥30 floor enforced twice: by the
+generator and by `tools/list_bundle_check.py`), the golden package under
+`xr-lists/testdata/` regenerating byte-identical through the real tools
+(`list_bundle_check.py --check`), and the FROZEN
+`list-bundle-manifest-v1` files sha256-pinned inside the check tool with
+the comparison REPORTED every run (DoD 5: consumed untouched). The
+living host grammar grew exactly one field for T3: bundle-check manifest
+entries accept an optional `attribution` string and BIND it
+(`manifest-attribution:<name>` refusal) — the frozen schema leaves
+`lists[]` free-form, so this is the schema-legal home the brief's
+attribution requirement rides in; both backends + vectors moved
+together, parity green. The signed round-trip matrix
+(`xr-lists/tests/roundtrip.sh`, 15 real cells: gpg
+sign/verify/tamper/wrong-key, SKIP-visible absences, release-channel
+refusal, host binding + data-tamper, hot-pin-out without network,
+replay/equal-reoffer refusals) runs under `p11_lists_gates`; the
+scriptlet/advanced-directive refusals are ADR-0045 +
+`docs/shield/scriptlets.md`.
 
 The T3 STOP condition was evaluated and did NOT fire: the frozen
 `list-bundle-manifest-v1` schema leaves `lists[]` items unconstrained

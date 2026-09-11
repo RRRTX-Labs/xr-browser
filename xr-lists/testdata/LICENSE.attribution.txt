@@ -1,0 +1,18 @@
+XR Shield list bundle — attribution sidecar (P11-T3)
+====================================================
+Lists are DATA (DR-04: copyleft list data is never linked as code). Each
+block below is byte-bound to the compiled list via its sha256 (the same
+digest the signed manifest pins). The machine-readable attribution rides
+in the bundle (per-list `attribution`, inside the bundle digest) and in
+the manifest (per-entry `attribution`, bound by the host's bundle-check).
+Shape law: "<list name> — © <rightsholders> — <SPDX> — <source>".
+
+List: xr-synthetic-default
+sha256: 6a335df25c12e91d7701aa97bd07a48f1ca620f03964a3818ad3e9b74f3cf8bc
+rules: 17
+Attribution: xr-synthetic-default — © RRRTX Labs — CC0-1.0 — self-authored synthetic fixture (no upstream list bytes; see xr-lists/README.md)
+
+List: xr-synthetic-refusals
+sha256: 3379301f17c83ca036928f2c3b0a1d81bd5afb01ba39f73c73f29f47c8dd87f5
+rules: 0
+Attribution: xr-synthetic-refusals — © RRRTX Labs — CC0-1.0 — self-authored refusal-coverage fixture (no upstream list bytes; see xr-lists/README.md)

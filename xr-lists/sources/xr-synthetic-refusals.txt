@@ -1,0 +1,51 @@
+[Adblock Plus 2.0]
+! xr-synthetic-refusals — self-authored synthetic fixture (CC0-1.0).
+! Every line below MUST produce a typed refusal (never a silent ignore,
+! never a guessed normalization) — this is the ≥30-case refusal table
+! the P11 brief requires, and the fixture the compile vectors pin.
+! Scriptlet classes (v1 executes NONE — ADR-0045, docs/shield/scriptlets.md):
+##+js(set-constant, documentAds, undefined)
+#%#//scriptlet('prevent-setTimeout', 'showAd')
+#$#abort-on-property-read adFlag
+! Procedural/extended cosmetic (beyond simple selectors):
+#@?#div:has(.ad-slot)
+#?#span:matches-css(color: red)
+example.com##div:upward(2)
+! Regex filters (the v1 normalized grammar carries no regex):
+//regex-refused.example/banner.js/
+! Unsupported filter options (engine-supported forms only):
+||imp.example^$important
+||tp.example^$third-party
+||sc.example^$script
+||is.example^$image,stylesheet
+||csp.example^$csp=script-src 'none'
+||rep.example^$replace=/a/b/
+||pop.example^$popup
+||gh.example^$generichide
+||gb.example^$genericblock
+||eh.example^$elemhide
+||fp.example^$first-party
+||unk.example^$totally-unknown-option
+||sub.example^$subdocument
+||obj.example^$object
+||ping.example^$ping
+||xhr.example^$xmlhttprequest
+||ws.example^$websocket
+||doc.example^$document
+! Malformed option values:
+||dom-empty.example^$domain=
+||bare-dollar.example^$
+||redirect-empty.example^$redirect=
+@@||redirect-exc.example^$redirect=1x1.gif
+! Cosmetic selectors outside the bundle grammar (# and @ are refused
+! characters; the network engine would refuse them at load, so the
+! compiler refuses them HERE — a compile leak is a bug, not a fallback):
+##div#main-ad
+##.weird@selector
+! Network filters outside the v1 grammar:
+||interior.example/a|b
+||
+$domain=x
+@@
+! uBO preprocessor conditionals (list-level logic is not data):
+!#if env_chrome

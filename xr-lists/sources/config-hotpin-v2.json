@@ -1,0 +1,11 @@
+{
+  "bundle_name": "xr-default",
+  "bundle_version": 2,
+  "lists": [
+    {
+      "name": "xr-synthetic-default",
+      "path": "xr-synthetic-default.txt",
+      "attribution": "xr-synthetic-default — © RRRTX Labs — CC0-1.0 — self-authored synthetic fixture (no upstream list bytes; see xr-lists/README.md)"
+    }
+  ]
+}

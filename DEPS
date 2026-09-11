@@ -44,7 +44,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "5a767bdcc3edb28f6cd76239410cbb8951e57a9f"     # xr-core P11-T2: the shield decision core (std-only C++20 + posture law + stdio host + hosted-lane FFI shim skeleton)
+xr_core_rev: "51e6333e3f303b9f52926068d1c7744ba6723720"     # xr-core P11-T3: bundle-check entry attribution (the frozen-schema-legal field the list pipeline embeds)
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"
