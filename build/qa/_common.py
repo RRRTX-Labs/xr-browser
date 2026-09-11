@@ -144,3 +144,34 @@ def xr_core_root() -> Path:
     if not (cand / ".git").exists() and not (cand / "README.md").exists():
         raise RunnerError(f"no xr-core sibling checkout at {cand}")
     return cand
+
+
+# --- bare-name collision union (P10) -------------------------------------
+# The build/*/ kits are all importable as the bare name `_common`; whichever
+# copy binds first in a shared interpreter (pytest collection) must carry the
+# UNION of the kit APIs, or the other kit's importers break (observed:
+# branding's `from _common import ToolError` died on build/qa's copy). Load
+# the SIBLING kit by explicit path and re-export the names this file lacks.
+def _xr_union_sibling_kit() -> None:  # noqa: D401 - module-level side import
+    import importlib.util as _ilu
+    _sib = Path(__file__).resolve().parent.parent / "_common.py"
+    if not _sib.exists() or _sib.resolve() == Path(__file__).resolve():
+        return
+    _spec = _ilu.spec_from_file_location("_xr_build_common_sibling", _sib)
+    if _spec is None or _spec.loader is None:
+        return
+    _mod = _ilu.module_from_spec(_spec)
+    try:
+        _spec.loader.exec_module(_mod)
+    except Exception:
+        return  # a broken sibling must not break THIS kit's importers
+    import builtins as _bi
+    for _nm in dir(_mod):
+        if _nm.startswith("_"):
+            continue
+        if _nm not in globals():
+            globals()[_nm] = getattr(_mod, _nm)  # noqa: PLC0206 - union export
+    del _bi
+
+
+_xr_union_sibling_kit()
