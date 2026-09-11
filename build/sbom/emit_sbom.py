@@ -62,7 +62,16 @@ def cargo_components(path: Path | None) -> list[dict]:
     except Exception:
         return []  # empty-tolerant: missing/invalid cargo metadata yields zero components
     pkgs = data.get("packages") if isinstance(data, dict) else []
-    return [{"name": p["name"], "version": p["version"]} for p in pkgs if isinstance(p, dict)]
+    out = []
+    for p in pkgs:
+        if not isinstance(p, dict):
+            continue
+        comp = {"name": p["name"], "version": p["version"]}
+        lic = p.get("license")
+        if isinstance(lic, str) and lic.strip():
+            comp["licenses"] = [{"license": {"name": lic.strip()}}]
+        out.append(comp)
+    return out
 
 
 def build_sbom(version: dict, argset: str, targets: list[str], tp: list[dict], cargo: list[dict]) -> dict:
@@ -75,7 +84,7 @@ def build_sbom(version: dict, argset: str, targets: list[str], tp: list[dict], c
                            "licenses": [{"license": {"name": "NOASSERTION"}}]})
     for c in cargo:
         components.append({"type": "library", "name": c["name"], "version": c["version"],
-                           "licenses": [{"license": {"name": "NOASSERTION"}}]})
+                           "licenses": c.get("licenses") or [{"license": {"name": "NOASSERTION"}}]})
     components.sort(key=lambda c: c["name"])
     digest = hashlib.sha256(json.dumps(components, sort_keys=True).encode()).hexdigest()
     serial = str(uuid.uuid5(NS, digest))

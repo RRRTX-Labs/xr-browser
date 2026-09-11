@@ -1,0 +1,2 @@
+license report: 18 dependency eval(s) (1 rejected-and-not-shipped; 0 unknown-license: none)
+PASS: license-report (18 entries; every dependency eval represented; unknown-license law clean)
