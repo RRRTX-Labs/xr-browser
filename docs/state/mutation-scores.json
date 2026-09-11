@@ -1,14 +1,15 @@
 {
- "comment": "P10-T0-c/T1: recorded mutation scores per xr-core core. Law: a score is a statement about specific bytes — each record pins the xr-core commit whose core/** the FULL matrix ran against (sampled:false); tools/mutation_freshness.py fails the gate when a core's core/** changes without a fresh transcript. Survivor dispositions are mandatory.",
+ "comment": "P10-T0-c/T1: recorded mutation scores per xr-core core. Law: a score is a statement about specific bytes \u2014 each record pins the xr-core commit whose core/** the FULL matrix ran against (sampled:false); tools/mutation_freshness.py fails the gate when a core's core/** changes without a fresh transcript. Survivor dispositions are mandatory.",
  "cores": {
   "commands": {
    "killed": 414,
    "mutants": 414,
+   "note": "re-run at e2566bb after roster_v1.json grew (+3 About commands); the matrix mutates commands/core/*.cc (data file unchanged mutant set), suites incl. test_host@23",
    "score_pct": 100.0,
-   "seed": 20260908,
+   "seed": 20260911,
    "survivors": [],
    "transcript": "evidence/P10/logs/t0c-mutation-commands.json",
-   "xr_core_commit": "89bd2ed252cd7b040fc7aeeaeaa874fc4f6c485c"
+   "xr_core_commit": "e2566bb914853751cc0328e0f879ef0a4e5c946a"
   },
   "policy": {
    "killed": 777,
@@ -44,7 +45,7 @@
    "seed": 20260911,
    "survivors": [
     {
-     "disposition": "equivalent-mutant: update/core/backoff.cc:26 SecondsUntilNextCheck `d > 0 ? d : 0` mutated to `d >= 0` — at d == 0 the mutant returns d, which IS 0; identical behavior for every input (the clamp and its boundary coincide). No test can distinguish it; killing it would require changing the expression, not the behavior.",
+     "disposition": "equivalent-mutant: update/core/backoff.cc:26 SecondsUntilNextCheck `d > 0 ? d : 0` mutated to `d >= 0` \u2014 at d == 0 the mutant returns d, which IS 0; identical behavior for every input (the clamp and its boundary coincide). No test can distinguish it; killing it would require changing the expression, not the behavior.",
      "id": "core/backoff.cc:26 ROR:> -> >=",
      "operator": "ROR:> -> >="
     }

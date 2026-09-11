@@ -302,7 +302,7 @@ pub fn escape_str(s: &str) -> String {
             '\t' => out.push_str("\\t"),
             '\u{0008}' => out.push_str("\\b"),
             '\u{000C}' => out.push_str("\\f"),
-            c if cp < 0x20 || cp > 0x7E => {
+            _c if cp < 0x20 || cp > 0x7E => {
                 if cp > 0xFFFF {
                     let v = cp - 0x10000;
                     let _ = write!(out, "\\u{:04x}\\u{:04x}",
@@ -356,6 +356,13 @@ pub fn get<'a>(v: &'a Value, key: &str) -> Option<&'a Value> {
 pub fn as_str<'a>(v: &'a Value) -> Option<&'a str> {
     match v {
         Value::Str(s) => Some(s),
+        _ => None,
+    }
+}
+
+fn as_bool(v: &Value) -> Option<bool> {
+    match v {
+        Value::Bool(b) => Some(*b),
         _ => None,
     }
 }
@@ -476,8 +483,10 @@ pub fn stub_sig(material: &str, message: &str) -> String {
     buf.push(b'|');
     buf.extend_from_slice(message.as_bytes());
     let digest = sha256(&buf);
-    let mut hex = String::with_capacity(32);
-    for byte in digest.iter().take(16) {
+    // law: "sig:" + sha256(material + "|" + canonical)[:16] — the first
+    // 16 HEX chars (= 8 bytes), matching the Python reference exactly
+    let mut hex = String::with_capacity(16);
+    for byte in digest.iter().take(8) {
         let _ = write!(hex, "{:02x}", byte);
     }
     format!("sig:{}", hex)
@@ -779,7 +788,7 @@ pub fn handle(frame: &[u8], spec: &Value,
     let envelope = Value::Obj(vec![
         ("epoch".to_string(), Value::Obj(vec![
             ("epoch_id".to_string(), Value::Str(active_id)),
-            ("key_id".to_string(), Value::Str(active_key)),
+            ("key_id".to_string(), Value::Str(active_key.clone())),
             ("seq".to_string(), Value::Num(active_seq.to_string())),
         ])),
         ("response".to_string(), response),

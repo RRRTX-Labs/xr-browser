@@ -55,6 +55,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Checkout xr-core at the DEPS pin
+        run: |
+          XR_CORE_REV="$(sed -n 's/^xr_core_rev: "\([0-9a-f]\{40\}\)".*/\1/p' DEPS)"
+          git clone --quiet https://github.com/RRRTX-Labs/xr-core.git ../xr-core
+          git -C ../xr-core checkout --quiet "$XR_CORE_REV"
       - name: Mutation freshness gate
         run: |
           python3 tools/mutation_freshness.py --repo .
@@ -223,6 +228,8 @@ jobs:
           XR_CORE_REV="$(sed -n 's/^xr_core_rev: "\([0-9a-f]\{40\}\)".*/\1/p' DEPS)"
           git clone --quiet https://github.com/RRRTX-Labs/xr-core.git ../xr-core
           git -C ../xr-core checkout --quiet "$XR_CORE_REV"
+      - name: Install pinned PyYAML (hosted python carries none; tools/DEPS.md pin)
+        run: python3 -m pip install --quiet pyyaml==6.0.3
       - name: Fuzz fleet timebox (600 s, all four cores)
         run: |
           python3 tools/fuzz_fleet.py --repo . --timebox 600 --seed 20260911 --json \

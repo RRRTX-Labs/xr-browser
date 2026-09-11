@@ -126,17 +126,20 @@ the Rust lane is runner-ready and proves itself hosted.
 
 ## 8. Runner capabilities (ubuntu-latest cargo/rustc/go)
 
-**UNVERIFIED until the first hosted run of this phase (the probe is
-queued; the transcript lands in `evidence/P10/logs/` with the printed
-tool versions).** The P10 brief requires confirming from an ACTUAL run,
-not belief; this log records the honest state: the workflows
-(`.github/workflows/core-hardening.yml` mutation/fuzz lanes) pin
-`actions/checkout@11d5960…` / `setup-python@a26af69…` (same pins as
-P9's governance), and the Rust conformance lane is written to print
-`cargo --version`/`rustc --version` then run `cargo test` (SKIP-visible
-with the reason if absent — never a fake green). If the run shows the
-toolchain missing, the debt is recorded here and the lane keeps skipping
-visibly (failure condition 7 honored).
+**VERIFIED for cargo/rustc by an ACTUAL run (2026-09-11):**
+`core-hardening` run 34604887643, job server-conformance (103280790981),
+step output — `cargo 1.98.1 (797e8a9bc 2026-08-05)`,
+`rustc 1.98.1 (48a229cea 2026-09-01)` (transcript:
+`evidence/P10/logs/research8-runner-probe.txt`). The same run ANSWERED
+two more capability facts honestly: ubuntu-latest python carries **no
+PyYAML** (the fuzz-fleet lane failed with ModuleNotFoundError and now
+pins `pyyaml==6.0.3` explicitly), and the freshness job needed its
+xr-core checkout step (fixed). `go` remains **UNOBSERVED** (no Go surface
+exists in P10; no lane printed a go version — not asserted). The
+blind-written Rust deployable needed exactly the first-compile fixes the
+no-local-toolchain rule predicted; the committed corpus caught them
+locally once a toolchain was present (rustc 1.85 via apt: 51/51
+byte-identical).
 
 ## 9. Signing-key custody (HSM/KMS options, unfunded-team class)
 

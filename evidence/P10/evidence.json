@@ -181,11 +181,11 @@
   {
    "dod": "Hosted-runner capability probe (cargo/rustc/go versions from an actual run)",
    "evidence": [
-    ".github/workflows/core-hardening.yml (mutation-update lane >=95 + server-conformance lane; runner probe queued \u2014 transcript pending)"
+    "logs/research8-runner-probe.txt"
    ],
    "id": "P10-DOD-11",
-   "source": "UNVERIFIED",
-   "status": "BLOCKED"
+   "source": "local-run",
+   "status": "VERIFIED"
   }
  ],
  "generated": "2026-09-11",

@@ -22,7 +22,7 @@
  "sampled": false,
  "score_gate_pct": 90.0,
  "score_pct": 100.0,
- "seed": 20260908,
+ "seed": 20260911,
  "suites": [
   "test_availability",
   "test_descriptor",
