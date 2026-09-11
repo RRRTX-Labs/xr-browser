@@ -1,0 +1,13 @@
+== rollout/rollback drill (update_host + reference server; store /tmp/tmp7h2c3o3l) ==
+  [ok] serve+accept
+  [ok] refuse-downgrade
+  [ok] replay-refusal
+  [ok] ramp-boundary-49-in
+  [ok] ramp-boundary-50-out
+  [ok] epoch-revocation-applied
+  [ok] revocation-forces-manual-path
+  [ok] stale-notice-ignored
+  [ok] auto-rollout-refused-until-p38
+  [ok] crash-hook-dev-only
+cells executed: 10 / not-run: 0
+PASS: rollout drill (serve/accept, downgrade+replay refusals, ramp boundaries, epoch revocation -> forced manual path, stale ignored, auto-rollout refused until P38, dev-only hook)

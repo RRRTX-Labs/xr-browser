@@ -1,0 +1,47 @@
+# release/rollout/policy.yaml — staged rollout policy as DATA (P10-T5).
+# The drill (tools/rollout_drill.py) executes this against the reference
+# server + the real verifier core. beta/stable AUTO-rollout is REFUSED
+# until P38 (the staged-rollout control plane) exists — enforced here in
+# data (auto_rollout.until), in code (tools/release_gate.py + the drill's
+# refusal cell), and by a test (the drill's negative fixture).
+schema: xr-rollout-policy
+schema_version: 1
+channels:
+  nightly:
+    steps: [{percent: 100, hold_hours: 0}]
+    ceiling_percent: 100
+    auto_rollout: true
+  beta:
+    steps:
+      - {percent: 5,  hold_hours: 24, pause_point: true}
+      - {percent: 25, hold_hours: 48, pause_point: true}
+      - {percent: 50, hold_hours: 72, pause_point: true}
+    ceiling_percent: 50        # beta never exceeds 50% on any step today
+    auto_rollout: false        # REFUSED until P38 (see below)
+  stable:
+    steps:
+      - {percent: 1,  hold_hours: 72, pause_point: true}
+      - {percent: 10, hold_hours: 72, pause_point: true}
+      - {percent: 50, hold_hours: 96, pause_point: true}
+    ceiling_percent: 100
+    auto_rollout: false        # REFUSED until P38 (see below)
+# THE DECISION (research log item 6): the crash-rate hook consumes P38's
+# telemetry contract, which does not exist. Until then:
+#   * auto-halt is DISABLED (no-auto-halt): an absent input must not be
+#     read as "healthy" (that would be telemetry by assumption) — a ramp
+#     pause point simply REQUIRES a human step (the halt-on-unknown
+#     question is moot while every advance is manual).
+#   * the interface below is the seam P38 plugs into: crash_hook receives
+#     {channel, window_hours, crash_rate} and returns HALT|CONTINUE; the
+#     dev-only assertion refuses any call that is not on a dev channel.
+crash_hook:
+  contract: "P38 telemetry contract (does not exist yet)"
+  until_p38: "no-auto-halt; every pause_point needs a human advance"
+  channels_allowed: ["dev"]   # dev-only assertion; nightly-test+ refused
+  on_absent_input: "no-auto-halt (explicitly NOT halt-on-unknown; see research log item 6 rationale)"
+# AUTO-ROLLOUT REFUSAL (the plan's law): beta/stable auto-promotion is
+# refused until P38 exists — the gate (tools/release_gate.py) and the
+# drill both refuse, and this data block is what they read.
+auto_rollout:
+  beta: {enabled: false, until: P38, reason: "staged-rollout control plane is a P38 deliverable"}
+  stable: {enabled: false, until: P38, reason: "stable promotion is a human act; automation arrives with P38"}
