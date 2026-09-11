@@ -1,0 +1,2 @@
+leaktest: 30 probe x state cells executed, 0 leak(s)
+PASS: leaktest (loopback)

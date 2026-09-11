@@ -60,18 +60,29 @@ ALLOW_SUBSTRINGS = (
     "ROOT-PUB", "SIGNING-PUB", "sig:",  # stub fixture scheme (public data)
     "AKIAIOSFODNN7EXAMPLE",  # the AWS docs' own public example, if cited
     "tools/secret_scan.py",
+    # the negative fixture's PLANTED key is the gate's own test data: a
+    # fixed placeholder blob (35 non-derivable bytes, never used as
+    # material) quoted by tools/negatives/p10_release.sh to prove the
+    # scan reddens. File-scoped allowlist, exact-path match below.
+    "tools/negatives/p10_release.sh",
 )
 
 SKIP_DIRS = {".git", "node_modules", "__pycache__", ".venv", "out", "build"}
 
 
 def repo_files(repo: Path) -> list[Path]:
-    """Tracked + untracked-but-not-ignored files (what a commit carries)."""
+    """Tracked + untracked-but-not-ignored files (what a commit carries).
+    A non-git root (negative fixtures) falls back to a directory walk."""
     r = subprocess.run(
         ["git", "-C", str(repo), "ls-files", "--cached", "--others",
          "--exclude-standard"], capture_output=True, text=True)
     if r.returncode != 0:
-        raise SystemExit(f"FAIL: git ls-files in {repo}: {r.stderr[:160]}")
+        out = []
+        for p in repo.rglob("*"):
+            if p.is_file() and not any(part in SKIP_DIRS
+                                       for part in p.parts):
+                out.append(p)
+        return out
     out = []
     for line in r.stdout.splitlines():
         p = repo / line
@@ -82,8 +93,12 @@ def repo_files(repo: Path) -> list[Path]:
 
 def scan(repos: list[Path]) -> list[str]:
     hits: list[str] = []
+    seen: set[Path] = set()
     for repo in repos:
         for path in repo_files(repo):
+            if path in seen:
+                continue  # --repo X --also X must not double-count
+            seen.add(path)
             if path.name == "secret_scan.py":
                 continue  # the defense lives in code: this file QUOTES the
                 # shapes it matches (the precise pattern-vs-secret line)
@@ -91,6 +106,13 @@ def scan(repos: list[Path]) -> list[str]:
                 text = path.read_text(encoding="utf-8", errors="replace")
             except OSError:
                 continue
+            planted_fixture = (
+                str(path).endswith("tools/negatives/p10_release.sh")
+                and "MC4CAQAwBQYDK2VwBCIEIK9FaBqPpXq0v00A"
+                    "BVGdDaa6gfgckWKJUTgKqXvI8abc" in text)
+            if planted_fixture and path.name == "p10_release.sh":
+                continue  # the negative fixture QUOTES a placeholder key to
+                # prove the scan reddens — exact-blob file-scoped exemption
             for name, pat in PATTERNS:
                 for m in pat.finditer(text):
                     frag = m.group(0)

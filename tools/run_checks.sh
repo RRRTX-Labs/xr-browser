@@ -337,6 +337,19 @@ fi
 echo "== P10-T7: license report + unknown-license-fails-build law =="
 "$PY" build/sbom/license_report.py
 
+echo "== P10-T9: release gate (dev green on synthetic; beta/stable MUST fail closed) =="
+"$PY" tools/release_gate.py check --channel dev --artifact work/release-check/synthetic-artifact.bin
+if "$PY" tools/release_gate.py check --channel beta >/dev/null 2>&1; then
+  echo "FAIL: release check --channel beta PASSED without credentials — the gate is broken"; exit 1
+else
+  echo "ok: release check --channel beta exits non-zero (fail-closed, missing items enumerated)"
+fi
+if "$PY" tools/release_gate.py check --channel stable >/dev/null 2>&1; then
+  echo "FAIL: release check --channel stable PASSED without credentials — the gate is broken"; exit 1
+else
+  echo "ok: release check --channel stable exits non-zero (fail-closed, missing items enumerated)"
+fi
+
 echo "== P10-T0-b: kill matrix, hosts-local EXECUTION (the P9 deferral closed) =="
 if bash build/qa/drill/drill_run.sh hosts-local; then :; elif [ $? -eq 77 ]; then
   echo "SKIP: kill matrix hosts-local skipped (g++/make absent) — needed for: executing the kill matrix against the discovered //xr host binaries"

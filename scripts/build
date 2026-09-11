@@ -46,6 +46,7 @@ SUBCOMMANDS: dict[str, str] = {
     "retire": "upstream/retirements.py",
     "fork-health": "upstream/fork_health.py",
     "spike": "spike/spike.py",
+    "release": "../tools/release_gate.py",
     "workflow-lint": "workflow_lint.py",
     "contracts": "contracts.py",
     "test": None,  # special: pytest runner, handled below
@@ -73,6 +74,7 @@ USAGE_NOTES = {
     "retire": "seam-retirement ledger (P3-T7)",
     "fork-health": "fork-health headline chart → docs/state/fork-health.md (P3-T7)",
     "spike": "identity-seam spike kit: genpatch / citation-audit / census-lint / probe",
+    "release": "release check --channel <dev|nightly-test|beta|stable> — the release gate (P10-T9; beta/stable fail-closed here)",
     "workflow-lint": "lint .github/workflows expressions + schema (actionlint when installed)",
     "contracts": "P5 contract-freeze gates: manifest|lint|vectors|freeze|all",
     "test": "run the pytest suites (tools/tests + build/**/tests + docs/contracts/tests)",

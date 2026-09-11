@@ -113,3 +113,11 @@ case_ceremony_missing_marker() {
     "$PY" tools/ceremony_check.py --keys-dir "$D"
 }
 neg_register ceremony_missing_marker
+
+# --- 55. release gate: an unsigned artifact on a release channel is RED ----
+case_release_gate_unsigned_beta() {
+  neg_expect_reject "release_gate: beta without provider attestation/leak is RED" \
+    "release check --channel beta" \
+    "$PY" tools/release_gate.py check --channel beta
+}
+neg_register release_gate_unsigned_beta
