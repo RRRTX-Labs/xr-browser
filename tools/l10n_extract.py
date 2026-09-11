@@ -255,6 +255,11 @@ def _scan_ts(path: Path, findings: list[dict]) -> None:
     for val, ctx in _quote_literals(code):
         if not re.search(r"[A-Za-z]", val):
             continue
+        if re.search(r"(?:===|!==|==|!=)\s*$", ctx.strip()):
+            # wire-sentinel comparison (e.g. signature_status === 'not
+            # signed: dev channel'): a host-wire VALUE the view maps to
+            # an id — code-domain, never rendered as-is (R4 intent)
+            continue
         if re.search(r"(?:textContent|innerText)\s*(?:=|\+=)\s*['\"]?$",
                      ctx, flags=re.M) and "textContent|innerText" not in val:
             if re.search(r"textContent|innerText", ctx):

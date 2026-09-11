@@ -58,3 +58,21 @@ help.status-enabled	IDS_XR_HELP_STATUS_ENABLED	‏«éñábléd ē»
 help.status-disabled	IDS_XR_HELP_STATUS_DISABLED	‏«dîsábléd —  ēxð{REASON}»
 help.empty	IDS_XR_HELP_EMPTY	‏«Nõ çõmmáñds (régîstry flág õff). ēxðañd ēxða»
 help.no-entry	IDS_XR_HELP_NO_ENTRY	‏«Nõ hélp éñtry fõr “ ēxðañd{ID}”.»
+about.heading	IDS_XR_ABOUT_HEADING	‏«Abõût XR ēx»
+about.version	IDS_XR_ABOUT_VERSION	‏«Vérsîõñ ē»
+about.chromium-base	IDS_XR_ABOUT_CHROMIUM_BASE	‏«Chrõmîûm básé  ēxða{CHROMIUM_REV}»
+about.build-hash	IDS_XR_ABOUT_BUILD_HASH	‏«Bûîld ē»
+about.signature-status	IDS_XR_ABOUT_SIGNATURE_STATUS	‏«Sîgñátûré ēx»
+about.not-signed-dev-channel	IDS_XR_ABOUT_NOT_SIGNED_DEV_CHANNEL	‏«ñõt sîgñéd: dév çháññél ēxðañd ē»
+about.rollback	IDS_XR_ABOUT_ROLLBACK	‏«Rõllbáçk áváîláblé ēxðañd»
+about.update-heading	IDS_XR_ABOUT_UPDATE_HEADING	‏«Updátés ē»
+about.check-now	IDS_XR_ABOUT_CHECK_NOW	‏«Chéçk fõr ûpdátés ēxðañ»
+about.state-idle	IDS_XR_ABOUT_STATE_IDLE	‏«Up tõ dáté ēxð»
+about.state-checking	IDS_XR_ABOUT_STATE_CHECKING	‏«Chéçkîñg fõr ûpdátés… ēxðañd »
+about.state-available	IDS_XR_ABOUT_STATE_AVAILABLE	‏«Añ ûpdáté îs áváîláblé ēxðañd »
+about.state-downloading	IDS_XR_ABOUT_STATE_DOWNLOADING	‏«Dõwñlõádîñg ûpdáté… ēxðañd»
+about.state-ready	IDS_XR_ABOUT_STATE_READY	‏«Updáté réády tõ ápply ēxðañd »
+about.state-failed	IDS_XR_ABOUT_STATE_FAILED	‏«Updáté fáîléd:  ēxðañ{REASON}»
+about.state-refused	IDS_XR_ABOUT_STATE_REFUSED	‏«Updáté réfûséd:  ēxðañ{REASON}»
+about.manual-download	IDS_XR_ABOUT_MANUAL_DOWNLOAD	‏«Yõû çáñ dõwñlõád thé látést vérsîõñ máñûálly: xr://ábõût → máñûál dõwñlõád ēxðañd ēxðañd ēxðañd ēxðañd »
+about.check-again	IDS_XR_ABOUT_CHECK_AGAIN	‏«Chéçk ágáîñ ēxð»
