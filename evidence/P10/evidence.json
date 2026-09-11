@@ -1,0 +1,224 @@
+{
+ "dod_rows": [
+  {
+   "dod": "T0-a: the uses:-pin / permissions: / timeout-minutes enforcement exists as code + negative fixtures",
+   "evidence": [
+    "evidence/P10/logs/t0a-green-after.txt",
+    "evidence/P10/logs/t0a-red-before.txt",
+    "build/workflow_lint.py",
+    "tools/negatives/p10_release.sh (workflow_lint negatives 48-50)",
+    "logs/t0a-green-after.txt",
+    "logs/t0a-red-before.txt"
+   ],
+   "id": "P10-DOD-0a",
+   "source": "local-run",
+   "status": "VERIFIED"
+  },
+  {
+   "dod": "T0-b: drill local mode executes cells for real and fails on zero",
+   "evidence": [
+    "evidence/P10/logs/t0b-drill-hosts-local.txt",
+    "build/qa/drill/drill_run.sh (hosts-local mode: cells-executed > 0 or FAIL)",
+    "logs/t0b-drill-hosts-local.txt"
+   ],
+   "id": "P10-DOD-0b",
+   "source": "local-run",
+   "status": "VERIFIED"
+  },
+  {
+   "dod": "T0-c: all five cores carry fresh full-mutation transcripts; freshness gate green",
+   "evidence": [
+    "evidence/P10/logs/t0c-mutation-{policy,settings,themes,commands,update}.{txt,json}",
+    "docs/state/mutation-scores.json",
+    "tools/mutation_freshness.py (5/5 fresh, pin c16c9631c13e)",
+    "logs/t0c-mutation-update.json",
+    "logs/t0c-mutation-commands.json"
+   ],
+   "id": "P10-DOD-0c",
+   "source": "local-run",
+   "status": "VERIFIED"
+  },
+  {
+   "dod": "T0-d: the two near-ceiling files split (389->329+78, 386->294+124); 400-LOC law green",
+   "evidence": [
+    "evidence/P10/logs/t0d-file-splits.txt",
+    "tools/evidence_check.py + tools/evidence_ci.py",
+    "tools/gen_registry.py + tools/gen_registry_docs.py",
+    "logs/t0d-file-splits.txt"
+   ],
+   "id": "P10-DOD-0d",
+   "source": "local-run",
+   "status": "VERIFIED"
+  },
+  {
+   "dod": "T1: verifier core + host + fake + golden vectors (>=60) byte-parity, >=600s fuzz 0 violations, mutation >=95%, both flag states tested",
+   "evidence": [
+    "xr-core@update (9 suites, 340 checks 0 failures; make -C update/tests test = 'ALL C++ UPDATE TESTS PASSED')",
+    "docs/contracts/vectors/update-v1.json (73 cases)",
+    "tools/update_vectors_check.py (73/73 byte-identical both backends)",
+    "evidence/P10/logs/t1-update-fuzz-600s.txt (600s, 21.5M iters, 0 violations)",
+    "evidence/P10/logs/t0c-mutation-update.json (99.76%, deny-guard 35/35, survivor dispositioned)",
+    "logs/t1-update-fuzz-600s.txt",
+    "logs/t0c-mutation-update.json"
+   ],
+   "id": "P10-DOD-1",
+   "source": "local-run",
+   "status": "VERIFIED"
+  },
+  {
+   "dod": "T2: server spec/refimpl/Rust trio; corpus >=40 cases green vs reference HERE; Rust lane = hosted (runner-ready; no cargo in sandbox \u2014 recorded debt)",
+   "evidence": [
+    "release/server/ (spec/refimpl/rust trio)",
+    "release/server/tests/conformance.json (51 cases byte-exact vs reference here)",
+    "release/server/rust/tests/conformance.rs (hosted runner)",
+    "evidence/P10/logs/t2-server-fuzz-600s.txt (0 violations)",
+    "tools/server_size_check.py (1379B raw / 435B gzip <= 2048B)",
+    "logs/t2-server-fuzz-600s.txt"
+   ],
+   "id": "P10-DOD-2",
+   "source": "local-run",
+   "status": "BLOCKED"
+  },
+  {
+   "dod": "T3: key hierarchy + ceremony docs + ceremony_check + secret_scan green; NO real/generated-for-release keys; release-channel keygen refused",
+   "evidence": [
+    "release/keys/ (README/key-hierarchy/ceremony/*.example)",
+    "tools/ceremony_check.py",
+    "tools/secret_scan.py --all (786 files clean; planted-key negative reddens)",
+    "logs/t4-signing-matrix.txt"
+   ],
+   "id": "P10-DOD-3",
+   "source": "local-run",
+   "status": "VERIFIED"
+  },
+  {
+   "dod": "T4: Linux repo signing REAL (sign/verify/tamper/wrong-key, missing-key SKIP-77); AppImage round-trip; mac/win argv-exact stubs; matrix complete",
+   "evidence": [
+    "evidence/P10/logs/t4-signing-matrix.txt (14 cells: gpg sign/verify/tamper/wrong-key REAL; appimage round-trip; argv-exact mac/win; provider guard)",
+    "build/signing/linux_repo_sign.py",
+    "docs/release/signing-runbook.md",
+    "release/pkg/packaging-matrix.yaml + tools/packaging_matrix_check.py (6 rows)",
+    "logs/t4-signing-matrix.txt"
+   ],
+   "id": "P10-DOD-4",
+   "source": "local-run",
+   "status": "VERIFIED"
+  },
+  {
+   "dod": "T5: cohort policy as data + boundary tests, no-auto-halt decided, dev-only hook, beta/stable auto-rollout refused until P38, epoch revocation forces manual path",
+   "evidence": [
+    "release/rollout/policy.yaml",
+    "tools/rollout_drill.py (10/10 cells, evidence/P10/logs/t5-rollout-drill.txt)",
+    "release/rollback/rollback.md",
+    "docs/release/rollback-drill.md (3-OS rehearsal = farm)",
+    "logs/t5-rollout-drill.txt"
+   ],
+   "id": "P10-DOD-5",
+   "source": "local-run",
+   "status": "VERIFIED"
+  },
+  {
+   "dod": "T6: attestation format v1 + real emit + offline verify with pinned key; publish/external-verifiability honestly NOT-RUN",
+   "evidence": [
+    "release/transparency/attestation-example.json (real, offline-verified)",
+    "tools/attest.py (one-byte tamper => FAIL; --publish SKIP-77 HG-38)",
+    "docs/contracts/release-attestation-v1.{md,schema.json} + registry-post-freeze.md P10 section",
+    "logs/t4-signing-matrix.txt"
+   ],
+   "id": "P10-DOD-6",
+   "source": "local-run",
+   "status": "VERIFIED"
+  },
+  {
+   "dod": "T7: license report covers every dependency eval; unknown-license fails build (law + negative)",
+   "evidence": [
+    "build/sbom/license_report.py (18 evals, 0 unknown)",
+    "build/sbom/sbom_gate.py --require-licenses (negative reddens rc=1)",
+    "evidence/P10/logs/t7-license-report.txt",
+    "logs/t7-license-report.txt"
+   ],
+   "id": "P10-DOD-7",
+   "source": "local-run",
+   "status": "VERIFIED"
+  },
+  {
+   "dod": "T8: About view renders every host state incl. failed-with-reason + manual path; state-coverage gate + negative; roster commands registered the ratchet-safe way",
+   "evidence": [
+    "xr-core/ui/about/about.ts (tsc clean; esbuild + CSP check pass)",
+    "xr-core/l10n/xr_strings.grdp (+18 IDS_XR_ABOUT_*)",
+    "tools/about_state_check.py (7/7 states; negative reddens)",
+    "xr-core/commands/core/roster_v1.json (update.about/check-now/manual-download; tier-1 still 7)",
+    "logs/t5-rollout-drill.txt"
+   ],
+   "id": "P10-DOD-8",
+   "source": "local-run",
+   "status": "VERIFIED"
+  },
+  {
+   "dod": "T9: release gate exists, wired, fails closed for beta/stable in this sandbox (five negatives total in p10_release.sh)",
+   "evidence": [
+    "tools/release_gate.py (dev GREEN 7/7 on synthetic; beta/stable RED rc=1 enumerated)",
+    "scripts/build (release subcommand)",
+    "tools/run_checks.sh (beta/stable passing = the failure branch)",
+    "tools/negatives/p10_release.sh case 55",
+    "logs/t9-leak-report.txt"
+   ],
+   "id": "P10-DOD-9",
+   "source": "local-run",
+   "status": "VERIFIED"
+  },
+  {
+   "dod": "Research log: 9 items cited-or-UNVERIFIED + decision rows (zero-crate Rust, no-auto-halt, injected verifier, refused-what-needed-real-keys)",
+   "evidence": [
+    "docs/state/research-log-P10.md (9 items; delta/minisign-format/runner-probe/custody marked UNVERIFIED with the deferral target)",
+    "release/notes/train-152.md (live chromiumdash fetch 2026-09-11, cited)",
+    "logs/t7-license-report.txt"
+   ],
+   "id": "P10-DOD-10",
+   "source": "local-run",
+   "status": "VERIFIED"
+  },
+  {
+   "dod": "Hosted-runner capability probe (cargo/rustc/go versions from an actual run)",
+   "evidence": [
+    ".github/workflows/core-hardening.yml (mutation-update lane >=95 + server-conformance lane; runner probe queued \u2014 transcript pending)"
+   ],
+   "id": "P10-DOD-11",
+   "source": "UNVERIFIED",
+   "status": "BLOCKED"
+  }
+ ],
+ "generated": "2026-09-11",
+ "not_done_by_design": [
+  "Rust server conformance vs the deployable: the dev sandbox has no cargo/rustc; the corpus is byte-exact against the REFERENCE here (test_conformance_ref.py, 51/51) and the deployable half is runner-ready (release/server/rust/tests/conformance.rs) pending the hosted run \u2014 recorded debt, lane kept, SKIP-visible.",
+  "Hosted-runner capability probe (research item 8): requires an actual GitHub Actions run at this push; the lane prints cargo/rustc/go versions and SKIPs visibly if absent. Never asserted from belief.",
+  "Transparency --publish / external verifiability: needs transparency-log credentials + egress (HG-38). --publish SKIPs visibly (77); --check-inclusion reports NOT-RUN; the plan's externally-verifiable DoD row stays BLOCKED/human-gated.",
+  "Real code-signing certs, Apple Developer ID/notarytool, SmartScreen enrollment, HSM key ceremony: HG-36/HG-37 human gates with exact operator runbooks (docs/release/signing-runbook.md, release/keys/ceremony.md). The tooling refuses release-channel signatures fail-closed.",
+  "Three-OS rollback rehearsal (physical Apple/Windows hardware, real notarized builds): farm-gated (HG-31/35 class) \u2014 docs/release/rollback-drill.md; the LOCAL drill runs 10/10 cells here.",
+  "Delta-update >=60% size win: not measured (needs the pinned //chrome/updater client + codec feasibility, research items 1-2); recorded in docs/release/handbook.md limitations.",
+  "minisign exact artifact-format bytes: the injected-verifier law forbids inventing crypto; the format lands with the HG-36 production binding (research item 3)."
+ ],
+ "phase": "P10",
+ "pin": "chromium d04cdb24d67b081f6cf80200ffc5233f44b61109 (UNCHANGED \u2014 152.0.7977.82); xr-core advanced 89bd2ed -> f8b4cfe (P10-T1 update verifier core + T8 About view + roster trio), DEPS pair-bumped same-day.",
+ "plan": "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
+ "plan_sha256": "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b",
+ "repos": {
+  "xr-browser": "P10 commits: T0-a..T0-d landed pre-phase (1c533dd/06d7e0f/9d7c27c); this phase: mutation+drill evidence (bf494a6), T1 vectors+parity lane (e954f98), T1 GN flag+hygiene, T2 server trio, T3+T4 signing/keys, T5 drill, T6 transparency+notes, T7 SBOM law, T8 about gate, T9 release gate, research log, hardening lanes.",
+  "xr-core": "P10 commits: 50fcb5f (T1 update core/host/tests/fake), c16c963 (T1 BUILD.gn + README-integration), f8b4cfe (T8 About view + grdp + roster trio)."
+ },
+ "schema_note": "P10 bundle \u2014 Update, signing & release engineering v1. Conforms to docs/contracts/evidence-bundle-v1.md. VERIFIED rows cite artifacts that exist at the cited path and commands actually run in this sandbox. Human/farm/hosted-dependent rows are HUMAN-GATED, BLOCKED, or recorded debt \u2014 never met-in-sandbox.",
+ "source_labels": [
+  "local-run",
+  "fixture",
+  "ci-run",
+  "UNVERIFIED"
+ ],
+ "supersedes": "evidence/P9",
+ "verdict_vocabulary": [
+  "VERIFIED",
+  "HUMAN-GATED",
+  "SIMULATED",
+  "BLOCKED",
+  "NOT-BY-DESIGN"
+ ]
+}

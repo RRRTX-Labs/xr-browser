@@ -8,7 +8,7 @@ availability predicate with a reason** — never absent, never a "coming
 soon" rail (§10). Tier-1 ≤ 9 controls is enforced in the registry itself
 (Plan §1.10 Attention Budget).
 
-20 commands registered; 7 in Tier-1 (≤ 9).
+23 commands registered; 7 in Tier-1 (≤ 9).
 
 | id | scope | tier | danger | predicate | status |
 | --- | --- | --- | --- | --- | --- |
@@ -32,5 +32,8 @@ soon" rail (§10). Tier-1 ≤ 9 controls is enforced in the registry itself
 | `help.cheatsheet` | global | tier2 | safe | `always` | enabled |
 | `history.clear-identity` | identity | tier1 | destructive | `always` | enabled |
 | `tab.close-all` | window | tier1 | destructive | `always` | enabled |
+| `update.about` | global | tier2 | safe | `always` | enabled |
+| `update.check-now` | global | tier2 | safe | `always` | enabled |
+| `update.manual-download` | global | tier2 | safe | `always` | enabled |
 
 Availability predicates read the **pinned** P6 snapshot (availability-predicate-contract v1); the UI never calls Resolve() live (TOCTOU rule). Dispatch source-tag allowlist, id whitelist and danger-confirmation gate live in `commands_host` (C++) — see `commands/host_protocol.md`.
