@@ -62,3 +62,13 @@ YML
     "$PY" build/workflow_lint.py --root "$NEG_TMP"
 }
 neg_register workflow_lint_missing_timeout
+
+# --- 51. kill matrix: an xr-core with zero hosts must FAIL, never pass -----
+# (T0-b: the zero-case law — a drill that executes nothing certifies nothing)
+case_kill_matrix_zero_hosts() {
+  local E="$NEG_TMP/empty-xr-core"; mkdir -p "$E"
+  neg_expect_reject "kill_matrix: zero discovered hosts fails closed" \
+    'found no \*_host targets|certify nothing' \
+    "$PY" tools/kill_matrix.py --repo . --xr-core "$E"
+}
+neg_register kill_matrix_zero_hosts

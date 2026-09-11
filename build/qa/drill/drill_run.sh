@@ -1,21 +1,32 @@
 #!/usr/bin/env bash
 # drill_run.sh — farm runner for the §11.10 kill matrix + §11.11 update
-# drill (P9-T10/T11). These drills need a real browser process tree and a
-# per-OS VM farm with snapshot/restore; neither exists in the P9 sandbox,
-# so every invocation here is a VISIBLE SKIP (exit 77) — a record, never a
-# fabricated result.
+# drill (P9-T10/T11), plus the P10-T0-b hosts-local mode that executes the
+# matrix for real against the host binaries that exist in THIS sandbox.
 #
-# Farm usage (HG-33 / HG-34):
-#   drill_run.sh kill-matrix   # process-type kill matrix under load
-#   drill_run.sh update-drill  # per-OS kill-mid-update + rollback
+#   drill_run.sh hosts-local  # P10-T0-b: the four discovered //xr host
+#                             # binaries, killed mid-write/dispatch/snapshot
+#                             # under load; cells executed / not-run printed;
+#                             # 0 executed => FAIL (runner law)
+#   drill_run.sh kill-matrix  # farm: needs the browser process tree (HG-33)
+#   drill_run.sh update-drill # farm: needs per-OS VM snapshots (HG-34)
+#
+# The 8 Chromium process rows stay farm-visible with the correct reason —
+# tools/kill_matrix.py prints them in the not-run split, so the deferral is
+# named, never dropped.
 set -u
 
 mode="${1:-}"
 case "$mode" in
+  hosts-local)
+    shift
+    ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+    PY="${PYTHON:-python3}"
+    exec "$PY" "$ROOT/tools/kill_matrix.py" --repo "$ROOT" --iterations 4 "$@"
+    ;;
   kill-matrix|update-drill)
     ;;
   *)
-    echo "usage: drill_run.sh {kill-matrix|update-drill}" >&2
+    echo "usage: drill_run.sh {hosts-local|kill-matrix|update-drill}" >&2
     exit 2
     ;;
 esac

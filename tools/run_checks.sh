@@ -295,6 +295,13 @@ echo "== P9-T9: SAST rule registry (canary + real-tree clean) =="
 echo "== P9-T10/T11: drill matrices (kill matrix + update drill, complete) =="
 "$PY" tools/drill_check.py --repo .
 
+echo "== P10-T0-b: kill matrix, hosts-local EXECUTION (the P9 deferral closed) =="
+if bash build/qa/drill/drill_run.sh hosts-local; then :; elif [ $? -eq 77 ]; then
+  echo "SKIP: kill matrix hosts-local skipped (g++/make absent) — needed for: executing the kill matrix against the discovered //xr host binaries"
+else
+  echo "FAIL: kill matrix hosts-local gate failed"; exit 1
+fi
+
 echo "== P9-T12: §11 surface completeness (every surface homed) =="
 "$PY" tools/surfaces_check.py --repo .
 
