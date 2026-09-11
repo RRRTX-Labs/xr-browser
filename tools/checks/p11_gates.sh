@@ -47,3 +47,13 @@ p11_size_law() {
   echo "== P11-T0-e: touched-file size law (every .py/.sh touched this phase is <=380 lines) =="
   "$PY" build/tests/test_file_size_law.py --touched
 }
+
+p11_vendor_gates() {
+  echo "== P11-T1: vendored Rust pin (offline verification + the chokepoint law) =="
+  # vendor_check hashes the whole vendored tree against the lock/manifests —
+  # offline, deterministic, ~1s; needs the sibling xr-core checkout (every CI
+  # lane has it at the DEPS pin). fetch_allowlist_check proves the ceremony
+  # (ADR-0044) did not widen: static.crates.io joined, index/API hosts refused.
+  "$PY" tools/vendor_check.py --check
+  "$PY" tools/fetch_allowlist_check.py
+}

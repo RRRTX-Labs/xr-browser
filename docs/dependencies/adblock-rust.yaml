@@ -3,14 +3,14 @@ project: "adblock-rust — https://github.com/brave/adblock-rust (canonically un
 role: "Native ad/tracker blocking engine embedded in the network service at the URLLoaderFactory layer (Plan §1.5, §8.2, DR-03)"
 plan_refs: ["§1.5", "§8.2", "DR-03", "P11-T1"]
 current_status: "actively maintained; repo pushed 2026-09-06 (live-verified); cross-industry adoption: Brave (shipping), Firefox 149 (experimental, off-by-default, Bug 2013888 per Plan Appendix A), Waterfox, Perplexity Comet (Plan Appendix A item 2)"
-version_pin_policy: "vendored + pinned via third_party/rust (cargo_crate pattern, P2); exact git revision pinned in DEPS; ±2% corpus gate on every pin update (P11-T8); `cargo vet` on diffs (P11-T1)"
+version_pin_policy: "VENDORED AT P11-T1: xr-core/third_party/rust/adblock/0.13.3/ = the unmodified crates.io tarball (sha256 f44b96a666a23c12acad7c688bfe8638a7094e7eabe765b09a6864ab991c676d), deps resolved from the tarball's OWN Cargo.lock; 59-crate build closure vendored + sealed (.cargo-checksum.json per crate, MANIFEST.sha256 per file); tools/vendor_check.py --check in run_checks + governance; bumps per third_party/rust/adblock/0.13.3/UPDATING.md (±2% corpus parity gate at every bump, P11-T8); cargo-vet substitute recorded in supply-chain/PROVENANCE.md (R7)"
 licenses:
   code: "MPL-2.0"
   data: "— (filter lists are a separate data dependency: easylist-family.yaml)"
 health:
-  last_release: "crates.io `adblock` — version live at evaluation (pinned by P2; refresh 90-day cadence)"
+  last_release: "0.13.3 — published 2026-08-20 on crates.io; tag v0.13.3 = commit 886d45dcf5 (live-verified 2026-09-11); edition 2024 (needs rustc >= 1.85; hosted runner cargo 1.98.1, run 34615191984)"
   bus_factor: "Brave engineering team + community contributors; Mozilla is a second consumer (Plan Appendix A) — healthy"
-  open_critical_advisories: "none found as of 2026-09-07 (advisory feed wired in P9-T9; this eval predates the feed)"
+  open_critical_advisories: "0 for adblock 0.13.3 (GHSA reviewed set, 2026-09-11); the vendored 59-crate closure scanned the same day: 14 advisories touch vendored names, 17 crate-range checks, 0 hits, 0 NEEDS-REVIEW (supply-chain/advisories.json)"
 security_posture: "parses hostile input (filter-list grammar) — fuzz target required from P11 commit #1 (P9 fleet, 10^9 exec floor before stable, P11 security req); scriptlets bounded to the engine's own sandbox semantics (no page access)"
 maintenance_burden: "low-medium: vendored pin + corpus parity gate; upstream fixes contributed back (Plan §12.5 maintained relationships)"
 link_policy: "permissive — MPL-2.0 is linkable (file-level copyleft, compatible with our MPL-2.0 //xr; DR-04 satisfied — not copyleft-GPL)"
@@ -21,8 +21,8 @@ alternatives_rejected:
   - "uBlock Origin code: GPLv3 — REJECTED as linked code (DR-04); users may sideload uBO Lite (MV3) themselves (Plan §8.2, R5)"
 exit_plan: "MPL license permits forking cheaply (Plan §15-R8); short-term: fork behind the same FFI boundary; long-term: fund upstreaming (register entry); corpus parity gate means a frozen pin still blocks correctly (degrade-safe: engine death ⇒ fail-open browsing with amber chip, Plan §11/P11 decisions)"
 owner: "D lead (Network, Shield & Extensions)"
-evaluated_on: 2026-09-07
-refresh_by: 2026-12-06
+evaluated_on: 2026-09-11
+refresh_by: 2026-12-10
 sources:
   - url: "https://github.com/brave/adblock-rust/blob/master/LICENSE"
     accessed: 2026-09-07
@@ -33,3 +33,12 @@ sources:
   - url: "https://github.com/brave/adblock-rust"
     accessed: 2026-09-07
     quote: "repo metadata: license MPL-2.0, default branch master, pushed 2026-09-06"
+  - url: "https://crates.io/api/v1/crates/adblock/0.13.3"
+    accessed: 2026-09-11
+    quote: "published 2026-08-20; crate file sha256 f44b96a666a23c12acad7c688bfe8638a7094e7eabe765b09a6864ab991c676d (matched by the tarball fetched through build/upstream/fetch.py before unpacking — ADR-0044)"
+  - url: "https://api.github.com/repos/brave/adblock-rust/git/blobs/ed05c5aa5b096c208f7c0b2575585c9433491d3c"
+    accessed: 2026-09-11
+    quote: "Cargo.lock at tag v0.13.3 (workspace lock); the published tarball's own crate-specific lock is a strict subset of it and is the vendoring resolution truth (sha256 recorded in supply-chain/licenses.json)"
+  - url: "https://api.github.com/advisories?ecosystem=rust&type=reviewed&affects=<crate>"
+    accessed: 2026-09-11
+    quote: "per-crate GHSA queries for the 59-crate closure + root: 14 distinct advisories, 17 range checks, all miss (bulk listing is deep-pagination-capped at ~2,200 entries — recorded in R7)"

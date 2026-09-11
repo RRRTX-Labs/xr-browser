@@ -58,6 +58,7 @@ echo "== test suites =="
 # fetch.py; unauthenticated git ls-remote). They fail closed on no network.
 # ---------------------------------------------------------------------------
 p11_size_law
+p11_vendor_gates
 
 echo "== evidence bundles (contract: docs/contracts/evidence-bundle-v1.md) =="
 "$PY" tools/evidence_check.py

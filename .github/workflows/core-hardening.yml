@@ -210,6 +210,57 @@ jobs:
           cargo test --locked 2>&1 | tee /tmp/rust-conformance.log
           grep -q "test result: ok" /tmp/rust-conformance.log
 
+  shield-vendor:
+    # P11-T1: the vendored adblock-rust pin is REAL — it compiles offline
+    # from the sha256-sealed tree, and the crate's own unit tests pass.
+    # Template: P10's server-conformance job. Two-phase on purpose:
+    #   build  = OFFLINE against third_party/rust/vendor/ (source
+    #            replacement; proves the closure is complete and sealed —
+    #            a single missing crate fails here, no network involved);
+    #   test   = from a byte-identical COPY (MANIFEST-sealed) with a
+    #            runner-side cargo fetch (--locked): the vendored layout
+    #            deliberately excludes the ~150-crate dev-dep graph
+    #            (PROVENANCE.md records the boundary), and the in-tree
+    #            source replacement would block dev-dep fetches anyway.
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Rust toolchain versions (recorded for research item 8)
+        run: |
+          cargo --version || echo "SKIP: cargo absent on this runner image"
+          rustc --version || echo "SKIP: rustc absent on this runner image"
+      - name: Checkout xr-core at the DEPS pin
+        run: |
+          XR_CORE_REV="$(sed -n 's/^xr_core_rev: "\([0-9a-f]\{40\}\)".*/\1/p' DEPS)"
+          git clone --quiet https://github.com/RRRTX-Labs/xr-core.git ../xr-core
+          git -C ../xr-core checkout --quiet "$XR_CORE_REV"
+      - name: Vendor tree integrity (offline verifier)
+        run: python3 tools/vendor_check.py --check
+      - name: Build the vendored crate OFFLINE (closure completeness proof)
+        run: |
+          cd ../xr-core/third_party/rust/adblock/0.13.3
+          cargo build --offline 2>&1 | tee /tmp/shield-vendor-build.log
+          tail -1 /tmp/shield-vendor-build.log
+      - name: Unit tests (byte-identical copy, --locked, runner-side fetch)
+        run: |
+          cp -r ../xr-core/third_party/rust/adblock/0.13.3 /tmp/adblock-test
+          cd /tmp/adblock-test
+          cargo test --locked --lib 2>&1 | tee /tmp/shield-vendor-test.log
+          grep -q "test result: ok" /tmp/shield-vendor-test.log
+      - name: Post the conclusion
+        if: always()
+        run: |
+          {
+            echo "## shield-vendor (P11-T1)"
+            echo "- vendored pin: adblock 0.13.3 (crate sha256 f44b96a6…)"
+            echo "- offline build: $( [ -f /tmp/shield-vendor-build.log ] && echo executed || echo not-reached )"
+            echo "- unit tests: $(grep -h 'test result:' /tmp/shield-vendor-test.log 2>/dev/null | head -1 || echo not-reached)"
+          } >> "$GITHUB_STEP_SUMMARY"
+
   fuzz-fleet:
     # One fleet lane per target (parallel matrix; the tool's 600 s/target
     # law is unchanged — serial 4x600 in one job kept getting cancelled

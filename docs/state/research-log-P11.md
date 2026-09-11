@@ -143,10 +143,29 @@ three new ci-run rows resolved LIVE (head-match + job-success). Negatives
 - GitHub security advisories for the repo: **0 open**.
 - crates.io `adblock/0.13.3`: published **2026-08-20**; crate tarball
   sha256 `f44b96a666a23c12acad7c688bfe8638a7094e7eabe765b09a6864ab991c676d`
-  — this is the T1 vendor pin; `static.crates.io` serves the `.crate`
-  tarball (HTTP 200) but is NOT in `fetch.py` ALLOWED_HOSTS → the
-  allowlist ceremony (`docs/process/allowlist-ceremony.md`) must land
-  before vendoring bytes through the chokepoint.
+  — this is the T1 vendor pin.
+- **Ceremony LANDED (2026-09-11, ADR-0044):** `static.crates.io` joined
+  `fetch.py` ALLOWED_HOSTS (5th entry; the crates.io INDEX/API hosts stay
+  OFF — resolution truth is the lock, not live queries). The tarball was
+  fetched through the chokepoint and its sha256 matched the crates.io pin
+  BEFORE unpacking. The published tarball carries the crate's OWN
+  `Cargo.lock` (crate-specific: workspace members adblock-fuzz/adblock-rs
+  and their subtrees already excluded; blob `ed05c5aa5b09…` at the tag is
+  the workspace lock — the tarball lock is a strict, self-contained
+  subset), every registry package in it sha256-pinned.
+- **Vendored (P11-T1):** `xr-core/third_party/rust/` — root crate verbatim
+  at `adblock/0.13.3/` + a feature-aware BUILD closure of **59 crates,
+  4,420,208 tarball bytes / ~30 MB extracted, 2,111 files** (default
+  features; dev-dep-only subtrees — criterion/reqwest/tokio/plotters/
+  aws-lc — deliberately excluded, PROVENANCE.md records the honest
+  `--offline` boundary). `css-validation` (cosmetic: cssparser/selectors)
+  is OFF at this pin; UPDATING.md carries the extension path for T2.
+- **Advisories (GHSA reviewed, `affects=` per crate through the
+  chokepoint, 2026-09-11):** 14 advisories touch vendored names
+  (flatbuffers, smallvec, idna, regex, base64, zerovec, zerovec-derive);
+  17 crate-range checks: **0 hits, 0 NEEDS-REVIEW** — every vendored
+  version sits outside every advisory range
+  (`supply-chain/advisories.json`).
 
 ## R2. Upstream conformance corpus (filter matching) — UNVERIFIED (T1/T8)
 
@@ -171,7 +190,45 @@ honesty rule as P10 R1.
 
 ## R6. EasyList licensing (bundle redistribution) — UNVERIFIED (T3)
 
-## R7. cargo-vet in a vendored (non-workspace) layout — UNVERIFIED (T1)
+## R7. cargo-vet in a vendored (non-workspace) layout — DECIDED (T1)
+
+**VERIFIED BY EXECUTION + recorded limits (2026-09-11).**
+- `cargo vet` / `cargo audit` cannot run in this sandbox: no cargo binary
+  (runner-capabilities ledger, R8) and both tools presume a live registry
+  index (index.crates.io — deliberately NOT allowlisted; resolution truth
+  is the pinned lock). Claiming either check would be fabrication, so the
+  smallest honest substitute was BUILT AND RUN instead:
+  1. **Integrity**: every vendored byte is sha256-sealed twice — the root
+     crate per-file (`MANIFEST.sha256`), each dependency per-file +
+     per-crate (cargo's own `.cargo-checksum.json`, whose `package` field
+     is verified against the tarball's own `Cargo.lock`). Tamper, deletion,
+     extra-file, lock-desync and closure-gap all redden
+     (`tools/vendor_check.py`, pytest x9 + negative 74/75).
+  2. **Advisories**: the reviewed GHSA rust set was pulled through the
+     chokepoint per vendored crate (`affects=` queries — the bulk listing
+     is deep-pagination-capped at ~2,200 entries, which is itself a
+     finding) and range-matched: 14 advisories / 17 checks / 0 hits; an
+     unparseable range records NEEDS-REVIEW and REDDENS the gate — never a
+     silent miss (`supply-chain/advisories.json`).
+  3. **Licenses**: per-crate SPDX expressions with the CHOSEN allowed
+     branch recorded (disjunctions are a decision; AND-groups need every
+     part allowed; unknown identifiers/exceptions are red — DR-04)
+     (`supply-chain/licenses.json`, evaluator tested incl. the
+     `(MIT OR Apache-2.0) AND Unicode-3.0` unicode-ident case).
+- **Open follow-up (recorded, not claimed):** run `cargo vet` proper (with
+  a criteria/imports baseline) on a cargo-capable machine — the hosted
+  `shield-vendor` lane has cargo; adding vet there is a lane edit once a
+  baseline exists. Until then the substitute set above is the check of
+  record, and PROVENANCE.md says exactly that.
+- **Ceremony side-rows (fetch_allowlist_check EXEMPT_FILES law: "a new
+  entry needs an ADR or research-log row"):** `build/qa/leaktest/engine.py`
+  (loopback-only TCP tap, observes egress, never emits — cdp.py class) and
+  `build/signing/platform_argv.py` (the timestamp.digicert.com literal is
+  ARGV DATA for the platform signer at HG-36/37; Python never fetches it)
+  gained documented exemption rows. `tools/scheduled_lane_check.py` was
+  FIXED rather than exempted: its api.github.com URL construction moved
+  into the chokepoint (`fetch.github_api_url`) — governance had been red
+  on the URL-in-code law since T0-c and this row is the record.
 
 ## R8. Runner capabilities from REAL runs (no comment-claims)
 
