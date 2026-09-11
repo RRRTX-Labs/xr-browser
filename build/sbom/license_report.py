@@ -86,10 +86,22 @@ def components_from_report() -> tuple[list[dict], list[str]]:
                  "value": "rejected" if rejected else "evaluated"},
             ],
         }
-        comp["licenses"] = [{"license": {"name": licenses[0] if licenses
-                                         else "NOASSERTION"}}]
+        def spdx_only(v: str) -> str:
+            # attached-SBOM mode carries SPDX ids only — eval prose ("—
+            # live-verified …", parentheticals) is audit-relevant text,
+            # not license data
+            v = v.split("—")[0].split(" - ")[0]
+            if ":" in v:  # "libsodium: ISC" -> "ISC"
+                v = v.split(":", 1)[1]
+            v = v.split(" (")[0].strip()  # "MIT (LICENSE live-verified …)"
+            return v.strip(",;")
+
+        head = spdx_only(licenses[0]) if licenses else "NOASSERTION"
+        comp["licenses"] = [{"license": {"name": head or "NOASSERTION"}}]
         for extra in licenses[1:4]:
-            comp["licenses"].append({"license": {"name": extra}})
+            s = spdx_only(extra)
+            if s:  # note-only rows (start with the dash) carry no SPDX id
+                comp["licenses"].append({"license": {"name": s}})
         comps.append(comp)
         if not known:
             unknown.append(yml.stem)
@@ -127,11 +139,18 @@ def main() -> int:
     if a.attach_to:
         sbom_path = Path(a.attach_to)
         sbom = json.loads(sbom_path.read_text(encoding="utf-8"))
-        have = {c.get("name") for c in sbom.get("components", [])}
+        by_name = {c.get("name"): c for c in sbom.get("components", [])}
         for c in comps:
-            if c.get("name") not in have:
-                c.pop("bom-ref", None)  # CycloneDX schema requires
-                sbom.setdefault("components", []).append(c)
+            tgt = by_name.get(c.get("name"))
+            if tgt is not None:
+                # refresh-in-place: the eval set is the license authority
+                # (re-attachment must CLEAN an older prose-bearing merge)
+                tgt["licenses"] = c["licenses"]
+                tgt["properties"] = c["properties"]
+                continue
+            c.pop("bom-ref", None)  # CycloneDX schema requires
+            sbom.setdefault("components", []).append(c)
+            by_name[c["name"]] = c
         rendered = json.dumps(sbom, sort_keys=True, indent=1) + "\n"
     else:
         rendered = json.dumps(report, sort_keys=True, indent=1,

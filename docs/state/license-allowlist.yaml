@@ -26,6 +26,8 @@ allowlist:
     justification: "Eval records banned siblings kdbx-rs (GPL-3.0) and KeePassXC (GPL-3.0) as do-not-copy references; keepass-rs itself is MIT (DR-04 satisfied)."
   - path: docs/dependencies/arti.yaml
     justification: "Eval states the main codebase is Apache-2.0 OR MIT and flags the optional LGPLv3 parts that must be excluded/evaluated before vendoring (P31) — the caveat is the point of the record."
+  - path: work/release-check/sbom.json
+    justification: "The release gate's synthetic SBOM (tools/release_gate.py) carries EVERY dependency eval's evaluated license as SPDX tokens — including the rejected EasyList-family data dep whose dual (GPL-3.0-or-later OR CC-BY-SA-3.0) must be STATED to justify the data-only treatment (DR-04). Eval prose is stripped (license_report spdx_only); the token itself is the audit-relevant datum."
   - path: docs/state/research-log-P1.md
     justification: "P1 research log records live-verified dependency licenses (uBlock Origin GPLv3, EasyList GPL-3.0-or-later dual) — the evaluation trail that justifies the DR-04 data-only treatment."
   - path: tools/README.md
