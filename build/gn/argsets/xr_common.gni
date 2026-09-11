@@ -9,6 +9,10 @@ xr_branding = true                 # XR-owned: de-Google branding (P2-T6)
 # OFF (false) => stock chrome + EMPTY registry (Plan P7 rollback row). Kept until
 # P13; expiry note 1/2 (see docs/registry/registry-post-freeze.md for 2/2).
 xr_command_registry_v1 = true
+# XR-owned (P10): the update verifier core + stdio host. OFF (false) =>
+# update_host refuses typed and stock chrome update behavior stands (both
+# states tested). Kept until the P16-exit review; see flags.yaml.
+xr_updater_v0 = true
 enable_widevine = false            # read-at: third_party/widevine/cdm/widevine.gni:14-20 (DR-14 OPEN / LG-3)
 safe_browsing_mode = 0             # read-at: chrome/common/BUILD.gn:407,759 (SB re-architect P16 / DR-15)
 google_api_key = ""                # read-at: google_apis/BUILD.gn:25 (no Google keys, L16)

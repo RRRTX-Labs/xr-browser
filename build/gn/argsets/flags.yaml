@@ -31,6 +31,16 @@ flags:
       stock browser with zero P7 code path active.
       EXPIRY (1/2): kept until P13 (XR Panel lands); the plan to retire it and
       the second expiry note live in docs/registry/registry-post-freeze.md.
+  xr_updater_v0:
+    kind: xr
+    default: true
+    note: >-
+      P10 update verifier core on|off. OFF (false) => update_host reports
+      the typed refusal ("feature flag xr_updater_v0 is off — stock chrome
+      update behavior") and stock chrome update behavior stands; both
+      states are tested (test_update_host, golden vectors). Kept until the
+      P16-exit review of the dev-only channel gate; expiry + retirement
+      note live in docs/contracts/registry-post-freeze.md (P10 section).
   # -- Chromium flags (read-at cited in the pinned rev) --
   enable_widevine:
     kind: chromium
