@@ -22,6 +22,7 @@ import json
 import shutil
 import subprocess
 import sys
+import re
 import tempfile
 from pathlib import Path
 
@@ -128,6 +129,15 @@ def _mutated_copy(repo: Path, workdir: Path, runner_rel: str,
     src = repo / runner_rel
     dest = workdir / "tools" / Path(runner_rel).name
     dest.parent.mkdir(parents=True, exist_ok=True)
+    # same-dir sibling modules the runner imports (P10-T0-d split:
+    # evidence_check imports evidence_ci) must travel with the copy
+    for m in re.findall(
+            r"^from (\w+) import ", src.read_text(encoding="utf-8"),
+            flags=re.M):
+        sib = src.parent / f"{m}.py"
+        if sib.exists():
+            (dest.parent / sib.name).write_text(
+                sib.read_text(encoding="utf-8"), encoding="utf-8")
     text = src.read_text(encoding="utf-8")
     assert find in text, f"defect anchor not found in {runner_rel}"
     assert text.count(find) == 1, f"defect anchor not unique in {runner_rel}"
