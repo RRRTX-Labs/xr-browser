@@ -251,5 +251,5 @@ jobs:
           import json
           r = json.load(open("/tmp/fuzz-fleet.json"))
           assert r["status"] == "pass", r
-          assert all(tg["violations"] == 0 for tg in r["targets"]), r
+          assert r["results"] and all(x["rc"] == 0 for x in r["results"]), r
           EOF

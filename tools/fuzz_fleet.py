@@ -141,8 +141,14 @@ def main(argv: list[str]) -> int:
             return EXIT_FAIL
     require_cases(len(results), "fuzz_fleet")
     if args.json:
-        print(stable_json({"tool": "fuzz_fleet", "targets": len(results),
-                           "seconds": seconds, "status": "pass"}))
+        print(stable_json({
+            "tool": "fuzz_fleet", "targets": len(results),
+            "seconds": seconds, "status": "pass",
+            # per-target rows (rc==0 is the violations==0 contract — the
+            # binaries exit nonzero on any violation)
+            "results": [{"target": r["target"], "rc": r["rc"],
+                         "seconds": r["seconds"]} for r in results],
+        }))
     else:
         print(f"fuzz_fleet: {len(results)} target(s) x {seconds}s clean "
               f"(corpus dirs seeded)")
