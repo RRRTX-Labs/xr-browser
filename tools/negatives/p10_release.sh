@@ -72,3 +72,16 @@ case_kill_matrix_zero_hosts() {
     "$PY" tools/kill_matrix.py --repo . --xr-core "$E"
 }
 neg_register kill_matrix_zero_hosts
+
+# --- 52. mutation freshness: a score recorded before a core/** edit is STALE
+case_mutation_freshness_stale() {
+  local OLD OLDP
+  OLD="$(git -C ../xr-core log --format=%H -1 -- themes/core)"   # the change itself
+  OLD="$(git -C ../xr-core rev-parse "$OLD~1")"                  # recorded BEFORE it
+  printf '{"schema_version":1,"cores":{"themes":{"xr_core_commit":"%s","transcript":"evidence/P10/logs/t0c-mutation-themes.txt","score_pct":100.0,"mutants":386,"killed":386,"survivors":[]}}}' \
+    "$OLD" > "$NEG_TMP/stale-scores.json"
+  neg_expect_reject "mutation_freshness: stale themes score flagged" \
+    'STALE mutation score' \
+    "$PY" tools/mutation_freshness.py --repo . --scores "$NEG_TMP/stale-scores.json"
+}
+neg_register mutation_freshness_stale

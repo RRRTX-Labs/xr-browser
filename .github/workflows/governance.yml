@@ -151,6 +151,10 @@ jobs:
       # deterministic seed; full matrix + 24h fuzz = HG-28 farm), fuzz
       # timebox, bench (record-only, budget verdicts text-checked).
       # ------------------------------------------------------------------
+      - name: Mutation freshness gate (P10-T0-c — a stale score is a FAIL)
+        run: |
+          python3 tools/mutation_freshness.py --repo .
+
       - name: Policy mutation gate (P6, sampled; full = HG-28)
         run: |
           # Deterministic sample keeps CI time bounded (~10 min on 2 cores);

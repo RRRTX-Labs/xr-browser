@@ -15,7 +15,7 @@ from pathlib import Path
 import pytest
 
 LIMIT = 400
-ROOTS = ("build", "tools")
+ROOTS = ("build", "tools", "release")  # P10-T0-d: release/ joins the law as it lands
 SKIP_DIRS = {"__pycache__", ".pytest_cache", "node_modules"}
 
 

@@ -1,0 +1,184 @@
+name: core-hardening
+
+# P10-T0-c: mutation + fuzz coverage for ALL FOUR C++ cores.
+#
+# Why this is a second workflow and not three more governance steps: the
+# governance job already carries ~35 min of gates inside a 45-min timeout
+# (the P9 budget math; see governance.yml). Adding three sampled mutation
+# timeboxes (900 s each) plus a 600 s fuzz fleet would push the sum past any
+# honest timeout, and trimming a timebox or a sample to fit is exactly the
+# "weaken a gate to keep a lane green" move this repo refuses. So: the
+# per-core lanes run here, in parallel jobs, on the pushes that can actually
+# change a core (xr-core pin bumps, mutation/fuzz machinery) and weekly, so
+# drift is caught even without a touching PR. Policy's lanes stay in
+# governance where P6/P8 put them — nothing moved, nothing trimmed.
+#
+# Runner capability note (P10 research item 8): ubuntu-latest ships a Rust
+# and Go toolchain; this workflow needs only python3 + g++ + make, which the
+# setup-python action and the image provide.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "DEPS"
+      - "tools/mutation_test.py"
+      - "tools/fuzz_fleet.py"
+      - "tools/policy_fuzz.py"
+      - "tools/mutation_freshness.py"
+      - ".github/workflows/core-hardening.yml"
+  pull_request:
+    paths:
+      - "DEPS"
+      - "tools/mutation_test.py"
+      - "tools/fuzz_fleet.py"
+      - "tools/policy_fuzz.py"
+      - "tools/mutation_freshness.py"
+      - ".github/workflows/core-hardening.yml"
+  schedule:
+    # weekly, 03:23 UTC Wednesdays — off the :00 stampede
+    - cron: "23 3 * * 3"
+  workflow_dispatch:
+
+concurrency:
+  group: core-hardening-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  freshness:
+    # The staleness gate first: if a recorded score no longer covers the
+    # pin, the per-core jobs below are what re-arms it.
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Mutation freshness gate
+        run: |
+          python3 tools/mutation_freshness.py --repo .
+
+  mutation-commands:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+      - name: Set up Python 3.12
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+      - name: Checkout xr-core at the DEPS pin
+        run: |
+          XR_CORE_REV="$(sed -n 's/^xr_core_rev: "\([0-9a-f]\{40\}\)".*/\1/p' DEPS)"
+          git clone --quiet https://github.com/RRRTX-Labs/xr-core.git ../xr-core
+          git -C ../xr-core checkout --quiet "$XR_CORE_REV"
+      - name: Commands mutation gate (sampled; full = HG-28 farm)
+        run: |
+          python3 tools/mutation_test.py --targets commands --sample 90 \
+            --seed 20260911 --timebox 900 --jobs 2 --score-gate 90 --json \
+            > /tmp/mutation-commands.json
+          cat /tmp/mutation-commands.json
+          python3 - <<'EOF'
+          import json
+          r = json.load(open("/tmp/mutation-commands.json"))
+          assert r["gate"] == "PASS", f"commands mutation gate FAIL: {r['score_pct']}%"
+          EOF
+
+  mutation-settings:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+      - name: Set up Python 3.12
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+      - name: Checkout xr-core at the DEPS pin
+        run: |
+          XR_CORE_REV="$(sed -n 's/^xr_core_rev: "\([0-9a-f]\{40\}\)".*/\1/p' DEPS)"
+          git clone --quiet https://github.com/RRRTX-Labs/xr-core.git ../xr-core
+          git -C ../xr-core checkout --quiet "$XR_CORE_REV"
+      - name: Settings mutation gate (sampled; full = HG-28 farm)
+        run: |
+          python3 tools/mutation_test.py --targets settings --sample 90 \
+            --seed 20260911 --timebox 900 --jobs 2 --score-gate 90 --json \
+            > /tmp/mutation-settings.json
+          cat /tmp/mutation-settings.json
+          python3 - <<'EOF'
+          import json
+          r = json.load(open("/tmp/mutation-settings.json"))
+          assert r["gate"] == "PASS", f"settings mutation gate FAIL: {r['score_pct']}%"
+          EOF
+
+  mutation-themes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+      - name: Set up Python 3.12
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+      - name: Checkout xr-core at the DEPS pin
+        run: |
+          XR_CORE_REV="$(sed -n 's/^xr_core_rev: "\([0-9a-f]\{40\}\)".*/\1/p' DEPS)"
+          git clone --quiet https://github.com/RRRTX-Labs/xr-core.git ../xr-core
+          git -C ../xr-core checkout --quiet "$XR_CORE_REV"
+      - name: Themes mutation gate (sampled at the P8 gate, >=95)
+        run: |
+          python3 tools/mutation_test.py --targets themes --sample 90 \
+            --seed 20260911 --timebox 900 --jobs 2 --score-gate 95 --json \
+            > /tmp/mutation-themes.json
+          cat /tmp/mutation-themes.json
+          python3 - <<'EOF'
+          import json
+          r = json.load(open("/tmp/mutation-themes.json"))
+          assert r["gate"] == "PASS", f"themes mutation gate FAIL: {r['score_pct']}% (< 95)"
+          EOF
+
+  fuzz-fleet:
+    # One fleet lane covers the fuzz-timebox duty for all four cores
+    # (discovered from build/fuzz/fleet.yaml — the P9 machinery, reused).
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Set up Python 3.12
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+      - name: Checkout xr-core at the DEPS pin
+        run: |
+          XR_CORE_REV="$(sed -n 's/^xr_core_rev: "\([0-9a-f]\{40\}\)".*/\1/p' DEPS)"
+          git clone --quiet https://github.com/RRRTX-Labs/xr-core.git ../xr-core
+          git -C ../xr-core checkout --quiet "$XR_CORE_REV"
+      - name: Fuzz fleet timebox (600 s, all four cores)
+        run: |
+          python3 tools/fuzz_fleet.py --repo . --timebox 600 --seed 20260911 --json \
+            > /tmp/fuzz-fleet.json
+          cat /tmp/fuzz-fleet.json
+          python3 - <<'EOF'
+          import json
+          r = json.load(open("/tmp/fuzz-fleet.json"))
+          assert r["status"] == "pass", r
+          assert all(t["violations"] == 0 for t in r["targets"]), r
+          EOF

@@ -1,0 +1,18 @@
+## T0-d: the two near-ceiling files, split by responsibility (not compressed)
+
+BEFORE (at base ef34792):
+389
+386
+
+AFTER (this commit):
+  329 tools/evidence_check.py
+   78 tools/evidence_ci.py
+  294 tools/gen_registry.py
+  124 tools/gen_registry_docs.py
+  825 total
+
+## behavior identical: gates still green
+PASS: evidence_check (7 bundle(s), 0 failure(s))
+PASS: registry_lint
+PASS: registry_lint
+206 passed in 2.30s
