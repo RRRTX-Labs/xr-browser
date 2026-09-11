@@ -94,6 +94,27 @@ SUITE_MAPS = {
         "shortcuts.cc": ["test_shortcuts"],
         "policy_state.cc": ["test_dial"],
     },
+    # P10-T1: the update verifier core joins the matrix (hard gate >=95%).
+    # The wall-clock fuzz suite stays out (its invariants are covered by the
+    # unit suites + the 600 s evidence campaign); the golden-vector suite IS
+    # in the maps — it drives the host binary end-to-end, which is exactly
+    # what a verifier mutation must not survive. apply_and_build() builds
+    # build/update_host whenever a host-driving suite is mapped.
+    "update": {
+        "json.cc": ["test_manifest_strict", "test_verify_policy",
+                    "test_golden_vectors"],
+        "json_parse.cc": ["test_manifest_strict", "test_verify_policy",
+                          "test_golden_vectors"],
+        "sha256.cc": ["test_manifest_strict", "test_golden_vectors"],
+        "manifest.cc": ["test_manifest_strict", "test_golden_vectors"],
+        "verify_policy.cc": ["test_verify_policy", "test_monotonic_downgrade",
+                             "test_golden_vectors"],
+        "epoch.cc": ["test_verify_policy", "test_update_host",
+                     "test_golden_vectors"],
+        "cohort.cc": ["test_cohort", "test_golden_vectors"],
+        "backoff.cc": ["test_backoff", "test_golden_vectors"],
+        "seen.cc": ["test_replay", "test_update_host", "test_golden_vectors"],
+    },
 }
 
 DEFAULT_TARGET = "policy"
@@ -163,6 +184,8 @@ def apply_and_build(tmp: Path, target: str, mutant: dict[str, Any],
         make_targets.append("build/themes_host")
     if "test_settings_host" in suites:
         make_targets.append("build/settings_host")
+    if "test_golden_vectors" in suites or "test_update_host" in suites:
+        make_targets.append("build/update_host")
     r = subprocess.run(
         ["make", "-C", str(tmp / target / "tests"), "-j", str(jobs), *make_targets],
         capture_output=True, text=True,
@@ -198,7 +221,8 @@ def main(argv: list[str]) -> int:
     p.add_argument("--xr-core", default="../xr-core")
     p.add_argument("--targets", default=DEFAULT_TARGET,
                    help="comma list of core roots under xr-core/"
-                        "(policy|settings|themes); default policy (P6 lane)")
+                        "(policy|settings|themes|commands|update); default "
+                        "policy (P6 lane)")
     p.add_argument("--sample", type=int, default=0,
                    help="run a seeded sample of N mutants per target (CI); "
                         "0 = full matrix")

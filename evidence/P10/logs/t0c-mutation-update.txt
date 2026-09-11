@@ -1,0 +1,13 @@
+target: xr-core/update/core/*.cc
+tool: mutation_test
+gate: PASS (score-gate 95.0%)
+score: 99.76%
+mutants: 415
+killed: 414 (build see json, test 414)
+survived: 1
+deny-guard: 35/35 (100% required)
+sampled: False seed: 20260908 timebox-truncated: False
+suites: test_backoff, test_cohort, test_golden_vectors, test_manifest_strict, test_monotonic_downgrade, test_replay, test_update_host, test_verify_policy
+
+survivors (dispositions in docs/state/mutation-scores.json):
+  core/backoff.cc:26 ROR:> -> >= -> dispositioned equivalent-mutant (d>=0 at d==0 returns d which IS 0; behavior-identical)
