@@ -85,6 +85,9 @@ def main(argv: list[str]) -> int:
                         "XR_FUZZ_SECONDS)")
     p.add_argument("--seed", type=int, default=20260910)
     p.add_argument("--json", action="store_true")
+    p.add_argument("--only", default=None,
+                   help="run ONE fleet target by id (CI matrix mode); "
+                        "fail-closed on an unknown id")
     args = p.parse_args(argv)
     repo = Path(args.repo).resolve()
 
@@ -98,6 +101,13 @@ def main(argv: list[str]) -> int:
     seconds = args.timebox or int(os.environ.get("XR_FUZZ_SECONDS",
                                   fleet.get("timebox_gate_s", 60)))
     targets = list(fleet["targets"])
+    if args.only:
+        if not any(tg["id"] == args.only for tg in targets):
+            print(f"FAIL: --only {args.only}: no such fleet target "
+                  f"(known: {', '.join(tg['id'] for tg in targets)})",
+                  file=sys.stderr)
+            return EXIT_FAIL
+        targets = [tg for tg in targets if tg["id"] == args.only]
     if not targets:
         print("FAIL: fuzz_fleet: zero targets (empty-run law)",
               file=sys.stderr)
