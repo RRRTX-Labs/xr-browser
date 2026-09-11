@@ -18,10 +18,15 @@
       "corpus": "tools/parity/corpus-commands.json"
     },
     {
+      "id": "update",
+      "protocol": "../xr-core/update/host_protocol.md",
+      "corpus": "tools/parity/corpus-update.json"
+    },
+    {
       "id": "policy",
       "protocol": null,
       "corpus": null,
-      "covered_by": "tools/vectors_check.py (golden-vector fake parity) + tools/mutation_test.py (777 mutants) — policy_host is a subcommand host, not a {method,args} stdio protocol; no Methods table to auto-discover."
+      "covered_by": "tools/vectors_check.py (golden-vector fake parity) + tools/mutation_test.py (777 mutants) — policy_host is a subcommand host, not a {method,args} stdio protocol; no Methods table to auto-discover. Recorded exception row (P11-T0-a: the exception lives HERE as data, not as a code comment); tools/host_protocol_check.py discovery confirms policy/host/*.cc carries no `method ==` dispatch literals."
     }
   ]
 }

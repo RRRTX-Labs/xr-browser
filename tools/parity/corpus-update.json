@@ -1,0 +1,315 @@
+{
+  "cases": [
+    {
+      "args": {},
+      "expect": "ok",
+      "id": "flag-status-on",
+      "method": "flag-status"
+    },
+    {
+      "args": {},
+      "expect": "ok",
+      "id": "about-states-alphabet",
+      "method": "about-states"
+    },
+    {
+      "args": {
+        "channel": "dev",
+        "current_version": "1.0.0.0",
+        "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+        "epoch": {
+          "epoch_id": "epoch-2026-09",
+          "key_id": "xr-root-1",
+          "manual_path": false,
+          "revoked": false,
+          "seq": 3
+        },
+        "keys": [
+          {
+            "key_id": "xr-root-1",
+            "public_key": "ROOT-PUB-KEY"
+          },
+          {
+            "key_id": "xr-signing-2026-09",
+            "public_key": "SIGNING-PUB-KEY"
+          }
+        ]
+      },
+      "expect": "ok",
+      "id": "verify-accept-newer",
+      "method": "verify"
+    },
+    {
+      "args": {
+        "channel": "dev",
+        "current_version": "1.0.0.0",
+        "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"},\"xrsig\":\"z\"}",
+        "epoch": {
+          "epoch_id": "epoch-2026-09",
+          "key_id": "xr-root-1",
+          "manual_path": false,
+          "revoked": false,
+          "seq": 3
+        },
+        "keys": [
+          {
+            "key_id": "xr-root-1",
+            "public_key": "ROOT-PUB-KEY"
+          },
+          {
+            "key_id": "xr-signing-2026-09",
+            "public_key": "SIGNING-PUB-KEY"
+          }
+        ]
+      },
+      "expect": "ok",
+      "id": "verify-unknown-envelope-level",
+      "method": "verify"
+    },
+    {
+      "args": {
+        "channel": "dev",
+        "current_version": "1.0.0.0",
+        "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"0.9.9.9\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:72d305d0ee79eda6\"}}",
+        "epoch": {
+          "epoch_id": "epoch-2026-09",
+          "key_id": "xr-root-1",
+          "manual_path": false,
+          "revoked": false,
+          "seq": 3
+        },
+        "keys": [
+          {
+            "key_id": "xr-root-1",
+            "public_key": "ROOT-PUB-KEY"
+          },
+          {
+            "key_id": "xr-signing-2026-09",
+            "public_key": "SIGNING-PUB-KEY"
+          }
+        ]
+      },
+      "expect": "ok",
+      "id": "verify-downgrade-refused",
+      "method": "verify"
+    },
+    {
+      "args": {
+        "channel": "beta",
+        "current_version": "1.0.0.0",
+        "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+        "epoch": {
+          "epoch_id": "epoch-2026-09",
+          "key_id": "xr-root-1",
+          "manual_path": false,
+          "revoked": false,
+          "seq": 3
+        },
+        "keys": [
+          {
+            "key_id": "xr-root-1",
+            "public_key": "ROOT-PUB-KEY"
+          },
+          {
+            "key_id": "xr-signing-2026-09",
+            "public_key": "SIGNING-PUB-KEY"
+          }
+        ]
+      },
+      "expect": "ok",
+      "id": "verify-release-channel-test-verifier-refused",
+      "method": "verify"
+    },
+    {
+      "args": {
+        "channel": "dev",
+        "current_version": "1.0.0.0",
+        "keys": [
+          {
+            "key_id": "xr-root-1",
+            "public_key": "ROOT-PUB-KEY"
+          },
+          {
+            "key_id": "xr-signing-2026-09",
+            "public_key": "SIGNING-PUB-KEY"
+          }
+        ]
+      },
+      "expect": "reject",
+      "id": "verify-missing-envelope",
+      "method": "verify"
+    },
+    {
+      "args": {
+        "channel": "dev",
+        "cookie": "track-me",
+        "current_version": "1.0.0.0",
+        "envelope": "{\"epoch\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"seq\":3},\"response\":{\"app\":[{\"appid\":\"labs.rrrtx.xr\",\"status\":\"ok\",\"updatecheck\":{\"manifest\":{\"packages\":{\"package\":[{\"fp\":\"1.abc\",\"hash_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"name\":\"xr-1.2.0.0.crx\",\"size\":1024}]},\"run\":\"\",\"version\":\"1.2.0.0\"},\"status\":\"ok\",\"urls\":{\"url\":[{\"codebase\":\"https://updates.example/xr/\"}]}}}],\"daystart\":{\"elapsed_days\":7000},\"protocol\":\"3.1\",\"server\":\"pub\"},\"schema\":\"xr-update-envelope\",\"schema_version\":1,\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0a8e6ec3b744bbc7\"}}",
+        "epoch": {
+          "epoch_id": "epoch-2026-09",
+          "key_id": "xr-root-1",
+          "manual_path": false,
+          "revoked": false,
+          "seq": 3
+        },
+        "keys": [
+          {
+            "key_id": "xr-root-1",
+            "public_key": "ROOT-PUB-KEY"
+          },
+          {
+            "key_id": "xr-signing-2026-09",
+            "public_key": "SIGNING-PUB-KEY"
+          }
+        ]
+      },
+      "expect": "reject",
+      "id": "verify-unknown-arg",
+      "method": "verify"
+    },
+    {
+      "args": {
+        "epoch": {
+          "epoch_id": "epoch-2026-09",
+          "key_id": "xr-root-1",
+          "manual_path": false,
+          "revoked": false,
+          "seq": 3
+        },
+        "keys": [
+          {
+            "key_id": "xr-root-1",
+            "public_key": "ROOT-PUB-KEY"
+          },
+          {
+            "key_id": "xr-signing-2026-09",
+            "public_key": "SIGNING-PUB-KEY"
+          }
+        ],
+        "notice": "{\"body\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"reason\":\"key compromise drill\",\"schema\":\"xr-epoch-revocation\",\"schema_version\":1,\"seq\":4},\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:f221a243b7786a68\"}}"
+      },
+      "expect": "ok",
+      "id": "epoch-apply-valid",
+      "method": "epoch-apply"
+    },
+    {
+      "args": {
+        "epoch": {
+          "epoch_id": "epoch-2026-09",
+          "key_id": "xr-root-1",
+          "manual_path": false,
+          "revoked": false,
+          "seq": 3
+        },
+        "keys": [
+          {
+            "key_id": "xr-root-1",
+            "public_key": "ROOT-PUB-KEY"
+          },
+          {
+            "key_id": "xr-signing-2026-09",
+            "public_key": "SIGNING-PUB-KEY"
+          }
+        ],
+        "notice": "{\"body\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"reason\":\"key compromise drill\",\"schema\":\"xr-epoch-revocation\",\"schema_version\":1,\"seq\":4},\"signature\":{\"alg\":\"minisign-ed25519\",\"key_id\":\"xr-root-1\",\"sig\":\"sig:0000000000000000\"}}"
+      },
+      "expect": "ok",
+      "id": "epoch-apply-bad-signature",
+      "method": "epoch-apply"
+    },
+    {
+      "args": {
+        "epoch": {
+          "epoch_id": "epoch-2026-09",
+          "key_id": "xr-root-1",
+          "manual_path": false,
+          "revoked": false,
+          "seq": 3
+        },
+        "keys": [
+          {
+            "key_id": "xr-root-1",
+            "public_key": "ROOT-PUB-KEY"
+          },
+          {
+            "key_id": "xr-signing-2026-09",
+            "public_key": "SIGNING-PUB-KEY"
+          }
+        ],
+        "notice": "{\"body\":{\"epoch_id\":\"epoch-2026-09\",\"key_id\":\"xr-root-1\",\"reason\":\"key compromise drill\",\"schema\":\"xr-epoch-revocation\",\"schema_version\":1,\"seq\":4,\"urgent\":true},\"signature\":{\"sig\":\"x\"}}"
+      },
+      "expect": "reject",
+      "id": "epoch-apply-unknown-field",
+      "method": "epoch-apply"
+    },
+    {
+      "args": {
+        "buckets": 100,
+        "channel": "stable",
+        "install_id": "0f3a1c-device-uuid"
+      },
+      "expect": "ok",
+      "id": "cohort-deterministic",
+      "method": "cohort"
+    },
+    {
+      "args": {
+        "buckets": 0,
+        "channel": "stable",
+        "install_id": "x"
+      },
+      "expect": "reject",
+      "id": "cohort-bad-buckets",
+      "method": "cohort"
+    },
+    {
+      "args": {
+        "now_mono": 1000,
+        "state": {
+          "fail_streak": 0,
+          "last_check_mono": -1,
+          "next_allowed_mono": 0
+        }
+      },
+      "expect": "ok",
+      "id": "backoff-fresh-may-check",
+      "method": "backoff"
+    },
+    {
+      "args": {
+        "now_mono": 100000,
+        "outcome": "failure",
+        "state": {
+          "fail_streak": 20,
+          "last_check_mono": 90000,
+          "next_allowed_mono": 108000
+        }
+      },
+      "expect": "ok",
+      "id": "backoff-failure-cap-48h",
+      "method": "backoff"
+    },
+    {
+      "args": {
+        "event": "check",
+        "state": "idle"
+      },
+      "expect": "ok",
+      "id": "about-state-1-idle-check",
+      "method": "about-state"
+    },
+    {
+      "args": {
+        "event": "offer",
+        "state": "idle"
+      },
+      "expect": "ok",
+      "id": "about-state-invalid-transition",
+      "method": "about-state"
+    }
+  ],
+  "pair": "update",
+  "protocol": "../xr-core/update/host_protocol.md",
+  "provenance": "P11-T0-a: derived pair. Cases are a method-spanning subset of the 73 golden vectors in docs/contracts/vectors/update-v1.json (byte-parity across both backends is enforced THERE by tools/update_vectors_check.py) plus the two flag-surface methods the vector file does not carry (flag-status, about-states; covered by test_update_host). expect encodes the EXIT CLASS: ok = exit 0 typed result (deny verdicts and kRejected included \u2014 they are results, not protocol errors), reject = exit 1 typed error (kMalformedInput/kUnknownMethod). Executed byte-for-byte against both backends by tools/tests/test_p11_parity.py.",
+  "schema_version": 1
+}

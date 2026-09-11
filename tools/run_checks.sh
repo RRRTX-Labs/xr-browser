@@ -235,6 +235,9 @@ fi
 # request stream and fails on any byte difference (g++ only; SKIPs visibly
 # otherwise). Evidence runs use XR_DIFF_FUZZ_SECONDS=600.
 # ---------------------------------------------------------------------------
+echo "== P11-T0-a: host protocol doc gate (every method-dispatching host documented, both directions) =="
+"$PY" tools/host_protocol_check.py
+
 echo "== P9-T0-a: parity completeness (every protocol method has corpus cases) =="
 "$PY" tools/parity_completeness.py
 
