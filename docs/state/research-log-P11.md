@@ -357,6 +357,34 @@ Decisions:
    positive test) and proven in both worlds — including a simulated
    hosted PATH with fake cargo/go/rustc/clang/semgrep binaries (12/12
    green under the simulation).
+13. **xr-lists minisign cell never ran where minisign EXISTS (T3 latent,
+   fixed this commit).** The round-trip's minisign cell passed only where
+   the binary was ABSENT (visible SKIP 77); hosted CI installs it (P10's
+   minisign-on-CI pattern), and the sign call then died on the missing
+   key file — `sign_artifact.py` requires a pre-existing secret key
+   (`minisign -S -s`). The governance lane reddening earlier had masked
+   the cell entirely. Fix: the round-trip now generates an ephemeral
+   PASSWORDLESS keypair (`minisign -G -W`) inside $TMP when the binary is
+   present; the absent-path SKIP is byte-unchanged. Proven locally with a
+   stub-binary simulation ("binary present — ran for real" cell green) —
+   the sandbox has no minisign, so the hosted run is the real proof and
+   is recorded per item 9's law.
+14. **`cargo test --lib` on a vendored .crate tree is structurally
+   impossible (T1 latent, fixed this commit).** The shield-vendor lane's
+   phase-2 step ran `cargo test --locked --lib` on a byte-identical copy
+   of the vendored pin — but cargo strips the crate's `tests/` tree when
+   publishing, and adblock's `src/blocker.rs:536` includes
+   `../tests/unit/blocker.rs` under `cfg(test)`, so the lib-test build
+   can never compile from published bytes (run 34717146412, job
+   103616322631: "couldn't read src/../tests/unit/blocker.rs"). The step
+   had NEVER executed before T5 (phase 1 reddened first — the 18 missing
+   Cargo.lock files, item 10). Fix: phase 2 now proves what the vendored
+   layout CAN prove — the byte-identical MANIFEST-sealed copy with the
+   lock resolved runner-side (`cargo build --locked --release`) — and the
+   job comment states the tarball fact + where upstream conformance
+   actually lives (T8's parity job against the vendored corpus; R2
+   addendum below). Not a weakening: the step as written never passed
+   anywhere; the honest capability is now the claimed capability.
 
 ## R1. adblock-rust: version, license, advisory state (T1 input)
 
@@ -403,6 +431,18 @@ documentation. The ≥1,500-case vendored corpus for T8 parity must be
 machine-derivable and license-clean; attribution per source is mandatory
 (T3's frozen list-bundle-manifest-v1 either carries it or we STOP per the
 brief).
+
+**P11-T5 addendum (2026-09-12, hosted-run evidence).** The published
+`.crate` tarball carries NO upstream test tree: cargo strips `tests/` at
+publish time, and adblock 0.13.3's `src/blocker.rs:536` includes
+`../tests/unit/blocker.rs` under `cfg(test)` — so `cargo test --lib`
+against the vendored bytes cannot compile (core-hardening run 34717146412,
+job 103616322631, on the exact DEPS-pinned tree). Consequence for this
+research item: the vendored pin's conformance evidence canNOT be "the
+crate's own unit tests"; it is T8's parity job (our FFI binding vs the
+reference engine over the vendored corpus, >=1,500 cases, +/-2% agreement,
+FP <=0.5%) plus the offline-build + lock-resolving-copy-build proofs in
+the shield-vendor lane. Recorded as research-log D7 item 14.
 
 ## R3. Chromium network-service seam at pin d04cdb24 — UNVERIFIED (pin read still owed; T2 landed the in-tree half)
 

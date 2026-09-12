@@ -212,16 +212,25 @@ jobs:
 
   shield-vendor:
     # P11-T1: the vendored adblock-rust pin is REAL — it compiles offline
-    # from the sha256-sealed tree, and the crate's own unit tests pass.
-    # Template: P10's server-conformance job. Two-phase on purpose:
+    # from the sha256-sealed tree, and the copy builds with the lock
+    # resolved runner-side. Template: P10's server-conformance job.
+    # Two-phase on purpose:
     #   build  = OFFLINE against third_party/rust/vendor/ (source
     #            replacement; proves the closure is complete and sealed —
     #            a single missing crate fails here, no network involved);
-    #   test   = from a byte-identical COPY (MANIFEST-sealed) with a
-    #            runner-side cargo fetch (--locked): the vendored layout
-    #            deliberately excludes the ~150-crate dev-dep graph
+    #   copy   = from a byte-identical COPY (MANIFEST-sealed) with a
+    #            runner-side cargo fetch (--locked, release): the vendored
+    #            layout deliberately excludes the ~150-crate dev-dep graph
     #            (PROVENANCE.md records the boundary), and the in-tree
     #            source replacement would block dev-dep fetches anyway.
+    # NOT `cargo test`: the published .crate tarball carries no upstream
+    # test tree — cargo strips tests/ at publish time, and adblock's
+    # src/blocker.rs:536 includes ../tests/unit/blocker.rs under cfg(test),
+    # so a lib-test build from vendored bytes is structurally impossible
+    # (run 34717146412 job 103616322631 proved it; the step had never
+    # executed before P11-T5 because phase 1 reddened first). Upstream
+    # conformance is T8's parity job against the vendored corpus
+    # (research-log-P11.md R2 addendum + D7 item 14).
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -245,12 +254,12 @@ jobs:
           cd ../xr-core/third_party/rust/adblock/0.13.3
           cargo build --offline 2>&1 | tee /tmp/shield-vendor-build.log
           tail -1 /tmp/shield-vendor-build.log
-      - name: Unit tests (byte-identical copy, --locked, runner-side fetch)
+      - name: Lock-resolving release build from a byte-identical copy (runner-side fetch, --locked)
         run: |
           cp -r ../xr-core/third_party/rust/adblock/0.13.3 /tmp/adblock-test
           cd /tmp/adblock-test
-          cargo test --locked --lib 2>&1 | tee /tmp/shield-vendor-test.log
-          grep -q "test result: ok" /tmp/shield-vendor-test.log
+          cargo build --locked --release 2>&1 | tee /tmp/shield-vendor-test.log
+          grep -q "Finished" /tmp/shield-vendor-test.log
       - name: Post the conclusion
         if: always()
         run: |
@@ -258,7 +267,7 @@ jobs:
             echo "## shield-vendor (P11-T1)"
             echo "- vendored pin: adblock 0.13.3 (crate sha256 f44b96a6…)"
             echo "- offline build: $( [ -f /tmp/shield-vendor-build.log ] && echo executed || echo not-reached )"
-            echo "- unit tests: $(grep -h 'test result:' /tmp/shield-vendor-test.log 2>/dev/null | head -1 || echo not-reached)"
+            echo "- copy build (--locked, release): $(grep -h 'Finished' /tmp/shield-vendor-test.log 2>/dev/null | head -1 || echo not-reached)"
           } >> "$GITHUB_STEP_SUMMARY"
 
   fuzz-fleet:

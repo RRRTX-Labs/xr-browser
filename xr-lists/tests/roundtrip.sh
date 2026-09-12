@@ -98,7 +98,18 @@ else
   bad "gpg-absent sign did not SKIP visibly (rc=$rc): $out"
 fi
 
-# ---- minisign absent => visible SKIP --------------------------------------
+# ---- minisign: ephemeral key when the binary is present; absent => visible
+# SKIP. P11-T5 fix: the cell previously passed ONLY where minisign was ABSENT
+# — hosted CI installs it (P10's minisign-on-CI pattern), and the sign call
+# then died on the missing key file (an untested path masked by the governance
+# lane reddening earlier; core-hardening/governance runs at 644fb41 exposed
+# it). sign_artifact.py requires a pre-existing secret key (minisign -S -s),
+# so the round-trip generates an ephemeral PASSWORDLESS keypair here
+# (-W = no password prompt); it lives and dies with $TMP.
+if command -v minisign >/dev/null 2>&1 && [ ! -f "$TMP/minisign.key" ]; then
+  minisign -G -W -p "$TMP/minisign.pub" -s "$TMP/minisign.key" >/dev/null \
+    || bad "minisign keygen failed (binary present, -G -W refused)"
+fi
 out=$("$PY" xr-lists/sign.py minisign --manifest "$TMP/manifest-v1.json" \
       --key "$TMP/minisign.key" --out-dir "$TMP/minisig" 2>&1)
 rc=$?
