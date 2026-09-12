@@ -1,0 +1,41 @@
+P11-T5 hosted-CI green record (research-log D7 item 9 law; queried to completion)
+==================================================================================
+Repo: RRRTX-Labs/xr-browser
+
+governance — run 34722250203, job 103630140232, head 747b033: SUCCESS
+  All 17 steps green (first P11 governance run ever past step 11):
+    8  Governance checks                     -> success
+    9  Workflow files lint (P4)              -> success
+    10 Negative fixtures (N=95 on hosted)    -> success
+    11 Build-system gates (P2)               -> success
+    12 Contract-freeze gates (P5)            -> success
+    13 Mutation freshness gate (P10-T0-c)    -> success
+    14 Policy mutation gate (P6, sampled)    -> success
+    15 Policy fuzz timebox (P6)              -> success
+    16 Policy bench (P6, record-only)        -> success
+    17 Upstream treadmill gates (P3)         -> success
+
+core-hardening — run 34718047516, head 3c53cee: SUCCESS
+  All 12 jobs green after the API rerun-failed-jobs of the three
+  runner-shutdown-flaked fuzz-fleet jobs (D7 item 17: exit 143 SIGTERM,
+  "The runner has received a shutdown signal" — infrastructure, not code).
+  shield-vendor job: BOTH phases green (phase 1 = the 18 recovered
+  Cargo.lock files via xr-core 1e5fa01; phase 2 = lock-resolving release
+  build from the byte-identical copy, D7 item 14).
+  Lane inputs (DEPS, tools/mutation_test.py, tools/fuzz_fleet.py,
+  tools/policy_fuzz.py, tools/mutation_freshness.py, its own yml) are
+  UNCHANGED 3c53cee..747b033 (git diff over those paths is empty), so
+  this verdict carries to the current head by the workflow's own
+  path-filter semantics.
+
+Debt-fix rounds (each queried to completion per D7 item 9):
+  round 1 (644fb41 + xr-core 1e5fa01/341f1fb): pytest hermeticity pins,
+    vendor Cargo.lock recovery, DEPS repin, xrctl fake flag.
+  round 2 (3c53cee): minisign roundtrip cell ephemeral keygen (D7 13);
+    cargo-test-on-vendored-tarball replaced by lock-resolving build (D7 14).
+  round 3 (0ddac3d): negatives canary hermeticity — rule-(e) PATH pin,
+    roundtrip control _common copy, honest release-refusal cell (D7 15/16).
+  round 4 (8798681): PATH pinned to stub dir alone; canary prints findings
+    when red (D7 18).
+  round 5 (747b033): license_audit skips python runtime caches — the
+    .pytest_cache self-pollution trap root-fixed (D7 19).

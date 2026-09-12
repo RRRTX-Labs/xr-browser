@@ -448,6 +448,22 @@ Decisions:
     real doc path still reddens (test-first: written red against the
     unfixed tool, then green). `./scripts/build test` mirrors hosted:
     731 passed locally. The procedural rm-workaround is now obsolete.
+20. **Hosted-CI green record (T5 closed on hosted; item 9's law
+    satisfied).** governance run **34722250203** (job 103630140232) at
+    head **747b033**: SUCCESS — all 17 steps, the first P11 governance
+    run ever past step 11 (contract-freeze, mutation freshness, policy
+    mutation/fuzz/bench and upstream-treadmill gates all green on
+    hosted). core-hardening run **34718047516** at head **3c53cee**:
+    SUCCESS after the API rerun of the three runner-shutdown-flaked
+    fuzz-fleet jobs (item 17); its path-filtered inputs are unchanged
+    3c53cee..747b033 (empty git diff over DEPS + mutation/fuzz tools +
+    its yml), so the verdict carries to the current head by the
+    workflow's own semantics. Full step/job listing:
+    evidence/P11/logs/t5-ci-green.txt (ci-run rows for the T0-d strict
+    evidence rules). Five debt-fix rounds: pytest hermeticity + vendor
+    locks (round 1), minisign cell + build-not-test (round 2, items
+    13/14), canary hermeticity + honest refusal cell (rounds 3/4, items
+    15/16/18), license_audit runtime caches (round 5, item 19).
 
 ## R1. adblock-rust: version, license, advisory state (T1 input)
 
