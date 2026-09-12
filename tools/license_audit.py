@@ -67,7 +67,13 @@ CODE_EXTS = {
     ".gn", ".gni", ".java", ".kt", ".ts", ".js", ".m", ".mm", ".swift", ".sh",
 }
 CODE_DIRS = {"third_party", "vendor", "patches"}
-SKIP_DIRS = {".git"}
+# Runtime caches/environments that .gitignore declares non-source: pytest
+# and the interpreter write them INTO the working tree during the very
+# same CI run — scanning them made the audit trip on its own suite's
+# scratch (nodeids quoting the GPL fixture test names; governance run
+# 34721088960 step 11, research-log D7 item 19). A marker in any real
+# source/doc path still reddens (regression test proves both halves).
+SKIP_DIRS = {".git", ".pytest_cache", "__pycache__", ".venv", "venv"}
 
 
 def is_code_path(rel: str) -> bool:

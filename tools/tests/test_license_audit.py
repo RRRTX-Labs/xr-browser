@@ -117,6 +117,29 @@ def test_allowlist_entry_without_justification_fails(tmp_path: Path) -> None:
     assert "justification" in proc.stdout
 
 
+def test_runtime_cache_pollution_is_not_scanned(tmp_path: Path) -> None:
+    """D7 item 19 (governance run 34721088960, step 11): pytest's own
+    runtime caches quote the GPL fixture test names (nodeids) — transient
+    gitignored scratch written by the suite during the same CI run, not
+    repo docs. The audit must skip them; the identical marker in a real
+    doc path must STILL redden (no weakening)."""
+    make_repo(tmp_path)
+    cache = tmp_path / ".pytest_cache" / "v" / "cache"
+    cache.mkdir(parents=True)
+    marker = (FIXTURES / "gpl-doc-note.md").read_text(encoding="utf-8")
+    (cache / "nodeids").write_text(marker, encoding="utf-8")
+    pyc = tmp_path / "tools" / "__pycache__"
+    pyc.mkdir(parents=True)
+    (pyc / "junk.py").write_text(marker, encoding="utf-8")
+    proc = run_tool("--repo", ".", cwd=tmp_path)
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    # the same marker in a real doc path still fails (guard stays honest)
+    (tmp_path / "docs" / "note.md").write_text(marker, encoding="utf-8")
+    proc = run_tool("--repo", ".", cwd=tmp_path)
+    assert proc.returncode == 1
+    assert "docs/note.md" in proc.stdout
+
+
 def test_missing_allowlist_fails_closed(tmp_path: Path) -> None:
     make_repo(tmp_path)
     (tmp_path / "docs/state/license-allowlist.yaml").unlink()

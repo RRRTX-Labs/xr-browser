@@ -431,6 +431,23 @@ Decisions:
     canary also now PRINTS the findings when it fails — a red canary that
     cannot show which arm fired is the same invisibility item 16
     condemns. The hosted run remains the recorded proof (item 9's law).
+19. **license_audit scanned the suite's own runtime scratch (hosted-only
+    self-pollution, fixed this commit).** Governance run 34721088960
+    (head 8798681) got the negatives green for the first time (N=95 on
+    hosted) and died one step later: `./scripts/build test` →
+    test_license_audit::test_real_repo_passes — the earlier pytest lanes
+    had written `.pytest_cache/v/cache/nodeids` quoting the GPL fixture
+    test names, and the audit's tree-walk (SKIP_DIRS = {".git"}) scanned
+    that transient gitignored cache as repo docs. This is the same trap
+    that twice polluted the LOCAL battery (procedurally worked around
+    with `rm -rf .pytest_cache` around pytest runs); the root fix makes
+    the TOOL hermetic instead: SKIP_DIRS now carries the python runtime
+    caches .gitignore already declares non-source (.pytest_cache,
+    __pycache__, .venv, venv). Not a weakening — the new regression test
+    proves both halves: polluted caches pass, the identical marker in a
+    real doc path still reddens (test-first: written red against the
+    unfixed tool, then green). `./scripts/build test` mirrors hosted:
+    731 passed locally. The procedural rm-workaround is now obsolete.
 
 ## R1. adblock-rust: version, license, advisory state (T1 input)
 
