@@ -41,3 +41,9 @@ allowlist:
   - path: build/sbom/cyclonedx-schema-1.6.json
     justification: "Vendored CycloneDX 1.6 JSON schema (Apache-2.0, DR-04 clean) enumerates SPDX license IDs as a JSON enum — GPL-2.0/GPL-3.0 appear only as enumerated permit-values inside the 'licenses' definition, not as linked code. Schema is vendored data, byte-frozen, with LICENSE.cyclonedx-schema.txt sidecar."
 
+  - path: docs/state/research-log-P11.md
+    justification: "P11 research log R6 records the live-verified EasyList licence page (GPL-3.0-or-later OR CC-BY-SA-3.0 dual, fetched 2026-09-12) grounding the xr-lists attribution pipeline's DATA-only + LICENSE.attribution.txt sidecar treatment (DR-04), and R1/D1 record the MPL-2.0 adblock-rust pin next to the rejected GPLv3 uBO code path."
+  - path: xr-lists/README.md
+    justification: "The xr-lists pipeline README states the source-list licence terms (EasyList GPL-3.0-or-later OR CC-BY-SA-3.0 dual, pointing at docs/dependencies/easylist-family.yaml) because the attribution shape law embeds the SPDX expression in every compiled bundle — the citation IS the data-only design (DR-04), never a link."
+  - path: tools/tests/fixtures/p11_vendor_red_licenses.json
+    justification: "P11 vendor-gate test fixture: spells out the red-class copyleft expressions as DATA so test_p11_vendor.py can prove vendor_check.py / vendor_rust_graph.py refuse them without any code file carrying the banned tokens (license_audit fails code hits unconditionally — the work/release-check/sbom.json precedent for license tokens as audit-relevant data)."

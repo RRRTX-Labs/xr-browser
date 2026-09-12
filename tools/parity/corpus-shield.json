@@ -1438,6 +1438,170 @@
    "expect": "reject",
    "id": "apply-missing-now-mono",
    "method": "apply"
+  },
+  {
+   "args": {
+    "scope": {
+     "reason": "user-allow",
+     "scope_id": "ex-1",
+     "site": "example.com"
+    }
+   },
+   "expect": "ok",
+   "id": "exception-add-happy",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "reason": "collision",
+     "scope_id": "ex-a"
+    },
+    "scopes": [
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     }
+    ]
+   },
+   "expect": "ok",
+   "id": "exception-add-duplicate-refused",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "scope_id": "ex-9",
+     "site": "x.example"
+    }
+   },
+   "expect": "reject",
+   "id": "exception-add-missing-reason",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope_id": "ex-a",
+    "scopes": [
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     },
+     {
+      "list_id": "l1",
+      "reason": "false-positive",
+      "rule_id": "r-7",
+      "scope_id": "ex-b"
+     }
+    ]
+   },
+   "expect": "ok",
+   "id": "exception-remove-happy",
+   "method": "exception-remove"
+  },
+  {
+   "args": {
+    "scope_id": "nope",
+    "scopes": [
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     }
+    ]
+   },
+   "expect": "ok",
+   "id": "exception-remove-unknown-refused",
+   "method": "exception-remove"
+  },
+  {
+   "args": {
+    "now_mono": 500,
+    "scopes": [
+     {
+      "expiry_mono": 500,
+      "reason": "r",
+      "scope_id": "a"
+     },
+     {
+      "reason": "r",
+      "scope_id": "b"
+     }
+    ]
+   },
+   "expect": "ok",
+   "id": "exception-sweep-boundary",
+   "method": "exception-sweep"
+  },
+  {
+   "args": {
+    "scopes": []
+   },
+   "expect": "reject",
+   "id": "exception-sweep-missing-now",
+   "method": "exception-sweep"
+  },
+  {
+   "args": {
+    "on": true,
+    "site": "example.com"
+   },
+   "expect": "ok",
+   "id": "site-toggle-on",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "on": true,
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "",
+      "reason": "user-site-toggle",
+      "rule_id": "",
+      "scope_id": "site-toggle:example.com",
+      "site": "example.com",
+      "workspace": ""
+     }
+    ],
+    "site": "example.com"
+   },
+   "expect": "ok",
+   "id": "site-toggle-already-on-refused",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "on": false,
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "",
+      "reason": "user-site-toggle",
+      "rule_id": "",
+      "scope_id": "site-toggle:example.com",
+      "site": "example.com",
+      "workspace": ""
+     }
+    ],
+    "site": "example.com"
+   },
+   "expect": "ok",
+   "id": "site-toggle-off",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "on": "true",
+    "site": "example.com"
+   },
+   "expect": "reject",
+   "id": "site-toggle-bad-on",
+   "method": "site-toggle"
   }
  ],
  "pair": "shield",

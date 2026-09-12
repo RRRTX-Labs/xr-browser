@@ -132,11 +132,13 @@ new host and fake. New LIVING contracts registered this phase:
 
 | Contract | Phase | Files | Review packet | Freeze status |
 |---|---|---|---|---|
-| shield-host-protocol v1 | P11 (T2) | `xr-core/shield/host_protocol.md` (the stdio method table — TWO vocabularies: the frozen mojom envelope for `Status`/`RecentEvents`, the living host surface for `flag-status`/`bundle-load`/`bundle-check`/`match`/`posture`/`apply`; byte-parity-locked against `fakes/shield.py`) | `docs/state/research-log-P11.md` | REVIEW-COMPLETE (ratification: PENDING, HG-26) |
+| shield-host-protocol v1 | P11 (T2) | `xr-core/shield/host_protocol.md` (the stdio method table — TWO vocabularies: the frozen mojom envelope for `Status`/`RecentEvents`, the living host surface for `flag-status`/`bundle-load`/`bundle-check`/`match`/`posture`/`apply` plus the T4 exception surface `exception-add`/`exception-remove`/`exception-sweep`/`site-toggle`; byte-parity-locked against `fakes/shield.py`) | `docs/state/research-log-P11.md` | REVIEW-COMPLETE (ratification: PENDING, HG-26) |
 | xr-list-bundle v1 (normalized bundle doc) | P11 (T2) | the living bundle shape inside `shield-host-protocol v1` (`schema:"xr-list-bundle"`, v1 filter grammar, per-list attribution INSIDE the digest, compiler refusal table); binds to the frozen manifest via `sha256(canonical per-list bytes)` | `docs/state/research-log-P11.md` | LIVING — T3 pipeline LANDED (`xr-lists/`, this repo; repo choice recorded as research-log D4) |
 
-Byte-law: 160 golden vectors (`docs/contracts/vectors/shield-v1.json`;
-157 at T2 + 3 for the T3 manifest-entry `attribution` loosening below)
+Byte-law: 229 golden vectors (`docs/contracts/vectors/shield-v1.json`;
+157 at T2 + 3 for the T3 manifest-entry `attribution` loosening below
++ 69 at T4: the 67-case exception-surface family and the 2 `a-slot-*`
+ParseSlot refusals the first full shield mutation matrix surfaced)
 replayed against BOTH backends (`tools/shield_vectors_check.py`, wired as
 `p11_shield_gates`) + the compiled-side pin
 (`xr-core/shield/tests/test_golden_vectors.cc`) + the derived parity pair
@@ -168,6 +170,37 @@ The T3 STOP condition was evaluated and did NOT fire: the frozen
 beyond `{name, sha256, rules}`, so per-list attribution rides INSIDE each
 list's canonical bytes (covered by the entry's `sha256`) — the frozen
 manifest carries it without amendment.
+
+T4 (exception surface) byte-laws: four host methods (`exception-add`,
+`exception-remove`, `exception-sweep`, `site-toggle`) with stateless
+set-in/set-out semantics (the scope set rides in on the request, the
+resulting set is the response — persistence is the caller's and the
+ledger's job). The T2 scope grammar is UNTOUCHED (reason REQUIRED on
+every scope; any document parse error ⇒ `kMalformedInput`, exit 1);
+CONTENT conflicts with the existing set ⇒ `kRejected` (exit 0):
+`duplicate-scope-id:<id>`, `unknown-scope-id:<id>`,
+`toggle-already-on:<site>` / `toggle-already-off:<site>` (the
+equal-reoffer precedent). Expiry sweep boundary is INCLUSIVE
+(`now_mono >= expiry_mono` ⇒ swept) and the as-of is the ARGUMENT — no
+wall clock anywhere. The per-site toggle's canonical scope
+(`site-toggle:<site>`, reason `user-site-toggle`) shares the id space
+with manual scopes (a collision is a refusal, no namespace magic);
+dynamic rule add/remove maps to `rule_id`/`list_id`-dimension scopes —
+user-added BLOCK rules are custom lists via xr-lists, NOT scopes. All of
+it pinned by the 69 new golden vectors (the 67-case `x-*` family + the
+2 `a-slot-*` ParseSlot refusals the first FULL shield mutation matrix
+surfaced — 389 mutants at pin 51e6333, 4 survivors in `apply.cc:23-33`,
+2 of them deny-guards, gate FAIL; discharged with NEW TESTS
+(`test_apply.cc` + 2 vectors, xr-core `cfbb344`), never
+equivalent-mutant excuses; the re-run killed 389/389, deny-guard
+61/61, 100.00% — `docs/state/mutation-scores.json` + research-log
+D6), 11 new
+parity-corpus cases (corpus-shield.json: 35 cases / 12 methods), and the
+disclosure ledger (`## shield exception ledger rows` in
+docs/limitations.md — monotonic expiry checked with
+`exception_ledger_check.py --as-of`, zero rows valid, missing section a
+failure, 19 pytest negative fixtures). The P8 §11.9 waivers semantics
+are NOT reused — ADR-0046 records why.
 
 ### `xr_shield_v1` flag — both-state convention + expiry note
 

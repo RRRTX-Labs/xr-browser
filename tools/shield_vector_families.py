@@ -332,6 +332,19 @@ def fam_apply(g: Gen) -> None:
            "state": {"active": {"present": "yes"}, "lkg": {"present": False},
                      "pins": [], "last_apply_mono": -1},
            "now_mono": 1})
+    # P11-T4 mutation-matrix find: slot-not-object and in-slot unknown-field
+    # were UNTESTED refusals (4 ParseSlot survivors, 2 deny-guards).
+    g.add("a-slot-not-object", "apply",
+          {"bundle": BUNDLE,
+           "state": {"active": 5, "lkg": {"present": False}, "pins": [],
+                     "last_apply_mono": -1},
+           "now_mono": 1})
+    g.add("a-slot-unknown-field", "apply",
+          {"bundle": BUNDLE,
+           "state": {"active": {"present": False, "bogus": 1},
+                     "lkg": {"present": False}, "pins": [],
+                     "last_apply_mono": -1},
+           "now_mono": 1})
 
 
 def fam_protocol(g: Gen) -> None:

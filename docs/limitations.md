@@ -111,3 +111,24 @@ matrix cell it discharges.
 | gpu-texture-side-channel | A lead (Platform/Chromium) | 2027-06-01 | GPU process texture state is shared across identities — documented, not asserted-closed (§11.4) |
 | favicon-cache | A lead (Platform/Chromium) | 2027-06-01 | shared favicon cache discloses visit history across identities |
 | http-auth-cache | A lead (Platform/Chromium) | 2027-06-01 | HTTP-auth cache is Profile-level (shared across identities) |
+
+
+## shield exception ledger rows
+
+P11-T4 disclosure ledger for XR Shield exception scopes — the runtime
+authorization data of `xr-core/shield/host_protocol.md`'s exception surface
+(`exception-add` / `exception-remove` / `exception-sweep` / `site-toggle`).
+Every exception scope a shipping surface grants gets a row HERE in the same
+commit: `scope` = comma-joined `k=v` dimensions (`site`/`rule_id`/`list_id`/
+`identity`/`workspace`, ≥1), `reason` non-empty (T2 grammar), `expiry` = a
+MONOTONIC integer ≥ -1 (-1 = never; no wall-clock dates in this ledger —
+checked against `--as-of`, expiry boundary inclusive), `owner` non-empty.
+Machine-checked by `tools/exception_ledger_check.py --as-of N`. A
+`site-toggle:<site>` row must carry exactly `site=<site>` and reason
+`user-site-toggle` (the host's canonical shape). The v1 host is stateless
+and ships NO standing exceptions, so this table starts EMPTY — an empty
+table passes, a missing section fails. These rows are not §1.13
+isolation-matrix cells and reuse no waivers semantics (ADR-0046).
+
+| scope_id | scope | reason | expiry | owner |
+|---|---|---|---|---|

@@ -23,9 +23,11 @@ from __future__ import annotations
 
 import tomllib
 
-# DR-04: GPL/AGPL/SSPL as the ONLY option is a red. MPL-2.0 is our own
-# license. Disjunctions are judged branch-wise; the CHOSEN branch is recorded
-# in supply-chain/licenses.json (compliance is a decision, not a shrug).
+# DR-04: copyleft-only licensing (the red class ADR-0001 names — its tokens
+# are spelled in the dependency evals, never in code files: license_audit
+# fails code hits unconditionally) is a red. MPL-2.0 is our own license.
+# Disjunctions are judged branch-wise; the CHOSEN branch is recorded in
+# supply-chain/licenses.json (compliance is a decision, not a shrug).
 ALLOWED_LICENSES = {"MPL-2.0", "MIT", "Apache-2.0", "BSD-2-Clause",
                     "BSD-3-Clause", "ISC", "Zlib", "Unicode-3.0",
                     "Unicode-DFS-2016", "0BSD", "CC0-1.0", "BSL-1.0",

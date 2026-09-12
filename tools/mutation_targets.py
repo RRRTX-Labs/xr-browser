@@ -66,4 +66,21 @@ SUITE_MAPS = {
         "backoff.cc": ["test_backoff", "test_golden_vectors"],
         "seen.cc": ["test_replay", "test_update_host", "test_golden_vectors"],
     },
+    # P11-T4 (T2-era debt, research-log-P11.md D6): the shield core joins
+    # the matrix. The golden-vector suite drives the COMPILED host
+    # end-to-end (229 cases over all 12 methods incl. the T4 exception
+    # surface) — a core mutation must not survive it; per-TU unit suites
+    # map as supersets. The wall-clock differential fuzz stays OUT of the
+    # per-mutant maps (house rule: unit budgets + the seeded campaigns).
+    "shield": {
+        "context.cc": ["test_context", "test_match", "test_golden_vectors"],
+        "posture.cc": ["test_posture", "test_match", "test_golden_vectors"],
+        "bundle.cc": ["test_bundle_strict", "test_apply", "test_match",
+                      "test_shield_host", "test_golden_vectors"],
+        "scope.cc": ["test_scope", "test_match", "test_golden_vectors"],
+        "apply.cc": ["test_apply", "test_golden_vectors"],
+        "events.cc": ["test_events", "test_golden_vectors"],
+        "match.cc": ["test_match", "test_golden_vectors"],
+        "fake_engine.cc": ["test_match", "test_golden_vectors"],
+    },
 }

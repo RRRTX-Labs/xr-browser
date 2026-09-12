@@ -1,0 +1,17 @@
+{
+ "note": "Red-class license expressions for the P11 vendor-gate tests (tools/tests/test_p11_vendor.py). The banned copyleft tokens are spelled out HERE, as data — never in code files: tools/license_audit.py fails code hits unconditionally, and the tests still assert that vendor_check.py / vendor_rust_graph.py REFUSE every expression below. This fixture path is allowlisted in docs/state/license-allowlist.yaml (doc-hit class; the work/release-check/sbom.json precedent for license tokens as audit-relevant data).",
+ "red": [
+  {
+   "expr": "GPL-3.0-only",
+   "why": "copyleft as the only option: red (DR-04)"
+  },
+  {
+   "expr": "GPL-2.0 OR AGPL-3.0",
+   "why": "disjunction with no allowed branch: red"
+  },
+  {
+   "expr": "MIT AND GPL-2.0",
+   "why": "AND: one bad part poisons the whole conjunction"
+  }
+ ]
+}

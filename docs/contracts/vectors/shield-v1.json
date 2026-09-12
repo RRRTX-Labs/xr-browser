@@ -8604,6 +8604,1572 @@
   },
   {
    "args": {
+    "scope": {
+     "reason": "user-allow",
+     "scope_id": "ex-1",
+     "site": "example.com"
+    }
+   },
+   "expect": {
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "",
+      "reason": "user-allow",
+      "rule_id": "",
+      "scope_id": "ex-1",
+      "site": "example.com",
+      "workspace": ""
+     }
+    ]
+   },
+   "id": "x-add-site-scope",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "reason": "work",
+     "scope_id": "ex-c",
+     "workspace": "ws"
+    },
+    "scopes": [
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     },
+     {
+      "list_id": "l1",
+      "reason": "false-positive",
+      "rule_id": "r-7",
+      "scope_id": "ex-b"
+     }
+    ]
+   },
+   "expect": {
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "profile-a",
+      "list_id": "",
+      "reason": "user-allow",
+      "rule_id": "",
+      "scope_id": "ex-a",
+      "site": "",
+      "workspace": ""
+     },
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "l1",
+      "reason": "false-positive",
+      "rule_id": "r-7",
+      "scope_id": "ex-b",
+      "site": "",
+      "workspace": ""
+     },
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "",
+      "reason": "work",
+      "rule_id": "",
+      "scope_id": "ex-c",
+      "site": "",
+      "workspace": "ws"
+     }
+    ]
+   },
+   "id": "x-add-onto-existing",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "list_id": "l1",
+     "reason": "false-positive",
+     "rule_id": "r-3",
+     "scope_id": "ex-r"
+    }
+   },
+   "expect": {
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "l1",
+      "reason": "false-positive",
+      "rule_id": "r-3",
+      "scope_id": "ex-r",
+      "site": "",
+      "workspace": ""
+     }
+    ]
+   },
+   "id": "x-add-rule-scope",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "identity": "profile-b",
+     "reason": "user-allow",
+     "scope_id": "ex-i"
+    }
+   },
+   "expect": {
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "profile-b",
+      "list_id": "",
+      "reason": "user-allow",
+      "rule_id": "",
+      "scope_id": "ex-i",
+      "site": "",
+      "workspace": ""
+     }
+    ]
+   },
+   "id": "x-add-identity-scope",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "expiry_mono": 700,
+     "reason": "temporary",
+     "scope_id": "ex-t",
+     "site": "news.example"
+    }
+   },
+   "expect": {
+    "scopes": [
+     {
+      "expiry_mono": 700,
+      "identity": "",
+      "list_id": "",
+      "reason": "temporary",
+      "rule_id": "",
+      "scope_id": "ex-t",
+      "site": "news.example",
+      "workspace": ""
+     }
+    ]
+   },
+   "id": "x-add-expiry",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "expiry_mono": 0,
+     "reason": "expires-at-zero",
+     "scope_id": "ex-z"
+    }
+   },
+   "expect": {
+    "scopes": [
+     {
+      "expiry_mono": 0,
+      "identity": "",
+      "list_id": "",
+      "reason": "expires-at-zero",
+      "rule_id": "",
+      "scope_id": "ex-z",
+      "site": "",
+      "workspace": ""
+     }
+    ]
+   },
+   "id": "x-add-expiry-zero",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "expiry_mono": 42,
+     "identity": "p",
+     "list_id": "l1",
+     "reason": "everything",
+     "rule_id": "r-1",
+     "scope_id": "ex-full",
+     "site": "s.example",
+     "workspace": "w"
+    }
+   },
+   "expect": {
+    "scopes": [
+     {
+      "expiry_mono": 42,
+      "identity": "p",
+      "list_id": "l1",
+      "reason": "everything",
+      "rule_id": "r-1",
+      "scope_id": "ex-full",
+      "site": "s.example",
+      "workspace": "w"
+     }
+    ]
+   },
+   "id": "x-add-all-dimensions",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "reason": "third",
+     "scope_id": "ex-c"
+    },
+    "scopes": [
+     {
+      "list_id": "l1",
+      "reason": "false-positive",
+      "rule_id": "r-7",
+      "scope_id": "ex-b"
+     },
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     }
+    ]
+   },
+   "expect": {
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "l1",
+      "reason": "false-positive",
+      "rule_id": "r-7",
+      "scope_id": "ex-b",
+      "site": "",
+      "workspace": ""
+     },
+     {
+      "expiry_mono": -1,
+      "identity": "profile-a",
+      "list_id": "",
+      "reason": "user-allow",
+      "rule_id": "",
+      "scope_id": "ex-a",
+      "site": "",
+      "workspace": ""
+     },
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "",
+      "reason": "third",
+      "rule_id": "",
+      "scope_id": "ex-c",
+      "site": "",
+      "workspace": ""
+     }
+    ]
+   },
+   "id": "x-add-order-preserved",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "reason": "collision",
+     "scope_id": "ex-a",
+     "site": "other.example"
+    },
+    "scopes": [
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     },
+     {
+      "list_id": "l1",
+      "reason": "false-positive",
+      "rule_id": "r-7",
+      "scope_id": "ex-b"
+     }
+    ]
+   },
+   "expect": {
+    "error": "kRejected",
+    "reason": "duplicate-scope-id:ex-a"
+   },
+   "id": "x-add-dup-rejected",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "reason": "manual",
+     "scope_id": "site-toggle:example.com",
+     "site": "example.com"
+    },
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "",
+      "reason": "user-site-toggle",
+      "rule_id": "",
+      "scope_id": "site-toggle:example.com",
+      "site": "example.com",
+      "workspace": ""
+     }
+    ]
+   },
+   "expect": {
+    "error": "kRejected",
+    "reason": "duplicate-scope-id:site-toggle:example.com"
+   },
+   "id": "x-add-dup-rejected-toggle-id",
+   "method": "exception-add"
+  },
+  {
+   "args": {},
+   "expect": {
+    "detail": "missing-scope",
+    "error": "kMalformedInput"
+   },
+   "id": "x-add-missing-scope",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "scope_id": "ex-9",
+     "site": "x.example"
+    }
+   },
+   "expect": {
+    "detail": "missing-reason:ex-9",
+    "error": "kMalformedInput"
+   },
+   "id": "x-add-missing-reason",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "reason": "",
+     "scope_id": "ex-9"
+    }
+   },
+   "expect": {
+    "detail": "missing-reason:ex-9",
+    "error": "kMalformedInput"
+   },
+   "id": "x-add-empty-reason",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "reason": "r",
+     "scope_id": ""
+    }
+   },
+   "expect": {
+    "detail": "bad-scope-id",
+    "error": "kMalformedInput"
+   },
+   "id": "x-add-bad-scope-id",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": "ex"
+   },
+   "expect": {
+    "detail": "scope-not-object",
+    "error": "kMalformedInput"
+   },
+   "id": "x-add-scope-not-object",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "bogus": 1,
+     "reason": "r",
+     "scope_id": "ex-9"
+    }
+   },
+   "expect": {
+    "detail": "unknown-field:bogus",
+    "error": "kMalformedInput"
+   },
+   "id": "x-add-scope-unknown-field",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "reason": "r",
+     "scope_id": "ex-9",
+     "site": 5
+    }
+   },
+   "expect": {
+    "detail": "field-not-string:site",
+    "error": "kMalformedInput"
+   },
+   "id": "x-add-field-not-string",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "expiry_mono": "700",
+     "reason": "r",
+     "scope_id": "ex-9"
+    }
+   },
+   "expect": {
+    "detail": "bad-expiry",
+    "error": "kMalformedInput"
+   },
+   "id": "x-add-bad-expiry-string",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "expiry_mono": -2,
+     "reason": "r",
+     "scope_id": "ex-9"
+    }
+   },
+   "expect": {
+    "detail": "bad-expiry",
+    "error": "kMalformedInput"
+   },
+   "id": "x-add-bad-expiry-negative",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "reason": "r",
+     "scope_id": "e"
+    },
+    "scopes": 5
+   },
+   "expect": {
+    "detail": "scopes-not-array",
+    "error": "kMalformedInput"
+   },
+   "id": "x-add-scopes-not-array",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "reason": "r",
+     "scope_id": "ex-c"
+    },
+    "scopes": [
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     },
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     }
+    ]
+   },
+   "expect": {
+    "detail": "duplicate-scope-id:ex-a",
+    "error": "kMalformedInput"
+   },
+   "id": "x-add-scopes-dup-in-set",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope": {
+     "reason": "r",
+     "scope_id": "ex-c"
+    },
+    "scopes": [
+     {
+      "scope_id": "ex-x",
+      "site": "s.example"
+     }
+    ]
+   },
+   "expect": {
+    "detail": "missing-reason:ex-x",
+    "error": "kMalformedInput"
+   },
+   "id": "x-add-scopes-missing-reason-in-set",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "bogus": 1,
+    "scope": {
+     "reason": "r",
+     "scope_id": "e"
+    }
+   },
+   "expect": {
+    "detail": "unknown-field:bogus",
+    "error": "kMalformedInput"
+   },
+   "id": "x-add-unknown-arg",
+   "method": "exception-add"
+  },
+  {
+   "args": {
+    "scope_id": "ex-a",
+    "scopes": [
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     },
+     {
+      "list_id": "l1",
+      "reason": "false-positive",
+      "rule_id": "r-7",
+      "scope_id": "ex-b"
+     }
+    ]
+   },
+   "expect": {
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "l1",
+      "reason": "false-positive",
+      "rule_id": "r-7",
+      "scope_id": "ex-b",
+      "site": "",
+      "workspace": ""
+     }
+    ]
+   },
+   "id": "x-remove-happy",
+   "method": "exception-remove"
+  },
+  {
+   "args": {
+    "scope_id": "ex-a",
+    "scopes": [
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     }
+    ]
+   },
+   "expect": {
+    "scopes": []
+   },
+   "id": "x-remove-last",
+   "method": "exception-remove"
+  },
+  {
+   "args": {
+    "scope_id": "site-toggle:example.com",
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "",
+      "reason": "user-site-toggle",
+      "rule_id": "",
+      "scope_id": "site-toggle:example.com",
+      "site": "example.com",
+      "workspace": ""
+     },
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     }
+    ]
+   },
+   "expect": {
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "profile-a",
+      "list_id": "",
+      "reason": "user-allow",
+      "rule_id": "",
+      "scope_id": "ex-a",
+      "site": "",
+      "workspace": ""
+     }
+    ]
+   },
+   "id": "x-remove-toggle-scope",
+   "method": "exception-remove"
+  },
+  {
+   "args": {
+    "scope_id": "nope",
+    "scopes": [
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     },
+     {
+      "list_id": "l1",
+      "reason": "false-positive",
+      "rule_id": "r-7",
+      "scope_id": "ex-b"
+     }
+    ]
+   },
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-scope-id:nope"
+   },
+   "id": "x-remove-unknown-rejected",
+   "method": "exception-remove"
+  },
+  {
+   "args": {
+    "scope_id": "ex-a",
+    "scopes": []
+   },
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-scope-id:ex-a"
+   },
+   "id": "x-remove-from-empty",
+   "method": "exception-remove"
+  },
+  {
+   "args": {
+    "scope_id": "ex-a"
+   },
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-scope-id:ex-a"
+   },
+   "id": "x-remove-no-scopes-arg",
+   "method": "exception-remove"
+  },
+  {
+   "args": {
+    "scope_id": "",
+    "scopes": [
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     }
+    ]
+   },
+   "expect": {
+    "detail": "bad-scope-id",
+    "error": "kMalformedInput"
+   },
+   "id": "x-remove-bad-id-empty",
+   "method": "exception-remove"
+  },
+  {
+   "args": {
+    "scope_id": 7,
+    "scopes": [
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     }
+    ]
+   },
+   "expect": {
+    "detail": "bad-scope-id",
+    "error": "kMalformedInput"
+   },
+   "id": "x-remove-bad-id-not-string",
+   "method": "exception-remove"
+  },
+  {
+   "args": {
+    "scopes": [
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     }
+    ]
+   },
+   "expect": {
+    "detail": "bad-scope-id",
+    "error": "kMalformedInput"
+   },
+   "id": "x-remove-missing-id",
+   "method": "exception-remove"
+  },
+  {
+   "args": {
+    "scope_id": "ex-x",
+    "scopes": [
+     {
+      "scope_id": "ex-x"
+     }
+    ]
+   },
+   "expect": {
+    "detail": "missing-reason:ex-x",
+    "error": "kMalformedInput"
+   },
+   "id": "x-remove-scopes-malformed",
+   "method": "exception-remove"
+  },
+  {
+   "args": {
+    "bogus": 1,
+    "scope_id": "ex-a",
+    "scopes": [
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     }
+    ]
+   },
+   "expect": {
+    "detail": "unknown-field:bogus",
+    "error": "kMalformedInput"
+   },
+   "id": "x-remove-unknown-arg",
+   "method": "exception-remove"
+  },
+  {
+   "args": {
+    "now_mono": 500,
+    "scopes": [
+     {
+      "expiry_mono": 500,
+      "reason": "r",
+      "scope_id": "a"
+     },
+     {
+      "reason": "r",
+      "scope_id": "b"
+     },
+     {
+      "expiry_mono": 900,
+      "reason": "r",
+      "scope_id": "c"
+     }
+    ]
+   },
+   "expect": {
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "",
+      "reason": "r",
+      "rule_id": "",
+      "scope_id": "b",
+      "site": "",
+      "workspace": ""
+     },
+     {
+      "expiry_mono": 900,
+      "identity": "",
+      "list_id": "",
+      "reason": "r",
+      "rule_id": "",
+      "scope_id": "c",
+      "site": "",
+      "workspace": ""
+     }
+    ],
+    "swept": [
+     "a"
+    ]
+   },
+   "id": "x-sweep-boundary",
+   "method": "exception-sweep"
+  },
+  {
+   "args": {
+    "now_mono": 499,
+    "scopes": [
+     {
+      "expiry_mono": 500,
+      "reason": "r",
+      "scope_id": "a"
+     },
+     {
+      "reason": "r",
+      "scope_id": "b"
+     },
+     {
+      "expiry_mono": 900,
+      "reason": "r",
+      "scope_id": "c"
+     }
+    ]
+   },
+   "expect": {
+    "scopes": [
+     {
+      "expiry_mono": 500,
+      "identity": "",
+      "list_id": "",
+      "reason": "r",
+      "rule_id": "",
+      "scope_id": "a",
+      "site": "",
+      "workspace": ""
+     },
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "",
+      "reason": "r",
+      "rule_id": "",
+      "scope_id": "b",
+      "site": "",
+      "workspace": ""
+     },
+     {
+      "expiry_mono": 900,
+      "identity": "",
+      "list_id": "",
+      "reason": "r",
+      "rule_id": "",
+      "scope_id": "c",
+      "site": "",
+      "workspace": ""
+     }
+    ],
+    "swept": []
+   },
+   "id": "x-sweep-just-before",
+   "method": "exception-sweep"
+  },
+  {
+   "args": {
+    "now_mono": 501,
+    "scopes": [
+     {
+      "expiry_mono": 500,
+      "reason": "r",
+      "scope_id": "a"
+     },
+     {
+      "reason": "r",
+      "scope_id": "b"
+     },
+     {
+      "expiry_mono": 900,
+      "reason": "r",
+      "scope_id": "c"
+     }
+    ]
+   },
+   "expect": {
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "",
+      "reason": "r",
+      "rule_id": "",
+      "scope_id": "b",
+      "site": "",
+      "workspace": ""
+     },
+     {
+      "expiry_mono": 900,
+      "identity": "",
+      "list_id": "",
+      "reason": "r",
+      "rule_id": "",
+      "scope_id": "c",
+      "site": "",
+      "workspace": ""
+     }
+    ],
+    "swept": [
+     "a"
+    ]
+   },
+   "id": "x-sweep-just-after",
+   "method": "exception-sweep"
+  },
+  {
+   "args": {
+    "now_mono": 900,
+    "scopes": [
+     {
+      "expiry_mono": 500,
+      "reason": "r",
+      "scope_id": "a"
+     },
+     {
+      "reason": "r",
+      "scope_id": "b"
+     },
+     {
+      "expiry_mono": 900,
+      "reason": "r",
+      "scope_id": "c"
+     }
+    ]
+   },
+   "expect": {
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "",
+      "reason": "r",
+      "rule_id": "",
+      "scope_id": "b",
+      "site": "",
+      "workspace": ""
+     }
+    ],
+    "swept": [
+     "a",
+     "c"
+    ]
+   },
+   "id": "x-sweep-all-gone",
+   "method": "exception-sweep"
+  },
+  {
+   "args": {
+    "now_mono": 0,
+    "scopes": [
+     {
+      "expiry_mono": 500,
+      "reason": "r",
+      "scope_id": "a"
+     },
+     {
+      "reason": "r",
+      "scope_id": "b"
+     },
+     {
+      "expiry_mono": 900,
+      "reason": "r",
+      "scope_id": "c"
+     }
+    ]
+   },
+   "expect": {
+    "scopes": [
+     {
+      "expiry_mono": 500,
+      "identity": "",
+      "list_id": "",
+      "reason": "r",
+      "rule_id": "",
+      "scope_id": "a",
+      "site": "",
+      "workspace": ""
+     },
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "",
+      "reason": "r",
+      "rule_id": "",
+      "scope_id": "b",
+      "site": "",
+      "workspace": ""
+     },
+     {
+      "expiry_mono": 900,
+      "identity": "",
+      "list_id": "",
+      "reason": "r",
+      "rule_id": "",
+      "scope_id": "c",
+      "site": "",
+      "workspace": ""
+     }
+    ],
+    "swept": []
+   },
+   "id": "x-sweep-none-expired",
+   "method": "exception-sweep"
+  },
+  {
+   "args": {
+    "now_mono": 999999,
+    "scopes": [
+     {
+      "reason": "r",
+      "scope_id": "f"
+     }
+    ]
+   },
+   "expect": {
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "",
+      "reason": "r",
+      "rule_id": "",
+      "scope_id": "f",
+      "site": "",
+      "workspace": ""
+     }
+    ],
+    "swept": []
+   },
+   "id": "x-sweep-forever-survives",
+   "method": "exception-sweep"
+  },
+  {
+   "args": {
+    "now_mono": 0,
+    "scopes": [
+     {
+      "expiry_mono": 0,
+      "reason": "r",
+      "scope_id": "z"
+     }
+    ]
+   },
+   "expect": {
+    "scopes": [],
+    "swept": [
+     "z"
+    ]
+   },
+   "id": "x-sweep-zero-expiry-zero-now",
+   "method": "exception-sweep"
+  },
+  {
+   "args": {
+    "now_mono": 10,
+    "scopes": []
+   },
+   "expect": {
+    "scopes": [],
+    "swept": []
+   },
+   "id": "x-sweep-empty-set",
+   "method": "exception-sweep"
+  },
+  {
+   "args": {
+    "now_mono": 10
+   },
+   "expect": {
+    "scopes": [],
+    "swept": []
+   },
+   "id": "x-sweep-no-scopes-arg",
+   "method": "exception-sweep"
+  },
+  {
+   "args": {
+    "scopes": [
+     {
+      "expiry_mono": 500,
+      "reason": "r",
+      "scope_id": "a"
+     },
+     {
+      "reason": "r",
+      "scope_id": "b"
+     },
+     {
+      "expiry_mono": 900,
+      "reason": "r",
+      "scope_id": "c"
+     }
+    ]
+   },
+   "expect": {
+    "detail": "missing-now-mono",
+    "error": "kMalformedInput"
+   },
+   "id": "x-sweep-missing-now",
+   "method": "exception-sweep"
+  },
+  {
+   "args": {
+    "now_mono": -3,
+    "scopes": [
+     {
+      "expiry_mono": 500,
+      "reason": "r",
+      "scope_id": "a"
+     },
+     {
+      "reason": "r",
+      "scope_id": "b"
+     },
+     {
+      "expiry_mono": 900,
+      "reason": "r",
+      "scope_id": "c"
+     }
+    ]
+   },
+   "expect": {
+    "detail": "missing-now-mono",
+    "error": "kMalformedInput"
+   },
+   "id": "x-sweep-negative-now",
+   "method": "exception-sweep"
+  },
+  {
+   "args": {
+    "now_mono": "500",
+    "scopes": [
+     {
+      "expiry_mono": 500,
+      "reason": "r",
+      "scope_id": "a"
+     },
+     {
+      "reason": "r",
+      "scope_id": "b"
+     },
+     {
+      "expiry_mono": 900,
+      "reason": "r",
+      "scope_id": "c"
+     }
+    ]
+   },
+   "expect": {
+    "detail": "missing-now-mono",
+    "error": "kMalformedInput"
+   },
+   "id": "x-sweep-now-not-int",
+   "method": "exception-sweep"
+  },
+  {
+   "args": {
+    "now_mono": 5,
+    "scopes": [
+     {
+      "expiry_mono": 1,
+      "scope_id": "a"
+     }
+    ]
+   },
+   "expect": {
+    "detail": "missing-reason:a",
+    "error": "kMalformedInput"
+   },
+   "id": "x-sweep-scopes-malformed",
+   "method": "exception-sweep"
+  },
+  {
+   "args": {
+    "bogus": 1,
+    "now_mono": 1,
+    "scopes": []
+   },
+   "expect": {
+    "detail": "unknown-field:bogus",
+    "error": "kMalformedInput"
+   },
+   "id": "x-sweep-unknown-arg",
+   "method": "exception-sweep"
+  },
+  {
+   "args": {
+    "on": true,
+    "site": "example.com"
+   },
+   "expect": {
+    "scope_id": "site-toggle:example.com",
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "",
+      "reason": "user-site-toggle",
+      "rule_id": "",
+      "scope_id": "site-toggle:example.com",
+      "site": "example.com",
+      "workspace": ""
+     }
+    ],
+    "toggled": "on"
+   },
+   "id": "x-toggle-on-fresh",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "on": true,
+    "scopes": [
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     }
+    ],
+    "site": "example.com"
+   },
+   "expect": {
+    "scope_id": "site-toggle:example.com",
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "profile-a",
+      "list_id": "",
+      "reason": "user-allow",
+      "rule_id": "",
+      "scope_id": "ex-a",
+      "site": "",
+      "workspace": ""
+     },
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "",
+      "reason": "user-site-toggle",
+      "rule_id": "",
+      "scope_id": "site-toggle:example.com",
+      "site": "example.com",
+      "workspace": ""
+     }
+    ],
+    "toggled": "on"
+   },
+   "id": "x-toggle-on-with-manual-set",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "expiry_mono": 700,
+    "on": true,
+    "site": "news.example"
+   },
+   "expect": {
+    "scope_id": "site-toggle:news.example",
+    "scopes": [
+     {
+      "expiry_mono": 700,
+      "identity": "",
+      "list_id": "",
+      "reason": "user-site-toggle",
+      "rule_id": "",
+      "scope_id": "site-toggle:news.example",
+      "site": "news.example",
+      "workspace": ""
+     }
+    ],
+    "toggled": "on"
+   },
+   "id": "x-toggle-on-expiry",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "expiry_mono": 0,
+    "on": true,
+    "site": "news.example"
+   },
+   "expect": {
+    "scope_id": "site-toggle:news.example",
+    "scopes": [
+     {
+      "expiry_mono": 0,
+      "identity": "",
+      "list_id": "",
+      "reason": "user-site-toggle",
+      "rule_id": "",
+      "scope_id": "site-toggle:news.example",
+      "site": "news.example",
+      "workspace": ""
+     }
+    ],
+    "toggled": "on"
+   },
+   "id": "x-toggle-on-expiry-zero",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "on": true,
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "",
+      "reason": "user-site-toggle",
+      "rule_id": "",
+      "scope_id": "site-toggle:example.com",
+      "site": "example.com",
+      "workspace": ""
+     }
+    ],
+    "site": "example.com"
+   },
+   "expect": {
+    "error": "kRejected",
+    "reason": "toggle-already-on:example.com"
+   },
+   "id": "x-toggle-on-existing",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "on": true,
+    "scopes": [
+     {
+      "reason": "manual",
+      "scope_id": "site-toggle:example.com",
+      "site": "example.com"
+     }
+    ],
+    "site": "example.com"
+   },
+   "expect": {
+    "error": "kRejected",
+    "reason": "toggle-already-on:example.com"
+   },
+   "id": "x-toggle-on-collision-manual-id",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "on": false,
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "",
+      "reason": "user-site-toggle",
+      "rule_id": "",
+      "scope_id": "site-toggle:example.com",
+      "site": "example.com",
+      "workspace": ""
+     },
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     },
+     {
+      "list_id": "l1",
+      "reason": "false-positive",
+      "rule_id": "r-7",
+      "scope_id": "ex-b"
+     }
+    ],
+    "site": "example.com"
+   },
+   "expect": {
+    "scope_id": "site-toggle:example.com",
+    "scopes": [
+     {
+      "expiry_mono": -1,
+      "identity": "profile-a",
+      "list_id": "",
+      "reason": "user-allow",
+      "rule_id": "",
+      "scope_id": "ex-a",
+      "site": "",
+      "workspace": ""
+     },
+     {
+      "expiry_mono": -1,
+      "identity": "",
+      "list_id": "l1",
+      "reason": "false-positive",
+      "rule_id": "r-7",
+      "scope_id": "ex-b",
+      "site": "",
+      "workspace": ""
+     }
+    ],
+    "toggled": "off"
+   },
+   "id": "x-toggle-off-existing",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "on": false,
+    "scopes": [
+     {
+      "identity": "profile-a",
+      "reason": "user-allow",
+      "scope_id": "ex-a"
+     }
+    ],
+    "site": "example.com"
+   },
+   "expect": {
+    "error": "kRejected",
+    "reason": "toggle-already-off:example.com"
+   },
+   "id": "x-toggle-off-absent",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "on": false,
+    "site": "example.com"
+   },
+   "expect": {
+    "error": "kRejected",
+    "reason": "toggle-already-off:example.com"
+   },
+   "id": "x-toggle-off-no-scopes-arg",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "on": false,
+    "scopes": [
+     {
+      "reason": "manual",
+      "scope_id": "site-toggle:example.com"
+     }
+    ],
+    "site": "example.com"
+   },
+   "expect": {
+    "scope_id": "site-toggle:example.com",
+    "scopes": [],
+    "toggled": "off"
+   },
+   "id": "x-toggle-off-keeps-manual-collision",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "on": true,
+    "site": 5
+   },
+   "expect": {
+    "detail": "bad-site",
+    "error": "kMalformedInput"
+   },
+   "id": "x-toggle-bad-site-int",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "on": true,
+    "site": ""
+   },
+   "expect": {
+    "detail": "bad-site",
+    "error": "kMalformedInput"
+   },
+   "id": "x-toggle-empty-site",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "on": true
+   },
+   "expect": {
+    "detail": "bad-site",
+    "error": "kMalformedInput"
+   },
+   "id": "x-toggle-missing-site",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "on": "true",
+    "site": "example.com"
+   },
+   "expect": {
+    "detail": "bad-toggle",
+    "error": "kMalformedInput"
+   },
+   "id": "x-toggle-bad-on-string",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "site": "example.com"
+   },
+   "expect": {
+    "detail": "bad-toggle",
+    "error": "kMalformedInput"
+   },
+   "id": "x-toggle-missing-on",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "expiry_mono": "700",
+    "on": true,
+    "site": "example.com"
+   },
+   "expect": {
+    "detail": "bad-expiry",
+    "error": "kMalformedInput"
+   },
+   "id": "x-toggle-bad-expiry-string",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "expiry_mono": -2,
+    "on": true,
+    "site": "example.com"
+   },
+   "expect": {
+    "detail": "bad-expiry",
+    "error": "kMalformedInput"
+   },
+   "id": "x-toggle-bad-expiry-negative",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "on": true,
+    "scopes": [
+     {
+      "scope_id": "a"
+     }
+    ],
+    "site": "example.com"
+   },
+   "expect": {
+    "detail": "missing-reason:a",
+    "error": "kMalformedInput"
+   },
+   "id": "x-toggle-scopes-malformed",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
+    "bogus": 1,
+    "on": true,
+    "site": "example.com"
+   },
+   "expect": {
+    "detail": "unknown-field:bogus",
+    "error": "kMalformedInput"
+   },
+   "id": "x-toggle-unknown-arg",
+   "method": "site-toggle"
+  },
+  {
+   "args": {
     "bundle": {
      "bundle_version": 3,
      "lists": [
@@ -12816,6 +14382,235 @@
    "method": "apply"
   },
   {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "||tracker.example^",
+         "id": "r1",
+         "kind": "network"
+        },
+        {
+         "action": "allow",
+         "filter": "||tracker.example^ok.js",
+         "id": "r2",
+         "kind": "network"
+        },
+        {
+         "action": "redirect",
+         "filter": "||ads.example/banner",
+         "id": "r3",
+         "kind": "redirect",
+         "resource": "1x1.gif"
+        },
+        {
+         "action": "block",
+         "domains": [
+          "site.example"
+         ],
+         "filter": "||scoped.example^",
+         "id": "r4",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||wild.example*/ad_*.js",
+         "id": "r5",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "|https://anchor.example/x",
+         "id": "r6",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||exact.example/e|",
+         "id": "r7",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "exclude_domains": [
+          "safe.example"
+         ],
+         "filter": "plain-literal.js",
+         "id": "r8",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "cosmetic.example",
+         "id": "r9",
+         "kind": "cosmetic"
+        },
+        {
+         "action": "block",
+         "filter": "||bare.example|",
+         "id": "r10",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||sep.example^a^b",
+         "id": "r11",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    },
+    "now_mono": 1,
+    "state": {
+     "active": 5,
+     "last_apply_mono": -1,
+     "lkg": {
+      "present": false
+     },
+     "pins": []
+    }
+   },
+   "expect": {
+    "detail": "slot-not-object:active",
+    "error": "kMalformedInput"
+   },
+   "id": "a-slot-not-object",
+   "method": "apply"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "CC-BY-3.0",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "||tracker.example^",
+         "id": "r1",
+         "kind": "network"
+        },
+        {
+         "action": "allow",
+         "filter": "||tracker.example^ok.js",
+         "id": "r2",
+         "kind": "network"
+        },
+        {
+         "action": "redirect",
+         "filter": "||ads.example/banner",
+         "id": "r3",
+         "kind": "redirect",
+         "resource": "1x1.gif"
+        },
+        {
+         "action": "block",
+         "domains": [
+          "site.example"
+         ],
+         "filter": "||scoped.example^",
+         "id": "r4",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||wild.example*/ad_*.js",
+         "id": "r5",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "|https://anchor.example/x",
+         "id": "r6",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||exact.example/e|",
+         "id": "r7",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "exclude_domains": [
+          "safe.example"
+         ],
+         "filter": "plain-literal.js",
+         "id": "r8",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "cosmetic.example",
+         "id": "r9",
+         "kind": "cosmetic"
+        },
+        {
+         "action": "block",
+         "filter": "||bare.example|",
+         "id": "r10",
+         "kind": "network"
+        },
+        {
+         "action": "block",
+         "filter": "||sep.example^a^b",
+         "id": "r11",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    },
+    "now_mono": 1,
+    "state": {
+     "active": {
+      "bogus": 1,
+      "present": false
+     },
+     "last_apply_mono": -1,
+     "lkg": {
+      "present": false
+     },
+     "pins": []
+    }
+   },
+   "expect": {
+    "detail": "unknown-field:bogus",
+    "error": "kMalformedInput"
+   },
+   "id": "a-slot-unknown-field",
+   "method": "apply"
+  },
+  {
    "args": {},
    "expect": {
     "detail": "bogus",
@@ -12841,7 +14636,7 @@
    "raw": "{\"args\":5,\"method\":\"match\"}"
   }
  ],
- "note": "Golden vectors for the shield surface (P11-T2): every case's expect is the canonical stdout of the Python reference (xr-core/fakes/shield.py); tools/shield_vectors_check.py replays them against BOTH backends byte-for-byte, and xr-core/shield/tests/test_golden_vectors.cc pins them from the compiled side. Flags field carries host CLI flags; exit pins codes the derivation rule would miss.",
+ "note": "Golden vectors for the shield surface (P11-T2): every case's expect is the canonical stdout of the Python reference (xr-core/fakes/shield.py); tools/shield_vectors_check.py replays them against BOTH backends byte-for-byte, and xr-core/shield/tests/test_golden_vectors.cc pins them from the compiled side. Flags field carries host CLI flags; exit pins codes the derivation rule would miss. P11-T4 adds the exception surface (exception-add / exception-remove / exception-sweep / site-toggle) as fam_exceptions.",
  "schema": "xr-shield-vectors",
  "schema_version": 1
 }

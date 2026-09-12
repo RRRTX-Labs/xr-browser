@@ -1,0 +1,24 @@
+P11-T4 shield mutation matrix — FIRST FULL RUN (gate FAIL), quoted summary.
+Run: tools/mutation_test.py --xr-core ../xr-core --targets shield --seed 20260912
+     --score-gate 95 --jobs 2   (full matrix, sampled:false)
+Pin: xr-core 51e6333e3f303b9f52926068d1c7744ba6723720 (shield/core/** bytes
+     identical at cfbb344 — the fix landed in shield/tests/test_apply.cc +
+     xr-browser vectors only).
+Result line (stdout):
+mutation[shield]: 389 mutants, killed 385, survived 4, score 98.97% (gate >= 95.0%), deny-guard 59/61, elapsed 239.9s -> FAIL
+Survivors (all core/apply.cc, ParseSlot):
+  :23 BOOL:false -> true   `return false;`  (slot-not-object refusal, DENY-GUARD)
+  :27 BOOL:false -> true   `bool ok = false;`  (in-slot unknown-field detector init)
+  :29 ROR:== -> !=         `if (kv.first == a) { ok = true; break; }`  (same detector)
+  :33 BOOL:false -> true   `return false;`  (unknown-field refusal, DENY-GUARD)
+Gate law: score >= 95 AND deny-guard 100% -> FAIL (2 deny-guard survivors).
+Disposition: NEW TESTS (house law; never equivalent-mutant excuses) —
+  xr-core cfbb344 (test_apply.cc: slot-not-object:active + unknown-field:bogus
+  rows) + golden vectors a-slot-not-object / a-slot-unknown-field (227->229).
+Re-run (recorded): 389/389 killed, deny-guard 61/61, 100.00%, elapsed 228.6s
+  -> PASS at pin cfbb344 — t4-mutation-shield.json (report) /
+  t4-mutation-shield.log (stdout; *.log is gitignored per house rule, the
+  .json is the committed transcript, T1 precedent).
+NOTE: this file is a quoted summary — the first run's --report-json path was
+reused by the passing re-run. The numbers above were transcribed from the
+first run's console output at the time, not regenerated.

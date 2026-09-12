@@ -130,10 +130,17 @@ def _mutated_copy(repo: Path, workdir: Path, runner_rel: str,
     dest = workdir / "tools" / Path(runner_rel).name
     dest.parent.mkdir(parents=True, exist_ok=True)
     # same-dir sibling modules the runner imports (P10-T0-d split:
-    # evidence_check imports evidence_ci) must travel with the copy
-    for m in re.findall(
-            r"^from (\w+) import ", src.read_text(encoding="utf-8"),
-            flags=re.M):
+    # evidence_check imports evidence_ci) must travel with the copy.
+    # P11-T4 fix (research-log-P11.md D6): T0-d gave evidence_check a
+    # BARE `import runner_caps` — the from-form-only regex missed it and
+    # every mutated copy crashed with ModuleNotFoundError (the meta-gate
+    # reddened, masked in earlier runs by fatal gates ahead of it). Both
+    # import forms are tracked now; `sib.exists()` keeps stdlib imports
+    # (json, re, sys, …) out.
+    src_text = src.read_text(encoding="utf-8")
+    sib_names = re.findall(r"^from (\w+) import ", src_text, flags=re.M)
+    sib_names += re.findall(r"^import (\w+)\s*(?:#|$)", src_text, flags=re.M)
+    for m in sib_names:
         sib = src.parent / f"{m}.py"
         if sib.exists():
             (dest.parent / sib.name).write_text(

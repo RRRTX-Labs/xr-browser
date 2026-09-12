@@ -110,13 +110,20 @@ def apply_and_build(tmp: Path, target: str, mutant: dict[str, Any],
     lines[idx] = lines[idx].replace(mutant["orig"], mutant["mutated"], 1)
     tgt.write_text("".join(lines), encoding="utf-8")
     make_targets = [f"build/{s}" for s in suites]
-    # a host-suite needs its host binary built too (settings_host/themes_host)
+    # a host-suite needs its host binary built too (settings_host/themes_host/
+    # update_host/shield_host — each branch is TARGET-GUARDED: a golden-
+    # vectors suite name is shared by the update and shield lanes, and asking
+    # the wrong Makefile for the wrong host would fail every build).
     if "test_host" in suites:
         make_targets.append("build/themes_host")
     if "test_settings_host" in suites:
         make_targets.append("build/settings_host")
-    if "test_golden_vectors" in suites or "test_update_host" in suites:
+    if target == "update" and (
+            "test_golden_vectors" in suites or "test_update_host" in suites):
         make_targets.append("build/update_host")
+    if target == "shield" and (
+            "test_golden_vectors" in suites or "test_shield_host" in suites):
+        make_targets.append("build/shield_host")
     r = subprocess.run(
         ["make", "-C", str(tmp / target / "tests"), "-j", str(jobs), *make_targets],
         capture_output=True, text=True,
@@ -152,8 +159,8 @@ def main(argv: list[str]) -> int:
     p.add_argument("--xr-core", default="../xr-core")
     p.add_argument("--targets", default=DEFAULT_TARGET,
                    help="comma list of core roots under xr-core/"
-                        "(policy|settings|themes|commands|update); default "
-                        "policy (P6 lane)")
+                        "(policy|settings|themes|commands|update|shield); "
+                        "default policy (P6 lane)")
     p.add_argument("--sample", type=int, default=0,
                    help="run a seeded sample of N mutants per target (CI); "
                         "0 = full matrix")

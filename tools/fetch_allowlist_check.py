@@ -62,6 +62,15 @@ EXEMPT_FILES: dict[str, str] = {
         "ARGV DATA handed to the platform signer (signtool/codesign) at the "
         "HG-36/37 human ceremony; this Python never opens a socket or "
         "fetches it — same class as the probe_driver scan tokens.",
+    # P11-T4 row (T2-era debt surfaced by the first full run_checks after
+    # the targeted T2/T3 batteries; research-log-P11.md D6 records it):
+    "tools/shield_vectors_kit.py":
+        "P11-T2 golden-vector fixture kit: the MATCH_URLS literals are "
+        "RFC 2606 reserved-namespace scan tokens (.example plus the "
+        "port/bare-host/example.com boundary variants the match vectors "
+        "must exercise) fed to the match-decision fixtures — DATA, never "
+        "fetched; the file imports no HTTP client and opens no socket "
+        "(same class as the probe_driver scan tokens above).",
 }
 # URL literals that are test/fixture DATA (never fetched): example namespaces
 EXAMPLE_URL = re.compile(r"\.(example|invalid|test)/")

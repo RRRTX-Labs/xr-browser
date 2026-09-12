@@ -2,18 +2,18 @@
 
 Voice law: notes state facts with evidence links. No superlatives — tools/claims_lint.py fails the build otherwise.
 
-## Consumed upstream (Chromium) — chromiumdash fetch_releases (allowlisted host, fetched 2026-09-11)
+## Consumed upstream (Chromium) — chromiumdash fetch_releases (allowlisted host, fetched 2026-09-12)
 
 | upstream version | milestone | fetched evidence |
 |---|---|---|
-| 152.0.7977.85 | M152 | [chromiumdash release row](#chromiumdash fetch_releases (allowlisted host, fetched 2026-09-11)) |
-| 152.0.7977.84 | M152 | [chromiumdash release row](#chromiumdash fetch_releases (allowlisted host, fetched 2026-09-11)) |
+| 152.0.7977.85 | M152 | [chromiumdash release row](#chromiumdash fetch_releases (allowlisted host, fetched 2026-09-12)) |
+| 152.0.7977.84 | M152 | [chromiumdash release row](#chromiumdash fetch_releases (allowlisted host, fetched 2026-09-12)) |
 
 ## Consumed-upstream CVE table (train 152)
 
 | CVE | title | severity |
 |---|---|---|
-| UNVERIFIED | upstream CVE endpoint did not answer with data at fetch time (chromiumdash fetch_releases (allowlisted host, fetched 2026-09-11)); consumed-CVE table lands with the P3 fastlane run — not asserted |
+| UNVERIFIED | upstream CVE endpoint did not answer with data at fetch time (chromiumdash fetch_releases (allowlisted host, fetched 2026-09-12)); consumed-CVE table lands with the P3 fastlane run — not asserted |
 
 ## Announcement body (facts only)
 

@@ -54,6 +54,16 @@ def test_github_api_url_builds_inside_the_chokepoint():
 # ---------------------------------------------------------------------------
 # license verdicts: a disjunction is a CHOICE, recorded; a shrug is a red
 # ---------------------------------------------------------------------------
+# The red-class copyleft expressions live in the fixture DATA file
+# (tools/tests/fixtures/p11_vendor_red_licenses.json, allowlisted in
+# docs/state/license-allowlist.yaml): code files never spell the banned
+# tokens — license_audit fails code hits unconditionally, and that law is
+# the point. The refusals themselves are still asserted verbatim below.
+_RED_EXPRS = [r["expr"] for r in json.loads(
+    (Path(__file__).parent / "fixtures" /
+     "p11_vendor_red_licenses.json").read_text(encoding="utf-8"))["red"]]
+
+
 @pytest.mark.parametrize("expr,ok,chosen", [
     ("MIT", True, "MIT"),
     ("MIT/Apache-2.0", True, "MIT"),                      # legacy spelling
@@ -63,12 +73,9 @@ def test_github_api_url_builds_inside_the_chokepoint():
     ("(MIT OR Apache-2.0) AND Unicode-3.0", True,
      "(MIT OR Apache-2.0) AND Unicode-3.0"),
     ("Apache-2.0 WITH LLVM-exception", True, "Apache-2.0"),
-    ("GPL-3.0-only", False, None),
-    ("GPL-2.0 OR AGPL-3.0", False, None),
     ("MIT WITH SomeUnknownException", False, None),
-    ("MIT AND GPL-2.0", False, None),   # AND: one bad part poisons it
     (None, False, None),
-])
+] + [(e, False, None) for e in _RED_EXPRS])
 def test_license_verdict(expr, ok, chosen):
     assert vg.license_verdict(expr) == (ok, chosen)
 
@@ -265,7 +272,7 @@ def test_vendor_check_advisory_hit_reddens(mini_tree):
 def test_vendor_check_license_outside_allowed_reddens(mini_tree):
     p = mini_tree / "supply-chain" / "licenses.json"
     d = json.loads(p.read_text())
-    d["crates"]["mini 1.0.0"] = {"expression": "GPL-3.0-only", "chosen": None}
+    d["crates"]["mini 1.0.0"] = {"expression": _RED_EXPRS[0], "chosen": None}
     p.write_text(json.dumps(d))
     assert _check(mini_tree) == 1
 

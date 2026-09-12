@@ -18,7 +18,8 @@ Split by responsibility for the touched-file size law (the
 gen_update_vectors.py pattern): this driver owns ONLY the CLI, the
 assembly order and the byte law; the fixtures + Gen machinery live in
 shield_vectors_kit.py and the case families in
-shield_vector_families.py.
+shield_vector_families.py (P11-T4: the exception-surface family lives in
+shield_vector_families_t4.py — same split law, same fixed assembly order).
 
 Deterministic: no clock, no RNG. --check regenerates byte-identical.
 Exit: 0 ok · 1 drift/error · 2 usage.
@@ -34,6 +35,7 @@ from shield_vector_families import (  # noqa: E402
     fam_apply, fam_bundle, fam_flag_posture, fam_frozen, fam_match,
     fam_protocol,
 )
+from shield_vector_families_t4 import fam_exceptions  # noqa: E402
 from shield_vectors_kit import Gen  # noqa: E402
 
 OUT = "docs/contracts/vectors/shield-v1.json"
@@ -57,6 +59,7 @@ def main() -> int:
     fam_frozen(g)
     fam_flag_posture(g)
     fam_match(g)
+    fam_exceptions(g)
     fam_bundle(g)
     fam_apply(g)
     fam_protocol(g)
@@ -76,7 +79,9 @@ def main() -> int:
                    "backends byte-for-byte, and xr-core/shield/tests/"
                    "test_golden_vectors.cc pins them from the compiled "
                    "side. Flags field carries host CLI flags; exit pins "
-                   "codes the derivation rule would miss."}
+                   "codes the derivation rule would miss. P11-T4 adds the "
+                   "exception surface (exception-add / exception-remove / "
+                   "exception-sweep / site-toggle) as fam_exceptions."}
     blob = json.dumps(doc, indent=1, sort_keys=True, ensure_ascii=True) + "\n"
     out = repo / OUT
     if a.check:
