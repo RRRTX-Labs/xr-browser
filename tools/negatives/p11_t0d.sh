@@ -92,14 +92,20 @@ JSON
   # the arm for B-2 and reddened this canary for the wrong reason. Pin the
   # world: a stub `cargo` (B-1's arm MUST fire) and a PATH without `go`
   # (B-2's arm must NOT) — identical semantics in both worlds.
-  local HBIN out rc
+  local HBIN PYABS out rc
   HBIN="$(mktemp -d)"
+  PYABS="$(command -v "$PY")"
   printf '#!/bin/sh\nexit 0\n' > "$HBIN/cargo" && chmod +x "$HBIN/cargo"
-  out="$(env PATH="$HBIN:/usr/bin:/bin" "$PY" tools/evidence_check.py --repo "$R" --strict --only P13 2>&1)" && rc=0 || rc=$?
+  # PATH pinned to the stub dir ALONE (D7 item 18): round 3's
+  # "$HBIN:/usr/bin:/bin" still resolved `go` on the hosted image. The
+  # interpreter is invoked by absolute path and evidence_check is
+  # stdlib-only, so the minimal PATH is safe in both worlds.
+  out="$(env PATH="$HBIN" "$PYABS" tools/evidence_check.py --repo "$R" --strict --only P13 2>&1)" && rc=0 || rc=$?
   rm -rf "$HBIN"
 
   if [ "$rc" -eq 0 ]; then
     echo "NEGATIVE-FAIL: stale BLOCKED (cargo proven present) passed strict — rule (e) inert"
+    printf '%s\n' "$out" | sed 's/^/    | /'   # visibility law: show the findings
     NEG_FAILURES=$((NEG_FAILURES + 1))
   elif ! printf '%s' "$out" | grep -q 'STALE BLOCKED'; then
     echo "NEGATIVE-FAIL: rejected, but not as STALE BLOCKED"
@@ -107,6 +113,7 @@ JSON
     NEG_FAILURES=$((NEG_FAILURES + 1))
   elif printf '%s' "$out" | grep -q 'row B-2'; then
     echo "NEGATIVE-FAIL: rule (e) fired on the UNOBSERVED tool (go) — the ledger must not certify what no run printed"
+    printf '%s\n' "$out" | sed 's/^/    | /'   # visibility law: name the firing arm
     NEG_FAILURES=$((NEG_FAILURES + 1))
   else
     echo "ok: evidence --strict: stale BLOCKED reddens (rule e), UNOBSERVED tool does not"

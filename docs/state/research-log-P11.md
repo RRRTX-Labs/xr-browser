@@ -420,6 +420,18 @@ Decisions:
     item exists so a future reader does not read the cancelled fuzz cells
     as a T5 regression.
 
+18. **Round 3's PATH pin was still leaky on hosted (rule-(e) canary, round
+    4 fix).** Governance run 34719560220 (head 0ddac3d) reddened the same
+    canary even with PATH="$HBIN:/usr/bin:/bin" — the hosted image
+    evidently resolves `go` from /usr/bin or /bin (or an equivalent
+    resolver path). Round 4 pins PATH to the stub dir ALONE and invokes
+    the interpreter by absolute path (`command -v`); evidence_check is
+    stdlib-only (no subprocess), proven locally in both worlds with the
+    exact fixture (B-1 fires via ledger+local arms, B-2 clean). The
+    canary also now PRINTS the findings when it fails — a red canary that
+    cannot show which arm fired is the same invisibility item 16
+    condemns. The hosted run remains the recorded proof (item 9's law).
+
 ## R1. adblock-rust: version, license, advisory state (T1 input)
 
 **VERIFIED (live API reads, 2026-09-11).**
