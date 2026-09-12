@@ -1,0 +1,33 @@
+{
+ "$schema-note": "Hand-rolled strict subset (no jsonschema dependency, per DEPENDENCY RULES). Validated by tools/xr_schema.py. additionalProperties is false everywhere. LAWS: `target` is REDACTED at row creation (scheme://host/path — query strings and fragments are structurally absent, never a display-time concern); `action` reuses the FROZEN mojom k-spellings and `why_code` the closed verdict vocabulary of xr-core/shield/host_protocol.md — no second naming; numeric fields are int64 on the wire (mojom BlockEvent declares ts_millis/tab_id int64 — epoch-scale values must survive); the >= 0 bounds are host-enforced (the schema pins the types), determinism-law: seq/ts_millis are caller-supplied, no clock in the generator. Generator: xr-core/shield/core/events.cc MakeLedgerRow; the golden instance is byte-verified from BOTH backends (docs/contracts/tests/test_block_event.py).",
+ "contract": "block-event",
+ "contract_version": 1,
+ "type": "object",
+ "additionalProperties": false,
+ "required": ["event", "contract_version", "seq", "ts_millis", "identity", "tab_id", "origin", "target", "rule_id", "rule", "list_id", "bundle_version", "action", "request_class", "why_code"],
+ "properties": {
+  "event": { "const": "block_event" },
+  "contract_version": { "type": "integer", "const": 1 },
+  "seq": { "type": "integer" },
+  "ts_millis": { "type": "integer" },
+  "identity": { "type": "string" },
+  "tab_id": { "type": "integer" },
+  "origin": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": ["scheme", "registrable_domain"],
+   "properties": {
+    "scheme": { "type": "string", "enum": ["http", "https"] },
+    "registrable_domain": { "type": "string" }
+   }
+  },
+  "target": { "type": "string" },
+  "rule_id": { "type": "string" },
+  "rule": { "type": "string" },
+  "list_id": { "type": "string" },
+  "bundle_version": { "type": "integer" },
+  "action": { "type": "string", "enum": ["kBlocked", "kAllowed", "kRedirected", "kUpgraded"] },
+  "request_class": { "type": "string", "enum": ["kNavigation", "kSubresource", "kScript", "kPermission", "kStorage", "kNetwork"] },
+  "why_code": { "type": "string", "enum": ["rule-blocked", "rule-allowed", "rule-redirected", "rule-replaced", "no-match", "no-bundle", "exception-scope", "engine-dead-fail-open", "engine-poisoned-fail-open", "kill-switch", "route-loss-fail-closed"] }
+ }
+}

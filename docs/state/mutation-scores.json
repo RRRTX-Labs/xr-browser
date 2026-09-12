@@ -1,5 +1,5 @@
 {
- "comment": "P10-T0-c/T1: recorded mutation scores per xr-core core. Law: a score is a statement about specific bytes \u2014 each record pins the xr-core commit whose core/** the FULL matrix ran against (sampled:false); tools/mutation_freshness.py fails the gate when a core's core/** changes without a fresh transcript. Survivor dispositions are mandatory. P11 re-arm (2026-09-11): all six cores re-run FULL (sampled:false) at the T0-b dedup pin 85289cd \u2014 freshness debt from the shared-primitives move paid, and `common` scored for the first time. The dedup shrank the per-core mutant surfaces (the moved files are now mutated ONCE, under common). P11-T4 (2026-09-12): the seventh discovered core `shield` scored for the first time (lane added to mutation_targets.py; FULL matrix at pin cfbb344 after the first run's ParseSlot deny-guard find was discharged with new tests \u2014 research-log-P11.md D6).",
+ "comment": "P10-T0-c/T1: recorded mutation scores per xr-core core. Law: a score is a statement about specific bytes \u2014 each record pins the xr-core commit whose core/** the FULL matrix ran against (sampled:false); tools/mutation_freshness.py fails the gate when a core's core/** changes without a fresh transcript. Survivor dispositions are mandatory. P11 re-arm (2026-09-11): all six cores re-run FULL (sampled:false) at the T0-b dedup pin 85289cd \u2014 freshness debt from the shared-primitives move paid, and `common` scored for the first time. The dedup shrank the per-core mutant surfaces (the moved files are now mutated ONCE, under common). P11-T4 (2026-09-12): the seventh discovered core `shield` scored for the first time (lane added to mutation_targets.py; FULL matrix at pin cfbb344 after the first run's ParseSlot deny-guard find was discharged with new tests \u2014 research-log-P11.md D6); P11-T5 2026-09-13: shield re-run FULL at pin 44f5306 after the emitter landed \u2014 394/394, first-run clean).",
  "cores": {
   "commands": {
    "killed": 215,
@@ -42,14 +42,14 @@
    "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
   },
   "shield": {
-   "killed": 389,
-   "mutants": 389,
-   "note": "FIRST SCORE for the shield core (T2-discovered; the lane joined SUITE_MAPS at T4 after mutation-freshness reddened the first full run_checks \u2014 research-log-P11.md D6). Full matrix, sampled:false, seed 20260912. The FIRST run at pin 51e6333 FAILED the deny-guard law: 4 survivors in apply.cc:23-33 (2 deny-guards) \u2014 ParseSlot's slot-not-object and in-slot unknown-field refusals were untested. Discharged with NEW TESTS (test_apply.cc + 2 golden vectors, 227->229; xr-core cfbb344), not dispositions-by-excuse; shield/core/** is byte-identical across the fix. The recorded re-run killed 389/389 incl. deny-guard 61/61. The failing first run's quoted summary: evidence/P11/logs/t4-mutation-shield-run1-fail.txt.",
+   "killed": 394,
+   "mutants": 394,
+   "note": "FIRST SCORE at T4 (research-log-P11.md D6): full matrix at pin cfbb344, 389/389 after the ParseSlot deny-guard find was discharged with NEW TESTS. P11-T5 RE-RUN (2026-09-13): the shield core moved (MakeLedgerRow + the event-emit emitter in events.cc/shield_host.cc/fakes + the int64 wire fix for mojom ts_millis/tab_id), so the FULL matrix ran again at pin 44f5306 (sampled:false, seed 20260913): 394 mutants (389 + 5 on the new emitter code), 394 killed, 100.00%, deny-guard 61/61 \u2014 FIRST-RUN clean: the T5 test additions (test_events +15, test_shield_host +13, 45 e-emit golden vectors) killed every new mutant; zero survivors to disposition. The T4 transcripts stay in evidence/P11/logs/t4-mutation-shield*.",
    "score_pct": 100.0,
-   "seed": 20260912,
+   "seed": 20260913,
    "survivors": [],
-   "transcript": "evidence/P11/logs/t4-mutation-shield.json",
-   "xr_core_commit": "cfbb344bb0b2981393cc27fdb9d56627a852d0c9"
+   "transcript": "evidence/P11/logs/t5-mutation-shield.json",
+   "xr_core_commit": "44f5306d7805ea473e5423a4496fd7be162befa4"
   },
   "themes": {
    "killed": 187,

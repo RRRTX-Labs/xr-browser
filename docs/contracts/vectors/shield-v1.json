@@ -14634,9 +14634,1565 @@
    },
    "id": "p-args-not-object",
    "raw": "{\"args\":5,\"method\":\"match\"}"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "bundle_version": 3,
+    "context": {
+     "identity": {
+      "value": "xr:00000000-0000-4000-8000-000000000001"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=newsletter#player"
+    },
+    "list_id": "l-1",
+    "rule": "||tracker.example^",
+    "rule_id": "r-1",
+    "seq": 41,
+    "tab_id": 7,
+    "ts_millis": 1750000000123,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "row": {
+     "action": "kBlocked",
+     "bundle_version": 3,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:00000000-0000-4000-8000-000000000001",
+     "list_id": "l-1",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "||tracker.example^",
+     "rule_id": "r-1",
+     "seq": 41,
+     "tab_id": 7,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1750000000123,
+     "why_code": "rule-blocked"
+    }
+   },
+   "id": "e-emit-golden-instance",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "bundle_version": 2,
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "list_id": "l-1",
+    "rule": "||tracker.example^",
+    "rule_id": "r-1",
+    "seq": 7,
+    "tab_id": 3,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "row": {
+     "action": "kBlocked",
+     "bundle_version": 2,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "l-1",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "||tracker.example^",
+     "rule_id": "r-1",
+     "seq": 7,
+     "tab_id": 3,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "rule-blocked"
+    }
+   },
+   "id": "e-emit-happy-full",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "row": {
+     "action": "kBlocked",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 7,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "rule-blocked"
+    }
+   },
+   "id": "e-emit-defaults",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kAllowed",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-allowed"
+   },
+   "expect": {
+    "row": {
+     "action": "kAllowed",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 7,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "rule-allowed"
+    }
+   },
+   "id": "e-emit-action-allowed",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kRedirected",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-redirected"
+   },
+   "expect": {
+    "row": {
+     "action": "kRedirected",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 7,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "rule-redirected"
+    }
+   },
+   "id": "e-emit-action-redirected",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kUpgraded",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-redirected"
+   },
+   "expect": {
+    "row": {
+     "action": "kUpgraded",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 7,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "rule-redirected"
+    }
+   },
+   "id": "e-emit-action-upgraded",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 100,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "row": {
+     "action": "kBlocked",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 100,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "rule-blocked"
+    }
+   },
+   "id": "e-emit-why-rule-blocked",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kAllowed",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 101,
+    "ts_millis": 1234,
+    "why_code": "rule-allowed"
+   },
+   "expect": {
+    "row": {
+     "action": "kAllowed",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 101,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "rule-allowed"
+    }
+   },
+   "id": "e-emit-why-rule-allowed",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kRedirected",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 102,
+    "ts_millis": 1234,
+    "why_code": "rule-redirected"
+   },
+   "expect": {
+    "row": {
+     "action": "kRedirected",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 102,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "rule-redirected"
+    }
+   },
+   "id": "e-emit-why-rule-redirected",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 103,
+    "ts_millis": 1234,
+    "why_code": "rule-replaced"
+   },
+   "expect": {
+    "row": {
+     "action": "kBlocked",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 103,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "rule-replaced"
+    }
+   },
+   "id": "e-emit-why-rule-replaced",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kAllowed",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 104,
+    "ts_millis": 1234,
+    "why_code": "no-match"
+   },
+   "expect": {
+    "row": {
+     "action": "kAllowed",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 104,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "no-match"
+    }
+   },
+   "id": "e-emit-why-no-match",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kAllowed",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 105,
+    "ts_millis": 1234,
+    "why_code": "no-bundle"
+   },
+   "expect": {
+    "row": {
+     "action": "kAllowed",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 105,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "no-bundle"
+    }
+   },
+   "id": "e-emit-why-no-bundle",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kAllowed",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 106,
+    "ts_millis": 1234,
+    "why_code": "exception-scope"
+   },
+   "expect": {
+    "row": {
+     "action": "kAllowed",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 106,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "exception-scope"
+    }
+   },
+   "id": "e-emit-why-exception-scope",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kAllowed",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 107,
+    "ts_millis": 1234,
+    "why_code": "engine-dead-fail-open"
+   },
+   "expect": {
+    "row": {
+     "action": "kAllowed",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 107,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "engine-dead-fail-open"
+    }
+   },
+   "id": "e-emit-why-engine-dead-fail-open",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kAllowed",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 108,
+    "ts_millis": 1234,
+    "why_code": "engine-poisoned-fail-open"
+   },
+   "expect": {
+    "row": {
+     "action": "kAllowed",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 108,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "engine-poisoned-fail-open"
+    }
+   },
+   "id": "e-emit-why-engine-poisoned-fail-open",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kAllowed",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 109,
+    "ts_millis": 1234,
+    "why_code": "kill-switch"
+   },
+   "expect": {
+    "row": {
+     "action": "kAllowed",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 109,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "kill-switch"
+    }
+   },
+   "id": "e-emit-why-kill-switch",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 110,
+    "ts_millis": 1234,
+    "why_code": "route-loss-fail-closed"
+   },
+   "expect": {
+    "row": {
+     "action": "kBlocked",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 110,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "route-loss-fail-closed"
+    }
+   },
+   "id": "e-emit-why-route-loss-fail-closed",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "bundle_version": 2,
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "shop.example",
+      "scheme": "https"
+     },
+     "request_class": "kNavigation",
+     "url": "https://shop.example/cart?cc=4111111111111111#pay"
+    },
+    "list_id": "l-1",
+    "rule": "||tracker.example^",
+    "rule_id": "r-1",
+    "seq": 7,
+    "tab_id": 3,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "row": {
+     "action": "kBlocked",
+     "bundle_version": 2,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "l-1",
+     "origin": {
+      "registrable_domain": "shop.example",
+      "scheme": "https"
+     },
+     "request_class": "kNavigation",
+     "rule": "||tracker.example^",
+     "rule_id": "r-1",
+     "seq": 7,
+     "tab_id": 3,
+     "target": "https://shop.example/cart",
+     "ts_millis": 1234,
+     "why_code": "rule-blocked"
+    }
+   },
+   "id": "e-emit-redact-shop",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "bundle_version": 2,
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "t.example",
+      "scheme": "https"
+     },
+     "request_class": "kSubresource",
+     "url": "https://t.example:8443/a.js?x=1"
+    },
+    "list_id": "l-1",
+    "rule": "||tracker.example^",
+    "rule_id": "r-1",
+    "seq": 7,
+    "tab_id": 3,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "row": {
+     "action": "kBlocked",
+     "bundle_version": 2,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "l-1",
+     "origin": {
+      "registrable_domain": "t.example",
+      "scheme": "https"
+     },
+     "request_class": "kSubresource",
+     "rule": "||tracker.example^",
+     "rule_id": "r-1",
+     "seq": 7,
+     "tab_id": 3,
+     "target": "https://t.example/a.js",
+     "ts_millis": 1234,
+     "why_code": "rule-blocked"
+    }
+   },
+   "id": "e-emit-redact-port",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "bundle_version": 0,
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 0,
+    "tab_id": 0,
+    "ts_millis": 0,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "row": {
+     "action": "kBlocked",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 0,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 0,
+     "why_code": "rule-blocked"
+    }
+   },
+   "id": "e-emit-zero-boundaries",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "plain.example",
+      "scheme": "http"
+     },
+     "request_class": "kNavigation",
+     "url": "http://plain.example/p?q=1"
+    },
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "row": {
+     "action": "kBlocked",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "plain.example",
+      "scheme": "http"
+     },
+     "request_class": "kNavigation",
+     "rule": "",
+     "rule_id": "",
+     "seq": 7,
+     "tab_id": 0,
+     "target": "http://plain.example/p",
+     "ts_millis": 1234,
+     "why_code": "rule-blocked"
+    }
+   },
+   "id": "e-emit-http-origin",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "ts_millis": 1750000000123,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "row": {
+     "action": "kBlocked",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 7,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1750000000123,
+     "why_code": "rule-blocked"
+    }
+   },
+   "id": "e-emit-epoch-ts",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "bundle_version": 3000000000,
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 4000000000,
+    "tab_id": 5000000000,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "row": {
+     "action": "kBlocked",
+     "bundle_version": 3000000000,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 4000000000,
+     "tab_id": 5000000000,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "rule-blocked"
+    }
+   },
+   "id": "e-emit-big-ints",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "blocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "bad-action:blocked",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-bad-action",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "because"
+   },
+   "expect": {
+    "detail": "bad-why-code:because",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-bad-why",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "missing-seq",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-missing-seq",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": -1,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "missing-seq",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-neg-seq",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7.5,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "missing-seq",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-float-seq",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "missing-ts-millis",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-missing-ts",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "missing-action",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-missing-action",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "ts_millis": 1234
+   },
+   "expect": {
+    "detail": "missing-why-code",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-missing-why",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "missing-context",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-missing-context",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": 3,
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "field-not-string:action",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-action-not-string",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": 3
+   },
+   "expect": {
+    "detail": "field-not-string:why_code",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-why-not-string",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "rule": 7,
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "field-not-string:rule",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-rule-not-string",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "rule_id": 7,
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "field-not-string:rule_id",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-rule-id-not-string",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "list_id": 7,
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "field-not-string:list_id",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-list-id-not-string",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "tab_id": -1,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "bad-tab-id",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-bad-tab-id",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "tab_id": "3",
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "bad-tab-id",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-tab-id-not-int",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "bundle_version": -2,
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "bad-bundle-version",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-bad-bundle-version",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "extra": 1,
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "unknown-field:extra",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-unknown-field",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "not a url"
+    },
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "unparsable-url",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-ctx-unparsable-url",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player",
+     "zzz": 1
+    },
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "unknown-field:zzz",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-ctx-unknown-field",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kX",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "unknown-request-class",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-ctx-bad-class",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": ""
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "empty-identity",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-ctx-empty-identity",
+   "method": "event-emit"
   }
  ],
- "note": "Golden vectors for the shield surface (P11-T2): every case's expect is the canonical stdout of the Python reference (xr-core/fakes/shield.py); tools/shield_vectors_check.py replays them against BOTH backends byte-for-byte, and xr-core/shield/tests/test_golden_vectors.cc pins them from the compiled side. Flags field carries host CLI flags; exit pins codes the derivation rule would miss. P11-T4 adds the exception surface (exception-add / exception-remove / exception-sweep / site-toggle) as fam_exceptions.",
+ "note": "Golden vectors for the shield surface (P11-T2): every case's expect is the canonical stdout of the Python reference (xr-core/fakes/shield.py); tools/shield_vectors_check.py replays them against BOTH backends byte-for-byte, and xr-core/shield/tests/test_golden_vectors.cc pins them from the compiled side. Flags field carries host CLI flags; exit pins codes the derivation rule would miss. P11-T4 adds the exception surface (exception-add / exception-remove / exception-sweep / site-toggle) as fam_exceptions; P11-T5 adds the activity-ledger emitter (event-emit, the living block-event-v1 rows) as fam_events.",
  "schema": "xr-shield-vectors",
  "schema_version": 1
 }

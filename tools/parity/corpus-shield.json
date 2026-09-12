@@ -1602,10 +1602,124 @@
    "expect": "reject",
    "id": "site-toggle-bad-on",
    "method": "site-toggle"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "bundle_version": 2,
+    "context": {
+     "identity": {
+      "value": "xr:...-001"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?q=1#f"
+    },
+    "list_id": "l-1",
+    "rule": "||tracker.example^",
+    "rule_id": "r-1",
+    "seq": 7,
+    "tab_id": 3,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": "ok",
+   "id": "event-emit-happy",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kAllowed",
+    "context": {
+     "identity": {
+      "value": "xr:...-001"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?q=1#f"
+    },
+    "seq": 8,
+    "ts_millis": 1235,
+    "why_code": "no-match"
+   },
+   "expect": "ok",
+   "id": "event-emit-defaults",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "blocked",
+    "context": {
+     "identity": {
+      "value": "xr:...-001"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?q=1#f"
+    },
+    "seq": 9,
+    "ts_millis": 1236,
+    "why_code": "no-match"
+   },
+   "expect": "reject",
+   "id": "event-emit-bad-action",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:...-001"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?q=1#f"
+    },
+    "seq": 10,
+    "ts_millis": 1237,
+    "why_code": "because"
+   },
+   "expect": "reject",
+   "id": "event-emit-bad-why",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:...-001"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?q=1#f"
+    },
+    "ts_millis": 1238,
+    "why_code": "no-match"
+   },
+   "expect": "reject",
+   "id": "event-emit-missing-seq",
+   "method": "event-emit"
   }
  ],
  "pair": "shield",
  "protocol": "../xr-core/shield/host_protocol.md",
- "provenance": "P11-T2: derived pair. Cases are a method-spanning subset of the 157 golden vectors in docs/contracts/vectors/shield-v1.json (byte-parity across both backends is enforced THERE by tools/shield_vectors_check.py + xr-core/shield/tests/test_golden_vectors.cc); this corpus is the completeness-gate artifact: every documented method carries >=1 parity case, with the exit-class law ok=exit 0 typed result (kRejected refusals and frozen-envelope errors included), reject=exit 1 typed error.",
+ "provenance": "P11-T2: derived pair. Cases are a method-spanning subset of the golden vectors in docs/contracts/vectors/shield-v1.json (157 at the T2 derivation; extended per task \u2014 274 at P11-T5) (byte-parity across both backends is enforced THERE by tools/shield_vectors_check.py + xr-core/shield/tests/test_golden_vectors.cc); this corpus is the completeness-gate artifact: every documented method carries >=1 parity case, with the exit-class law ok=exit 0 typed result (kRejected refusals and frozen-envelope errors included), reject=exit 1 typed error.",
  "schema_version": 1
 }

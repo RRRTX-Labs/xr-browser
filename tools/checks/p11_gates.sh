@@ -71,6 +71,11 @@ p11_shield_gates() {
   else
     exit 1
   fi
+  # P11-T5: living block-event-v1 — schema-strict golden + claims-clean
+  # reason-code table (the five-way why_code sync law is pytest territory:
+  # docs/contracts/tests/test_block_event.py).
+  "$PY" tools/xr_schema.py validate block-event docs/contracts/tests/golden-block-event.json
+  "$PY" tools/claims_lint.py --file docs/shield/reason-codes.md
 }
 
 p11_lists_gates() {

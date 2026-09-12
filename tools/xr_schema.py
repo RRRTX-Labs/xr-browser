@@ -38,6 +38,9 @@ SCHEMAS = {
     "server-epochs": "server-epochs-v1.schema.json",
     # P10-T6: the release attestation format v1.
     "release-attestation": "release-attestation-v1.schema.json",
+    # P11-T5: the shield activity-ledger row (LIVING; registered
+    # post-freeze in docs/contracts/registry-post-freeze.md).
+    "block-event": "block-event-v1.schema.json",
 }
 
 

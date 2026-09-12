@@ -1,0 +1,381 @@
+== plan pin ==
+PASS: plan_pin_check
+== feature registry (plan §2 ↔ docs/registry/*) ==
+PASS: registry_lint
+== decision register (schema) ==
+PASS: dr_parse
+== decision register (Register-Change trailers) ==
+PASS: dr_parse
+== license audit (canonical MPL-2.0 + copyleft scan) ==
+PASS: license_audit
+== DCO signoff ==
+PASS: dco_check
+== threat model v0 structure ==
+PASS: check_threat_model
+== banned-vocabulary lint ==
+PASS: vocab_lint
+== CODEOWNERS / S0 path sync ==
+PASS: owners_sync
+== test suites ==
+........................................................................ [ 21%]
+........................................................................ [ 43%]
+........................................................................ [ 64%]
+........................................................................ [ 86%]
+.............................................                            [100%]
+333 passed in 112.32s (0:01:52)
+== P11-T0-e: touched-file size law (every .py/.sh touched this phase is <=380 lines) ==
+PASS: touched-file size law (50 touched .py/.sh in 7fa253f1dbd827ba66a3cd563536d9932713c09a..HEAD, all <= 380 lines)
+== P11-T1: vendored Rust pin (offline verification + the chokepoint law) ==
+PASS: vendor_check (59 vendored crates verified against the lock; root pin sealed per-file; closure complete offline; licenses + advisories clean)
+PASS: fetch_allowlist_check (228 files scanned; chokepoint build/upstream/fetch.py)
+== evidence bundles (contract: docs/contracts/evidence-bundle-v1.md) ==
+PASS: evidence/P1/evidence.json (structural)
+PASS: evidence/P10/evidence.json (structural)
+PASS: evidence/P2/evidence.json (structural)
+PASS: evidence/P3/evidence.json (structural)
+PASS: evidence/P4/evidence.json (structural)
+PASS: evidence/P5/evidence.json (structural)
+PASS: evidence/P6/evidence.json (structural)
+PASS: evidence/P7/evidence.json (structural)
+PASS: evidence/P8/evidence.json (structural)
+PASS: evidence/P9/evidence.json (structural)
+PASS: evidence_check (10 bundle(s), 0 failure(s))
+PASS: evidence/P10/evidence.json (strict)
+PASS: evidence/P3/evidence.json (strict)
+PASS: evidence/P4/evidence.json (strict)
+PASS: evidence/P5/evidence.json (strict)
+PASS: evidence/P6/evidence.json (strict)
+PASS: evidence/P7/evidence.json (strict)
+PASS: evidence/P8/evidence.json (strict)
+PASS: evidence/P9/evidence.json (strict)
+PASS: evidence_check (8 bundle(s), 0 failure(s))
+PASS: runner-capabilities ledger (7 entries, every present/absent claim cited by a real run or transcript; UNOBSERVED entries say why)
+PASS: runner_caps --self-test (citation law + UNOBSERVED law + empty-ledger law + stale-BLOCKED rule, all proven offline)
+== spike: every file:line citation re-verified at the pin ==
+rows checked: 23  {'PASS': 23, 'FAIL': 0, 'DRIFT': 0, 'BLOCKED-NET': 0}
+log: evidence/P4/logs/citation-audit.txt
+PASS: citation-audit
+== spike: papercut census schema ==
+census rows: 15  named surfaces required: 13
+PASS: census-lint
+== spike: probe driver static + fixture lanes ==
+PASS  driver.policy.isolation_bypass           isolation-bypass flag(s) refused: --disable-site-isolation-t
+PASS  driver.policy.clean_flags                no refusal
+PASS  driver.fsdiff.detect                     {"added": ["a/y.bin"], "removed": [], "changed": ["a/x.bin"]
+PASS  driver.fsdiff.stable                     {"added": [], "removed": [], "changed": []}
+PASS  driver.cdp.roundtrip                     {"echo": "SystemInfo.getInfo"}
+PASS  driver.cdp.loopback_only                 CdpError raised
+PASS  driver.fixture.origin                    7 file(s) scanned; 0 real-domain token(s)
+PASS: probe-driver (7 row(s), 0 failure(s))
+== cross-repo pin alive (DEPS xr_core_rev reachable from origin) ==
+PASS: check-pin-alive
+== patch ledger incl. candidate (spike/) dirs ==
+PASS: xr-patch
+== workflow files: expressions + schema (compile error = zero jobs) ==
+  checked: .github/workflows/compat-beta-parity.yml
+  checked: .github/workflows/core-hardening.yml
+  checked: .github/workflows/governance.yml
+  checked: .github/workflows/nightly-rebase-build.yml
+  checked: .github/workflows/sast.yml
+  actionlint: SKIP (tool absent: actionlint) — needed for: deep check of .github/workflows expressions and schema (P4) — a compile error there yields a run with zero jobs and no logs; the always-on half of build/workflow_lint.py still runs without it; install hint: github.com/rhysd/actionlint releases (CI installs it pinned by version + tarball sha256)
+PASS: workflow-lint
+== P11-T0-c: scheduled-lane health (a red nightly is a red check within a day) ==
+PASS: scheduled_lane_check --self-test (hard-fail, stale-fix, newer-run-verified, newer-run-still-red, lane-health-only exemption, own-lane cap, green, not-run and disabled paths all proven offline)
+PASS: compat-beta-parity.yml
+    compat-beta-parity.yml: schedule run 34680223706 head 9df51d141 created 2026-09-12T07:14:57Z — success
+NOT-RUN: core-hardening.yml
+    core-hardening.yml: no schedule-event run yet (cron 23 3 * * 3; workflow id 355786923) — the lane exists but has not fired; visible, non-fatal
+PASS: nightly-rebase-build.yml
+    nightly-rebase-build.yml: schedule run 34678497266 head 9df51d141 created 2026-09-12T06:34:48Z — success
+NOT-RUN: sast.yml
+    sast.yml: no schedule-event run yet (cron 17 4 * * 1; workflow id 355038316) — the lane exists but has not fired; visible, non-fatal
+PASS: scheduled_lane_check (4 scheduled lane(s); NOT-RUN=2, PASS=2; every non-green state above is visible and non-fatal BY RULE, never silently dropped)
+== P5: mojom structural lint (banned surface, kVersion, budgets) ==
+PASS: mojom_lint (10 files)
+== P5: §1.11 contracts manifest (14 items) + §2.10 reserved surface ==
+PASS: contracts_manifest (14 items)
+== P5: golden-vector fake parity (byte-stable) ==
+  policy-resolver-v1.json: 66/66 ok  sha256=8d35c4c33adcc050…
+  route-manager-v1.json: 9/9 ok  sha256=a57c3252fbcc45e4…
+  update-v1.json: 73/73 ok  sha256=f5d1ca9282afcd56…
+PASS: vectors_check
+== P5: contract freeze register (FROZEN.yaml, ratified=PENDING) ==
+PASS: freeze_check
+== P5: contract-amendment RFC trailer gate (T10) ==
+WARN: 9df51d14 drafts unlisted post-freeze contract file(s) ['docs/contracts/registry-post-freeze.md'] (warn-only; stamp them in a registry to freeze): P11-T4 (xr-browser side): the exception surface under governance — 229 vectors, the dual ledger, ADR-0046, the shield mutation lane, and five full-run gate debts discharged
+PASS: amend_guard (stamped=True)
+== P5: isolation-card l10n well-formed + vocab-clean ==
+isolation-card OK 8 strings
+== P8-T5: l10n string source — xr_strings.grdp strict gate (schema ids, ph, desc, vocab, bidi, isolation-card) ==
+grdp_check: xr_strings.grdp OK (77 messages, isolation-card cross-check clean)
+== P8-T5: raw-string lint — no user-visible literals outside ids (ui/ + payload), id cross-check ==
+l10n_extract: 14 files, 0 raw-string violations, 0 missing ids -> CLEAN
+== P9-T0-b: qyy pseudo-locale render (deterministic) + self-test ==
+PASS: pseudo_locale self-test (canaries fire; tokens verbatim; RTL markers present)
+PASS: pseudo_locale qyy render diff-clean (77 messages, mean 39.1 chars)
+== P8-T6: attention-budget policy of record — local counters only, doc markers present ==
+attention-budget OK (markers: no upload, LOCAL COUNTERS ONLY, 90, day, deny-preserve, zero bytes)
+== P8-T7: help<->settings deep-link contract lint (schema <-> registry, both directions) ==
+help_deep_link: OK (3 sections, 22 enabled commands, contract markers present)
+== P11-T0-b: no-new-crypto gate (ONE copy of a public algorithm, never a new one — ADR-0043) ==
+PASS: no_new_crypto_check (104 file(s) scanned; one sha256.cc, one json.cc, one json_parse.cc — all in common/core; no constants/libs/banned symbols/PRNG/undispositioned std::hash outside the allowlist)
+PASS: no_new_crypto_check --self-test (6 planted rule violations + 1 planted copy all reddened)
+== P6: mode_lint — L3 one-brain ban + L13 intent headers ==
+mode_lint: 0 violation(s) (PASS)
+== P6: policy.md regeneration diff-clean (generated, no hand drift) ==
+policy.md: regeneration diff-clean (13739 bytes)
+== P6: policy-change-event-v1 schema validates (incl. absence laws) ==
+PASS: xr_schema validate policy-change-event
+== P6/P7/P8/P9-T0-c: discovered C++ suite lanes (every xr-core/*/tests/Makefile) ==
+PASS: lane commands: C++ suites passed
+PASS: lane common: C++ suites passed
+PASS: lane policy: C++ suites passed
+PASS: lane settings: C++ suites passed
+PASS: lane shield: C++ suites passed
+PASS: lane themes: C++ suites passed
+PASS: lane update: C++ suites passed
+PASS: ci_lane_discovery (7/7 lanes)
+== P7: ≤12 hook patch round-trip vs the pinned Chromium rev ==
+rev            : d04cdb24d67b081f6cf80200ffc5233f44b61109
+patch          : 11938 B  sha256 13fd46ae06ac127a…
+hook files (4): chrome/browser/ui/views/BUILD.gn, chrome/browser/ui/views/toolbar/app_menu.cc, chrome/browser/ui/views/toolbar/toolbar_view.cc, chrome/browser/ui/views/frame/browser_frame_view.cc
+payload files (5): chrome/browser/ui/xr/BUILD.gn, chrome/browser/ui/xr/xr_command_bridge.cc, chrome/browser/ui/xr/xr_command_bridge.h, chrome/browser/ui/xr/xr_identity_color_bar.cc, chrome/browser/ui/xr/xr_identity_color_bar.h
+total files    : 9 (cap ≤12)
+never-list     : PASS (all files under chrome/browser/ui/**)
+apply          : PASS
+verify         : PASS
+revert         : PASS (byte-exact: True)
+negative       : expected FAIL (patch is bound to the pinned bytes), observed FAIL
+PASS: ui-skeleton patch round-trip
+== P7: WebUI reproducible toolchain (tsc-strict + deterministic bundle + CSP) ==
+toolchain: npm ci --ignore-scripts (lock-pinned, --ignore-scripts)
+toolchain: tsc -p /home/user/xr-core/ui (strict)
+toolchain: node build.mjs (deterministic bundle)
+  build: built dist/ (bundle.js + index.html + tokens.css)
+toolchain: node check-bundle.js (CSP on output)
+  csp: check-bundle: PASS (CSP-strict: no inline JS/eval, no runtime network, no sourcemap)
+toolchain: PASS (tsc-strict + deterministic bundle + CSP-clean) in /home/user/xr-core/ui/toolchain
+== P7: WebUI reproducibility — two builds byte-identical (R1 rung) ==
+repro-check: bundle build_a=60009b860cbaf110caa0a31a9c9c048035ce29fc1923d026f98a3b57ada68aea
+repro-check: bundle build_b=60009b860cbaf110caa0a31a9c9c048035ce29fc1923d026f98a3b57ada68aea
+repro-check: all    build_a=5eb5764b10ddea96e9d7ea784bd178072d65c0f56540f8f00dc6511ea702ee80
+repro-check: all    build_b=5eb5764b10ddea96e9d7ea784bd178072d65c0f56540f8f00dc6511ea702ee80
+repro-check: PASS — two independent builds are byte-identical (R1 repro rung)
+== P7: CSP lint — no runtime network/eval in ui/** + commands/** ==
+csp_lint: 0 violation(s) (PASS)
+== P7: a11y lint — ARIA APG combobox + aria-live + focus-visible ==
+a11y_lint: 0 violation(s) (PASS)
+== P7: RTL lint — logical-properties-only CSS ==
+rtl_lint: 0 violation(s) (PASS)
+== P7: commands.md regeneration diff-clean (roster → doc, no hand drift) ==
+PASS: /home/user/xr-browser/docs/contracts/commands.md is up to date
+== P7: menu model — Tier-1 ≤9 + tier separation + golden diff ==
+PASS: menu_model_check (Tier-1 ≤9, tier separation, stable order)
+== P7: §10 coverage ratchet (every future surface maps to a command) ==
+PASS: coverage_check
+== T0: upstream added-file canary — live pin->pin classification (fetch.py) ==
+GREEN: all patches apply cleanly at the target rev — proceed to promotion/DEPS-bump review (human presses the button; L24)
+wall-clock 4.543s, 21 B fetched, mode=dry-run, source=real
+== P11-T0-a: host protocol doc gate (every method-dispatching host documented, both directions) ==
+  discovered host: commands (9 method(s): bindings-clear, bindings-list, bindings-set, flag-status, invoke, list, menu-model, query, register)
+  discovered host: settings (8 method(s): counters-dump, flag-status, get, router-resolve, schema-dump, search, sections, set)
+  discovered host: shield (13 method(s): RecentEvents, Status, apply, bundle-check, bundle-load, event-emit, exception-add, exception-remove, exception-sweep, flag-status, match, posture, site-toggle)
+  discovered host: themes (7 method(s): apply, current, flag-status, import, list, system-mode, validate-doc)
+  discovered host: update (7 method(s): about-state, about-states, backoff, cohort, epoch-apply, flag-status, verify)
+PASS: host_protocol_check (5 host(s), every method literal documented, response law declared)
+== P11-T2: shield decision engine (vectors regenerate deterministically + both-backend byte parity) ==
+PASS: docs/contracts/vectors/shield-v1.json regenerates byte-identical (274 cases)
+PASS: 274 shield vectors byte-identical across shield_host (C++) and fakes/shield.py (Python)
+PASS: xr_schema validate block-event
+PASS: claims-lint (1 note file(s); no unsupported superlatives; evidence links, not adjectives)
+== P11-T3: xr-lists pipeline (compile vectors + frozen-schema bundle check + signed round-trip) ==
+PASS: docs/contracts/vectors/xr-lists-compile-v1.json regenerates byte-identical (100 cases, 47 refusal cases)
+ok: frozen list-bundle-manifest-v1.md untouched (sha256 d0d9e09f7492ed50… == pin)
+ok: frozen list-bundle-manifest-v1.schema.json untouched (sha256 8f9e576b3ff7fc5c… == pin)
+ok: refusal coverage (47 refusal cases, 13 families covered, vocabulary closed)
+ok: testdata/bundle.json regenerates byte-identical
+ok: testdata/LICENSE.attribution.txt regenerates byte-identical
+ok: testdata/manifest.json regenerates byte-identical
+PASS: list_bundle_check (frozen schema untouched + manifest schema-valid + binding + state laws + refusal coverage + byte-identical regeneration)
+  ok: compile hotpin-v1 — wrote bundle -> /tmp/tmp.Vgy1C7sqCP/bundle-v1.json (0 refusals)
+  ok: compile hotpin-v2 (the bad list is hot-pinned OUT as signed data)
+  ok: attribution sidecar + shape law — wrote /tmp/tmp.Vgy1C7sqCP/LICENSE.attribution.txt (2 lists, shape law enforced)
+  ok: sign: runtime keygen + detached gpg signature (TEST channel)
+  ok: verify: detached signature OK — ok: gpg detached verify (manifest-v1.json vs manifest-v1.json.asc)
+  ok: one-byte tamper detected
+  ok: wrong keyring rejected
+  ok: gpg-absent => visible SKIP (77), never a silent pass
+  ok: minisign-absent => visible SKIP (P10's minisign-on-CI pattern)
+  ok: release-channel refused by sign_artifact (fail-closed)
+  ok: attribution shape law reddens (not-4-segments + name-mismatch)
+  ok: host bundle-check binds the signed manifest (2 lists)
+  ok: data tamper refused by the binding (manifest-sha256)
+  ok: hot-pin-out dropped the bad list WITHOUT network (offline stdio host); every frame answered exactly once around apply
+  ok: replay path — re-offered bad bundle refused (downgrade), equal re-offer refused; lkg/pins laws held
+PASS: xr-lists round-trip (15 cells executed: real gpg sign/verify/tamper/wrong-key, SKIP-visible absences, release-channel refusal, attribution law, host binding + hot-pin-out + replay)
+== P9-T0-a: parity completeness (every protocol method has corpus cases) ==
+PASS: themes: methods covered by parity corpus
+PASS: settings: methods covered by parity corpus
+PASS: commands: methods covered by parity corpus
+PASS: update: methods covered by parity corpus
+PASS: policy: methods covered by parity corpus
+PASS: shield: methods covered by parity corpus
+PASS: derived pair list == manifest (6 row(s) cross-checked against xr-core/*/host discovery)
+PASS: parity_completeness (6 pair(s), 0 failure(s))
+== P9-T0-a: byte-differential fuzz (C++ host vs fake, seeded) ==
+pair themes: 931 requests, 0 divergences
+pair settings: 912 requests, 0 divergences
+pair commands: 912 requests, 0 divergences
+PASS: differential_fuzz (2755 requests, 0 divergences)
+== P9-T1: browser-test fixture lint (fixtures are the spec) ==
+browser_test_lint: 0 violation(s) (PASS)
+== P9-T2: isolation-matrix fake cells (identity x mechanism) ==
+PASS: isolation_matrix --check (matrix record diff-clean)
+== P9-T3: leaktest self-test + loopback canary (0 leaks) ==
+PASS: leaktest self-test (clean baseline; planted egress detected; blind harness refused)
+leaktest: 30 probe x state cells executed, 0 leak(s)
+PASS: leaktest (loopback)
+== P9-T4: compat corpus validate + offline replay ==
+compat validate: 20 entries checked, 0 violation(s) (PASS)
+compat replay: 20 entries checked, 0 violation(s) (PASS)
+== P9-T5: perf budgets (plan-transcribed, diff-clean) + gate ==
+PASS: gen_perf_budgets --check (17 rows transcribed, diff-clean)
+PASS: perf_gate --check (report diff-clean)
+== P9-T6: visual-diff stdlib engine self-test ==
+PASS: visual_diff self-test (identical clean; 1px/theme/RTL flagged; threshold honored; expired waiver red; valid waiver green)
+== P9-T7: npm allowlist + copy lint + AXTree snapshot + keyboard tasks ==
+npm_allowlist_check: 35 package(s) checked, 0 violation(s) (PASS)
+copy_lint: 77 string(s) checked, 0 violation(s) (PASS)
+PASS: a11y_tree --check (29 nodes, diff-clean)
+keyboard_tasks_check: 12 task(s), 0 violation(s) (PASS)
+== P9-T8: fuzz corpus seeds + contract generator + fleet (timebox law) ==
+seed_corpus: 76 seed(s) verified (policy-core=36, commands-core=11, settings-core=10, themes-core=19)
+PASS: seed_corpus --check
+mojom_fuzz_gen: 4000 cases (policy=1000, commands=1000, settings=1000, themes=1000)
+PASS: mojom_fuzz_gen
+fuzz_fleet: 4 target(s) x 60s clean (corpus dirs seeded)
+PASS: fuzz_fleet
+== P9-T9: SAST rule registry (canary + real-tree clean) ==
+sast_check: 10 rule(s), 0 violation(s) (PASS)
+== P9-T10/T11: drill matrices (kill matrix + update drill, complete) ==
+drill_check: 0 violation(s) (PASS)
+== P10-T0-c: mutation freshness (a stale score is a FAIL, not a note) ==
+fresh cores: commands, common, policy, settings, shield, themes, update
+PASS: mutation-freshness (pin 341f1fbe33cd, 7 core(s) fresh)
+== P10-T1: update golden vectors, cross-backend BYTE parity (73 cases) ==
+byte-identical: 73/73 cases across update_host (C++) and fakes/update.py (Python)
+PASS: update-vectors (73 cases, both backends, both flags)
+== P10-T1: std-only core import hygiene (no Chromium includes in core/**) ==
+PASS: core-hygiene (91 files across 7 cores: commands, common, policy, settings, shield, themes, update; std/libc includes only, no Chromium, no cross-core escapes)
+== P10-T2: update-server spec + conformance (reference) + fuzz + size ==
+PASS: xr_schema validate server-version-graph
+PASS: xr_schema validate server-channels
+PASS: xr_schema validate server-cohorts
+PASS: xr_schema validate server-epochs
+PASS: update_server_ref self-check (render+verify+statelessness+cap; response 669 bytes)
+PASS: spec/README.md diff-clean
+PASS: spec_generated.rs diff-clean (3 variants)
+PASS: conformance corpus consistent (51 cases, 22 render-31 responses, 29 typed refusals)
+PASS: server conformance (reference): 51 cases (22 render-31 responses byte-exact, 29 typed refusals; stateless; canonical)
+fuzz: 585621 iters, 188198 render-31 responses, 397423 typed refusals, 0 violations (seed 20260911, budget 30 s)
+PASS: server fuzz (never-accept-without-valid-signature/epoch, statelessness, canonical refusals, cap)
+response: 1379 bytes raw, 435 bytes gzip (limit 2048; 3 offer(s) rendered)
+request cap: 65536 bytes (over-cap refused before parse — measured by the conformance corpus, case too-large)
+PASS: server-size (response 1379B <= 2048B, gzip 435B; cap enforced)
+== P10-T5/T7/T8: rollout drill + claims/notes + about-state coverage ==
+== rollout/rollback drill (update_host + reference server; store /tmp/tmp_7caw5fh) ==
+  [ok] serve+accept
+  [ok] refuse-downgrade
+  [ok] replay-refusal
+  [ok] ramp-boundary-49-in
+  [ok] ramp-boundary-50-out
+  [ok] epoch-revocation-applied
+  [ok] revocation-forces-manual-path
+  [ok] stale-notice-ignored
+  [ok] auto-rollout-refused-until-p38
+  [ok] crash-hook-dev-only
+cells executed: 10 / not-run: 0
+PASS: rollout drill (serve/accept, downgrade+replay refusals, ramp boundaries, epoch revocation -> forced manual path, stale ignored, auto-rollout refused until P38, dev-only hook)
+PASS: release-notes diff-clean (train-152.md)
+PASS: claims-lint (1 note file(s); no unsupported superlatives; evidence links, not adjectives)
+PASS: about-state (all 7 host states rendered: idle, checking, available, downloading, ready, failed, refused; failed/refused carry reason + manual path + check-again; roster + grdp rows present)
+== P10-T3: key-ceremony docs + the both-repos secret absence proof ==
+PASS: secret-scan (3020 files across both repos; no private key material, no credential shapes; the absence of release keys is the honest state — ADR-0004/HG-36)
+PASS: ceremony-check (ceremony.md + key-hierarchy.md + README complete; secret-scan clean across both repos; release-key generation refused by tooling)
+== P10-T4: signing matrix (gpg REAL in sandbox; argv-exact mac/win) ==
+  ok: gpg keygen — PASS: linux-repo test key generated in /tmp/tmp.AJfuVXa0kc/gnupghome (TEST ONLY — release keys are HSM-born, HG-36)
+  ok: clearsign InRelease
+  ok: verify OK — PASS: signature verified (InRelease against keyring /tmp/tmp.AJfuVXa0kc/gnupghome)
+  ok: one-byte tamper detected (FAIL: verification FAILED (InRelease.tampered): gpg: Signatu...)
+  ok: wrong keyring rejected
+  ok: repomd.xml detached .asc verify
+  ok: appimage write+check — PASS: appimage-meta round-trip (XR-0.9.18.2-x86_64.AppImage: beta 0.9.18.2, digest ok, stub sig ok)
+  ok: tampered image refused (FAIL: XR-0.9.18.2-x86_64.AppImage: payload digest/size misma...)
+  ok: argv-stub matrix (5 exact argv shapes + provider guard, stub-recorded)
+  ok: beta without XR_SIGN_PROVIDER refused — REFUSED: channel 'beta' requires XR_SIGN_PROVIDER (a real si...
+  ok: stable with provider accepted (argv construction only; real sigs = HG-37)
+PASS: signing matrix (14 cells executed: gpg real round-trip, tamper, wrong-key; appimage round-trip; argv-exact; provider guard)
+PASS: packaging-matrix (6 rows complete: owner + signing + update-registration + artifacts; tier-2 capability statements present; signing tools exist)
+== P10-T7: license report + unknown-license-fails-build law ==
+license report: 18 dependency eval(s) (1 rejected-and-not-shipped; 0 unknown-license: none)
+PASS: license-report (18 entries; every dependency eval represented; unknown-license law clean)
+== P10-T9: release gate (dev green on synthetic; beta/stable MUST fail closed) ==
+== release gate: channel dev ==
+  [--] signing: TEST-ONLY banner (dev lane — the core prints 'test-only: …' on every accept; HG-36 for production)
+  [ok] signing: dev/nightly-test: TEST-ONLY is the honest state, banner in every result
+  [ok] sbom+licenses: PASS: sbom_gate
+  [ok] attestation: PASS: attestation verified offline (attestation-example.json; pinned TEST-ONLY key; 0 subject artifact(s) re-digested; one-byte tamper law holds by construction — demonstrated in the negative fixture)
+  [ok] evidence: PASS: evidence_check (8 bundle(s), 0 failure(s))
+  [ok] leak-report: evidence/P10/logs/t9-leak-report.txt
+  [ok] notes+voice: release_notes --check + claims_lint
+  [ok] drills: rollout drill transcript (10/10 cells)
+
+release gate — channel 'dev': 7 lane(s) green, 0 missing
+PASS: release check --channel dev
+ok: release check --channel beta exits non-zero (fail-closed, missing items enumerated)
+ok: release check --channel stable exits non-zero (fail-closed, missing items enumerated)
+== P10-T0-b: kill matrix, hosts-local EXECUTION (the P9 deferral closed) ==
+  executed: commands/mid-dispatch/SIGKILL (4 iteration(s))
+  executed: commands/mid-dispatch/SIGTERM (4 iteration(s))
+  executed: commands/mid-write/SIGKILL (4 iteration(s))
+  executed: commands/mid-write/SIGTERM (4 iteration(s))
+  executed: commands/corrupt-load/- (1 iteration(s))
+  executed: policy/mid-dispatch/SIGKILL (4 iteration(s))
+  executed: policy/mid-dispatch/SIGTERM (4 iteration(s))
+  NOT-RUN : policy/mid-write/* — policy_host has no binary write mode (PolicyStore::Save is library-level; the host write path lands with P11+ IPC) — file-level law proven by policy/tests/test_store.cc
+  executed: policy/mid-snapshot/SIGKILL (4 iteration(s))
+  executed: settings/mid-dispatch/SIGKILL (4 iteration(s))
+  executed: settings/mid-dispatch/SIGTERM (4 iteration(s))
+  executed: settings/mid-write/SIGKILL (4 iteration(s))
+  executed: settings/mid-write/SIGTERM (4 iteration(s))
+  executed: settings/corrupt-load/- (1 iteration(s))
+  NOT-RUN : shield/*/* — no drill surface registered for this host
+  executed: themes/mid-dispatch/SIGKILL (4 iteration(s))
+  executed: themes/mid-dispatch/SIGTERM (4 iteration(s))
+  executed: themes/mid-write/SIGKILL (4 iteration(s))
+  executed: themes/mid-write/SIGTERM (4 iteration(s))
+  executed: themes/corrupt-load/- (1 iteration(s))
+  NOT-RUN : update/*/* — no drill surface registered for this host
+  executed: commands/disposable-zero-bytes/- (1 iteration(s))
+  executed: settings/disposable-zero-bytes/- (1 iteration(s))
+  executed: themes/disposable-zero-bytes/- (1 iteration(s))
+  NOT-RUN : browser/process-kill/* — needs the farm browser process tree + VM snapshots (HG-33)
+  NOT-RUN : renderer/process-kill/* — needs the farm browser process tree + VM snapshots (HG-33)
+  NOT-RUN : network/process-kill/* — needs the farm browser process tree + VM snapshots (HG-33)
+  NOT-RUN : vaultd/process-kill/* — needs the farm browser process tree + VM snapshots (HG-33)
+  NOT-RUN : tord/process-kill/* — needs the farm browser process tree + VM snapshots (HG-33)
+  NOT-RUN : wgd/process-kill/* — needs the farm browser process tree + VM snapshots (HG-33)
+  NOT-RUN : inspect/process-kill/* — needs the farm browser process tree + VM snapshots (HG-33)
+  NOT-RUN : gpu/process-kill/* — needs the farm browser process tree + VM snapshots (HG-33)
+  cells executed: 21 (kill iterations: 66), cells not-run: 11
+PASS: kill-matrix
+== P9-T12: §11 surface completeness (every surface homed) ==
+surfaces_check: 15 surface(s), 0 violation(s) (PASS)
+== P9 meta: mutation-check the checker (3 runners, defect must escape) ==
+tools/perf_gate.py: control=tripped, mutation=escaped
+tools/surfaces_check.py: control=tripped, mutation=escaped
+tools/evidence_check.py: control=tripped, mutation=escaped
+test_checker_mutation: 3 target(s), 0 failure(s) (PASS)
+== ALL GOVERNANCE CHECKS PASSED ==
+RUN_CHECKS_RC=0
+BATTERY_DONE

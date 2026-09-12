@@ -44,7 +44,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "cfbb344bb0b2981393cc27fdb9d56627a852d0c9"     # xr-core P11-T3: bundle-check entry attribution (the frozen-schema-legal field the list pipeline embeds)
+xr_core_rev: "341f1fbe33cd87e128c90dce8339e52d5798b2dd"     # xr-core P11-T5: event-emit emitter + MakeLedgerRow (the living block-event-v1 activity-ledger row) + the int64 wire fix
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

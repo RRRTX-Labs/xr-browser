@@ -258,6 +258,106 @@ Lesson recorded for T5–T8: run the FULL `tools/run_checks.sh` +
 `tools/run_negatives.sh` at every task boundary, not the targeted
 subset — task-scoped batteries let cross-phase gates drift silently.
 
+## D7. T5 decisions — emitter = `event-emit` host method writing a LIVING superset row (no mojom widening), + the int64 wire fix
+
+The brief's T5 asks for `block-event-v1` as a living contract (registered
+post-freeze), ledger emission through the existing ring/Activity-Ledger
+path, a "why blocked" reason-code supply for P13 to render, the privacy
+posture on events, and retention/caps inherited from the P8 ring tests.
+Decisions:
+
+1. **Shape.** The frozen mojom `BlockEvent` stays exactly as frozen (the
+   Status/RecentEvents surface is untouched — its bytes are pinned by the
+   frozen fixture case). The ledger row is a living SUPERSET document
+   (`block-event-v1`): frozen fields with frozen semantics and frozen
+   k-spellings (`action`, `request_class`, `origin`, redacted `target`)
+   plus the provenance the mojom struct deliberately does not carry
+   (`rule_id`, `bundle_version`, `why_code`, flat `identity`, `seq`).
+   No second naming: the row's `action` enum IS the frozen enum.
+2. **Emitter.** A new host method `event-emit` (both backends byte-identical;
+   45 vector cases + a 43-case direct parity probe). No `kRejected` class —
+   emission has no content-conflict semantics, so every bad input is
+   `kMalformedInput` with a closed detail token. `seq`/`ts_millis` are
+   caller-supplied: no clock reads (the commands/core/dispatch.cc
+   ledger-row precedent).
+3. **int64 fix (latent T2 bug, found in T5).** The mojom declares
+   `ts_millis`/`tab_id` int64, but T2's `EventToJson` cast them to int32 —
+   epoch-scale timestamps truncated on the wire (no committed value was
+   large enough to show it). Fixed in `EventToJson` AND the new
+   `MakeLedgerRow`; frozen-surface bytes unchanged for every committed
+   value (test_golden_vectors 355 checks green before and after), and the
+   law is now pinned: golden `ts_millis` 1750000000123 + vectors
+   `e-emit-epoch-ts` / `e-emit-big-ints`.
+4. **Reason codes.** `docs/shield/reason-codes.{md,json}` maps the closed
+   11-code verdict vocabulary to stable `shield.why.*` text keys; P13
+   renders the localized copy (a documented dependency — v1 renders
+   nothing). Five-way sync (host_protocol closed set = schema enum = table
+   json = table md = vectors' usage) is pytest-asserted; drift reddens.
+5. **Retention/caps.** v1 pins what the code has: the ring FIFO cap (256)
+   and the 64 KiB canonical-byte view budget (P8 inheritance, doc/code
+   match tested). The 90-day rolling default retention, per-identity local
+   storage, user export and the never-uploaded law are P13 persist-time
+   behavior — stated in the contract as a dependency, not claimed as
+   implemented. The plan's 2,000-event per-tab ring is P13's scale of the
+   same cap law.
+6. **events.h intent cleanup.** The T2 intent header cited speculative
+   `event-sink-v1`/`event-stream-v1` contract names that were never
+   registered anywhere; replaced with the registered `block-event-v1`
+   (no phantom forward references in source intent headers).
+7. **Attention.** The emitter drives the passive chip counter only
+   (invariant 7: no toasts/badges/modals); the enforcement extraction to
+   `tools/attention_check.py` stays T6's job per the plan.
+8. **fetch_allowlist false positive (gate fix, not a weakening).** The
+   `EXAMPLE_URL` exemption in `tools/fetch_allowlist_check.py` matched
+   `.example/` but not `.example:8443/` — the T5 redact-port vector URL
+   (a reserved RFC-2606 domain WITH a port, exactly as unfetchable as
+   without one) reddened the chokepoint scan. Fixed at the regex (the
+   trailing class now allows `:` or `/`) instead of exempting the whole
+   families file — a file-level EXEMPT_FILES entry would have dropped
+   the file from the scan entirely, which IS a weakening; the targeted
+   fix keeps it scanned and is recorded here per the exemption table's
+   ADR-or-research-row law.
+9. **Hosted-CI verification debt (process find).** The hosted governance +
+   core-hardening lanes were RED at the T3 and T4 pushes (runs at 06bd7ab7
+   and 9df51d1, both `failure`) and nobody looked: T1's evidence checked
+   its own hosted runs, but T2–T4 pushed without querying CI. T5 queried
+   the API, root-caused every red, and fixed each with a named commit
+   (items 10–12). New evidence law for this phase: every push is followed
+   by a hosted-run query, and the run conclusions are recorded in the
+   phase transcript before the task is called complete.
+10. **Vendored Cargo.lock files never committed (T1 latent, fixed
+   `xr-core 1e5fa01`).** Every upstream crate tarball ships its OWN
+   `.gitignore` (e.g. aho-corasick's `/Cargo.lock` line), so T1's
+   `git add third_party/rust/vendor` silently skipped 18 crate
+   `Cargo.lock` files the published tarballs contain. The dev sandbox had
+   them on disk (vendor_check green locally); the hosted checkout did not
+   (shield-vendor red: 18 × "MISSING file Cargo.lock"). Force-added; the
+   nested `.gitignore`s stay untouched (they are published-tarball bytes);
+   verified with vendor_check against a `git archive` extraction — the
+   exact hosted bytes, not the working tree.
+11. **xrctl ↔ shield-fake interface drift (T2 latent, fixed `xr-core
+   341f1fb` + xrctl unwrap in the T5 browser commit).** The shield fake's
+   `call(method, args, flag)` follows the house CLI shape (flag + tuple
+   return), but xrctl's generic path calls `mod.call(method, payload)` and
+   serializes the result directly: TypeError since T2 on the hosted
+   governance lane (the local battery doesn't run `docs/contracts/tests`;
+   only CI does). Fixed on BOTH sides: the fake's `flag` defaults to
+   `"on"` (its documented CLI default), and xrctl unwraps an
+   `(envelope, rc)` tuple to the envelope — the exit-code contract belongs
+   to the host-binary layer (pinned by the vectors), xrctl's contract is
+   the typed envelope. 274 vectors re-verified byte-identical after the
+   fake change.
+12. **Rule-(e) canary hermeticity (T0-d latent, fixed in
+   `tools/tests/test_p11_t0d_evidence.py`).** The stale-BLOCKED fixture
+   tests measured whichever environment they ran in: hosted runners have
+   cargo/go installed, so `which` fired the LOCAL arm on top of the ledger
+   arm (2 hits where the assert wanted 1; the UNOBSERVED-go test fired
+   outright). Pinned hermetic with `monkeypatch` (`shutil.which` → None
+   for the ledger-arm fixtures; the local arm keeps its own explicit
+   positive test) and proven in both worlds — including a simulated
+   hosted PATH with fake cargo/go/rustc/clang/semgrep binaries (12/12
+   green under the simulation).
+
 ## R1. adblock-rust: version, license, advisory state (T1 input)
 
 **VERIFIED (live API reads, 2026-09-11).**

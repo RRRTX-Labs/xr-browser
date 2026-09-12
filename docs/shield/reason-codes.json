@@ -1,0 +1,72 @@
+{
+ "note": "P11-T5: the 'why blocked' reason-code table — the stable mapping from the closed verdict why_code vocabulary (xr-core/shield/host_protocol.md, section Decision vocabularies) to P13 render keys. Codes are contract vocabulary and never change; text_key values are stable identifiers for localized copy (P13 renders the text; this table supplies the codes and the mapping). Sync law: these codes equal the block-event-v1 schema enum, the host_protocol closed set, and the why_codes used by the shield vectors (docs/contracts/tests/test_block_event.py asserts all of it). claims_lint-clean: mechanics, not promises.",
+ "p13_dependency": "P13 renders localized copy for text_key in the Activity Ledger and the one-click 'why was this blocked' affordance, and enforces the 90-day rolling default retention (user-configurable, local only, never uploaded) at persist time. Until P13 lands, the why_code itself is the fallback display string.",
+ "codes": [
+  {
+   "why_code": "rule-blocked",
+   "text_key": "shield.why.ruleBlocked",
+   "emits_when": "a list or custom rule blocked the request",
+   "default_action": "kBlocked"
+  },
+  {
+   "why_code": "rule-allowed",
+   "text_key": "shield.why.ruleAllowed",
+   "emits_when": "an allow-rule matched; the request proceeded",
+   "default_action": "kAllowed"
+  },
+  {
+   "why_code": "rule-redirected",
+   "text_key": "shield.why.ruleRedirected",
+   "emits_when": "a redirect-rule rewrote the request",
+   "default_action": "kRedirected"
+  },
+  {
+   "why_code": "rule-replaced",
+   "text_key": "shield.why.ruleReplaced",
+   "emits_when": "a replace-rule intercepted the request before it reached the network",
+   "default_action": "kBlocked"
+  },
+  {
+   "why_code": "no-match",
+   "text_key": "shield.why.noMatch",
+   "emits_when": "no rule matched; the request proceeded",
+   "default_action": "kAllowed"
+  },
+  {
+   "why_code": "no-bundle",
+   "text_key": "shield.why.noBundle",
+   "emits_when": "no list bundle is bound yet; the request proceeded (data absence fails open)",
+   "default_action": "kAllowed"
+  },
+  {
+   "why_code": "exception-scope",
+   "text_key": "shield.why.exceptionScope",
+   "emits_when": "a user exception scope covered the hit; the request proceeded",
+   "default_action": "kAllowed"
+  },
+  {
+   "why_code": "engine-dead-fail-open",
+   "text_key": "shield.why.engineDeadFailOpen",
+   "emits_when": "the blocking engine died; browsing continues fail-open with an amber chip",
+   "default_action": "kAllowed"
+  },
+  {
+   "why_code": "engine-poisoned-fail-open",
+   "text_key": "shield.why.enginePoisonedFailOpen",
+   "emits_when": "the engine reported poison; browsing continues fail-open with an amber chip",
+   "default_action": "kAllowed"
+  },
+  {
+   "why_code": "kill-switch",
+   "text_key": "shield.why.killSwitch",
+   "emits_when": "the kill switch is on; blocking is suspended with an amber chip",
+   "default_action": "kAllowed"
+  },
+  {
+   "why_code": "route-loss-fail-closed",
+   "text_key": "shield.why.routeLossFailClosed",
+   "emits_when": "the egress route was lost; the request is held fail-closed (red chip)",
+   "default_action": "kBlocked"
+  }
+ ]
+}

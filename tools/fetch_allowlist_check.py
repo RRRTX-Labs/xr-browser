@@ -73,7 +73,11 @@ EXEMPT_FILES: dict[str, str] = {
         "(same class as the probe_driver scan tokens above).",
 }
 # URL literals that are test/fixture DATA (never fetched): example namespaces
-EXAMPLE_URL = re.compile(r"\.(example|invalid|test)/")
+# RFC-2606 reserved domains never route — test DATA, not network use.
+# The trailing class allows a port (".example:8443/"): a reserved domain
+# with a port is exactly as unfetchable as without one (P11-T5 false
+# positive on the shield vector families; research-log-P11.md D7 item 8).
+EXAMPLE_URL = re.compile(r"\.(example|invalid|test)[:/]")
 NET_IMPORTS = re.compile(
     r"^\s*(import|from)\s+(urllib\.request|http\.client|socket|requests|httpx|aiohttp)\b",
     re.MULTILINE,

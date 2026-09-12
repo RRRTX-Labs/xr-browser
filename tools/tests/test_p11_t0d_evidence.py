@@ -81,20 +81,37 @@ CAPS = {"capabilities": {
 }}
 
 
-def test_stale_blocked_ledger_arm():
+def _pin_no_local_tools(monkeypatch):
+    """Hermeticity pin for rule (e)'s LOCAL arm (P11-T5).
+
+    Hosted CI runners have cargo/go/make installed; the dev sandbox does
+    not. Without this pin the fixture tests below measure whichever
+    environment they happen to run in — the leak reddened the hosted
+    governance lane at 9df51d1: 'no cargo in the sandbox' double-fired
+    (ledger arm + `which cargo` local arm => 2 hits, assert wanted 1) and
+    the UNOBSERVED-go test fired via `which go`. The local arm keeps its
+    own explicit positive test below (test_stale_blocked_local_arm).
+    """
+    monkeypatch.setattr(runner_caps.shutil, "which", lambda _tool: None)
+
+
+def test_stale_blocked_ledger_arm(monkeypatch):
+    _pin_no_local_tools(monkeypatch)
     hits = runner_caps.stale_blocked_findings(
         [row("B-1", "Rust replay — no cargo in the sandbox",
              status="BLOCKED-NET")], CAPS, P)
     assert len(hits) == 1 and "STALE BLOCKED" in hits[0]
 
 
-def test_stale_blocked_unobserved_tool_never_fires():
+def test_stale_blocked_unobserved_tool_never_fires(monkeypatch):
+    _pin_no_local_tools(monkeypatch)
     assert runner_caps.stale_blocked_findings(
         [row("B-2", "telemetry — no go in the sandbox",
              status="BLOCKED-NET")], CAPS, P) == []
 
 
-def test_stale_blocked_ignores_verified_rows_and_other_reasons():
+def test_stale_blocked_ignores_verified_rows_and_other_reasons(monkeypatch):
+    _pin_no_local_tools(monkeypatch)  # uniform hermeticity (defensive)
     assert runner_caps.stale_blocked_findings(
         [row("V-1", "hosted replay, no cargo needed anymore")], CAPS, P) == []
     assert runner_caps.stale_blocked_findings(

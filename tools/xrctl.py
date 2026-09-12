@@ -71,6 +71,15 @@ def cmd_call(args) -> int:
         result = mod.resolve(payload)
     else:
         result = mod.call(args.method, payload)
+    if isinstance(result, tuple):
+        # The shield fake (P11-T2) follows the house CLI shape and returns
+        # (envelope, rc): the exit-code contract belongs to the HOST BINARY
+        # layer (pinned by the golden vectors), while xrctl's contract is
+        # the typed result envelope — unwrap it here. (P11-T5: this generic
+        # path raised TypeError on the shield fake's required flag arg and
+        # then leaked the raw tuple; both hosted-CI debts fixed here + a
+        # flag default in the fake.)
+        result = result[0]
     print(json.dumps(result, sort_keys=True, separators=(",", ":")))
     return EXIT_OK
 
