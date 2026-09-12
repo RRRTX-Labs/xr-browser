@@ -87,8 +87,17 @@ JSON
 JSON
   # B-1 must be flagged stale (cargo proven present); B-2 must NOT (go is
   # UNOBSERVED — the ledger refuses to certify what no run ever printed).
-  local out rc
-  out="$("$PY" tools/evidence_check.py --repo "$R" --strict --only P13 2>&1)" && rc=0 || rc=$?
+  # Hermetic PATH (hosted-CI law; research-log D7 item 15): rule (e)'s LOCAL
+  # arm is shutil.which() — hosted runners carry `go` on PATH, which fired
+  # the arm for B-2 and reddened this canary for the wrong reason. Pin the
+  # world: a stub `cargo` (B-1's arm MUST fire) and a PATH without `go`
+  # (B-2's arm must NOT) — identical semantics in both worlds.
+  local HBIN out rc
+  HBIN="$(mktemp -d)"
+  printf '#!/bin/sh\nexit 0\n' > "$HBIN/cargo" && chmod +x "$HBIN/cargo"
+  out="$(env PATH="$HBIN:/usr/bin:/bin" "$PY" tools/evidence_check.py --repo "$R" --strict --only P13 2>&1)" && rc=0 || rc=$?
+  rm -rf "$HBIN"
+
   if [ "$rc" -eq 0 ]; then
     echo "NEGATIVE-FAIL: stale BLOCKED (cargo proven present) passed strict — rule (e) inert"
     NEG_FAILURES=$((NEG_FAILURES + 1))

@@ -131,6 +131,11 @@ case_lists_roundtrip_red() {
   mkdir -p "$R/build"
   cp -r xr-lists "$R/"
   cp -r build/signing "$R/build/"
+  # sign_artifact.py resolves its `_common` import by scanning its OWN path
+  # parents (not the caller's cwd) — the partial copy must carry
+  # build/_common.py or the minisign-present cell dies on import (only
+  # visible where minisign EXISTS; D7 item 16).
+  cp build/_common.py "$R/build/"
   "$PY" - "$R" <<'PYEOF'
 import json, sys
 from pathlib import Path
@@ -148,6 +153,7 @@ PYEOF
   mkdir -p "$C/build"
   cp -r xr-lists "$C/"
   cp -r build/signing "$C/build/"
+  cp build/_common.py "$C/build/"  # same import-scan law as the $R copy
   if XR_CORE="$PWD/../xr-core" bash "$C/xr-lists/tests/roundtrip.sh" >/dev/null 2>&1; then
     echo "ok: roundtrip.sh positive control (clean tree passes the matrix)"
   else

@@ -127,6 +127,10 @@ fi
 if out=$("$PY" build/signing/sign_artifact.py --artifact "$TMP/manifest-v1.json" \
       --channel release --os linux 2>&1); then
   bad "release channel ACCEPTED by the test scaffold: $out"
+elif ! printf '%s' "$out" | grep -q "release-channel signature is impossible"; then
+  # any-nonzero is NOT a refusal: an import crash or a missing tool must not
+  # masquerade as the fail-closed guard firing (D7 item 16).
+  bad "release channel refused for the WRONG reason (no ToolError message): $out"
 else cell "release-channel refused by sign_artifact (fail-closed)"; fi
 
 # ---- attribution shape law: a malformed attribution reddens ---------------

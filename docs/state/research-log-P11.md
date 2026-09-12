@@ -385,6 +385,40 @@ Decisions:
    actually lives (T8's parity job against the vendored corpus; R2
    addendum below). Not a weakening: the step as written never passed
    anywhere; the honest capability is now the claimed capability.
+15. **Shell canaries leak the hosted PATH too (rule-(e) canary, fixed this
+    commit).** The negatives harness has the same environment-leak class as
+    the pytest lane (items 9/11): evidence_check's rule (e) LOCAL arm is
+    `shutil.which()`, and hosted runners carry `go` on PATH — the
+    "UNOBSERVED tool (go)" canary (B-2 must NOT be flagged stale) reddened
+    on hosted for the wrong reason (governance run 34718047468, step 10).
+    Fix: the canary now runs evidence_check under a hermetic PATH — a stub
+    `cargo` (B-1's arm must fire) and no `go` (B-2's arm must not) —
+    identical semantics in both worlds. Verified locally in both worlds
+    (bare + stub-minisign PATH); the hosted run is the recorded proof.
+16. **Partial-copy canaries must carry import-scan dependencies (roundtrip
+    control, fixed this commit).** sign_artifact.py resolves `_common` by
+    scanning its OWN path parents, not the caller's cwd — the p11_t3
+    roundtrip control's clean copy (xr-lists/ + build/signing/ only) was
+    missing build/_common.py, so the minisign-present cell died on import.
+    Latent everywhere minisign is ABSENT (the cell SKIPs); exposed on
+    hosted where it EXISTS. Fixed by copying build/_common.py into both
+    canary copies. Same commit tightens the release-refusal cell: it
+    accepted ANY nonzero exit as "refused" — an import crash silently
+    passed as fail-closed. It now requires the actual ToolError message
+    ("release-channel signature is impossible"). Reproduced locally with
+    the stub-minisign simulation before and after the fix.
+17. **Hosted-runner shutdown flake (infrastructure, NOT code — recorded so
+    it is never misdiagnosed).** Core-hardening run 34718047516 (head
+    3c53cee): fuzz-fleet (settings-core) job 103618728672 was killed mid
+    600-second timebox with exit 143 (SIGTERM) and the runner's own
+    message "The runner has received a shutdown signal"; the matrix
+    fail-fast then cancelled the policy-core and themes-core siblings at
+    the same second. Every other core-hardening job (shield-vendor both
+    phases, server-conformance, freshness, three mutations,
+    commands-core fuzz) was SUCCESS. No code signal: the law is retry at
+    the next head (or rerun-failed-jobs) before touching anything; this
+    item exists so a future reader does not read the cancelled fuzz cells
+    as a T5 regression.
 
 ## R1. adblock-rust: version, license, advisory state (T1 input)
 
