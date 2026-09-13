@@ -542,20 +542,42 @@ evidence/P11/logs/t8-shield-parity-fake.txt) and through the real shim
 in both. Divergence classes D-1…D-6 (including the live-capture set that
 stays NOT-RUN under HG-31): docs/shield/parity-divergences.md.
 
-## R3. Chromium network-service seam at pin d04cdb24 — UNVERIFIED (pin read still owed; T2 landed the in-tree half)
+## R3. Chromium network-service seam at pin d04cdb24 — VERIFIED live (DoD-10, 2026-09-13)
 
-The pin (`152.0.7977.82 @ d04cdb24d67b081f6cf80200ffc5233f44b61109`,
-`xr-browser/DEPS`) has no checkout in this sandbox; `path:line` citations
-for the URLLoaderFactory/NetworkContext interception point must come from a
-live read at the pin before the patch manifest grows its third entry. Same
-honesty rule as P10 R1.
+Live reads at the pin (`152.0.7977.82 @ d04cdb24d67b081f6cf80200ffc5233f44b61109`,
+`xr-browser/DEPS`) through the GitHub contents API — the same honesty rule
+as P10 R1 (no remembered contents; every anchor below was counted unique
+in the fetched bytes before the patch was authored):
 
-T2 status note (2026-09-12): the in-tree half of the seam LANDED — the
-injection contract is `xr-core/shield/core/engine.h` (BlockingEngine, pure
-virtual, no adblock types in the core) plus the hosted-lane FFI shim
-`xr-core/shield/engine/` (C ABI `xr_shield_engine.h`). Nothing binds this
-to Chromium yet; the farm-side seam read and the patch-manifest 3rd entry
-owe exactly what this entry said before T2.
+* `services/network/url_loader.cc` (2706 lines, blob sha `8cf3f99728dd…`):
+  `URLLoader::ScheduleStart()` at :751 ends in the defer/`Start()` fork
+  (:763–:767 — `LogBlockedBy("ResourceScheduler")` :764 /
+  `url_request_->Start()` :766); the completion path is
+  `URLLoader::NotifyCompleted(int)` at :1990; the deferred-resume restart
+  is `URLLoader::ResumeStart()` at :2382 (its own `Start()` at :2384 —
+  deliberately NOT hooked: the consult sits BEFORE the defer branch, so a
+  deferred-then-resumed request has already been ruled on; a redirect
+  re-enters ScheduleStart).
+* `services/network/network_context.cc` (4170 lines, blob sha `789de76a8dc0…`):
+  the PassKey `NetworkContext` ctor at :715; the body's receiver binding
+  ends `receiver_);` at :754, followed by the file-unique
+  `#endif  // BUILDFLAG(IS_WIN) && DCHECK_IS_ON()` at :762 — the gate's
+  recorded attachment point.
+* `services/network/BUILD.gn` (792 lines, blob sha `c811f8c13d65…`):
+  `component("network_service")` at :12; the sources-list tail
+  `"web_transport.cc"`/`"web_transport.h"` at :277–:278 (the alphabetical
+  insertion point for `xr/xr_shield_gate.*`).
+* `net/base/net_error_list.h` (1167 lines): `NET_ERROR(BLOCKED_BY_CLIENT, -20)`
+  at :91 — the verdict mapping reuses the platform's existing
+  embedder-blocked code; no new net error is invented.
+
+The T2 in-tree half (engine.h injection contract + `shield/engine/` FFI
+shim) binds to Chromium through patch `0200-shield-network-seam`
+(xr-core/patches/network-seams/): 3 guarded upstream hooks +
+2 XR-owned payload files = 5 files ≤ the DoD-10 budget of 8, proven
+byte-exact at the pin by `build/webui/shield_seam_roundtrip.py`
+(real fetch through the choke point, apply → markers → revert →
+anchor-perturbation negative, every run_checks + governance run).
 
 ## R4. MV3/DNR limits (what Shield must NOT promise) — VERIFIED live (T6, 2026-09-13)
 
@@ -1052,3 +1074,75 @@ redirect resources passed by NAME only.
    gone, and the --locked copy build (runner-side fetch) still exercises
    the full upstream lock. Two hosted rounds to root-cause a two-layer
    debt — each round's error named the next fix exactly.
+
+10. **Round 3 (run 34758863940) — the blind-written shim COMPILED.** The
+    offline shim-root build went green on the first hosted try after the
+    add_filter_list/cstr fixes (`Finished`, 49.41 s, cdylib present): the
+    offline-closure proof now exists for real, and the --locked copy build
+    passed beside it (37.80 s). The red moved downstream to the bench
+    driver's real-engine link: `-L/-l/-rpath` were emitted BEFORE the
+    sources, and GNU ld resolves left-to-right — a library nothing has
+    referenced yet is dropped, so every `xr_shield_engine_*` symbol came
+    back undefined (collect2 exit 1). Fix: libraries go after objects
+    (`shield_bench.py`); while in there, a literal `%4==0` in the usage
+    fprintf format was escaped (`%%` — g++ `-Wformat=` had flagged it in
+    the same log). Third consecutive hosted round where the error named
+    the next fix exactly.
+
+## D11. DoD-10 decisions — the network-seam patch entry (2026-09-13)
+
+1. **Consult placement.** `URLLoader::ScheduleStart()`, BEFORE the
+   ResourceScheduler defer branch — the last point where a load can be
+   stopped before the first packet, and placement ahead of defer/resume
+   closes the slip-past path (`ResumeStart()`'s `Start()` needs no hook;
+   a changed-URL redirect re-enters ScheduleStart, which IS hooked).
+2. **Verdict mapping.** Block → `NotifyCompleted(net::ERR_BLOCKED_BY_CLIENT)`
+   (the platform's existing embedder-blocked code, pin-cited at
+   `net_error_list.h:91`) — no new net error, no response synthesis in v1.
+3. **Engine provisioning stays OUTSIDE the patch.** The gate is a thin
+   data path holding a glue-installed consult function whose signature
+   mirrors `xr_shield_engine_match`'s four redacted strings; the //xr
+   farm glue (bundle load → verify → `xr_shield_engine_create` →
+   `InstallEngine`) is not a Chromium-side file, so the seam patch stays
+   5 files and the engine lifecycle stays under xr-core's posture law
+   (fail-open on death/absence, counted; route loss is fail-CLOSED and
+   is a rebase-time marker failure, never a runtime state).
+4. **Guard = `#if defined(ENABLE_XR_SHIELD)`** (0042-spike precedent):
+   undefined → stock Chromium logic byte-identical; no BUILDFLAG header
+   is invented (that would be a fourth upstream file for zero v1 gain).
+5. **Promotion, not candidacy.** 0042 stayed a CANDIDATE (spike/,
+   `manifest-entry: NOT-YET`) because its pin reads were owed; this entry
+   ships PROMOTED — manifest 2→3, `services/network/` joins
+   allowed_roots (the §12.7 never-list — content/, blink/, third_party/,
+   v8/ — is untouched and enforced by the roundtrip tool), budget.md
+   regenerated (network_seams 0→1), roundtrip gate wired into
+   `p11_phase_gates` + two hermetic negative fixtures (never-list path,
+   hook-budget overflow) in run_negatives.
+6. **Ordering law respected.** The seam is network-service-only; nothing
+   in the patch touches a renderer-side file ("before any renderer
+   exists").
+
+## D12. DoD-3 late-found debt — the differential oracle lacked the shield pair (2026-09-13)
+
+Found during report fact-checking, before any claim existed: DoD-3's
+"fuzz ≥600 s 0 violations" had NO shield transcript — `differential_fuzz`
+(P9-T0-a) only knew the themes/settings/commands pairs, and no shield-
+specific fuzzer existed. Nothing had cited a shield fuzz run, so this is a
+gap closed before any evidence row was written (the same correction-before-
+claim discipline as D10-9). Closure:
+
+1. **Split + extend.** `differential_fuzz.py` sat at 374/380 lines — the
+   generators + pair configs moved to `differential_fuzz_kit.py` (driver
+   208 / kit 379, touched-file law held; `test_p9_parity`'s
+   `df._pair_configs` seam preserved by re-export alias — 7/7 green).
+2. **Shield pair.** host = `shield/tests/build/shield_host`, fake =
+   `fakes/shield.py`, generator = the xr_shield_v1 {method,args} surface
+   (match weighted heaviest; event-emit, exceptions, apply, bundle ops,
+   Status, toggles, protocol-shape junk). Input-domain scope recorded in
+   the kit docstring: single well-formed frames, DEFAULT flags (both-state
+   coverage lives in the 307 vectors), the P8 parse-rejection carve-out
+   unchanged. Determinism: seeded rng only; now_mono/as-of are generated,
+   never read.
+3. **Evidence run.** 600 s / **11,893 requests / 0 divergences** (seed
+   20260913, `evidence/P11/logs/t2-shield-fuzz-600s.txt`); the run_checks
+   gate now fuzzes all four pairs (120 s timebox law unchanged).

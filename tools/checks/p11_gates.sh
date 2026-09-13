@@ -121,6 +121,17 @@ p11_perf_parity_gates() {
   "$PY" tools/shield_parity.py --core ../xr-core --check
 }
 
+p11_seam_gates() {
+  echo "== P11 DoD-10: shield network-seam patch round-trip at the pin (real fetch) =="
+  # The 0200 seam patch is regenerated from live pin fetches (fetch.py choke
+  # point — no fixtures, no remembered bytes) and round-tripped: apply ->
+  # markers -> revert byte-exact -> anchor-perturbation negative. Anchor drift
+  # at the pin reddens this gate — the rebase-detection contract the patchinfo
+  # promises. The hook budget (<=8 files, DoD-10) is asserted in-tool. No
+  # claim is made that Chromium BUILDS (gn absent); this is patch fidelity.
+  "$PY" build/webui/shield_seam_roundtrip.py --xr-core ../xr-core
+}
+
 p11_phase_gates() {
   # The single dispatcher entry for the P11 gate battery: run_checks.sh sits
   # at the 380-line touched-file law ceiling, so future P11 gates extend
@@ -129,4 +140,5 @@ p11_phase_gates() {
   p11_shield_gates
   p11_lists_gates
   p11_perf_parity_gates
+  p11_seam_gates
 }
