@@ -49,6 +49,8 @@ surfaces:
       - "tools/copy_lint.py"
       - "tools/keyboard_tasks_check.py"
       - "tools/pseudo_locale.py"
+      - "tools/shield_state_check.py"
+      - "tools/attention_check.py"
     farm: "HG-31 axe run · HG-32 SR/human passes"
     green: "a11y/copy gates green; axe + 12 keyboard tasks HG-31"
   - id: "11.7"

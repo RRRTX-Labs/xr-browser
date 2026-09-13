@@ -20,7 +20,9 @@ assembly order and the byte law; the fixtures + Gen machinery live in
 shield_vectors_kit.py and the case families in
 shield_vector_families.py (P11-T4: the exception-surface family lives in
 shield_vector_families_t4.py, P11-T5: the emitter family in
-shield_vector_families_t5.py — same split law, same fixed assembly order).
+shield_vector_families_t5.py, P11-T6: the dev-only debug-page
+family in shield_vector_families_t6.py — same split law, same fixed
+assembly order).
 
 Deterministic: no clock, no RNG. --check regenerates byte-identical.
 Exit: 0 ok · 1 drift/error · 2 usage.
@@ -38,6 +40,7 @@ from shield_vector_families import (  # noqa: E402
 )
 from shield_vector_families_t4 import fam_exceptions  # noqa: E402
 from shield_vector_families_t5 import fam_events  # noqa: E402
+from shield_vector_families_t6 import fam_page  # noqa: E402
 from shield_vectors_kit import Gen  # noqa: E402
 
 OUT = "docs/contracts/vectors/shield-v1.json"
@@ -66,6 +69,7 @@ def main() -> int:
     fam_apply(g)
     fam_protocol(g)
     fam_events(g)
+    fam_page(g)
     ids = [c["id"] for c in g.cases]
     if len(ids) != len(set(ids)):
         print("FAIL: duplicate vector ids")

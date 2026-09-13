@@ -1,0 +1,42 @@
+{
+ "deny_guard_killed": 8,
+ "deny_guard_mutants": 8,
+ "deny_guard_survivors": 0,
+ "gate": "PASS",
+ "killed": 219,
+ "operators": [
+  "ROR:== -> !=",
+  "ROR:!= -> ==",
+  "ROR:< -> <=",
+  "ROR:<= -> <",
+  "ROR:> -> >=",
+  "ROR:>= -> >",
+  "LOR:&& -> ||",
+  "LOR:|| -> &&",
+  "BOOL:true -> false",
+  "BOOL:false -> true",
+  "AOR:0 -> 1",
+  "AOR:1 -> 2",
+  "AOR:2 -> 3"
+ ],
+ "sampled": false,
+ "score_gate_pct": 90.0,
+ "score_pct": 100.0,
+ "seed": 20260913,
+ "suites": [
+  "test_availability",
+  "test_descriptor",
+  "test_dial",
+  "test_dispatch",
+  "test_host",
+  "test_matcher",
+  "test_registry",
+  "test_shortcuts"
+ ],
+ "survived": 0,
+ "survivors": [],
+ "target": "xr-core/commands/core/*.cc",
+ "tool": "mutation_test",
+ "total_mutants": 219,
+ "truncated_by_timebox": false
+}

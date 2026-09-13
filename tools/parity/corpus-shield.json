@@ -1716,10 +1716,30 @@
    "expect": "reject",
    "id": "event-emit-missing-seq",
    "method": "event-emit"
+  },
+  {
+   "args": {},
+   "expect": "ok",
+   "id": "page-states-union",
+   "method": "page-states"
+  },
+  {
+   "args": {},
+   "expect": "ok",
+   "id": "debug-page-default-channel-refusal",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "x": 1
+   },
+   "expect": "reject",
+   "id": "page-states-unknown-field",
+   "method": "page-states"
   }
  ],
  "pair": "shield",
  "protocol": "../xr-core/shield/host_protocol.md",
- "provenance": "P11-T2: derived pair. Cases are a method-spanning subset of the golden vectors in docs/contracts/vectors/shield-v1.json (157 at the T2 derivation; extended per task \u2014 274 at P11-T5) (byte-parity across both backends is enforced THERE by tools/shield_vectors_check.py + xr-core/shield/tests/test_golden_vectors.cc); this corpus is the completeness-gate artifact: every documented method carries >=1 parity case, with the exit-class law ok=exit 0 typed result (kRejected refusals and frozen-envelope errors included), reject=exit 1 typed error.",
+ "provenance": "P11-T2: derived pair. Cases are a method-spanning subset of the golden vectors in docs/contracts/vectors/shield-v1.json (157 at the T2 derivation; extended per task \u2014 274 at P11-T5; 307 at P11-T6 \u2014 the dev-only debug-page family) (byte-parity across both backends is enforced THERE by tools/shield_vectors_check.py + xr-core/shield/tests/test_golden_vectors.cc); this corpus is the completeness-gate artifact: every documented method carries >=1 parity case, with the exit-class law ok=exit 0 typed result (kRejected refusals and frozen-envelope errors included), reject=exit 1 typed error.",
  "schema_version": 1
 }

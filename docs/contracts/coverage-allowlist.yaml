@@ -36,6 +36,12 @@ surfaces:
   - surface: about/manual-download
     command: update.manual-download
     phase: P10
+  # --- xr://shield dev page (lands in P11-T6) — the dev-only debug page is a
+  # surface like any other: it ships BEHIND a command (shield.page, tier2,
+  # predicate build.channel-dev), never beside the registry. ------------------
+  - surface: shield/page
+    command: shield.page
+    phase: P11
   # --- XR Panel (lands in P13) — maps to the tier-1 panel.open command. -------
   - surface: panel/xr
     command: panel.open

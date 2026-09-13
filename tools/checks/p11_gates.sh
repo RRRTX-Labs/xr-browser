@@ -76,6 +76,12 @@ p11_shield_gates() {
   # docs/contracts/tests/test_block_event.py).
   "$PY" tools/xr_schema.py validate block-event docs/contracts/tests/golden-block-event.json
   "$PY" tools/claims_lint.py --file docs/shield/reason-codes.md
+  # P11-T6: the dev-only debug page — the state vocabulary in lockstep
+  # (host kPageStates == view union == fake PAGE_STATES == the roster's
+  # build.channel-dev predicate == the grdp strings) and the
+  # Attention-Budget shield rule (chip count only; the extracted
+  # tools/attention_check.py runs in the dispatcher's P8-T6 lane).
+  "$PY" tools/shield_state_check.py
 }
 
 p11_lists_gates() {

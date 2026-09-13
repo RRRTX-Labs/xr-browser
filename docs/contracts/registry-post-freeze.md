@@ -132,17 +132,18 @@ new host and fake. New LIVING contracts registered this phase:
 
 | Contract | Phase | Files | Review packet | Freeze status |
 |---|---|---|---|---|
-| shield-host-protocol v1 | P11 (T2) | `xr-core/shield/host_protocol.md` (the stdio method table — TWO vocabularies: the frozen mojom envelope for `Status`/`RecentEvents`, the living host surface for `flag-status`/`bundle-load`/`bundle-check`/`match`/`posture`/`apply` plus the T4 exception surface `exception-add`/`exception-remove`/`exception-sweep`/`site-toggle` plus the T5 activity-ledger emitter `event-emit`; byte-parity-locked against `fakes/shield.py`) | `docs/state/research-log-P11.md` | REVIEW-COMPLETE (ratification: PENDING, HG-26) |
+| shield-host-protocol v1 | P11 (T2) | `xr-core/shield/host_protocol.md` (the stdio method table — TWO vocabularies: the frozen mojom envelope for `Status`/`RecentEvents`, the living host surface for `flag-status`/`bundle-load`/`bundle-check`/`match`/`posture`/`apply` plus the T4 exception surface `exception-add`/`exception-remove`/`exception-sweep`/`site-toggle` plus the T5 activity-ledger emitter `event-emit` plus the P11-T6 dev-only debug page `page-states`/`debug-page` behind the REAL `--build-channel dev` startup gate (default release refuses typed `build-channel-not-dev:<channel>`); byte-parity-locked against `fakes/shield.py`) | `docs/state/research-log-P11.md` | REVIEW-COMPLETE (ratification: PENDING, HG-26) |
 | xr-list-bundle v1 (normalized bundle doc) | P11 (T2) | the living bundle shape inside `shield-host-protocol v1` (`schema:"xr-list-bundle"`, v1 filter grammar, per-list attribution INSIDE the digest, compiler refusal table); binds to the frozen manifest via `sha256(canonical per-list bytes)` | `docs/state/research-log-P11.md` | LIVING — T3 pipeline LANDED (`xr-lists/`, this repo; repo choice recorded as research-log D4) |
 | block-event-v1 (activity-ledger row) | P11 (T5) | `docs/contracts/block-event-v1.md` + `block-event-v1.schema.json` + golden `docs/contracts/tests/golden-block-event.json`; generator `xr-core/shield/core/events.cc` (`MakeLedgerRow`); emitter `event-emit` (`xr-core/shield/host/shield_host.cc` + `xr-core/fakes/shield.py`, byte-parity); reason-code table `docs/shield/reason-codes.{md,json}` (P13 render dependency) | `docs/contracts/review/04-shield-v1.md` | LIVING — registered post-freeze; a SUPERSET document around the FROZEN `BlockEvent` mojom vocabulary (never widens it; `policy-change-event-v1` untouched) |
 
-Byte-law: 274 golden vectors (`docs/contracts/vectors/shield-v1.json`;
+Byte-law: 307 golden vectors (`docs/contracts/vectors/shield-v1.json`;
 157 at T2 + 3 for the T3 manifest-entry `attribution` loosening below
 + 69 at T4: the 67-case exception-surface family and the 2 `a-slot-*`
 ParseSlot refusals the first full shield mutation matrix surfaced
 + 45 at T5: the `event-emit` emitter family — the golden instance,
 every `why_code` and every action k-spelling, redaction at creation,
-the int64 wire law, and the 22 malformed-input tokens)
+the int64 wire law, and the 22 malformed-input tokens
++ 33 at T6: the dev-only debug-page family — the page-state union, the channel gate in all three refusals plus both dev renders, the enterprise force-disable laws (policy wins, reason verbatim, silent suppression malformed), every riding-state row and the closed malformed token set)
 replayed against BOTH backends (`tools/shield_vectors_check.py`, wired as
 `p11_shield_gates`) + the compiled-side pin
 (`xr-core/shield/tests/test_golden_vectors.cc`) + the derived parity pair

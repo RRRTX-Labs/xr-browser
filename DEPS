@@ -44,7 +44,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "341f1fbe33cd87e128c90dce8339e52d5798b2dd"     # xr-core P11-T5: event-emit emitter + MakeLedgerRow (the living block-event-v1 activity-ledger row) + the int64 wire fix
+xr_core_rev: "62b2c923aa7a48f6adc84299af956be74bf5bf01"     # xr-core P11-T6: --build-channel startup gate + page-states/debug-page (the dev-only xr://shield page) + the roster trio (shield.toggle de-stub, add-rule/remove-rule, shield.page behind build.channel-dev)
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

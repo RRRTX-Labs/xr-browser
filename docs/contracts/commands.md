@@ -8,7 +8,7 @@ availability predicate with a reason** — never absent, never a "coming
 soon" rail (§10). Tier-1 ≤ 9 controls is enforced in the registry itself
 (Plan §1.10 Attention Budget).
 
-23 commands registered; 7 in Tier-1 (≤ 9).
+26 commands registered; 7 in Tier-1 (≤ 9).
 
 | id | scope | tier | danger | predicate | status |
 | --- | --- | --- | --- | --- | --- |
@@ -25,6 +25,9 @@ soon" rail (§10). Tier-1 ≤ 9 controls is enforced in the registry itself
 | `dial.set-fortress` | site | tier2 | destructive | `policy.trust-dial-writable` | enabled |
 | `dial.reset` | site | tier2 | caution | `policy.trust-dial-writable` | enabled |
 | `shield.toggle` | site | tier2 | safe | `always` | enabled |
+| `shield.add-rule` | site | tier2 | caution | `always` | enabled |
+| `shield.remove-rule` | site | tier2 | caution | `always` | enabled |
+| `shield.page` | global | tier2 | safe | `build.channel-dev` | disabled (build channel is not dev (capabilities snapshot)) |
 | `settings.network` | global | tier2 | safe | `always` | enabled |
 | `settings.privacy` | global | tier2 | safe | `always` | enabled |
 | `settings.identity` | global | tier2 | safe | `always` | enabled |

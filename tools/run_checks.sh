@@ -135,20 +135,13 @@ echo "== P9-T0-b: qyy pseudo-locale render (deterministic) + self-test =="
   --out docs/qa/qyy/xr_strings.qyy.txt --as-of 2026-09-10 --check
 
 # ---------------------------------------------------------------------------
-# P8-T6 gate (attention-budget ledger v0 — local counters only). The policy
-# doc is the statement of record that counters.h cites; the gate refuses a
-# dangling citation or a drifted law (retention/granularity/no-upload).
+# P8-T6 gate (attention-budget ledger v0 — local counters only), EXTRACTED
+# into tools/attention_check.py at P11-T6 (plan §architecture invariant 7:
+# the enforcement lived inline here; the tool also carries the new shield
+# chip-count-only rule). Same markers, same refusal semantics, +headroom.
 # ---------------------------------------------------------------------------
-echo "== P8-T6: attention-budget policy of record — local counters only, doc markers present =="
-"$PY" -c "
-import pathlib, re
-p = pathlib.Path('docs/state/attention-budget.md')
-t = re.sub(r'\s+', ' ', p.read_text(encoding='utf-8'))
-need = ['no upload', 'LOCAL COUNTERS ONLY', '90', 'day', 'deny-preserve', 'zero bytes']
-missing = [m for m in need if m not in t]
-assert p.exists() and not missing, f'attention-budget.md missing or drifted: {missing}'
-print('attention-budget OK (markers:', ', '.join(need) + ')')
-"
+echo "== P8-T6+P11-T6: attention-budget policy of record + shield chip-count-only rule =="
+"$PY" tools/attention_check.py
 
 # ---------------------------------------------------------------------------
 # P8-T7 gate (help <-> settings deep-link contract). Schema sections and the

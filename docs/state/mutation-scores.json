@@ -1,15 +1,15 @@
 {
- "comment": "P10-T0-c/T1: recorded mutation scores per xr-core core. Law: a score is a statement about specific bytes \u2014 each record pins the xr-core commit whose core/** the FULL matrix ran against (sampled:false); tools/mutation_freshness.py fails the gate when a core's core/** changes without a fresh transcript. Survivor dispositions are mandatory. P11 re-arm (2026-09-11): all six cores re-run FULL (sampled:false) at the T0-b dedup pin 85289cd \u2014 freshness debt from the shared-primitives move paid, and `common` scored for the first time. The dedup shrank the per-core mutant surfaces (the moved files are now mutated ONCE, under common). P11-T4 (2026-09-12): the seventh discovered core `shield` scored for the first time (lane added to mutation_targets.py; FULL matrix at pin cfbb344 after the first run's ParseSlot deny-guard find was discharged with new tests \u2014 research-log-P11.md D6); P11-T5 2026-09-13: shield re-run FULL at pin 44f5306 after the emitter landed \u2014 394/394, first-run clean).",
+ "comment": "P10-T0-c/T1: recorded mutation scores per xr-core core. Law: a score is a statement about specific bytes \u2014 each record pins the xr-core commit whose core/** the FULL matrix ran against (sampled:false); tools/mutation_freshness.py fails the gate when a core's core/** changes without a fresh transcript. Survivor dispositions are mandatory. P11 re-arm (2026-09-11): all six cores re-run FULL (sampled:false) at the T0-b dedup pin 85289cd \u2014 freshness debt from the shared-primitives move paid, and `common` scored for the first time. The dedup shrank the per-core mutant surfaces (the moved files are now mutated ONCE, under common). P11-T4 (2026-09-12): the seventh discovered core `shield` scored for the first time (lane added to mutation_targets.py; FULL matrix at pin cfbb344 after the first run's ParseSlot deny-guard find was discharged with new tests \u2014 research-log-P11.md D6); P11-T5 2026-09-13: shield re-run FULL at pin 44f5306 after the emitter landed \u2014 394/394, first-run clean). P11-T6 2026-09-13: commands re-run FULL at pin 62b2c92 after the dev-channel predicate landed \u2014 219/219, first-run clean; shield/core bytes unchanged at T6 (the T6 host/fake changes live in shield/host and fakes/, outside the core/** freshness surface) so the T5 shield record stands.",
  "cores": {
   "commands": {
-   "killed": 215,
-   "mutants": 215,
-   "note": "re-arm at the T0-b dedup pin: 414->215 mutants (dedup move); 100% killed incl. the roster-driven About commands.",
+   "killed": 219,
+   "mutants": 219,
+   "note": "P11-T6 re-run FULL at pin 62b2c92 after the build.channel-dev predicate landed in availability.cc: 215->219 mutants (+4 on the new predicate arm), 100% killed first-run, deny-guard 8/8.",
    "score_pct": 100.0,
-   "seed": 20260911,
+   "seed": 20260913,
    "survivors": [],
-   "transcript": "evidence/P11/logs/t1-mutation-commands.json",
-   "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
+   "transcript": "evidence/P11/logs/t6-mutation-commands.json",
+   "xr_core_commit": "62b2c923aa7a48f6adc84299af956be74bf5bf01"
   },
   "common": {
    "killed": 199,

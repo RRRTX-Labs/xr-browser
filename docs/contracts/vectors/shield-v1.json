@@ -16190,6 +16190,766 @@
    },
    "id": "e-emit-ctx-empty-identity",
    "method": "event-emit"
+  },
+  {
+   "args": {},
+   "expect": {
+    "states": [
+     "normal",
+     "engine-dead",
+     "engine-poisoned",
+     "kill-switch",
+     "route-loss"
+    ]
+   },
+   "id": "p-page-states",
+   "method": "page-states"
+  },
+  {
+   "args": {
+    "x": 1
+   },
+   "expect": {
+    "detail": "unknown-field:x",
+    "error": "kMalformedInput"
+   },
+   "id": "p-page-states-unknown-field",
+   "method": "page-states"
+  },
+  {
+   "args": {},
+   "expect": {
+    "error": "kRejected",
+    "reason": "build-channel-not-dev:release"
+   },
+   "id": "p-debug-refused-default-channel",
+   "method": "debug-page"
+  },
+  {
+   "args": {},
+   "expect": {
+    "error": "kRejected",
+    "reason": "build-channel-not-dev:release"
+   },
+   "flags": "--build-channel release",
+   "id": "p-debug-refused-release",
+   "method": "debug-page"
+  },
+  {
+   "args": {},
+   "expect": {
+    "error": "kRejected",
+    "reason": "build-channel-not-dev:nightly-test"
+   },
+   "flags": "--build-channel nightly-test",
+   "id": "p-debug-refused-nightly-test",
+   "method": "debug-page"
+  },
+  {
+   "args": {},
+   "expect": {
+    "bundles": null,
+    "channel": "dev",
+    "chip_count": 0,
+    "engine": {
+     "alive": true,
+     "binding": "table-engine-v1",
+     "poisoned": false,
+     "rust_bound": false,
+     "vendored_pin": "adblock-0.13.3"
+    },
+    "enterprise": {
+     "force_disabled": false,
+     "reason": ""
+    },
+    "last_apply": null,
+    "lists": [],
+    "memory": {
+     "bundle_canonical_bytes": 0,
+     "ring_events": 0,
+     "scope_count": 0
+    },
+    "page_state": "normal",
+    "posture": {
+     "chip": "green",
+     "mode": "normal",
+     "reason": "normal"
+    },
+    "refused_directives": []
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-dev-minimal",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "The EasyList authors (https://easylist.to/)",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "||tracker.example^",
+         "id": "r1",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    },
+    "last_apply": {
+     "duration_ms": 40,
+     "result": "ok",
+     "ts_millis": 1750000000123
+    },
+    "ring": [
+     {
+      "action": "kBlocked",
+      "identity": {
+       "value": "xr:a"
+      },
+      "list_provenance": "xr-default-list-v1",
+      "origin": {
+       "registrable_domain": "tracker.example",
+       "scheme": "https"
+      },
+      "request_class": "kScript",
+      "rule": "||tracker.example^",
+      "tab_id": 1,
+      "target": "https://tracker.example/a.js",
+      "ts_millis": 1000
+     },
+     {
+      "action": "kAllowed",
+      "identity": {
+       "value": "xr:a"
+      },
+      "list_provenance": "xr-default-list-v1",
+      "origin": {
+       "registrable_domain": "safe.example",
+       "scheme": "https"
+      },
+      "request_class": "kSubresource",
+      "rule": "||safe.example^",
+      "tab_id": 1,
+      "target": "https://safe.example/ok.js",
+      "ts_millis": 1001
+     }
+    ],
+    "scopes": [
+     {
+      "reason": "user-allow",
+      "scope_id": "ex-1",
+      "site": "example.com"
+     }
+    ],
+    "state": {
+     "active": {
+      "bundle_id": "xr-default",
+      "digest": "4e2a696549d6940e7ff6cc6cdb0cc58da13b1417e1e326e695a9fc0a2c3f28",
+      "present": true,
+      "version": 3
+     },
+     "last_apply_mono": 100,
+     "lkg": {
+      "present": false
+     },
+     "pins": [
+      {
+       "bundle_id": "xr-default",
+       "digest": "4e2a696549d6940e7ff6cc6cdb0cc58da13b1417e1e326e695a9fc0a2c3f28",
+       "present": true,
+       "version": 3
+      }
+     ]
+    }
+   },
+   "expect": {
+    "detail": "bad-slot-fields:active",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-dev-full",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "engine_alive": false
+   },
+   "expect": {
+    "bundles": null,
+    "channel": "dev",
+    "chip_count": 0,
+    "engine": {
+     "alive": false,
+     "binding": "table-engine-v1",
+     "poisoned": false,
+     "rust_bound": false,
+     "vendored_pin": "adblock-0.13.3"
+    },
+    "enterprise": {
+     "force_disabled": false,
+     "reason": ""
+    },
+    "last_apply": null,
+    "lists": [],
+    "memory": {
+     "bundle_canonical_bytes": 0,
+     "ring_events": 0,
+     "scope_count": 0
+    },
+    "page_state": "engine-dead",
+    "posture": {
+     "chip": "amber",
+     "mode": "fail-open",
+     "reason": "engine-dead"
+    },
+    "refused_directives": []
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-state-engine-dead",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "engine_poisoned": true
+   },
+   "expect": {
+    "bundles": null,
+    "channel": "dev",
+    "chip_count": 0,
+    "engine": {
+     "alive": true,
+     "binding": "table-engine-v1",
+     "poisoned": true,
+     "rust_bound": false,
+     "vendored_pin": "adblock-0.13.3"
+    },
+    "enterprise": {
+     "force_disabled": false,
+     "reason": ""
+    },
+    "last_apply": null,
+    "lists": [],
+    "memory": {
+     "bundle_canonical_bytes": 0,
+     "ring_events": 0,
+     "scope_count": 0
+    },
+    "page_state": "engine-poisoned",
+    "posture": {
+     "chip": "amber",
+     "mode": "fail-open",
+     "reason": "engine-poisoned"
+    },
+    "refused_directives": []
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-state-engine-poisoned",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "kill_switch_on": true
+   },
+   "expect": {
+    "bundles": null,
+    "channel": "dev",
+    "chip_count": 0,
+    "engine": {
+     "alive": true,
+     "binding": "table-engine-v1",
+     "poisoned": false,
+     "rust_bound": false,
+     "vendored_pin": "adblock-0.13.3"
+    },
+    "enterprise": {
+     "force_disabled": false,
+     "reason": ""
+    },
+    "last_apply": null,
+    "lists": [],
+    "memory": {
+     "bundle_canonical_bytes": 0,
+     "ring_events": 0,
+     "scope_count": 0
+    },
+    "page_state": "kill-switch",
+    "posture": {
+     "chip": "amber",
+     "mode": "fail-open",
+     "reason": "kill-switch"
+    },
+    "refused_directives": []
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-state-kill-switch",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "route_bound": false
+   },
+   "expect": {
+    "bundles": null,
+    "channel": "dev",
+    "chip_count": 0,
+    "engine": {
+     "alive": true,
+     "binding": "table-engine-v1",
+     "poisoned": false,
+     "rust_bound": false,
+     "vendored_pin": "adblock-0.13.3"
+    },
+    "enterprise": {
+     "force_disabled": false,
+     "reason": ""
+    },
+    "last_apply": null,
+    "lists": [],
+    "memory": {
+     "bundle_canonical_bytes": 0,
+     "ring_events": 0,
+     "scope_count": 0
+    },
+    "page_state": "route-loss",
+    "posture": {
+     "chip": "red",
+     "mode": "fail-closed",
+     "reason": "route-loss"
+    },
+    "refused_directives": []
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-state-route-loss",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "enterprise": {
+     "force_disabled": true,
+     "reason": "IT policy 4711: shielding mandated off"
+    },
+    "kill_switch_on": false
+   },
+   "expect": {
+    "bundles": null,
+    "channel": "dev",
+    "chip_count": 0,
+    "engine": {
+     "alive": true,
+     "binding": "table-engine-v1",
+     "poisoned": false,
+     "rust_bound": false,
+     "vendored_pin": "adblock-0.13.3"
+    },
+    "enterprise": {
+     "force_disabled": true,
+     "reason": "IT policy 4711: shielding mandated off"
+    },
+    "last_apply": null,
+    "lists": [],
+    "memory": {
+     "bundle_canonical_bytes": 0,
+     "ring_events": 0,
+     "scope_count": 0
+    },
+    "page_state": "kill-switch",
+    "posture": {
+     "chip": "amber",
+     "mode": "fail-open",
+     "reason": "kill-switch"
+    },
+    "refused_directives": []
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-enterprise-force-wins",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "enterprise": {
+     "force_disabled": true,
+     "reason": "Unternehmensrichtlinie 4711 \u2014 Schild aus"
+    }
+   },
+   "expect": {
+    "bundles": null,
+    "channel": "dev",
+    "chip_count": 0,
+    "engine": {
+     "alive": true,
+     "binding": "table-engine-v1",
+     "poisoned": false,
+     "rust_bound": false,
+     "vendored_pin": "adblock-0.13.3"
+    },
+    "enterprise": {
+     "force_disabled": true,
+     "reason": "Unternehmensrichtlinie 4711 \u2014 Schild aus"
+    },
+    "last_apply": null,
+    "lists": [],
+    "memory": {
+     "bundle_canonical_bytes": 0,
+     "ring_events": 0,
+     "scope_count": 0
+    },
+    "page_state": "kill-switch",
+    "posture": {
+     "chip": "amber",
+     "mode": "fail-open",
+     "reason": "kill-switch"
+    },
+    "refused_directives": []
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-enterprise-reason-verbatim-unicode",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "enterprise": {
+     "force_disabled": false,
+     "reason": ""
+    }
+   },
+   "expect": {
+    "bundles": null,
+    "channel": "dev",
+    "chip_count": 0,
+    "engine": {
+     "alive": true,
+     "binding": "table-engine-v1",
+     "poisoned": false,
+     "rust_bound": false,
+     "vendored_pin": "adblock-0.13.3"
+    },
+    "enterprise": {
+     "force_disabled": false,
+     "reason": ""
+    },
+    "last_apply": null,
+    "lists": [],
+    "memory": {
+     "bundle_canonical_bytes": 0,
+     "ring_events": 0,
+     "scope_count": 0
+    },
+    "page_state": "normal",
+    "posture": {
+     "chip": "green",
+     "mode": "normal",
+     "reason": "normal"
+    },
+    "refused_directives": []
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-enterprise-not-forced",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "bogus": 1
+   },
+   "expect": {
+    "detail": "unknown-field:bogus",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-unknown-field",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "engine_alive": "yes"
+   },
+   "expect": {
+    "detail": "field-not-bool:engine_alive",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-posture-not-bool",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "enterprise": 5
+   },
+   "expect": {
+    "detail": "enterprise-not-object",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-enterprise-not-object",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "enterprise": {
+     "force_disabled": true,
+     "reason": "r",
+     "x": 1
+    }
+   },
+   "expect": {
+    "detail": "unknown-field:x",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-enterprise-unknown-key",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "enterprise": {
+     "reason": "r"
+    }
+   },
+   "expect": {
+    "detail": "missing-force-disabled",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-missing-force-disabled",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "enterprise": {
+     "force_disabled": "yes",
+     "reason": "r"
+    }
+   },
+   "expect": {
+    "detail": "missing-force-disabled",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-force-disabled-not-bool",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "enterprise": {
+     "force_disabled": true
+    }
+   },
+   "expect": {
+    "detail": "missing-enterprise-reason",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-missing-enterprise-reason",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "enterprise": {
+     "force_disabled": true,
+     "reason": ""
+    }
+   },
+   "expect": {
+    "detail": "missing-enterprise-reason",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-empty-enterprise-reason",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "enterprise": {
+     "force_disabled": false,
+     "reason": "x"
+    }
+   },
+   "expect": {
+    "detail": "reason-without-force-disabled",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-reason-without-force-disabled",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "enterprise": {
+     "force_disabled": false,
+     "reason": 5
+    }
+   },
+   "expect": {
+    "detail": "reason-without-force-disabled",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-reason-not-string-without-force",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "last_apply": 5
+   },
+   "expect": {
+    "detail": "last-apply-not-object",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-last-apply-not-object",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "last_apply": {
+     "duration_ms": 1,
+     "result": "ok",
+     "ts_millis": 1,
+     "x": 1
+    }
+   },
+   "expect": {
+    "detail": "unknown-field:x",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-last-apply-unknown-key",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "last_apply": {
+     "duration_ms": 1,
+     "result": "ok",
+     "ts_millis": -1
+    }
+   },
+   "expect": {
+    "detail": "bad-last-apply",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-bad-last-apply-negative-ts",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "last_apply": {
+     "result": "ok",
+     "ts_millis": 1
+    }
+   },
+   "expect": {
+    "detail": "bad-last-apply",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-bad-last-apply-missing-duration",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "last_apply": {
+     "duration_ms": 1,
+     "result": "",
+     "ts_millis": 1
+    }
+   },
+   "expect": {
+    "detail": "bad-last-apply",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-bad-last-apply-empty-result",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "ring": 5
+   },
+   "expect": {
+    "detail": "ring-not-array",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-ring-not-array",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "scopes": 5
+   },
+   "expect": {
+    "detail": "scopes-not-array",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-scopes-not-array",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "state": 5
+   },
+   "expect": {
+    "detail": "state-not-object",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-state-not-object",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "bundle": {
+     "bundle_version": 3,
+     "lists": [
+      {
+       "attribution": "The EasyList authors (https://easylist.to/)",
+       "name": "l1",
+       "rules": [
+        {
+         "action": "block",
+         "filter": "! comment",
+         "id": "r1",
+         "kind": "network"
+        }
+       ]
+      }
+     ],
+     "name": "xr-default",
+     "refusals": [
+      {
+       "count": 2,
+       "directive": "##.ad",
+       "reason": "unsupported-directive:cosmetic-hash"
+      }
+     ],
+     "schema": "xr-list-bundle",
+     "schema_version": 1
+    }
+   },
+   "expect": {
+    "error": "kRejected",
+    "reason": "unsupported-directive:comment"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-bundle-grammar-refusal",
+   "method": "debug-page"
   }
  ],
  "note": "Golden vectors for the shield surface (P11-T2): every case's expect is the canonical stdout of the Python reference (xr-core/fakes/shield.py); tools/shield_vectors_check.py replays them against BOTH backends byte-for-byte, and xr-core/shield/tests/test_golden_vectors.cc pins them from the compiled side. Flags field carries host CLI flags; exit pins codes the derivation rule would miss. P11-T4 adds the exception surface (exception-add / exception-remove / exception-sweep / site-toggle) as fam_exceptions; P11-T5 adds the activity-ledger emitter (event-emit, the living block-event-v1 rows) as fam_events.",

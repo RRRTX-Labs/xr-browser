@@ -76,3 +76,39 @@ about.state-failed	IDS_XR_ABOUT_STATE_FAILED	‏«Updáté fáîléd:  ēxðañ{
 about.state-refused	IDS_XR_ABOUT_STATE_REFUSED	‏«Updáté réfûséd:  ēxðañ{REASON}»
 about.manual-download	IDS_XR_ABOUT_MANUAL_DOWNLOAD	‏«Yõû çáñ dõwñlõád thé látést vérsîõñ máñûálly: xr://ábõût → máñûál dõwñlõád ēxðañd ēxðañd ēxðañd ēxðañd »
 about.check-again	IDS_XR_ABOUT_CHECK_AGAIN	‏«Chéçk ágáîñ ēxð»
+shield.heading	IDS_XR_SHIELD_HEADING	‏«Shîéld Débûg ēxð»
+shield.dev.only	IDS_XR_SHIELD_DEV_ONLY	‏«Dév bûîlds õñly — thîs págé îs réfûséd õñ õthér bûîld çháññéls ēxðañd ēxðañd ēxðañd ēx»
+shield.state.normal	IDS_XR_SHIELD_STATE_NORMAL	‏«Shîéld státé: ñõrmál — blõçkîñg áçtîvé ēxðañd ēxðañd »
+shield.state.engine.dead	IDS_XR_SHIELD_STATE_ENGINE_DEAD	‏«Shîéld státé: éñgîñé déád — fáîl-õpéñ, réqûésts páss ûñblõçkéd ēxðañd ēxðañd ēxðañd ēx»
+shield.state.engine.poisoned	IDS_XR_SHIELD_STATE_ENGINE_POISONED	‏«Shîéld státé: éñgîñé põîsõñéd — fáîl-õpéñ, réqûésts páss ûñblõçkéd ēxðañd ēxðañd ēxðañd ēxða»
+shield.state.kill.switch	IDS_XR_SHIELD_STATE_KILL_SWITCH	‏«Shîéld státé: kîll swîtçh õñ — fáîl-õpéñ, blõçkîñg dîsábléd ēxðañd ēxðañd ēxðañd ē»
+shield.state.route.loss	IDS_XR_SHIELD_STATE_ROUTE_LOSS	‏«Shîéld státé: rõûté lõss — fáîl-çlõséd, réqûésts áré blõçkéd ēxðañd ēxðañd ēxðañd ēx»
+shield.forced.disabled	IDS_XR_SHIELD_FORCED_DISABLED	‏«Fõrçé-dîsábléd by éñtérprîsé põlîçy:  ēxðañd ēxðañd{REASON}»
+shield.chip.count.label	IDS_XR_SHIELD_CHIP_COUNT_LABEL	‏«Blõçkéd réqûésts (çhîp) ēxðañd ē»
+shield.chip.count	IDS_XR_SHIELD_CHIP_COUNT	‏«{COUNT} blõçkéd ēx»
+shield.engine.heading	IDS_XR_SHIELD_ENGINE_HEADING	‏«Eñgîñé ē»
+shield.engine.alive	IDS_XR_SHIELD_ENGINE_ALIVE	‏«Eñgîñé álîvé ēxð»
+shield.engine.poisoned	IDS_XR_SHIELD_ENGINE_POISONED	‏«Eñgîñé põîsõñéd ēxðañ»
+shield.engine.binding	IDS_XR_SHIELD_ENGINE_BINDING	‏«Déçîsîõñ éñgîñé bîñdîñg ēxðañd ē»
+shield.engine.vendored	IDS_XR_SHIELD_ENGINE_VENDORED	‏«Véñdõréd éñgîñé pîñ ēxðañd»
+shield.engine.rust.bound	IDS_XR_SHIELD_ENGINE_RUST_BOUND	‏«Rûst éñgîñé bõûñd ēxðañ»
+shield.bundles.heading	IDS_XR_SHIELD_BUNDLES_HEADING	‏«Lîst bûñdlés ēxð»
+shield.bundle.active	IDS_XR_SHIELD_BUNDLE_ACTIVE	‏«Açtîvé bûñdlé ēxða»
+shield.bundle.lkg	IDS_XR_SHIELD_BUNDLE_LKG	‏«Lást kñõwñ gõõd ēxðañ»
+shield.bundle.pins	IDS_XR_SHIELD_BUNDLE_PINS	‏«Pîññéd slõts (lást twõ) ēxðañd ē»
+shield.slot.value	IDS_XR_SHIELD_SLOT_VALUE	‏«{NAME}, vérsîõñ  ēxð{VERSION}, dîgést  ēx{DIGEST}»
+shield.apply.heading	IDS_XR_SHIELD_APPLY_HEADING	‏«Lást ápply ēxð»
+shield.apply.row	IDS_XR_SHIELD_APPLY_ROW	‏«Résûlt  ē{RESULT}, dûrátîõñ  ēxð{DURATION} ms, át  ēx{TS} ms »
+shield.apply.none	IDS_XR_SHIELD_APPLY_NONE	‏«Nõ ápply réçõrdéd ēxðañ»
+shield.refused.heading	IDS_XR_SHIELD_REFUSED_HEADING	‏«Réfûséd dîréçtîvés ēxðañd»
+shield.refused.empty	IDS_XR_SHIELD_REFUSED_EMPTY	‏«Nõ réfûséd dîréçtîvés ēxðañd »
+shield.refused.row	IDS_XR_SHIELD_REFUSED_ROW	‏«{DIRECTIVE} réfûséd  ēx{COUNT}: {REASON}»
+shield.lists.heading	IDS_XR_SHIELD_LISTS_HEADING	‏«Lîst sõûrçés áñd áttrîbûtîõñ ēxðañd ēxð»
+shield.lists.empty	IDS_XR_SHIELD_LISTS_EMPTY	‏«Nõ bûñdlé lõádéd ēxðañ»
+shield.list.name	IDS_XR_SHIELD_LIST_NAME	‏«Lîst »
+shield.list.rules	IDS_XR_SHIELD_LIST_RULES	‏«Rûlés ē»
+shield.list.attribution	IDS_XR_SHIELD_LIST_ATTRIBUTION	‏«Attrîbûtîõñ ēxð»
+shield.memory.heading	IDS_XR_SHIELD_MEMORY_HEADING	‏«Cõré strûçtûré mémõry ēxðañd »
+shield.memory.bytes	IDS_XR_SHIELD_MEMORY_BYTES	‏«Bûñdlé çáñõñîçál bytés ēxðañd »
+shield.memory.ring	IDS_XR_SHIELD_MEMORY_RING	‏«Rîñg évéñts ēxð»
+shield.memory.scopes	IDS_XR_SHIELD_MEMORY_SCOPES	‏«Exçéptîõñ sçõpés ēxðañ»

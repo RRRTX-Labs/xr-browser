@@ -75,10 +75,31 @@ ledger. That is the only reader surface besides the store file itself.
 - Not a tracker of individuals: no identifiers, no per-user keys.
 - Promotion decisions use counts, not event content.
 
+## Shield (P11-T6)
+
+The shield chip count is the ONLY passive security counter in the product
+(Plan P11 UX, "silent otherwise"). The xr://shield debug page and the
+chip may report exactly one number — the `kBlocked` rows in the riding
+ring — and nothing that escalates attention:
+
+- No toasts, no badges-on-timer, no modals, no notifications from shield
+  state; the page is silent otherwise (state line + counts + rows).
+- The enterprise force-disable note renders the policy reason VERBATIM —
+  that is a disclosure, not an attention surface.
+- The blocked count never escalates the command tier: `shield.page` is
+  `tier2` in the roster and stays there (pinned by
+  `tools/shield_state_check.py`).
+- Gate: `tools/attention_check.py` pins this section's markers, the
+  P8-T6 policy markers above, and scans every shield surface
+  (`xr-core/ui/shield/*.ts` + the `IDS_XR_SHIELD_*` strings) for
+  attention-escalation vocabulary — any hit is a FAIL.
+
 ## 9. Enforcement
 
 - C++ suites (`settings` make test): counters unit/durability suites,
   kill-loop, zero-byte disposable fsdiff, deny-preserve corrupt-ledger
   cases, fuzz with the ledger in the loop (`XR_FUZZ_SECONDS` campaigns).
-- `tools/run_checks.sh` P8-T6 lane asserts this file exists with the law's
-  markers so the citation in `counters.h` can never dangle.
+- `tools/attention_check.py` (extracted from the inline `run_checks.sh`
+  P8-T6 lane at P11-T6, which now calls the tool) asserts this file
+  exists with the law's markers so the citation in `counters.h` can
+  never dangle, and enforces the Shield rule above.

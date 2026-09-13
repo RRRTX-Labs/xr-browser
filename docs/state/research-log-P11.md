@@ -538,7 +538,54 @@ virtual, no adblock types in the core) plus the hosted-lane FFI shim
 to Chromium yet; the farm-side seam read and the patch-manifest 3rd entry
 owe exactly what this entry said before T2.
 
-## R4. MV3/DNR limits (what Shield must NOT promise) — UNVERIFIED (T4/T6)
+## R4. MV3/DNR limits (what Shield must NOT promise) — VERIFIED live (T6, 2026-09-13)
+
+Live read of the platform's own declarative-blocking ceiling:
+https://developer.chrome.com/docs/extensions/reference/api/declarativeNetRequest
+(fetched 2026-09-13, not memory). Numbers as documented TODAY:
+
+* **Closed action set.** `RuleActionType` = `block` · `redirect` · `allow`
+  · `upgradeScheme` · `modifyHeaders` · `allowAllRequests`. There is NO
+  cosmetic action, NO DOM action, NO scriptlet action anywhere in DNR,
+  and "Redirects to JavaScript urls are not allowed." The platform's
+  declarative surface is network-only — the same horizon XR Shield v1
+  deliberately chose (T2), so v1 is not "behind MV3"; MV3 extensions
+  cannot do more, declaratively, than block/redirect/allow/upgrade/
+  modify-headers.
+* **Quotas.** Static: ≤100 rulesets declared, ≤50 enabled
+  (`MAX_NUMBER_OF_ENABLED_STATIC_RULESETS`), ≥30,000 rules guaranteed
+  POOL-SHARED across all installed extensions
+  (`GUARANTEED_MINIMUM_STATIC_RULES`; the rest is
+  `getAvailableStaticRuleCount()` at runtime). Session: ≤5,000
+  (`MAX_NUMBER_OF_SESSION_RULES`). Dynamic: ≥5,000 unsafe
+  (`MAX_NUMBER_OF_UNSAFE_DYNAMIC_RULES`); since Chrome 121, 30,000 for
+  SAFE dynamic rules (safe = block/allow/allowAllRequests/upgradeScheme;
+  `MAX_NUMBER_OF_DYNAMIC_RULES`). Regex: ≤1,000 per rule type
+  (`MAX_NUMBER_OF_REGEX_RULES`) and each compiled regex rule <2 KB or it
+  is IGNORED with a warning.
+* **Coverage gap.** "A declarativeNetRequest only applies to requests
+  that reach the network stack" — service-worker-generated responses and
+  `CacheStorage` retrievals are out of reach. Redirects may only target
+  web-accessible resources.
+
+What Shield must NOT promise (this entry's answer):
+1. Never promise cosmetic or scriptlet filtering in v1 — the platform's
+   own declarative API has no such action class, and our v1 filter
+   grammar is a STRICTER subset still (no regex at all vs DNR's
+   1,000-regex/2 KB ceiling; refusals are typed, never silently
+   ignored — see the xr-lists refusal table).
+2. Never promise "unlimited rules": a full EasyList-class corpus
+   (~10^5 filters) exceeds EVERY DNR quota above; that arithmetic is
+   precisely why Shield is a browser feature with its own engine in the
+   network service, not an extension feature — and why bundle size is
+   the list pipeline's governed concern (T3), not an afterthought.
+3. Never promise blocking of bytes that never reach the network stack
+   (the DNR service-worker gap is OUR gap too: the seam is
+   URLLoaderFactory-level — same horizon, honestly stated).
+4. Never claim DNR parity as a selling point: XR Shield consumes
+   signed bundles with attribution and exception scopes; the comparison
+   that matters for users is capability-honesty, and the platform
+   ceiling above is the citation for it.
 
 ## R5. Brave memory work (adblock-rust in production) — UNVERIFIED (T7)
 
@@ -708,7 +755,7 @@ vocabulary), `match.cc` (DecideMatch consults posture before the table),
 enumeration), `engine/xr_shield_engine.h` + `engine/lib.rs` (totality /
 kill_for_test).
 
-### R9b. Scriptlet security posture — UNVERIFIED (T6)
+### R9b. Scriptlet security posture — VERIFIED live (T6, 2026-09-13)
 
 v1 executes NO scriptlets: the decision surface is network-block only.
 The shim's cargo features back the boundary (`shield/engine/Cargo.toml`:
@@ -720,3 +767,114 @@ prohibitions at the pin (page access? DOM APIs? `window` handles?) cited
 from a live read, plus 2–3 public CVE/advisory examples of scriptlet-class
 bypasses behind the refusal-list entries. No scriptlet claim is made from
 memory anywhere in this phase.
+
+**T6 resolution (2026-09-13, live reads — the debt above is DISCHARGED):**
+
+*Sandbox prohibitions at the pin* (`d04cdb24d67b081f6cf80200ffc5233f44b61109`,
+read through the GitHub contents API at that exact rev — fetch, not
+memory):
+
+* `sandbox/policy/mojom/sandbox.mojom:13` declares `enum Sandbox`;
+  `:39-40` `// The network service. May be disabled by policy.` →
+  `kNetwork`; `:65-68` `// Hosts untrustworthy web content. Blocks as
+  much OS access as possible. Unless disabled by policy, allows dynamic
+  code (for wasm/v8).` → `kRenderer`. Two DISTINCT sandbox types: the
+  page's JS world exists only inside `kRenderer`.
+* `services/network/public/mojom/network_service.mojom:193`
+  `interface NetworkService` — the service's ENTIRE mojom surface
+  (`SetParams` `:195`, `StartNetLog` `:208`, `CreateNetworkContext`
+  `:236`, resolver/HTTP-auth/proxy plumbing, `GetNetworkList` `:344`)
+  has NO page access, NO DOM APIs and NO `window` handle; the closest a
+  renderer ever comes is `SetRawHeadersAccess(network.mojom.RendererProcessId …)`
+  `:310` — an integer process id, not a JS-world handle. A grep of the
+  file for `window`/`DOM`/`document`/`script` interface members returns
+  zero hits.
+* Conclusion: from where shield/core + adblock-rust live (network
+  service, `kNetwork` sandbox), scriptlet injection is STRUCTURALLY
+  inexpressible — not a discipline we keep, a capability the service
+  surface does not have. Any future scriptlet feature means a
+  renderer-side component in the sandbox whose own comment says
+  "hosts untrustworthy web content": a new attack surface requiring its
+  own design + review, which is exactly why the refusal stands.
+
+*Public CVE/advisory examples of the scriptlet class* (behind the
+refusal-list entry; fetched 2026-09-13):
+
+1. **CVE-2022-32308** (NVD; uBlock Origin < 1.41.1): XSS — a spoofed
+   `MessageSender.url` let remote attackers "run arbitrary code … to the
+   browser renderer process" (the extension's message surface reaching
+   into page worlds). https://nvd.nist.gov/vuln/detail/CVE-2022-32308
+2. **uBlockOrigin/uBlock-issues #1845** (taviso, 2021-11-25),
+   "Security: malicious filters can use scriptlets to introduce
+   vulnerabilities": a LIST-delivered scriptlet
+   (`+js(set,RegExp.prototype.test,trueFunc)`) can neuter a site's own
+   origin checks / iframe sandboxing — i.e., list data becomes
+   page-world code execution steerable by whoever can ship a filter.
+   https://github.com/uBlockOrigin/uBlock-issues/issues/1845
+3. **USENIX Security '23**, Kim et al., "Browser Privilege Escalation
+   Attacks via Extensions", §4 case study (ad blockers): "In six ad
+   blockers, the attacker could spoof a request for adding a custom
+   rule and run arbitrary code on web sites."
+   https://www.usenix.org/system/files/usenixsecurity23-kim-young-min.pdf
+4. Industry mitigation confirming the class: AdGuard's filter docs
+   restrict scriptlet rules to TRUSTED filters only ("Scriptlets rules
+   can only be used in trusted filters"; trusted-scriptlets are
+   AdGuard-only).
+   https://adguard.com/kb/general/ad-filtering/create-own-filters/
+
+The v1 posture is unchanged and now evidence-backed: zero scriptlets,
+network-block only, cargo features fenced (`shield/engine/Cargo.toml`),
+redirect resources passed by NAME only.
+
+## D8. T6 decisions — the dev-only page is a host method behind a real startup gate; the enterprise kill path is data; the Attention-Budget enforcement became a tool
+
+* **The page is served by the host, not by a privileged WebUI channel.**
+  `page-states` (public state vocabulary) + `debug-page` (the state
+  document) join the shield host protocol; `--build-channel` is a
+  STARTUP option with channel set `dev|release|nightly-test` (default
+  `release` — fails CLOSED; a bad value is usage, exit 2). The update
+  host's `AllowedForChannel` precedent (dev||nightly-test) was read;
+  the shield page is STRICTER (dev only) because it renders
+  bundle/ledger internals. Both backends validate the same channel set
+  (parity law).
+* **Stateless-host law held for the enterprise kill path.** The v1 host
+  stores nothing, so the enterprise force-disable arrives as a METHOD
+  ARGUMENT (the browser-side policy layer resolves it — the
+  `policy/core/resolve.cc` enterprise-force precedent: forces are
+  final). Three laws, all vectorized: policy WINS over the caller's
+  `kill_switch_on:false` (no silent re-enable); the reason passes
+  through VERBATIM (unicode byte-for-byte — it is a disclosure);
+  force-disable WITHOUT a reason is `kMalformedInput`
+  `missing-enterprise-reason` (a silent suppression is a parse error,
+  not a state).
+* **Roster/predicate.** `shield.toggle` de-stubbed (handler
+  `action.shield.toggle`); `shield.add-rule`/`shield.remove-rule`
+  (tier2/caution/Trust/site/always); `shield.page` (tier2/safe/Browser/
+  global) rides the new predicate `build.channel-dev` — a `predicate_id`
+  value extension, the sanctioned mechanism in the registry-post-freeze
+  P7 extension-points table. The availability implementation mirrors
+  `tor.engine-ready`'s capabilities-snapshot pattern (pinned snapshot,
+  pure evaluate, deny-default on unknown) and the deny reason string is
+  byte-identical across C++ and the fake
+  (`build channel is not dev (capabilities snapshot)`).
+* **The view has ZERO focusable controls** (a render-only debug page):
+  keyboard tasks stay 12/12 unchanged, the AXTree golden regenerated
+  honestly (32 nodes) — no keyboard-gate surface was added.
+* **Attention-Budget enforcement became a tool** (plan §arch-7):
+  `tools/attention_check.py` replaces the inline `run_checks.sh` P8-T6
+  lane (dispatcher 379→372 lines — the headroom the plan predicted) and
+  adds the shield rule as a vocabulary scan (toast/badge/modal/
+  notification in any shield surface or `IDS_XR_SHIELD_*` string ⇒
+  FAIL). The ledger gained a `## Shield (P11-T6)` section as the
+  statement of record; `tools/shield_state_check.py` pins the tier2 law
+  for `shield.page` so the chip count can never escalate quietly.
+* **Numbers:** vectors 274→307 (33-case `p-*` family; both backends
+  byte-identical; `test_golden_vectors.cc` 465 checks), parity corpus
+  40→43, negatives N=95→100 (5 canaries in `tools/negatives/p11_t6.sh`,
+  all reddening proven), grdp 77→113 messages, commands.md/menu-model/
+  qyy goldens regenerated in the same commit as the roster change.
+* **Law-8 disclosure landed:** `docs/shield/privacy.md` (block-log
+  privacy statement; the query-string redaction test it cites is the
+  EXISTING golden vector `e-emit-redact-shop` — a card number in a
+  query, gone from the serialized row, byte-pinned in both backends).
+
