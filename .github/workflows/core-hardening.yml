@@ -287,7 +287,31 @@ jobs:
             --json 2>&1 | tee /tmp/shield-bench-real.log
           tail -1 /tmp/shield-bench-real.log > /tmp/shield-bench-real.json
           python3 -c "import json; d=json.load(open('/tmp/shield-bench-real.json')); assert d['rows'], 'no rows'"
-          python3 tools/perf_gate.py --repo . --bench /tmp/shield-bench-real.json --check --as-of 2026-09-10
+          # Verdicts render to a TEMP report. The committed
+          # docs/state/perf-budgets.md is the sandbox trend-lane artifact and
+          # is drift-checked (perf_gate --check) by run_checks against the
+          # SANDBOX bench only: runner-rig rows must never rewrite it or
+          # drift-fail against it (different rig, values differ by design).
+          python3 tools/perf_gate.py --repo . --bench /tmp/shield-bench-real.json \
+            --report-md /tmp/perf-budgets-real.md --as-of 2026-09-10
+          # Headline assertion (a trend-class runner rig MAY rule MET):
+          # filter_decision_p99_ms (<=1 ms) and list_apply_ms (<=1500 ms)
+          # must carry verdict MET here; NEUTRAL/MISSED/RECORD-ONLY on a
+          # headline row fails the lane. Reference-class certification
+          # (calibrated rig, memory_default_mb <=80 MB) stays the farm lane
+          # NOT-RUN (HG-31, docs/qa/browser-harness.md).
+          python3 - <<'PY'
+          import pathlib
+          md = pathlib.Path('/tmp/perf-budgets-real.md').read_text(encoding='utf-8')
+          for metric in ('filter_decision_p99_ms', 'list_apply_ms'):
+              row = next(l for l in md.splitlines()
+                         if l.startswith(f'| {metric} |'))
+              verdict = [c.strip() for c in row.split('|')][5]
+              assert verdict == 'MET', \
+                  f'{metric}: verdict {verdict} (headline row must be MET)'
+              print(f'PASS: {metric} verdict MET (hosted trend rig)')
+          PY
+          cat /tmp/perf-budgets-real.md
       - name: Real-engine parity (vendored corpus vs the shim, bands enforced)
         run: |
           python3 tools/shield_parity.py --core ../xr-core --engine real \
