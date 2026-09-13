@@ -98,7 +98,7 @@ p11_lists_gates() {
   bash xr-lists/tests/roundtrip.sh
 }
 
-p11_perf_gates() {
+p11_perf_parity_gates() {
   echo "== P11-T7: shield bench rows committed (trend rig; no re-measurement) =="
   # --check verifies docs/state/bench-trend.json carries the shield rows
   # (fakecore_decision_p99_ms record-only, list_apply_ms budget-asserted,
@@ -108,6 +108,17 @@ p11_perf_gates() {
   # REAL engine product path — in the hosted core-hardening shield-vendor
   # job (reference numbers ride the farm lane, docs/qa/browser-harness.md).
   "$PY" build/qa/perf/shield_bench.py --repo . --check
+  echo "== P11-T8: parity corpus deterministic + fake/TableEngine lane in band =="
+  # The generator's --check proves the committed >=1,500-case corpus is
+  # byte-identical to its deterministic enumeration (no RNG, no clock).
+  # shield_parity replays it through fakes/shield.py (the Python mirror of
+  # the C++ TableEngine — byte-equivalence pinned by differential_smoke +
+  # the golden-vector replay) and enforces the plan's bands: agreement
+  # >=98%, FP <=0.5%, provenance >=98%. The REAL-engine lane (ctypes vs
+  # the vendored adblock-rust shim) is hosted-only: no local cargo build
+  # exists or is claimed; locally it exits 77 SKIP, visibly.
+  "$PY" ../xr-core/shield/tests/corpus/gen_parity_corpus.py --check
+  "$PY" tools/shield_parity.py --core ../xr-core --check
 }
 
 p11_phase_gates() {
@@ -117,5 +128,5 @@ p11_phase_gates() {
   p11_hostdoc_gates
   p11_shield_gates
   p11_lists_gates
-  p11_perf_gates
+  p11_perf_parity_gates
 }

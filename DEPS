@@ -44,7 +44,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "62b2c923aa7a48f6adc84299af956be74bf5bf01"     # xr-core P11-T6: --build-channel startup gate + page-states/debug-page (the dev-only xr://shield page) + the roster trio (shield.toggle de-stub, add-rule/remove-rule, shield.page behind build.channel-dev)
+xr_core_rev: "3769474d9a667fca05966d8be0f9c05534876350"     # xr-core P11-T8: the adblock-rust FFI binding completed (match + rule recovery + v1 option law + panic->alive death semantics) + the 1,533-case parity corpus
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

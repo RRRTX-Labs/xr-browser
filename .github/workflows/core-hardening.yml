@@ -234,7 +234,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
@@ -260,14 +260,46 @@ jobs:
           cd /tmp/adblock-test
           cargo build --locked --release 2>&1 | tee /tmp/shield-vendor-test.log
           grep -q "Finished" /tmp/shield-vendor-test.log
+      # P11-T8: the shim's FIRST compilation happens here (hosted lane by
+      # law — no local cargo build exists or is claimed; lib.rs cites the
+      # vendored API path:line it was written against). Then the REAL
+      # engine product path rides the >=50k-decision bench (the plan's
+      # floor; the sandbox lane's fake-engine rows are record-only) and
+      # the parity corpus (>=1,500 cases, bands enforced). Rig class of a
+      # hosted GitHub runner is TREND — the <=1ms filter-decision budget
+      # is a trend-class row, so perf_gate may rule MET here; the
+      # reference-class certification (calibrated rig, <=80MB memory row)
+      # stays a farm-lane NOT-RUN (docs/qa/browser-harness.md).
+      - name: Build the shield/engine FFI shim (cdylib, offline, source-replaced)
+        run: |
+          cd ../xr-core/shield/engine
+          cargo build --release --offline 2>&1 | tee /tmp/shield-shim-build.log
+          grep -q "Finished" /tmp/shield-shim-build.log
+          test -f target/release/libxr_shield_engine.so
+      - name: Real-engine shield bench (>=50k decisions, trend-class hosted rig)
+        run: |
+          python3 build/qa/perf/shield_bench.py --repo . --xr-core ../xr-core \
+            --engine real --shim-dir ../xr-core/shield/engine/target/release \
+            --json 2>&1 | tee /tmp/shield-bench-real.log
+          tail -1 /tmp/shield-bench-real.log > /tmp/shield-bench-real.json
+          python3 -c "import json; d=json.load(open('/tmp/shield-bench-real.json')); assert d['rows'], 'no rows'"
+          python3 tools/perf_gate.py --repo . --bench /tmp/shield-bench-real.json --check --as-of 2026-09-10
+      - name: Real-engine parity (vendored corpus vs the shim, bands enforced)
+        run: |
+          python3 tools/shield_parity.py --core ../xr-core --engine real \
+            --shim ../xr-core/shield/engine/target/release/libxr_shield_engine.so \
+            --check 2>&1 | tee /tmp/shield-parity-real.log
       - name: Post the conclusion
         if: always()
         run: |
           {
-            echo "## shield-vendor (P11-T1)"
+            echo "## shield-vendor (P11-T1/T7/T8)"
             echo "- vendored pin: adblock 0.13.3 (crate sha256 f44b96a6…)"
             echo "- offline build: $( [ -f /tmp/shield-vendor-build.log ] && echo executed || echo not-reached )"
             echo "- copy build (--locked, release): $(grep -h 'Finished' /tmp/shield-vendor-test.log 2>/dev/null | head -1 || echo not-reached)"
+            echo "- shim cdylib build: $(grep -h 'Finished' /tmp/shield-shim-build.log 2>/dev/null | head -1 || echo not-reached)"
+            echo "- real-engine bench: $(grep -h 'decision ms' /tmp/shield-bench-real.log 2>/dev/null | head -1 || echo not-reached)"
+            echo "- real-engine parity: $(grep -h 'shield_parity' /tmp/shield-parity-real.log 2>/dev/null | head -1 || echo not-reached)"
           } >> "$GITHUB_STEP_SUMMARY"
 
   fuzz-fleet:

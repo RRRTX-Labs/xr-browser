@@ -1,0 +1,4 @@
+# T8 corpus generator determinism (sandbox, 2026-09-13)
+$ python3 ../xr-core/shield/tests/corpus/gen_parity_corpus.py --check --json
+{"tool": "gen_parity_corpus", "mode": "check", "path": "/home/user/xr-core/shield/tests/corpus/parity-corpus-v1.json", "identical": true, "case_count": 1533}
+rc=0

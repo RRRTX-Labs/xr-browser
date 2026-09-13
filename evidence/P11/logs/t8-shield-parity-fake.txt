@@ -1,0 +1,168 @@
+# T8 parity — fake/TableEngine lane (sandbox, 2026-09-13)
+$ python3 tools/shield_parity.py --core ../xr-core --check
+shield_parity (fake): 1533 cases — agreement 100.0% (band >=98.0), FP 0.0% (band <=0.5), provenance 100.0% (band >=98.0), FN 0 — PASS
+rc=0
+
+$ python3 tools/shield_parity.py --core ../xr-core --json (summary fields)
+{
+    "action_agreement_pct": 100.0,
+    "bands": {
+        "agreement_min_pct": 98.0,
+        "fp_max_pct": 0.5,
+        "provenance_min_pct": 98.0
+    },
+    "cases": 1533,
+    "engine": "fake",
+    "false_negatives": 0,
+    "false_positive_pct": 0.0,
+    "mismatches": [],
+    "per_class": {
+        "allow-only": {
+            "agree": 42,
+            "fp": 0,
+            "fp_denom": 42,
+            "n": 42,
+            "prov": 42
+        },
+        "allow-paired": {
+            "agree": 63,
+            "fp": 0,
+            "fp_denom": 63,
+            "n": 63,
+            "prov": 63
+        },
+        "bare-domain-pipe": {
+            "agree": 105,
+            "fp": 0,
+            "fp_denom": 42,
+            "n": 105,
+            "prov": 105
+        },
+        "cosmetic-ignored": {
+            "agree": 21,
+            "fp": 0,
+            "fp_denom": 21,
+            "n": 21,
+            "prov": 21
+        },
+        "domains-out": {
+            "agree": 21,
+            "fp": 0,
+            "fp_denom": 21,
+            "n": 21,
+            "prov": 21
+        },
+        "domains-rd": {
+            "agree": 42,
+            "fp": 0,
+            "fp_denom": 0,
+            "n": 42,
+            "prov": 42
+        },
+        "exclude-host": {
+            "agree": 21,
+            "fp": 0,
+            "fp_denom": 21,
+            "n": 21,
+            "prov": 21
+        },
+        "exclude-rd": {
+            "agree": 42,
+            "fp": 0,
+            "fp_denom": 21,
+            "n": 42,
+            "prov": 42
+        },
+        "host-caret": {
+            "agree": 231,
+            "fp": 0,
+            "fp_denom": 63,
+            "n": 231,
+            "prov": 231
+        },
+        "host-path": {
+            "agree": 189,
+            "fp": 0,
+            "fp_denom": 84,
+            "n": 189,
+            "prov": 189
+        },
+        "left-anchor": {
+            "agree": 105,
+            "fp": 0,
+            "fp_denom": 42,
+            "n": 105,
+            "prov": 105
+        },
+        "option-law-pin": {
+            "agree": 42,
+            "fp": 0,
+            "fp_denom": 21,
+            "n": 42,
+            "prov": 42
+        },
+        "plain-literal": {
+            "agree": 63,
+            "fp": 0,
+            "fp_denom": 21,
+            "n": 63,
+            "prov": 63
+        },
+        "redirect": {
+            "agree": 42,
+            "fp": 0,
+            "fp_denom": 21,
+            "n": 42,
+            "prov": 42
+        },
+        "replace": {
+            "agree": 42,
+            "fp": 0,
+            "fp_denom": 21,
+            "n": 42,
+            "prov": 42
+        },
+        "right-anchor": {
+            "agree": 84,
+            "fp": 0,
+            "fp_denom": 42,
+            "n": 84,
+            "prov": 84
+        },
+        "right-anchor-void": {
+            "agree": 63,
+            "fp": 0,
+            "fp_denom": 21,
+            "n": 63,
+            "prov": 63
+        },
+        "sep-chain": {
+            "agree": 84,
+            "fp": 0,
+            "fp_denom": 42,
+            "n": 84,
+            "prov": 84
+        },
+        "wildcard-mid": {
+            "agree": 126,
+            "fp": 0,
+            "fp_denom": 42,
+            "n": 126,
+            "prov": 126
+        },
+        "wildcard-multi": {
+            "agree": 105,
+            "fp": 0,
+            "fp_denom": 63,
+            "n": 105,
+            "prov": 105
+        }
+    },
+    "provenance_agreement_pct": 100.0,
+    "tool": "shield_parity",
+    "verdict": "PASS"
+}
+
+$ python3 tools/shield_parity.py --engine real (local: no shim cdylib — hosted lane only)
+SKIP: real-engine lane needs the shim cdylib (../xr-core/shield/engine/target/release/libxr_shield_engine.so) — hosted lane only (no local cargo build)
+rc=77 (77 = visible SKIP)

@@ -502,7 +502,7 @@ Decisions:
   version sits outside every advisory range
   (`supply-chain/advisories.json`).
 
-## R2. Upstream conformance corpus (filter matching) — UNVERIFIED (T1/T8)
+## R2. Upstream conformance corpus (filter matching) — RESOLVED (T8, 2026-09-13)
 
 Candidate sources to evaluate at T1: adblock-rust's own test data
 (`tests/`), EasyList/EasyPrivacy header contracts, filter-syntax
@@ -522,6 +522,24 @@ crate's own unit tests"; it is T8's parity job (our FFI binding vs the
 reference engine over the vendored corpus, >=1,500 cases, +/-2% agreement,
 FP <=0.5%) plus the offline-build + lock-resolving-copy-build proofs in
 the shield-vendor lane. Recorded as research-log D7 item 14.
+
+**P11-T8 resolution (2026-09-13).** The corpus landed where the T5
+addendum pointed: `xr-core/shield/tests/corpus/parity-corpus-v1.json`,
+1,533 cases (≥1,500 floor) over 420 bundles, 20 rule classes — pure
+enumeration (no RNG, no clock), machine-derivable and license-clean
+(synthetic hosts/filters, attribution string "XR P11 synthetic parity
+fixture (CC0-1.0)" in every bundle; NO third-party list text is
+redistributed, so R6's licensing constraints are not engaged). Expected
+verdicts are derived by the generator's OWN implementation of the
+documented v1 semantics (fake_engine.h law comment) — not by running any
+engine — and committed; `gen_parity_corpus.py --check` proves the file is
+byte-identical to the deterministic regeneration. `tools/shield_parity.py`
+replays it through the fake/TableEngine lane locally (100.0% action
+agreement, 0.0% FP, 100.0% provenance — sandbox run 2026-09-13,
+evidence/P11/logs/t8-shield-parity-fake.txt) and through the real shim
+(ctypes) in the hosted shield-vendor lane, bands ≥98%/≤0.5%/≥98% enforced
+in both. Divergence classes D-1…D-6 (including the live-capture set that
+stays NOT-RUN under HG-31): docs/shield/parity-divergences.md.
 
 ## R3. Chromium network-service seam at pin d04cdb24 — UNVERIFIED (pin read still owed; T2 landed the in-tree half)
 
@@ -941,3 +959,52 @@ redirect resources passed by NAME only.
 5. **list-apply budget row** extracted from the plan text by
    gen_perf_budgets.py ("list apply ≤ 1.5 s background" → 1500 ms,
    trend class, core-side): sandbox worst-single 230.1 ms → MET.
+
+## D10. T8 decisions — the shim's division of labor + corpus shape (2026-09-13)
+
+1. **Shim division of labor.** adblock-rust decides filter SHAPE (its
+   indexed product path); the shim enforces the v1 RULE-OPTION law
+   post-hit (exact `domains`/`exclude_domains` membership against the
+   FFI-passed rd/host) and maps actions through a side table
+   (block 0 / allow 1 / redirect 2 + resource name / replace 3).
+   `$domain=` is deliberately NOT emitted — ABP subdomain semantics are
+   broader than v1's documented exact-membership law (D-2 becomes an
+   enforcement pin, corpus class `option-law-pin`).
+2. **Constructor path.** The public API is `Engine::new_with_filter_set`
+   + `check_network_request` (vendored engine.rs:136/:254);
+   `Blocker::from_context` is pub(crate) and the T2 skeleton's
+   `Blocker::new(set, Default::default())` matches NO real signature —
+   the skeleton was labeled "nothing in-tree claims this file compiles"
+   and the T8 binding was written against the vendored source with
+   path:line citations. `FilterSet::new(true)` is RUNTIME debug mode
+   (raw_line retention for rule recovery) — the `debug-info` cargo
+   feature gates different APIs and stays off.
+3. **Death semantics.** `alive` is an `AtomicBool`; every export wraps
+   its body in `catch_unwind` and a caught panic flips alive→false
+   (posture fail-opens, amber). `panic = "abort"` was REMOVED from the
+   release profile — it would have made catch_unwind a no-op and turned
+   a parse panic into a network-service crash.
+4. **First-party source assumption.** `Request::new(url, url, "other",
+   "get")`: the v1 FFI carries no initiator and the v1 grammar has no
+   third-party dimension (`$` in filter text is a bundle-compile
+   refusal), so the assumption is exact for every rule the format can
+   carry (D-3 moot until the seam grows an initiator).
+5. **Corpus shape.** 1,533 single-rule(-pair) cases: single-rule
+    bundles make the shim's post-hit option enforcement exact
+    (multi-rule + optioned-allow interaction is the documented D-4
+    residual); expected verdicts come from the generator's own
+    implementation of the documented semantics, committed, with
+    `--check` byte-pinning determinism. Local fake lane: 100.0%
+    agreement / 0.0% FP / 100.0% provenance (all bands ≥98/≤0.5/≥98).
+6. **Allow-only provenance (D-5).** TableEngine reports an allow HIT
+    for an unpaired exception rule; adblock-rust checks exceptions only
+    after a block match, so the shim reports no-opinion. Final ACTION
+    is `allow` in both lanes (action-neutral); tagged
+    `provenance-divergence-D5`, real lane compares action only. No
+    upstream ask — ABP-conformant behavior; the TableEngine's
+    eager-allow reporting is pinned by frozen golden vectors and stays.
+7. **No local cargo — by law, not by accident.** The shim's FIRST
+    compilation is the hosted shield-vendor lane (written blind against
+    the vendored API source; risk accepted and recorded here). Locally
+    the real lane exits 77 SKIP visibly; nothing in-tree claims a local
+    real-engine result.

@@ -72,3 +72,22 @@ python3 build/qa/perf/shield_bench.py --repo . --engine real \
 python3 tools/perf_gate.py --repo . --bench docs/state/bench-trend.json \
   --check --as-of <frozen date>
 ```
+
+## P11-T8: shield live-capture FP set (D-6 method, NOT-RUN, HG-31)
+
+The vendored corpus (≥1,500 synthetic cases) carries the FP ≤0.5% band
+today. The plan's 1,000-site live-traffic measurement needs a browser
+and is recorded as NOT-RUN — no live-traffic FP claim exists anywhere.
+Farm method, verbatim:
+
+1. Load the top-1,000-site list (frozen copy committed with the run) in
+   the farm browser with the product shield bundle active.
+2. Capture every network-service request URL through the seam's redacted
+   match surface (`scheme://host/path`, lowercased, port/query/fragment
+   stripped) plus initiator rd — the capture file is the corpus.
+3. Replay each captured request through BOTH engines (TableEngine and
+   the real shim) offline via `tools/shield_parity.py --corpus
+   <capture>`; agreement ≥98%, FP ≤0.5% of expected-allow.
+4. Every divergence lands in `docs/shield/parity-divergences.md` as a
+   pinned class BEFORE any band re-run; an unpinnable divergence is a
+   stop-and-report (brief law), never a band adjustment.
