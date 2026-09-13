@@ -46,3 +46,29 @@ bites, and the whole tool is registered as a canary in the negative gate.
 gn gen out/xr --args='…xr branding…' && ninja -C out/xr xr_browser_tests
 out/xr/xr_browser_tests --gtest_filter='Xr*'
 ```
+
+## P11-T7: shield perf — the reference-rig lane (NOT-RUN, rides HG-31)
+
+Three lanes measure the shield budgets; only the farm lane can certify
+the REFERENCE-class rows (perf_gate's rig-class law forbids a trend rig
+from ever emitting MET for them):
+
+| lane | rig class | engine | rows it may rule on |
+|---|---|---|---|
+| sandbox (`build/qa/perf/shield_bench.py`, committed trend file) | trend | fake (TableEngine, linear scan) | `list_apply_ms` (≤1500ms) MET; `fakecore_decision_p99_ms`, `rss_structures_mb`, `fake_decision_p99_ms` (sampled n=2000) RECORD-ONLY |
+| hosted (core-hardening `shield-vendor`) | trend (GitHub runner) | real (vendored adblock-rust shim) | `filter_decision_p99_ms` (≤1ms trend row), `list_apply_ms`; ≥50k decisions — the plan floor the fake lane cannot honor for the product path |
+| farm (this section) | reference (calibrated rig) | real | `memory-default` (≤80MB REFERENCE row), reference certification of `filter_decision_p99_ms`, D-6 capture set |
+
+The sandbox fake-engine decision row is record-only BY LAW: a 20k-rule
+linear scan on a shared sandbox cannot honestly assert the ≤1ms product
+budget — the product path is the indexed real engine on a calibrated
+rig. Farm runbook (when the browser + rig exist):
+
+```bash
+# Reference rig, pinned hardware class, real engine product bundle:
+python3 build/qa/perf/shield_bench.py --repo . --engine real \
+  --shim-dir <cdylib dir> --rig reference --iters 50000 --rules 20000 \
+  --merge-trend   # writes the reference trend file the gate consumes
+python3 tools/perf_gate.py --repo . --bench docs/state/bench-trend.json \
+  --check --as-of <frozen date>
+```

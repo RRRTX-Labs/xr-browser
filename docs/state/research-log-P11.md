@@ -587,7 +587,38 @@ What Shield must NOT promise (this entry's answer):
    that matters for users is capability-honesty, and the platform
    ceiling above is the citation for it.
 
-## R5. Brave memory work (adblock-rust in production) — UNVERIFIED (T7)
+## R5. Brave memory work (adblock-rust in production) — VERIFIED live (T7, 2026-09-13)
+
+Live reads (2026-09-13, web): Brave Newsroom announcement as carried by
+alternativeto.net/news (2026-01-06), malwaretips.com thread 139029
+(quoting the Brave post), byteiota.com (2026-01-06), plus
+github.com/brave/brave-browser/issues/21970 (2022, the earlier regex-field
+saving). Facts:
+
+* Brave v1.85 (January 2026): adblock-rust refactored to store the ~100k
+  default filters in a ZERO-COPY FlatBuffers binary format instead of
+  heap-allocated Vecs/HashMaps/structs — ~45 MB saved (~75% reduction of
+  the engine's filter memory), on Android, iOS and desktop; engine memory
+  162 MB → 104 MB across v1.79.118 → v1.85.118 (byteiota's reading of the
+  release notes). Larger savings with extra lists enabled.
+* Layered with: stack-allocated vectors (−19% allocations, ~−15% filter
+  list build time), tokenized common regex patterns (+13% matching
+  speed), engine-instance resource sharing (~−2 MB/instance desktop),
+  internal resource storage −30%. More planned for v1.86.
+* Predecessor: brave-browser#21970 — ~7 MB saved by optimizing the unused
+  `regex` field of NetworkFilter, fixed in adblock-rust v0.5.2 (2022).
+
+Consequences for P11 sizing: (1) our vendored pin 0.13.3 ALREADY carries
+the FlatBuffers representation (src/filters/fb_network.rs — the debug-mode
+`raw_line` retention the T8 shim relies on is the fb path's debug flag),
+so the −75%-class memory work is IN the pin, not ahead of it; (2) the
+plan's ≤80 MB default-bundle memory budget sits below Brave's ~104 MB
+post-optimization figure at ~100k filters — coherent, since v1's default
+bundle is smaller and the budget covers the whole structures RSS delta
+(sandbox fake-engine measurement: 60.2 MB at 20k rules, record-only);
+(3) the budget row stays REFERENCE class — certification needs the
+calibrated farm rig with the REAL engine (browser-harness.md §P11-T7),
+never the sandbox trend lane.
 
 ## R6. EasyList licensing (bundle redistribution) — VERIFIED live (T3, 2026-09-12)
 
@@ -878,3 +909,35 @@ redirect resources passed by NAME only.
   EXISTING golden vector `e-emit-redact-shop` — a card number in a
   query, gone from the serialized row, byte-pinned in both backends).
 
+## D9. T7 decisions — the perf honesty laws (2026-09-13)
+
+1. **Metric-naming law.** The fake engine's decision row is
+   `fakecore_decision_p99_ms` and is RECORD-ONLY (no budget row exists
+   for it): a 20k-rule LINEAR SCAN on a shared sandbox (measured p99
+   ≈3.5 ms) cannot honestly certify the plan's ≤1 ms product budget. The
+   product row `filter_decision_p99_ms` (≤1 ms, trend class) is asserted
+   ONLY by real-engine lanes: hosted shield-vendor (trend-class runner)
+   and the farm reference rig (NOT-RUN, HG-31). The corpus was NOT
+   shrunk to make the fake pass — that would have been budget gaming.
+2. **Sampled Python binding.** The pure-Python reference fake at the
+   plan's ≥50k floor over 20k rules measures in HOURS (a foreground
+   50k run was killed at ~950 s — recorded, not hidden), so the Python
+   row is a SAMPLED record-only row (`--py-iters 2000`, `"sampled":
+   true`, honest n in the row). The ≥50k floor rides the PRODUCT-path
+   bindings: the C++ core binding (sandbox, 50k ✓) and the real-engine
+   binding (hosted, 50k ✓).
+3. **Mix-alignment law.** Request rule-indices align to the rule-class
+   cycle (`base = (j*7919) % (nrules/5)`, class offset `base*5+k`):
+   unaligned, the "matching" classes silently measured no-match scans
+   (first run: 2750/0/52250 vs the designed 12500/2500/35000 — the mix
+   counter is what exposed it). Warmup iterations do not feed the mix
+   counter (a 55k total exposed that contamination; fixed). Final
+   sandbox mix: exactly 12500/2500/35000.
+4. **Rig classes.** Sandbox = trend (NEUTRAL against the plan numbers,
+   per the brief); hosted GitHub runner = trend-class (may rule MET on
+   the ≤1 ms trend row, NEVER on the ≤80 MB reference row — perf_gate's
+   rig-class law enforces); reference certification = farm lane,
+   method committed in docs/qa/browser-harness.md §P11-T7.
+5. **list-apply budget row** extracted from the plan text by
+   gen_perf_budgets.py ("list apply ≤ 1.5 s background" → 1500 ms,
+   trend class, core-side): sandbox worst-single 230.1 ms → MET.

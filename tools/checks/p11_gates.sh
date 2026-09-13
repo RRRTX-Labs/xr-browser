@@ -98,6 +98,18 @@ p11_lists_gates() {
   bash xr-lists/tests/roundtrip.sh
 }
 
+p11_perf_gates() {
+  echo "== P11-T7: shield bench rows committed (trend rig; no re-measurement) =="
+  # --check verifies docs/state/bench-trend.json carries the shield rows
+  # (fakecore_decision_p99_ms record-only, list_apply_ms budget-asserted,
+  # rss_structures_mb record-only on linux, fake_decision_p99_ms sampled
+  # record-only). The measurement itself (>=50k decisions over >=20k rules,
+  # 12500/2500/35000 mix) runs in the sandbox lane transcript and — for the
+  # REAL engine product path — in the hosted core-hardening shield-vendor
+  # job (reference numbers ride the farm lane, docs/qa/browser-harness.md).
+  "$PY" build/qa/perf/shield_bench.py --repo . --check
+}
+
 p11_phase_gates() {
   # The single dispatcher entry for the P11 gate battery: run_checks.sh sits
   # at the 380-line touched-file law ceiling, so future P11 gates extend
@@ -105,4 +117,5 @@ p11_phase_gates() {
   p11_hostdoc_gates
   p11_shield_gates
   p11_lists_gates
+  p11_perf_gates
 }

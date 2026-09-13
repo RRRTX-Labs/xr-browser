@@ -151,6 +151,16 @@ def build(plan_text: str) -> dict:
                                "theme apply")),
         "core-side", "trend", "themes",
         "§4 P8 Perf (theme apply ≤100 ms)")
+    # P11-T7: the third P11 number (p99 + memory already ride §11.7 rows
+    # since P9-T5); seconds -> ms like the other apply rows.
+    m = re.search(r"list apply ≤ ([\d.]+) s background", plan_text)
+    if not m:
+        raise RunnerError("plan: no match for 'list apply <= N s "
+                          "background' (P11 Perf row) — budget absent or "
+                          "reworded in the plan (stop, do not guess)")
+    add("list-apply", "list_apply_ms", "ms", int(float(m.group(1)) * 1000),
+        "core-side", "trend", "shield",
+        "§4 P11 Perf (list apply ≤1.5 s background)")
 
     return {"schema_version": 1, "generated_from": PLAN_FILE,
             "rows": rows}

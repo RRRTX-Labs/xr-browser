@@ -1,0 +1,12 @@
+# T7 shield bench — sandbox trend rig (final fixtures: RFC 2606 .example hosts; 2026-09-13)
+$ TMPDIR=~/.benchtmp python3 build/qa/perf/shield_bench.py --merge-trend
+shield_bench: compiling (/usr/bin/g++ -O2 -std=c++20 -I/home/user/xr-core … 12 TUs)
+shield-bench (fake engine, trend rig): 50000 decisions over 20000 rules
+  decision ms: p50=2.419913 p99=3.506640 p99.9=4.636091 (mix: 12500 block / 2500 allow / 35000 no-match)
+  apply ms (20000-rule bundle, 10 iters): median=222.317 worst=230.109
+  rss structures delta: 60.223 MB (record-only)
+  verdicts: tools/perf_gate.py (rig-class law)
+{"engine":"fake","iters":50000,"name":"shield-bench","rig_class":"trend","rows":[{"metric":"fakecore_decision_p99_ms","n":50000,"p50":2.419913,"p99":3.506640,"p999":4.636091,"unit":"ms","value_us":3.506640},{"metric":"list_apply_ms","n":10,"p50":222.317,"p99":227.176,"unit":"ms","value_us":230.109,"worst_single_ms":230.109},{"metric":"rss_structures_mb","unit":"MB","value_us":60.223}],"rules":20000}
+python fake binding (SAMPLED n=2000): p50=30.093953 p99=43.878677 p99.9=69.048336 ms (mix: 500 block / 100 allow / 1400 no-match; record-only)
+shield_bench: merged 4 shield row(s) into /home/user/xr-browser/docs/state/bench-trend.json
+BENCH_RC=0

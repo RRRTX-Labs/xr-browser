@@ -1,0 +1,21 @@
+# T7 perf gate over the MERGED trend file (sandbox, 2026-09-13)
+$ python3 tools/perf_gate.py --repo . --bench docs/state/bench-trend.json --report-md docs/state/perf-budgets.md --as-of 2026-09-10
+perf_gate: 8 row(s), 0 MISSED, 0 NEUTRAL (rig trend)
+  MET          cache_warm_pinned_read_us
+  MET          resolve_cold_us
+  MET          snapshot_apply_us
+  MET          theme_apply_us
+  RECORD-ONLY  fakecore_decision_p99_ms
+  MET          list_apply_ms
+  RECORD-ONLY  rss_structures_mb
+  RECORD-ONLY  fake_decision_p99_ms
+PASS: perf_gate
+rc=0
+
+$ python3 tools/perf_gate.py --repo . --bench docs/state/bench-trend.json --check --as-of 2026-09-10
+PASS: perf_gate --check (report diff-clean)
+rc=0
+
+$ python3 build/qa/perf/shield_bench.py --repo . --check
+PASS: shield-bench --check (rows present: fake_decision_p99_ms, fakecore_decision_p99_ms, list_apply_ms, rss_structures_mb)
+rc=0
