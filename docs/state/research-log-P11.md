@@ -1039,3 +1039,16 @@ redirect resources passed by NAME only.
    independently proves the consumed closure resolves offline.
    Generalized lesson applied to every new P11 hosted step: validate
    with grep/assert on the captured log, never with a pipe's exit code.
+   **Correction-in-flight (run 34758551861):** the first fix — a
+   lock-free-resolve copy of the crate built offline at the consumed
+   features — ALSO failed on cssparser: cargo resolves the ROOT
+   package's optional dependencies even when no activated feature needs
+   them (as a path DEPENDENCY of the shim, adblock's unactivated
+   optionals are pruned — which is why the shim's own offline resolve
+   succeeded in the red run). Final shape: the shim-root
+   `cargo build --release --offline` step IS the offline-closure proof
+   (it resolves + compiles all 59 consumed crates from the sealed vendor
+   dir with no network); the standalone adblock-root offline step is
+   gone, and the --locked copy build (runner-side fetch) still exercises
+   the full upstream lock. Two hosted rounds to root-cause a two-layer
+   debt — each round's error named the next fix exactly.

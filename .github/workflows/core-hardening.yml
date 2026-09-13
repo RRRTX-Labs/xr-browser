@@ -216,11 +216,11 @@ jobs:
     # resolved runner-side. Template: P10's server-conformance job.
     # Two-phase on purpose:
     #   build  = OFFLINE against third_party/rust/vendor/ (source
-    #            replacement; the CONSUMED-feature closure resolves and
-    #            compiles with no network — lock-free resolve, because the
-    #            full upstream lock names the css-validation subtree the
-    #            closure deliberately excludes; see the step's history
-    #            comment — grep-verified, never pipe-exit-verified);
+    #            replacement): the shim-root cargo build resolves and
+    #            compiles the CONSUMED 59-crate closure with no network —
+    #            grep-verified, never pipe-exit-verified (the T8 debt fix
+    #            after run 34758097067 found the old step pipe-masked and
+    #            red since the T5 lock commit);
     #   copy   = from a byte-identical COPY (MANIFEST-sealed) with a
     #            runner-side cargo fetch (--locked, release): the vendored
     #            layout deliberately excludes the ~150-crate dev-dep graph
@@ -252,32 +252,6 @@ jobs:
           git -C ../xr-core checkout --quiet "$XR_CORE_REV"
       - name: Vendor tree integrity (offline verifier)
         run: python3 tools/vendor_check.py --check
-      - name: Offline closure build (consumed features, lock-free resolve, grep-verified)
-        # T8 DEBT FIX (run 34758097067 surfaced it): this step used to be
-        # `cargo build --offline` in the sealed crate dir, piped to tee
-        # under the default `bash -e` shell — NO pipefail, so cargo's exit
-        # code was swallowed. The step had been resolving RED since the T5
-        # lock commit: the full upstream Cargo.lock demands the
-        # css-validation subtree (cssparser/selectors) the 59-crate closure
-        # deliberately excludes (consumed features only — PROVENANCE.md
-        # boundary). Runs 34723790851/34726853499 therefore did NOT prove
-        # an offline build; nothing cited them as one in an evidence row.
-        # Corrected claim: the CONSUMED closure resolves + compiles offline
-        # from the sealed vendor dir — a lock-free resolve in an in-tree
-        # copy (keeps the third_party/rust/.cargo source-replacement
-        # discovery; the committed lock stays hash-verified by vendor_check
-        # and exercised by the --locked copy build below). The validator is
-        # grep on "Finished" — never the pipe's exit code.
-        run: |
-          rm -rf ../xr-core/third_party/rust/.offline-proof
-          cp -r ../xr-core/third_party/rust/adblock/0.13.3 ../xr-core/third_party/rust/.offline-proof
-          rm ../xr-core/third_party/rust/.offline-proof/Cargo.lock
-          cd ../xr-core/third_party/rust/.offline-proof
-          cargo build --offline --release --no-default-features \
-            --features embedded-domain-resolver,full-regex-handling,resource-assembler \
-            2>&1 | tee /tmp/shield-vendor-build.log
-          grep -q "Finished" /tmp/shield-vendor-build.log
-          cd .. && rm -rf .offline-proof
       - name: Lock-resolving release build from a byte-identical copy (runner-side fetch, --locked)
         run: |
           cp -r ../xr-core/third_party/rust/adblock/0.13.3 /tmp/adblock-test
@@ -286,7 +260,13 @@ jobs:
           grep -q "Finished" /tmp/shield-vendor-test.log
       # P11-T8: the shim's FIRST compilation happens here (hosted lane by
       # law — no local cargo build exists or is claimed; lib.rs cites the
-      # vendored API path:line it was written against). Then the REAL
+      # vendored API path:line it was written against). This step is also
+      # THE offline-closure proof: the shim root resolves the consumed
+      # 59-crate closure from the sealed vendor dir with no network (a
+      # standalone adblock-root offline build cannot serve: cargo resolves
+      # the ROOT's optional deps — cssparser/selectors — even unactivated,
+      # and the css-validation subtree is deliberately outside the closure;
+      # runs 34758097067/34758551861 proved both halves). Then the REAL
       # engine product path rides the >=50k-decision bench (the plan's
       # floor; the sandbox lane's fake-engine rows are record-only) and
       # the parity corpus (>=1,500 cases, bands enforced). Rig class of a
@@ -294,7 +274,7 @@ jobs:
       # is a trend-class row, so perf_gate may rule MET here; the
       # reference-class certification (calibrated rig, <=80MB memory row)
       # stays a farm-lane NOT-RUN (docs/qa/browser-harness.md).
-      - name: Build the shield/engine FFI shim (cdylib, offline, source-replaced)
+      - name: Offline closure build = the FFI shim (cdylib, source-replaced, grep-verified)
         run: |
           cd ../xr-core/shield/engine
           cargo build --release --offline 2>&1 | tee /tmp/shield-shim-build.log
@@ -319,7 +299,7 @@ jobs:
           {
             echo "## shield-vendor (P11-T1/T7/T8)"
             echo "- vendored pin: adblock 0.13.3 (crate sha256 f44b96a6…)"
-            echo "- offline closure build: $(grep -h 'Finished' /tmp/shield-vendor-build.log 2>/dev/null | head -1 || echo not-reached)"
+            echo "- offline closure build (shim root): $(grep -h 'Finished' /tmp/shield-shim-build.log 2>/dev/null | head -1 || echo not-reached)"
             echo "- copy build (--locked, release): $(grep -h 'Finished' /tmp/shield-vendor-test.log 2>/dev/null | head -1 || echo not-reached)"
             echo "- shim cdylib build: $(grep -h 'Finished' /tmp/shield-shim-build.log 2>/dev/null | head -1 || echo not-reached)"
             echo "- real-engine bench: $(grep -h 'decision ms' /tmp/shield-bench-real.log 2>/dev/null | head -1 || echo not-reached)"
