@@ -170,13 +170,18 @@ def compile_and_run_cc(xr_core: Path, tmp: Path, args) -> dict | None:
     srcs = [str(BENCH_CC)] + [str(xr_core / s) for s in CORE_SRCS]
     binary = tmp / "shield_bench"
     cmd = [gxx, "-O2", "-std=c++20", f"-I{xr_core}", "-o", str(binary)]
+    link = []
     if args.engine == "real":
         if not args.shim_dir:
             raise SystemExit("FAIL: --engine real needs --shim-dir (the "
                              "cargo-built libxr_shield_engine directory)")
-        cmd += ["-DXR_SHIELD_REAL_ENGINE", f"-L{args.shim_dir}",
-                "-lxr_shield_engine", f"-Wl,-rpath,{args.shim_dir}"]
-    cmd += srcs
+        cmd += ["-DXR_SHIELD_REAL_ENGINE"]
+        # Libraries AFTER the objects: GNU ld resolves left-to-right and
+        # drops a -l whose symbols nothing has referenced yet (hosted run
+        # 34758863940 taught this with undefined xr_shield_engine_*).
+        link = [f"-L{args.shim_dir}", "-lxr_shield_engine",
+                f"-Wl,-rpath,{args.shim_dir}"]
+    cmd += srcs + link
     print(f"shield_bench: compiling ({' '.join(cmd[:4])} … {len(srcs)} TUs)")
     r = subprocess.run(cmd, capture_output=True, text=True)
     if r.returncode != 0:

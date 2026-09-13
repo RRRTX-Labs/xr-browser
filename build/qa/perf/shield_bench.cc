@@ -245,7 +245,7 @@ class RealEngine : public BlockingEngine {
 void Usage() {
   std::fprintf(stderr,
                "usage: shield_bench [--iters N>=50000] [--rules N>=4000, "
-               "%4==0] [--apply-iters N>=3] [--rig trend|reference] "
+               "%%4==0] [--apply-iters N>=3] [--rig trend|reference] "
                "[--engine fake|real]\n");
 }
 
