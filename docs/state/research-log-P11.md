@@ -520,8 +520,9 @@ job 103616322631, on the exact DEPS-pinned tree). Consequence for this
 research item: the vendored pin's conformance evidence canNOT be "the
 crate's own unit tests"; it is T8's parity job (our FFI binding vs the
 reference engine over the vendored corpus, >=1,500 cases, +/-2% agreement,
-FP <=0.5%) plus the offline-build + lock-resolving-copy-build proofs in
-the shield-vendor lane. Recorded as research-log D7 item 14.
+FP <=0.5%) plus the offline-consumed-closure + lock-resolving-copy-build
+proofs in the shield-vendor lane (the offline proof was pipe-masked and
+silently red until the T8 debt fix — D10 item 9). Recorded as research-log D7 item 14.
 
 **P11-T8 resolution (2026-09-13).** The corpus landed where the T5
 addendum pointed: `xr-core/shield/tests/corpus/parity-corpus-v1.json`,
@@ -1008,3 +1009,33 @@ redirect resources passed by NAME only.
     the vendored API source; risk accepted and recorded here). Locally
     the real lane exits 77 SKIP visibly; nothing in-tree claims a local
     real-engine result.
+
+8. **Hosted-lane finding #1 (run 34758097067, job 103725907042).**
+   `FilterSet::add_filter`/`add_filters` in vendored 0.13.3 are
+   `#[cfg(test)]`-only; the public production API is
+   `add_filter_list(String, ParseOptions)` (lists.rs:240). lib.rs fixed
+   accordingly (one filter per call keeps insertion order == rule_table
+   order; the parser strips the trailing newline, so the debug raw_line
+   equals the filter text exactly — the recovery key stays valid). This
+   is the no-local-cargo law's recorded risk materializing and being
+   caught exactly where the design said it would be: the first hosted
+   compile, in 48 seconds, with the error naming the fix.
+9. **Hosted-lane finding #2 — a MASKED step (debt correction, T0-d
+   class).** The shield-vendor "Build the vendored crate OFFLINE" step
+   piped cargo into `tee` under GitHub's default `bash -e` shell — no
+   pipefail — so cargo's exit code was swallowed. The step had been
+   resolving RED since the T5 lock commit (xr-core 1e5fa01): the full
+   upstream Cargo.lock names the css-validation subtree
+   (cssparser/selectors) that the 59-crate consumed-feature closure
+   deliberately excludes (PROVENANCE.md boundary), and offline
+   resolution with that lock demands every locked package regardless of
+   feature activation. Runs 34723790851 and 34726853499 therefore did
+   NOT prove an offline build; no evidence row cites them as one (the
+   P11 bundle was unwritten at discovery — the correction lands BEFORE
+   any claim existed, which is the cheapest possible moment). Fixed: the
+   step now builds an in-tree lock-free-resolve copy (consumed features,
+   source-replacement discovery intact) and validates by grep on
+   "Finished"; the shim's own `cargo build --release --offline` step
+   independently proves the consumed closure resolves offline.
+   Generalized lesson applied to every new P11 hosted step: validate
+   with grep/assert on the captured log, never with a pipe's exit code.

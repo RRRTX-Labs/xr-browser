@@ -44,7 +44,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "3769474d9a667fca05966d8be0f9c05534876350"     # xr-core P11-T8: the adblock-rust FFI binding completed (match + rule recovery + v1 option law + panic->alive death semantics) + the 1,533-case parity corpus
+xr_core_rev: "ee1433e073f7eb55371670caaa068846dd025b00"     # xr-core P11-T8 debt fix: add_filter_list (the public API; add_filter is cfg(test)-only) + explicit-lifetime cstr helper — hosted run 34758097067 root cause
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"
