@@ -199,3 +199,72 @@ snapshot set is the browser-side proof.
 - Roster: `update.about` / `update.check-now` /
   `update.manual-download` (tier-2, safe; Tier-1 stays ≤9 at 7) — the
   §10 ratchet rows landed in the same commit.
+
+## P11 stage: xr://shield E2E runbook (farm rows — HG-31)
+
+P11 adds the shield surface: the dev-only `xr://shield` debug page, the
+count-only blocked chip, and the shield roster commands. The dev-only law
+is host-enforced, not a comment: the page methods (`page-states`,
+`debug-page`) sit behind the REAL `--build-channel dev` startup gate and a
+default-release build refuses typed `build-channel-not-dev:<channel>`; the
+roster's `shield.page` command rides the `build.channel-dev` predicate in
+the availability snapshot (both availability backends register it —
+`tools/shield_state_check.py` fails the build otherwise). Everything below
+is a FARM row (HG-31 rig): no browser exists in any lane yet, and nothing
+here is implied PASS from the in-sandbox core/host/fake suites.
+
+### Flow 1 — dev-only enforcement + page states
+
+1. Launch a dev build (`--build-channel dev`, flag `xr_shield_v1=on`
+   default). Open `xr://shield` (roster `shield.page`, tier-2). Assert the
+   heading (`IDS_XR_SHIELD_HEADING`), the dev-only note
+   (`IDS_XR_SHIELD_DEV_ONLY`), and state `normal` with a GREEN chip.
+2. Launch a release build. Assert the host refuses `debug-page` /
+   `page-states` with the typed `build-channel-not-dev:release` and that
+   `shield.page` is unavailable in the palette with the predicate reason —
+   never a "coming soon" rail, never a silent absence.
+3. Drive the page through every `kPageStates` value (host method
+   `page-states` enumerates them): `normal` (green), `engine-dead`,
+   `engine-poisoned`, `kill-switch` (all three fail-OPEN with an AMBER
+   chip — distinct from blocked-nothing), `route-loss` (fail-CLOSED: the
+   network path refuses; posture precedence route > engine > kill-switch >
+   normal, property-tested in `xr-core/shield/tests/test_posture.cc`).
+   The view (`xr-core/ui/shield/shield.ts`) must render every state; an
+   unknown state renders honestly, never guessed. The negative for a
+   dropped state lives in `tools/negatives/p11_t6.sh`.
+
+### Flow 2 — both-flags matrix (`xr_shield_v1`)
+
+1. Flag ON (default): `flag-status` reports `on`; `Status.enabled` is
+   true; blocking decisions flow (`match`), BlockEvent rows ride the
+   activity ledger with redaction (`docs/shield/privacy.md` — no full
+   URLs) and the chip shows the COUNT ONLY (`IDS_XR_SHIELD_CHIP_COUNT` —
+   no badge/toast/modal vocabulary; the attention rule is enforced by
+   `tools/attention_check.py`).
+2. Flag OFF: `flag-status` reports `off`; `Status.enabled` is false; the
+   page shows `kill-switch` amber (fail-OPEN, "off is a visible state,
+   never a green lie"); the decision methods stay flag-independent BY
+   DESIGN — the deliberate-off law lives in the posture input
+   `kill_switch_on` (registry row: `docs/contracts/registry-post-freeze.md`
+   §`xr_shield_v1`).
+3. Enterprise force-disable: the note carries the reason VERBATIM
+   (`IDS_XR_SHIELD_FORCED_DISABLED` with its `{REASON}` placeholder
+   substituted; the raw-string lint forbids literals).
+
+### Flow 3 — roster commands + explainers
+
+- `shield.toggle` (tier-2, safe): per-site toggle = the T4 host method
+  `site-toggle`; an exception scope, NOT a waiver (ADR-0046) — the ledger
+  row says which scope changed and the sweep (`exception-sweep`) remains
+  available.
+- `shield.add-rule` / `shield.remove-rule` (tier-2, caution): the T4
+  exception surface (`exception-add` / `exception-remove`) with
+  `tools/exception_ledger_check.py` enforcing the ledger rows.
+- `dial.set-shield` (tier-2, safe): the dial entry to the same surface.
+- Recent events render from the `RecentEvents` FROZEN mojom envelope with
+  the closed `why` vocabulary (`docs/shield/reason-codes.md`); every event
+  carries rule-id + list provenance (P13 explainer dependency).
+- The grdp (`xr-core/l10n/xr_strings.grdp`) must carry every required
+  `IDS_XR_SHIELD_*` message; the Python fake's `PAGE_STATES`
+  (`xr-core/fakes/shield.py`) stays byte-identical to the host's
+  `kPageStates` list — both enforced by `tools/shield_state_check.py`.
