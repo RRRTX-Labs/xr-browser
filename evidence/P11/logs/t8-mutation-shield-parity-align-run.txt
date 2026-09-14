@@ -1,0 +1,2 @@
+mutation[shield]: 396 mutants, killed 396, survived 0, score 100.00% (gate >= 90.0%), deny-guard 61/61, elapsed 233.8s -> PASS
+mutation: targets=shield -> PASS
