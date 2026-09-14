@@ -32,7 +32,7 @@ jobs:
 
       - name: Checkout xr-core at the DEPS pin
         run: |
-          pin=$(grep -oP 'xr_core_rev: "\\K[0-9a-f]{40}' DEPS)
+          pin=$(grep -oP 'xr_core_rev: "\K[0-9a-f]{40}' DEPS)
           git clone -q https://github.com/RRRTX-Labs/xr-core.git ../xr-core
           git -C ../xr-core checkout -q "$pin"
           git -C ../xr-core rev-parse HEAD
