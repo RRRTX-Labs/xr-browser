@@ -1088,6 +1088,35 @@ redirect resources passed by NAME only.
     fprintf format was escaped (`%%` — g++ `-Wformat=` had flagged it in
     the same log). Third consecutive hosted round where the error named
     the next fix exactly.
+11. **Round 4 (run 34765433794) — the lane went GREEN with the parity
+    verdict masked, and the masked verdict was FAIL.** The item-9 unmask
+    covered the two build steps but not the parity step, which was still
+    a bare `cmd | tee` pipe: bash -e without pipefail took tee's exit 0
+    while the log carried `agreement 93.151% (band >=98.0), FP 11.765%
+    (band <=0.5), FN 21` on 1533 cases. Caught by reading the green log
+    line-by-line before any evidence row existed — correction-before-
+    claim, third time this phase. All 105 divergences were then
+    root-caused STATICALLY from the vendored source, and the numbers
+    reconstruct exactly (84 FP + 21 FN = 105; 1428/1533 = 93.151%;
+    84/714 expected-allow = 11.765%): (D-7) `||d|` is a HOST-END anchor
+    in adblock-rust (network_matchers.rs:226-246 — the empty-selector
+    branch decides on hostname alone), not the URL-end anchor the v1
+    matcher implemented; (D-8) a trailing wildcard is STRIPPED with the
+    right anchor KEPT (network.rs:785 runs after :702-705), so `va*|` ≡
+    `va|` — the v1 matcher voided the anchor instead; (D-9) the vendored
+    engine matches the whole surface lowercased (request.rs:124-131) —
+    which host_protocol.md's "lowercased match surface" always promised
+    and the implementation had drifted from. Upstream-first ruling: the
+    vendored engine is the production network blocker, so the v1 matcher
+    aligned in all three mirrors (xr-core 866387a), regenerating under
+    the byte laws: 307 golden vectors (2 flipped: m-bare-domain-miss,
+    m-allow-case-path), 1533 corpus cases (exactly 105 expectation
+    flips in 5 class/variant pairs), C++ suite green with new pins in
+    test_match, fake lane back to 100%/0%/100%/FN0. The hosted step is
+    now grep-verified on `"verdict": "PASS"` from a --json dump (cap
+    20→200 mismatches: one hosted round must be enough to triage).
+    Lesson generalized: an unmask pass has to sweep EVERY `| tee` step
+    in the job — the step that burned you is not the only one masked.
 
 ## D11. DoD-10 decisions — the network-seam patch entry (2026-09-13)
 

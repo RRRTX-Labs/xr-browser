@@ -2091,12 +2091,12 @@
      "reason": "normal"
     },
     "verdict": {
-     "action": "block",
+     "action": "allow",
      "bundle_version": 3,
      "engine_decision": true,
      "list_id": "l1",
-     "rule_id": "r1",
-     "why_code": "rule-blocked"
+     "rule_id": "r2",
+     "why_code": "rule-allowed"
     }
    },
    "id": "m-allow-case-path",
@@ -4504,12 +4504,12 @@
      "reason": "normal"
     },
     "verdict": {
-     "action": "allow",
+     "action": "block",
      "bundle_version": 3,
-     "engine_decision": false,
-     "list_id": "",
-     "rule_id": "",
-     "why_code": "no-match"
+     "engine_decision": true,
+     "list_id": "l1",
+     "rule_id": "r10",
+     "why_code": "rule-blocked"
     }
    },
    "id": "m-bare-domain-miss",

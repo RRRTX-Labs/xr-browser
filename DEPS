@@ -44,7 +44,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "e824e4034baf8ef147473b72247348650bc2f4c7"     # xr-core P11 DoD-10: the network-seam patch entry 0200-shield-network-seam (manifest 2→3; round-trip-proven at the pin)
+xr_core_rev: "866387aadeb091422dbeb66075804248575bbbe6"     # xr-core P11-T8 parity alignment (D-7/D-8/D-9): the v1 matcher follows the vendored engine; corpus+vectors regenerated under the byte laws
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

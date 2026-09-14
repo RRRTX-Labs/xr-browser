@@ -312,11 +312,39 @@ jobs:
               print(f'PASS: {metric} verdict MET (hosted trend rig)')
           PY
           cat /tmp/perf-budgets-real.md
+      # Unmask round 2 (the sweep the first unmask pass owed EVERY tee
+      # step): this step was still a bare `cmd | tee` pipe, so run
+      # 34765433794 went GREEN while the verdict inside was FAIL
+      # (agreement 93.151% vs band >=98, FP 11.765% vs <=0.5, FN 21).
+      # bash -e without pipefail takes tee's exit code — the verdict is
+      # now grep-verified from the --json dump, and the dump carries
+      # per-class counts + up to 200 mismatches so any future divergence
+      # triages from ONE hosted round. The divergences that round found
+      # are fixed (D-7/D-8/D-9, docs/shield/parity-divergences.md; the
+      # v1 matcher aligned to the vendored engine at xr-core 866387a).
       - name: Real-engine parity (vendored corpus vs the shim, bands enforced)
         run: |
           python3 tools/shield_parity.py --core ../xr-core --engine real \
             --shim ../xr-core/shield/engine/target/release/libxr_shield_engine.so \
-            --check 2>&1 | tee /tmp/shield-parity-real.log
+            --check --json 2>&1 | tee /tmp/shield-parity-real.json
+          grep -q '"verdict": "PASS"' /tmp/shield-parity-real.json
+          python3 - <<'PY'
+          import json
+          line = next(l for l in open('/tmp/shield-parity-real.json')
+                      if l.startswith('{'))
+          r = json.loads(line)
+          print(f"shield_parity (real): {r['cases']} cases — agreement "
+                f"{r['action_agreement_pct']}% (band "
+                f">={r['bands']['agreement_min_pct']}), FP "
+                f"{r['false_positive_pct']}% (band "
+                f"<={r['bands']['fp_max_pct']}), provenance "
+                f"{r['provenance_agreement_pct']}%, FN "
+                f"{r['false_negatives']} — {r['verdict']}")
+          for m in r['mismatches'][:40]:
+              print(' ', m['id'], f"[{m['class']}/{m['variant']}]", m['url'],
+                    'expect', m['expect']['action'], 'got',
+                    m['got']['action'])
+          PY
       - name: Post the conclusion
         if: always()
         run: |
@@ -327,7 +355,7 @@ jobs:
             echo "- copy build (--locked, release): $(grep -h 'Finished' /tmp/shield-vendor-test.log 2>/dev/null | head -1 || echo not-reached)"
             echo "- shim cdylib build: $(grep -h 'Finished' /tmp/shield-shim-build.log 2>/dev/null | head -1 || echo not-reached)"
             echo "- real-engine bench: $(grep -h 'decision ms' /tmp/shield-bench-real.log 2>/dev/null | head -1 || echo not-reached)"
-            echo "- real-engine parity: $(grep -h 'shield_parity' /tmp/shield-parity-real.log 2>/dev/null | head -1 || echo not-reached)"
+            echo "- real-engine parity: $(grep -ho '"verdict": "[A-Z]*"' /tmp/shield-parity-real.json 2>/dev/null | head -1 || echo not-reached) (full JSON report in the step log)"
           } >> "$GITHUB_STEP_SUMMARY"
 
   fuzz-fleet:

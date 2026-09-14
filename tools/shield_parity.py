@@ -191,7 +191,10 @@ def run(corpus: dict, lane, engine: str) -> dict:
             cls["prov"] += 1
             totals["prov"] += 1
         if not ok or not prov_ok:
-            if len(mismatches) < 20:
+            # 200, not 20: the 105-divergence round (D-7/D-8/D-9) proved
+            # a 20-row cap cannot triage a whole-class divergence from a
+            # hosted log; the --json dump is the triage artifact.
+            if len(mismatches) < 200:
                 mismatches.append({"id": case["id"],
                                    "class": case["rule_class"],
                                    "variant": case["variant"],
