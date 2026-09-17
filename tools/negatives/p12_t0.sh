@@ -263,3 +263,35 @@ YML
     "$PY" "$REPO_ROOT/build/tee_assert_lint.py" --root "$R"
 }
 neg_register tee_multiline_counted
+
+# --- vocab_lint: a malformed allowlist row must not silently un-allowlist ----
+case_vocab_allowlist_missing_line() {
+  # load_allowlist() returns failures when a row lacks a required field, and
+  # vocab_lint then treats the allowlist as EMPTY. So one malformed row does
+  # not merely fail to allowlist its own hit — it un-allowlists every other
+  # row, reddening unrelated files. That blast radius is why this is a
+  # negative rather than a footnote: the failure looks like "39 new vocab
+  # violations" and points at files nobody touched.
+  local R="$NEG_TMP/vocabrow"
+  rm -rf "$R"; mkdir -p "$R/docs/state" "$R/tools"
+  # vocab_lint loads tools/_common.py by path, so the fixture needs it too —
+  # copying only the tool produces a FileNotFoundError, which would be a
+  # rejection "for the wrong reason" and lib.sh would not accept it.
+  cp tools/vocab_lint.py tools/_common.py "$R/tools/"
+  "$PY" - "$R" <<'PY'
+import sys, pathlib
+root = pathlib.Path(sys.argv[1])
+(root / "docs" / "state" / "vocab-allowlist.yaml").write_text(
+    "schema_version: 1\n"
+    "allowlist:\n"
+    "  - path: docs/x.md\n"
+    "    pattern: anonymous\n"          # <- no `line:` field
+    "    justification: malformed on purpose\n")
+(root / "docs").mkdir(parents=True, exist_ok=True)
+(root / "docs" / "x.md").write_text("we never claim anonymous browsing\n")
+PY
+  neg_expect_reject "vocab_lint: an allowlist row missing its line field fails the load, and the failure is reported rather than swallowed" \
+    "missing field 'line'" \
+    "$PY" "$R/tools/vocab_lint.py" --repo "$R"
+}
+neg_register vocab_allowlist_missing_line

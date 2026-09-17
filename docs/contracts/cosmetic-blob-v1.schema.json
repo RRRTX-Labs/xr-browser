@@ -1,0 +1,69 @@
+{
+  "contract": "cosmetic-blob",
+  "contract_version": 1,
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "schema_version",
+    "blob_id",
+    "generated_epoch",
+    "scope",
+    "rules",
+    "refusals",
+    "sha256"
+  ],
+  "properties": {
+    "schema": {"const": "xr-cosmetic-blob-v1"},
+    "schema_version": {"const": 1},
+    "blob_id": {"type": "string", "minLength": 1},
+    "generated_epoch": {"type": "integer", "minimum": 0},
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["site", "identity_class"],
+      "properties": {
+        "site": {"type": "string", "minLength": 1},
+        "identity_class": {
+          "enum": ["anonymous", "authenticated", "enterprise"]
+        }
+      }
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "selector", "action"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "selector": {"type": "string", "minLength": 1},
+          "action": {"enum": ["hide", "remove", "style"]},
+          "style": {
+            "type": "object",
+            "additionalProperties": {"type": "string"},
+            "propertyNames": {"pattern": "^[a-zA-Z-]+$"}
+          },
+          "enabled": {"type": "boolean"},
+          "exception_sites": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "refusals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["rule_index", "reason"],
+        "properties": {
+          "rule_index": {"type": "integer", "minimum": 0},
+          "reason": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
