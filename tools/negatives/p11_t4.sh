@@ -17,16 +17,16 @@ XR_CORE_ABS="$(cd ../xr-core && pwd)"
 # prebuilt host — shield_vectors_check rebuilds it via make when needed).
 snapshot_core() {
   mkdir -p "$1"
-  tar -C "$XR_CORE_ABS/.." \
-    --exclude='xr-core/.git' --exclude='xr-core/shield/tests/build' \
-    -cf - xr-core | tar -C "$1" -xf -
+  # P12-T0-d: build outputs excluded via the shared helper. They are what
+  # filled the ~993 MiB $TMPDIR tmpfs mid-battery (the observed failure was
+  # `tar: xr-core/update/tests/build/test_update_fuzz: Cannot write`).
+  scratch_tar_xr_core "$1"
 }
 
 # snapshot_browser <dest>: copies the repo working tree (no .git/pycache).
 snapshot_browser() {
   mkdir -p "$1"
-  tar -C . --exclude='./.git' --exclude='*__pycache__*' -cf - . \
-    | tar -C "$1" -xf -
+  scratch_tar_tree "$1"
 }
 
 # --- protocol row canary: deleting a Methods row reddens the doc↔code check --

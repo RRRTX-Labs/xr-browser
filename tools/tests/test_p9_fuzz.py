@@ -17,17 +17,23 @@ def run_tool(name: str, *args: str) -> subprocess.CompletedProcess[str]:
                           capture_output=True, text=True)
 
 
-def test_mojom_fuzz_gen_deterministic() -> None:
+def test_mojom_fuzz_gen_deterministic(tmp_path: Path) -> None:
+    # P12-T0-d: this test wrote BOTH streams into the repo tree
+    # (docs/qa/fuzz-stream-{a,b}) and unlinked them at the end. Two problems,
+    # and the second is the one that makes suites order-dependent: an assert
+    # failure between the writes and the unlinks left fuzz-stream-b behind in
+    # the source tree, so the next run started from a different state than the
+    # first. Tests do not write into the repo tree — both streams now live in
+    # tmp_path, which pytest removes even on failure.
+    a_out = tmp_path / "fuzz-stream-a"
+    b_out = tmp_path / "fuzz-stream-b"
     a = run_tool("mojom_fuzz_gen.py", "--repo", str(REPO), "--count", "40",
-                 "--seed", "7", "--out", str(REPO / "docs/qa/fuzz-stream-a"))
+                 "--seed", "7", "--out", str(a_out))
     b = run_tool("mojom_fuzz_gen.py", "--repo", str(REPO), "--count", "40",
-                 "--seed", "7", "--out", str(REPO / "docs/qa/fuzz-stream-b"))
+                 "--seed", "7", "--out", str(b_out))
     assert a.returncode == 0 and b.returncode == 0
-    assert (REPO / "docs/qa/fuzz-stream-a").read_bytes() == \
-           (REPO / "docs/qa/fuzz-stream-b").read_bytes()
-    assert len((REPO / "docs/qa/fuzz-stream-a").read_text().splitlines()) == 160
-    (REPO / "docs/qa/fuzz-stream-a").unlink()
-    (REPO / "docs/qa/fuzz-stream-b").unlink()
+    assert a_out.read_bytes() == b_out.read_bytes()
+    assert len(a_out.read_text().splitlines()) == 160
 
 
 def test_mojom_fuzz_gen_covers_four_hosts() -> None:

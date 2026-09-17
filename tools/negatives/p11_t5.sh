@@ -15,15 +15,15 @@ XR_CORE_ABS_T5="$(cd ../xr-core && pwd)"
 
 snapshot_core_t5() {
   mkdir -p "$1"
-  tar -C "$XR_CORE_ABS_T5/.." \
-    --exclude='xr-core/.git' --exclude='xr-core/shield/tests/build' \
-    -cf - xr-core | tar -C "$1" -xf -
+  # P12-T0-d: build outputs excluded via the shared helper. They are what
+  # filled the ~993 MiB $TMPDIR tmpfs mid-battery (the observed failure was
+  # `tar: xr-core/update/tests/build/test_update_fuzz: Cannot write`).
+  scratch_tar_xr_core "$1"
 }
 
 snapshot_browser_t5() {
   mkdir -p "$1"
-  tar -C . --exclude='./.git' --exclude='*__pycache__*' -cf - . \
-    | tar -C "$1" -xf -
+  scratch_tar_tree "$1"
 }
 
 # sibling layout ($1/xr-browser + $1/xr-core) for tests that resolve

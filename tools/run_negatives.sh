@@ -13,7 +13,23 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PY="${PYTHON:-python3}"
-TMP="$(mktemp -d)"
+# P12-T0-d: scratch is preflighted, not discovered mid-run by a tar ENOSPC.
+# The negatives battery tars whole trees into scratch; on a ~993 MiB $TMPDIR
+# tmpfs that used to die partway with
+#   tar: xr-core/update/tests/build/test_update_fuzz: Cannot write:
+#       No space left on device
+# which reads exactly like a real defect. tools/scratch.sh prefers the
+# repo-local work/scratch, excludes build outputs from every fixture tar, and
+# fails fast with the free space it needs.
+# shellcheck disable=SC1091
+. "$(dirname "$0")/scratch.sh"
+scratch_require "${XR_NEG_SCRATCH_MIB:-512}" || {
+  rc=$?
+  [ "$rc" -eq 77 ] && exit 77
+  exit 1
+}
+TMP="$(scratch_dir)/negatives.$$"
+mkdir -p "$TMP"
 trap 'rm -rf "$TMP"' EXIT
 export NEG_TMP="$TMP"
 export PY
@@ -24,7 +40,7 @@ export PY
 # The ordered case-file list (the dispatcher's only hand-written bit; each
 # file must exist or the gate fails closed rather than silently dropping an
 # area). p9_ci.sh carries the T1–T12 runner canaries.
-NEG_FILES=(p1_p2.sh p3_p4.sh p5_p6.sh p7_p8.sh p9_core.sh p9_ci.sh p10_release.sh p11_t0.sh p11_t0d.sh p11_t0e.sh p11_t1.sh p11_t2.sh p11_t3.sh p11_t4.sh p11_t5.sh p11_t6.sh p11_t10.sh)
+NEG_FILES=(p1_p2.sh p3_p4.sh p5_p6.sh p7_p8.sh p9_core.sh p9_ci.sh p10_release.sh p11_t0.sh p11_t0d.sh p11_t0e.sh p11_t1.sh p11_t2.sh p11_t3.sh p11_t4.sh p11_t5.sh p11_t6.sh p11_t10.sh p12_t0.sh)
 
 if [ "${1:-}" = "--self-test" ]; then
   neg_self_test "${NEG_FILES[@]}"
