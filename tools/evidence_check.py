@@ -343,7 +343,17 @@ def main() -> int:
     if not args.no_presence:
         extra = tuple(Path(x.strip()).resolve()
                       for x in args.also_repo.split(",") if x.strip())
-        presence_fails, _ = epc.check(repo, args.dir, extra)
+        # The presence law is a property of the CHECKOUT this gate runs in, not
+        # of whatever --repo points at. A negative fixture passes a synthetic
+        # bundle root that happens to sit inside this repo's worktree, so git
+        # resolves THIS repo's history and demands bundles the fixture never
+        # had (P9/P10/P11) — which reddened a positive control that exists to
+        # prove rule d can be satisfied. Anchor to the real repo root, and skip
+        # entirely when --repo is not that root: a fixture is validating one
+        # bundle's shape, not certifying a phase inventory.
+        anchor = Path(__file__).resolve().parents[1]
+        if repo.resolve() == anchor:
+            presence_fails, _ = epc.check(repo, args.dir, extra)
         if presence_fails:
             results["evidence_presence_check"] = presence_fails
 

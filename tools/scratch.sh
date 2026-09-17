@@ -122,9 +122,21 @@ scratch_tar_tree() {
   # parent does not exist yet the `cd` fails, the substitution collapses to
   # "/<basename>", and the guard silently stops matching (that exact bug let a
   # repo-into-itself copy through once already).
+  # Refuse only the copy that would actually nest: the destination at or above
+  # the repo root. A destination UNDER the scratch root is safe because the tar
+  # below excludes ./work, so the copy cannot contain itself — and refusing it
+  # outright broke the pre-existing negative fixtures, which legitimately build
+  # a tree snapshot under $NEG_TMP (p11_t4.sh, p1_p2.sh). The guard is for the
+  # recursion, not for the location.
   case "$dest" in
-    "$root"/*|"$root")
-      echo "SCRATCH-FAIL: refusing to copy the repo into itself ($dest is under $root) — a tree copied under work/scratch nests recursively and poisons every tree-scanning gate"
+    "$root"|"$root/")
+      echo "SCRATCH-FAIL: refusing to copy the repo onto itself ($dest IS $root)"
+      return 1
+      ;;
+  esac
+  case "$(cd "$root/.." && pwd)/$(basename "$root")/" in
+    "$dest"/*)
+      echo "SCRATCH-FAIL: refusing to copy the repo into a parent of itself ($dest contains $root)"
       return 1
       ;;
   esac

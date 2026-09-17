@@ -31,9 +31,13 @@ neg_register dco_unsigned
 
 # --- 3. registry: hand-edited feature row -----------------------------------
 case_registry_drift() {
+  # $NEG_TMP lives under work/scratch INSIDE the repo (P12-T0-d), so `cp -r .`
+  # into it is a copy of a directory into itself and fails. Mirror the tree
+  # with tar instead, excluding both .git and the scratch root: this case only
+  # needs docs/registry/features.yaml to be editable in isolation.
   local R="$NEG_TMP/drift"
-  cp -r . "$R"
-  rm -rf "$R/.git"
+  rm -rf "$R"; mkdir -p "$R"
+  (cd "$REPO_ROOT" && tar cf - --exclude=./.git --exclude=./work .) | (cd "$R" && tar xf -)
   "$PY" - "$R" <<'EOF'
 import sys, yaml
 root = sys.argv[1]

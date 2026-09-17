@@ -73,21 +73,32 @@ SKIP_DIRS = {".git", "node_modules", "__pycache__", ".venv", "out", "build"}
 def repo_files(repo: Path) -> list[Path]:
     """Tracked + untracked-but-not-ignored files (what a commit carries).
     A non-git root (negative fixtures) falls back to a directory walk."""
+    def walk() -> list[Path]:
+        out = []
+        for q in repo.rglob("*"):
+            if q.is_file() and not any(part in SKIP_DIRS for part in q.parts):
+                out.append(q)
+        return out
+
     r = subprocess.run(
         ["git", "-C", str(repo), "ls-files", "--cached", "--others",
          "--exclude-standard"], capture_output=True, text=True)
     if r.returncode != 0:
-        out = []
-        for p in repo.rglob("*"):
-            if p.is_file() and not any(part in SKIP_DIRS
-                                       for part in p.parts):
-                out.append(p)
-        return out
+        return walk()
     out = []
     for line in r.stdout.splitlines():
         p = repo / line
         if p.is_file() and not any(part in SKIP_DIRS for part in p.parts):
             out.append(p)
+    # A zero-file result from a NON-EMPTY root means git enumerated nothing —
+    # which happens when the root is itself gitignored (a fixture under
+    # work/scratch, .gitignore:22) rather than when the root is genuinely
+    # empty. Returning [] there made the scan report "0 files, no key
+    # material" and PASS on a planted private key, i.e. the security gate went
+    # silent exactly where it was pointed. Falling back to the walk keeps the
+    # scan honest: it is the same enumeration the non-git branch already used.
+    if not out and repo.is_dir() and any(repo.iterdir()):
+        return walk()
     return out
 
 

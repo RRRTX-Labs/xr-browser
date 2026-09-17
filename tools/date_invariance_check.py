@@ -216,6 +216,13 @@ def main(argv: list[str]) -> int:
     p.add_argument("--repo", default=".")
     p.add_argument("--dates", default=",".join(DEFAULT_DATES))
     p.add_argument("--json", action="store_true")
+    p.add_argument("--require-ambient-probe", action="store_true",
+                   help="FAIL rather than degrade when libfaketime is absent. "
+                        "Without it, a missing libfaketime silently reduces "
+                        "this check to the --as-of half only and still prints "
+                        "PASS — which let a planted date.today() through in a "
+                        "tree copy that had no libfaketime. The push gate sets "
+                        "this; an ad-hoc run may not.")
     a = p.parse_args(argv)
     repo = Path(a.repo).resolve()
     dates = [d.strip() for d in a.dates.split(",") if d.strip()]
@@ -302,6 +309,12 @@ def main(argv: list[str]) -> int:
                          f"{late} across the {boundary} boundary (expected "
                          f"PASS then FAIL)")
 
+    if a.require_ambient_probe and not ambient:
+        drift.append("ambient-clock probe UNAVAILABLE but --require-ambient-"
+                     "probe was set: the wall-clock half of this law is "
+                     "unproven, so this run certifies less than the gate "
+                     "claims (install libfaketime; see tools/requirements-"
+                     "dev.txt)")
     drift += ambient_drift
     if a.json:
         print(json.dumps({"tool": "date_invariance_check", "dates": dates,

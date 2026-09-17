@@ -159,7 +159,11 @@ p12_date_invariance_gates() {
   # (2) the property: re-run every date-aware lane at two far-apart --as-of
   #     values AND under a displaced ambient clock, and require identical
   #     verdicts; the freshness tier must still bite (no weakened expiry law).
-  "$PY" tools/date_invariance_check.py
+  # --require-ambient-probe: without libfaketime this check degrades to the
+  # --as-of half only and still prints PASS. That is the silent-degradation
+  # class — a planted date.today() passed in a tree copy that had no
+  # libfaketime. The gate must FAIL rather than certify less than it claims.
+  "$PY" tools/date_invariance_check.py --require-ambient-probe
 }
 
 # P12-T0-a: the release-notes lane. This reddened the push gate every calendar

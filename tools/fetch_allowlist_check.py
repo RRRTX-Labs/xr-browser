@@ -90,10 +90,18 @@ URL_IN_CODE = re.compile(r"[\"'](https?://[^\"']{4,})[\"']")
 
 
 def python_files(root: Path) -> list[Path]:
-    skip = {".git", "work", "node_modules", "__pycache__"}
+    # "work" was a bare name match, which skipped ANY path containing a
+    # component called work — including the repo's own work/scratch fixture
+    # root that P12-T0-d introduced, and any legitimate module named work.py's
+    # directory. The intent is the scratch root only, so match it as the
+    # repo-relative prefix it actually is.
+    skip = {".git", "node_modules", "__pycache__"}
     out = []
     for p in root.rglob("*.py"):
-        if any(part in skip for part in p.parts):
+        rel = p.relative_to(root)
+        if any(part in skip for part in rel.parts):
+            continue
+        if rel.parts and rel.parts[0] == "work":
             continue
         out.append(p)
     return sorted(out)
