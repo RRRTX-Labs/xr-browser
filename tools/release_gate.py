@@ -152,8 +152,15 @@ def main() -> int:
                str(leak.relative_to(REPO)) if leak.exists() else
                "no leak artifact found")
     # 6. notes + voice ------------------------------------------------------
+    # P12-T0-a: the notes lane is OFFLINE + date-invariant. The second live
+    # path (this one) reddened the gate daily for the same reason as
+    # run_checks.sh:327 — release_notes.py rendered from today's network data
+    # with today's date. Both now render from the committed snapshot fixture
+    # with a pinned --as-of; freshness is a scheduled-lane STALE-* verdict.
     rc1, _ = run([sys.executable, "tools/release_notes.py", "--train", "152",
-                  "--out", "release/notes/train-152.md", "--check"])
+                  "--out", "release/notes/train-152.md", "--check",
+                  "--fixture", "tools/fixtures/release-notes-train-152.json",
+                  "--as-of", "2026-09-14"])
     rc2, _ = run([sys.executable, "tools/claims_lint.py"])
     g.lane("notes+voice", rc1 == 0 and rc2 == 0,
            "release_notes --check + claims_lint" +

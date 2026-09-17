@@ -142,3 +142,39 @@ p11_phase_gates() {
   p11_perf_parity_gates
   p11_seam_gates
 }
+
+# --- P12-T0-a: the date-invariance law -------------------------------------
+# A check whose verdict moves when nothing in the repo changed is not a gate.
+# Three tools in this gate's closure read the wall clock (release_notes.py:41,
+# visual_diff.py:76, exception_ledger_check.py:195 at the P11 tip), which is
+# why run_checks.sh reddened itself every calendar day. Bodies live HERE, not
+# in the dispatcher: run_checks.sh sits at the 380-line touched-file ceiling
+# (P11-T0-e), so new gates extend this module.
+p12_date_invariance_gates() {
+  echo "== P12-T0-a: date-invariance law (no wall clock in a gate verdict) =="
+  # (1) the mechanism: no verdict-affecting clock read in the closure, with
+  #     the argument-default carve-out as the only permitted shape.
+  "$PY" tools/wall_clock_lint.py
+  "$PY" tools/wall_clock_lint.py --self-test
+  # (2) the property: re-run every date-aware lane at two far-apart --as-of
+  #     values AND under a displaced ambient clock, and require identical
+  #     verdicts; the freshness tier must still bite (no weakened expiry law).
+  "$PY" tools/date_invariance_check.py
+}
+
+# P12-T0-a: the release-notes lane. This reddened the push gate every calendar
+# day at the P11 tip: release_notes.py rendered from today's LIVE chromiumdash
+# fetch with today()'s date embedded in the citation string, then diffed it
+# against a file regenerated on an earlier day — a guaranteed daily red on an
+# unchanged tree (chased twice by re-commits 3711fc2 and f3d9773, both
+# labelled "by design"; it was not by design). It now renders from the
+# committed snapshot fixture with a pinned --as-of, so the citation date is
+# DATA (the snapshot's own `fetched` header). Snapshot freshness — the
+# legitimate question this was badly answering — moved to the scheduled
+# core-hardening `snapshot-freshness` job as a STALE-* verdict: visible,
+# non-fatal to any push gate, never counted green.
+p12_release_notes_gate() {
+  "$PY" tools/release_notes.py --train 152 --out release/notes/train-152.md \
+    --check --fixture tools/fixtures/release-notes-train-152.json \
+    --as-of 2026-09-14
+}

@@ -37,6 +37,13 @@ EXIT_USAGE = c.EXIT_USAGE
 from build.qa.visual import engine, pngcodec  # noqa: E402
 
 
+def _as_of_date(as_of: str) -> date:
+    """The frozen clock as a comparable date (P12-T0-a: the waiver-expiry
+    comparison reads --as-of, never the wall clock)."""
+    c.iso(as_of)  # validates (raises RunnerError on junk)
+    return date.fromisoformat(as_of)
+
+
 def load_waivers(path: Path) -> list[dict[str, Any]]:
     import yaml
     doc = yaml.safe_load(path.read_text(encoding="utf-8"))
@@ -55,7 +62,8 @@ def find_waiver(waivers: list[dict[str, Any]], name: str,
 
 def compare_files(ref: Path, cand: Path, *, threshold: int,
                   ignore: list[engine.Region], waivers: list[dict[str, Any]],
-                  meta: dict[str, Any] | None) -> dict[str, Any]:
+                  meta: dict[str, Any] | None,
+                  as_of: date) -> dict[str, Any]:
     ref_img = pngcodec.decode(ref.read_bytes())
     cand_img = pngcodec.decode(cand.read_bytes())
     ref_hash = engine.sha256_png(ref.read_bytes())
@@ -73,7 +81,7 @@ def compare_files(ref: Path, cand: Path, *, threshold: int,
             except (KeyError, ValueError):
                 verdict = "DIFFERENT"   # malformed waiver is no waiver
             else:
-                verdict = "WAIVED" if when >= date.today() else "DIFFERENT"
+                verdict = "WAIVED" if when >= as_of else "DIFFERENT"
                 if verdict == "DIFFERENT":
                     record["expired_waiver"] = w.get("id")
     record["verdict"] = verdict
@@ -130,13 +138,15 @@ def self_test(tmp: Path) -> int:
                 "reference_hash": engine.sha256_png(pngcodec.encode(a)),
                 "reason": "test", "owner": "t", "expiry": "2000-01-01"}]
     rec = compare_files(tmp / "a.png", tmp / "b.png", threshold=0,
-                        ignore=[], waivers=waivers, meta={"name": "panel"})
+                        ignore=[], waivers=waivers, meta={"name": "panel"},
+                        as_of=date(2026, 9, 14))
     checks["expired_waiver_red"] = rec["verdict"] == "DIFFERENT"
 
     # and a VALID waiver turns the same diff into a pass.
     waivers[0]["expiry"] = "2999-01-01"
     rec2 = compare_files(tmp / "a.png", tmp / "b.png", threshold=0,
-                         ignore=[], waivers=waivers, meta={"name": "panel"})
+                         ignore=[], waivers=waivers, meta={"name": "panel"},
+                         as_of=date(2026, 9, 14))
     checks["valid_waiver_green"] = rec2["verdict"] == "WAIVED"
 
     bad = [k for k, v in checks.items() if not v]
@@ -204,7 +214,8 @@ def main(argv: list[str]) -> int:
         meta = json.loads(mp.read_text(encoding="utf-8"))
 
     record = compare_files(ref, cand, threshold=args.threshold,
-                           ignore=ignore, waivers=waivers, meta=meta)
+                           ignore=ignore, waivers=waivers, meta=meta,
+                           as_of=_as_of_date(args.as_of))
     record["as_of"] = c.iso(args.as_of)
     if args.report_json:
         rp = Path(args.report_json)

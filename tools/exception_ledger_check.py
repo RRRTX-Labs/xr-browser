@@ -175,7 +175,8 @@ def check_shield(repo: Path, as_of: int) -> tuple[list[str], list[str], int]:
     return fails, info, len(rows)
 
 
-def check(repo: Path, matrix_json: Path) -> tuple[list[str], list[str]]:
+def check(repo: Path, matrix_json: Path,
+          as_of: date) -> tuple[list[str], list[str]]:
     """Returns (failures, info lines)."""
     fails: list[str] = []
     info: list[str] = []
@@ -192,7 +193,7 @@ def check(repo: Path, matrix_json: Path) -> tuple[list[str], list[str]]:
         return [f"{matrix_json}: unreadable ({exc})"], []
     exception_mechs = sorted({c["mechanism"] for c in doc.get("cells", [])
                               if c.get("verdict") == "EXCEPTION"})
-    today = date.today()
+    today = as_of
 
     for mech in exception_mechs:
         row = rows.get(mech)
@@ -231,6 +232,13 @@ def main(argv: list[str]) -> int:
                         "column (deterministic; default 0 = fresh boot; "
                         "the §1.13 ledger keeps its wall-clock expiry "
                         "law — P9 legacy, unchanged)")
+    p.add_argument("--as-of-date", default=date.today().isoformat(),
+                   help="comparison date YYYY-MM-DD for the §1.13 wall-clock "
+                        "expiry law (default: today, so the law stays live "
+                        "for a human run; the push gate pins it explicitly "
+                        "so its verdict cannot move with the calendar — "
+                        "P12-T0-a). Distinct from --as-of, which is the "
+                        "P9 MONOTONIC shield-ledger clock (an int).")
     p.add_argument("--json", action="store_true")
     args = p.parse_args(argv)
     if args.as_of < 0:
@@ -241,7 +249,12 @@ def main(argv: list[str]) -> int:
     mj = Path(args.matrix_json)
     if not mj.is_absolute():
         mj = repo / mj
-    fails, info = check(repo, mj)
+    try:
+        wall_as_of = date.fromisoformat(args.as_of_date)
+    except ValueError:
+        print(f"usage: --as-of-date {args.as_of_date!r} is not YYYY-MM-DD")
+        return EXIT_USAGE
+    fails, info = check(repo, mj, wall_as_of)
     shield_fails, shield_info, shield_n = check_shield(repo, args.as_of)
     fails += shield_fails
     info += shield_info

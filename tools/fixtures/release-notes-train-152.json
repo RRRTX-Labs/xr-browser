@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "train": 152,
+  "fetched": "2026-09-14",
+  "source": "chromiumdash fetch_releases (allowlisted host, via build/upstream/fetch.py GitilesFetchSource.releases('Stable', 'Windows', 5))",
+  "snapshot_note": "Offline rows snapshot (P12-T0-a). These are the REAL chromiumdash rows for milestone 152 as fetched on 2026-09-14 by the P10-T6 run that generated release/notes/train-152.md (commit f3d9773). The gate renders from THIS file, never from a live fetch, so the committed notes cannot redden when the calendar advances or when upstream Stable moves past M152. Refreshing this snapshot is a scheduled-lane concern (STALE-*, visible, non-fatal) -- see tools/scheduled_lane_check.py and .github/workflows/core-hardening.yml.",
+  "rows": [
+    {
+      "version": "152.0.7977.85",
+      "milestone": 152,
+      "channel": "Stable",
+      "platform": "Windows"
+    },
+    {
+      "version": "152.0.7977.84",
+      "milestone": 152,
+      "channel": "Stable",
+      "platform": "Windows"
+    }
+  ],
+  "cve": [
+    {
+      "unverified": true,
+      "reason": "upstream CVE endpoint did not answer with data at fetch time"
+    }
+  ]
+}

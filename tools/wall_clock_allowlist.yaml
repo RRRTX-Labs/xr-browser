@@ -1,0 +1,52 @@
+# tools/wall_clock_allowlist.yaml — non-verdict wall-clock reads (P12-T0-a).
+#
+# DATA, never a code comment (the house exception discipline: an exception you
+# cannot enumerate is an exception nobody reviews). tools/wall_clock_lint.py
+# FAILs on a wall-clock read that is neither an add_argument(default=...) nor a
+# row here, and FAILs on a row here that no longer matches (dead rows are a
+# silent hole).
+#
+# Scope of the law: the T0-a class is a clock read that can move a VERDICT or
+# the bytes of a diff-gated artifact. Every row below is a report/audit
+# timestamp on an artifact that is NOT diff-gated, so it cannot change a gate's
+# answer. Duration timers (time.monotonic / time.perf_counter / time.time) are
+# excluded from the banned set by definition — they measure elapsed time for a
+# timebox, and no date comparison can read them.
+schema_version: 1
+rows:
+  - path: build/preflight.py
+    line: 33
+    kind: report-timestamp
+    reason: "machine-capability snapshot field `at`; diagnostic only, no verdict"
+  - path: build/sync.py
+    line: 62
+    kind: report-timestamp
+    reason: "_now() stamps the rebase-sync report; not diff-gated"
+  - path: build/upstream/issues.py
+    line: 63
+    kind: report-timestamp
+    reason: "_now_iso() stamps a draft upstream issue body; human artifact"
+  - path: build/upstream/rebase_bot.py
+    line: 48
+    kind: report-timestamp
+    reason: "_now_iso() stamps the rebase-bot report; not diff-gated"
+  - path: build/upstream/issues.py
+    line: 120
+    kind: artifact-name-stamp
+    reason: "timestamp component of a written issue-bundle FILENAME; the bundle content verdict is pin-derived"
+  - path: build/spike/citation_audit.py
+    line: 167
+    kind: report-timestamp
+    reason: "already env-gated behind XR_CITATION_STAMP precisely so the committed audit log stays reproducible"
+  - path: build/spike/probe_driver.py
+    line: 236
+    kind: report-timestamp
+    reason: "`generated_at` on the probe report; the verdict fields are pin-derived"
+  - path: build/webui/patch_roundtrip.py
+    line: 198
+    kind: report-timestamp
+    reason: "`generated_at` on the round-trip report; verdict is byte-exactness, not the clock"
+  - path: build/webui/shield_seam_roundtrip.py
+    line: 233
+    kind: report-timestamp
+    reason: "`generated_at` on the seam round-trip report; verdict is byte-exactness, not the clock"

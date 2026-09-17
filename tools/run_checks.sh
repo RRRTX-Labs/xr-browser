@@ -280,6 +280,8 @@ echo "== P9-T5: perf budgets (plan-transcribed, diff-clean) + gate =="
 echo "== P9-T6: visual-diff stdlib engine self-test =="
 "$PY" tools/visual_diff.py --self-test
 
+p12_date_invariance_gates
+
 echo "== P9-T7: npm allowlist + copy lint + AXTree snapshot + keyboard tasks =="
 "$PY" tools/npm_allowlist_check.py --repo .
 "$PY" tools/copy_lint.py --repo .
@@ -324,7 +326,9 @@ XR_FUZZ_SECONDS="${XR_FUZZ_SECONDS:-30}" "$PY" release/server/tests/test_server_
 
 echo "== P10-T5/T7/T8: rollout drill + claims/notes + about-state coverage =="
 "$PY" tools/rollout_drill.py
-"$PY" tools/release_notes.py --train 152 --out release/notes/train-152.md --check
+# P12-T0-a: offline + date-invariant (body in checks/p11_gates.sh; the
+# dispatcher stays under the 380-line touched-file ceiling).
+p12_release_notes_gate
 "$PY" tools/claims_lint.py
 "$PY" tools/about_state_check.py
 
