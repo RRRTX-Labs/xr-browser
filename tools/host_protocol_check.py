@@ -74,7 +74,14 @@ def discover_method_hosts(xr_core: Path) -> dict[str, list[str]]:
                 continue
             literals.update(METHOD_LITERAL_RE.findall(text))
         if literals:
-            hosts[host_dir.parent.name] = sorted(literals)
+            # The key is the path RELATIVE to xr_core, not the bare parent
+            # name. `host_dir.parent.name` gives "cosmetic" for
+            # renderer/cosmetic/host, which then looks for
+            # xr-core/cosmetic/host_protocol.md — a path that cannot exist for
+            # a nested tree. Two cores in different trees sharing a basename
+            # would also collide on one key and silently overwrite each other.
+            hosts[host_dir.parent.relative_to(xr_core).as_posix()] = sorted(
+                literals)
     return hosts
 
 

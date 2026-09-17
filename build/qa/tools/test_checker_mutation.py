@@ -138,8 +138,19 @@ def _mutated_copy(repo: Path, workdir: Path, runner_rel: str,
     # import forms are tracked now; `sib.exists()` keeps stdlib imports
     # (json, re, sys, …) out.
     src_text = src.read_text(encoding="utf-8")
-    sib_names = re.findall(r"^from (\w+) import ", src_text, flags=re.M)
-    sib_names += re.findall(r"^import (\w+)\s*(?:#|$)", src_text, flags=re.M)
+    # NOT anchored at line start: P12-T0-b gave evidence_check a
+    # function-LOCAL `import evidence_presence_check` (deferred so the checker
+    # still works when the module is absent), and the anchored regexes missed
+    # it — the mutated copy then died on ModuleNotFoundError and the canary
+    # "escaped" for the wrong reason, which is a red canary that looks green.
+    # Scanning at any indentation, gated by `sib.exists()`, keeps stdlib out.
+    sib_names = re.findall(r"^\s*from (\w+) import ", src_text, flags=re.M)
+    # The `(?:#|$)` form matched only a `#` at END OF LINE, so the very import
+    # this was fixed for — `import evidence_presence_check as epc  # noqa:
+    # E402` — was still missed: it has text after the `#`, and the `as epc`
+    # suffix defeats a bare `\s*$` too. `\b` after the name, with no anchor,
+    # catches both the plain and the aliased forms at any indentation.
+    sib_names += re.findall(r"^\s*import (\w+)\b", src_text, flags=re.M)
     for m in sib_names:
         sib = src.parent / f"{m}.py"
         if sib.exists():
