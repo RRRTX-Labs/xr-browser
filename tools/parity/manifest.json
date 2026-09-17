@@ -31,6 +31,11 @@
    "corpus": "tools/parity/corpus-shield.json",
    "id": "shield",
    "protocol": "../xr-core/shield/host_protocol.md"
+  },
+  {
+   "corpus": "tools/parity/corpus-cosmetic.json",
+   "id": "renderer/cosmetic",
+   "protocol": "../xr-core/renderer/cosmetic/host_protocol.md"
   }
  ],
  "schema_version": 1

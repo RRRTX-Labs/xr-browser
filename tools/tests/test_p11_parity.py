@@ -135,7 +135,12 @@ def test_completeness_gate_positive_with_update_pair() -> None:
     assert r.returncode == 0, r.stdout + r.stderr
     assert "update: methods covered by parity corpus" in r.stdout
     assert "shield: methods covered by parity corpus" in r.stdout
-    assert "6 pair(s), 0 failure(s)" in r.stdout
+    # P12-T1: renderer/cosmetic is the 7th stdio host. The count is asserted
+    # (not merely ">= 6") because the point of the derivation law is that an
+    # unlisted host is a FAILURE — a hardcoded number is what makes the
+    # gate notice one.
+    assert "renderer/cosmetic: methods covered by parity corpus" in r.stdout
+    assert "7 pair(s), 0 failure(s)" in r.stdout
 
 
 def test_phantom_pair_fails(tmp_path: Path) -> None:

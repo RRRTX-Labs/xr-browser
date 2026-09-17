@@ -1,0 +1,510 @@
+{
+ "cases": [
+  {
+   "args": {
+    "blob_id": "b1",
+    "generated_epoch": 1758000000,
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": ".ad"
+     }
+    ],
+    "scope": {
+     "identity_class": "anonymous",
+     "site": "example.test"
+    }
+   },
+   "expect": "ok",
+   "id": "blob-build-minimal",
+   "method": "blob-build"
+  },
+  {
+   "args": {
+    "blob_id": "b3",
+    "rules": [],
+    "scope": {
+     "identity_class": "anonymous",
+     "site": "a.b"
+    }
+   },
+   "compare": "code",
+   "expect": "reject",
+   "id": "blob-build-missing-epoch",
+   "method": "blob-build"
+  },
+  {
+   "args": {
+    "blob_id": "b2",
+    "generated_epoch": 1758000000,
+    "refusals": [
+     {
+      "reason": "unknown-pseudo-class",
+      "rule_index": 3
+     }
+    ],
+    "rules": [],
+    "scope": {
+     "identity_class": "anonymous",
+     "site": "example.test"
+    }
+   },
+   "expect": "ok",
+   "id": "blob-build-with-refusal",
+   "method": "blob-build"
+  },
+  {
+   "args": {},
+   "compare": "code",
+   "expect": "reject",
+   "id": "blob-check-missing-arg",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"parity-1\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"},{\"action\":\"remove\",\"enabled\":true,\"id\":\"r2\",\"selector\":\".sponsor\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"b3e409592678e23f602a770e4c916c250ab9f42533b0a10725219167509653c4\"}"
+   },
+   "expect": "ok",
+   "id": "blob-check-no-frame-scope",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "not-json"
+   },
+   "expect": "reject",
+   "id": "blob-check-not-json",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"parity-1\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"},{\"action\":\"remove\",\"enabled\":true,\"id\":\"r2\",\"selector\":\".sponsor\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"b3e409592678e23f602a770e4c916c250ab9f42533b0a10725219167509653c4\"}",
+    "frame_scope": {
+     "identity_class": "anonymous",
+     "site": "other.test"
+    }
+   },
+   "expect": "reject",
+   "id": "blob-check-scope-mismatch",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"parity-1\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"body\"},{\"action\":\"remove\",\"enabled\":true,\"id\":\"r2\",\"selector\":\".sponsor\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"b3e409592678e23f602a770e4c916c250ab9f42533b0a10725219167509653c4\"}"
+   },
+   "expect": "reject",
+   "id": "blob-check-tampered",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"parity-1\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"},{\"action\":\"remove\",\"enabled\":true,\"id\":\"r2\",\"selector\":\".sponsor\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"b3e409592678e23f602a770e4c916c250ab9f42533b0a10725219167509653c4\"}",
+    "frame_scope": {
+     "identity_class": "anonymous",
+     "site": "example.test"
+    }
+   },
+   "expect": "ok",
+   "id": "blob-check-valid",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "condition": "blob-invalid"
+   },
+   "expect": "ok",
+   "id": "degrade-blob-invalid",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "blob-missing"
+   },
+   "expect": "ok",
+   "id": "degrade-blob-missing",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "dom-mutation-storm"
+   },
+   "expect": "ok",
+   "id": "degrade-dom-mutation-storm",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "empty-rule-set"
+   },
+   "expect": "ok",
+   "id": "degrade-empty-rule-set",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "engine-unavailable"
+   },
+   "expect": "ok",
+   "id": "degrade-engine-unavailable",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "flag-off"
+   },
+   "expect": "ok",
+   "id": "degrade-flag-off",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "generic-set-only"
+   },
+   "expect": "ok",
+   "id": "degrade-generic-set-only",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "main-world-required"
+   },
+   "expect": "ok",
+   "id": "degrade-main-world-required",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {},
+   "compare": "code",
+   "expect": "reject",
+   "id": "degrade-missing-arg",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "rule-too-expensive"
+   },
+   "expect": "ok",
+   "id": "degrade-rule-too-expensive",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "rule-unknown-pseudo"
+   },
+   "expect": "ok",
+   "id": "degrade-rule-unknown-pseudo",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "rule-unparsable"
+   },
+   "expect": "ok",
+   "id": "degrade-rule-unparsable",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "scope-mismatch"
+   },
+   "expect": "ok",
+   "id": "degrade-scope-mismatch",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "scriptlets-off"
+   },
+   "expect": "ok",
+   "id": "degrade-scriptlets-off",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "shields-down"
+   },
+   "expect": "ok",
+   "id": "degrade-shields-down",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "invented"
+   },
+   "expect": "reject",
+   "id": "degrade-unknown-condition",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {},
+   "expect": "ok",
+   "id": "flag-status-default-off",
+   "method": "flag-status"
+  },
+  {
+   "args": {
+    "probe": 1
+   },
+   "expect": "ok",
+   "id": "flag-status-shape",
+   "method": "flag-status"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": "div > .ad"
+     }
+    ]
+   },
+   "expect": "ok",
+   "id": "key-set-basic",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": "div>.ad"
+     },
+     {
+      "action": "hide",
+      "id": "r2",
+      "selector": "div > .ad"
+     }
+    ]
+   },
+   "expect": "ok",
+   "id": "key-set-dedup",
+   "method": "key-set"
+  },
+  {
+   "args": {},
+   "compare": "code",
+   "expect": "reject",
+   "id": "key-set-missing-rules",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "behavior": "url(#x)"
+      }
+     }
+    ]
+   },
+   "expect": "reject",
+   "id": "key-set-refused-bad-property",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": "*.bogus("
+     }
+    ]
+   },
+   "expect": "reject",
+   "id": "key-set-refused-bad-selector",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": []
+   },
+   "expect": "reject",
+   "id": "key-set-refused-empty",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "remove",
+      "id": "r1",
+      "selector": ".softwall"
+     }
+    ]
+   },
+   "expect": "ok",
+   "id": "key-set-remove",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "display": "none",
+       "opacity": "0"
+      }
+     }
+    ]
+   },
+   "expect": "ok",
+   "id": "key-set-style",
+   "method": "key-set"
+  },
+  {
+   "args": {},
+   "expect": "ok",
+   "id": "page-states-off-empty",
+   "method": "page-states"
+  },
+  {
+   "args": {
+    "keyset_rules": 3
+   },
+   "expect": "ok",
+   "id": "page-states-off-rules",
+   "method": "page-states"
+  },
+  {
+   "args": {
+    "frame_identity": "anon",
+    "frame_site": "ads.example",
+    "url_class": "generic"
+   },
+   "expect": "ok",
+   "id": "scope-key-anonymous",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "trust": "root",
+    "url_class": "article"
+   },
+   "compare": "code",
+   "expect": "reject",
+   "id": "scope-key-bad-trust",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "embedder_site": "top.example",
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "url_class": "article"
+   },
+   "expect": "reject",
+   "id": "scope-key-embedder-refused",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "trust": "enterprise",
+    "url_class": "article"
+   },
+   "expect": "ok",
+   "id": "scope-key-enterprise",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_site": "ads.example"
+   },
+   "compare": "code",
+   "expect": "reject",
+   "id": "scope-key-missing-arg",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "same-document",
+    "url_class": "article"
+   },
+   "expect": "ok",
+   "id": "scope-key-same-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "selector": "div>.ad"
+   },
+   "expect": "ok",
+   "id": "selector-parse-canonical",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:has-text(Sponsored)"
+   },
+   "expect": "ok",
+   "id": "selector-parse-has-text",
+   "method": "selector-parse"
+  },
+  {
+   "args": {},
+   "compare": "code",
+   "expect": "reject",
+   "id": "selector-parse-missing-arg",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "@media x"
+   },
+   "expect": "reject",
+   "id": "selector-parse-refused-at-rule",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div<!--x-->"
+   },
+   "expect": "reject",
+   "id": "selector-parse-refused-markup",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "*:has(.ad)"
+   },
+   "expect": "reject",
+   "id": "selector-parse-refused-universal",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "a[href^=url(x)]"
+   },
+   "expect": "reject",
+   "id": "selector-parse-refused-url",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div > .ad"
+   },
+   "expect": "ok",
+   "id": "selector-parse-simple",
+   "method": "selector-parse"
+  }
+ ],
+ "pair": "renderer/cosmetic",
+ "protocol": "../xr-core/renderer/cosmetic/host_protocol.md",
+ "provenance": "P12-T1: derived pair. Cases span all 8 documented methods of renderer/cosmetic/host/cosmetic_host.cc, including all 14 degrade conditions by name so the degrade table cannot lose a row without a parity case going missing. expect encodes the EXIT CLASS: ok = exit 0 typed result, reject = exit 0 typed kRejected, error = exit 1 typed error. Byte-parity against fakes/cosmetic.py is enforced by tools/cosmetic_vectors_check.py over the golden vectors; this corpus enforces that every method HAS a parity case at all (the P9-T0-a derivation law).",
+ "schema_version": 1
+}
