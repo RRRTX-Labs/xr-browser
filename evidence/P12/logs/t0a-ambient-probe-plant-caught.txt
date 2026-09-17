@@ -1,0 +1,20 @@
+# PLANT TEST: does date_invariance_check actually CATCH a date-dependent lane,
+# or is its ambient probe decoration?
+
+# The plant reverts release_notes.py's citation_for() to the pre-T0-a shape
+# (date from date.today() instead of the snapshot's fetched header) — the exact
+# bug T0-a exists to close. Exit codes are captured with PIPESTATUS so the
+# transcript cannot be fooled by a trailing filter command.
+
+  plant applied to tools/release_notes.py:citation_for()
+60:    fetched = __import__("datetime").date.today().isoformat()  # PLANTED: ambient clock
+
+# --- the REAL check against the PLANTED copy: must be non-zero ---
+exit=1
+FAIL: date_invariance_check — 2 problem(s):
+  ambient:release-notes-bytes: verdict changed when the AMBIENT clock moved to 2019-03-04 with --as-of pinned at 2026-09-14 — this tool reads the wall clock: {'render_rc': 0, 'bytes_sha256': '1e9be1e19b5b803c9b486d4b90ff6a40a088103ebdbef796b5ca8b45c6b74c0e', 'check_rc': 1, 'check_verdict': 'FAIL'} != {'render_rc': 0, 'bytes_sha256': 'a46d00f5834d94da4debaf9d5c55817eb61c8bec0d3ac5504e868fd63246aa95', 'check_rc': 1, 'check_verdict': 'FAIL'}
+  ambient:release-notes-bytes: verdict changed when the AMBIENT clock moved to 2031-11-23 with --as-of pinned at 2026-09-14 — this tool reads the wall clock: {'render_rc': 0, 'bytes_sha256': 'ee3366f2f18767d87911ba949a0831046b12ec58c1585fdeab62e71b060dbef4', 'check_rc': 1, 'check_verdict': 'FAIL'} != {'render_rc': 0, 'bytes_sha256': 'a46d00f5834d94da4debaf9d5c55817eb61c8bec0d3ac5504e868fd63246aa95', 'check_rc': 1, 'check_verdict': 'FAIL'}
+
+# --- the same check against the unmodified tree: must be zero ---
+exit=0
+PASS: date_invariance_check (3 invariant lane(s) identical across 2 dates [2026-01-01 .. 2038-01-18]; 1 freshness lane(s) still bite across their expiry boundary; 12 ambient-clock probe(s) via libfaketime — the push gate is date-invariant and no freshness law was weakened)

@@ -1,0 +1,149 @@
+{
+  "phase": "P12",
+  "plan": "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
+  "pin": "chromium d04cdb24d67b081f6cf80200ffc5233f44b61109 (152.0.7977.82, UNCHANGED); xr-core advanced 89bd2ed -> 866387aadeb091422dbeb66075804248575bbbe6 (adblock-rust 0.13.3 vendored, shield decision core, xr-lists pipeline, 0200 network seam), DEPS pair-bumped same-day",
+  "plan_sha256": "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b",
+  "repos": {
+    "xr-browser": "7922648aaa40f2013acad79503fcb5d71651d2a3 (201 commits, 201/201 DCO). P11 commit range: e258826 (T1 vendoring) .. 7922648 (docs quartet).",
+    "xr-core": "866387aadeb091422dbeb66075804248575bbbe6 (55 commits, 55/55 DCO). shield/{core,host,tests,engine}, third_party/rust/adblock/0.13.3, patches/network-seams/0200-shield-network-seam, mojom/shield.mojom, fakes/shield.py."
+  },
+  "generated": "2026-09-17",
+  "toolchain_capture": {
+    "sandbox": "g++ 14.2, make, python 3.13, node 20.20, git 2.47, gpg; ABSENT gn/ninja/clang/cargo/rustc/go/minisign/shellcheck/actionlint; no Chromium checkout, no browser, no renderer",
+    "hosted": "cargo/rustc present (proven by core-hardening run 34905296809 jobs shield-vendor 104180441587 and server-conformance 104180441650)"
+  },
+  "source_labels": [
+    "local-run",
+    "fixture",
+    "ci-run",
+    "UNVERIFIED"
+  ],
+  "verdict_vocabulary": [
+    "VERIFIED",
+    "HUMAN-GATED",
+    "SIMULATED",
+    "BLOCKED",
+    "PARTIAL",
+    "NOT-BY-DESIGN"
+  ],
+  "schema_note": "P12 bundle for the T0 debt close-out only (T0-a..T0-d), committed before any feature work per the P12 brief. T1-T8 rows are appended by the commits that land them; no row here cites a result that the command in its evidence transcript did not produce.",
+  "retro_bundle": false,
+  "human_gates": {
+    "path": "evidence/P12/human-gates.md",
+    "note": "authored 2026-09-17 by the P12 agent; 11 rows, each naming an act this sandbox cannot perform"
+  },
+  "dod_rows": [
+    {
+      "id": "P12-DOD-T0-a-1",
+      "dod": "P12-T0-a date invariance: release_notes.py --fixture replays the shipped train-152 bytes; --as-of is injectable for every date-dependent lane",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "evidence/P12/logs/t0a-release-notes-fixture.txt",
+        "evidence/P12/logs/t0a-as-of-2038.txt",
+        "tools/fixtures/release-notes-train-152.json",
+        "logs/t0a-release-notes-fixture.txt"
+      ],
+      "notes": "PASS: release-notes diff-clean at all three --as-of values, exit 0 each time. The rendered bytes match the shipped release/notes/train-152.md (sha256 ee2c50ab8a02c61bbd6be8b4872d9c9ba2d7ca736725d47495680e6) regardless of --as-of, because the citation date is the SNAPSHOT's own `fetched` header (2026-09-14), not date.today(). || The BEFORE state is in t0a-gate-red-before.txt: a clean clone at 7922648aaa40 gives 119 PASS / 1 FAIL, the failure being exactly this lane's daily red. Note what is NOT claimed: the fixture is an OFFLINE snapshot of the chromiumdash response, so this lane proves date-invariance and diff-cleanliness against pinned data. It does not prove the snapshot still matches upstream — that is the separate scheduled snapshot-freshness lane, and conflating the two is how the daily red was originally rationalized as 'by design' twice (3711fc2, f3d9773)."
+    },
+    {
+      "id": "P12-DOD-T0-a-2",
+      "dod": "P12-T0-a date invariance: the gate holds under two displaced dates",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "evidence/P12/logs/t0a-date-invariance.txt",
+        "logs/t0a-date-invariance.txt"
+      ],
+      "notes": "date_invariance_check: PASS — all 4 lane(s) verdict-identical at 2026-09-14, 2038-01-18, 2031-11-23. Lanes: release-notes-bytes, visual-diff-waived, visual-diff-expired, exception-ledger. || A first draft of this check reddened on itself: the exception-ledger lane legitimately fails at 2038-01-18 because its waiver EXPIRES 2027-06-01. That is correct expiry behaviour, so the check was restructured rather than weakened — invariant lanes are date-independent, freshness lanes are pinned to a frozen GATE_PINNED_AS_OF and reported as STALE-* outside it. Weakening the expiry law to make the gate green was explicitly rejected."
+    },
+    {
+      "id": "P12-DOD-T0-a-3",
+      "dod": "P12-T0-a wall-clock lint: no tool in the gate closure may read ambient date/time",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "evidence/P12/logs/t0a-wall-clock-lint.txt",
+        "tools/wall_clock_allowlist.yaml",
+        "logs/t0a-wall-clock-lint.txt"
+      ],
+      "notes": "Self-test 6/6 ok (including the plant detection and the default= exclusion). Real run: PASS (118 files; 0 offenders; 9 allowlisted; 0 dead rows). || The closure is derived from tools/run_checks.sh plus tools/checks/*.sh, transitively through quoted python3/bash invocations and local imports, so a newly added lane is scanned without anyone editing the linter. A first draft also banned time.monotonic/perf_counter/time.time, which flagged 19 legitimate duration timers; those cannot move a date verdict, so they were removed from the banned set rather than allowlisted one by one."
+    },
+    {
+      "id": "P12-DOD-T0-a-4",
+      "dod": "P12-T0-a ambient-clock probe: a planted date-dependent PASS is caught",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "evidence/P12/logs/t0a-ambient-probe.txt",
+        "evidence/P12/logs/t0a-ambient-probe-plant-caught.txt",
+        "logs/t0a-ambient-probe.txt",
+        "logs/t0a-ambient-probe-plant-caught.txt"
+      ],
+      "notes": "Probe: 12 PASS, 0 FAIL, 0 SKIP on the real tree; the plant is caught (release-notes-fixture@+15y != @pinned -> drift). || This is the self-catch the brief demanded: the gate must prove it notices a date-dependent PASS, not merely assert that none exists. libfaketime genuinely displaced both `date -u +%Y` and Python's datetime.date.today() in children (verified before use). A dead probe is not reported as green: 0 probes exits non-zero."
+    },
+    {
+      "id": "P12-DOD-T0-a-5",
+      "dod": "P12-T0-a freshness: staleness moves to a scheduled lane as STALE-*, not a daily red",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "evidence/P12/logs/t0a-freshness-scheduled.txt",
+        "logs/t0a-freshness-scheduled.txt"
+      ],
+      "notes": "The lane reports STALE-FAIL for release/notes/train-152.md against 2026-09-14 and exits non-zero; it is registered as a scheduled lane and runs in the new snapshot-freshness CI job rather than in the daily core-hardening lane. || The daily gate no longer reddens on a stale artifact; the scheduled lane still does, so the signal is not lost — it is moved to where a human acts on it."
+    },
+    {
+      "id": "P12-DOD-T0-b-6",
+      "dod": "P12-T0-b evidence presence: a logs/-only phase is a hard FAIL",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "evidence/P12/logs/t0b-presence-detects-p11.txt",
+        "tools/evidence_presence_check.py",
+        "logs/t0b-presence-detects-p11.txt"
+      ],
+      "notes": "Before this commit the check named P11 as logs/-only and FAILed (1 violation) while P11's CI had concluded success — the hole, caught by the gate. After this bundle: 11 phases all bundled, 0 violations. || Phase discovery deliberately does NOT use a `^P<n>:` anchor: real subjects are `P10:`, `P6-T5:`, `p9:`, `evidence(P5):`, `P11-T7:`. An anchored scan found 3 of 11 phases, which is the same invisibility class it was written to prevent."
+    },
+    {
+      "id": "P12-DOD-T0-b-7",
+      "dod": "P12-T0-b P11 evidence bundle retro-created",
+      "status": "VERIFIED",
+      "source": "ci-run",
+      "evidence": [
+        "evidence/P11/evidence.json",
+        "evidence/P11/human-gates.md",
+        "evidence/P12/logs/t0b-evidence-strict.txt"
+      ],
+      "notes": "9 bundle(s), 0 failures. P11 carries 15 dod rows and 11 human-gate rows, every row citing a transcript that was produced by running the command it cites. || CI citations use the run/job ids resolved from api.github.com on 2026-09-17 for head 7922648aaa40 (governance run 34905296564 job 104180441172; core-hardening run 34905296809, 12 jobs all success; compat-beta-parity run 35196697265 job 105121493093; nightly-rebase-build run 35191553230 job 105105030678). All 12 core-hardening jobs concluded success, which is also the proof that cargo/rustc ARE present on GitHub Actions runners.",
+      "ci_run": "34905296564",
+      "ci_job": "104180441172"
+    },
+    {
+      "id": "P12-DOD-T0-c-8",
+      "dod": "P12-T0-c verdict steps: every `| tee` verdict asserts the whole result",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "evidence/P12/logs/t0c-tee-assert-lint.txt",
+        "logs/t0c-tee-assert-lint.txt"
+      ],
+      "notes": "11 pipes across 5 workflows inspected, 0 violations. --require-pipes 11 makes the lint fail if a future refactor silently drops a verdict pipe from inspection. || The first draft scanned raw lines and inspected only 3 of the real pipes, because a backslash continuation puts the verdict command and its `| tee` on different physical lines. The count is now cross-checked against `grep -c '| tee'`, and any audit tool with the same blind spot is a known failure mode: an under-counting audit is the same invisibility class as an over-silent one."
+    },
+    {
+      "id": "P12-DOD-T0-d-9",
+      "dod": "P12-T0-d scratch hygiene: build outputs excluded, work/scratch preferred, free space pre-checked",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "evidence/P12/logs/t0d-scratch-negatives.txt",
+        "logs/t0d-scratch-negatives.txt"
+      ],
+      "notes": "scratch_tar_tree excludes build outputs and tests/build; license_audit reddens on a marker in a real source path and skips the same marker under work/; scratch_dir refuses a repo-internal scratch root (no recursion, no self-referential tar); free-space pre-check refuses a scratch on a filesystem below the threshold. || The fixture copies in tools/negatives/p11_t{4,5,6}.sh included xr-core/*/tests/build/** artifacts and filled the ~993 MiB /tmp tmpfs — the concrete failure that motivated T0-d. The copyleft marker text lives in tools/tests/fixtures/p12_copyleft_markers.json rather than in the case file, following the p11_vendor_red_licenses.json precedent, because license_audit fails copyleft tokens in code/shell files unconditionally."
+    }
+  ],
+  "not_done_by_design": [
+    "T1-T8 feature rows: this bundle covers the T0 debts only, which the brief requires be complete before any feature work. The four debts are committed as separate commits (T0-a, T0-b, T0-c, T0-d, plus two follow-ups), and the feature rows are added by the commits that land them.",
+    "No Chromium build or browser-level measurement is claimed anywhere in this phase's evidence so far. `gn` and `ninja` are absent from this environment, so any claim of a rendered result would be a fabricated browser measurement, which the brief's stop conditions forbid. The renderer-seam evidence is static (patch bytes, patchinfo, seam roundtrip, core-level tests) plus the HG-31/HG-32 human gates."
+  ]
+}

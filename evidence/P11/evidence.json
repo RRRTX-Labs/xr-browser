@@ -8,7 +8,7 @@
   "retro_bundle": {
     "authored_by": "XR P12 Agent <p12-agent@users.noreply.github.com>",
     "requested_by": "orchestrator brief, P12-T0-b",
-    "reason": "evidence_check.py validated only bundles that exist, so a logs/-only phase was invisible by design; P12-T0-b closes that hole with tools/evidence_presence_check.py and this bundle discharges P11's instance of it.",
+    "reason": "evidence_check.py validated only bundles that exist, so a logs/-only phase was never examined at all (unexamined by design, not exempt); P12-T0-b closes that hole with tools/evidence_presence_check.py and this bundle discharges P11's instance of it.",
     "p11_logs_modified": false,
     "reconstruction_basis": "committed artifacts + transcripts under evidence/P11/logs/ + git history at the pins above; no P11 log was edited or rewritten"
   },

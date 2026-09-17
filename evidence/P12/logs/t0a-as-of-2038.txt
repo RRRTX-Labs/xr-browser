@@ -1,0 +1,10 @@
+# --as-of injection: the fixture must survive a displaced clock
+== as-of 2026-09-14 ==
+exit=0
+b3f4913a3c0f85951880eb9d21b19389f8695b426c9a88c43530d81ea977d195  /tmp/rn-2026-09-14.md
+== as-of 2038-01-18 ==
+exit=0
+0c2c45e2551c4e7e0d2ee3f8ea754f94389458348c5ad3ef9444a261bf007ee6  /tmp/rn-2038-01-18.md
+== as-of 2031-11-23 ==
+exit=0
+6b3298f9c14276d0d5a798bb3f03cdfaf76968e94bc30e8f411a28d629b6df3b  /tmp/rn-2031-11-23.md

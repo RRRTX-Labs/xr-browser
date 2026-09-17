@@ -1,0 +1,31 @@
+# python3 tools/evidence_check.py --strict   (the gate's own invocation,
+#  tools/run_checks.sh:68)
+exit=0
+PASS: evidence/P9/evidence.json (strict)
+PASS: evidence_check (10 bundle(s), 0 failure(s); presence law: every phase in git history carries a bundle)
+
+# ---
+# CORRECTION OF A WRONG CLAIM I MADE WHILE WRITING THIS BUNDLE.
+#
+# A first run here reported 35 failures, all of the form 'cites missing
+# artifact ../xr-core/...' or 'build/qa/drill/...'. I first attributed them to
+# the sibling repo being absent. That was wrong: ../xr-core WAS present. The
+# real cause was that 221 tracked files had been deleted from THIS working
+# tree — the whole build/ directory plus scripts/build — because the workspace
+# snapshot excludes directory names like 'build', and the restore had not been
+# done. xr-core had the same damage (6 files: common/tests/build/*.o and
+# third_party/.../build/probe.rs).
+#
+# Measured, not assumed:
+    git ls-files --deleted   ->  221 (xr-browser), 6 (xr-core)   [before]
+    git checkout -- build/ scripts/build  ...                     [restore]
+    git ls-files --deleted   ->  0 (both)                        [after]
+    evidence_check.py --strict -> 10 bundles, 0 failures, exit 0  [after]
+#
+# This matters beyond this row: every gate lane that reads build/ had been
+# running against a damaged tree, so the earlier gate transcript in this
+# directory is not a valid baseline and was re-run after the restore.
+
+# --- verification that both trees are complete ---
+  xr-browser missing tracked files: 0
+  xr-core    missing tracked files: 0

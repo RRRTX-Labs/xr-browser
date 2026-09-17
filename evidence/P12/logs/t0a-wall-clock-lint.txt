@@ -1,0 +1,7 @@
+# python3 tools/wall_clock_lint.py --self-test
+PASS: wall_clock_lint self-test (6 planted/permitted shapes discriminated)
+exit=0
+
+# python3 tools/wall_clock_lint.py
+PASS: wall_clock_lint (119 gate-closure file(s) scanned; 0 verdict-affecting wall-clock reads outside an argument default; 9 non-verdict timestamp(s) allowlisted as data, 0 dead rows)
+exit=0

@@ -1,0 +1,19 @@
+# the gate form (tools/checks/p11_gates.sh:p12_release_notes_gate)
+# python3 tools/release_notes.py --train 152 --out release/notes/train-152.md --check --fixture tools/fixtures/release-notes-train-152.json --as-of 2026-09-14
+PASS: release-notes diff-clean (train-152.md; offline fixture, fetched 2026-09-14, as-of 2026-09-14 — date-invariant)
+exit=0
+
+# the shipped artifact it diffs against:
+ee2c50ab8a02c61bbd6be8b4872d9c9ba2d7ca736725d47495bd7d27495680e6  release/notes/train-152.md
+
+# the same lane at three far-apart --as-of values: identical verdicts,
+# because the citation date comes from the SNAPSHOT's fetched header, not today()
+== --as-of 2026-09-14 ==
+PASS: release-notes diff-clean (train-152.md; offline fixture, fetched 2026-09-14, as-of 2026-09-14 — date-invariant)
+exit=0
+== --as-of 2031-11-23 ==
+PASS: release-notes diff-clean (train-152.md; offline fixture, fetched 2026-09-14, as-of 2031-11-23 — date-invariant)
+exit=0
+== --as-of 2038-01-18 ==
+PASS: release-notes diff-clean (train-152.md; offline fixture, fetched 2026-09-14, as-of 2038-01-18 — date-invariant)
+exit=0

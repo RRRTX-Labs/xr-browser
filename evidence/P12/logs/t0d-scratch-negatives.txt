@@ -1,0 +1,33 @@
+# P12-T0-d scratch hygiene negatives — the real registered case names,
+# taken from tools/negatives/p12_t0.sh (an earlier draft of this transcript
+# named two cases that do not exist; the runner correctly refused them with
+# 'has no case_...() — never ran', which is the zero-case law working).
+
+30:neg_register wall_clock_offender
+48:neg_register wall_clock_default_ok
+70:neg_register wall_clock_dead_row
+79:neg_register invariance_no_straddle
+88:neg_register invariance_one_date
+138:neg_register invariance_drift
+160:neg_register evidence_logs_only
+168:neg_register evidence_missing_dir
+181:neg_register evidence_zero_rows
+193:neg_register evidence_empty_humangates
+205:neg_register evidence_presence_positive_control
+223:neg_register tee_unguarded
+239:neg_register tee_zero_case
+259:neg_register tee_multiline_counted
+278:neg_register scratch_preflight_fails_fast
+294:neg_register scratch_preflight_skip_shape
+335:neg_register scratch_tar_excludes_build_outputs
+345:neg_register scratch_preflight_positive_control
+366:neg_register scratch_refuses_repo_into_itself
+402:neg_register license_audit_skips_scratch
+
+ok: scratch_require fails fast with the free space it needs
+ok: scratch short-fall SKIPs visibly (77) rather than failing silently
+ok: scratch excludes keep .git/build/__pycache__ out and source in
+ok: scratch_require positive control (a satisfiable demand passes)
+ok: scratch_tar_tree refuses a dest inside the source tree (no recursive nesting)
+ok: license_audit skips the work/ scratch root (no hits on scratch copies)
+N=20

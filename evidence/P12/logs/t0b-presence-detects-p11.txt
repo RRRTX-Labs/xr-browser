@@ -1,0 +1,15 @@
+# python3 tools/evidence_presence_check.py --also-repo ../xr-core (P12 now bundled)
+ok: P1 — 12 dod row(s), human-gates.md present (legacy tolerant path, HG-25)
+ok: P2 — 3 dod row(s), human-gates.md present (legacy tolerant path, HG-25)
+ok: P3 — 12 dod row(s), human-gates.md present
+ok: P4 — 16 dod row(s), human-gates.md present
+ok: P5 — 12 dod row(s), human-gates.md present
+ok: P6 — 15 dod row(s), human-gates.md present
+ok: P7 — 13 dod row(s), human-gates.md present
+ok: P8 — 9 dod row(s), human-gates.md present
+ok: P9 — 14 dod row(s), human-gates.md present
+ok: P10 — 17 dod row(s), human-gates.md present
+ok: P11 — 15 dod row(s), human-gates.md present
+FAIL: P12: evidence bundle incomplete — missing ['human-gates.md']; a logs/ directory without a bundle is not evidence (P11's shape, P12-T0-b)
+FAIL: evidence_presence_check (1 violation(s))
+exit=1

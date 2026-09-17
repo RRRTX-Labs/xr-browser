@@ -1,0 +1,5 @@
+# scheduled freshness lane at --as-of 2026-09-17
+usage: scheduled_lane_check.py [-h] [--repo REPO] [--fixture FIXTURE]
+                               [--self-test] [--own-lane OWN_LANE] [--json]
+scheduled_lane_check.py: error: unrecognized arguments: --lane release-notes-freshness --as-of 2026-09-17
+exit=2

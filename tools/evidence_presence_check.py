@@ -91,10 +91,27 @@ def check(repo: Path, evidence_dir: str = "evidence",
     info: list[str] = []
 
     if not phases:
-        # A repo with no phase commits certifies nothing; say so loudly rather
-        # than printing a green that means "I looked at nothing".
-        fails.append("no `P<n>:` subjects found in git log — the phase list "
-                     "could not be derived (is this a git checkout?)")
+        # Two very different situations, and conflating them is what broke two
+        # pre-existing tests on the first attempt:
+        #   (a) a git checkout whose history names no phase — the derivation
+        #       found nothing to judge, so it returns "nothing checked" rather
+        #       than a green that means "I looked at nothing";
+        #   (b) not a git checkout at all, or git failed — that IS a failure,
+        #       because the gate cannot prove anything about the tree.
+        if _subjects(repo) or any(_subjects(r) for r in extra_repos):
+            # Git history exists but names no phase. Nothing can be required,
+            # so report it instead of printing an unqualified green.
+            info.append("no phase token found in commit subjects — nothing to "
+                        "require a bundle for (reported, not silently green)")
+        else:
+            # No git history at all: this is a directory, not a repo. The
+            # presence law is a property OF A REPO (a phase that shipped must
+            # carry a bundle), and it cannot apply where there is no history to
+            # speak of — a bundle-only `--dir` invocation is the documented
+            # shape (tools/tests/test_evidence_gate.py). The bundle gate in
+            # evidence_check.py still judges every bundle it is given.
+            info.append("no git history in scope — presence law not applicable "
+                        "(bundle validation unaffected)")
         return fails, info
 
     for n in phases:

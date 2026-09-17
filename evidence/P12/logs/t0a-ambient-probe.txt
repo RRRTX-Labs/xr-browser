@@ -1,0 +1,26 @@
+# Ambient-clock probe. The probe is part of the DEFAULT check (no flag).
+#
+# $ python3 tools/date_invariance_check.py
+PASS: date_invariance_check (3 invariant lane(s) identical across 2 dates [2026-01-01 .. 2038-01-18]; 1 freshness lane(s) still bite across their expiry boundary; 12 ambient-clock probe(s) via libfaketime — the push gate is date-invariant and no freshness law was weakened)
+exit=0
+
+# ---
+# What the 12 probes are: the check re-runs each date-aware lane as a CHILD
+# process under LD_PRELOAD=libfaketime with --as-of PINNED at the gate's own
+# value, then requires the verdict to match the pinned-clock run. That is the
+# half of the property that probing --as-of alone cannot see: a lane that
+# honours --as-of but ALSO reads date.today() would pass an --as-of sweep and
+# still drift daily.
+
+# libfaketime path actually used (verified to displace both `date -u +%Y` and
+# Python's datetime.date.today() in children before it was relied on):
+  /usr/local/lib/python3.13/site-packages/libfaketime/vendor/libfaketime/src/libfaketime.so.1
+
+# NOTE on a run I did NOT claim: invoking the check with the PARENT already
+# under LD_PRELOAD (FAKETIME=2031-11-23) hit the 300 s timeout, because the
+# check spawns its own preloaded children and the nesting is expensive. The
+# probe's evidence is therefore the child-spawned runs above, which is also
+# what run_checks.sh exercises.
+
+# Dead-probe law: 0 probes is not reported as green (the check exits non-zero).
+309:                          "ambient_probe": ambient or "unavailable"},
