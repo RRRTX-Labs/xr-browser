@@ -44,7 +44,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "040e7b0b314bc4b22686c9f19e06fd0405f7a397"     # xr-core P12-T1/T3/T5: renderer/cosmetic core complete (7 modules: selector, pseudo, scope_key, style, keyset, degrade, blob) + abpf validator + cosmetic_host (8 methods) + host_protocol.md + fakes/cosmetic.py as an 8-method parity reference. 1419 C++ checks, byte-parity verified across both backends on all 8 methods.
+xr_core_rev: "895020c3045020a08d3a0f16e78e14a8e3ae5879"     # xr-core P12-T1/T3/T5: renderer/cosmetic complete — 7 core modules, abpf validator, cosmetic_host (8 methods) + host_protocol.md, fakes/cosmetic.py as an 8-method parity reference, 200 golden vectors byte-identical across both backends. 1433 C++ checks.
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"
