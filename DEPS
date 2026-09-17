@@ -44,7 +44,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "b215c9adc334d84fcf86593fb16d725a8ec0d3f6"     # xr-core P12-T1 cosmetic core: renderer/cosmetic/{core,tests} — selector parser (closed 25-value refusal vocabulary, pseudo allowlist wired in), pseudo table (8 admitted / 8 refused, every entry cited to the sealed vendored tree), scope-key derivation (embedder refused as an input). 897 checks, mutation 179/179
+xr_core_rev: "040e7b0b314bc4b22686c9f19e06fd0405f7a397"     # xr-core P12-T1/T3/T5: renderer/cosmetic core complete (7 modules: selector, pseudo, scope_key, style, keyset, degrade, blob) + abpf validator + cosmetic_host (8 methods) + host_protocol.md + fakes/cosmetic.py as an 8-method parity reference. 1419 C++ checks, byte-parity verified across both backends on all 8 methods.
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"
