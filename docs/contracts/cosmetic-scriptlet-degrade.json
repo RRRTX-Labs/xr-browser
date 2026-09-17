@@ -1,0 +1,3865 @@
+{
+ "cases": [
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-abort-on-property-read__softwall-body-lock",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-body-lock",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-abort-on-property-read__softwall-body-lock__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-body-lock",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-abort-on-property-read__softwall-overlay",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-overlay",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-abort-on-property-read__softwall-overlay__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-overlay",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-abort-on-property-read__inline-ad-slot",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "inline-ad-slot",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-abort-on-property-read__inline-ad-slot__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "inline-ad-slot",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-abort-on-property-read__sticky-header-ad",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "sticky-header-ad",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-abort-on-property-read__sticky-header-ad__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "sticky-header-ad",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-abort-on-property-read__interstitial",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "interstitial",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-abort-on-property-read__interstitial__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "interstitial",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-abort-on-property-read__video-preroll",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "video-preroll",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-abort-on-property-read__video-preroll__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "video-preroll",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-abort-on-property-read__newsletter-modal",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "newsletter-modal",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-abort-on-property-read__newsletter-modal__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "newsletter-modal",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-abort-on-property-read__scroll-hijack",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "scroll-hijack",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-abort-on-property-read__scroll-hijack__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "scroll-hijack",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-abort-on-property-read__cookie-wall",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "cookie-wall",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-abort-on-property-read__cookie-wall__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "cookie-wall",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-abort-on-property-read__app-install-prompt",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "app-install-prompt",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-abort-on-property-read__app-install-prompt__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "app-install-prompt",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-abort-on-property-read__article-truncation",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "article-truncation",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-abort-on-property-read__article-truncation__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "article-truncation",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-abort-on-property-read__autoplay-banner",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "autoplay-banner",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-abort-on-property-read__autoplay-banner__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "autoplay-banner",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sr-abort-bad-arity",
+   "note": "Refusal path: wrong arity is refused and the page is untouched. A scriptlet that half-applied on a malformed instruction would leave the page in a state neither the list nor the user asked for.",
+   "page": "inline-ad-slot",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-abort-on-property-write__softwall-body-lock",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-body-lock",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-abort-on-property-write__softwall-body-lock__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-body-lock",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-abort-on-property-write__softwall-overlay",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-overlay",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-abort-on-property-write__softwall-overlay__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-overlay",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-abort-on-property-write__inline-ad-slot",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "inline-ad-slot",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-abort-on-property-write__inline-ad-slot__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "inline-ad-slot",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-abort-on-property-write__sticky-header-ad",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "sticky-header-ad",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-abort-on-property-write__sticky-header-ad__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "sticky-header-ad",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-abort-on-property-write__interstitial",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "interstitial",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-abort-on-property-write__interstitial__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "interstitial",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-abort-on-property-write__video-preroll",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "video-preroll",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-abort-on-property-write__video-preroll__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "video-preroll",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-abort-on-property-write__newsletter-modal",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "newsletter-modal",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-abort-on-property-write__newsletter-modal__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "newsletter-modal",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-abort-on-property-write__scroll-hijack",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "scroll-hijack",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-abort-on-property-write__scroll-hijack__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "scroll-hijack",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-abort-on-property-write__cookie-wall",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "cookie-wall",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-abort-on-property-write__cookie-wall__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "cookie-wall",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-abort-on-property-write__app-install-prompt",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "app-install-prompt",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-abort-on-property-write__app-install-prompt__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "app-install-prompt",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-abort-on-property-write__article-truncation",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "article-truncation",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-abort-on-property-write__article-truncation__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "article-truncation",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-abort-on-property-write__autoplay-banner",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "autoplay-banner",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-abort-on-property-write__autoplay-banner__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "autoplay-banner",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sr-write-bad-arity",
+   "note": "Refusal path: wrong arity is refused and the page is untouched. A scriptlet that half-applied on a malformed instruction would leave the page in a state neither the list nor the user asked for.",
+   "page": "inline-ad-slot",
+   "scriptlet": "abort-on-property-write",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-set-constant__softwall-body-lock",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-body-lock",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-set-constant__softwall-body-lock__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-body-lock",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-set-constant__softwall-overlay",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-overlay",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-set-constant__softwall-overlay__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-overlay",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-set-constant__inline-ad-slot",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "inline-ad-slot",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-set-constant__inline-ad-slot__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "inline-ad-slot",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-set-constant__sticky-header-ad",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "sticky-header-ad",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-set-constant__sticky-header-ad__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "sticky-header-ad",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-set-constant__interstitial",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "interstitial",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-set-constant__interstitial__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "interstitial",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-set-constant__video-preroll",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "video-preroll",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-set-constant__video-preroll__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "video-preroll",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-set-constant__newsletter-modal",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "newsletter-modal",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-set-constant__newsletter-modal__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "newsletter-modal",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-set-constant__scroll-hijack",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "scroll-hijack",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-set-constant__scroll-hijack__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "scroll-hijack",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-set-constant__cookie-wall",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "cookie-wall",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-set-constant__cookie-wall__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "cookie-wall",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-set-constant__app-install-prompt",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "app-install-prompt",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-set-constant__app-install-prompt__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "app-install-prompt",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-set-constant__article-truncation",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "article-truncation",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-set-constant__article-truncation__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "article-truncation",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-set-constant__autoplay-banner",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "autoplay-banner",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-set-constant__autoplay-banner__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "autoplay-banner",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sr-set-constant-bad-arity",
+   "note": "Refusal path: wrong arity is refused and the page is untouched. A scriptlet that half-applied on a malformed instruction would leave the page in a state neither the list nor the user asked for.",
+   "page": "inline-ad-slot",
+   "scriptlet": "set-constant",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-remove-attr__softwall-body-lock",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-body-lock",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-remove-attr__softwall-body-lock__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-body-lock",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-remove-attr__softwall-overlay",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-overlay",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-remove-attr__softwall-overlay__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-overlay",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-remove-attr__inline-ad-slot",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "inline-ad-slot",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-remove-attr__inline-ad-slot__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "inline-ad-slot",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-remove-attr__sticky-header-ad",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "sticky-header-ad",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-remove-attr__sticky-header-ad__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "sticky-header-ad",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-remove-attr__interstitial",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "interstitial",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-remove-attr__interstitial__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "interstitial",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-remove-attr__video-preroll",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "video-preroll",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-remove-attr__video-preroll__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "video-preroll",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-remove-attr__newsletter-modal",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "newsletter-modal",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-remove-attr__newsletter-modal__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "newsletter-modal",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-remove-attr__scroll-hijack",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "scroll-hijack",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-remove-attr__scroll-hijack__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "scroll-hijack",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-remove-attr__cookie-wall",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "cookie-wall",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-remove-attr__cookie-wall__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "cookie-wall",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-remove-attr__app-install-prompt",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "app-install-prompt",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-remove-attr__app-install-prompt__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "app-install-prompt",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-remove-attr__article-truncation",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "article-truncation",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-remove-attr__article-truncation__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "article-truncation",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-remove-attr__autoplay-banner",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "autoplay-banner",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-remove-attr__autoplay-banner__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "autoplay-banner",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sr-remove-attr-bad-arity",
+   "note": "Refusal path: wrong arity is refused and the page is untouched. A scriptlet that half-applied on a malformed instruction would leave the page in a state neither the list nor the user asked for.",
+   "page": "inline-ad-slot",
+   "scriptlet": "remove-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-remove-class__softwall-body-lock",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-body-lock",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-remove-class__softwall-body-lock__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-body-lock",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-remove-class__softwall-overlay",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-overlay",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-remove-class__softwall-overlay__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-overlay",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-remove-class__inline-ad-slot",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "inline-ad-slot",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-remove-class__inline-ad-slot__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "inline-ad-slot",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-remove-class__sticky-header-ad",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "sticky-header-ad",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-remove-class__sticky-header-ad__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "sticky-header-ad",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-remove-class__interstitial",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "interstitial",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-remove-class__interstitial__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "interstitial",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-remove-class__video-preroll",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "video-preroll",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-remove-class__video-preroll__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "video-preroll",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-remove-class__newsletter-modal",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "newsletter-modal",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-remove-class__newsletter-modal__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "newsletter-modal",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-remove-class__scroll-hijack",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "scroll-hijack",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-remove-class__scroll-hijack__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "scroll-hijack",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-remove-class__cookie-wall",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "cookie-wall",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-remove-class__cookie-wall__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "cookie-wall",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-remove-class__app-install-prompt",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "app-install-prompt",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-remove-class__app-install-prompt__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "app-install-prompt",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-remove-class__article-truncation",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "article-truncation",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-remove-class__article-truncation__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "article-truncation",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-remove-class__autoplay-banner",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "autoplay-banner",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-remove-class__autoplay-banner__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "autoplay-banner",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sr-remove-class-bad-arity",
+   "note": "Refusal path: wrong arity is refused and the page is untouched. A scriptlet that half-applied on a malformed instruction would leave the page in a state neither the list nor the user asked for.",
+   "page": "inline-ad-slot",
+   "scriptlet": "remove-class",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-set-attr__softwall-body-lock",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-body-lock",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-set-attr__softwall-body-lock__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-body-lock",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-set-attr__softwall-overlay",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-overlay",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-set-attr__softwall-overlay__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-overlay",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-set-attr__inline-ad-slot",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "inline-ad-slot",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-set-attr__inline-ad-slot__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "inline-ad-slot",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-set-attr__sticky-header-ad",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "sticky-header-ad",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-set-attr__sticky-header-ad__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "sticky-header-ad",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-set-attr__interstitial",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "interstitial",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-set-attr__interstitial__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "interstitial",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-set-attr__video-preroll",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "video-preroll",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-set-attr__video-preroll__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "video-preroll",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-set-attr__newsletter-modal",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "newsletter-modal",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-set-attr__newsletter-modal__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "newsletter-modal",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-set-attr__scroll-hijack",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "scroll-hijack",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-set-attr__scroll-hijack__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "scroll-hijack",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-set-attr__cookie-wall",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "cookie-wall",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-set-attr__cookie-wall__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "cookie-wall",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-set-attr__app-install-prompt",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "app-install-prompt",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-set-attr__app-install-prompt__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "app-install-prompt",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-set-attr__article-truncation",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "article-truncation",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-set-attr__article-truncation__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "article-truncation",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-set-attr__autoplay-banner",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "autoplay-banner",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-set-attr__autoplay-banner__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "autoplay-banner",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sr-set-attr-bad-arity",
+   "note": "Refusal path: wrong arity is refused and the page is untouched. A scriptlet that half-applied on a malformed instruction would leave the page in a state neither the list nor the user asked for.",
+   "page": "inline-ad-slot",
+   "scriptlet": "set-attr",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-json-prune__softwall-body-lock",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-body-lock",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-json-prune__softwall-body-lock__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-body-lock",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-json-prune__softwall-overlay",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-overlay",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-json-prune__softwall-overlay__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-overlay",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-json-prune__inline-ad-slot",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "inline-ad-slot",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-json-prune__inline-ad-slot__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "inline-ad-slot",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-json-prune__sticky-header-ad",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "sticky-header-ad",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-json-prune__sticky-header-ad__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "sticky-header-ad",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-json-prune__interstitial",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "interstitial",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-json-prune__interstitial__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "interstitial",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-json-prune__video-preroll",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "video-preroll",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-json-prune__video-preroll__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "video-preroll",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-json-prune__newsletter-modal",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "newsletter-modal",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-json-prune__newsletter-modal__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "newsletter-modal",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-json-prune__scroll-hijack",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "scroll-hijack",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-json-prune__scroll-hijack__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "scroll-hijack",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-json-prune__cookie-wall",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "cookie-wall",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-json-prune__cookie-wall__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "cookie-wall",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-json-prune__app-install-prompt",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "app-install-prompt",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-json-prune__app-install-prompt__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "app-install-prompt",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-json-prune__article-truncation",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "article-truncation",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-json-prune__article-truncation__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "article-truncation",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-json-prune__autoplay-banner",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "autoplay-banner",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-json-prune__autoplay-banner__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "autoplay-banner",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sr-json-prune-bad-arity",
+   "note": "Refusal path: wrong arity is refused and the page is untouched. A scriptlet that half-applied on a malformed instruction would leave the page in a state neither the list nor the user asked for.",
+   "page": "inline-ad-slot",
+   "scriptlet": "json-prune",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-no-setTimeout-if__softwall-body-lock",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-body-lock",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-no-setTimeout-if__softwall-body-lock__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-body-lock",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-no-setTimeout-if__softwall-overlay",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-overlay",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-no-setTimeout-if__softwall-overlay__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-overlay",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-no-setTimeout-if__inline-ad-slot",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "inline-ad-slot",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-no-setTimeout-if__inline-ad-slot__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "inline-ad-slot",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-no-setTimeout-if__sticky-header-ad",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "sticky-header-ad",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-no-setTimeout-if__sticky-header-ad__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "sticky-header-ad",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-no-setTimeout-if__interstitial",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "interstitial",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-no-setTimeout-if__interstitial__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "interstitial",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-no-setTimeout-if__video-preroll",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "video-preroll",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-no-setTimeout-if__video-preroll__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "video-preroll",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-no-setTimeout-if__newsletter-modal",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "newsletter-modal",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-no-setTimeout-if__newsletter-modal__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "newsletter-modal",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-no-setTimeout-if__scroll-hijack",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "scroll-hijack",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-no-setTimeout-if__scroll-hijack__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "scroll-hijack",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-no-setTimeout-if__cookie-wall",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "cookie-wall",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-no-setTimeout-if__cookie-wall__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "cookie-wall",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-no-setTimeout-if__app-install-prompt",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "app-install-prompt",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-no-setTimeout-if__app-install-prompt__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "app-install-prompt",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-no-setTimeout-if__article-truncation",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "article-truncation",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-no-setTimeout-if__article-truncation__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "article-truncation",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-no-setTimeout-if__autoplay-banner",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "autoplay-banner",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-no-setTimeout-if__autoplay-banner__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "autoplay-banner",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sr-no-settimeout-bad-arity",
+   "note": "Refusal path: wrong arity is refused and the page is untouched. A scriptlet that half-applied on a malformed instruction would leave the page in a state neither the list nor the user asked for.",
+   "page": "inline-ad-slot",
+   "scriptlet": "no-setTimeout-if",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-prevent-setTimeout__softwall-body-lock",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-body-lock",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-prevent-setTimeout__softwall-body-lock__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-body-lock",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-prevent-setTimeout__softwall-overlay",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-overlay",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-prevent-setTimeout__softwall-overlay__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-overlay",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-prevent-setTimeout__inline-ad-slot",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "inline-ad-slot",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-prevent-setTimeout__inline-ad-slot__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "inline-ad-slot",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-prevent-setTimeout__sticky-header-ad",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "sticky-header-ad",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-prevent-setTimeout__sticky-header-ad__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "sticky-header-ad",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-prevent-setTimeout__interstitial",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "interstitial",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-prevent-setTimeout__interstitial__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "interstitial",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-prevent-setTimeout__video-preroll",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "video-preroll",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-prevent-setTimeout__video-preroll__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "video-preroll",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-prevent-setTimeout__newsletter-modal",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "newsletter-modal",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-prevent-setTimeout__newsletter-modal__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "newsletter-modal",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-prevent-setTimeout__scroll-hijack",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "scroll-hijack",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-prevent-setTimeout__scroll-hijack__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "scroll-hijack",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-prevent-setTimeout__cookie-wall",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "cookie-wall",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-prevent-setTimeout__cookie-wall__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "cookie-wall",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-prevent-setTimeout__app-install-prompt",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "app-install-prompt",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-prevent-setTimeout__app-install-prompt__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "app-install-prompt",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-prevent-setTimeout__article-truncation",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "article-truncation",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-prevent-setTimeout__article-truncation__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "article-truncation",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-prevent-setTimeout__autoplay-banner",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "autoplay-banner",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-prevent-setTimeout__autoplay-banner__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "autoplay-banner",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sr-prevent-settimeout-bad-arity",
+   "note": "Refusal path: wrong arity is refused and the page is untouched. A scriptlet that half-applied on a malformed instruction would leave the page in a state neither the list nor the user asked for.",
+   "page": "inline-ad-slot",
+   "scriptlet": "prevent-setTimeout",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-noeval__softwall-body-lock",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-body-lock",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-noeval__softwall-body-lock__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-body-lock",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-noeval__softwall-overlay",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-overlay",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-noeval__softwall-overlay__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-overlay",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-noeval__inline-ad-slot",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "inline-ad-slot",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-noeval__inline-ad-slot__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "inline-ad-slot",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-noeval__sticky-header-ad",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "sticky-header-ad",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-noeval__sticky-header-ad__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "sticky-header-ad",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-noeval__interstitial",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "interstitial",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-noeval__interstitial__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "interstitial",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-noeval__video-preroll",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "video-preroll",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-noeval__video-preroll__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "video-preroll",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-noeval__newsletter-modal",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "newsletter-modal",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-noeval__newsletter-modal__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "newsletter-modal",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-noeval__scroll-hijack",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "scroll-hijack",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-noeval__scroll-hijack__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "scroll-hijack",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-noeval__cookie-wall",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "cookie-wall",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-noeval__cookie-wall__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "cookie-wall",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-noeval__app-install-prompt",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "app-install-prompt",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-noeval__app-install-prompt__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "app-install-prompt",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-noeval__article-truncation",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "article-truncation",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-noeval__article-truncation__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "article-truncation",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-noeval__autoplay-banner",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "autoplay-banner",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-noeval__autoplay-banner__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "autoplay-banner",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sr-noeval-bad-arity",
+   "note": "Refusal path: wrong arity is refused and the page is untouched. A scriptlet that half-applied on a malformed instruction would leave the page in a state neither the list nor the user asked for.",
+   "page": "inline-ad-slot",
+   "scriptlet": "noeval",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-nowebrtc__softwall-body-lock",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-body-lock",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-nowebrtc__softwall-body-lock__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-body-lock",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-nowebrtc__softwall-overlay",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-overlay",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-nowebrtc__softwall-overlay__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-overlay",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-nowebrtc__inline-ad-slot",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "inline-ad-slot",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-nowebrtc__inline-ad-slot__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "inline-ad-slot",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-nowebrtc__sticky-header-ad",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "sticky-header-ad",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-nowebrtc__sticky-header-ad__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "sticky-header-ad",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-nowebrtc__interstitial",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "interstitial",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-nowebrtc__interstitial__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "interstitial",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-nowebrtc__video-preroll",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "video-preroll",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-nowebrtc__video-preroll__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "video-preroll",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-nowebrtc__newsletter-modal",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "newsletter-modal",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-nowebrtc__newsletter-modal__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "newsletter-modal",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-nowebrtc__scroll-hijack",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "scroll-hijack",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-nowebrtc__scroll-hijack__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "scroll-hijack",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-nowebrtc__cookie-wall",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "cookie-wall",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-nowebrtc__cookie-wall__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "cookie-wall",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-nowebrtc__app-install-prompt",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "app-install-prompt",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-nowebrtc__app-install-prompt__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "app-install-prompt",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-nowebrtc__article-truncation",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "article-truncation",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-nowebrtc__article-truncation__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "article-truncation",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-nowebrtc__autoplay-banner",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "autoplay-banner",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-nowebrtc__autoplay-banner__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "autoplay-banner",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sr-nowebrtc-bad-arity",
+   "note": "Refusal path: wrong arity is refused and the page is untouched. A scriptlet that half-applied on a malformed instruction would leave the page in a state neither the list nor the user asked for.",
+   "page": "inline-ad-slot",
+   "scriptlet": "nowebrtc",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-cookie-remover__softwall-body-lock",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-body-lock",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-cookie-remover__softwall-body-lock__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-body-lock",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-cookie-remover__softwall-overlay",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "softwall-overlay",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-cookie-remover__softwall-overlay__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "softwall-overlay",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-cookie-remover__inline-ad-slot",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "inline-ad-slot",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-cookie-remover__inline-ad-slot__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "inline-ad-slot",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-cookie-remover__sticky-header-ad",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "sticky-header-ad",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-cookie-remover__sticky-header-ad__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "sticky-header-ad",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-cookie-remover__interstitial",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "interstitial",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-cookie-remover__interstitial__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "interstitial",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-cookie-remover__video-preroll",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "video-preroll",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-cookie-remover__video-preroll__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "video-preroll",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-cookie-remover__newsletter-modal",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "newsletter-modal",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-cookie-remover__newsletter-modal__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "newsletter-modal",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-cookie-remover__scroll-hijack",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "scroll-hijack",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-cookie-remover__scroll-hijack__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "scroll-hijack",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-cookie-remover__cookie-wall",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "cookie-wall",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-cookie-remover__cookie-wall__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "cookie-wall",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-cookie-remover__app-install-prompt",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "app-install-prompt",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-cookie-remover__app-install-prompt__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "app-install-prompt",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-cookie-remover__article-truncation",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "article-truncation",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-cookie-remover__article-truncation__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "article-truncation",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": false,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-cookie-remover__autoplay-banner",
+   "note": "Scriptlet disabled: the page must render the same structure. A scriptlet that is not disable-able individually is not a degrade path, it is a dependency.",
+   "page": "autoplay-banner",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-cookie-remover__autoplay-banner__on",
+   "note": "Scriptlet enabled on the model: it may change classes and attributes, but node count and text length are unchanged. A scriptlet that removes NODES is doing DOM removal, which is the cosmetic `remove` action's job and is labelled page-modifying.",
+   "page": "autoplay-banner",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sr-cookie-bad-arity",
+   "note": "Refusal path: wrong arity is refused and the page is untouched. A scriptlet that half-applied on a malformed instruction would leave the page in a state neither the list nor the user asked for.",
+   "page": "inline-ad-slot",
+   "scriptlet": "cookie-remover",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 41,
+    "text_len": 5200
+   },
+   "id": "sd-failing-scriptlet__softwall-body-lock",
+   "note": "A scriptlet that raises must degrade to inert and leave the page structure intact \u2014 the plan's 'never breaks page render', asserted on the model rather than claimed.",
+   "page": "softwall-body-lock",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 58,
+    "text_len": 4100
+   },
+   "id": "sd-failing-scriptlet__softwall-overlay",
+   "note": "A scriptlet that raises must degrade to inert and leave the page structure intact \u2014 the plan's 'never breaks page render', asserted on the model rather than claimed.",
+   "page": "softwall-overlay",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 33,
+    "text_len": 3000
+   },
+   "id": "sd-failing-scriptlet__inline-ad-slot",
+   "note": "A scriptlet that raises must degrade to inert and leave the page structure intact \u2014 the plan's 'never breaks page render', asserted on the model rather than claimed.",
+   "page": "inline-ad-slot",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 47,
+    "text_len": 3800
+   },
+   "id": "sd-failing-scriptlet__sticky-header-ad",
+   "note": "A scriptlet that raises must degrade to inert and leave the page structure intact \u2014 the plan's 'never breaks page render', asserted on the model rather than claimed.",
+   "page": "sticky-header-ad",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 66,
+    "text_len": 2900
+   },
+   "id": "sd-failing-scriptlet__interstitial",
+   "note": "A scriptlet that raises must degrade to inert and leave the page structure intact \u2014 the plan's 'never breaks page render', asserted on the model rather than claimed.",
+   "page": "interstitial",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 52,
+    "text_len": 2400
+   },
+   "id": "sd-failing-scriptlet__video-preroll",
+   "note": "A scriptlet that raises must degrade to inert and leave the page structure intact \u2014 the plan's 'never breaks page render', asserted on the model rather than claimed.",
+   "page": "video-preroll",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 44,
+    "text_len": 3300
+   },
+   "id": "sd-failing-scriptlet__newsletter-modal",
+   "note": "A scriptlet that raises must degrade to inert and leave the page structure intact \u2014 the plan's 'never breaks page render', asserted on the model rather than claimed.",
+   "page": "newsletter-modal",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 39,
+    "text_len": 4400
+   },
+   "id": "sd-failing-scriptlet__scroll-hijack",
+   "note": "A scriptlet that raises must degrade to inert and leave the page structure intact \u2014 the plan's 'never breaks page render', asserted on the model rather than claimed.",
+   "page": "scroll-hijack",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 55,
+    "text_len": 3600
+   },
+   "id": "sd-failing-scriptlet__cookie-wall",
+   "note": "A scriptlet that raises must degrade to inert and leave the page structure intact \u2014 the plan's 'never breaks page render', asserted on the model rather than claimed.",
+   "page": "cookie-wall",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 37,
+    "text_len": 3100
+   },
+   "id": "sd-failing-scriptlet__app-install-prompt",
+   "note": "A scriptlet that raises must degrade to inert and leave the page structure intact \u2014 the plan's 'never breaks page render', asserted on the model rather than claimed.",
+   "page": "app-install-prompt",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 49,
+    "text_len": 6100
+   },
+   "id": "sd-failing-scriptlet__article-truncation",
+   "note": "A scriptlet that raises must degrade to inert and leave the page structure intact \u2014 the plan's 'never breaks page render', asserted on the model rather than claimed.",
+   "page": "article-truncation",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  },
+  {
+   "enabled": true,
+   "expect_structure": {
+    "nodes": 43,
+    "text_len": 2700
+   },
+   "id": "sd-failing-scriptlet__autoplay-banner",
+   "note": "A scriptlet that raises must degrade to inert and leave the page structure intact \u2014 the plan's 'never breaks page render', asserted on the model rather than claimed.",
+   "page": "autoplay-banner",
+   "scriptlet": "abort-on-property-read",
+   "surface": "model"
+  }
+ ],
+ "note": "P12-T4 scriptlet degrade corpus. EVERY case is a DOM-MODEL fixture, not a browser: `surface: model` is on the document and on every case, and the tooling refuses to run without it, because a model result read as a page result is exactly the claim this phase is graded on. Each scriptlet gets one case per synthetic page with the scriptlet DISABLED (the page must render the same structure), one with it ENABLED (structure still unchanged; only classes and attributes may differ), one refusal-path case at bad arity, and one failing-scriptlet case per page proving it degrades to inert. The structure asserted is node count and text length; classes and attributes are what a scriptlet is allowed to change.",
+ "pages": {
+  "app-install-prompt": {
+   "classes": {
+    "div.prompt": [
+     "install"
+    ]
+   },
+   "nodes": 37,
+   "text_len": 3100
+  },
+  "article-truncation": {
+   "classes": {
+    "div.trunc": [
+     "fade"
+    ]
+   },
+   "nodes": 49,
+   "text_len": 6100
+  },
+  "autoplay-banner": {
+   "classes": {
+    "div.banner": [
+     "autoplay"
+    ]
+   },
+   "nodes": 43,
+   "text_len": 2700
+  },
+  "cookie-wall": {
+   "classes": {
+    "div#cwall": [
+     "wall"
+    ]
+   },
+   "nodes": 55,
+   "text_len": 3600
+  },
+  "inline-ad-slot": {
+   "classes": {
+    "div.ad": [
+     "ad",
+     "slot"
+    ]
+   },
+   "nodes": 33,
+   "text_len": 3000
+  },
+  "interstitial": {
+   "classes": {
+    "div#inter": [
+     "interstitial"
+    ]
+   },
+   "nodes": 66,
+   "text_len": 2900
+  },
+  "newsletter-modal": {
+   "classes": {
+    "div.modal": [
+     "signup"
+    ]
+   },
+   "nodes": 44,
+   "text_len": 3300
+  },
+  "scroll-hijack": {
+   "body_attrs": {
+    "data-lock": "1"
+   },
+   "nodes": 39,
+   "text_len": 4400
+  },
+  "softwall-body-lock": {
+   "body_attrs": {
+    "style": "overflow:hidden"
+   },
+   "classes": {
+    "body": [
+     "locked"
+    ]
+   },
+   "nodes": 41,
+   "text_len": 5200
+  },
+  "softwall-overlay": {
+   "classes": {
+    "div#veil": [
+     "overlay",
+     "on"
+    ]
+   },
+   "nodes": 58,
+   "text_len": 4100
+  },
+  "sticky-header-ad": {
+   "classes": {
+    "header": [
+     "sticky-ad"
+    ]
+   },
+   "nodes": 47,
+   "text_len": 3800
+  },
+  "video-preroll": {
+   "classes": {
+    "div.player": [
+     "ad-playing"
+    ]
+   },
+   "nodes": 52,
+   "text_len": 2400
+  }
+ },
+ "schema": "cosmetic-scriptlet-degrade-1",
+ "schema_version": 1,
+ "surface": "model"
+}
