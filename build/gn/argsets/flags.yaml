@@ -41,6 +41,34 @@ flags:
       states are tested (test_update_host, golden vectors). Kept until the
       P16-exit review of the dev-only channel gate; expiry + retirement
       note live in docs/contracts/registry-post-freeze.md (P10 section).
+  xr_shield_cosmetic_v1:
+    kind: xr
+    default: false
+    note: >-
+      P12 cosmetic filtering (renderer seam) on|off. DEFAULT OFF, and the off
+      state is asserted identical to today's product: no cosmetic call site is
+      active, no MutationObserver is installed, and cosmetic_host's page-states
+      reports observer_installed=false / generic_set_applies=false at
+      keyset_rules=0 (200 golden vectors pin both states byte-for-byte across
+      cosmetic_host and fakes/cosmetic.py). The degrade table's flag-off row is
+      kInert — present and doing nothing — not kNoWork, because those are
+      different observable states. Kept until the P16-exit review of the
+      renderer seam; the seam patch is blink_seams/0300-cosmetic-document-start
+      and the guard state is lint-checked by tools/blink_guard_lint.py.
+  xr_shield_scriptlets:
+    kind: xr
+    default: false
+    note: >-
+      P12 scriptlet execution on|off. DEFAULT OFF and INDEPENDENT of
+      xr_shield_cosmetic_v1: with cosmetic on and scriptlets off, cosmetic
+      filtering applies and no scriptlet runs. The registry in
+      renderer/cosmetic/scriptlets/registry.yaml is validation-only in this
+      phase — no interpreter is wired into the host path — and the ABPF
+      validator REFUSES $ext-… directives rather than accepting and ignoring
+      them, because accepting would imply execution. The debug page prints the
+      registry state as "inert: flag off" verbatim, a string cosmetic_host
+      produces so the page and the host cannot drift on it. Kept until the
+      P16-exit review; both-states tested via the golden vectors.
   # -- Chromium flags (read-at cited in the pinned rev) --
   enable_widevine:
     kind: chromium
