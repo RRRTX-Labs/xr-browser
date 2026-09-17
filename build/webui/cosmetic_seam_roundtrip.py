@@ -7,38 +7,36 @@ build/webui/patch_roundtrip.py (P7): no remembered contents, no fixtures.
   1. Fetches the exact upstream files the patch modifies at the DEPS
      chromium_rev through build/upstream/fetch.py (the only network choke
      point). A fetch failure is BLOCKED-NET, never simulated.
-  2. Assembles a throwaway git checkout of those files at their Chromium paths,
-     commits it ("pre" state, every file hashed).
-  3. Applies the guarded hook transforms + materializes the payload sources from
-     the patch dir, then `git diff`s: that diff IS the manifest patch.
-  4. Round-trip on a pristine copy: `git apply --check` -> apply -> every
+  2. Assembles a throwaway git checkout at their Chromium paths, commits it
+     ("pre" state, every file hashed), applies the guarded hook transforms and
+     materializes the payload from the patch dir, then `git diff`s: that diff IS
+     the manifest patch.
+  3. Round-trip on a pristine copy: `git apply --check` -> apply -> every
      expected marker present -> `git apply -R` -> byte-exact compare of every
      file against the pre-state hashes, and no residual files.
-  5. Negative: perturb a pinned anchor line and assert the patch then FAILS to
-     apply (the patch is bound to the pin, so upstream drift is caught).
-  6. Never-list: refuses any target outside third_party/blink/renderer/core/**
-     (§12.7 puts blink/** on the never-list; see the manifest row's note).
-  7. Budget: total files <= the blink_seams category cap.
+  4. Negative: perturb a pinned anchor and assert the patch then FAILS to apply
+     (the patch is bound to the pin, so upstream drift is caught).
+  5. Never-list: refuses any target outside third_party/blink/renderer/core/**
+     (§12.7 puts blink/** on the never-list; see the manifest row's note), and
+     asserts total files <= the blink_seams category cap.
 
 WHY THIS TOOL EXISTS, BEYOND THE ROUND-TRIP.
 
-Because step 3 re-derives the patch from the PINNED bytes and refuses to
-proceed when an anchor is absent or ambiguous, it is also the only check in the
-tree that a hooked symbol EXISTS at the pin. During P12 the first draft of patch
-0300 hooked `Document::ParseRootElementBeforeChildren` — a function that is not
-in Chromium 152 at all. A hand-written patch reports nothing about that; the
-lint sees a syntactically fine hunk and passes it. This tool reported
-"anchor not found (upstream drift)" and the hook moved to
-`Document::WillInsertBody` (document.cc, real at the pin). Keep it that way:
-never hand-write a hunk header, never hand-copy an anchor out of memory.
+Because step 2 re-derives the patch from the PINNED bytes and refuses to proceed
+when an anchor is absent or ambiguous, it is also the only check in the tree that
+a hooked symbol EXISTS at the pin. During P12 the first draft of patch 0300
+hooked `Document::ParseRootElementBeforeChildren` — not a function in Chromium
+152 at all. A hand-written patch reports nothing about that, and the guard lint
+sees a syntactically fine hunk and passes it. This tool reported "anchor not
+found at the pin" and the hook moved to `Document::WillInsertBody`. Keep it that
+way: never hand-write a hunk header, never hand-copy an anchor out of memory.
 
 WHAT THIS TOOL DOES *NOT* PROVE.
 
-gn and ninja are absent from the environment it runs in, so it does not run gn
-and does not compile the payload. It proves the patch applies and reverts
-byte-exactly at the pin against real upstream files; it does NOT prove the
-payload builds, and no page-level behaviour is claimed anywhere in P12 — the
-page assertions are HG-31 and run in the nightly build.
+gn and ninja are absent here, so it runs no gn and compiles nothing. It proves
+the patch applies and reverts byte-exactly at the pin against real upstream
+files; it does NOT prove the payload builds, and no page-level behaviour is
+claimed in P12 — those assertions are HG-31, in the nightly build.
 
 Exit codes: 0 pass · 1 fail · 2 usage. --json for machines.
 """
@@ -62,17 +60,15 @@ for _p in [Path(_HERE), *_HERE.parents]:
 
 from _common import ToolError, load_deps, repo_root  # noqa: E402
 
-# 77 is this repo's skip code (tools/scheduled_lane_check.py,
-# build/qa/drill/drill_run.sh both use it). A fetch failure is an ENVIRONMENT
-# gap, not a failed check, so it must be visible as a SKIP and never as a pass:
-# the guard lint runs unconditionally in the same gate section, so a SKIP here
-# still leaves a real check of the seam's guard discipline behind it.
+# 77 is this repo's skip code (scheduled_lane_check.py, drill_run.sh). A fetch
+# failure is an ENVIRONMENT gap, not a failed check, so it must be a visible
+# SKIP and never a pass — and the guard lint runs unconditionally in the same
+# gate section, so a SKIP still leaves a real check behind it.
 EXIT_BLOCKED = 77
-
 PATCH_ID = "0300-cosmetic-document-start"
 NEVER_ROOT = "third_party/blink/renderer/core/"
-# The manifest's blink_seams category cap, which is also the brief's "<=25
-# files" budget for the seam. Asserted below against the real file count.
+# The manifest's blink_seams cap and the brief's "<=25 files" budget. Asserted
+# below against the real count.
 HOOK_BUDGET = 25
 PAYLOAD_PREFIX = "third_party/blink/renderer/core/xr/"
 
