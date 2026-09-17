@@ -56,7 +56,14 @@ def discover_method_hosts(xr_core: Path) -> dict[str, list[str]]:
     result is deterministic across runs and machines.
     """
     hosts: dict[str, list[str]] = {}
-    for host_dir in sorted(xr_core.glob("*/host")):
+    # ** not *: a depth-1 glob cannot see renderer/cosmetic/host (P12). A host
+    # that is not discovered is a host whose protocol doc is never checked, and
+    # an undocumented dispatch literal is exactly the drift this gate exists to
+    # catch — so under-discovery here is the same failure it prevents.
+    for host_dir in sorted(xr_core.glob("**/host")):
+        if any(part in host_dir.parts for part in
+               ("third_party", "build", "node_modules", "out")):
+            continue
         if not host_dir.is_dir():
             continue
         literals: set[str] = set()

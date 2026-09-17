@@ -44,7 +44,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "866387aadeb091422dbeb66075804248575bbbe6"     # xr-core P11-T8 parity alignment (D-7/D-8/D-9): the v1 matcher follows the vendored engine; corpus+vectors regenerated under the byte laws
+xr_core_rev: "b215c9adc334d84fcf86593fb16d725a8ec0d3f6"     # xr-core P12-T1 cosmetic core: renderer/cosmetic/{core,tests} — selector parser (closed 25-value refusal vocabulary, pseudo allowlist wired in), pseudo table (8 admitted / 8 refused, every entry cited to the sealed vendored tree), scope-key derivation (embedder refused as an input). 897 checks, mutation 179/179
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

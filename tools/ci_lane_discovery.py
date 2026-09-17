@@ -34,18 +34,33 @@ MANIFEST = "docs/state/ci-lanes.json"
 
 
 def discover(repo: Path, xr_core: Path) -> list[str]:
-    """Lane names: every xr-core/*/tests/Makefile, sorted (deterministic)."""
+    """Lane names: every xr-core tests/Makefile at ANY depth, sorted.
+
+    P12 lesson: this used `glob("*/tests/Makefile")`, which is depth-1 only.
+    `renderer/cosmetic/tests/Makefile` sits two levels down, so the cosmetic
+    lane would have been silently absent from CI — a gate that does not know a
+    suite exists cannot fail it, and "no lane" reads exactly like "lane
+    passed". Discovery is now `**`, and the lane id is the path RELATIVE to
+    xr-core (minus the trailing /tests) so nested lanes are distinguishable
+    and still deterministic: "shield", "renderer/cosmetic".
+    """
     lanes: list[str] = []
-    for mk in sorted(xr_core.glob("*/tests/Makefile")):
-        lane = mk.parent.parent.name
-        lanes.append(lane)
+    for mk in sorted(xr_core.glob("**/tests/Makefile")):
+        rel = mk.parent.parent.relative_to(xr_core).as_posix()
+        # Skip anything under a build output or a vendored tree: those are not
+        # lanes, and ** would otherwise pick up fixtures that happen to ship a
+        # Makefile.
+        parts = set(rel.split("/"))
+        if parts & {"build", "out", "third_party", "node_modules"}:
+            continue
+        lanes.append(rel)
     return lanes
 
 
 def run_lane(xr_core: Path, lane: str, repo: Path,
              timeout: int) -> tuple[bool, str, str]:
     """Run one lane's `make test`; return (passed, output, skip_reason)."""
-    make_dir = xr_core / lane / "tests"
+    make_dir = xr_core / lane / "tests"  # lane may be a nested path (P12)
     env = {"PATH": "/usr/bin:/bin:/usr/local/bin",
            "XR_BROWSER_ROOT": str(repo)}
     import os

@@ -68,7 +68,9 @@ def discover_hosts(xr_core: Path) -> list[dict[str, Any]]:
     """Discovered, not hand-listed: every <name>_host target in xr-core."""
     found: list[dict[str, Any]] = []
     seen: set[str] = set()
-    for mk in sorted(xr_core.glob("*/tests/Makefile")):
+    # ** not *: a depth-1 glob missed renderer/cosmetic/tests/Makefile, which
+    # would have left the cosmetic host out of the kill matrix entirely (P12).
+    for mk in sorted(xr_core.glob("**/tests/Makefile")):
         for line in mk.read_text(encoding="utf-8").splitlines():
             s = line.strip()
             if ":" not in s:

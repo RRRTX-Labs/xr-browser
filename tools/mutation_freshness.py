@@ -52,8 +52,19 @@ def current_pin(repo: Path) -> str:
 
 
 def discover_cores(xr_core: Path) -> list[str]:
-    found = sorted(d.parent.name for d in xr_core.glob("*/core")
-                   if d.is_dir() and (d.parent / "tests").is_dir())
+    # ** not *: `*/core` is depth-1 and silently missed
+    # renderer/cosmetic/core (P12). A core that is not discovered is a core
+    # whose mutation freshness is never checked, which reads exactly like a
+    # core that is fresh.
+    #
+    # The name is the path relative to xr_core (minus /core) rather than the
+    # bare directory name, so two cores in different trees cannot collide on a
+    # shared basename: "shield", "renderer/cosmetic".
+    found = sorted(
+        d.parent.relative_to(xr_core).as_posix()
+        for d in xr_core.glob("**/core")
+        if d.is_dir() and (d.parent / "tests").is_dir()
+        and "third_party" not in d.parts and "build" not in d.parts)
     if not found:
         raise SystemExit(f"FAIL: no cores discovered under {xr_core}")
     return found

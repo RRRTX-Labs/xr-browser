@@ -72,6 +72,15 @@ SUITE_MAPS = {
     # surface) — a core mutation must not survive it; per-TU unit suites
     # map as supersets. The wall-clock differential fuzz stays OUT of the
     # per-mutant maps (house rule: unit budgets + the seeded campaigns).
+    # P12-T1: the cosmetic core. Three TUs, each mapped to the suites that
+    # actually exercise it — a TU mapped to no suite would make every mutant in
+    # it survive by construction, and a TU mapped to a suite that never calls it
+    # would do the same while looking covered.
+    "renderer/cosmetic": {
+        "selector.cc": ["test_selector"],
+        "pseudo.cc": ["test_selector", "test_pseudo"],
+        "scope_key.cc": ["test_scope_key"],
+    },
     "shield": {
         "context.cc": ["test_context", "test_match", "test_golden_vectors"],
         "posture.cc": ["test_posture", "test_match", "test_golden_vectors"],

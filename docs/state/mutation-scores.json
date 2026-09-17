@@ -76,6 +76,16 @@
    ],
    "transcript": "evidence/P11/logs/t1-mutation-update.json",
    "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
+  },
+  "renderer/cosmetic": {
+   "killed": 179,
+   "mutants": 179,
+   "score_pct": 100.0,
+   "seed": null,
+   "survivors": [],
+   "transcript": "evidence/P12/logs/t1-mutation-cosmetic.json",
+   "xr_core_commit": "b215c9adc334d84fcf86593fb16d725a8ec0d3f6",
+   "note": "FIRST SCORE at P12-T1: full matrix (--sample 0, unsampled) over the three cosmetic TUs — selector.cc, pseudo.cc, scope_key.cc. 179 mutants, 179 killed, 0 survivors, so no equivalent-mutant disposition is needed. deny-guard 17/17: every refusal-return site in these files is reached by a test, which is the property that matters for a parser whose whole job is refusing. Elapsed 65 s on 2 CPUs. This is a CORE-level result — the unit suites kill every mutant in these three files. It says nothing about rendered behaviour: no browser measurement exists in this phase and the page-level assertions are HG-31."
   }
  },
  "schema": "xr-mutation-scores",

@@ -83,11 +83,13 @@ _COMMIT_RE = re.compile(r"\b[0-9a-f]{7,40}\b", re.IGNORECASE)
 _OPEN_STATUS_PREFIXES = ("PARTIAL", "BLOCKED", "HUMAN-GATED")
 
 
+# Sibling imports resolve only because Python adds a script's own dir to
+# sys.path under __main__; the mutation canary runs a COPY from a temp tree,
+# where that does not hold. Explicit, as copy_lint.py and compat.py do it.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
 from evidence_ci import CI_RESOLVER, hosted_claim_findings  # noqa: E402
-# P12-T0-b: presence is a SEPARATE law from validity. This module validated
-# the bundles that exist; a phase that shipped logs/ and no bundle was
-# invisible by design (P11's shape). The sibling module derives the phase list
-# from git history so a missing bundle cannot hide.
+# P12-T0-b: presence is a separate law from validity — see the sibling module.
 import evidence_presence_check as epc  # noqa: E402
 import runner_caps  # noqa: E402 - sibling tool module (P11-T0-d)
 
@@ -343,14 +345,10 @@ def main() -> int:
     if not args.no_presence:
         extra = tuple(Path(x.strip()).resolve()
                       for x in args.also_repo.split(",") if x.strip())
-        # The presence law is a property of the CHECKOUT this gate runs in, not
-        # of whatever --repo points at. A negative fixture passes a synthetic
-        # bundle root that happens to sit inside this repo's worktree, so git
-        # resolves THIS repo's history and demands bundles the fixture never
-        # had (P9/P10/P11) — which reddened a positive control that exists to
-        # prove rule d can be satisfied. Anchor to the real repo root, and skip
-        # entirely when --repo is not that root: a fixture is validating one
-        # bundle's shape, not certifying a phase inventory.
+        # Presence is a property of the CHECKOUT this gate runs in, not of
+        # whatever --repo points at: a negative fixture's synthetic bundle root
+        # sits inside this worktree, so git would resolve THIS repo's history
+        # and demand bundles the fixture never had. Anchor to the real root.
         anchor = Path(__file__).resolve().parents[1]
         if repo.resolve() == anchor:
             presence_fails, _ = epc.check(repo, args.dir, extra)
