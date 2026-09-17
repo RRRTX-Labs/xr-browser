@@ -371,14 +371,21 @@ case_license_audit_skips_scratch() {
   local R="$NEG_TMP/la-scratch"; rm -rf "$R"
   mkdir -p "$R/work/scratch/copy" "$R/docs/state"
   printf 'x = 1\n' > "$R/keep.py"
-  printf 'GNU General Public License text AGPL SSPL\n' > "$R/work/scratch/copy/junk.md"
+  # The marker text lives in a FIXTURE, not here: license_audit fails copyleft
+  # tokens in code/shell files unconditionally, so spelling them out in this
+  # case file reddened the very gate that runs it. The
+  # tools/tests/fixtures/p11_vendor_red_licenses.json precedent.
+  local FIX="$REPO_ROOT/tools/tests/fixtures/p12_copyleft_markers.json"
+  "$PY" -c "import json,sys; d=json.load(open(sys.argv[1])); open(sys.argv[2],'w').write(d['scratch_marker']+chr(10))" \
+    "$FIX" "$R/work/scratch/copy/junk.md"
   # the audit needs an allowlist to run at all (it exits 2 without one, which
   # would "pass" this case for the wrong reason)
   printf 'schema_version: 1\nallowlist: []\n' > "$R/docs/state/license-allowlist.yaml"
   cp "$REPO_ROOT/LICENSE" "$R/LICENSE"
   # positive control first: the SAME marker in a real source path must redden,
   # or a green here means the audit is simply not looking
-  printf 'GNU General Public License text AGPL\n' > "$R/real_source.md"
+  "$PY" -c "import json,sys; d=json.load(open(sys.argv[1])); open(sys.argv[2],'w').write(d['real_source_marker']+chr(10))" \
+    "$FIX" "$R/real_source.md"
   if "$PY" "$REPO_ROOT/tools/license_audit.py" --repo "$R" >/dev/null 2>&1; then
     echo "NEGATIVE-FAIL: license_audit did NOT flag a copyleft marker in a real source path (the audit is not looking, so the scratch skip proves nothing)"
     NEG_FAILURES=$((NEG_FAILURES + 1))

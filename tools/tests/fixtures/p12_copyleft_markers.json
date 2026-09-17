@@ -1,0 +1,5 @@
+{
+  "note": "Copyleft marker text for the P12-T0-d license_audit scratch negative (tools/negatives/p12_t0.sh, case_license_audit_skips_scratch). The negative proves two things at once: that a copyleft marker in a REAL source path reddens license_audit (the positive control, without which a green result would only prove the audit is not looking), and that the SAME marker inside the work/ scratch root does not. The banned tokens are spelled out HERE as data, never in a code or shell file, because tools/license_audit.py fails code hits unconditionally — the tools/tests/fixtures/p11_vendor_red_licenses.json precedent for license tokens as audit-relevant data. This path is allowlisted in docs/state/license-allowlist.yaml.",
+  "real_source_marker": "GNU General Public License text AGPL",
+  "scratch_marker": "GNU General Public License text AGPL SSPL"
+}

@@ -1,49 +1,85 @@
 schema_version: 1
-source: "ADR-0001 / DR-04 (no GPL/AGPL code linked; lists & feeds are data)"
+source: ADR-0001 / DR-04 (no GPL/AGPL code linked; lists & feeds are data)
 lint: tools/license_audit.py
-review: >
-  Path-level allowlist (unlike vocab_lint's line-precise entries):
-  dependency evals, ADRs, and the plan are refreshed over time, so the
-  review unit is the file. Every entry must state WHY the file cites
-  copyleft terms. A file newly citing copyleft without an entry fails
-  CI.
-allowlist:
-  - path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
-    justification: "Pinned plan v2 (brand-corrected copy of the v2 file below) cites copyleft as prohibitions/decisions: §0.2 R10 (keepass-rs/MIT vs kdbx GPL), §1.5 'lists are data', §1.12-4 license invariant, §8.2 uBO GPL3 DON'T, §8.4 KeePassXC GPL DON'T-copy. Immutable by pin; never edited in place."
-  - path: docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md
-    justification: "Versioned plan file (amendment record, docs/process/plan-amendment.md): identical content to the pinned copy above, cites copyleft as prohibitions/decisions (same passages). Retained per amendment rule 4 (old versions are never deleted)."
-  - path: docs/adr/0001-repo-topology-and-licensing.md
-    justification: "ADR-0001 records the DR-04 GPL boundary itself (no GPL/AGPL/SSPL linked; EasyList GPLv3/CC-BY-SA 3.0 dual consumed as data with LICENSE.data sidecars)."
-  - path: docs/process/dependency-eval-template.yaml
-    justification: "L9 intake template defines the link_policy field, which by design names the copyleft classes (GPL/AGPL/LGPL/SSPL) it checks."
-  - path: docs/threat-model.md
-    justification: "Threat model transcribes plan §1.12-4 (license invariant) and §9.1 T11 scope note; cites copyleft as the invariant's subject."
-  - path: docs/dependencies/easylist-family.yaml
-    justification: "Data-only INTEGRATE eval: EasyList is GPL-3.0-or-later OR CC-BY-SA-3.0 (live-verified 2026-09-07) — the eval must state the data's license to justify the data-only + LICENSE.data sidecar treatment (DR-04)."
-  - path: docs/dependencies/adblock-rust.yaml
-    justification: "Eval records the REJECTED sibling: uBlock Origin code is GPLv3 and must never be linked (DR-04); only the MPL-2.0 adblock-rust crate is integrated."
-  - path: docs/dependencies/keepass-rs.yaml
-    justification: "Eval records banned siblings kdbx-rs (GPL-3.0) and KeePassXC (GPL-3.0) as do-not-copy references; keepass-rs itself is MIT (DR-04 satisfied)."
-  - path: docs/dependencies/arti.yaml
-    justification: "Eval states the main codebase is Apache-2.0 OR MIT and flags the optional LGPLv3 parts that must be excluded/evaluated before vendoring (P31) — the caveat is the point of the record."
-  - path: work/release-check/sbom.json
-    justification: "The release gate's synthetic SBOM (tools/release_gate.py) carries EVERY dependency eval's evaluated license as SPDX tokens — including the rejected EasyList-family data dep whose dual (GPL-3.0-or-later OR CC-BY-SA-3.0) must be STATED to justify the data-only treatment (DR-04). Eval prose is stripped (license_report spdx_only); the token itself is the audit-relevant datum."
-  - path: docs/state/research-log-P1.md
-    justification: "P1 research log records live-verified dependency licenses (uBlock Origin GPLv3, EasyList GPL-3.0-or-later dual) — the evaluation trail that justifies the DR-04 data-only treatment."
-  - path: tools/README.md
-    justification: "Tool inventory table names the license gate's own rule ('no GPL/AGPL code') — meta-mention of what license_audit.py enforces."
-  - path: CONTRIBUTING.md
-    justification: "Contributor rules restate the license gate ('no copyleft (GPL/AGPL) code' — ADR-0001/DR-04) — meta-mention of the enforcement rule."
-  - path: README.md
-    justification: "Gate table restates the license gate's rule ('no GPL/AGPL code') — meta-mention of what CI enforces."
-  - path: evidence/P1/research-log-links.txt
-    justification: "Evidence traceability map names the verified copyleft artifacts (uBlock GPLv3, EasyList GPL-3.0 dual) that the dependency evals cite."
-  - path: build/sbom/cyclonedx-schema-1.6.json
-    justification: "Vendored CycloneDX 1.6 JSON schema (Apache-2.0, DR-04 clean) enumerates SPDX license IDs as a JSON enum — GPL-2.0/GPL-3.0 appear only as enumerated permit-values inside the 'licenses' definition, not as linked code. Schema is vendored data, byte-frozen, with LICENSE.cyclonedx-schema.txt sidecar."
+review: 'Path-level allowlist (unlike vocab_lint''s line-precise entries): dependency evals, ADRs, and
+  the plan are refreshed over time, so the review unit is the file. Every entry must state WHY the file
+  cites copyleft terms. A file newly citing copyleft without an entry fails CI.
 
-  - path: docs/state/research-log-P11.md
-    justification: "P11 research log R6 records the live-verified EasyList licence page (GPL-3.0-or-later OR CC-BY-SA-3.0 dual, fetched 2026-09-12) grounding the xr-lists attribution pipeline's DATA-only + LICENSE.attribution.txt sidecar treatment (DR-04), and R1/D1 record the MPL-2.0 adblock-rust pin next to the rejected GPLv3 uBO code path."
-  - path: xr-lists/README.md
-    justification: "The xr-lists pipeline README states the source-list licence terms (EasyList GPL-3.0-or-later OR CC-BY-SA-3.0 dual, pointing at docs/dependencies/easylist-family.yaml) because the attribution shape law embeds the SPDX expression in every compiled bundle — the citation IS the data-only design (DR-04), never a link."
-  - path: tools/tests/fixtures/p11_vendor_red_licenses.json
-    justification: "P11 vendor-gate test fixture: spells out the red-class copyleft expressions as DATA so test_p11_vendor.py can prove vendor_check.py / vendor_rust_graph.py refuse them without any code file carrying the banned tokens (license_audit fails code hits unconditionally — the work/release-check/sbom.json precedent for license tokens as audit-relevant data)."
+  '
+allowlist:
+- path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+  justification: "Pinned plan v2 (brand-corrected copy of the v2 file below) cites copyleft as prohibitions/decisions:\
+    \ \xA70.2 R10 (keepass-rs/MIT vs kdbx GPL), \xA71.5 'lists are data', \xA71.12-4 license invariant,\
+    \ \xA78.2 uBO GPL3 DON'T, \xA78.4 KeePassXC GPL DON'T-copy. Immutable by pin; never edited in place."
+- path: docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md
+  justification: 'Versioned plan file (amendment record, docs/process/plan-amendment.md): identical content
+    to the pinned copy above, cites copyleft as prohibitions/decisions (same passages). Retained per amendment
+    rule 4 (old versions are never deleted).'
+- path: docs/adr/0001-repo-topology-and-licensing.md
+  justification: ADR-0001 records the DR-04 GPL boundary itself (no GPL/AGPL/SSPL linked; EasyList GPLv3/CC-BY-SA
+    3.0 dual consumed as data with LICENSE.data sidecars).
+- path: docs/process/dependency-eval-template.yaml
+  justification: L9 intake template defines the link_policy field, which by design names the copyleft
+    classes (GPL/AGPL/LGPL/SSPL) it checks.
+- path: docs/threat-model.md
+  justification: "Threat model transcribes plan \xA71.12-4 (license invariant) and \xA79.1 T11 scope note;\
+    \ cites copyleft as the invariant's subject."
+- path: docs/dependencies/easylist-family.yaml
+  justification: "Data-only INTEGRATE eval: EasyList is GPL-3.0-or-later OR CC-BY-SA-3.0 (live-verified\
+    \ 2026-09-07) \u2014 the eval must state the data's license to justify the data-only + LICENSE.data\
+    \ sidecar treatment (DR-04)."
+- path: docs/dependencies/adblock-rust.yaml
+  justification: 'Eval records the REJECTED sibling: uBlock Origin code is GPLv3 and must never be linked
+    (DR-04); only the MPL-2.0 adblock-rust crate is integrated.'
+- path: docs/dependencies/keepass-rs.yaml
+  justification: Eval records banned siblings kdbx-rs (GPL-3.0) and KeePassXC (GPL-3.0) as do-not-copy
+    references; keepass-rs itself is MIT (DR-04 satisfied).
+- path: docs/dependencies/arti.yaml
+  justification: "Eval states the main codebase is Apache-2.0 OR MIT and flags the optional LGPLv3 parts\
+    \ that must be excluded/evaluated before vendoring (P31) \u2014 the caveat is the point of the record."
+- path: work/release-check/sbom.json
+  justification: "The release gate's synthetic SBOM (tools/release_gate.py) carries EVERY dependency eval's\
+    \ evaluated license as SPDX tokens \u2014 including the rejected EasyList-family data dep whose dual\
+    \ (GPL-3.0-or-later OR CC-BY-SA-3.0) must be STATED to justify the data-only treatment (DR-04). Eval\
+    \ prose is stripped (license_report spdx_only); the token itself is the audit-relevant datum."
+- path: docs/state/research-log-P1.md
+  justification: "P1 research log records live-verified dependency licenses (uBlock Origin GPLv3, EasyList\
+    \ GPL-3.0-or-later dual) \u2014 the evaluation trail that justifies the DR-04 data-only treatment."
+- path: tools/README.md
+  justification: "Tool inventory table names the license gate's own rule ('no GPL/AGPL code') \u2014 meta-mention\
+    \ of what license_audit.py enforces."
+- path: CONTRIBUTING.md
+  justification: "Contributor rules restate the license gate ('no copyleft (GPL/AGPL) code' \u2014 ADR-0001/DR-04)\
+    \ \u2014 meta-mention of the enforcement rule."
+- path: README.md
+  justification: "Gate table restates the license gate's rule ('no GPL/AGPL code') \u2014 meta-mention\
+    \ of what CI enforces."
+- path: evidence/P1/research-log-links.txt
+  justification: Evidence traceability map names the verified copyleft artifacts (uBlock GPLv3, EasyList
+    GPL-3.0 dual) that the dependency evals cite.
+- path: build/sbom/cyclonedx-schema-1.6.json
+  justification: "Vendored CycloneDX 1.6 JSON schema (Apache-2.0, DR-04 clean) enumerates SPDX license\
+    \ IDs as a JSON enum \u2014 GPL-2.0/GPL-3.0 appear only as enumerated permit-values inside the 'licenses'\
+    \ definition, not as linked code. Schema is vendored data, byte-frozen, with LICENSE.cyclonedx-schema.txt\
+    \ sidecar."
+- path: docs/state/research-log-P11.md
+  justification: P11 research log R6 records the live-verified EasyList licence page (GPL-3.0-or-later
+    OR CC-BY-SA-3.0 dual, fetched 2026-09-12) grounding the xr-lists attribution pipeline's DATA-only
+    + LICENSE.attribution.txt sidecar treatment (DR-04), and R1/D1 record the MPL-2.0 adblock-rust pin
+    next to the rejected GPLv3 uBO code path.
+- path: xr-lists/README.md
+  justification: "The xr-lists pipeline README states the source-list licence terms (EasyList GPL-3.0-or-later\
+    \ OR CC-BY-SA-3.0 dual, pointing at docs/dependencies/easylist-family.yaml) because the attribution\
+    \ shape law embeds the SPDX expression in every compiled bundle \u2014 the citation IS the data-only\
+    \ design (DR-04), never a link."
+- path: tools/tests/fixtures/p11_vendor_red_licenses.json
+  justification: "P11 vendor-gate test fixture: spells out the red-class copyleft expressions as DATA\
+    \ so test_p11_vendor.py can prove vendor_check.py / vendor_rust_graph.py refuse them without any code\
+    \ file carrying the banned tokens (license_audit fails code hits unconditionally \u2014 the work/release-check/sbom.json\
+    \ precedent for license tokens as audit-relevant data)."
+- path: tools/tests/fixtures/p12_copyleft_markers.json
+  justification: "P12-T0-d license_audit scratch negative fixture: spells out the copyleft marker text\
+    \ as DATA so tools/negatives/p12_t0.sh can prove license_audit (a) reddens on a marker in a real source\
+    \ path and (b) skips the work/ scratch root \u2014 without any code or shell file carrying the banned\
+    \ tokens (license_audit fails code hits unconditionally; the tools/tests/fixtures/p11_vendor_red_licenses.json\
+    \ precedent)."
