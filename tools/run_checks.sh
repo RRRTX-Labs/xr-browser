@@ -12,6 +12,8 @@ PY="${PYTHON:-python3}"
 # P11-T0-e: the P11 gate bodies live in tools/checks/p11_gates.sh (functions)
 # so this dispatcher stays under the touched-file size law.
 . "$(dirname "$0")/checks/p11_gates.sh"
+# P12-T1: the P12 feature gate bodies, same size-law split as above.
+. "$(dirname "$0")/checks/p12_gates.sh"
 RANGE="${1:-}"
 
 echo "== plan pin =="
@@ -373,4 +375,5 @@ echo "== P9-T12: §11 surface completeness (every surface homed) =="
 echo "== P9 meta: mutation-check the checker (3 runners, defect must escape) =="
 "$PY" build/qa/tools/test_checker_mutation.py --repo .
 
+p12_gates
 echo "== ALL GOVERNANCE CHECKS PASSED =="
