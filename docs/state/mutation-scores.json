@@ -1,5 +1,5 @@
 {
- "comment": "P10-T0-c/T1: recorded mutation scores per xr-core core. Law: a score is a statement about specific bytes — each record pins the xr-core commit whose core/** the FULL matrix ran against (sampled:false); tools/mutation_freshness.py fails the gate when a core's core/** changes without a fresh transcript. Survivor dispositions are mandatory. P11 re-arm (2026-09-11): all six cores re-run FULL (sampled:false) at the T0-b dedup pin 85289cd — freshness debt from the shared-primitives move paid, and `common` scored for the first time. The dedup shrank the per-core mutant surfaces (the moved files are now mutated ONCE, under common). P11-T4 (2026-09-12): the seventh discovered core `shield` scored for the first time (lane added to mutation_targets.py; FULL matrix at pin cfbb344 after the first run's ParseSlot deny-guard find was discharged with new tests — research-log-P11.md D6); P11-T5 2026-09-13: shield re-run FULL at pin 44f5306 after the emitter landed — 394/394, first-run clean). P11-T6 2026-09-13: commands re-run FULL at pin 62b2c92 after the dev-channel predicate landed — 219/219, first-run clean; shield/core bytes unchanged at T6 (the T6 host/fake changes live in shield/host and fakes/, outside the core/** freshness surface) so the T5 shield record stands. P11-T8 2026-09-15: shield re-run FULL at pin 866387a after the parity-alignment matcher changes — 396/396, first-run clean.",
+ "comment": "P10-T0-c/T1: recorded mutation scores per xr-core core. Law: a score is a statement about specific bytes \u2014 each record pins the xr-core commit whose core/** the FULL matrix ran against (sampled:false); tools/mutation_freshness.py fails the gate when a core's core/** changes without a fresh transcript. Survivor dispositions are mandatory. P11 re-arm (2026-09-11): all six cores re-run FULL (sampled:false) at the T0-b dedup pin 85289cd \u2014 freshness debt from the shared-primitives move paid, and `common` scored for the first time. The dedup shrank the per-core mutant surfaces (the moved files are now mutated ONCE, under common). P11-T4 (2026-09-12): the seventh discovered core `shield` scored for the first time (lane added to mutation_targets.py; FULL matrix at pin cfbb344 after the first run's ParseSlot deny-guard find was discharged with new tests \u2014 research-log-P11.md D6); P11-T5 2026-09-13: shield re-run FULL at pin 44f5306 after the emitter landed \u2014 394/394, first-run clean). P11-T6 2026-09-13: commands re-run FULL at pin 62b2c92 after the dev-channel predicate landed \u2014 219/219, first-run clean; shield/core bytes unchanged at T6 (the T6 host/fake changes live in shield/host and fakes/, outside the core/** freshness surface) so the T5 shield record stands. P11-T8 2026-09-15: shield re-run FULL at pin 866387a after the parity-alignment matcher changes \u2014 396/396, first-run clean.",
  "cores": {
   "commands": {
    "killed": 219,
@@ -31,6 +31,16 @@
    "transcript": "evidence/P11/logs/t1-mutation-policy.json",
    "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
   },
+  "renderer/cosmetic": {
+   "killed": 418,
+   "mutants": 418,
+   "note": "P12-T8 freshness law: re-run after the four new core modules (style.cc, keyset.cc, degrade.cc, blob.cc) and the abpf validator landed, so the recorded score covered 3 of 7 TUs. Full matrix (--sample 0, sampled:false, seed 20260918) over renderer/cosmetic/core/*.cc: 418 mutants, 418 killed, 0 survivors, so no equivalent-mutant disposition is needed. deny-guard 22/22: every refusal-return site in these files is reached by a test, which is the property that matters for a parser whose whole job is refusing. Gate 95%, score 100.00%. This is a CORE-level result \u2014 the C++ unit suites kill every mutant in these files. It says nothing about rendered behaviour: no browser measurement exists in this phase (gn and ninja are absent) and the page-level assertions are HG-31.",
+   "score_pct": 100.0,
+   "seed": 20260918,
+   "survivors": [],
+   "transcript": "evidence/P12/logs/t1-mutation-cosmetic.json",
+   "xr_core_commit": "4f3be7a8fe863d19a404162b43e2bc19c68a5baa"
+  },
   "settings": {
    "killed": 286,
    "mutants": 286,
@@ -44,7 +54,7 @@
   "shield": {
    "killed": 396,
    "mutants": 396,
-   "note": "FIRST SCORE at T4 (research-log-P11.md D6): full matrix at pin cfbb344, 389/389 after the ParseSlot deny-guard find was discharged with NEW TESTS. P11-T5 RE-RUN (2026-09-13): the shield core moved (MakeLedgerRow + the event-emit emitter in events.cc/shield_host.cc/fakes + the int64 wire fix for mojom ts_millis/tab_id), so the FULL matrix ran again at pin 44f5306 (sampled:false, seed 20260913): 394 mutants (389 + 5 on the new emitter code), 394 killed, 100.00%, deny-guard 61/61 — FIRST-RUN clean: the T5 test additions (test_events +15, test_shield_host +13, 45 e-emit golden vectors) killed every new mutant; zero survivors to disposition. The T4 transcripts stay in evidence/P11/logs/t4-mutation-shield*. P11-T8 parity alignment RE-RUN (2026-09-15): the matcher semantics moved (D-7/D-8/D-9 — bundle.cc filter lowercasing, fake_engine.{h,cc} host-end anchor + trailing-wildcard strip + lowercased surface), so the FULL matrix ran again at pin 866387a (sampled:false, seed 20260915): 396 mutants (394 + 2 on the changed matcher lines), 396 killed, 100.00%, deny-guard 61/61 — FIRST-RUN clean: the new test_match pins (host-end ||d|, va.js*| both ways, case-insensitive surface) killed every new mutant; zero survivors to disposition. The T5 transcripts stay in evidence/P11/logs/t5-mutation-shield*.",
+   "note": "FIRST SCORE at T4 (research-log-P11.md D6): full matrix at pin cfbb344, 389/389 after the ParseSlot deny-guard find was discharged with NEW TESTS. P11-T5 RE-RUN (2026-09-13): the shield core moved (MakeLedgerRow + the event-emit emitter in events.cc/shield_host.cc/fakes + the int64 wire fix for mojom ts_millis/tab_id), so the FULL matrix ran again at pin 44f5306 (sampled:false, seed 20260913): 394 mutants (389 + 5 on the new emitter code), 394 killed, 100.00%, deny-guard 61/61 \u2014 FIRST-RUN clean: the T5 test additions (test_events +15, test_shield_host +13, 45 e-emit golden vectors) killed every new mutant; zero survivors to disposition. The T4 transcripts stay in evidence/P11/logs/t4-mutation-shield*. P11-T8 parity alignment RE-RUN (2026-09-15): the matcher semantics moved (D-7/D-8/D-9 \u2014 bundle.cc filter lowercasing, fake_engine.{h,cc} host-end anchor + trailing-wildcard strip + lowercased surface), so the FULL matrix ran again at pin 866387a (sampled:false, seed 20260915): 396 mutants (394 + 2 on the changed matcher lines), 396 killed, 100.00%, deny-guard 61/61 \u2014 FIRST-RUN clean: the new test_match pins (host-end ||d|, va.js*| both ways, case-insensitive surface) killed every new mutant; zero survivors to disposition. The T5 transcripts stay in evidence/P11/logs/t5-mutation-shield*.",
    "score_pct": 100.0,
    "seed": 20260915,
    "survivors": [],
@@ -64,28 +74,18 @@
   "update": {
    "killed": 215,
    "mutants": 216,
-   "note": "re-arm at the T0-b dedup pin: 415->216 mutants (dedup move); the ONE survivor is the same equivalent mutant P10 dispositioned (clamp boundary coincides at d==0 — no test can distinguish identical behavior); disposition carried forward verbatim.",
+   "note": "re-arm at the T0-b dedup pin: 415->216 mutants (dedup move); the ONE survivor is the same equivalent mutant P10 dispositioned (clamp boundary coincides at d==0 \u2014 no test can distinguish identical behavior); disposition carried forward verbatim.",
    "score_pct": 99.54,
    "seed": 20260911,
    "survivors": [
     {
-     "disposition": "equivalent-mutant: update/core/backoff.cc:26 SecondsUntilNextCheck `d > 0 ? d : 0` mutated to `d >= 0` — at d == 0 the mutant returns d, which IS 0; identical behavior for every input (the clamp and its boundary coincide). No test can distinguish it; killing it would require changing the expression, not the behavior.",
+     "disposition": "equivalent-mutant: update/core/backoff.cc:26 SecondsUntilNextCheck `d > 0 ? d : 0` mutated to `d >= 0` \u2014 at d == 0 the mutant returns d, which IS 0; identical behavior for every input (the clamp and its boundary coincide). No test can distinguish it; killing it would require changing the expression, not the behavior.",
      "id": "core/backoff.cc:26 ROR:> -> >=",
      "operator": "ROR:> -> >="
     }
    ],
    "transcript": "evidence/P11/logs/t1-mutation-update.json",
    "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
-  },
-  "renderer/cosmetic": {
-   "killed": 179,
-   "mutants": 179,
-   "score_pct": 100.0,
-   "seed": null,
-   "survivors": [],
-   "transcript": "evidence/P12/logs/t1-mutation-cosmetic.json",
-   "xr_core_commit": "b215c9adc334d84fcf86593fb16d725a8ec0d3f6",
-   "note": "FIRST SCORE at P12-T1: full matrix (--sample 0, unsampled) over the three cosmetic TUs — selector.cc, pseudo.cc, scope_key.cc. 179 mutants, 179 killed, 0 survivors, so no equivalent-mutant disposition is needed. deny-guard 17/17: every refusal-return site in these files is reached by a test, which is the property that matters for a parser whose whole job is refusing. Elapsed 65 s on 2 CPUs. This is a CORE-level result — the unit suites kill every mutant in these three files. It says nothing about rendered behaviour: no browser measurement exists in this phase and the page-level assertions are HG-31."
   }
  },
  "schema": "xr-mutation-scores",
