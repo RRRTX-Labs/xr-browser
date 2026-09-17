@@ -1,0 +1,216 @@
+{
+ "always_on": true,
+ "budget_note": "The set is small by design. A generic set that grew to thousands of rules would cost document-start time on EVERY page including ones with no ads, which is the opposite of the degrade law. tools/cosmetic_generic_set_check.py --check enforces both budgets and is diff-clean.",
+ "build_budget_ms": 50,
+ "exception_able_at_shield_policy_level": false,
+ "exception_note": "NOT exception-able per-site at the Shield policy level. A shields-down must not leave the page half-styled: if the generic set were per-site exception-able, a user who lowered shields on one site would get a page where the site's own rules were off but the generic ones were still on, which is a worse rendering than either consistent state. Cosmetic rules from a LIST remain exception-able; this set does not. Recorded as a deliberate reading of the plan, not a silent choice \u2014 see docs/renderer/generic-hide-set.md.",
+ "generated_by": "hand-authored, not compiled from an upstream list",
+ "no_upstream_list_note": "This set is deliberately independent of any subscribed filter list. It is the reason the generic set can be always-on: a user with zero lists installed still gets the well-known junk hidden, and a user who unsubscribes from every list does not get a page whose layout depends on a list they no longer have. Every selector below is a structural pattern that identifies an element by its ROLE in the page, not by a domain or a list author's opinion.",
+ "no_upstream_list_required": true,
+ "schema": "generic-hide-set-v1",
+ "schema_version": 1,
+ "selectors": [
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Structural: an element whose own id declares it a placeholder for an ad. The page has already labelled it; hiding it cannot remove content the author intended the reader to see.",
+   "selector": "div#ad-placeholder"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Class form of the same declaration. Both spellings are carried because sites are inconsistent about id versus class for the same role, and a set that matched only one would silently miss the other.",
+   "selector": "div.ad-placeholder"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Structural: a skeleton loader for an ad slot that never filled. Leaving it visible is a blank rectangle the page did not intend to show.",
+   "selector": "div#ad-skeleton"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Class form of the same declaration. Both spellings are carried because sites are inconsistent about id versus class for the same role.",
+   "selector": "div.ad-skeleton"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Structural: a rail element declared as an ad rail. Scoped to <aside> so a page using 'ad-rail' as a generic layout name in its main content is not affected.",
+   "selector": "aside#ad-rail"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Structural: an overlay declared as an ad overlay. Overlays sit above content, so an empty one blocks interaction with the page beneath it.",
+   "selector": "div#ad-overlay"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Class form of the same declaration. Overlays sit above content, so an unfilled one blocks interaction with the page beneath it.",
+   "selector": "div.ad-overlay"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Structural: an interstitial declared as an ad. Interstitials cover the viewport, so an unfilled one is a blank screen.",
+   "selector": "div#interstitial-ad"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Class form of the same declaration. Interstitials cover the viewport, so an unfilled one is a blank screen the reader has to dismiss.",
+   "selector": "div.interstitial-ad"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Structural: the container a video preroll is injected into. Scoped to the container, never to the player itself, so removing it cannot break playback.",
+   "selector": "div#preroll-container"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Class form of the same declaration. Scoped to the container rather than the player, so removing it cannot break playback.",
+   "selector": "div.preroll-container"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Structural: a slot the page itself marks empty. This is the page's own signal that there is nothing there to render.",
+   "selector": "div#ad-slot-empty"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Class form of the same declaration. This is the page's own signal that there is nothing in the slot to render, which makes it the safest class of rule in the set.",
+   "selector": "div.ad-slot-empty"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Attribute-state: the ad network's own published attribute for an unfilled slot. Reading the network's state is more reliable than guessing from a class name, and the selector only matches when the network says the slot is empty.",
+   "selector": "ins.adsbygoogle[data-ad-status=unfilled]"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Attribute-state: the same network's signal that a slot overflowed and rendered nothing.",
+   "selector": "ins.adsbygoogle[data-ad-status=overflow]"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Attribute-state: the iframe container a network ad is injected into. Scoped by the prefix AND the query-id attribute, so a page's own iframe is never matched.",
+   "selector": "div[id^=google_ads_iframe_][data-google-query-id]"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Class form of the same declaration. Hiding a 'Sponsored' label without hiding what it labels would mislabel the content beneath it, so this entry only makes sense alongside the sponsored-container rule.",
+   "selector": "div.sponsored-label"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Attribute-state: an element the page itself marks as sponsored. The page has already made the claim; this rule only acts on it.",
+   "selector": "div[data-sponsored=true]"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Attribute-state: the page's own marker for an ad unit.",
+   "selector": "div[data-ad-unit]"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Attribute-state: the page's own marker for an ad slot.",
+   "selector": "div[data-ad-slot]"
+  },
+  {
+   "action": "remove",
+   "page_modifying": true,
+   "provenance": "Structural: a soft wall's overlay element. REMOVED rather than hidden because a soft wall keeps its overlay in the layout and re-shows it on interaction; display:none leaves the interaction handler attached. This is the one page-modifying entry in the set and it is labelled as such.",
+   "selector": "div#softwall-overlay"
+  },
+  {
+   "action": "remove",
+   "page_modifying": true,
+   "provenance": "Class form of the same declaration. Removed rather than hidden because a soft wall keeps its overlay in the layout and re-shows it on interaction. Page-modifying, and labelled as such.",
+   "selector": "div.softwall-overlay"
+  },
+  {
+   "action": "remove",
+   "page_modifying": true,
+   "provenance": "Structural: the veil element a metered paywall renders over truncated content. Removed for the same reason as the soft wall overlay. NOTE: this hides the VEIL, it does not unlock content \u2014 the article text behind it is whatever the server sent, and a server that withheld the text still withholds it.",
+   "selector": "div#paywall-veil"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Structural: a newsletter signup modal's overlay. Hidden rather than removed so a page that reopens its own modal is not left with a dangling reference.",
+   "selector": "div#newsletter-modal-overlay"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Class form of the same declaration. Hidden rather than removed so a page that reopens its own modal is not left holding a reference to a detached node.",
+   "selector": "div.newsletter-modal-overlay"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Structural: the 'open in our app' prompt. It is not an ad, but it is element-level junk that covers content, which is what this set exists for.",
+   "selector": "div#app-install-prompt"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Class form of the same declaration. Not an ad, but element-level junk that covers content, which is what this set exists for.",
+   "selector": "div.app-install-prompt"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Structural: a consent wall that blocks the viewport. Hiding the WALL does not consent to anything and does not dismiss the site's own obligation \u2014 the site still has to honour the browser's signals. This entry exists because an unclickable overlay makes a page unusable, not to bypass consent.",
+   "selector": "div#cookie-consent-wall"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Class form of the same declaration. Hiding the wall does not consent to anything: the site still has to honour the browser's signals. This entry exists because an unclickable overlay makes a page unusable.",
+   "selector": "div.cookie-consent-wall"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Structural: the overlay an adblock-detection script renders. Hiding it does not defeat the detection itself; it stops the page from becoming unusable when detection fires.",
+   "selector": "div#ad-recovery-overlay"
+  },
+  {
+   "action": "hide",
+   "page_modifying": false,
+   "provenance": "Class form of the same declaration. Hiding it does not defeat adblock detection itself; it stops the page becoming unusable when detection fires.",
+   "selector": "div.ad-recovery-overlay"
+  },
+  {
+   "action": "remove",
+   "page_modifying": true,
+   "provenance": "Structural: an overlay whose only purpose is to stop scrolling. Removed, because display:none leaves the scroll lock in place on <body> and the page stays unusable. Page-modifying.",
+   "selector": "div#scroll-lock-overlay"
+  },
+  {
+   "action": "style",
+   "page_modifying": false,
+   "provenance": "Structural: restores scrolling on a body an ad script locked. This is a STYLE action, not a hide \u2014 the element stays, only the lock is lifted. `overflow` is on the admitted property allowlist precisely so this is expressible; `position` and `z-index` are not, because a rule that can restack the page can hide the user's own content.",
+   "selector": "body.ad-scroll-locked",
+   "style": {
+    "overflow": "auto"
+   }
+  }
+ ],
+ "size_budget_rules": 64
+}
