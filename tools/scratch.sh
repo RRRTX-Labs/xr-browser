@@ -106,13 +106,30 @@ scratch_require() {
 }
 
 # scratch_tar_tree <dest-dir> — copy the xr-browser tree into <dest-dir>,
-# excluding build outputs.
+# excluding build outputs AND the scratch root itself.
+#
+# Refusing a dest inside the source tree is load-bearing, not politeness: a
+# copy of the repo written under work/scratch nests a second copy of every
+# file, the next copy nests that one, and one negative case produced a 305 MB
+# recursive tree that then made license_audit report 2759 hits against copies
+# of its own source. Excluding ./work stops the recursion; the guard stops the
+# class.
 scratch_tar_tree() {
   local dest="$1"
   local root
   root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+  # Match the RAW path. Resolving `dirname "$dest"` first is wrong: when the
+  # parent does not exist yet the `cd` fails, the substitution collapses to
+  # "/<basename>", and the guard silently stops matching (that exact bug let a
+  # repo-into-itself copy through once already).
+  case "$dest" in
+    "$root"/*|"$root")
+      echo "SCRATCH-FAIL: refusing to copy the repo into itself ($dest is under $root) — a tree copied under work/scratch nests recursively and poisons every tree-scanning gate"
+      return 1
+      ;;
+  esac
   mkdir -p "$dest" || return 1
-  ( cd "$root" && tar "${SCRATCH_TAR_EXCLUDES[@]}" -cf - . ) \
+  ( cd "$root" && tar "${SCRATCH_TAR_EXCLUDES[@]}" --exclude=./work -cf - . ) \
     | ( cd "$dest" && tar -xf - )
 }
 

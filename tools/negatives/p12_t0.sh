@@ -98,7 +98,7 @@ case_invariance_drift() {
   # sibling paths relative to the repo root (exception_ledger_check reads
   # ../xr-core/test/isolation/isolation-matrix.json); a copy under /tmp makes
   # that lane error out and its noise masks the drift this case must prove.
-  local R="$REPO_ROOT/../.p12-invariance-drift.$$"
+  local R="${TMPDIR:-/tmp}/p12-invariance-drift.$$"
   rm -rf "$R"
   mkdir -p "$R"
   (cd "$REPO_ROOT" && tar cf - --exclude=./.git .) | (cd "$R" && tar xf -)
@@ -343,3 +343,53 @@ case_scratch_preflight_positive_control() {
   fi
 }
 neg_register scratch_preflight_positive_control
+
+case_scratch_refuses_repo_into_itself() {
+  # A tree copied under work/scratch nests recursively; one case produced a
+  # 305 MB tree that made license_audit report 2759 hits against copies of its
+  # own source. The guard is load-bearing, so it gets a negative.
+  local out rc
+  out="$(cd "$REPO_ROOT" && bash -c \
+    ". tools/scratch.sh; scratch_tar_tree '$REPO_ROOT/work/scratch/x'" 2>&1)" && rc=0 || rc=$?
+  if [ "$rc" -eq 0 ]; then
+    echo "NEGATIVE-FAIL: scratch_tar_tree copied the repo into itself"
+    NEG_FAILURES=$((NEG_FAILURES + 1))
+    rm -rf "$REPO_ROOT/work"
+  elif ! printf '%s' "$out" | grep -q 'refusing to copy the repo into itself'; then
+    echo "NEGATIVE-FAIL: refused, but not with the recursion explanation"
+    printf '%s\n' "$out" | sed 's/^/    | /'
+    NEG_FAILURES=$((NEG_FAILURES + 1))
+  else
+    echo "ok: scratch_tar_tree refuses a dest inside the source tree (no recursive nesting)"
+  fi
+}
+neg_register scratch_refuses_repo_into_itself
+
+case_license_audit_skips_scratch() {
+  # The other half of the same incident: a scratch tree inside the repo must
+  # not be scanned as source.
+  local R="$NEG_TMP/la-scratch"; rm -rf "$R"
+  mkdir -p "$R/work/scratch/copy" "$R/docs/state"
+  printf 'x = 1\n' > "$R/keep.py"
+  printf 'GNU General Public License text AGPL SSPL\n' > "$R/work/scratch/copy/junk.md"
+  # the audit needs an allowlist to run at all (it exits 2 without one, which
+  # would "pass" this case for the wrong reason)
+  printf 'schema_version: 1\nallowlist: []\n' > "$R/docs/state/license-allowlist.yaml"
+  cp "$REPO_ROOT/LICENSE" "$R/LICENSE"
+  # positive control first: the SAME marker in a real source path must redden,
+  # or a green here means the audit is simply not looking
+  printf 'GNU General Public License text AGPL\n' > "$R/real_source.md"
+  if "$PY" "$REPO_ROOT/tools/license_audit.py" --repo "$R" >/dev/null 2>&1; then
+    echo "NEGATIVE-FAIL: license_audit did NOT flag a copyleft marker in a real source path (the audit is not looking, so the scratch skip proves nothing)"
+    NEG_FAILURES=$((NEG_FAILURES + 1))
+    return 1
+  fi
+  rm -f "$R/real_source.md"
+  if "$PY" "$REPO_ROOT/tools/license_audit.py" --repo "$R" >/dev/null 2>&1; then
+    echo "ok: license_audit skips the work/ scratch root (no hits on scratch copies)"
+  else
+    echo "NEGATIVE-FAIL: license_audit scanned work/ scratch and reddened on a copy"
+    NEG_FAILURES=$((NEG_FAILURES + 1))
+  fi
+}
+neg_register license_audit_skips_scratch

@@ -73,7 +73,13 @@ CODE_DIRS = {"third_party", "vendor", "patches"}
 # scratch (nodeids quoting the GPL fixture test names; governance run
 # 34721088960 step 11, research-log D7 item 19). A marker in any real
 # source/doc path still reddens (regression test proves both halves).
-SKIP_DIRS = {".git", ".pytest_cache", "__pycache__", ".venv", "venv"}
+# `work` is the harness scratch root (tools/scratch.sh, P12-T0-d; gitignored
+# like the others). The negatives battery copies whole trees into it, so
+# scanning it made the audit trip on recursive copies of ITS OWN source —
+# 2759 spurious hits from one nested tree. Same class as the pytest-cache fix
+# above: scratch written into the working tree during the same run is not
+# source. A marker in any real source/doc path still reddens.
+SKIP_DIRS = {".git", ".pytest_cache", "__pycache__", ".venv", "venv", "work"}
 
 
 def is_code_path(rel: str) -> bool:
