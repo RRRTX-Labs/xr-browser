@@ -84,6 +84,11 @@ _OPEN_STATUS_PREFIXES = ("PARTIAL", "BLOCKED", "HUMAN-GATED")
 
 
 from evidence_ci import CI_RESOLVER, hosted_claim_findings  # noqa: E402
+# P12-T0-b: presence is a SEPARATE law from validity. This module validated
+# the bundles that exist; a phase that shipped logs/ and no bundle was
+# invisible by design (P11's shape). The sibling module derives the phase list
+# from git history so a missing bundle cannot hide.
+import evidence_presence_check as epc  # noqa: E402
 import runner_caps  # noqa: E402 - sibling tool module (P11-T0-d)
 
 def strict_default_phases(root: Path) -> list[str]:
@@ -297,6 +302,12 @@ def main() -> int:
                     help="comma-separated phase dirs to check (default: all; "
                          "in --strict mode without --only, auto P3+)")
     ap.add_argument("--json", action="store_true", help="emit JSON")
+    ap.add_argument("--no-presence", action="store_true",
+                    help="skip the P12-T0-b presence law (every phase in git "
+                         "history must carry evidence.json + human-gates.md)")
+    ap.add_argument("--also-repo", default="",
+                    help="extra repo roots whose commit subjects also name "
+                         "phases (e.g. ../xr-core)")
     args = ap.parse_args()
 
     repo = Path(args.repo).resolve()
@@ -323,6 +334,19 @@ def main() -> int:
     results: dict[str, list[str]] = {}
     for f in files:
         results[str(f.relative_to(repo))] = check_file(f, repo, args.strict)
+
+    # P12-T0-b: the presence law. Derived from git history, so a phase with
+    # commits and no bundle FAILS here even though every existing bundle is
+    # valid. Not scoped by --only: "check only the bundles I listed" must not
+    # become "ignore the phase I forgot to write".
+    presence_fails: list[str] = []
+    if not args.no_presence:
+        extra = tuple(Path(x.strip()).resolve()
+                      for x in args.also_repo.split(",") if x.strip())
+        presence_fails, _ = epc.check(repo, args.dir, extra)
+        if presence_fails:
+            results["evidence_presence_check"] = presence_fails
+
     total = sum(len(v) for v in results.values())
     if args.json:
         print(json.dumps({"checked": list(results), "failures": results,
@@ -335,7 +359,9 @@ def main() -> int:
             else:
                 print(f"PASS: {name} ({'strict' if args.strict else 'structural'})")
         print(f"{'PASS' if total == 0 else 'FAIL'}: evidence_check "
-              f"({len(files)} bundle(s), {total} failure(s))")
+              f"({len(files)} bundle(s), {total} failure(s)"
+              f"{'' if args.no_presence else '; presence law: every phase in '
+                 'git history carries a bundle'})")
     return 0 if total == 0 else 1
 
 

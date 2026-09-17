@@ -1,0 +1,258 @@
+{
+  "phase": "P11 — XR Shield v1: native network blocking + list pipeline",
+  "generated": "2026-09-17",
+  "plan": "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
+  "plan_sha256": "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b",
+  "supersedes": "evidence/P10",
+  "schema_note": "RETRO-BUNDLE, authored by the P12 agent on 2026-09-17 at the orchestrator's explicit request (P12-T0-b). The P11 phase agents shipped evidence/P11/logs/ (24 transcripts) and NO bundle, so P11's 15 DoD rows had no contract-valid artifact and its claims lived only in commit-message prose and docs/shield/*.md. Every row below is reconstructed from artifacts that EXIST in this tree today, re-measured by the P12 agent on 2026-09-17 at xr-browser 7922648aaa40f2013acad79503fcb5d71651d2a3 / xr-core 866387aadeb091422dbeb66075804248575bbbe6. The P11 logs were NOT modified and nothing here claims a P11 agent wrote it. Where a row could not be re-established from an artifact, it is recorded as an open item rather than asserted. Conforms to docs/contracts/evidence-bundle-v1.md.",
+  "retro_bundle": {
+    "authored_by": "XR P12 Agent <p12-agent@users.noreply.github.com>",
+    "requested_by": "orchestrator brief, P12-T0-b",
+    "reason": "evidence_check.py validated only bundles that exist, so a logs/-only phase was invisible by design; P12-T0-b closes that hole with tools/evidence_presence_check.py and this bundle discharges P11's instance of it.",
+    "p11_logs_modified": false,
+    "reconstruction_basis": "committed artifacts + transcripts under evidence/P11/logs/ + git history at the pins above; no P11 log was edited or rewritten"
+  },
+  "verdict_vocabulary": [
+    "VERIFIED",
+    "HUMAN-GATED",
+    "SIMULATED",
+    "BLOCKED",
+    "PARTIAL",
+    "NOT-BY-DESIGN"
+  ],
+  "source_labels": [
+    "local-run",
+    "fixture",
+    "ci-run",
+    "UNVERIFIED"
+  ],
+  "pin": "chromium d04cdb24d67b081f6cf80200ffc5233f44b61109 (152.0.7977.82, UNCHANGED); xr-core advanced 89bd2ed -> 866387aadeb091422dbeb66075804248575bbbe6 (adblock-rust 0.13.3 vendored, shield decision core, xr-lists pipeline, 0200 network seam), DEPS pair-bumped same-day",
+  "repos": {
+    "xr-browser": "7922648aaa40f2013acad79503fcb5d71651d2a3 (201 commits, 201/201 DCO). P11 commit range: e258826 (T1 vendoring) .. 7922648 (docs quartet).",
+    "xr-core": "866387aadeb091422dbeb66075804248575bbbe6 (55 commits, 55/55 DCO). shield/{core,host,tests,engine}, third_party/rust/adblock/0.13.3, patches/network-seams/0200-shield-network-seam, mojom/shield.mojom, fakes/shield.py."
+  },
+  "dod_rows": [
+    {
+      "id": "P11-DOD-T1",
+      "dod": "T1: adblock-rust 0.13.3 vendored + sealed (per-file MANIFEST.sha256, cargo vet posture, no GPL link), with the static crates.io allowlist recorded in ADR-0044 and the scriptlet scope boundary in ADR-0045",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "../xr-core/third_party/rust/adblock/0.13.3/MANIFEST.sha256",
+        "../xr-core/third_party/rust/adblock/0.13.3/MANIFEST.xr.sha256",
+        "docs/adr/0044-static-crates-io-allowlist.md",
+        "logs/t1-mutation-common.json"
+      ],
+      "notes": "Re-verified 2026-09-17: both manifests present in the sealed tree; tools/vendor_check.py --check is a run_checks lane."
+    },
+    {
+      "id": "P11-DOD-T2",
+      "dod": "T2: the shield decision core behind ONE injection point (shield/core/engine.h BlockingEngine), with the posture fail-open/fail-closed truth table and 307 golden vectors byte-identical across shield_host and fakes/shield.py",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "../xr-core/shield/core/engine.h",
+        "../xr-core/shield/core/posture.cc",
+        "../xr-core/shield/host_protocol.md",
+        "../xr-core/fakes/shield.py",
+        "docs/contracts/vectors/shield-v1.json",
+        "logs/t5-gates.txt"
+      ],
+      "notes": "Re-measured 2026-09-17: docs/contracts/vectors/shield-v1.json carries 307 cases (counted, not remembered); tools/shield_vectors_check.py asserts byte-parity across both backends as a run_checks lane."
+    },
+    {
+      "id": "P11-DOD-T3",
+      "dod": "T3: the xr-lists compile -> attribution -> sign pipeline against the FROZEN list-bundle-manifest-v1, with the zero-scriptlet (#%#) boundary refused at compile time by typed reason",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "xr-lists/compile.py",
+        "xr-lists/attribution.py",
+        "xr-lists/sign.py",
+        "xr-lists/tests/roundtrip.sh",
+        "docs/contracts/vectors/xr-lists-compile-v1.json",
+        "docs/shield/lists.md",
+        "docs/shield/scriptlets.md",
+        "logs/t3-lists-rebundle-p12.txt"
+      ],
+      "notes": "Re-measured 2026-09-17: 100 compile vectors carrying 47 typed refusals (the docs/shield/lists.md figure, cross-checked by counting the vector file: 100 cases, of which the refusal class is 47 per the committed generator). docs/contracts/FROZEN.yaml and INDEX.md were NOT modified by P11 (P12 re-verified: git diff empty at its tip). The authoritative count is tools/list_bundle_check.py's own line: '47 refusal cases, 13 families covered, vocabulary closed' over 100 compile vectors. A loose regex over the vector JSON matches 56 rows because some non-refusal cases mention refusal vocabulary in their ids; the tool's figure is the contract, and this bundle records the discrepancy rather than picking a number."
+    },
+    {
+      "id": "P11-DOD-T4",
+      "dod": "T4: resolver-coupled exception scopes + per-site toggle on the single P11 scope object, with the dual ledger and the shield mutation lane",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "../xr-core/shield/core/scope.cc",
+        "tools/exception_ledger_check.py",
+        "docs/adr/0046-shield-exceptions-not-waivers.md",
+        "logs/t4-mutation-shield.json",
+        "logs/t4-mutation-shield-run1-fail.txt"
+      ],
+      "notes": "The T4 first run FAILED on a ParseSlot deny-guard find (logs/t4-mutation-shield-run1-fail.txt) and was discharged with new tests before the re-run — the failure transcript is committed, not hidden."
+    },
+    {
+      "id": "P11-DOD-T5",
+      "dod": "T5: BlockEvent emission -> ring + Activity Ledger under the living block-event-v1 contract",
+      "status": "VERIFIED",
+      "source": "ci-run",
+      "ci_run": 34905296809,
+      "ci_job": 104180441172,
+      "evidence": [
+        "../xr-core/shield/core/events.cc",
+        "docs/contracts/block-event-v1.md",
+        "logs/t5-ci-green.txt",
+        "logs/t5-mutation-shield.json"
+      ],
+      "notes": "Hosted half resolved 2026-09-17 through api.github.com: core-hardening run 34905296809 at head 7922648aaa40, all 12 jobs success."
+    },
+    {
+      "id": "P11-DOD-T6",
+      "dod": "T6: kill switches + the xr://shield dev-only debug page (engine status, last-apply, list versions) with zero chrome elsewhere, and the extracted attention_check",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "tools/attention_check.py",
+        "build/gn/argsets/flags.yaml",
+        "docs/webui-e2e.md",
+        "logs/t6-battery-run-checks.txt"
+      ],
+      "notes": "The xr_shield_v1 flag defaults documented in flags.yaml; attention_check enforces the chip-count-only law."
+    },
+    {
+      "id": "P11-DOD-T7",
+      "dod": "T7: perf instrumentation — the shield bench emits trend-class rows consumed by perf_gate, with the honesty law that a trend rig never asserts MET",
+      "status": "PARTIAL",
+      "source": "local-run",
+      "evidence": [
+        "build/qa/perf/shield_bench.py",
+        "build/qa/perf/perf-budgets.json",
+        "logs/t7-shield-bench-sandbox.txt",
+        "logs/t7-perf-gate-merged.txt"
+      ],
+      "notes": "Sandbox numbers are rig_class: trend => NEUTRAL by rule. The plan's real budget rows (p99 decision <= 1 ms/request, memory <= 80 MB default sets) are BROWSER measurements and are NOT established by a sandbox trend bench; they remain a farm/hosted item. Recorded PARTIAL rather than VERIFIED for exactly that reason."
+    },
+    {
+      "id": "P11-DOD-T8",
+      "dod": "T8: corpus parity vs a reference uBO configuration, with the real-engine agreement lane on the hosted runner and divergences recorded upstream-first",
+      "status": "VERIFIED",
+      "source": "ci-run",
+      "ci_run": 34905296809,
+      "ci_job": 104180441587,
+      "evidence": [
+        "tools/shield_parity.py",
+        "../xr-core/shield/tests/corpus/parity-corpus-v1.json",
+        "docs/shield/parity.md",
+        "docs/shield/parity-divergences.md",
+        "logs/t8-shield-parity-fake.txt",
+        "logs/t8-mutation-shield-parity-align.json"
+      ],
+      "notes": "Hosted real-engine lane: core-hardening run 34905296809 job 104180441587 'shield-vendor' success (cargo/rustc present on the hosted runner; absent in this sandbox). The 1,000-site browser-capture corpus is NOT-RUN here — method recorded in docs/shield/parity.md."
+    },
+    {
+      "id": "P11-DOD-9",
+      "dod": "DoD-9: mutation freshness — every touched core carries a fresh FULL matrix at the current pin, survivors dispositioned",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "docs/state/mutation-scores.json",
+        "tools/mutation_freshness.py",
+        "logs/t5-mutation-shield.json",
+        "logs/t8-mutation-shield-parity-align.json"
+      ],
+      "notes": "Re-measured 2026-09-17 from docs/state/mutation-scores.json: 7 cores recorded — commands 219/219, common 199/199, policy 578/578, settings 286/286, shield 396/396, themes 187/187, update 215/216 (99.54%, the single survivor dispositioned as an equivalent mutant at update/core/backoff.cc:26, carried forward verbatim from P10)."
+    },
+    {
+      "id": "P11-DOD-10",
+      "dod": "DoD-10: the 0200 network-seam patch (<=8 files) round-trips byte-exact at the pin, with the anchor-perturbation negative, under the network_seams cap",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "../xr-core/patches/network-seams/0200-shield-network-seam/0200-shield-network-seam.patch",
+        "../xr-core/patches/manifest.yaml",
+        "build/webui/shield_seam_roundtrip.py",
+        "build/patching/categories.py",
+        "logs/t10-seam-roundtrip-rebundle-p12.txt"
+      ],
+      "notes": "Re-run 2026-09-17 during the P12 gate: 5 files (3 upstream hooks + 2 XR payload) vs the <=8 budget; apply/verify/revert PASS, byte-exact True, perturbed-anchor apply correctly FAILs. NO claim that Chromium builds — gn is absent in this sandbox. Re-run 2026-09-17: patch 11841 B sha256 3ced9302a782aefd…, 5 files vs the <=8 budget, apply/verify/revert PASS with byte-exact True, and the perturbed-anchor negative correctly FAILs."
+    },
+    {
+      "id": "P11-DOD-11",
+      "dod": "DoD-11: fuzz — the shield differential pair (C++ host vs Python fake) runs seeded with zero divergences",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "tools/differential_fuzz.py",
+        "logs/t2-shield-fuzz-600s.txt"
+      ],
+      "notes": "Transcript records 600 s / 11,893 requests / 0 divergences (commit 5fc13e2). The plan's '10^9 execs before stable' is a release-cadence farm budget and is NOT claimed here."
+    },
+    {
+      "id": "P11-DOD-12",
+      "dod": "DoD-12: the frozen-contract consumption discipline — list-bundle-manifest-v1 consumed unchanged, FROZEN.yaml and INDEX.md untouched, post-freeze registrations recorded",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "docs/contracts/FROZEN.yaml",
+        "docs/contracts/INDEX.md",
+        "docs/contracts/registry-post-freeze.md",
+        "logs/t12-frozen-untouched-rebundle-p12.txt"
+      ],
+      "notes": "FROZEN.yaml carries 14 rows, all ratified: PENDING (HG-26). P12 re-verified at its own tip that neither file was modified. Re-verified 2026-09-17: FROZEN.yaml = 14 rows, all ratified: PENDING; `git log --name-only e258826^..HEAD` over FROZEN.yaml and INDEX.md is EMPTY, so neither was touched anywhere in the P11 range. sha256 recorded in the transcript."
+    },
+    {
+      "id": "P11-DOD-13",
+      "dod": "DoD-13: hosted CI green at the P11 tip — governance, core-hardening, compat-beta-parity, nightly-rebase-build",
+      "status": "VERIFIED",
+      "source": "ci-run",
+      "ci_run": 34905296564,
+      "ci_job": 104180441172,
+      "evidence": [
+        "logs/t5-ci-green.txt",
+        "logs/t6-battery-run-checks.txt"
+      ],
+      "notes": "All four resolved through api.github.com on 2026-09-17 at head 7922648aaa40: governance run 34905296564 (job 104180441172) success; core-hardening run 34905296809 (12/12 jobs) success; compat-beta-parity run 35196697265 (job 105121493093) success 2026-09-17; nightly-rebase-build run 35191553230 (job 105105030678) success 2026-09-17."
+    },
+    {
+      "id": "P11-DOD-14",
+      "dod": "DoD-14: the documentation quartet (docs/shield/{overview,parity,perf,lists}.md) plus the docs/webui-e2e.md P11 section, every fact citing a committed artifact",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "docs/shield/overview.md",
+        "docs/shield/parity.md",
+        "docs/shield/perf.md",
+        "docs/shield/lists.md",
+        "docs/webui-e2e.md",
+        "logs/t14-docs-quartet-rebundle-p12.txt"
+      ],
+      "notes": "All five paths present at the P11 tip (commit 7922648). All five files present with the byte/line/sha256 figures in the transcript; tools/claims_lint.py PASS (voice law)."
+    },
+    {
+      "id": "P11-DOD-15",
+      "dod": "DoD-15: the parity/divergence discipline — D-7/D-8/D-9 records with upstream citations and the upstream-first ledger entries",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "docs/shield/parity-divergences.md",
+        "docs/state/research-log-P11.md",
+        "logs/t15-divergences-rebundle-p12.txt"
+      ],
+      "notes": "No invented issue numbers (P10 precedent held); draft issue bodies only. D-5 through D-9 present in docs/shield/parity-divergences.md; grep for chromium issue URLs across the divergence log and research-log-P11.md returns NOTHING, so no upstream issue number was invented (draft bodies only)."
+    }
+  ],
+  "not_done_by_design": [
+    "OPEN ITEM (found by the P12 agent, not by P11): `bash tools/run_checks.sh` at the P11 tip 7922648 exits 1 with exactly one failure — `FAIL: release/notes/train-152.md stale`. Root cause is that tools/release_notes.py embedded datetime.date.today() in the rendered citation, so the gate reddened itself every calendar day on an unchanged tree. Recorded here as P11's open debt and fixed by P12-T0-a (tools/wall_clock_lint.py + tools/date_invariance_check.py + the offline fixture path). This is why P11's hosted rows could be green while its local gate was red.",
+    "OPEN ITEM (carried, not P11's fault): the `sast` scheduled lane's last run at the P11 tip is STALE-FAIL — the workflow file was fixed at 35d0993 AFTER that run started, so the verdict predates the fix. tools/scheduled_lane_check.py reports this state correctly (visible, non-fatal, never counted green). Its next scheduled fire (2026-09-21 04:17 UTC) is the truth-teller and is a standing check, not a P11 claim.",
+    "NOT-BY-DESIGN: the plan's real perf budget rows (p99 decision <= 1 ms/request, memory <= 80 MB default sets, list apply <= 1.5 s) are browser/engine measurements. No sandbox trend bench establishes them, and P11 did not claim to — they stay farm-gated.",
+    "NOT-BY-DESIGN: the plan's 'dogfood 2 weeks full-time' and 'breakage-triage rota live (median <48h SLA)' Manual rows require a shipping build and a rota; both are human/ops acts, not sandbox artifacts."
+  ],
+  "human_gates": {
+    "path": "evidence/P11/human-gates.md",
+    "note": "retro-bundle: P11's human gates reconstructed from commit-message prose; see the file's Provenance section"
+  },
+  "toolchain_capture": {
+    "sandbox": "g++ 14.2, make, python 3.13, node 20.20, git 2.47, gpg; ABSENT gn/ninja/clang/cargo/rustc/go/minisign/shellcheck/actionlint; no Chromium checkout, no browser, no renderer",
+    "hosted": "cargo/rustc present (proven by core-hardening run 34905296809 jobs shield-vendor 104180441587 and server-conformance 104180441650)"
+  }
+}
