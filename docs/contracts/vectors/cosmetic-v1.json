@@ -1,0 +1,3426 @@
+{
+ "cases": [
+  {
+   "args": {},
+   "exit": 0,
+   "expect": {
+    "scriptlet_registry_state": "inert: flag off",
+    "xr_shield_cosmetic_v1": "off",
+    "xr_shield_scriptlets": "off"
+   },
+   "id": "flag-status-default",
+   "method": "flag-status"
+  },
+  {
+   "args": {},
+   "exit": 0,
+   "expect": {
+    "scriptlet_registry_state": "active",
+    "xr_shield_cosmetic_v1": "off",
+    "xr_shield_scriptlets": "on"
+   },
+   "flags": "--flag xr_shield_scriptlets=on",
+   "id": "flag-status-xr_shield_scriptlets-on",
+   "method": "flag-status"
+  },
+  {
+   "args": {},
+   "exit": 0,
+   "expect": {
+    "scriptlet_registry_state": "inert: flag off",
+    "xr_shield_cosmetic_v1": "on",
+    "xr_shield_scriptlets": "off"
+   },
+   "flags": "--flag xr_shield_cosmetic_v1=on",
+   "id": "flag-status-xr_shield_cosmetic_v1-on",
+   "method": "flag-status"
+  },
+  {
+   "args": {},
+   "exit": 0,
+   "expect": {
+    "scriptlet_registry_state": "active",
+    "xr_shield_cosmetic_v1": "on",
+    "xr_shield_scriptlets": "on"
+   },
+   "flags": "--flag xr_shield_cosmetic_v1=on --flag xr_shield_scriptlets=on",
+   "id": "flag-status-xr_shield_cosmetic_v1-on_xr_shield_scriptlets-on",
+   "method": "flag-status"
+  },
+  {
+   "args": {
+    "selector": "div > .ad"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div > .ad",
+    "compounds": 2,
+    "pseudos": []
+   },
+   "id": "selector-admitted-00",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div>.ad"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div > .ad",
+    "compounds": 2,
+    "pseudos": []
+   },
+   "id": "selector-admitted-01",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": ".ad"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": ".ad",
+    "compounds": 1,
+    "pseudos": []
+   },
+   "id": "selector-admitted-02",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "#top-ad"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "#top-ad",
+    "compounds": 1,
+    "pseudos": []
+   },
+   "id": "selector-admitted-03",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "section.sponsored > div"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "section.sponsored > div",
+    "compounds": 2,
+    "pseudos": []
+   },
+   "id": "selector-admitted-04",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div.a.b"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div.a.b",
+    "compounds": 1,
+    "pseudos": []
+   },
+   "id": "selector-admitted-05",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div.b.a"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div.a.b",
+    "compounds": 1,
+    "pseudos": []
+   },
+   "id": "selector-admitted-06",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "a[href]"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "a[href]",
+    "compounds": 1,
+    "pseudos": []
+   },
+   "id": "selector-admitted-07",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "a[href^=\"https\"]"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "a[href^=\"https\"]",
+    "compounds": 1,
+    "pseudos": []
+   },
+   "id": "selector-admitted-08",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:has-text(Sponsored)"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div:has-text(Sponsored)",
+    "compounds": 1,
+    "pseudos": [
+     "has-text"
+    ]
+   },
+   "id": "selector-admitted-09",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:has(.ad)"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div:has(.ad)",
+    "compounds": 1,
+    "pseudos": [
+     "has"
+    ]
+   },
+   "id": "selector-admitted-10",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:not(.keep)"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div:not(.keep)",
+    "compounds": 1,
+    "pseudos": [
+     "not"
+    ]
+   },
+   "id": "selector-admitted-11",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:min-text-length(40)"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div:min-text-length(40)",
+    "compounds": 1,
+    "pseudos": [
+     "min-text-length"
+    ]
+   },
+   "id": "selector-admitted-12",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:upward(2)"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div:upward(2)",
+    "compounds": 1,
+    "pseudos": [
+     "upward"
+    ]
+   },
+   "id": "selector-admitted-13",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:matches-path(/blog)"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div:matches-path(/blog)",
+    "compounds": 1,
+    "pseudos": [
+     "matches-path"
+    ]
+   },
+   "id": "selector-admitted-14",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:remove()"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div:remove",
+    "compounds": 1,
+    "pseudos": [
+     "remove"
+    ]
+   },
+   "id": "selector-admitted-15",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "*"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "*",
+    "compounds": 1,
+    "pseudos": []
+   },
+   "id": "selector-admitted-16",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": ""
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "empty-selector"
+   },
+   "id": "selector-refused-00-empty",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "selector-too-long"
+   },
+   "id": "selector-refused-01-too-long",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > .a"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "too-many-compounds"
+   },
+   "id": "selector-refused-02-compounds",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "a[x0],x1],x2],x3],x4],x5],x6],x7],x8]"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "selector-list-refused"
+   },
+   "id": "selector-refused-03-attrs",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:has(.a0,.a1,.a2,.a3,.a4,.a5,.a6,.a7,.a8)"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "selector-list-refused"
+   },
+   "id": "selector-refused-04-pseudo-args",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": ".yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "ident-too-long"
+   },
+   "id": "selector-refused-05-ident-too-long",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:(.ad"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "disallowed-char"
+   },
+   "id": "selector-refused-06-unbalanced-paren",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div[.ad"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "disallowed-char"
+   },
+   "id": "selector-refused-07-unbalanced-bracket",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div >> .ad"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "double-combinator"
+   },
+   "id": "selector-refused-08-double-combinator",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "> .ad"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "leading-combinator"
+   },
+   "id": "selector-refused-09-leading-combinator",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div >"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "trailing-combinator"
+   },
+   "id": "selector-refused-10-trailing-combinator",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div,.ad,"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "selector-list-refused"
+   },
+   "id": "selector-refused-11-comma-list",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:is(.a,.b)"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "selector-list-refused"
+   },
+   "id": "selector-refused-12-comma-in-pseudo-arg",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div;.ad"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "disallowed-char"
+   },
+   "id": "selector-refused-13-disallowed-char",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div.ad!important"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "bang-important-refused"
+   },
+   "id": "selector-refused-14-bang",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "@media screen"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "at-rule-refused"
+   },
+   "id": "selector-refused-15-at-rule",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div<!--x-->"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "markup-refused"
+   },
+   "id": "selector-refused-16-markup",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "a[href^=url(x)]"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "url-function-refused"
+   },
+   "id": "selector-refused-17-url-function",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div[style*=expression(1)]"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "expression-refused"
+   },
+   "id": "selector-refused-18-expression",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:bogus-pseudo"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-pseudo-class"
+   },
+   "id": "selector-refused-19-unknown-pseudo",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:has-text(zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz)"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "selector-too-long"
+   },
+   "id": "selector-refused-20-pseudo-arg-too-long",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "*:has(.ad)"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "universal-with-pseudo"
+   },
+   "id": "selector-refused-21-universal-with-pseudo",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div\\\\.ad"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "escape-sequence-refused"
+   },
+   "id": "selector-refused-22-escape",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "df43082ec40058142885f3e913ce84b8977eeadc5060c77f41737abc2ab4d4a2",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "scope-key-anonymous-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "cross-document",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "df43082ec40058142885f3e913ce84b8977eeadc5060c77f41737abc2ab4d4a2",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "scope-key-anonymous-cross-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "same-document",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "59b6c26c6ade940484bdc90914d2088d7dc78d8d5f7b6bdd3d4fb3d64ef9b942",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "scope-key-anonymous-same-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "initial",
+    "trust": "authenticated",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "a533f4329120a9d35315b44328ed2bf42ba1431dc54f5d77f9c3f0df6da5fe9a",
+    "partition": "1c845991828d4ffc1768fc37c76331f1ab5e44931deec2827842ff35a8220726"
+   },
+   "id": "scope-key-authenticated-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "cross-document",
+    "trust": "authenticated",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "a533f4329120a9d35315b44328ed2bf42ba1431dc54f5d77f9c3f0df6da5fe9a",
+    "partition": "1c845991828d4ffc1768fc37c76331f1ab5e44931deec2827842ff35a8220726"
+   },
+   "id": "scope-key-authenticated-cross-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "same-document",
+    "trust": "authenticated",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "16ba97cf649bdd7fecb3308807eb9f2a2dcb3cb6b48108c560db0865a1d78947",
+    "partition": "1c845991828d4ffc1768fc37c76331f1ab5e44931deec2827842ff35a8220726"
+   },
+   "id": "scope-key-authenticated-same-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "initial",
+    "trust": "enterprise",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "af4cf47a3e41a6b7973c39903063ea57078a7e032b9b178182c31317d8e9eb62",
+    "partition": "ad4dfa390fa0c44012b4829ed90cba2a5f9c1bee9ac88d5bb2d5f382261ffd55"
+   },
+   "id": "scope-key-enterprise-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "cross-document",
+    "trust": "enterprise",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "af4cf47a3e41a6b7973c39903063ea57078a7e032b9b178182c31317d8e9eb62",
+    "partition": "ad4dfa390fa0c44012b4829ed90cba2a5f9c1bee9ac88d5bb2d5f382261ffd55"
+   },
+   "id": "scope-key-enterprise-cross-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "same-document",
+    "trust": "enterprise",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "9f1bc60fcc9967f607c3018437b9b8d9a72764d11f7b650a9112c43045d297b0",
+    "partition": "ad4dfa390fa0c44012b4829ed90cba2a5f9c1bee9ac88d5bb2d5f382261ffd55"
+   },
+   "id": "scope-key-enterprise-same-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "anon",
+    "frame_site": "ads.example",
+    "url_class": "generic"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "d93c2d99cce0d8e9aea7ac515e4ed638d81b7582c5007f400a7b451efe4485c0",
+    "partition": "2ca07275aed09b778350d14a3be2855e29ddc1feab552a453f2896673adf2e1a"
+   },
+   "id": "scope-key-urlclass-generic",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "anon",
+    "frame_site": "ads.example",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "8b2a4c33dfd277fcaff56e3560f197a512aa42bda54be52f07b13ae4d261b384",
+    "partition": "2ca07275aed09b778350d14a3be2855e29ddc1feab552a453f2896673adf2e1a"
+   },
+   "id": "scope-key-urlclass-article",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "anon",
+    "frame_site": "ads.example",
+    "url_class": "search"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "fcc36d701510571dcaeed3941f13ce03bfc5982476b5f0ec3cdd83aea898b62d",
+    "partition": "2ca07275aed09b778350d14a3be2855e29ddc1feab552a453f2896673adf2e1a"
+   },
+   "id": "scope-key-urlclass-search",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "anon",
+    "frame_site": "ads.example",
+    "url_class": "player"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "d6a6fe5ac08ca42beb77c04c75fa48fd61d8e335c721bc9150c83f159eb379d7",
+    "partition": "2ca07275aed09b778350d14a3be2855e29ddc1feab552a453f2896673adf2e1a"
+   },
+   "id": "scope-key-urlclass-player",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "anon",
+    "frame_site": "ads.example",
+    "url_class": "embed"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "058e0b098b95193b629f6c8978d5b341db77bd910d1d063e60a75007023c47da",
+    "partition": "2ca07275aed09b778350d14a3be2855e29ddc1feab552a453f2896673adf2e1a"
+   },
+   "id": "scope-key-urlclass-embed",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "embedder_site": "top.example",
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "detail": "the embedder site is not an input to the scope key",
+    "error": "kRejected",
+    "reason": "embedder-refused"
+   },
+   "id": "scope-key-embedder-refused",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "a",
+    "frame_site": "ads.example",
+    "trust": "root",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "detail": "trust is not a known identity class",
+    "error": "kMalformedInput"
+   },
+   "id": "scope-key-bad-trust",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "a",
+    "frame_site": "ads.example",
+    "navigation": "teleport",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "detail": "navigation is not a known class",
+    "error": "kMalformedInput"
+   },
+   "id": "scope-key-bad-navigation",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "a",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "detail": "frame_site must be a string",
+    "error": "kMalformedInput"
+   },
+   "id": "scope-key-missing-site",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": ".ad"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "bytes": 18,
+    "compiled_selectors": 1,
+    "duplicates_removed": 0
+   },
+   "id": "key-set-single-hide",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": "div>.ad"
+     },
+     {
+      "action": "hide",
+      "id": "r2",
+      "selector": "div > .ad"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "bytes": 24,
+    "compiled_selectors": 1,
+    "duplicates_removed": 1
+   },
+   "id": "key-set-whitespace-dedup",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": "div.a.b"
+     },
+     {
+      "action": "hide",
+      "id": "r2",
+      "selector": "div.b.a"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "bytes": 22,
+    "compiled_selectors": 1,
+    "duplicates_removed": 1
+   },
+   "id": "key-set-classorder-dedup",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": ".ad"
+     },
+     {
+      "action": "remove",
+      "id": "r2",
+      "selector": ".ad"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "bytes": 23,
+    "compiled_selectors": 2,
+    "duplicates_removed": 0
+   },
+   "id": "key-set-action-distinct",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": ".ad"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "bytes": 18,
+    "compiled_selectors": 1,
+    "duplicates_removed": 0
+   },
+   "id": "key-set-action-hide",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "collapse",
+      "id": "r1",
+      "selector": ".ad"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "bytes": 18,
+    "compiled_selectors": 1,
+    "duplicates_removed": 0
+   },
+   "id": "key-set-action-collapse",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "visibility",
+      "id": "r1",
+      "selector": ".ad"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "bytes": 23,
+    "compiled_selectors": 1,
+    "duplicates_removed": 0
+   },
+   "id": "key-set-action-visibility",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "remove",
+      "id": "r1",
+      "selector": ".ad"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "bytes": 5,
+    "compiled_selectors": 1,
+    "duplicates_removed": 0
+   },
+   "id": "key-set-action-remove",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "display": "none",
+       "opacity": "0"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "bytes": 28,
+    "compiled_selectors": 1,
+    "duplicates_removed": 0
+   },
+   "id": "key-set-style-two-decls",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "behavior": "none"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-css-property"
+   },
+   "id": "key-set-refused-property-behavior",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "-moz-binding": "none"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-css-property"
+   },
+   "id": "key-set-refused-property--moz-binding",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "content": "none"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-css-property"
+   },
+   "id": "key-set-refused-property-content",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "position": "none"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-css-property"
+   },
+   "id": "key-set-refused-property-position",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "z-index": "none"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-css-property"
+   },
+   "id": "key-set-refused-property-z-index",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "background": "none"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-css-property"
+   },
+   "id": "key-set-refused-property-background",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "background-image": "none"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-css-property"
+   },
+   "id": "key-set-refused-property-background-image",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "list-style-image": "none"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-css-property"
+   },
+   "id": "key-set-refused-property-list-style-image",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "cursor": "none"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-css-property"
+   },
+   "id": "key-set-refused-property-cursor",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "border-image": "none"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-css-property"
+   },
+   "id": "key-set-refused-property-border-image",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "mask": "none"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-css-property"
+   },
+   "id": "key-set-refused-property-mask",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "filter": "none"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-css-property"
+   },
+   "id": "key-set-refused-property-filter",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "src": "none"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-css-property"
+   },
+   "id": "key-set-refused-property-src",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "display": "none !important"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "bang-important-refused"
+   },
+   "id": "key-set-refused-bang-in-value",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "background": "url(x)"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-css-property"
+   },
+   "id": "key-set-refused-url-in-value",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": []
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "empty-rule-set"
+   },
+   "id": "key-set-refused-empty",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {}
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "empty-style-map"
+   },
+   "id": "key-set-refused-empty-style-map",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": ".a"
+     },
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": ".b"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "duplicate-rule-id"
+   },
+   "id": "key-set-refused-dup-id",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "script",
+      "id": "r1",
+      "selector": ".a"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-action"
+   },
+   "id": "key-set-refused-unknown-action",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": "*.bogus("
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "disallowed-char"
+   },
+   "id": "key-set-refused-bad-selector",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": "*:has(.ad)"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "universal-with-pseudo"
+   },
+   "id": "key-set-refused-universal-pseudo",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r0",
+      "selector": ".c0"
+     },
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": ".c1"
+     },
+     {
+      "action": "hide",
+      "id": "r2",
+      "selector": ".c2"
+     },
+     {
+      "action": "hide",
+      "id": "r3",
+      "selector": ".c3"
+     },
+     {
+      "action": "hide",
+      "id": "r4",
+      "selector": ".c4"
+     },
+     {
+      "action": "hide",
+      "id": "r5",
+      "selector": ".c5"
+     },
+     {
+      "action": "hide",
+      "id": "r6",
+      "selector": ".c6"
+     },
+     {
+      "action": "hide",
+      "id": "r7",
+      "selector": ".c7"
+     },
+     {
+      "action": "hide",
+      "id": "r8",
+      "selector": ".c8"
+     },
+     {
+      "action": "hide",
+      "id": "r9",
+      "selector": ".c9"
+     },
+     {
+      "action": "hide",
+      "id": "r10",
+      "selector": ".c10"
+     },
+     {
+      "action": "hide",
+      "id": "r11",
+      "selector": ".c11"
+     },
+     {
+      "action": "hide",
+      "id": "r12",
+      "selector": ".c12"
+     },
+     {
+      "action": "hide",
+      "id": "r13",
+      "selector": ".c13"
+     },
+     {
+      "action": "hide",
+      "id": "r14",
+      "selector": ".c14"
+     },
+     {
+      "action": "hide",
+      "id": "r15",
+      "selector": ".c15"
+     },
+     {
+      "action": "hide",
+      "id": "r16",
+      "selector": ".c16"
+     },
+     {
+      "action": "hide",
+      "id": "r17",
+      "selector": ".c17"
+     },
+     {
+      "action": "hide",
+      "id": "r18",
+      "selector": ".c18"
+     },
+     {
+      "action": "hide",
+      "id": "r19",
+      "selector": ".c19"
+     },
+     {
+      "action": "hide",
+      "id": "r20",
+      "selector": ".c20"
+     },
+     {
+      "action": "hide",
+      "id": "r21",
+      "selector": ".c21"
+     },
+     {
+      "action": "hide",
+      "id": "r22",
+      "selector": ".c22"
+     },
+     {
+      "action": "hide",
+      "id": "r23",
+      "selector": ".c23"
+     },
+     {
+      "action": "hide",
+      "id": "r24",
+      "selector": ".c24"
+     },
+     {
+      "action": "hide",
+      "id": "r25",
+      "selector": ".c25"
+     },
+     {
+      "action": "hide",
+      "id": "r26",
+      "selector": ".c26"
+     },
+     {
+      "action": "hide",
+      "id": "r27",
+      "selector": ".c27"
+     },
+     {
+      "action": "hide",
+      "id": "r28",
+      "selector": ".c28"
+     },
+     {
+      "action": "hide",
+      "id": "r29",
+      "selector": ".c29"
+     },
+     {
+      "action": "hide",
+      "id": "r30",
+      "selector": ".c30"
+     },
+     {
+      "action": "hide",
+      "id": "r31",
+      "selector": ".c31"
+     },
+     {
+      "action": "hide",
+      "id": "r32",
+      "selector": ".c32"
+     },
+     {
+      "action": "hide",
+      "id": "r33",
+      "selector": ".c33"
+     },
+     {
+      "action": "hide",
+      "id": "r34",
+      "selector": ".c34"
+     },
+     {
+      "action": "hide",
+      "id": "r35",
+      "selector": ".c35"
+     },
+     {
+      "action": "hide",
+      "id": "r36",
+      "selector": ".c36"
+     },
+     {
+      "action": "hide",
+      "id": "r37",
+      "selector": ".c37"
+     },
+     {
+      "action": "hide",
+      "id": "r38",
+      "selector": ".c38"
+     },
+     {
+      "action": "hide",
+      "id": "r39",
+      "selector": ".c39"
+     },
+     {
+      "action": "hide",
+      "id": "r40",
+      "selector": ".c40"
+     },
+     {
+      "action": "hide",
+      "id": "r41",
+      "selector": ".c41"
+     },
+     {
+      "action": "hide",
+      "id": "r42",
+      "selector": ".c42"
+     },
+     {
+      "action": "hide",
+      "id": "r43",
+      "selector": ".c43"
+     },
+     {
+      "action": "hide",
+      "id": "r44",
+      "selector": ".c44"
+     },
+     {
+      "action": "hide",
+      "id": "r45",
+      "selector": ".c45"
+     },
+     {
+      "action": "hide",
+      "id": "r46",
+      "selector": ".c46"
+     },
+     {
+      "action": "hide",
+      "id": "r47",
+      "selector": ".c47"
+     },
+     {
+      "action": "hide",
+      "id": "r48",
+      "selector": ".c48"
+     },
+     {
+      "action": "hide",
+      "id": "r49",
+      "selector": ".c49"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "bytes": 980,
+    "compiled_selectors": 50,
+    "duplicates_removed": 0
+   },
+   "id": "key-set-many-rules",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "condition": "flag-off"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "flag-off",
+    "outcome": "inert",
+    "page_effect": "The page renders exactly as it does today: no style is emitted, no observer is installed, no call site is active.",
+    "reason": "",
+    "reported": false
+   },
+   "id": "degrade-flag-off",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "scriptlets-off"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "scriptlets-off",
+    "outcome": "inert",
+    "page_effect": "Cosmetic hiding still applies; scriptlets do nothing. The debug page reports the registry as 'inert: flag off' verbatim.",
+    "reason": "",
+    "reported": false
+   },
+   "id": "degrade-scriptlets-off",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "blob-invalid"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "blob-invalid",
+    "outcome": "drop-blob",
+    "page_effect": "The whole blob is dropped and the page renders unstyled. NOT the half-styled state that dropping only the bad rule would produce.",
+    "reason": "blob-invalid",
+    "reported": true
+   },
+   "id": "degrade-blob-invalid",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "blob-missing"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "blob-missing",
+    "outcome": "generic-set-only",
+    "page_effect": "The always-on generic hide set still applies; site-specific rules do not. The page renders with only the conservative junk selectors hidden.",
+    "reason": "blob-missing",
+    "reported": true
+   },
+   "id": "degrade-blob-missing",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "scope-mismatch"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "scope-mismatch",
+    "outcome": "drop-blob",
+    "page_effect": "The blob is not applied at all. A blob for site A in a frame on site B would leak one identity's rule set into another, so this is a hard drop and not a partial apply.",
+    "reason": "scope-mismatch",
+    "reported": true
+   },
+   "id": "degrade-scope-mismatch",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "rule-unparsable"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "rule-unparsable",
+    "outcome": "drop-blob",
+    "page_effect": "One unparsable rule rejects the whole blob. The alternative \u2014 dropping the bad rule and applying the rest \u2014 would let a list author learn which payloads survived, which is a probing channel.",
+    "reason": "rule-unparsable",
+    "reported": true
+   },
+   "id": "degrade-rule-unparsable",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "rule-unknown-pseudo"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "rule-unknown-pseudo",
+    "outcome": "drop-blob",
+    "page_effect": "As above. A pseudo-class outside the allowlist means the producer and the renderer disagree about the contract.",
+    "reason": "unknown-pseudo-class",
+    "reported": true
+   },
+   "id": "degrade-rule-unknown-pseudo",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "rule-too-expensive"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "rule-too-expensive",
+    "outcome": "drop-rule",
+    "page_effect": "THIS is the one condition that drops a single rule rather than the blob, because the rule is valid and the cost is a property of the page rather than of the rule. The remaining rules still apply.",
+    "reason": "rule-too-expensive",
+    "reported": true
+   },
+   "id": "degrade-rule-too-expensive",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "shields-down"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "shields-down",
+    "outcome": "generic-set-only",
+    "page_effect": "Site-specific rules are off. The generic set STILL applies, because a shields-down must not leave the page half-styled \u2014 the user asked for less filtering, not for a broken layout.",
+    "reason": "",
+    "reported": false
+   },
+   "id": "degrade-shields-down",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "empty-rule-set"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "empty-rule-set",
+    "outcome": "no-work",
+    "page_effect": "Zero rules means zero emitted style and no mutation observer installed. This is what makes the default-off state byte-identical to today's product, and it is asserted rather than assumed.",
+    "reason": "",
+    "reported": false
+   },
+   "id": "degrade-empty-rule-set",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "dom-mutation-storm"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "dom-mutation-storm",
+    "outcome": "throttle",
+    "page_effect": "The page keeps rendering; cosmetic matching slows to the budget. A mutation storm must never make the page jank, so the cosmetic work yields rather than competing with layout.",
+    "reason": "dom-mutation-storm",
+    "reported": true
+   },
+   "id": "degrade-dom-mutation-storm",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "engine-unavailable"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "engine-unavailable",
+    "outcome": "page-unstyled",
+    "page_effect": "The page renders unstyled. Fail-OPEN is correct here: refusing to hide an ad must never refuse to render a page. This is the deliberate opposite of the network layer's fail-CLOSED rule.",
+    "reason": "engine-unavailable",
+    "reported": true
+   },
+   "id": "degrade-engine-unavailable",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "main-world-required"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "main-world-required",
+    "outcome": "drop-rule",
+    "page_effect": "A scriptlet that would need a main-world handle is refused outright \u2014 the handle is never set \u2014 and the rest of the registry still works.",
+    "reason": "main-world-required",
+    "reported": true
+   },
+   "id": "degrade-main-world-required",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "generic-set-only"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "generic-set-only",
+    "outcome": "generic-set-only",
+    "page_effect": "Only the conservative generic set applies. This is the floor: the least the feature ever does when everything else is unavailable.",
+    "reason": "",
+    "reported": false
+   },
+   "id": "degrade-generic-set-only",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "invented-state"
+   },
+   "exit": 0,
+   "expect": {
+    "detail": "invented-state",
+    "error": "kRejected",
+    "reason": "unknown-degrade-condition"
+   },
+   "id": "degrade-unknown",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "keyset_rules": 0
+   },
+   "exit": 0,
+   "expect": {
+    "blob_cache_entries": 0,
+    "blob_cache_occupancy": "NOT-RUN (network-service side)",
+    "cosmetic_enabled": false,
+    "degrade_events": 0,
+    "generic_set_applies": false,
+    "keyset_rules": 0,
+    "observer_installed": false,
+    "refused_pseudos": 0,
+    "refused_selectors": 0
+   },
+   "id": "page-states-off-0",
+   "method": "page-states"
+  },
+  {
+   "args": {
+    "keyset_rules": 1
+   },
+   "exit": 0,
+   "expect": {
+    "blob_cache_entries": 0,
+    "blob_cache_occupancy": "NOT-RUN (network-service side)",
+    "cosmetic_enabled": false,
+    "degrade_events": 0,
+    "generic_set_applies": false,
+    "keyset_rules": 1,
+    "observer_installed": false,
+    "refused_pseudos": 0,
+    "refused_selectors": 0
+   },
+   "id": "page-states-off-1",
+   "method": "page-states"
+  },
+  {
+   "args": {
+    "keyset_rules": 3
+   },
+   "exit": 0,
+   "expect": {
+    "blob_cache_entries": 0,
+    "blob_cache_occupancy": "NOT-RUN (network-service side)",
+    "cosmetic_enabled": false,
+    "degrade_events": 0,
+    "generic_set_applies": false,
+    "keyset_rules": 3,
+    "observer_installed": false,
+    "refused_pseudos": 0,
+    "refused_selectors": 0
+   },
+   "id": "page-states-off-3",
+   "method": "page-states"
+  },
+  {
+   "args": {
+    "keyset_rules": 0
+   },
+   "exit": 0,
+   "expect": {
+    "blob_cache_entries": 0,
+    "blob_cache_occupancy": "NOT-RUN (network-service side)",
+    "cosmetic_enabled": true,
+    "degrade_events": 0,
+    "generic_set_applies": true,
+    "keyset_rules": 0,
+    "observer_installed": false,
+    "refused_pseudos": 0,
+    "refused_selectors": 0
+   },
+   "flags": "--flag xr_shield_cosmetic_v1=on",
+   "id": "page-states-xr_shield_cosmetic_v1-on-0",
+   "method": "page-states"
+  },
+  {
+   "args": {
+    "keyset_rules": 1
+   },
+   "exit": 0,
+   "expect": {
+    "blob_cache_entries": 0,
+    "blob_cache_occupancy": "NOT-RUN (network-service side)",
+    "cosmetic_enabled": true,
+    "degrade_events": 0,
+    "generic_set_applies": true,
+    "keyset_rules": 1,
+    "observer_installed": true,
+    "refused_pseudos": 0,
+    "refused_selectors": 0
+   },
+   "flags": "--flag xr_shield_cosmetic_v1=on",
+   "id": "page-states-xr_shield_cosmetic_v1-on-1",
+   "method": "page-states"
+  },
+  {
+   "args": {
+    "keyset_rules": 3
+   },
+   "exit": 0,
+   "expect": {
+    "blob_cache_entries": 0,
+    "blob_cache_occupancy": "NOT-RUN (network-service side)",
+    "cosmetic_enabled": true,
+    "degrade_events": 0,
+    "generic_set_applies": true,
+    "keyset_rules": 3,
+    "observer_installed": true,
+    "refused_pseudos": 0,
+    "refused_selectors": 0
+   },
+   "flags": "--flag xr_shield_cosmetic_v1=on",
+   "id": "page-states-xr_shield_cosmetic_v1-on-3",
+   "method": "page-states"
+  },
+  {
+   "args": {
+    "blob_id": "vec-1",
+    "generated_epoch": 1758000000,
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": "div > .ad"
+     },
+     {
+      "action": "remove",
+      "id": "r2",
+      "selector": ".sponsor"
+     }
+    ],
+    "scope": {
+     "identity_class": "anonymous",
+     "site": "example.test"
+    }
+   },
+   "exit": 0,
+   "expect": {
+    "blob": "{\"blob_id\":\"vec-1\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"},{\"action\":\"remove\",\"enabled\":true,\"id\":\"r2\",\"selector\":\".sponsor\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"2d3be28434824e74e9f9e1266c487af55db631b6c6f63f961ca7e4afe02acf68\"}",
+    "bytes": 392,
+    "sha256": "2d3be28434824e74e9f9e1266c487af55db631b6c6f63f961ca7e4afe02acf68"
+   },
+   "id": "blob-build-two-rules",
+   "method": "blob-build"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"vec-1\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"},{\"action\":\"remove\",\"enabled\":true,\"id\":\"r2\",\"selector\":\".sponsor\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"2d3be28434824e74e9f9e1266c487af55db631b6c6f63f961ca7e4afe02acf68\"}",
+    "frame_scope": {
+     "identity_class": "anonymous",
+     "site": "example.test"
+    }
+   },
+   "exit": 0,
+   "expect": {
+    "blob_id": "vec-1",
+    "bytes": 34,
+    "compiled_selectors": 2,
+    "duplicates_removed": 0,
+    "page_modifying": 1,
+    "producer_refusals": 0,
+    "sha256": "2d3be28434824e74e9f9e1266c487af55db631b6c6f63f961ca7e4afe02acf68"
+   },
+   "id": "blob-check-valid",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"vec-1\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"},{\"action\":\"remove\",\"enabled\":true,\"id\":\"r2\",\"selector\":\".sponsor\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"2d3be28434824e74e9f9e1266c487af55db631b6c6f63f961ca7e4afe02acf68\"}"
+   },
+   "exit": 0,
+   "expect": {
+    "blob_id": "vec-1",
+    "bytes": 34,
+    "compiled_selectors": 2,
+    "duplicates_removed": 0,
+    "page_modifying": 1,
+    "producer_refusals": 0,
+    "sha256": "2d3be28434824e74e9f9e1266c487af55db631b6c6f63f961ca7e4afe02acf68"
+   },
+   "id": "blob-check-no-frame",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"vec-1\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"},{\"action\":\"remove\",\"enabled\":true,\"id\":\"r2\",\"selector\":\".sponsor\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"2d3be28434824e74e9f9e1266c487af55db631b6c6f63f961ca7e4afe02acf68\"}",
+    "frame_scope": {
+     "identity_class": "anonymous",
+     "site": "other.test"
+    }
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "scope-mismatch"
+   },
+   "id": "blob-check-wrong-site",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"vec-1\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"},{\"action\":\"remove\",\"enabled\":true,\"id\":\"r2\",\"selector\":\".sponsor\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"2d3be28434824e74e9f9e1266c487af55db631b6c6f63f961ca7e4afe02acf68\"}",
+    "frame_scope": {
+     "identity_class": "enterprise",
+     "site": "example.test"
+    }
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "scope-mismatch"
+   },
+   "id": "blob-check-wrong-identity",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"vec-1\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"body\"},{\"action\":\"remove\",\"enabled\":true,\"id\":\"r2\",\"selector\":\".sponsor\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"2d3be28434824e74e9f9e1266c487af55db631b6c6f63f961ca7e4afe02acf68\"}"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "sha256-mismatch"
+   },
+   "id": "blob-check-tampered",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"vec-1\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"},{\"action\":\"remove\",\"enabled\":true,\"id\":\"r2\",\"selector\":\".sponsor\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha25\"sha256\":\"abcd\"\"}"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "malformed-blob"
+   },
+   "id": "blob-check-truncated-digest",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "not-json"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "malformed-blob"
+   },
+   "id": "blob-check-not-json",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "[]"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "malformed-blob"
+   },
+   "id": "blob-check-array",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob_id": "vec-2",
+    "generated_epoch": 1758000000,
+    "refusals": [
+     {
+      "reason": "unknown-pseudo-class",
+      "rule_index": 7
+     }
+    ],
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": ".ad"
+     }
+    ],
+    "scope": {
+     "identity_class": "anonymous",
+     "site": "example.test"
+    }
+   },
+   "exit": 0,
+   "expect": {
+    "blob": "{\"blob_id\":\"vec-2\",\"generated_epoch\":1758000000,\"refusals\":[{\"reason\":\"unknown-pseudo-class\",\"rule_index\":7}],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\".ad\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"cee5af028470ccf22990e05c2b3d646cf6a446816fafd83422de6ae31f897847\"}",
+    "bytes": 367,
+    "sha256": "cee5af028470ccf22990e05c2b3d646cf6a446816fafd83422de6ae31f897847"
+   },
+   "id": "blob-build-with-refusal",
+   "method": "blob-build"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"vec-2\",\"generated_epoch\":1758000000,\"refusals\":[{\"reason\":\"unknown-pseudo-class\",\"rule_index\":7}],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\".ad\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"cee5af028470ccf22990e05c2b3d646cf6a446816fafd83422de6ae31f897847\"}",
+    "frame_scope": {
+     "identity_class": "anonymous",
+     "site": "example.test"
+    }
+   },
+   "exit": 0,
+   "expect": {
+    "blob_id": "vec-2",
+    "bytes": 18,
+    "compiled_selectors": 1,
+    "duplicates_removed": 0,
+    "page_modifying": 0,
+    "producer_refusals": 1,
+    "sha256": "cee5af028470ccf22990e05c2b3d646cf6a446816fafd83422de6ae31f897847"
+   },
+   "id": "blob-check-with-refusal",
+   "method": "blob-check"
+  },
+  {
+   "args": {},
+   "exit": 0,
+   "expect": {
+    "scriptlet_registry_state": "inert: flag off",
+    "xr_shield_cosmetic_v1": "off",
+    "xr_shield_scriptlets": "off"
+   },
+   "id": "unknown-method",
+   "method": "flag-status"
+  },
+  {
+   "args": {
+    "selector": "div.ad"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div.ad",
+    "compounds": 1,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-00",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "section > div.ad"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "section > div.ad",
+    "compounds": 2,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-01",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "main .sponsored"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "main   .sponsored",
+    "compounds": 2,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-02",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "aside#rail .ad-slot"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "aside#rail   .ad-slot",
+    "compounds": 2,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-03",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div[class]"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div[class]",
+    "compounds": 1,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-04",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div[class*=advert]"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div[class*=\"advert\"]",
+    "compounds": 1,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-05",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div[class^=ad-]"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div[class^=\"ad-\"]",
+    "compounds": 1,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-06",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div[class$=-ad]"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div[class$=\"-ad\"]",
+    "compounds": 1,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-07",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div[class~=banner]"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div[class~=\"banner\"]",
+    "compounds": 1,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-08",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div[class|=ad]"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div[class|=\"ad\"]",
+    "compounds": 1,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-09",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div[class*=\"Ad Slot\" i]"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div[class*=\"Ad Slot\" i]",
+    "compounds": 1,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-10",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "DIV:HAS(.a)"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "DIV:has(.a)",
+    "compounds": 1,
+    "pseudos": [
+     "has"
+    ]
+   },
+   "id": "selector-admitted-extra-11",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "Div.Ad"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "Div.Ad",
+    "compounds": 1,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-12",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "SECTION > DIV.AD"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "SECTION > DIV.AD",
+    "compounds": 2,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-13",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "article > header + div"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "article > header + div",
+    "compounds": 3,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-14",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "ul > li:first-child"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "ul > li:first-child",
+    "compounds": 2,
+    "pseudos": [
+     "first-child"
+    ]
+   },
+   "id": "selector-admitted-extra-15",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "body > div"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "body > div",
+    "compounds": 2,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-16",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div.ad:not(.kept)"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div.ad:not(.kept)",
+    "compounds": 1,
+    "pseudos": [
+     "not"
+    ]
+   },
+   "id": "selector-admitted-extra-17",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "span:has-text(Advertisement)"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "span:has-text(Advertisement)",
+    "compounds": 1,
+    "pseudos": [
+     "has-text"
+    ]
+   },
+   "id": "selector-admitted-extra-18",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:min-text-length(120)"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div:min-text-length(120)",
+    "compounds": 1,
+    "pseudos": [
+     "min-text-length"
+    ]
+   },
+   "id": "selector-admitted-extra-19",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "p:upward(1)"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "p:upward(1)",
+    "compounds": 1,
+    "pseudos": [
+     "upward"
+    ]
+   },
+   "id": "selector-admitted-extra-20",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "section:matches-path(/news)"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "section:matches-path(/news)",
+    "compounds": 1,
+    "pseudos": [
+     "matches-path"
+    ]
+   },
+   "id": "selector-admitted-extra-21",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div.ad ~ div.footer"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div.ad ~ div.footer",
+    "compounds": 2,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-22",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "nav a[href]"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "nav   a[href]",
+    "compounds": 2,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-23",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "form input[type=hidden]"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "form   input[type=\"hidden\"]",
+    "compounds": 2,
+    "pseudos": []
+   },
+   "id": "selector-admitted-extra-24",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div[class*=promoted]:has(img)"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div[class*=\"promoted\"]:has(img)",
+    "compounds": 1,
+    "pseudos": [
+     "has"
+    ]
+   },
+   "id": "selector-admitted-extra-25",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "table td:nth-child(2)"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "table   td:nth-child(2)",
+    "compounds": 2,
+    "pseudos": [
+     "nth-child"
+    ]
+   },
+   "id": "selector-admitted-extra-26",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:has("
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unbalanced-paren"
+   },
+   "id": "selector-extra-00-unbalanced-paren",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div["
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unbalanced-bracket"
+   },
+   "id": "selector-extra-01-unbalanced-bracket",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "disallowed-char"
+   },
+   "id": "selector-extra-02-disallowed-char",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div..ad"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "disallowed-char"
+   },
+   "id": "selector-extra-03-empty-compound",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div.ad!"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "disallowed-char"
+   },
+   "id": "selector-extra-04-bare-bang",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": ".aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": ".aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "compounds": 1,
+    "pseudos": []
+   },
+   "id": "selector-extra-05-ident-at-limit",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": ".aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "ident-too-long"
+   },
+   "id": "selector-extra-06-ident-over-limit",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:has-text(qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq)"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "selector-too-long"
+   },
+   "id": "selector-extra-07-arg-near-limit",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:has(div:has(div:has(div:has(div:has(.a))))"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unbalanced-paren"
+   },
+   "id": "selector-extra-08-nested-has",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "*:has-text(x)"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "universal-with-pseudo"
+   },
+   "id": "selector-extra-09-universal-functional",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:nth-ancestor(2)"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-pseudo-class"
+   },
+   "id": "selector-extra-10-refused-pseudo",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:xpath(//a)"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-pseudo-class"
+   },
+   "id": "selector-extra-11-refused-pseudo",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:matches-css(color:red)"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-pseudo-class"
+   },
+   "id": "selector-extra-12-refused-pseudo",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:matches-attr(href)"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-pseudo-class"
+   },
+   "id": "selector-extra-13-refused-pseudo",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:if(.a)"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "unknown-pseudo-class"
+   },
+   "id": "selector-extra-14-refused-pseudo",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:remove"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div:remove",
+    "compounds": 1,
+    "pseudos": [
+     "remove"
+    ]
+   },
+   "id": "selector-extra-15-admitted-bare-remove",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:remove()"
+   },
+   "exit": 0,
+   "expect": {
+    "canonical": "div:remove",
+    "compounds": 1,
+    "pseudos": [
+     "remove"
+    ]
+   },
+   "id": "selector-extra-16-admitted-empty-arg-remove",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "selector": "div:remove(x)"
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "disallowed-pseudo-arg"
+   },
+   "id": "selector-extra-17-remove-with-arg",
+   "method": "selector-parse"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": "div>.ad"
+     },
+     {
+      "action": "hide",
+      "id": "r2",
+      "selector": "div > .ad"
+     },
+     {
+      "action": "hide",
+      "id": "r3",
+      "selector": "div  >  .ad"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "bytes": 24,
+    "compiled_selectors": 1,
+    "duplicates_removed": 2
+   },
+   "id": "key-set-dedup-three-variants",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": ".ad"
+     },
+     {
+      "action": "style",
+      "id": "r2",
+      "selector": ".ad",
+      "style": {
+       "display": "none"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "bytes": 36,
+    "compiled_selectors": 2,
+    "duplicates_removed": 0
+   },
+   "id": "key-set-style-vs-hide-distinct",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": ".ad"
+     },
+     {
+      "action": "collapse",
+      "id": "r2",
+      "selector": ".ad"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "bytes": 36,
+    "compiled_selectors": 2,
+    "duplicates_removed": 0
+   },
+   "id": "key-set-hide-collapse-distinct",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "exception_sites": [
+       "a.example",
+       "b.example"
+      ],
+      "id": "r1",
+      "selector": ".ad"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "bytes": 38,
+    "compiled_selectors": 1,
+    "duplicates_removed": 0
+   },
+   "id": "key-set-exception-sites",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "enabled": false,
+      "id": "r1",
+      "selector": ".ad"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "bytes": 18,
+    "compiled_selectors": 1,
+    "duplicates_removed": 0
+   },
+   "id": "key-set-disabled-rule",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "display": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "style-value-too-long"
+   },
+   "id": "key-set-refused-style-value-too-long",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "display": ""
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "empty-style-value"
+   },
+   "id": "key-set-refused-empty-style-value",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "clip": "none",
+       "clip-path": "none",
+       "display": "none",
+       "height": "none",
+       "max-height": "none",
+       "max-width": "none",
+       "min-height": "none",
+       "min-width": "none",
+       "opacity": "none",
+       "overflow": "none",
+       "pointer-events": "none",
+       "visibility": "none",
+       "width": "none"
+      }
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "bytes": 191,
+    "compiled_selectors": 1,
+    "duplicates_removed": 0
+   },
+   "id": "key-set-refused-too-many-declarations",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "action": "hide",
+      "id": "",
+      "selector": ".ad"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "empty-rule-id"
+   },
+   "id": "key-set-refused-empty-id",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     "nope"
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "detail": "rule 0 is not an object",
+    "error": "kRejected",
+    "reason": "rule-rejected"
+   },
+   "id": "key-set-refused-nonobject-rule",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "rules": [
+     {
+      "id": "r1",
+      "selector": ".ad"
+     }
+    ]
+   },
+   "exit": 0,
+   "expect": {
+    "detail": "rule 0 needs id, selector and action",
+    "error": "kRejected",
+    "reason": "rule-rejected"
+   },
+   "id": "key-set-missing-action",
+   "method": "key-set"
+  },
+  {
+   "args": {
+    "frame_identity": "anon",
+    "frame_site": "ads.example",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "8b2a4c33dfd277fcaff56e3560f197a512aa42bda54be52f07b13ae4d261b384",
+    "partition": "2ca07275aed09b778350d14a3be2855e29ddc1feab552a453f2896673adf2e1a"
+   },
+   "id": "scope-key-identity-4",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "df43082ec40058142885f3e913ce84b8977eeadc5060c77f41737abc2ab4d4a2",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "scope-key-identity-5",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "bob@example.test",
+    "frame_site": "ads.example",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "fd5086e4f0d5c1586f341f44a3ca35c0e054d347fbd873d9cd7730ea81bdf646",
+    "partition": "c3540d9b42297906d20ddf421656f002ebd5e649be7797eb65fe72ed4cd43d93"
+   },
+   "id": "scope-key-identity-16",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "frame_site": "ads.example",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "d4ffc73082ebb2f16f81d08734dcb46676203adcada87e1b1972218768017271",
+    "partition": "e38de163b0b89a8a7f64d8fde5ef1bb162b1f86114f19dbb1ecc318e7bfa5da5"
+   },
+   "id": "scope-key-identity-60",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "anon",
+    "frame_site": "ads.example",
+    "url_class": "generic"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "d93c2d99cce0d8e9aea7ac515e4ed638d81b7582c5007f400a7b451efe4485c0",
+    "partition": "2ca07275aed09b778350d14a3be2855e29ddc1feab552a453f2896673adf2e1a"
+   },
+   "id": "scope-key-site-ads_example",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "anon",
+    "frame_site": "a.b.c.example",
+    "url_class": "generic"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "4f33a37eb1f936241fb316825031c30785ab3a6790c9ca2a6f9750888eaeefcd",
+    "partition": "2ca07275aed09b778350d14a3be2855e29ddc1feab552a453f2896673adf2e1a"
+   },
+   "id": "scope-key-site-a_b_c_example",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "anon",
+    "frame_site": "xn--e1afmkfd.example",
+    "url_class": "generic"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "7422676f2db7ff47cc82f9a4e92f349ad468de57e548764e2dcaec01722366b3",
+    "partition": "2ca07275aed09b778350d14a3be2855e29ddc1feab552a453f2896673adf2e1a"
+   },
+   "id": "scope-key-site-xn--e1afmkfd_example",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "keyset_rules": 0
+   },
+   "exit": 0,
+   "expect": {
+    "blob_cache_entries": 0,
+    "blob_cache_occupancy": "NOT-RUN (network-service side)",
+    "cosmetic_enabled": true,
+    "degrade_events": 0,
+    "generic_set_applies": true,
+    "keyset_rules": 0,
+    "observer_installed": false,
+    "refused_pseudos": 0,
+    "refused_selectors": 0
+   },
+   "flags": "--flag xr_shield_cosmetic_v1=on",
+   "id": "page-states-on-0",
+   "method": "page-states"
+  },
+  {
+   "args": {
+    "keyset_rules": 1
+   },
+   "exit": 0,
+   "expect": {
+    "blob_cache_entries": 0,
+    "blob_cache_occupancy": "NOT-RUN (network-service side)",
+    "cosmetic_enabled": true,
+    "degrade_events": 0,
+    "generic_set_applies": true,
+    "keyset_rules": 1,
+    "observer_installed": true,
+    "refused_pseudos": 0,
+    "refused_selectors": 0
+   },
+   "flags": "--flag xr_shield_cosmetic_v1=on",
+   "id": "page-states-on-1",
+   "method": "page-states"
+  },
+  {
+   "args": {
+    "keyset_rules": 2
+   },
+   "exit": 0,
+   "expect": {
+    "blob_cache_entries": 0,
+    "blob_cache_occupancy": "NOT-RUN (network-service side)",
+    "cosmetic_enabled": true,
+    "degrade_events": 0,
+    "generic_set_applies": true,
+    "keyset_rules": 2,
+    "observer_installed": true,
+    "refused_pseudos": 0,
+    "refused_selectors": 0
+   },
+   "flags": "--flag xr_shield_cosmetic_v1=on",
+   "id": "page-states-on-2",
+   "method": "page-states"
+  },
+  {
+   "args": {
+    "keyset_rules": 5
+   },
+   "exit": 0,
+   "expect": {
+    "blob_cache_entries": 0,
+    "blob_cache_occupancy": "NOT-RUN (network-service side)",
+    "cosmetic_enabled": true,
+    "degrade_events": 0,
+    "generic_set_applies": true,
+    "keyset_rules": 5,
+    "observer_installed": true,
+    "refused_pseudos": 0,
+    "refused_selectors": 0
+   },
+   "flags": "--flag xr_shield_cosmetic_v1=on",
+   "id": "page-states-on-5",
+   "method": "page-states"
+  },
+  {
+   "args": {
+    "keyset_rules": 100
+   },
+   "exit": 0,
+   "expect": {
+    "blob_cache_entries": 0,
+    "blob_cache_occupancy": "NOT-RUN (network-service side)",
+    "cosmetic_enabled": true,
+    "degrade_events": 0,
+    "generic_set_applies": true,
+    "keyset_rules": 100,
+    "observer_installed": true,
+    "refused_pseudos": 0,
+    "refused_selectors": 0
+   },
+   "flags": "--flag xr_shield_cosmetic_v1=on",
+   "id": "page-states-on-100",
+   "method": "page-states"
+  },
+  {
+   "args": {
+    "condition": "shields-down"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "shields-down",
+    "outcome": "generic-set-only",
+    "page_effect": "Site-specific rules are off. The generic set STILL applies, because a shields-down must not leave the page half-styled \u2014 the user asked for less filtering, not for a broken layout.",
+    "reason": "",
+    "reported": false
+   },
+   "flags": "--flag xr_shield_cosmetic_v1=on",
+   "id": "degrade-shields-down-flag-on",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "generic-set-only"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "generic-set-only",
+    "outcome": "generic-set-only",
+    "page_effect": "Only the conservative generic set applies. This is the floor: the least the feature ever does when everything else is unavailable.",
+    "reason": "",
+    "reported": false
+   },
+   "flags": "--flag xr_shield_cosmetic_v1=on",
+   "id": "degrade-generic-set-only-flag-on",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "engine-unavailable"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "engine-unavailable",
+    "outcome": "page-unstyled",
+    "page_effect": "The page renders unstyled. Fail-OPEN is correct here: refusing to hide an ad must never refuse to render a page. This is the deliberate opposite of the network layer's fail-CLOSED rule.",
+    "reason": "engine-unavailable",
+    "reported": true
+   },
+   "flags": "--flag xr_shield_cosmetic_v1=on",
+   "id": "degrade-engine-unavailable-flag-on",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "blob_id": "vec-empty",
+    "generated_epoch": 1,
+    "rules": [],
+    "scope": {
+     "identity_class": "anonymous",
+     "site": "example.test"
+    }
+   },
+   "exit": 0,
+   "expect": {
+    "blob": "{\"blob_id\":\"vec-empty\",\"generated_epoch\":1,\"refusals\":[],\"rules\":[],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"d77b89ab8192184b295a60cb1e318d1c8be826068cea327c68b49bb587a27ee9\"}",
+    "bytes": 255,
+    "sha256": "d77b89ab8192184b295a60cb1e318d1c8be826068cea327c68b49bb587a27ee9"
+   },
+   "id": "blob-build-empty-rules",
+   "method": "blob-build"
+  },
+  {
+   "args": {
+    "blob_id": "vec-auth",
+    "generated_epoch": 2,
+    "rules": [
+     {
+      "action": "hide",
+      "id": "r1",
+      "selector": ".ad"
+     }
+    ],
+    "scope": {
+     "identity_class": "authenticated",
+     "site": "example.test"
+    }
+   },
+   "exit": 0,
+   "expect": {
+    "blob": "{\"blob_id\":\"vec-auth\",\"generated_epoch\":2,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\".ad\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"authenticated\",\"site\":\"example.test\"},\"sha256\":\"ad8618db2c851f90e3dcd19de02ecb94efe378d3d47b802d98f81929bb307bfb\"}",
+    "bytes": 317,
+    "sha256": "ad8618db2c851f90e3dcd19de02ecb94efe378d3d47b802d98f81929bb307bfb"
+   },
+   "id": "blob-build-authenticated",
+   "method": "blob-build"
+  },
+  {
+   "args": {
+    "blob_id": "vec-style",
+    "generated_epoch": 3,
+    "rules": [
+     {
+      "action": "style",
+      "id": "r1",
+      "selector": ".ad",
+      "style": {
+       "opacity": "0"
+      }
+     }
+    ],
+    "scope": {
+     "identity_class": "anonymous",
+     "site": "example.test"
+    }
+   },
+   "exit": 0,
+   "expect": {
+    "blob": "{\"blob_id\":\"vec-style\",\"generated_epoch\":3,\"refusals\":[],\"rules\":[{\"action\":\"style\",\"enabled\":true,\"id\":\"r1\",\"selector\":\".ad\",\"style\":{\"opacity\":\"0\"}}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"7138ca6b7112bc4a4de78b8a423d60b64912a1d046948ddceb2a9c225d3847dd\"}",
+    "bytes": 339,
+    "sha256": "7138ca6b7112bc4a4de78b8a423d60b64912a1d046948ddceb2a9c225d3847dd"
+   },
+   "id": "blob-build-style-rule",
+   "method": "blob-build"
+  }
+ ],
+ "note": "P12-T1 golden vectors for the renderer/cosmetic host surface. Every `expect` was CAPTURED from cosmetic_host at generation time and then pinned; tools/cosmetic_vectors_check.py re-runs BOTH backends (the compiled C++ host and fakes/cosmetic.py) and requires byte-identical stdout and identical exit codes against these bytes. The refusal vocabulary is closed and copied from the C++ *ErrorName() tables \u2014 a rename on either side reddens this file rather than drifting. `exit` is pinned explicitly: 0 for an ok or typed rejection, 1 for a typed error, so a vector that changes exit class is a visible change and not a silent one.",
+ "schema": "cosmetic-vectors-1",
+ "schema_version": 1
+}
