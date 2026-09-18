@@ -28,7 +28,7 @@ p11_lane_gates() {
   if "$PY" tools/scheduled_lane_check.py; then :; elif [ $? -eq 77 ]; then
     echo "SKIP: SKIP (network unavailable for api.github.com) — needed for: scheduled-lane verdicts (silent-red-nightly visibility); local hint: re-run with network; the self-test above proved the checker itself"
   else
-    exit 1
+    die
   fi
 }
 
@@ -69,7 +69,7 @@ p11_shield_gates() {
   if "$PY" tools/shield_vectors_check.py; then :; elif [ $? -eq 77 ]; then
     echo "SKIP: SKIP (tool absent: g++/make) — needed for: shield-vector byte parity against the compiled shield_host; local hint: apt-get install g++ make (build-essential)"
   else
-    exit 1
+    die
   fi
   # P11-T5: living block-event-v1 — schema-strict golden + claims-clean
   # reason-code table (the five-way why_code sync law is pytest territory:
@@ -157,13 +157,18 @@ p12_date_invariance_gates() {
   "$PY" tools/wall_clock_lint.py
   "$PY" tools/wall_clock_lint.py --self-test
   # (2) the property: re-run every date-aware lane at two far-apart --as-of
-  #     values AND under a displaced ambient clock, and require identical
-  #     verdicts; the freshness tier must still bite (no weakened expiry law).
-  # --require-ambient-probe: without libfaketime this check degrades to the
-  # --as-of half only and still prints PASS. That is the silent-degradation
-  # class — a planted date.today() passed in a tree copy that had no
-  # libfaketime. The gate must FAIL rather than certify less than it claims.
-  "$PY" tools/date_invariance_check.py --require-ambient-probe
+  #     values AND — when the faketime helper tool is present — under a
+  #     displaced ambient clock, and require identical verdicts; the
+  #     freshness tier must still bite (no weakened expiry law).
+  # T0-U1: NO --require-ambient-probe here. A gate lane must never
+  # hard-require an optional tool (ADR-0047). The default path runs the
+  # deterministic --as-of half always; the ambient clock half runs as a
+  # strengthening lane when `faketime` exists and is reported UNAVAILABLE
+  # when it does not — visible, never silent. The strict probe
+  # (--require-ambient-probe) lives ONLY in the scheduled governance lane
+  # that apt-installs faketime (governance.yml), where absence is a visible
+  # SKIP (exit 77), never a red gate.
+  "$PY" tools/date_invariance_check.py
 }
 
 # P12-T0-a: the release-notes lane. This reddened the push gate every calendar

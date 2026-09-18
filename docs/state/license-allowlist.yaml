@@ -83,3 +83,9 @@ allowlist:
     \ path and (b) skips the work/ scratch root \u2014 without any code or shell file carrying the banned\
     \ tokens (license_audit fails code hits unconditionally; the tools/tests/fixtures/p11_vendor_red_licenses.json\
     \ precedent)."
+- path: docs/dependencies/helper-tools.yaml
+  justification: "Catalog of OPTIONAL EXTERNAL HELPER TOOLS (minisign/actionlint/faketime) installed as OS\
+    \ packages, never vendored/linked. The faketime row states the package's own license (GPL-2.0,\
+    \ wolfcw/libfaketime) as the REQUIRED disclosure that it is a test-only preload for governance tooling\
+    \ and not a runtime dependency of any kind (DR-04: separate process or absent \u2014 the 'absent' branch\
+    \ here)."

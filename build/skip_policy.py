@@ -45,6 +45,16 @@ EXTERNAL_TOOLS: dict[str, dict[str, str]] = {
         "install": "github.com/rhysd/actionlint releases (CI installs it "
                    "pinned by version + tarball sha256)",
     },
+    "faketime": {
+        "used_for": "the ambient-clock half of the date-invariance law "
+                    "(P12-T0-a, re-homed from a pip pin by P12-CLOSE T0-U1 / "
+                    "ADR-0047): an LD_PRELOAD displacement proving no gate "
+                    "verdict reads the wall calendar. Absent => the "
+                    "--as-of half is the verdict with the limitation stated; "
+                    "--require-ambient-probe is passed ONLY by the scheduled "
+                    "governance lane that installs it",
+        "install": "apt-get install -y faketime (Debian/Ubuntu universe)",
+    },
 }
 
 SKIP_PREFIX = "SKIP (tool absent: "

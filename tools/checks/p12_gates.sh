@@ -50,7 +50,7 @@ p12_cosmetic_seam_gates() {
   elif [ $? -eq 77 ]; then
     echo "SKIP: cosmetic seam round-trip skipped (upstream fetch unavailable) — needed for: proving patch 0300 applies/reverts byte-exactly against the pinned Chromium bytes; local hint: re-run with network; the guard lint and the ledger check above still ran"
   else
-    echo "FAIL: cosmetic seam round-trip gate failed"; exit 1
+    echo "FAIL: cosmetic seam round-trip gate failed"; die
   fi
 }
 

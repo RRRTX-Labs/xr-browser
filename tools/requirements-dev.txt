@@ -8,25 +8,24 @@
 #   PyYAML  — dr_parse, gen_registry, registry_lint, vocab_lint,
 #             license_audit (YAML artifacts)
 #   pytest  — the co-located test suites under tools/tests/
-#   libfaketime — tools/date_invariance_check.py's ambient-clock probe
-#             (P12-T0-a). This is the one dependency added past the original
-#             three, and it is a TEST-ONLY tool that ships a prebuilt
-#             libfaketime.so.1: the probe needs a real LD_PRELOAD clock
-#             displacement to prove the push gate ignores the wall clock, and
-#             there is no stdlib way to move a child process's clock. It is
-#             NOT imported by any gate verdict path — its absence is reported
-#             as UNAVAILABLE, and the gate fails loudly rather than silently
-#             certifying half a law (see --require-ambient-probe).
-#             Digests from pypi.org/pypi/libfaketime/3.0.1/json, fetched
-#             2026-09-17.
 # jsonschema is PERMITTED but not yet pinned: no tool consumes it at P1,
 # and "no unnecessary dependency" (ADR-0001) wins over pre-pinning.
+#
+# P12-CLOSE (T0-U1) removed `libfaketime==3.0.1` from this file: its
+# transitive deps (python-dateutil, pytz) were unpinned/unhashed, so
+# `pip install --require-hashes` hard-errored on a clean clone — the
+# hosted governance red. The ambient-clock probe is now a HELPER-TOOL
+# (apt `faketime`, like minisign/actionlint — see
+# docs/dependencies/helper-tools.yaml), and tools/date_invariance_check.py
+# reports SKIP (tool absent: faketime), never a gate red. ADR-0047 records
+# why a dev-dep addition requires this ceremony.
 #
 # Install:  pip install --require-hashes -r tools/requirements-dev.txt
 #
 # Transitive closure for Python 3.12: pytest -> iniconfig, packaging,
 # pluggy, Pygments (colorama/exceptiongroup/tomli are <3.11/win32-marked
-# and excluded by environment markers).
+# and excluded by environment markers). Rule: tools/dev_deps_closure_check.py
+# verifies this closure stays complete and hashed.
 
 pytest==9.0.3 \
     --hash=sha256:2c5efc453d45394fdd706ade797c0a81091eccd1d6e4bccfcd476e2b8e0ab5d9 \
@@ -55,7 +54,3 @@ pluggy==1.6.0 \
 Pygments==2.20.0 \
     --hash=sha256:81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176 \
     --hash=sha256:6757cd03768053ff99f3039c1a36d6c0aa0b263438fcab17520b30a303a82b5f
-
-libfaketime==3.0.1 \
-    --hash=sha256:5eed7c17f3d4ba0f6f828de4975f69a622b06b1e792674e6c1b069c0689fab79 \
-    --hash=sha256:49c2b06250bd5a1206efe5ecfdc575850517081b50b42c6c58718be1a4a09fbd

@@ -91,6 +91,17 @@ def test_helper_tools_doc_lists_every_registered_tool():
         assert name in documented, f"{name} used in code but not documented"
 
 
+def test_faketime_absent_has_policy_phrase():
+    """P12-CLOSE T0-U1 / ADR-0047: faketime is an OPTIONAL tool — its absence
+    reason routes through the single SKIP-text home so the date-invariance
+    checker cannot drift from minisign/actionlint's phrasing."""
+    import skip_policy
+    meta = skip_policy.EXTERNAL_TOOLS["faketime"]
+    assert "date-invariance" in meta["used_for"]
+    assert "require-ambient-probe" in meta["used_for"]
+    assert "apt-get install -y faketime" in meta["install"]
+
+
 def test_fastlane_drill_either_runs_or_skips_visibly(tmp_path, monkeypatch):
     """The drill: full round-trip when minisign exists, visible SKIP otherwise.
 

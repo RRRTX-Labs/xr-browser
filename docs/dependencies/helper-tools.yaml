@@ -92,3 +92,16 @@ tools:
     owner: "E (Release engineering)"
     added_on: 2026-09-07
     added_by: "P4 (hosted-CI root cause)"
+
+  - name: faketime
+    role: "The ambient-clock HALF of the date-invariance law (P12-T0-a). tools/date_invariance_check.py re-runs every date-aware gate lane at two far-apart --as-of values (the deterministic half) and, when this tool is present, under an LD_PRELOAD-displaced wall clock (the ambient half) with --as-of pinned at the gate's own value. Both halves must agree; the displaced half proves no lane secretly reads the calendar."
+    required: false
+    policy: "absent -> the --as-of half is the verdict and the ambient half reports UNAVAILABLE, visibly, in the PASS line (never a silent pass, never a fabricated probe); --require-ambient-probe is passed ONLY by the scheduled governance lane that installs this tool (governance.yml), where a demanded-but-missing probe FAILS the lane rather than certifying less than it claims. A gate lane never hard-requires an optional tool (ADR-0047)."
+    install_ci: "sudo apt-get install -y faketime   # Debian/Ubuntu universe (libfaketime + the faketime launcher)"
+    install_dev: "apt-get install faketime | brew install libfaketime"
+    license: "GPL-2.0 (wolfcw/libfaketime) — installed as an OS package, never vendored and never linked into the product; it is a TEST-ONLY preload for governance tooling, not a runtime dependency of any kind"
+    source_url: "https://github.com/wolfcw/libfaketime"
+    rationale: "P12's original approach pinned libfaketime==3.0.1 in tools/requirements-dev.txt. That broke the hosted gate in two directions: its transitives (python-dateutil, pytz) were unpinned/unhashed, so `pip install --require-hashes` hard-errored on a clean clone; and --require-ambient-probe in the default gate made the whole governance surface depend on a preload library one must hand-install — an environment no one can reproduce. The apt-package route is the repo's established mechanism for this class (minisign/actionlint): never a pip pin, never a hard gate requirement; absent => visible degradation, and the CI lane that installs it gets the strict probe. Alternative rejected: keeping the pip pin (the defect this fixes); alternative rejected: deleting the ambient probe (the law keeps its teeth via the deterministic pair + the strict scheduled lane)."
+    owner: "E (Release engineering)"
+    added_on: 2026-09-18
+    added_by: "P12-CLOSE T0-U1 (ADR-0047, dev-dep ceremony)"

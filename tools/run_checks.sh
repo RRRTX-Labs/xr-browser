@@ -1,11 +1,8 @@
 #!/usr/bin/env bash
 # run_checks.sh — the P1 governance gate (local + CI entry point).
-#
-# Usage: tools/run_checks.sh [git-range]
-#   git-range: rev range for dco_check and the Register-Change trailer
-#              check (CI passes the PR base branch; default: full history).
-#
-# Every check must pass (exit 0). Exit 1 = gate failed.
+# Usage: tools/run_checks.sh [git-range]. git-range feeds dco_check and the
+# Register-Change trailer check (CI passes the PR base; default: full history).
+# Every check must pass (exit 0). Exit 1 = gate failed. --keep-going runs all.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PY="${PYTHON:-python3}"
@@ -14,7 +11,8 @@ PY="${PYTHON:-python3}"
 . "$(dirname "$0")/checks/p11_gates.sh"
 # P12-T1: the P12 feature gate bodies, same size-law split as above.
 . "$(dirname "$0")/checks/p12_gates.sh"
-RANGE="${1:-}"
+# T0-U1: --keep-going (tracer + tally live in checks/gate_runner.sh).
+. "$(dirname "$0")/checks/gate_runner.sh"; kr_parse_args "$@"
 
 echo "== plan pin =="
 "$PY" tools/plan_pin_check.py
@@ -34,6 +32,9 @@ fi
 
 echo "== license audit (canonical MPL-2.0 + copyleft scan) =="
 "$PY" tools/license_audit.py
+
+echo "== T0-U1: dev-dependency closure (pinned transitives hashed) =="
+"$PY" tools/dev_deps_closure_check.py --repo .
 
 echo "== DCO signoff =="
 if [ -n "$RANGE" ]; then
@@ -186,18 +187,18 @@ echo "== P6/P7/P8/P9-T0-c: discovered C++ suite lanes (every xr-core/*/tests/Mak
 echo "== P7: ≤12 hook patch round-trip vs the pinned Chromium rev =="
 "$PY" build/webui/patch_roundtrip.py --xr-core ../xr-core
 
-echo "== P7: WebUI reproducible toolchain (tsc-strict + deterministic bundle + CSP) =="
+echo "== P7: WebUI toolchain (tsc-strict + deterministic bundle + CSP) =="
 if bash build/webui/toolchain.sh; then :; elif [ $? -eq 77 ]; then
   echo "SKIP: WebUI toolchain skipped (node/npm or npm registry unavailable) — sources+config shipped"
 else
-  echo "FAIL: WebUI toolchain gate failed"; exit 1
+  echo "FAIL: WebUI toolchain gate failed"; die
 fi
 
 echo "== P7: WebUI reproducibility — two builds byte-identical (R1 rung) =="
 if bash build/webui/repro-check.sh; then :; elif [ $? -eq 77 ]; then
   echo "SKIP: WebUI repro skipped (node/npm or npm registry unavailable)"
 else
-  echo "FAIL: WebUI repro gate failed"; exit 1
+  echo "FAIL: WebUI repro gate failed"; die
 fi
 
 echo "== P7: CSP lint — no runtime network/eval in ui/** + commands/** =="
@@ -342,7 +343,7 @@ echo "== P10-T4: signing matrix (gpg REAL in sandbox; argv-exact mac/win) =="
 if bash build/signing/tests/test_signing_p10.sh; then :; elif [ $? -eq 77 ]; then
   echo "SKIP: signing matrix skipped (gpg absent)"
 else
-  echo "FAIL: signing matrix gate failed"; exit 1
+  echo "FAIL: signing matrix gate failed"; die
 fi
 "$PY" tools/packaging_matrix_check.py
 
@@ -352,12 +353,12 @@ echo "== P10-T7: license report + unknown-license-fails-build law =="
 echo "== P10-T9: release gate (dev green on synthetic; beta/stable MUST fail closed) =="
 "$PY" tools/release_gate.py check --channel dev --artifact work/release-check/synthetic-artifact.bin
 if "$PY" tools/release_gate.py check --channel beta >/dev/null 2>&1; then
-  echo "FAIL: release check --channel beta PASSED without credentials — the gate is broken"; exit 1
+  echo "FAIL: release check --channel beta PASSED without credentials — the gate is broken"; die
 else
   echo "ok: release check --channel beta exits non-zero (fail-closed, missing items enumerated)"
 fi
 if "$PY" tools/release_gate.py check --channel stable >/dev/null 2>&1; then
-  echo "FAIL: release check --channel stable PASSED without credentials — the gate is broken"; exit 1
+  echo "FAIL: release check --channel stable PASSED without credentials — the gate is broken"; die
 else
   echo "ok: release check --channel stable exits non-zero (fail-closed, missing items enumerated)"
 fi
@@ -366,7 +367,7 @@ echo "== P10-T0-b: kill matrix, hosts-local EXECUTION (the P9 deferral closed) =
 if bash build/qa/drill/drill_run.sh hosts-local; then :; elif [ $? -eq 77 ]; then
   echo "SKIP: kill matrix hosts-local skipped (g++/make absent) — needed for: executing the kill matrix against the discovered //xr host binaries"
 else
-  echo "FAIL: kill matrix hosts-local gate failed"; exit 1
+  echo "FAIL: kill matrix hosts-local gate failed"; die
 fi
 
 echo "== P9-T12: §11 surface completeness (every surface homed) =="
@@ -376,4 +377,4 @@ echo "== P9 meta: mutation-check the checker (3 runners, defect must escape) =="
 "$PY" build/qa/tools/test_checker_mutation.py --repo .
 
 p12_gates
-echo "== ALL GOVERNANCE CHECKS PASSED =="
+kr_finish

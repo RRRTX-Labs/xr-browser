@@ -3,7 +3,9 @@
 Law: ALL network access in this repository flows through
 build/upstream/fetch.py, whose allowlist is: chromium.googlesource.com,
 commondatastorage.googleapis.com, chromiumdash.appspot.com, api.github.com,
-static.crates.io (P11-T1, ADR-0044 ceremony — pinned crate tarballs only).
+static.crates.io (P11-T1, ADR-0044 ceremony — pinned crate tarballs only),
+pypi.org (P12-CLOSE, ADR-0047 ceremony — pinned release-METADATA JSON only;
+the gate itself is offline against tools/fixtures/dev-deps-closure.json).
 
 This static check fails when any Python file OUTSIDE the chokepoint (or the
 vendored-schema-free governance tools that must not talk to the network at
@@ -164,7 +166,7 @@ def main() -> int:
     for host in re.findall(r"[\"']([a-z0-9.-]+\.[a-z]{2,})[\"']", fetch_code):
         if host not in {"chromium.googlesource.com", "commondatastorage.googleapis.com",
                         "chromiumdash.appspot.com", "api.github.com",
-                        "static.crates.io"} and \
+                        "static.crates.io", "pypi.org"} and \
                 not host.endswith(".chromium.googlesource.com"):
             violations.append({"file": CHOKEPOINT, "line": host,
                                "why": "host outside the committed allowlist"})

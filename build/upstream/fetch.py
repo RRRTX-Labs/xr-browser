@@ -13,6 +13,7 @@ Security model:
       static.crates.io                 (crates.io CDN: pinned .crate tarballs,
                                         P11-T1/ADR-0044; every byte sha256-
                                         pinned by the upstream Cargo.lock)
+      pypi.org (P12-CLOSE/ADR-0047: pinned METADATA JSON; gate is offline)
   - redirects are validated hop-by-hop: a redirect out of the allowlist is
     refused (test-covered, including a mock server that tries).
   - read-only: GET only; the module has no write/push/credential path and
@@ -62,6 +63,7 @@ ALLOWED_HOSTS: frozenset[str] = frozenset({
     # crates.io INDEX/API hosts (index.crates.io, crates.io) stay OFF the
     # list — resolution truth comes from the lock file, not live queries.
     "static.crates.io",
+    "pypi.org",
 })
 CHROMIUM_GITILES = "https://chromium.googlesource.com/chromium/src"
 CHROMIUMDASH = "https://chromiumdash.appspot.com"

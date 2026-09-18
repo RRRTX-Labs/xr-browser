@@ -1,0 +1,61 @@
+{
+ "distributions": {
+  "PyYAML": {
+   "requires_dist": null,
+   "requires_python": ">=3.8",
+   "version": "6.0.3"
+  },
+  "Pygments": {
+   "requires_dist": [
+    "colorama>=0.4.6; extra == \"windows-terminal\""
+   ],
+   "requires_python": ">=3.9",
+   "version": "2.20.0"
+  },
+  "iniconfig": {
+   "requires_dist": null,
+   "requires_python": ">=3.10",
+   "version": "2.3.0"
+  },
+  "packaging": {
+   "requires_dist": null,
+   "requires_python": ">=3.8",
+   "version": "26.2"
+  },
+  "pluggy": {
+   "requires_dist": [
+    "pre-commit; extra == \"dev\"",
+    "tox; extra == \"dev\"",
+    "pytest; extra == \"testing\"",
+    "pytest-benchmark; extra == \"testing\"",
+    "coverage; extra == \"testing\""
+   ],
+   "requires_python": ">=3.9",
+   "version": "1.6.0"
+  },
+  "pytest": {
+   "requires_dist": [
+    "colorama>=0.4; sys_platform == \"win32\"",
+    "exceptiongroup>=1; python_version < \"3.11\"",
+    "iniconfig>=1.0.1",
+    "packaging>=22",
+    "pluggy<2,>=1.5",
+    "pygments>=2.7.2",
+    "tomli>=1; python_version < \"3.11\"",
+    "argcomplete; extra == \"dev\"",
+    "attrs>=19.2; extra == \"dev\"",
+    "hypothesis>=3.56; extra == \"dev\"",
+    "mock; extra == \"dev\"",
+    "requests; extra == \"dev\"",
+    "setuptools; extra == \"dev\"",
+    "xmlschema; extra == \"dev\""
+   ],
+   "requires_python": ">=3.10",
+   "version": "9.0.3"
+  }
+ },
+ "schema": "dev-deps-closure-1",
+ "note": "Committed reference metadata for tools/dev_deps_closure_check.py (T0-U1, P12-CLOSE). Each distribution's requires_dist/requires_python copied verbatim from pypi.org/pypi/<pkg>/<ver>/json on 2026-09-18. Committing it keeps the gate OFFLINE (the zero-network stance; fetch.py's ALLOWED_HOSTS does not list pypi.org). Refresh ceremony (--fetch-write): run only under an explicit flag with network, then commit the diff via --check-diff-clean, exactly like the other generated state in this repo.",
+ "fetched": "2026-09-18",
+ "source": "https://pypi.org/pypi/<pkg>/<ver>/json"
+}

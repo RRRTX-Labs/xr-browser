@@ -13,30 +13,32 @@ Default dates: 2026-01-01 and 2038-01-18 (the 2038 boundary is deliberate: it
 is where a 32-bit time_t and any sloppy epoch arithmetic would disagree with a
 date-only comparison, so a lane that secretly mixes the two reddens here).
 
-Two tiers, because "date-invariant" is NOT one property (this is the finding
-that made the first version of this tool redden on itself — see the P12
-report):
+Two tiers, because "date-invariant" is NOT one property (the finding that made
+the first version of this tool redden on itself — see the P12 report):
 
-  INVARIANT tier — the verdict MUST be identical at both dates, because the
-  push gate pins `--as-of` and the rendered bytes must not move:
-    release-notes-bytes   rendered artifact sha256 at both dates
-    release-notes-check   --check exit code against the committed file
-    visual-diff-waived    unexpired waiver at both dates (verdict WAIVED)
-    visual-diff-expired   expired waiver at both dates (verdict DIFFERENT)
+  INVARIANT tier — the verdict MUST be identical at both dates (the push gate
+  pins `--as-of`; the rendered bytes must not move): release-notes-bytes,
+  release-notes-check, visual-diff-waived, visual-diff-expired.
 
-  FRESHNESS tier — the verdict MUST differ in the expected direction, because
-  an expiry law that cannot expire is not a law. Making the push gate
-  date-invariant must NOT weaken it (brief failure condition 6): the gate pins
-  `--as-of-date` and the live law moves to a scheduled lane, so this tier
-  asserts the law still bites.
-    exception-ledger      PASS before the ledger's 2027-06-01 expiry,
-                          FAIL after it
+  FRESHNESS tier — the verdict MUST differ in the expected direction (an expiry
+  law that cannot expire is not a law). Making the gate date-invariant must NOT
+  weaken it (brief failure condition 6): exception-ledger PASSes before the
+  2027-06-01 expiry and FAILs after.
+
+The ambient-clock half — displace the wall clock while ``--as-of`` stays pinned
+— lives in tools/date_ambient_probe.py (touched-file size law). `faketime` is
+an OPTIONAL helper tool (apt, docs/dependencies/helper-tools.yaml): without
+``--require-ambient-probe`` the --as-of pair is the verdict and an absent tool
+reports UNAVAILABLE (visible, never silent); with the flag a demand the host
+cannot satisfy FAILS the lane (ADR-0047: a gate lane never hard-requires an
+optional tool). Only the governance lane that apt-installs faketime passes it.
 
 The zero-case law applies to both tiers: zero lanes executed is a FAIL.
 
 Usage:  python3 tools/date_invariance_check.py [--repo .] [--json]
-            [--dates 2026-01-01,2038-01-18]
-Exit: 0 pass · 1 drift · 2 usage. Stdlib only, offline, deterministic.
+            [--dates 2026-01-01,2038-01-18] [--require-ambient-probe]
+Exit: 0 pass · 1 drift (incl. an unsatisfiable strict probe) · 2 usage.
+Stdlib only, offline, deterministic.
 """
 from __future__ import annotations
 
@@ -48,6 +50,11 @@ import sys
 import tempfile
 from pathlib import Path
 
+# The ambient-clock half + helper-tool discovery (split by the touched-file
+# size law; P12-CLOSE T0-U1).
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import date_ambient_probe as dap  # noqa: E402
+
 EXIT_PASS, EXIT_FAIL, EXIT_USAGE = 0, 1, 2
 DEFAULT_DATES = ("2026-01-01", "2038-01-18")
 FIXTURE = "tools/fixtures/release-notes-train-152.json"
@@ -56,50 +63,11 @@ FIXTURE = "tools/fixtures/release-notes-train-152.json"
 GATE_PINNED_AS_OF = "2026-09-14"
 
 
-# A real `date` binary, wrapped so a Python child inherits the displaced
-# clock. Absent libfaketime this degrades to no displacement, and the probe
-# says so rather than claiming a proof it did not run.
-FAKETIME_LIB_CANDIDATES = (
-    "/usr/lib/x86_64-linux-gnu/faketime/libfaketime.so.1",
-    "/usr/lib/faketime/libfaketime.so.1",
-    "/usr/local/lib/faketime/libfaketime.so.1",
-)
-
-
-def faketime_lib() -> str | None:
-    """The libfaketime shared object, if this machine has one. Discovery
-    order: the distro paths, then the pip `libfaketime` wheel's vendored .so
-    (which is what a pinned tools/requirements-dev.txt install provides).
-    Returns None when absent — the probe then reports UNAVAILABLE rather than
-    claiming a proof it did not run."""
-    import glob
-    import os
-    for c in FAKETIME_LIB_CANDIDATES:
-        if os.path.exists(c):
-            return c
-    for pat in ("/usr/lib/*/faketime/libfaketime.so.1",
-                "/usr/lib/faketime/libfaketime.so.1",
-                "/usr/local/lib/faketime/libfaketime.so.1"):
-        hits = sorted(glob.glob(pat))
-        if hits:
-            return hits[0]
-    try:
-        import site
-        for sp in site.getsitepackages():
-            hits = sorted(glob.glob(
-                f"{sp}/libfaketime/vendor/libfaketime/src/libfaketime.so.1"))
-            if hits:
-                return hits[0]
-    except Exception:
-        pass
-    return None
-
-
 def _run(repo: Path, argv: list[str], *,
          env_date: str | None = None) -> tuple[int, str]:
     import os
     env = dict(os.environ)
-    lib = faketime_lib() if env_date else None
+    lib = dap.faketime_lib() if env_date else None
     if env_date and lib:
         env["LD_PRELOAD"] = lib
         env["FAKETIME"] = f"{env_date} 12:00:00"
@@ -179,14 +147,13 @@ def lane_visual_diff(repo: Path, as_of: str, td: Path, *, expiry: str,
     return {"rc": rc, "verdict": _verdict_token(txt)}
 
 
-def run_lanes(repo: Path, as_of: str, td: Path, *, env_date: str | None = None
-              ) -> dict:
+def run_lanes(repo: Path, as_of: str, td: Path, *,
+              env_date: str | None = None) -> dict:
     """env_date, when set, runs the lanes under a displaced AMBIENT calendar
-    (a real ``date`` binary via libfaketime, else python -c) while ``--as-of``
-    stays pinned. That is the property the push gate actually needs: pinning
-    the flag must make the ambient clock irrelevant. Probing --as-of alone
-    cannot see a tool that reads today() directly, because --as-of never
-    changes what today() returns inside one run."""
+    (a real `date` binary via faketime) while `--as-of` stays pinned — the
+    property the push gate actually needs. Probing --as-of alone cannot see a
+    tool that reads today() directly, because --as-of never changes what
+    today() returns inside one run."""
     return {
         "release-notes-bytes": lane_release_notes(repo, as_of, td,
                                                   env_date=env_date),
@@ -217,12 +184,12 @@ def main(argv: list[str]) -> int:
     p.add_argument("--dates", default=",".join(DEFAULT_DATES))
     p.add_argument("--json", action="store_true")
     p.add_argument("--require-ambient-probe", action="store_true",
-                   help="FAIL rather than degrade when libfaketime is absent. "
-                        "Without it, a missing libfaketime silently reduces "
-                        "this check to the --as-of half only and still prints "
-                        "PASS — which let a planted date.today() through in a "
-                        "tree copy that had no libfaketime. The push gate sets "
-                        "this; an ad-hoc run may not.")
+                   help="demand the ambient-clock half: on a host without "
+                        "the `faketime` helper tool the run FAILS rather "
+                        "than degrading to the --as-of half only. The "
+                        "default run_checks.sh path does NOT set this; only "
+                        "the governance lane that apt-installs faketime "
+                        "does (ADR-0047).")
     a = p.parse_args(argv)
     repo = Path(a.repo).resolve()
     dates = [d.strip() for d in a.dates.split(",") if d.strip()]
@@ -242,20 +209,21 @@ def main(argv: list[str]) -> int:
         td = Path(tmp)
         for d in dates:
             results[d] = run_lanes(repo, d, td)
-        # Ambient-clock probe: with --as-of PINNED at the gate's own value,
-        # displace the wall clock and require the SAME verdicts. This is the
-        # half of the property that probing --as-of alone cannot see.
+        # Ambient-clock probe: --as-of PINNED at the gate's own value while
+        # the wall clock moves; identical verdicts required. Discovered and
+        # run by the split module (helper-tool discovery + probe self-check
+        # live there).
         ambient = None
-        if faketime_lib():
-            pinned = GATE_PINNED_AS_OF
-            base = run_lanes(repo, pinned, td)
-            for shift in ("2019-03-04", "2031-11-23"):
-                moved = run_lanes(repo, pinned, td, env_date=shift)
-                for lane in sorted(base):
-                    key = f"ambient:{lane}@{shift}"
-                    results[key] = moved[lane]
-                    results.setdefault(f"ambient:{lane}@pinned", base[lane])
-            ambient = "libfaketime"
+        ambient_probe_error = ""
+        if dap.have_faketime() and dap.faketime_lib():
+            base = run_lanes(repo, GATE_PINNED_AS_OF, td)
+            extra, err = dap.run_ambient_tier(repo, GATE_PINNED_AS_OF, td,
+                                              base, run_lanes)
+            results.update(extra)
+            if err:
+                ambient, ambient_probe_error = "probe-error", err
+            else:
+                ambient = "faketime"
 
     lanes = sorted(results[dates[0]])
     ambient_lanes = sorted(k for k in results if k.startswith("ambient:"))
@@ -309,13 +277,36 @@ def main(argv: list[str]) -> int:
                          f"{late} across the {boundary} boundary (expected "
                          f"PASS then FAIL)")
 
-    if a.require_ambient_probe and not ambient:
-        drift.append("ambient-clock probe UNAVAILABLE but --require-ambient-"
-                     "probe was set: the wall-clock half of this law is "
-                     "unproven, so this run certifies less than the gate "
-                     "claims (install libfaketime; see tools/requirements-"
-                     "dev.txt)")
     drift += ambient_drift
+    ambient_note = ""
+    if ambient is None:
+        if a.require_ambient_probe:
+            # T0-U1 (ADR-0047): the strict lane demanded a probe the host
+            # cannot satisfy — certifying less than it claims is not an
+            # option. Tool text is build/skip_policy.py's (reuse, don't
+            # invent); the inline fallback keeps the fixture honest.
+            abs_reason = dap.skip_policy_absent_reason(repo)
+            hint = "install hint: apt-get install -y faketime"
+            if abs_reason is None:
+                drift.append("ambient-clock probe UNAVAILABLE but "
+                             "--require-ambient-probe was set — the "
+                             "wall-clock half of this law is unproven, so a "
+                             f"run that demanded it certifies less than it "
+                             f"claims ({hint})")
+            else:
+                drift.append(f"{abs_reason} — but --require-ambient-probe "
+                             f"was set, so a run that demanded the "
+                             f"ambient-clock half certifies less than it "
+                             f"claims ({hint})")
+        else:
+            ambient_note = ("ambient-clock probe UNAVAILABLE (faketime "
+                            "absent) — the --as-of half is proven, the "
+                            "wall-clock half is NOT")
+    elif ambient == "faketime":
+        ambient_note = (f"{len(ambient_lanes)} ambient-clock probe(s) via "
+                        f"faketime")
+    elif ambient == "probe-error":
+        drift.append(f"ambient-clock probe DID NOT RUN: {ambient_probe_error}")
     if a.json:
         print(json.dumps({"tool": "date_invariance_check", "dates": dates,
                           "lanes": lanes, "drift": drift,
@@ -326,15 +317,11 @@ def main(argv: list[str]) -> int:
         for d in drift:
             print(f"  {d}")
         return EXIT_FAIL
-    amb = (f"{len(ambient_lanes)} ambient-clock probe(s) via {ambient}"
-           if ambient else
-           "ambient-clock probe UNAVAILABLE (libfaketime absent) — the "
-           "--as-of half is proven, the wall-clock half is NOT")
     print(f"PASS: date_invariance_check ({len(INVARIANT_LANES)} invariant "
           f"lane(s) identical across {len(dates)} dates "
           f"[{' .. '.join(dates)}]; {len(FRESHNESS_LANES)} freshness lane(s) "
-          f"still bite across their expiry boundary; {amb} — the push gate is "
-          f"date-invariant and no freshness law was weakened)")
+          f"still bite across their expiry boundary; {ambient_note} — the "
+          f"push gate is date-invariant and no freshness law was weakened)")
     return EXIT_PASS
 
 

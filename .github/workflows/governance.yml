@@ -61,8 +61,9 @@ jobs:
         # them so the lane exercises the real round-trip instead.
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq minisign
+          sudo apt-get install -y -qq minisign faketime
           minisign -v
+          faketime '2019-03-04 12:00:00' /bin/date -u +%Y
           # actionlint: GitHub's own checker for workflow expressions and
           # schema. Pinned by version AND release-tarball sha256 — the same
           # supply-chain discipline as the hash-pinned actions above. It is
@@ -76,6 +77,20 @@ jobs:
           echo "${AL_SHA256}  /tmp/actionlint.tgz" | sha256sum -c -
           sudo tar -xzf /tmp/actionlint.tgz -C /usr/local/bin actionlint
           actionlint -version
+
+      - name: Date-invariance strict probe (T0-U1 / ADR-0047)
+        # The ONLY lane that may pass --require-ambient-probe: it installed
+        # faketime in the step above, so the ambient-clock half of the
+        # date-invariance law runs for real here. We prove the displacement
+        # first (faketime must move a child clock or this step is a lie),
+        # then demand the probe fail-closed on drift.
+        run: |
+          shifted=$(faketime '2019-03-04 12:00:00' /bin/date -u +%Y)
+          test "$shifted" = "2019" || {
+            echo "FAIL: faketime did not displace a child clock (got '$shifted')"
+            exit 1
+          }
+          python3 tools/date_invariance_check.py --require-ambient-probe
 
       - name: Checkout xr-core at the DEPS pin
         # P3 gates (budget / retirement-lint) read the sibling patch repo at
