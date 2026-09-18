@@ -1,0 +1,8 @@
+== P12-CLOSE T0-U4: registry-post-freeze cosmetic registration (before) ==
+grep -c cosmetic docs/contracts/registry-post-freeze.md  ->  0
+
+== P12-CLOSE T0-U4: bundle DoD coverage (before) ==
+dod_rows before: 9 | not_done_by_design[0]: T1-T8 feature rows: this bundle covers the T0 debts only, which the br
+
+(the after-half of this transcript is re-run in the same commit that registers
+ cosmetic-blob-v1 + cosmetic-host-protocol; see feature-t0u4-registry-after.txt)

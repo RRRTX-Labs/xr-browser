@@ -1,0 +1,23 @@
+== P12-CLOSE T0-U2: evidence_check --strict (head-match rule live) ==
+SKIP: ci-run verification for P11-DOD-T5: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/jobs/104180441172
+SKIP: ci-run verification for P11-DOD-T8: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34905296809
+SKIP: ci-run verification for P11-DOD-13: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34905296564
+SKIP: ci-run verification for P12-DOD-T0-b-7: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/jobs/104180441172
+SKIP: ci-run verification for DOD-12: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34511850763
+PASS: evidence/P10/evidence.json (strict)
+PASS: evidence/P11/evidence.json (strict)
+PASS: evidence/P12/evidence.json (strict)
+PASS: evidence/P3/evidence.json (strict)
+PASS: evidence/P4/evidence.json (strict)
+PASS: evidence/P5/evidence.json (strict)
+PASS: evidence/P6/evidence.json (strict)
+PASS: evidence/P7/evidence.json (strict)
+PASS: evidence/P8/evidence.json (strict)
+PASS: evidence/P9/evidence.json (strict)
+PASS: evidence_check (10 bundle(s), 0 failure(s); presence law: every phase in git history carries a bundle)
+
+== P12-CLOSE T0-U2: the three planted head-match negatives exist ==
+148:# --- T0-U2 (evidence_check final-CI head law) ------------------------------
+154:case_u2_head_law() {
+180:  # covers it; governance IS covered -> the missing workflow is the reason
+202:  neg_expect_reject "evidence T0-U2 (iii): a green-but-stale row after the SHA advanced reddens" \

@@ -1,0 +1,8 @@
+== cosmetic vectors byte-parity across both backends (P12-T3 landed) ==
+PASS: 200 cosmetic vectors byte-identical across cosmetic_host (C++) and fakes/cosmetic.py (Python)
+
+== generic hide set gate (33 rules, always-on, not exception-able) ==
+PASS: cosmetic_generic_set_check (33 rules (4 page-modifying), always-on, not exception-able, build 2.00 ms)
+
+== patch manifest: declared files vs patch diff ==
+PASS: patch_manifest_check (patches: 4, files: 21, drifted: 0 — declared `files:` equals the patch diff in both directions)

@@ -1,0 +1,4 @@
+== scope-key embedder-refused (fakes/cosmetic.py, P12-T3 host law) ==
+{"method":"scope-key","frame_site":"a.example","frame_identity":"anonymous","navigation":"cross-document","url_class":"page","embedder_site":"top.example"}
+{"detail":"the embedder site is not an input to the scope key","error":"kRejected","reason":"embedder-refused"}
+ (exit 0)

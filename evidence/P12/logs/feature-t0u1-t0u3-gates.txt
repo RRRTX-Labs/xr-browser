@@ -1,0 +1,22 @@
+== P12-CLOSE T0-U1: dev-dependency closure gate (offline fixture) ==
+PASS: dev_deps_closure_check (every marker-free transitive of the 6 pinned distributions is pinned and hashed in tools/requirements-dev.txt; extra-only and sub-floor-marker requirements excluded by the same rule pip -r applies — offline, fixture-based)
+
+== P12-CLOSE T0-U1: libfaketime is OUT of the dev requirements (closure = ADR-0001 cap) ==
+3:# Policy (ADR-0001, plan P1): at most PyYAML, jsonschema, pytest; everything
+8:#   PyYAML  — dr_parse, gen_registry, registry_lint, vocab_lint,
+10:#   pytest  — the co-located test suites under tools/tests/
+14:# P12-CLOSE (T0-U1) removed `libfaketime==3.0.1` from this file: its
+25:# Transitive closure for Python 3.12: pytest -> iniconfig, packaging,
+26:# pluggy, Pygments (colorama/exceptiongroup/tomli are <3.11/win32-marked
+30:pytest==9.0.3 \
+33:PyYAML==6.0.3 \
+45:iniconfig==2.3.0 \
+48:packaging==26.2 \
+51:pluggy==1.6.0 \
+54:Pygments==2.20.0 \
+
+== P12-CLOSE T0-U3: budget meter unit = FILES (4 entries -> 21 files / 150) ==
+total files 21 | entries 4 | over_budget False | over_categories {}
+
+== P12-CLOSE T0-U3: budget tests ==
+7 passed in 0.40s

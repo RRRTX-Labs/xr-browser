@@ -4,10 +4,10 @@
   "pin": "chromium d04cdb24d67b081f6cf80200ffc5233f44b61109 (152.0.7977.82, UNCHANGED); xr-core advanced 89bd2ed -> 866387aadeb091422dbeb66075804248575bbbe6 (adblock-rust 0.13.3 vendored, shield decision core, xr-lists pipeline, 0200 network seam), DEPS pair-bumped same-day",
   "plan_sha256": "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b",
   "repos": {
-    "xr-browser": "7922648aaa40f2013acad79503fcb5d71651d2a3 (201 commits, 201/201 DCO). P11 commit range: e258826 (T1 vendoring) .. 7922648 (docs quartet).",
-    "xr-core": "866387aadeb091422dbeb66075804248575bbbe6 (55 commits, 55/55 DCO). shield/{core,host,tests,engine}, third_party/rust/adblock/0.13.3, patches/network-seams/0200-shield-network-seam, mojom/shield.mojom, fakes/shield.py."
+    "xr-browser": "7922648aaa40f2013acad79503fcb5d71651d2a3 (201 commits, 201/201 DCO). P11 commit range: e258826 (T1 vendoring) .. 7922648 (docs quartet). P12-CLOSE advanced this repo to f47b54e (T0-U1 d14d8c9 dev-dep closure gate + optional-tool SKIP law; T0-U2 c1d4aaa evidence final-CI head law; T0-U3 f47b54e budget unit = files); the final SHA is recorded at close.",
+    "xr-core": "866387aadeb091422dbeb66075804248575bbbe6 (55 commits, 55/55 DCO). shield/{core,host,tests,engine}, third_party/rust/adblock/0.13.3, patches/network-seams/0200-shield-network-seam, mojom/shield.mojom, fakes/shield.py. P12-CLOSE will pair-bump DEPS xr_core_rev to xr-core origin HEAD at close; the pin above is unchanged until then."
   },
-  "generated": "2026-09-17",
+  "generated": "2026-09-19 (T0-U4 restructure; T0-U1..U3 transcripts appended)",
   "toolchain_capture": {
     "sandbox": "g++ 14.2, make, python 3.13, node 20.20, git 2.47, gpg; ABSENT gn/ninja/clang/cargo/rustc/go/minisign/shellcheck/actionlint; no Chromium checkout, no browser, no renderer",
     "hosted": "cargo/rustc present (proven by core-hardening run 34905296809 jobs shield-vendor 104180441587 and server-conformance 104180441650)"
@@ -26,7 +26,7 @@
     "PARTIAL",
     "NOT-BY-DESIGN"
   ],
-  "schema_note": "P12 bundle for the T0 debt close-out only (T0-a..T0-d), committed before any feature work per the P12 brief. T1-T8 rows are appended by the commits that land them; no row here cites a result that the command in its evidence transcript did not produce.",
+  "schema_note": "P12 close-out bundle. The 9 P12-DOD-T0-* rows are the landed phase's own T0-a..T0-d debt records, kept verbatim. T0-U4 appends one row per P12-CLOSE Definition-of-Done item (P12-CLOSE-DOD-1..15, below): the T0 close-out (U1..U4 = DoD 1..4) is VERIFIED/PARTIAL with fresh transcripts; the feature DoDs (5..13) sit BLOCKED-PENDING until the commit that lands them (T2/T5/T7/T6) flips the row to VERIFIED with its own transcript; DoD 14..15 are the close-out's repo/report claims. No row cites a result its evidence transcript did not produce; no page-level/rendered result is claimed anywhere (HG-31).",
   "retro_bundle": false,
   "human_gates": {
     "path": "evidence/P12/human-gates.md",
@@ -44,7 +44,7 @@
         "tools/fixtures/release-notes-train-152.json",
         "logs/t0a-release-notes-fixture.txt"
       ],
-      "notes": "PASS: release-notes diff-clean at all three --as-of values, exit 0 each time. The rendered bytes match the shipped release/notes/train-152.md (sha256 ee2c50ab8a02c61bbd6be8b4872d9c9ba2d7ca736725d47495680e6) regardless of --as-of, because the citation date is the SNAPSHOT's own `fetched` header (2026-09-14), not date.today(). || The BEFORE state is in t0a-gate-red-before.txt: a clean clone at 7922648aaa40 gives 119 PASS / 1 FAIL, the failure being exactly this lane's daily red. Note what is NOT claimed: the fixture is an OFFLINE snapshot of the chromiumdash response, so this lane proves date-invariance and diff-cleanliness against pinned data. It does not prove the snapshot still matches upstream — that is the separate scheduled snapshot-freshness lane, and conflating the two is how the daily red was originally rationalized as 'by design' twice (3711fc2, f3d9773)."
+      "notes": "PASS: release-notes diff-clean at all three --as-of values, exit 0 each time. The rendered bytes match the shipped release/notes/train-152.md (sha256 ee2c50ab8a02c61bbd6be8b4872d9c9ba2d7ca736725d47495680e6) regardless of --as-of, because the citation date is the SNAPSHOT's own `fetched` header (2026-09-14), not date.today(). || The BEFORE state is in t0a-gate-red-before.txt: a clean clone at 7922648aaa40 gives 119 PASS / 1 FAIL, the failure being exactly this lane's daily red. Note what is NOT claimed: the fixture is an OFFLINE snapshot of the chromiumdash response, so this lane proves date-invariance and diff-cleanliness against pinned data. It does not prove the snapshot still matches upstream \u2014 that is the separate scheduled snapshot-freshness lane, and conflating the two is how the daily red was originally rationalized as 'by design' twice (3711fc2, f3d9773)."
     },
     {
       "id": "P12-DOD-T0-a-2",
@@ -55,7 +55,7 @@
         "evidence/P12/logs/t0a-date-invariance.txt",
         "logs/t0a-date-invariance.txt"
       ],
-      "notes": "date_invariance_check: PASS — all 4 lane(s) verdict-identical at 2026-09-14, 2038-01-18, 2031-11-23. Lanes: release-notes-bytes, visual-diff-waived, visual-diff-expired, exception-ledger. || A first draft of this check reddened on itself: the exception-ledger lane legitimately fails at 2038-01-18 because its waiver EXPIRES 2027-06-01. That is correct expiry behaviour, so the check was restructured rather than weakened — invariant lanes are date-independent, freshness lanes are pinned to a frozen GATE_PINNED_AS_OF and reported as STALE-* outside it. Weakening the expiry law to make the gate green was explicitly rejected."
+      "notes": "date_invariance_check: PASS \u2014 all 4 lane(s) verdict-identical at 2026-09-14, 2038-01-18, 2031-11-23. Lanes: release-notes-bytes, visual-diff-waived, visual-diff-expired, exception-ledger. || A first draft of this check reddened on itself: the exception-ledger lane legitimately fails at 2038-01-18 because its waiver EXPIRES 2027-06-01. That is correct expiry behaviour, so the check was restructured rather than weakened \u2014 invariant lanes are date-independent, freshness lanes are pinned to a frozen GATE_PINNED_AS_OF and reported as STALE-* outside it. Weakening the expiry law to make the gate green was explicitly rejected."
     },
     {
       "id": "P12-DOD-T0-a-3",
@@ -91,7 +91,7 @@
         "evidence/P12/logs/t0a-freshness-scheduled.txt",
         "logs/t0a-freshness-scheduled.txt"
       ],
-      "notes": "The lane reports STALE-FAIL for release/notes/train-152.md against 2026-09-14 and exits non-zero; it is registered as a scheduled lane and runs in the new snapshot-freshness CI job rather than in the daily core-hardening lane. || The daily gate no longer reddens on a stale artifact; the scheduled lane still does, so the signal is not lost — it is moved to where a human acts on it."
+      "notes": "The lane reports STALE-FAIL for release/notes/train-152.md against 2026-09-14 and exits non-zero; it is registered as a scheduled lane and runs in the new snapshot-freshness CI job rather than in the daily core-hardening lane. || The daily gate no longer reddens on a stale artifact; the scheduled lane still does, so the signal is not lost \u2014 it is moved to where a human acts on it."
     },
     {
       "id": "P12-DOD-T0-b-6",
@@ -103,7 +103,7 @@
         "tools/evidence_presence_check.py",
         "logs/t0b-presence-detects-p11.txt"
       ],
-      "notes": "Before this commit the check named P11 as logs/-only and FAILed (1 violation) while P11's CI had concluded success — the hole, caught by the gate. After this bundle: 11 phases all bundled, 0 violations. || Phase discovery deliberately does NOT use a `^P<n>:` anchor: real subjects are `P10:`, `P6-T5:`, `p9:`, `evidence(P5):`, `P11-T7:`. An anchored scan found 3 of 11 phases, which is the same invisibility class it was written to prevent."
+      "notes": "Before this commit the check named P11 as logs/-only and FAILed (1 violation) while P11's CI had concluded success \u2014 the hole, caught by the gate. After this bundle: 11 phases all bundled, 0 violations. || Phase discovery deliberately does NOT use a `^P<n>:` anchor: real subjects are `P10:`, `P6-T5:`, `p9:`, `evidence(P5):`, `P11-T7:`. An anchored scan found 3 of 11 phases, which is the same invisibility class it was written to prevent."
     },
     {
       "id": "P12-DOD-T0-b-7",
@@ -139,11 +139,191 @@
         "evidence/P12/logs/t0d-scratch-negatives.txt",
         "logs/t0d-scratch-negatives.txt"
       ],
-      "notes": "scratch_tar_tree excludes build outputs and tests/build; license_audit reddens on a marker in a real source path and skips the same marker under work/; scratch_dir refuses a repo-internal scratch root (no recursion, no self-referential tar); free-space pre-check refuses a scratch on a filesystem below the threshold. || The fixture copies in tools/negatives/p11_t{4,5,6}.sh included xr-core/*/tests/build/** artifacts and filled the ~993 MiB /tmp tmpfs — the concrete failure that motivated T0-d. The copyleft marker text lives in tools/tests/fixtures/p12_copyleft_markers.json rather than in the case file, following the p11_vendor_red_licenses.json precedent, because license_audit fails copyleft tokens in code/shell files unconditionally."
+      "notes": "scratch_tar_tree excludes build outputs and tests/build; license_audit reddens on a marker in a real source path and skips the same marker under work/; scratch_dir refuses a repo-internal scratch root (no recursion, no self-referential tar); free-space pre-check refuses a scratch on a filesystem below the threshold. || The fixture copies in tools/negatives/p11_t{4,5,6}.sh included xr-core/*/tests/build/** artifacts and filled the ~993 MiB /tmp tmpfs \u2014 the concrete failure that motivated T0-d. The copyleft marker text lives in tools/tests/fixtures/p12_copyleft_markers.json rather than in the case file, following the p11_vendor_red_licenses.json precedent, because license_audit fails copyleft tokens in code/shell files unconditionally."
+    },
+    {
+      "id": "P12-CLOSE-DOD-1",
+      "dod": "DoD 1: a clean clone installs the repo's own dev deps and runs the whole gate to exit 0; libfaketime is gone from requirements-dev.txt; faketime is a helper-tools optional; --require-ambient-probe appears only in a CI lane that installs it; dev_deps_closure_check exists, is gated, has negatives; the ADR records the episode.",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/feature-t0u1-t0u3-gates.txt",
+        "tools/requirements-dev.txt",
+        "tools/dev_deps_closure_check.py",
+        "docs/dependencies/helper-tools.yaml",
+        "docs/adr/0047-dev-dep-ceremony-and-gate-lanes-never-hard-require-optional-tools.md"
+      ],
+      "notes": "T0-U1 commit d14d8c9. PASS: dev_deps_closure_check (offline, fixture-based) \u2014 every marker-free transitive of the 6 pinned distributions is pinned and hashed; libfaketime is absent from requirements-dev.txt (transcript shows only ADR-0001's set). The clean-clone reproduction chain (venv + pip install --require-hashes + bash tools/run_checks.sh) is the close-out report's section 1 and re-runs at the final SHA; the CI-at-final-SHA half is DoD 12's row, not this one."
+    },
+    {
+      "id": "P12-CLOSE-DOD-2",
+      "dod": "DoD 2: evidence_check --strict refuses a phase whose final ci-run row does not match its own head (three negatives registered), and docs/contracts/evidence-bundle-v1.md carries the rule text.",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/feature-t0u2-evidence-strict.txt",
+        "tools/evidence_check.py",
+        "tools/evidence_ci.py",
+        "docs/contracts/evidence-bundle-v1.md",
+        "tools/negatives/p12_close.sh"
+      ],
+      "notes": "T0-U2 commit c1d4aaa. evidence_check --strict PASS (10 bundles, 0 failures); the head-match findings print phase_head vs each ci-run head_sha so the comparison is visible (transcript). The three negatives live in tools/negatives/p12_close.sh case_u2_head_law: (i) parent-commit row only => FAIL, (ii) missing core-hardening where a core was touched => FAIL, (iii) green-but-stale row after the SHA advanced => FAIL. run_checks.sh prints the two HEADs compared."
+    },
+    {
+      "id": "P12-CLOSE-DOD-3",
+      "dod": "DoD 3: budget caps enforce FILES derived from the patch diff headers; budget.md table and footnote agree; the four current entries are reported compliant; the split-across-two-patches negative proves it is not counting entries.",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/feature-t0u1-t0u3-gates.txt",
+        "build/farm/budget_meter.py",
+        "build/farm/tests/test_budget.py",
+        "docs/state/budget.md",
+        "docs/contracts/patch-manifest-v1.md",
+        "tools/negatives/p3_p4.sh"
+      ],
+      "notes": "T0-U3 commit f47b54e. Live meter: 4 patch entries = 21 files (total 21/150: blink_seams 5/25, branding 2/unlimited, ui 9/35, network_seams 5/20). budget tests 7/7: a 30-file patch is red, the same 30 files split across 2 patches is still red (total_entries==2), 24 files is green, an underivable file set FAILs, and the files: metadata list is never the count."
+    },
+    {
+      "id": "P12-CLOSE-DOD-4",
+      "dod": "DoD 4: evidence/P12/evidence.json carries a row for every P12 DoD item with real artifact paths and ci-run sources; cosmetic-blob-v1 and the cosmetic host protocol are registered in registry-post-freeze.md; evidence/P12-CLOSE/ exists with this phase's rows.",
+      "status": "PARTIAL",
+      "source": "local-run",
+      "evidence": [
+        "logs/feature-t0u4-dod4-registry.txt",
+        "docs/contracts/registry-post-freeze.md",
+        "docs/contracts/cosmetic-blob-v1.md",
+        "docs/contracts/review/16-cosmetic-blob-v1.md",
+        "../xr-core/renderer/cosmetic/host_protocol.md"
+      ],
+      "notes": "This T0-U4 commit does the two in-repo halves: (a) the blanket 'T0 debts only' note is replaced by one row per DoD item (P12-CLOSE-DOD-1..15 appended below), and (b) cosmetic-blob-v1 + cosmetic-host-protocol v1 (+ the two flags' expiry notes) are registered in docs/contracts/registry-post-freeze.md \u2014 the grep-cosmetic count there went 0 -> present. The evidence/P12-CLOSE/ bundle is created by the close-out commit once the final SHA's CI is in (that half stays open, named in not_done_by_design)."
+    },
+    {
+      "id": "P12-CLOSE-DOD-5",
+      "dod": "DoD 5: cosmetic.mojom (or extended shield.mojom) with an RFC proposal ADR; test_mojom_coverage.py proves every xr-core/mojom interface is fuzzer-visible; test_cosmetic_fuzz.cc >=600s wired as a fifth fuzz_fleet target, 0 violations, empty-run-must-fail proven.",
+      "status": "BLOCKED-PENDING-T2",
+      "source": "fixture",
+      "evidence": [
+        "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
+        "docs/contracts/review/16-cosmetic-blob-v1.md"
+      ],
+      "notes": "Pending the T2 commit of this phase: the mojom interface, the RFC-proposal ADR (approval is expressly a human act), the mojom-coverage test, and the >=600s fuzz target land together. Recorded here so DoD coverage is complete today, per T0-U4; the T2 commit flips this row to VERIFIED with the fleet lane's per-target rows and the --min-iters empty-run negative as transcript."
+    },
+    {
+      "id": "P12-CLOSE-DOD-6",
+      "dod": "DoD 6: docs/renderer/blob-cache.md written with the cache invariants (identity-partitioned, bounded, never cross-identity, invalidated by the bundle's monotonic apply version), the P4/P6 partition citations, and the farm measurement row; the derivable half exists as tests, not prose.",
+      "status": "BLOCKED-PENDING-T2",
+      "source": "fixture",
+      "evidence": [
+        "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
+        "docs/contracts/cosmetic-blob-v1.md"
+      ],
+      "notes": "Pending the T2 commit of this phase (delivered together with the fuzz target and the cache tests). The oversized-refusal, stale/expired-no-work and eviction/LKG cases must be tests, not prose, when the doc lands."
+    },
+    {
+      "id": "P12-CLOSE-DOD-7",
+      "dod": "DoD 7: T5 complete \u2014 >=150 cosmetic vectors, the >=40-case identity/OOPIF scope matrix, both planted negatives red as designed, exception_ledger_check extended with --as-of, docs/renderer/cosmetic.md + degrade-safety.md present, single-scope-object atomicity green (no second exception store, grep-proven).",
+      "status": "BLOCKED-PENDING-T5",
+      "source": "fixture",
+      "evidence": [
+        "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
+        "docs/contracts/vectors/cosmetic-v1.json"
+      ],
+      "notes": "Pending the T5 commit of this phase. The landed 200 golden vectors (docs/contracts/vectors/cosmetic-v1.json) already pin both flag states byte-for-byte; T5 grows the scope-key/OOPIF matrix and plants the split-brain and naive-key negatives."
+    },
+    {
+      "id": "P12-CLOSE-DOD-8",
+      "dod": "DoD 8: T7 complete \u2014 four generated perf budget rows, tools/cosmetic_bench.py with committed rows and --check, the trend rig never asserting MET, four NOT-RUN browser items with methods in docs/qa/browser-harness.md, and no synthetic number labeled as a browser measurement anywhere.",
+      "status": "BLOCKED-PENDING-T7",
+      "source": "fixture",
+      "evidence": [
+        "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
+        "build/qa/perf/perf-budgets.json"
+      ],
+      "notes": "Pending the T7 commit of this phase. The rows are generator-added (never hand-edited; --check diff-clean) with rig_class: trend so the sandbox can only ever be NEUTRAL; real-engine/real-Blink halves stay NOT-RUN with their method pointers."
+    },
+    {
+      "id": "P12-CLOSE-DOD-9",
+      "dod": "DoD 9: xr://shield cosmetic rows render for every new state (shield_state_check green + extended), attention_check green with its new cosmetic rule + negative, reason codes extended and documented for P13, block-event-v1 extension registered with both backends byte-identical.",
+      "status": "BLOCKED-PENDING-T6",
+      "source": "fixture",
+      "evidence": [
+        "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
+        "docs/shield/reason-codes.md"
+      ],
+      "notes": "Pending the T6-remainder commit of this phase (shield_state_check + attention_check extensions, the cosmetic reason-code rows, and the block-event-v1 page-modifying class through the post-freeze registry)."
+    },
+    {
+      "id": "P12-CLOSE-DOD-10",
+      "dod": "DoD 10: mutation \u2014 fresh full matrix for every core the close-out touches, deny-guard subsets reported, survivors dispositioned, >=95% gate.",
+      "status": "PARTIAL",
+      "source": "local-run",
+      "evidence": [
+        "logs/t1-mutation-cosmetic.json",
+        "docs/state/mutation-scores.json"
+      ],
+      "notes": "The landed cosmetic core's T1 matrix is evidence/P12/logs/t1-mutation-cosmetic.json and mutation_freshness is green (418/418 killed at the P11 standard). The full matrix for whatever the close-out touches re-runs at the final SHA (HG-28); a survivor must be dispositioned, never excused."
+    },
+    {
+      "id": "P12-CLOSE-DOD-11",
+      "dod": "DoD 11: run_checks.sh exit 0 on a clean clone and under a forward-dated clock with an identical PASS set; ./scripts/build test grown and 0 failed; run_negatives.sh N grown from 102; scheduled_lane_check clean (or only honest STALE-FAILs explained); owners_sync/no_new_crypto/vendor/license/SBOM/egress/npm/fetch-allowlist green; FROZEN.yaml/INDEX.md byte-identical; check-pin-alive PASS; trees clean.",
+      "status": "BLOCKED-PENDING-CLOSE",
+      "source": "fixture",
+      "evidence": [
+        "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
+        "docs/state/runner-capabilities.json"
+      ],
+      "notes": "The gate-battery numbers (exit 0, PASS count, N negatives, scripts-build-test totals, date-invariance under two --as-of values, both FROZEN/INDEX sha256s) are the close-out report's section 9 and re-run at the final SHA on a clean clone with only the repo's own pinned dev deps installed."
+    },
+    {
+      "id": "P12-CLOSE-DOD-12",
+      "dod": "DoD 12: governance and core-hardening success at the final SHA, cited in the bundle per T0-U2 (head_sha == phase_head), with the sast 2026-09-21 fire's conclusion reported (or NOT-YET with next fire time) \u2014 no prose claims.",
+      "status": "BLOCKED-PENDING-CLOSE",
+      "source": "fixture",
+      "evidence": [
+        "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
+        "docs/state/ci-lanes.json"
+      ],
+      "notes": "Recorded by the close-out commit once the final SHA exists: run + job ids resolved from the public API, head_sha equality with phase_head machine-checked by T0-U2. The sast lane's fix 35d0993 (2026-09-14) still awaits its next scheduled fire; scheduled_lane_check reports that exactly, never a fabricated green."
+    },
+    {
+      "id": "P12-CLOSE-DOD-13",
+      "dod": "DoD 13: docs/state/research-log-P12.md extended with the T2/T5/T7 items and the mojom RFC status; every new claim in the report cites an artifact or a path:line@pin.",
+      "status": "BLOCKED-PENDING-DOCS",
+      "source": "fixture",
+      "evidence": [
+        "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
+        "docs/state/research-log-P11.md"
+      ],
+      "notes": "research-log-P12.md does not exist yet; it lands with the T2 work and grows through T5/T7. Every report claim will cite an artifact or path:line@pin \u2014 numbers this sandbox did not produce are labeled as such, not inherited."
+    },
+    {
+      "id": "P12-CLOSE-DOD-14",
+      "dod": "DoD 14: both repos pushed with origin HEADs equal to what the report states (ls-remote pasted), DCO on every commit, DEPS xr_core_rev == xr-core origin HEAD, check-pin-alive PASS at the final SHA.",
+      "status": "BLOCKED-PENDING-CLOSE",
+      "source": "fixture",
+      "evidence": [
+        "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"
+      ],
+      "notes": "xr-browser main is at f47b54e (T0-U1..U3 pushed, DCO every commit). xr-core is pushed at close with the same-day DEPS pair-bump; the report pastes ls-remote for both and check-pin-alive at the final SHA."
+    },
+    {
+      "id": "P12-CLOSE-DOD-15",
+      "dod": "DoD 15: the 12-section final report delivered in full for the whole of P12, in the exact section order the brief specifies, with 9/10 carrying reproduced clean-clone numbers and the final-SHA run ids.",
+      "status": "BLOCKED-PENDING-REPORT",
+      "source": "fixture",
+      "evidence": [
+        "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"
+      ],
+      "notes": "The close-out commit writes the report following the brief's 12-section order, without inheriting the previous agent's figures except the two the orchestrator independently confirmed (108 PASS at 0c35cbb; ./scripts/build test 787/2) \u2014 and those are re-run, not copied."
     }
   ],
   "not_done_by_design": [
-    "T1-T8 feature rows: this bundle covers the T0 debts only, which the brief requires be complete before any feature work. The four debts are committed as separate commits (T0-a, T0-b, T0-c, T0-d, plus two follow-ups), and the feature rows are added by the commits that land them.",
-    "No Chromium build or browser-level measurement is claimed anywhere in this phase's evidence so far. `gn` and `ninja` are absent from this environment, so any claim of a rendered result would be a fabricated browser measurement, which the brief's stop conditions forbid. The renderer-seam evidence is static (patch bytes, patchinfo, seam roundtrip, core-level tests) plus the HG-31/HG-32 human gates."
+    "Page-level and rendered results \u2014 the blank-page detection sweep, the document-start p95 on a real build, the 50-hard-apps spot check, and any compiled-against-Blink claim \u2014 stay NOT-RUN (method: docs/qa/browser-harness.md). gn/ninja are absent from this sandbox, so any such number would be a fabricated browser measurement (HG-31).",
+    "Final-SHA CI conclusions (governance + core-hardening run/job ids, and the scheduled lanes incl. sast's next fire) are recorded by the close-out commit once the final SHA exists \u2014 DoD 12. Until then no ci-run row may stand as the phase's final-CI claim (T0-U2: it must match the phase's own head).",
+    "Contract ratification is human. cosmetic-blob-v1 and cosmetic-host-protocol v1 are registered LIVING in docs/contracts/registry-post-freeze.md; stamping cosmetic-blob-v1 into FROZEN.yaml waits on its stamping condition (host + ABPF validator both consuming it + >=150 vectors byte-parity), and ratification rides HG-26's one-batch queue.",
+    "HG-20 (PAT revocation) remains the user's act, not a repo artifact.",
+    "HG-28 full 24h mutation matrices at the release pin: the cosmetic core's matrix runs once its bytes stabilize; the T1 matrix for the landed bytes is evidence/P12/logs/t1-mutation-cosmetic.json.",
+    "The P12-CLOSE evidence bundle (evidence/P12-CLOSE/) is created by the close-out commit with this phase's own rows and the final phase_head."
   ]
 }

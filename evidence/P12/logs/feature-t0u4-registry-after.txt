@@ -1,0 +1,12 @@
+== P12-CLOSE T0-U4: registry-post-freeze cosmetic registration (after) ==
+grep -c cosmetic docs/contracts/registry-post-freeze.md  ->  11
+15:| cosmetic-blob-v1 | P12 | `docs/contracts/cosmetic-blob-v1.md` + `cosmetic-blob-v1.schema.json` + golden `docs/contracts/vectors/cosmetic-v1.json` (200 cases, both flag states byte-identical across backends); consumed by `xr-core/renderer/cosmetic/{host,abpf}` | `docs/contracts/review/16-cosmetic-blob-v1.md` | LIVING (stamp condition recorded in the review packet: freeze only after host + ABPF validator both consume it and ≥150 vectors pass byte-parity) |
+16:| cosmetic-host-protocol v1 | P12 | `xr-core/renderer/cosmetic/host_protocol.md` (the stdio method table: `flag-status`/`selector-parse`/`scope-key`/`blob-build`/`blob-check`/`key-set`/`degrade-apply`/`page-states`; byte-parity-locked against `xr-core/fakes/cosmetic.py`) | `docs/contracts/review/16-cosmetic-blob-v1.md` | LIVING (ratification: PENDING, HG-26); the renderer-side mojom request for the compiled key-set is T2's RFC-proposal ADR, not a frozen surface |
+240:P12 lands `cosmetic-blob-v1` + `cosmetic-host-protocol v1` (registered in the
+
+== P12-CLOSE T0-U4: bundle DoD coverage (after) ==
+dod_rows after: 24 | P12-CLOSE rows: 1 per DoD item (15)
+
+== P12-CLOSE T0-U4: evidence_check --strict --only P12 ==
+PASS: evidence/P12/evidence.json (strict)
+PASS: evidence_check (1 bundle(s), 0 failure(s); presence law: every phase in git history carries a bundle)

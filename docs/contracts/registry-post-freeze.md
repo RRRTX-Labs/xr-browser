@@ -232,3 +232,43 @@ fail-CLOSED absolutely (the asymmetry is property-tested by exhaustive
 T6 adds the `build/gn/argsets/flags.yaml` + `xr_common.gni` entries and
 the xr://shield dev-only surface; expiry/retirement follows the P7/P10
 two-note convention at that row.
+
+## P12 — cosmetic filtering + scriptlet injection (renderer seam; adds the cosmetic living contracts)
+
+P12 lands `cosmetic-blob-v1` + `cosmetic-host-protocol v1` and the
+`blink_seams/0300-cosmetic-document-start` patch.
+It implements **to** the frozen surfaces (`shield.mojom`/`xr_types.mojom` stay
+untouched — P12 adds no mojom field; the compiled key-set request is proposed
+as a T2 RFC, not applied), and never redefines them. New LIVING contracts
+registered this phase:
+
+| Contract | Phase | Files | Review packet | Freeze status |
+|---|---|---|---|---|
+| cosmetic-blob-v1 | P12 | `docs/contracts/cosmetic-blob-v1.md` + `cosmetic-blob-v1.schema.json` + golden `docs/contracts/vectors/cosmetic-v1.json` (200 cases, both flag states byte-identical across backends); consumed by `xr-core/renderer/cosmetic/{host,abpf}` | `docs/contracts/review/16-cosmetic-blob-v1.md` | LIVING — stamp condition recorded in the review packet: freeze only after the host and the ABPF validator both consume it and ≥150 vectors pass byte-parity |
+| cosmetic-host-protocol v1 | P12 | `xr-core/renderer/cosmetic/host_protocol.md` (the stdio method table: `flag-status`/`selector-parse`/`scope-key`/`blob-build`/`blob-check`/`key-set`/`degrade-apply`/`page-states`; byte-parity-locked against `xr-core/fakes/cosmetic.py`) | `docs/contracts/review/16-cosmetic-blob-v1.md` | LIVING (ratification: PENDING, HG-26); the renderer-side mojom request for the compiled key-set is T2's RFC-proposal ADR, not a frozen surface |
+
+Both state flags are recorded in `build/gn/argsets/flags.yaml` (note 1 of 2);
+the expiry note 2 of 2 lives here, per the P7/P10 convention:
+
+- **`xr_shield_cosmetic_v1`** — default OFF, and the OFF state is asserted
+  identical to today's product (no cosmetic call site active, no
+  MutationObserver installed, `page-states` reports
+  `observer_installed=false`/`generic_set_applies=false` at
+  `keyset_rules=0`; 200 golden vectors pin both states byte-for-byte across
+  `cosmetic_host` and `fakes/cosmetic.py`). **Kept until the P16-exit review**
+  of the renderer seam; retirement is itself a post-freeze registry change
+  (this same ledger), so the kill-switch cannot be silently dropped.
+- **`xr_shield_scriptlets`** — default OFF and INDEPENDENT of
+  `xr_shield_cosmetic_v1` (cosmetic on + scriptlets off ⇒ cosmetic applies and
+  no scriptlet runs). The registry in
+  `xr-core/renderer/cosmetic/scriptlets/registry.yaml` is validation-only this
+  phase (no interpreter in the host path; the ABPF validator REFUSES
+  `$ext-…` directives rather than accepting-and-ignoring). Enabling is a
+  human/farm gate (HG-31: no browser here); the debug page's
+  `scriptlet_registry_state` is `"inert: flag off"` verbatim so page and host
+  cannot drift. **Kept until the P16-exit review.**
+
+The P14+ xr://shield cosmetic rows, the reason-code table rows, and the
+`block-event-v1` page-modifying (injected-element) class are the T6-remainder
+work and will register here when they land — the registry entry, not a silent
+field addition.
