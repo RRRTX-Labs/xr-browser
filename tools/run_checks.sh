@@ -66,8 +66,8 @@ p11_vendor_gates
 echo "== evidence bundles (contract: docs/contracts/evidence-bundle-v1.md) =="
 "$PY" tools/evidence_check.py
 # strict: auto-covers every bundle newer than the P2 legacy exemption (P3+);
-# P1/P2 stay exempt per the HG-25 ruling. A new phase is covered automatically
-# — no hardcoded list to forget (the P6/P7 debt closed by T0, XR-P7-T0).
+# P1/P2 stay exempt per the HG-25 ruling (no hardcoded list to forget, T0).
+# T0-U2: phase_head bundles print both heads compared (`head-match:` lines).
 "$PY" tools/evidence_check.py --strict
 p11_caps_gates
 

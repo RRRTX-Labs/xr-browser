@@ -112,5 +112,78 @@ def hosted_claim_findings(rows: list[dict], path) -> list[str]:
     return fails
 
 
+# T0-U2: the final-CI claim must point at the bundle's OWN head. This is a
+# STRUCTURAL rule (offline, deterministic): the bundle records its phase head
+# (`phase_head`) and which workflows it claims final-CI green for (`ci_claimed`,
+# default `governance` — the push gate runs on every push to main; a phase that
+# touched xr-core lanes or C++ cores declares `core-hardening` too). Every
+# claimed workflow needs >= 1 `source: ci-run` row whose `head_sha` matches
+# `phase_head`; a row citing an OLDER head stays fine for its own claim (rule
+# (a) resolves its greenness) but cannot stand as the phase's final-CI claim.
+# Online authenticity is rule (a)'s job; this rule is the bundle's own
+# consistency, so it must not depend on network reachability.
+
+_HEAD_RE = re.compile(r"\b[0-9a-f]{7,40}\b", re.IGNORECASE)
+_CI_RUN_LABEL = "ci-run"
+DEFAULT_CI_WORKFLOWS = ("governance",)
+
+
+def _head_matches(row_head: str, phase_head: str) -> bool:
+    """7..40-hex, case-insensitive, prefix-match either way (the resolver's
+    own comparison shape: a short recorded rev meets a full API sha)."""
+    a = _HEAD_RE.search(row_head or "")
+    b = _HEAD_RE.search(phase_head or "")
+    if not (a and b):
+        return False
+    ra, rb = a.group(0).lower(), b.group(0).lower()
+    return ra.startswith(rb) or rb.startswith(ra)
+
+
+def head_coverage_findings(doc: dict, rows: list[dict], path) -> list[str]:
+    """T0-U2 findings, or [] — plus the comparison lines the reader needs to
+    SEE that both heads were compared (stderr, both --json and text modes)."""
+    fails: list[str] = []
+    phase_head = str(doc.get("phase_head") or "").strip()
+    if not _HEAD_RE.search(phase_head):
+        # not declared: grandfathered bundle (P9-T12 scoping pattern) — the
+        # rule binds only bundles that record their head.
+        return fails
+    claimed = doc.get("ci_claimed")
+    if isinstance(claimed, list) and all(
+            isinstance(w, str) and w.strip() for w in claimed):
+        claimed = [str(w).strip() for w in claimed]
+    else:
+        fails.append(f"{path}: ci_claimed must be a list of non-empty "
+                     f"workflow names (T0-U2), got {claimed!r}")
+        claimed = []
+    if "governance" not in claimed:
+        fails.append(f"{path}: ci_claimed must include 'governance' — it runs "
+                     f"on every push to main, so a phase cannot claim final-CI "
+                     f"green without it (T0-U2)")
+
+    covered: dict[str, str] = {}
+    for row in rows:
+        if row.get("source") != _CI_RUN_LABEL:
+            continue
+        wf = str(row.get("workflow") or "governance").strip()
+        row_head = str(row.get("head_sha") or "").strip()
+        print(f"head-match: phase_head={phase_head} vs ci-run "
+              f"{row.get('id', '<no id>')} head_sha={row_head} "
+              f"(workflow={wf})", file=sys.stderr)
+        if _head_matches(row_head, phase_head):
+            covered.setdefault(wf, str(row.get("id", "<no id>")))
+    for wf in claimed:
+        if wf not in covered:
+            fails.append(
+                f"{path}: phase records head {phase_head[:12]}, but no "
+                f"ci-run row carries a matching head_sha for workflow "
+                f"{wf!r} (T0-U2) — a final-CI claim must point at the "
+                f"phase's own head, not an older one")
+    good = sorted(f"{w}:{rid}" for w, rid in covered.items())
+    print(f"head-match: covered=[{', '.join(good) or 'none'}] "
+          f"phase_head={phase_head}", file=sys.stderr)
+    return fails
+
+
 # Tests monkeypatch this to exercise the content-mismatch paths offline.
 CI_RESOLVER = _default_ci_resolver

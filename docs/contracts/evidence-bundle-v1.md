@@ -147,8 +147,48 @@ Exit `0` pass · `1` fail (reasons printed) · `2` usage error.
    or by this sandbox (`which`). An absent ledger makes rule (e) inert with
    a visible SKIP line, never silently.
 
-Row-level fields added by this amendment: `corrects` (string id of the row
-an appended correction row corrects). Ledger schema:
+## T0-U2 amendment: the final-CI claim must point at the phase's own head
+
+Four consecutive phases saw the closing report and `origin`/hosted reality
+diverge (P7 invented "no CI on push"; P8/P9 wrote "not pushed" while origin
+had moved; P11 closed without its bundle; P12 reported a gate-green that only
+exists in a hand-mutated environment). The gap: a `ci-run` row could cite any
+green run at any head, and nothing linked the phase's final-CI claim to the
+head the bundle itself records. Rule (a)'s head match compares a run's
+`head_sha` against the bundle's `pin`/`repos` text — the *previous* phase's
+close head — so a row citing P11's head could still stand as P12's "final CI
+is green". The final-CI claim must be: **≥1 `ci-run` row whose `head_sha`
+equals the bundle's own recorded head, for every workflow that ran on that
+push.**
+
+Rule (binds every bundle that declares `phase_head`; others grandfathered,
+exactly like the P9-T12 scope):
+
+1. The bundle declares `phase_head` — its recorded xr-browser HEAD (full
+   sha) — and `ci_claimed` — the workflows it claims final-CI green for (a
+   list, default `["governance"]`; `governance` is mandatory because it runs
+   on every push to main). A phase that touched `xr-core` lanes or C++ cores
+   also declares `core-hardening`.
+2. For every claimed workflow the bundle must carry ≥1 `source: ci-run` row
+   whose `head_sha` **equals `phase_head`** (7–40 hex, case-insensitive,
+   prefix-matched both directions). A `ci-run` row may stamp `workflow`
+   (default `governance`) and `head_sha`; a row citing an older head stays
+   valid **for that row's own claim** but cannot stand as the phase's
+   final-CI claim.
+3. This check is STRUCTURAL (offline, deterministic): it is the bundle's
+   internal consistency, not a network verdict — rule (a) remains the online
+   greenness proof. The `--strict` transcript prints both heads compared
+   (`phase_head=…` per candidate row), so a reader sees the comparison ran
+   rather than trusting a silent pass.
+
+Negative fixtures (registered in `tools/negatives/`): (i) a bundle whose only
+`ci-run` row points at a parent commit ⇒ FAIL; (ii) missing `core-hardening`
+where the phase touched a core ⇒ FAIL; (iii) a green-but-stale row after the
+SHA advanced ⇒ FAIL.
+
+Row-level fields added by these amendments: `corrects` (string id of the row
+an appended correction row corrects); `head_sha` and `workflow` (ci-run
+rows). Bundle-level fields: `phase_head`, `ci_claimed`. Ledger schema:
 `runner-capabilities-v1` — `capabilities: {<tool>: {present: true|false|
 "UNOBSERVED", version?, note?, proven_by: [{ci_run, ci_job, workflow?,
 job?, step?, head?, log?, date, note?}]}}`; `present: true/false` requires

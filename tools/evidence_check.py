@@ -88,7 +88,8 @@ _OPEN_STATUS_PREFIXES = ("PARTIAL", "BLOCKED", "HUMAN-GATED")
 # where that does not hold. Explicit, as copy_lint.py and compat.py do it.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from evidence_ci import CI_RESOLVER, hosted_claim_findings  # noqa: E402
+# noqa: E402 — sibling tool modules (evidence_ci holds the T0-U2 head law).
+from evidence_ci import CI_RESOLVER, head_coverage_findings, hosted_claim_findings
 # P12-T0-b: presence is a separate law from validity — see the sibling module.
 import evidence_presence_check as epc  # noqa: E402
 import runner_caps  # noqa: E402 - sibling tool module (P11-T0-d)
@@ -232,6 +233,8 @@ def check_file(path: Path, repo: Path, strict: bool) -> list[str]:
 
     phase_num = _phase_number(path.parent.name)
     if strict and phase_num is not None and phase_num >= T12_MIN_PHASE:
+        # T0-U2: phase_head bundles cite a same-head ci-run row per workflow.
+        fails.extend(head_coverage_findings(doc, rows, path))
         # (b) a PARTIAL/BLOCKED/HUMAN-GATED row must be explained: the bundle
         # carries a non-empty not_done_by_design (P8 shipped [] with partial
         # work — that hole closes here).

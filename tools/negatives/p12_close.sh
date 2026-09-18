@@ -144,3 +144,74 @@ SH
   fi
 }
 neg_register keepgoing_all_failures
+
+# --- T0-U2 (evidence_check final-CI head law) ------------------------------
+# A bundle declaring phase_head must cite a same-head ci-run row for every
+# claimed workflow. Three negatives, all offline-deterministic (the rule is
+# structural; CI_RESOLVER is left to print its usual offline SKIP and the
+# rule must redden without network). The helper writes a P12 bundle with
+# human-gates.md + logs/x.txt so the OTHER strict laws stay quiet.
+case_u2_head_law() {
+  local B="$NEG_TMP/u2e"; mkdir -p "$B/evidence/P12/logs"
+  printf '# P12 gates\n\nfarm rows.\n' > "$B/evidence/P12/human-gates.md"
+  printf 'ok\n' > "$B/evidence/P12/logs/x.txt"
+  local PHASE_HEAD="0c35cbb8c6f285890f112cc8f0926d023280ce5a"
+  local PARENT_HEAD="7922648aaa40f2013acad79503fcb5d71651d2a3"
+  # $1 = ci_claimed json, $2 = extra rows json appended to dod_rows
+  u2_bundle() {
+    cat > "$B/evidence/P12/evidence.json" <<JSON
+{"phase":"P12","generated":"2026-09-18","plan":"docs/plans/fixture.md",
+ "phase_head":"$PHASE_HEAD","ci_claimed":$1,
+ "source_labels":["local-run","ci-run"],
+ "dod_rows":[
+  {"id":"F0","dod":"local","status":"VERIFIED","source":"local-run",
+   "evidence":["logs/x.txt"]}$2
+ ]}
+JSON
+  }
+  # (i) the only ci-run row points at a PARENT commit (governance-only claim,
+  # so the head mismatch is the isolated reason) -> FAIL
+  u2_bundle '["governance"]' \
+    ',{"id":"F1","dod":"hosted","status":"VERIFIED","source":"ci-run","ci_run":34905296564,"ci_job":104180441172,"workflow":"governance","head_sha":"'$PARENT_HEAD'","evidence":["logs/x.txt"]}'
+  neg_expect_reject "evidence T0-U2 (i): a final ci-run row at a parent commit reddens" \
+    'own head' \
+    "$PY" tools/evidence_check.py --repo "$B" --strict --only P12
+  # (ii) the phase touched a core (claims core-hardening) but no same-head row
+  # covers it; governance IS covered -> the missing workflow is the reason
+  u2_bundle '["governance","core-hardening"]' \
+    ',{"id":"F2","dod":"hosted","status":"VERIFIED","source":"ci-run","ci_run":34905296564,"ci_job":104180441172,"workflow":"governance","head_sha":"'$PHASE_HEAD'","evidence":["logs/x.txt"]}'
+  neg_expect_reject "evidence T0-U2 (ii): a claimed-but-uncovered core-hardening reddens" \
+    'core-hardening' \
+    "$PY" tools/evidence_check.py --repo "$B" --strict --only P12
+  # (iii) the ci-run row was green at the SAME head but the phase HEAD has
+  # since advanced past it -> that row cannot be the final claim
+  u2_bundle '["governance"]' \
+    ',{"id":"F3","dod":"hosted","status":"VERIFIED","source":"ci-run","ci_run":34905296564,"ci_job":104180441172,"workflow":"governance","head_sha":"'$PARENT_HEAD'","evidence":["logs/x.txt"]}'
+  cat > "$B/evidence/P12/evidence.json" <<JSON
+{"phase":"P12","generated":"2026-09-18","plan":"docs/plans/fixture.md",
+ "phase_head":"$PHASE_HEAD","ci_claimed":["governance"],
+ "source_labels":["local-run","ci-run"],
+ "dod_rows":[
+  {"id":"F0","dod":"local","status":"VERIFIED","source":"local-run",
+   "evidence":["logs/x.txt"]},
+  {"id":"F3","dod":"hosted","status":"VERIFIED","source":"ci-run",
+   "ci_run":34905296564,"ci_job":104180441172,"workflow":"governance",
+   "head_sha":"$PARENT_HEAD","evidence":["logs/x.txt"]}
+ ]}
+JSON
+  neg_expect_reject "evidence T0-U2 (iii): a green-but-stale row after the SHA advanced reddens" \
+    'own head' \
+    "$PY" tools/evidence_check.py --repo "$B" --strict --only P12
+  # positive control: same-head rows for BOTH claimed workflows pass the
+  # structural rule offline (the resolver SKIPs visibly, never a fail).
+  u2_bundle '["governance","core-hardening"]' \
+    ',{"id":"F4","dod":"hosted","status":"VERIFIED","source":"ci-run","ci_run":34905296564,"ci_job":104180441172,"workflow":"governance","head_sha":"'$PHASE_HEAD'","evidence":["logs/x.txt"]},{"id":"F5","dod":"hosted","status":"VERIFIED","source":"ci-run","ci_run":34905296809,"ci_job":104180441587,"workflow":"core-hardening","head_sha":"'$PHASE_HEAD'","evidence":["logs/x.txt"]}'
+  if "$PY" tools/evidence_check.py --repo "$B" --strict --only P12 \
+       >/dev/null 2>&1; then
+    echo "ok: T0-U2 positive control (same-head rows for both workflows pass offline)"
+  else
+    echo "NEGATIVE-FAIL: T0-U2 positive control must pass with same-head rows for every claimed workflow"
+    NEG_FAILURES=$((NEG_FAILURES + 1))
+  fi
+}
+neg_register u2_head_law
