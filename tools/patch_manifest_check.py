@@ -1,32 +1,39 @@
 #!/usr/bin/env python3
-"""tools/patch_manifest_check.py — the patch budget ledger, machine-checked (P12).
+"""tools/patch_manifest_check.py — declared `files:` vs the patch's real diff.
 
-patches/manifest.yaml is the ledger the fork's patch discipline rests on: it
-caps how many upstream files each seam category may touch, and the caps are the
-only thing standing between "we patch 12 files" and "we patch 900 and stop being
-a fork". Until P12 nothing in the tree verified the ledger against the patches
-it describes — the caps were prose, and a row whose `files:` list disagreed with
-its own diff silently under-counted its category.
+`docs/contracts/patch-manifest-v1.md` §2 calls a row's `files:` list "upstream
+files touched (metadata; **the .patch is truth**)". Nothing else in the tree
+compared the metadata to the truth, so a row could drift from its own diff and
+stay green: the first P12 row declared 4 files while its patch touched 5 (the
+payload's BUILD.gn was omitted), and `xr-patch lint` passed it correctly — that
+list is not its input.
 
-That gap is not hypothetical: the first P12 row listed 4 files while the
-generated patch touched 5 (the payload's BUILD.gn was omitted), so the row
-under-reported its own category by 20 %. This tool is what turns that into a
-red gate instead of a drift nobody notices.
+So this tool checks ONE thing, in both directions:
 
-Checks, per patch row:
-  * `dir` exists and holds `<id>.patch` and `patchinfo.md`;
-  * the declared `files:` EQUALS the paths the patch actually touches, in both
-    directions — a listed-but-untouched path is a lie in one direction, an
-    untouched-by-the-ledger path is a cap bypass in the other;
-  * every touched path is under an `allowed_root`;
-  * per-category counts are within `categories[*].cap` (null = uncapped), and
-    the patch count is within `total_cap`;
-  * no duplicate patch ids.
+  * a declared path the patch does not touch — the metadata over-reports, so a
+    reader auditing by the manifest is told the patch is bigger than it is;
+  * a touched path the row does not declare — the metadata under-reports, and
+    `build/farm/budget_meter.py`'s `registered_files()` reads exactly this list
+    to decide what counts as registered, so an undeclared upstream file is
+    invisible to the audit surface it feeds.
 
-The touched-path extraction reads the patch's `--- a/` and `+++ b/` headers,
-which is what `git apply` itself consumes, so the ledger is compared against the
-same notion of "what this patch changes" that the tool applying it uses.
-Deletions (`+++ /dev/null`) and additions (`--- /dev/null`) are both handled.
+WHAT THIS TOOL DELIBERATELY DOES NOT CHECK, and who does:
+
+  * per-category and total caps — `build/patching/apply.py lint` and
+    `build/farm/budget_meter.py` both own them, and both count PATCH ENTRIES,
+    not files. An earlier version of this file counted files against those caps,
+    which would have falsely failed 30 files spread over 2 patches and falsely
+    passed 26 single-file patches. A third implementation of the same rule that
+    disagrees with the other two is worse than none, so it is gone.
+  * allowed_roots membership of the diff paths — `apply.py lint` runs
+    `check_path_policy(diff_paths(pf), roots)` on the real patch.
+  * patchinfo.md mandatory fields and id match — `lint_patchinfo()`.
+  * duplicate ids, category validity, unknown row fields — `lint_manifest()`.
+
+The touched-path extraction reads the `--- a/` and `+++ b/` headers, which is
+what `git apply` consumes, so the metadata is compared against the same notion
+of "what this patch changes" that the tool applying it uses. Pure adds
+(`--- /dev/null`) and pure deletes (`+++ /dev/null`) are both handled.
 
 Exit: 0 pass · 1 fail · 2 usage.
 """
@@ -35,7 +42,6 @@ from __future__ import annotations
 import argparse
 import re
 import sys
-from collections import Counter
 from pathlib import Path
 
 try:
@@ -70,94 +76,48 @@ def touched_paths(patch: Path) -> set[str]:
 
 def check(manifest: Path) -> tuple[list[str], dict[str, int]]:
     fails: list[str] = []
-    counts: dict[str, int] = {}
     man = yaml.safe_load(manifest.read_text(encoding="utf-8"))
     if not isinstance(man, dict):
-        return [f"{MANIFEST}: not a mapping"], counts
+        return [f"{MANIFEST}: not a mapping"], {}
 
-    roots = man.get("allowed_roots") or []
-    cats = man.get("categories") or {}
-    total_cap = man.get("total_cap")
     rows = man.get("patches") or []
-    counts = {"patches": len(rows), "files": 0, "categories": 0}
-
+    counts = {"patches": len(rows), "files": 0, "drift": 0}
     if not rows:
         # Not a failure — an empty ledger is a legitimate state — but it must
         # say so, because "0 patches, PASS" and "checked nothing, PASS" are
-        # different claims.
+        # different claims and only the counts tell them apart.
         print("NOTE: the manifest declares no patches — nothing to check")
         return fails, counts
 
-    if not roots:
-        fails.append(f"{MANIFEST}: allowed_roots is empty — every patch would "
-                     f"be outside the ledger, so the roots are missing rather "
-                     f"than permissive")
-
-    seen: Counter[str] = Counter()
-    per_cat: Counter[str] = Counter()
+    base = manifest.parent
     for row in rows:
         if not isinstance(row, dict):
             fails.append(f"{MANIFEST}: patch row is not a mapping: {row!r}")
             continue
         pid = row.get("id") or "<no id>"
-        seen[pid] += 1
-        d = row.get("dir")
-        cat = row.get("category")
         declared = list(row.get("files") or [])
-        base = manifest.parent
-
-        if cat not in cats:
-            fails.append(f"{pid}: category {cat!r} is not in `categories` — an "
-                         f"unknown category is uncapped by default, which is "
-                         f"how a cap gets bypassed by typo")
-        else:
-            per_cat[cat] += len(declared)
-
+        d = row.get("dir")
         if not d:
-            fails.append(f"{pid}: no `dir`")
-            continue
-        pdir = base / d
-        patch = pdir / f"{pid}.patch"
+            continue  # apply.py lint owns the missing-dir finding
+        patch = base / d / f"{pid}.patch"
         if not patch.is_file():
-            fails.append(f"{pid}: {patch.relative_to(base)} does not exist")
-            continue
-        if not (pdir / "patchinfo.md").is_file():
-            fails.append(f"{pid}: {pdir.relative_to(base)}/patchinfo.md is "
-                         f"missing — a patch with no rationale cannot be "
-                         f"reviewed or reverted on judgement")
-
+            continue  # apply.py lint owns the missing-patch finding
         actual = touched_paths(patch)
         counts["files"] += len(actual)
         missing = sorted(set(declared) - actual)
         extra = sorted(actual - set(declared))
+        counts["drift"] += len(missing) + len(extra)
         if missing:
             fails.append(f"{pid}: declares {len(missing)} file(s) the patch "
-                         f"does not touch — the ledger over-reports, so the "
-                         f"count is not a floor: " + ", ".join(missing))
+                         f"does not touch — the metadata over-reports, so a "
+                         f"reader auditing by the manifest is told the patch is "
+                         f"bigger than it is: " + ", ".join(missing))
         if extra:
-            fails.append(f"{pid}: touches {len(extra)} file(s) the ledger does "
-                         f"not declare — the ledger under-reports, which is the "
-                         f"direction that hides a cap breach: "
-                         + ", ".join(extra))
-        for path in sorted(actual):
-            if not any(path.startswith(r) for r in roots):
-                fails.append(f"{pid}: {path} is outside every allowed_root "
-                             f"({', '.join(roots)})")
-
-    for pid, n in sorted(seen.items()):
-        if n > 1:
-            fails.append(f"duplicate patch id {pid!r} ({n} rows) — the ledger "
-                         f"can no longer say which row a budget belongs to")
-
-    for cat, n in sorted(per_cat.items()):
-        spec = cats.get(cat)
-        cap = spec.get("cap") if isinstance(spec, dict) else spec
-        if isinstance(cap, int) and n > cap:
-            fails.append(f"category {cat!r}: {n} declared file(s) > cap {cap}")
-
-    counts["categories"] = len(per_cat)
-    if isinstance(total_cap, int) and len(rows) > total_cap:
-        fails.append(f"{len(rows)} patches > total_cap {total_cap}")
+            fails.append(f"{pid}: touches {len(extra)} file(s) the row does not "
+                         f"declare — the metadata under-reports, and "
+                         f"budget_meter.py's registered_files() reads this "
+                         f"list, so the file is invisible to the audit surface "
+                         f"it feeds: " + ", ".join(extra))
     return fails, counts
 
 
@@ -167,8 +127,7 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--xr-core", default="../xr-core",
                     help="xr-core checkout (default: ../xr-core)")
     a = ap.parse_args(argv)
-    xr_core = Path(a.xr_core).resolve()
-    manifest = xr_core / MANIFEST
+    manifest = Path(a.xr_core).resolve() / MANIFEST
     if not manifest.is_file():
         print(f"FAIL: {manifest} not found")
         return EXIT_FAIL
@@ -178,10 +137,12 @@ def main(argv: list[str]) -> int:
         print(f"FAIL: {f}")
     if fails:
         print(f"FAIL: patch_manifest_check (patches: {counts.get('patches')}, "
-              f"files: {counts.get('files')}; {len(fails)} finding(s))")
+              f"files: {counts.get('files')}, drifted: {counts.get('drift')}; "
+              f"{len(fails)} finding(s))")
         return EXIT_FAIL
     print(f"PASS: patch_manifest_check (patches: {counts['patches']}, "
-          f"files: {counts['files']}, categories: {counts['categories']})")
+          f"files: {counts['files']}, drifted: 0 — declared `files:` equals "
+          f"the patch diff in both directions)")
     return EXIT_PASS
 
 
