@@ -128,9 +128,18 @@ PY
   grep -q 'date.today()' "$R/tools/release_notes.py" || {
     echo "NEGATIVE-FAIL: invariance_drift plant did not apply"
     NEG_FAILURES=$((NEG_FAILURES + 1)); rm -rf "$R"; return 1; }
-  neg_expect_reject "date_invariance_check: an artifact whose bytes move with --as-of reddens the invariance gate" \
-    'release-notes-bytes' \
-    "$PY" "$R/tools/date_invariance_check.py" --repo "$R" --require-ambient-probe
+  # T0-U1: the drift is only visible under an AMBIENT displacement (a
+  # date.today() read hides from the --as-of half by definition). faketime is
+  # an OPTIONAL helper tool (skip-policy law), so a host without it SKIPs this
+  # case visibly — the strict-probe red is separately covered by
+  # p12_close.sh's ambient_demand_red. Never a silent pass, never a false red.
+  if ! command -v faketime >/dev/null 2>&1; then
+    neg_skip "invariance_drift needs the optional faketime helper tool (visible, never a PASS)"
+  else
+    neg_expect_reject "date_invariance_check: an artifact whose bytes move with the ambient clock reddens the invariance gate" \
+      'release-notes-bytes' \
+      "$PY" "$R/tools/date_invariance_check.py" --repo "$R" --require-ambient-probe
+  fi
   # positive control: the unmodified copy is date-invariant, so the red above
   # is the plant's and not the harness's
   if "$PY" "$REPO_ROOT/tools/date_invariance_check.py" --repo "$REPO_ROOT" >/dev/null 2>&1; then

@@ -37,6 +37,33 @@ from categories import PLAN_CAPS, TOTAL_CAP  # noqa: E402
 DEFAULT_MANIFEST = "../xr-core/patches/manifest.yaml"  # relative to meta repo root
 STATE_DOC = "docs/state/budget.md"
 
+# P12-CLOSE T0-U3: the budget unit is FILES, per Plan §1.2 ("≤150
+# upstream-touched files", per-class "~N files" columns). The meter had counted
+# patch ENTRIES (`len(patches)`) against file caps, so a single 60-file patch
+# read as "1/25 PASS". Files are derived from each patch dir's *.patch diff
+# headers (`--- a/` / `+++ b/`, union both directions; `/dev/null` marks a pure
+# add/delete) — the same "what this patch changes" that `git apply` reads. The
+# entry count is kept as a SECOND reported column, never a budget unit.
+import re  # noqa: E402
+
+_MINUS_RE = re.compile(r"^--- (?:a/(.+?)|/dev/null)\t?$")
+_PLUS_RE = re.compile(r"^\+\+\+ (?:b/(.+?)|/dev/null)\t?$")
+
+
+def patch_diff_files(patchdir: Path) -> set[str]:
+    """Every upstream path the patch dir's *.patch files touch, from the diff
+    headers. Empty when no *.patch yields any — the caller reports that as a
+    failure (a file set that cannot be derived is never silently zero)."""
+    out: set[str] = set()
+    for pf in sorted(patchdir.glob("*.patch")):
+        for line in pf.read_text(encoding="utf-8",
+                                 errors="replace").splitlines():
+            for rx in (_MINUS_RE, _PLUS_RE):
+                m = rx.match(line)
+                if m and m.group(1):
+                    out.add(m.group(1).split("\t", 1)[0])
+    return out
+
 
 def load_budget_config(root: Path) -> dict:
     cfg_path = root / "build" / "upstream" / "budget-config.json"
@@ -93,33 +120,55 @@ def _unregistered_checkout_diff(checkout: Path, manifest: dict) -> list[str]:
     return failures
 
 
-def build_report(manifest: dict, cfg: dict) -> tuple[dict, str]:
+def build_report(manifest: dict, cfg: dict, path: Path) -> tuple[dict, str, list[str]]:
+    """Count per-category upstream FILES (from the diff headers) against the
+    caps; keep patch-entry counts as a second column. Returns (report, table,
+    failures). A patch whose file set cannot be derived is a FAILURE (never a
+    silent zero — failure condition 4)."""
     patches = manifest.get("patches") or []
-    per: dict[str, int] = {c: 0 for c in PLAN_CAPS}
+    files_per: dict[str, set[str]] = {c: set() for c in PLAN_CAPS}
+    entries_per: dict[str, int] = {c: 0 for c in PLAN_CAPS}
+    failures: list[str] = []
     for p in patches:
         cat = p.get("category")
-        if cat in per:
-            per[cat] += 1
-    total = len(patches)
-    over_categories = {c: {"count": per[c], "cap": PLAN_CAPS[c]}
-                       for c in PLAN_CAPS
-                       if PLAN_CAPS[c] is not None and per[c] > PLAN_CAPS[c]}
+        d = path.parent / p["dir"] if p.get("dir") else None
+        if d is None or not d.is_dir():
+            failures.append(f"patch {p.get('id')!r}: dir missing — file set "
+                            f"underivable (never count zero silently)")
+            continue
+        fs = patch_diff_files(d)
+        if not fs:
+            failures.append(f"patch {p.get('id')!r}: {d} has no *.patch or "
+                            f"yields no diff-file set — file set underivable")
+            continue
+        if cat in files_per:
+            files_per[cat] |= fs
+            entries_per[cat] += 1
+    total_files = sum(len(s) for s in files_per.values())
+    total_entries = len(patches)
+    over_categories = {
+        c: {"files": len(files_per[c]), "cap": PLAN_CAPS[c]}
+        for c in PLAN_CAPS
+        if PLAN_CAPS[c] is not None and len(files_per[c]) > PLAN_CAPS[c]}
     report = {
         "tool": "budget_meter",
-        "total": total,
-        "per_category": per,
+        "total": total_files,            # files — the budget unit now
+        "total_entries": total_entries,  # patch entries — a second column
+        "per_category": {c: len(s) for c, s in files_per.items()},
+        "per_category_entries": entries_per,
         "cap": TOTAL_CAP,
         "category_caps": {c: (cap if cap is not None else "unlimited") for c, cap in PLAN_CAPS.items()},
-        "over_budget": total > TOTAL_CAP,
+        "over_budget": total_files > TOTAL_CAP,
         "over_categories": over_categories,
         "config_source": cfg["source"],
     }
-    md = ["| category | patches | cap |", "|---|---|---|"]
-    for c, n in sorted(per.items()):
+    md = ["| category | files | entries | cap |", "|---|---|---|---|"]
+    for c in sorted(files_per):
         cap = PLAN_CAPS[c]
-        md.append(f"| {c} | {n} | {cap if cap is not None else 'unlimited'} |")
-    md.append(f"| **total** | **{total}** | **{TOTAL_CAP}** |")
-    return report, "\n".join(md) + "\n"
+        md.append(f"| {c} | {len(files_per[c])} | {entries_per[c]} | "
+                  f"{cap if cap is not None else 'unlimited'} |")
+    md.append(f"| **total** | **{total_files}** | **{total_entries}** | **{TOTAL_CAP}** |")
+    return report, "\n".join(md) + "\n", failures
 
 
 def state_doc_body(report: dict, table: str) -> str:
@@ -128,8 +177,10 @@ def state_doc_body(report: dict, table: str) -> str:
         "Generated by `./scripts/build budget --state-doc docs/state/budget.md`\n"
         f"from the xr-core patch manifest at the DEPS pin. Config source: {report['config_source']}.\n\n"
         f"{table}\n"
-        f"_Total {report['total']} / {report['cap']} upstream-touched files; the count is "
-        "published in every release note (Plan §12.2)._ (regenerated: see git log)\n")
+        f"_Total {report['total']} / {report['cap']} upstream-touched files; "
+        f"{report['total_entries']} patch entries. The budget unit is FILES, "
+        "derived from each patch's diff headers — the count is published in "
+        "every release note (Plan §12.2)._ (regenerated: see git log)\n")
 
 
 def main() -> None:
@@ -168,8 +219,7 @@ def main() -> None:
         if not mpath.exists():
             raise ToolError(f"manifest not found: {mpath} (xr-core rev in DEPS? run build sync)")
         manifest = _load_manifest(mpath)
-        report, table = build_report(manifest, cfg)
-        failures: list[str] = []
+        report, table, failures = build_report(manifest, cfg, mpath)
 
         if args.cmd == "audit":
             report["tool"] = "xr-audit"
@@ -193,10 +243,10 @@ def main() -> None:
         else:
             if args.gate:
                 if report["over_budget"]:
-                    failures.append(f"budget gate: {report['total']} patches exceed the total cap {TOTAL_CAP} "
+                    failures.append(f"budget gate: {report['total']} upstream-touched files exceed the total cap {TOTAL_CAP} "
                                     "(Plan §1.2: exceeding budget = architecture review, never silent scope)")
                 for c, info in report["over_categories"].items():
-                    failures.append(f"budget gate: category {c!r} has {info['count']} patches, cap {info['cap']}")
+                    failures.append(f"budget gate: category {c!r} has {info['files']} files, cap {info['cap']}")
 
         report["gate"] = bool(getattr(args, "gate", False))
         report["failures"] = failures
@@ -218,7 +268,7 @@ def main() -> None:
 
         if getattr(args, "release_note_snippet", False):
             report["release_note_snippet"] = (
-                f"- Upstream patches carried: {report['total']} of {report['cap']} budgeted files "
+                f"- Upstream-touched files carried: {report['total']} of {report['cap']} budgeted files "
                 f"({', '.join(f'{c}={n}' for c, n in sorted(report['per_category'].items()) if n)}) — Plan §12.2")
             print(report["release_note_snippet"])
 

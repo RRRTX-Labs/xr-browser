@@ -9,20 +9,25 @@ import sys
 from pathlib import Path
 root = Path(sys.argv[1])
 rows = []
-for i in range(3):  # extension_chokepoint cap = 2
+# T0-U3: the budget unit is FILES. Three patches each touching a DISTINCT file
+# = 3 files > the extension_chokepoint cap of 2 (three patches on the SAME file
+# would now be 1 file and must NOT trip the cap — the unit is what changed).
+for i in range(3):
     d = root / "inj" / str(i)
     d.mkdir(parents=True, exist_ok=True)
-    (d / "inj.patch").write_text("--- a/x.txt\n+++ b/x.txt\n@@ -1 +1 @@\n-x\n+y\n")
+    f = f"x{i}.txt"
+    (d / "inj.patch").write_text(
+        f"--- a/{f}\n+++ b/{f}\n@@ -1 +1 @@\n-x\n+y\n")
     rows += [f'  - id: "inj-{i}"', '    owner: "@xr/security"',
-             "    category: extension_chokepoint", "    files:", '      - "x.txt"',
+             "    category: extension_chokepoint", "    files:", f'      - "{f}"',
              f"    dir: inj/{i}"]
 (root / "manifest.yaml").write_text(
     "schema_version: 1\ntotal_cap: 150\ncategories:\n"
     "  extension_chokepoint: { cap: 2 }\nallowed_roots:\n  - \"x.txt\"\n"
     "patches:\n" + "\n".join(rows) + "\n")
 PYDONE
-  neg_expect_reject "budget: over-cap manifest fails the gate" \
-    'extension_chokepoint' \
+  neg_expect_reject "budget: a manifest whose FILES exceed the per-category cap fails the gate" \
+    'extension_chokepoint.*3 files|has 3 files' \
     "$PY" build/farm/budget_meter.py budget --manifest "$B/manifest.yaml" --gate
 }
 neg_register budget_overcap

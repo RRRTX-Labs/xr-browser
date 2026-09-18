@@ -20,11 +20,13 @@ So this tool checks ONE thing, in both directions:
 WHAT THIS TOOL DELIBERATELY DOES NOT CHECK, and who does:
 
   * per-category and total caps — `build/patching/apply.py lint` and
-    `build/farm/budget_meter.py` both own them, and both count PATCH ENTRIES,
-    not files. An earlier version of this file counted files against those caps,
-    which would have falsely failed 30 files spread over 2 patches and falsely
-    passed 26 single-file patches. A third implementation of the same rule that
-    disagrees with the other two is worse than none, so it is gone.
+    `build/farm/budget_meter.py` own them, and since P12-CLOSE T0-U3 the meter
+    counts FILES (derived from each patch's diff headers) against the caps,
+    exactly as the plan's "~N files" columns read. `apply.py lint` keeps its
+    entry-count lint shape pinned by test_apply_lint_does_not_see_files_drift
+    (division of labour). An earlier version of THIS file counted files against
+    caps before the meter did — falsely failing 30 files over 2 patches — and
+    was removed; the meter is now the single files-vs-cap enforcement point.
   * allowed_roots membership of the diff paths — `apply.py lint` runs
     `check_path_policy(diff_paths(pf), roots)` on the real patch.
   * patchinfo.md mandatory fields and id match — `lint_patchinfo()`.

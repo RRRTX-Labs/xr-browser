@@ -69,8 +69,19 @@ data error today.
 
 ## 4. Budget (Plan §1.2)
 
-- **Total** upstream-touched patch entries ≤ **150** (count published per
-  release). **Per-category caps** as in the `categories` block. Exceeding the
-  budget is an architecture review, never silent scope — `xr-patch lint` and
-  `budget_meter.py` reject overflow as a *data error* today (P3-T3 turns the
-  meter into a hard CI gate).
+- **The unit is FILES**, everywhere, in all three counters and gates: the
+  plan's table counts "upstream-touched **files**" (total ≤ **150**, per-class
+  "~N files"), and this contract's `files:` list is labelled "metadata; the
+  .patch is truth" precisely because the meter must derive the file set from
+  the diff, not from the list. P12-CLOSE T0-U3 fixed the meter, which had
+  counted patch ENTRIES against file caps (a single 60-file patch read as
+  "1/25 PASS"). The patch-entry count remains a reported second column, never a
+  budget unit.
+- **Total** upstream-touched files ≤ **150** (count published per release).
+  **Per-category caps** as in the `categories` block, enforced on the file
+  count derived from each patch dir's `*.patch` diff headers (`--- a/`/`+++ b/`,
+  union both directions; `/dev/null` marks a pure add/delete). A patch whose
+  `*.patch` yields no derivable file set is a FAILURE, never a silent zero.
+  Exceeding the budget is an architecture review, never silent scope —
+  `xr-patch lint` and `budget_meter.py` reject overflow as a *data error*
+  today (P3-T3 turns the meter into a hard CI gate).
