@@ -50,3 +50,7 @@ rows:
     line: 233
     kind: report-timestamp
     reason: "`generated_at` on the seam round-trip report; verdict is byte-exactness, not the clock"
+  - path: build/webui/cosmetic_seam_roundtrip.py
+    line: 252
+    kind: report-timestamp
+    reason: "`generated_at` on the cosmetic seam round-trip report; the verdict fields (apply/verify/revert/negative and patch_sha256) are all derived from the pinned bytes, not from the clock. Same row shape as its two sibling round-trip tools above."
