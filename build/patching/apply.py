@@ -186,7 +186,17 @@ def lint_manifest(manifest: dict[str, Any], manifest_path: Path) -> list[str]:
                 fails.extend(check_path_policy(diff_paths(pf), roots))
         except ToolError as e:
             fails.append(str(e))
-        counts[cat] = counts.get(cat, 0) + 1 if cat else counts.get(cat, 0)
+        # Only plan categories are counted. An unknown (or missing) one is not
+        # a budget question — validate_category() above already emitted the
+        # finding — and giving it a counter would make the cap loop below index
+        # PLAN_CAPS with a key that is not there. That raised KeyError, so a
+        # mistyped category printed a traceback and NO findings at all, which
+        # is how a reviewer loses the one line telling them what to fix. (The
+        # old `... if cat else counts.get(cat, 0)` also parsed as
+        # `(x + 1) if cat else x`, so its else branch inserted a falsy key
+        # rather than skipping.)
+        if cat in PLAN_CAPS:
+            counts[cat] = counts.get(cat, 0) + 1
 
     total = len(patches)
     if total > TOTAL_CAP:

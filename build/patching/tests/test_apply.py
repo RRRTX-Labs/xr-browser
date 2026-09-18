@@ -158,3 +158,47 @@ def test_lint_missing_manifest_from_repo_cites_deps_pin(tmp_path):
                 deps_pin = line.split('"')[1]
         assert m.group(1) == deps_pin
     assert "Traceback" not in msg
+
+
+# --- P12 regression: a bad category must REPORT, not crash ------------------
+
+def test_unknown_category_reaches_the_cap_loop_without_crashing(fixture):
+    """An unknown category used to raise KeyError in the cap loop.
+
+    `counts[cat] += 1` ran for any category, then `PLAN_CAPS[c]` indexed with it,
+    so the clean "not a Plan §1.2 patch class" finding that validate_category()
+    had already produced never printed — the reviewer got a traceback and no
+    actionable line, and a CI wrapper grepping for `FAIL:` saw nothing.
+
+    The pre-existing unknown-category assertion in
+    test_manifest_lint_unknown_key_and_caps does NOT cover this: it writes the
+    manifest to tmp_path, so `dir` does not resolve, the row loop `continue`s
+    before the counter increment and the crash site is never reached. This test
+    edits the manifest IN PLACE so the patch dir exists and the counting code
+    actually runs.
+    """
+    m = fixture["manifest"]
+    text = m.read_text()
+    assert text.count("category: branding") == 1, "fixture assumption"
+    m.write_text(text.replace("category: branding", "category: not_a_class"))
+    r = _run("lint", "--manifest", str(m))
+    assert r.returncode == 1
+    assert "not a Plan" in r.stdout, r.stdout + r.stderr
+    assert "Traceback" not in r.stdout + r.stderr, "must report, not crash"
+    assert "KeyError" not in r.stdout + r.stderr
+
+
+def test_missing_category_reaches_the_cap_loop_without_crashing(fixture):
+    """Same crash by the other door: the old counter line was
+    `counts[cat] = counts.get(cat, 0) + 1 if cat else counts.get(cat, 0)`,
+    which parses as `(x + 1) if cat else x` — so its else branch inserted a
+    falsy key into `counts` instead of skipping, and `PLAN_CAPS[falsy]` raised.
+    """
+    m = fixture["manifest"]
+    text = m.read_text()
+    assert "    category: branding\n" in text, "fixture assumption"
+    m.write_text(text.replace("    category: branding\n", ""))
+    r = _run("lint", "--manifest", str(m))
+    assert r.returncode == 1
+    assert "missing 'category'" in r.stdout, r.stdout + r.stderr
+    assert "Traceback" not in r.stdout + r.stderr, "must report, not crash"
