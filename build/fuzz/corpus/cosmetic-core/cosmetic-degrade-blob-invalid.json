@@ -1,0 +1,1 @@
+{"args":{"condition":"blob-invalid"},"expect":"ok","method":"degrade-apply"}

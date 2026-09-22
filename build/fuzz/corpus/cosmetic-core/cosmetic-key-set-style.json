@@ -1,0 +1,1 @@
+{"args":{"rules":[{"action":"style","id":"r1","selector":".ad","style":{"display":"none","opacity":"0"}}]},"expect":"ok","method":"key-set"}

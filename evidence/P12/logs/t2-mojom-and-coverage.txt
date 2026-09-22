@@ -1,0 +1,15 @@
+== tools/mojom_lint.py --roundtrip ../xr-core/mojom ==
+PASS: mojom_lint (11 files)
+
+== tools/mojom_fuzz_gen.py --repo . --count 1000 --seed 20260910 ==
+mojom_fuzz_gen: 12000 cases (policy=1000, commands=1000, settings=1000, themes=1000, shield=1000, route-manager=1000, identity=1000, vault=1000, guard=1000, downloads=1000, activity-log=1000, renderer/cosmetic=1000)
+covers: PolicyResolver:policy:1000 commands:commands:1000 settings:settings:1000 themes:themes:1000 Shield:shield:1000 RouteManager:route-manager:1000 IdentityManager:identity:1000 VaultService:vault:1000 GuardLedger:guard:1000 DownloadSafety:downloads:1000 ActivityLog:activity-log:1000 Cosmetic:renderer/cosmetic:1000
+PASS: mojom_fuzz_gen
+
+== tools/seed_corpus.py --repo . --check ==
+seed_corpus: 127 seed(s) verified (policy-core=36, commands-core=11, settings-core=10, themes-core=19, cosmetic-core=51)
+PASS: seed_corpus --check
+
+== pytest tools/tests/test_mojom_coverage.py -q ==
+.........                                                                [100%]
+9 passed in 0.39s

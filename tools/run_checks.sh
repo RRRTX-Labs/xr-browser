@@ -297,7 +297,7 @@ echo "== P9-T8: fuzz corpus seeds + contract generator + fleet (timebox law) =="
 if command -v g++ >/dev/null 2>&1 && command -v make >/dev/null 2>&1; then
   "$PY" tools/fuzz_fleet.py --repo . --timebox 60
 else
-  echo "SKIP: SKIP (tool absent: g++/make) — needed for: the four in-house fuzz targets; local hint: apt-get install g++ make (build-essential)"
+  echo "SKIP: SKIP (tool absent: g++/make) — needed for: the five fleet targets (four in-house C++ fuzzers + the policy harness); local hint: apt-get install g++ make (build-essential)"
 fi
 
 echo "== P9-T9: SAST rule registry (canary + real-tree clean) =="

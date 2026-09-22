@@ -1,0 +1,1 @@
+{"args":{"frame_identity":"alice","frame_site":"ads.example","trust":"root","url_class":"article"},"expect":"reject","method":"scope-key"}

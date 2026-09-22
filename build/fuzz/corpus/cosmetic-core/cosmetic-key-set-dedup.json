@@ -1,0 +1,1 @@
+{"args":{"rules":[{"action":"hide","id":"r1","selector":"div>.ad"},{"action":"hide","id":"r2","selector":"div > .ad"}]},"expect":"ok","method":"key-set"}

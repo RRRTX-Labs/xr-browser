@@ -1,0 +1,1 @@
+{"args":{"condition":"shields-down"},"expect":"ok","method":"degrade-apply"}

@@ -1,0 +1,1 @@
+{"args":{"embedder_site":"top.example","frame_identity":"alice","frame_site":"ads.example","url_class":"article"},"expect":"reject","method":"scope-key"}

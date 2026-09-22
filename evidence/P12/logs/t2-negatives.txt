@@ -1,0 +1,9 @@
+== tools/run_negatives.sh (p12_t2 cases included) ==
+ok: default path still aborts at the first failing lane
+ok: evidence T0-U2 (i): a final ci-run row at a parent commit reddens (rejected with expected reason)
+ok: evidence T0-U2 (ii): a claimed-but-uncovered core-hardening reddens (rejected with expected reason)
+ok: evidence T0-U2 (iii): a green-but-stale row after the SHA advanced reddens (rejected with expected reason)
+ok: T0-U2 positive control (same-head rows for both workflows pass offline)
+
+note: 2 case(s) SKIPped (tool absent) — visible, never a PASS
+ALL NEGATIVE CASES REJECTED AS EXPECTED (N=132)

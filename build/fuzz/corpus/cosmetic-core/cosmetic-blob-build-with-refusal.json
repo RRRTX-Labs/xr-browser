@@ -1,0 +1,1 @@
+{"args":{"blob_id":"b2","generated_epoch":1758000000,"refusals":[{"reason":"unknown-pseudo-class","rule_index":3}],"rules":[],"scope":{"identity_class":"anonymous","site":"example.test"}},"expect":"ok","method":"blob-build"}

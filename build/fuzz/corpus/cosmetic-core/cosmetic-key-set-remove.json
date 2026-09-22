@@ -1,0 +1,1 @@
+{"args":{"rules":[{"action":"remove","id":"r1","selector":".softwall"}]},"expect":"ok","method":"key-set"}

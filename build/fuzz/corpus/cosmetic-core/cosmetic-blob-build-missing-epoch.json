@@ -1,0 +1,1 @@
+{"args":{"blob_id":"b3","rules":[],"scope":{"identity_class":"anonymous","site":"a.b"}},"expect":"reject","method":"blob-build"}

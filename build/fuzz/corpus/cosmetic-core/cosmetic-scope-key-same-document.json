@@ -1,0 +1,1 @@
+{"args":{"frame_identity":"alice","frame_site":"ads.example","navigation":"same-document","url_class":"article"},"expect":"ok","method":"scope-key"}

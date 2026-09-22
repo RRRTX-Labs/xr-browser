@@ -1,0 +1,1 @@
+{"args":{"blob_id":"b1","generated_epoch":1758000000,"rules":[{"action":"hide","id":"r1","selector":".ad"}],"scope":{"identity_class":"anonymous","site":"example.test"}},"expect":"ok","method":"blob-build"}

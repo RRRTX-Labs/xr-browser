@@ -1,0 +1,1 @@
+{"args":{"selector":"div>.ad"},"expect":"ok","method":"selector-parse"}

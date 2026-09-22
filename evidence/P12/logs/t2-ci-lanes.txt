@@ -1,0 +1,71 @@
+PASS: lane commands: C++ suites passed
+PASS: lane common: C++ suites passed
+PASS: lane policy: C++ suites passed
+PASS: lane renderer/cosmetic: C++ suites passed
+PASS: lane settings: C++ suites passed
+PASS: lane shield: C++ suites passed
+PASS: lane themes: C++ suites passed
+PASS: lane update: C++ suites passed
+{
+  "lanes": [
+    "commands",
+    "common",
+    "policy",
+    "renderer/cosmetic",
+    "settings",
+    "shield",
+    "themes",
+    "update"
+  ],
+  "results": {
+    "commands": {
+      "passed": true,
+      "tail": [
+        "ALL C++ COMMANDS TESTS PASSED"
+      ]
+    },
+    "common": {
+      "passed": true,
+      "tail": [
+        "ALL C++ COMMON TESTS PASSED"
+      ]
+    },
+    "policy": {
+      "passed": true,
+      "tail": [
+        "ALL C++ POLICY TESTS PASSED"
+      ]
+    },
+    "renderer/cosmetic": {
+      "passed": true,
+      "tail": [
+        "ALL C++ COSMETIC TESTS PASSED"
+      ]
+    },
+    "settings": {
+      "passed": true,
+      "tail": [
+        "ALL C++ SETTINGS TESTS PASSED"
+      ]
+    },
+    "shield": {
+      "passed": true,
+      "tail": [
+        "ALL C++ SHIELD TESTS PASSED"
+      ]
+    },
+    "themes": {
+      "passed": true,
+      "tail": [
+        "ALL C++ THEMES TESTS PASSED"
+      ]
+    },
+    "update": {
+      "passed": true,
+      "tail": [
+        "ALL C++ UPDATE TESTS PASSED"
+      ]
+    }
+  },
+  "status": "pass"
+}

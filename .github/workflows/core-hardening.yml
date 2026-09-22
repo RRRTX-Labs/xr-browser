@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    # serial fleet: 4 targets x 600 s + three make builds + asserts
+    # serial fleet: 5 targets x 600 s + four make builds + asserts
     timeout-minutes: 45
     steps:
       - name: Checkout
@@ -390,11 +390,11 @@ jobs:
 
   fuzz-fleet:
     # One fleet lane per target (parallel matrix; the tool's 600 s/target
-    # law is unchanged — serial 4x600 in one job kept getting cancelled
+    # law is unchanged — serial 5x600 in one job kept getting cancelled
     # ~30 min in, and each target is independently evidenced this way).
     strategy:
       matrix:
-        target: [policy-core, commands-core, settings-core, themes-core]
+        target: [policy-core, commands-core, settings-core, themes-core, cosmetic-core]
       fail-fast: false
     runs-on: ubuntu-latest
     permissions:
@@ -420,6 +420,7 @@ jobs:
           make -C ../xr-core/commands/tests build
           make -C ../xr-core/settings/tests build
           make -C ../xr-core/themes/tests build
+          make -C ../xr-core/renderer/cosmetic/tests build
       - name: Fuzz timebox (600 s, ${{ matrix.target }})
         run: |
           python3 tools/fuzz_fleet.py --repo . --timebox 600 --seed 20260911 \

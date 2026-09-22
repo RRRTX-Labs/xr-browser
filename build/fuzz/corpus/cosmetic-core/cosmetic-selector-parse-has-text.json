@@ -1,0 +1,1 @@
+{"args":{"selector":"div:has-text(Sponsored)"},"expect":"ok","method":"selector-parse"}

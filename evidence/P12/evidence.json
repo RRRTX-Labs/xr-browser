@@ -201,24 +201,40 @@
     {
       "id": "P12-CLOSE-DOD-5",
       "dod": "DoD 5: cosmetic.mojom (or extended shield.mojom) with an RFC proposal ADR; test_mojom_coverage.py proves every xr-core/mojom interface is fuzzer-visible; test_cosmetic_fuzz.cc >=600s wired as a fifth fuzz_fleet target, 0 violations, empty-run-must-fail proven.",
-      "status": "BLOCKED-PENDING-T2",
-      "source": "fixture",
+      "status": "VERIFIED",
+      "source": "local-run",
       "evidence": [
-        "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
-        "docs/contracts/review/16-cosmetic-blob-v1.md"
+        "evidence/P12/logs/t2-mojom-and-coverage.txt",
+        "evidence/P12/logs/t2-cosmetic-lane-make-test.txt",
+        "evidence/P12/logs/t2-cosmetic-fuzz-600s.txt",
+        "evidence/P12/logs/t2-negatives.txt",
+        "evidence/P12/logs/t2-ci-lanes.txt",
+        "logs/t2-mojom-and-coverage.txt",
+        "logs/t2-cosmetic-lane-make-test.txt",
+        "logs/t2-cosmetic-fuzz-600s.txt",
+        "logs/t2-negatives.txt",
+        "logs/t2-ci-lanes.txt",
+        "tools/tests/test_mojom_coverage.py",
+        "tools/negatives/p12_t2.sh",
+        "docs/adr/0048-cosmetic-mojom.md",
+        "docs/rfcs/RFC-0001.md"
       ],
-      "notes": "Pending the T2 commit of this phase: the mojom interface, the RFC-proposal ADR (approval is expressly a human act), the mojom-coverage test, and the >=600s fuzz target land together. Recorded here so DoD coverage is complete today, per T0-U4; the T2 commit flips this row to VERIFIED with the fleet lane's per-target rows and the --min-iters empty-run negative as transcript."
+      "notes": "T2 landed: xr-core/mojom/cosmetic.mojom (interface Cosmetic, house-style budgets), BUILD.gn 12 files, ADR-0048 PROPOSED + RFC-0001 DRAFT (approval expressly a human act). mojom_lint --roundtrip PASS (11 files); mojom_fuzz_gen covers all 9 mojom interfaces + 3 descriptor hosts (12 hosts, 12000 cases, covers line names every interface); test_mojom_coverage.py proves subset coverage; seed_corpus --check 127 seeds incl. cosmetic-core=51; fleet yaml 5 targets. test_cosmetic_fuzz.cc 0 violations over 98081792 iters at 600 s (seed 20260919); make test lane 9 suites + KAT green; negatives N=132 with the two p12_t2 cases (embedder-refused in-band, fleet empty-corpus red). ci_lane_discovery 8 lanes incl. renderer/cosmetic green."
     },
     {
       "id": "P12-CLOSE-DOD-6",
       "dod": "DoD 6: docs/renderer/blob-cache.md written with the cache invariants (identity-partitioned, bounded, never cross-identity, invalidated by the bundle's monotonic apply version), the P4/P6 partition citations, and the farm measurement row; the derivable half exists as tests, not prose.",
-      "status": "BLOCKED-PENDING-T2",
-      "source": "fixture",
+      "status": "VERIFIED",
+      "source": "local-run",
       "evidence": [
-        "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
-        "docs/contracts/cosmetic-blob-v1.md"
+        "docs/renderer/blob-cache.md",
+        "evidence/P12/logs/t2-cosmetic-fuzz-600s.txt",
+        "evidence/P12/logs/t2-negatives.txt",
+        "logs/t2-cosmetic-fuzz-600s.txt",
+        "logs/t2-negatives.txt",
+        "docs/adr/0048-cosmetic-mojom.md"
       ],
-      "notes": "Pending the T2 commit of this phase (delivered together with the fuzz target and the cache tests). The oversized-refusal, stale/expired-no-work and eviction/LKG cases must be tests, not prose, when the doc lands."
+      "notes": "docs/renderer/blob-cache.md written: cache key (identity, site, trust) cited to xr-core/policy/core/cache.h PolicyCacheKey (lines 28-39) and shield/core/scope.h ExceptionScope; DeriveScopeKey refuses the embedder (scope_key.cc ~98-102); oversized => typed refusal (keyset.cc, test_keyset.cc TestByteBudgetIsEnforcedDuringTheWalk); stale/expired => no work via generated_epoch and the shield/core/apply.h monotonic bundle_version + last-known-good; eviction by IdentityPartition never serves another identity. The embedder-refused negative (tools/negatives/p12_t2.sh) and the fuzz byte-accounting invariant are tests, not prose; the browser-side hit-rate stays NOT-RUN (docs/qa/browser-harness.md method), matching the host's blob_cache_occupancy NOT-RUN string."
     },
     {
       "id": "P12-CLOSE-DOD-7",

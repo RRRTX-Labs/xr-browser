@@ -1,0 +1,1 @@
+{"args":{"rules":[{"action":"hide","id":"r1","selector":"*.bogus("}]},"expect":"reject","method":"key-set"}

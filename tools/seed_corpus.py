@@ -80,6 +80,11 @@ def derive(repo: Path) -> dict[str, list[tuple[str, str]]]:
           settings_doc.read_text(encoding="utf-8").strip())] +
         parity_seeds(repo, core, "settings", "settings"))
     seeds["themes-core"] = parity_seeds(repo, core, "themes", "themes")
+    # P12-T2: the fifth fleet target. Cosmetic has no C++ host build under
+    # fanout here — its seeds come from the cosmetic parity corpus (the same
+    # 51 committed {method,args} cases that the differential oracle and the
+    # coverage test already replay), byte-copies of committed artifacts.
+    seeds["cosmetic-core"] = parity_seeds(repo, core, "cosmetic", "cosmetic")
     return seeds
 
 

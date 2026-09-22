@@ -1,10 +1,13 @@
 # Fuzzing fleet (P9-T8)
 
-The four C++ cores each ship an **in-house seeded fuzzer** (built by their
-own `make test`, g++ only) and a **CI-side clang/libFuzzer entry point**
-(`build/fuzz/libfuzzer/`). The fleet (data in `build/fuzz/fleet.yaml`,
-runner `tools/fuzz_fleet.py`) runs the in-house fuzzers under the timebox
-law and gates the libFuzzer lane's corpus.
+The fleet is five targets (data in `build/fuzz/fleet.yaml`, runner
+`tools/fuzz_fleet.py`): the policy python harness plus four C++ cores each
+shipping an **in-house seeded fuzzer** (built by their own `make test`, g++
+only) and a **CI-side clang/libFuzzer entry point**
+(`build/fuzz/libfuzzer/`). P12-T2 added the fifth — `cosmetic-core` (the
+renderer/cosmetic never-accept oracle) — with its seeded corpus. The fleet
+runs the in-house fuzzers under the timebox law and gates the libFuzzer
+lane's corpus.
 
 ## Why both
 
@@ -22,6 +25,7 @@ law and gates the libFuzzer lane's corpus.
 | commands-core | commands | `commands/tests/build/test_fuzz` | `commands_dispatch_fuzz` |
 | settings-core | settings | `settings/tests/build/test_settings_fuzz` | `settings_core_fuzz` |
 | themes-core | themes | `themes/tests/build/test_fuzz` | `themes_loader_fuzz` |
+| cosmetic-core | renderer/cosmetic | `renderer/cosmetic/tests/build/test_cosmetic_fuzz` | `cosmetic_core_fuzz` |
 
 `not_yet:` rows record the plan's Rust + Mojo-bind targets with their owning
 phase — recorded, never fabricated (no rustc, no clang, no browser process
@@ -36,7 +40,7 @@ python3 tools/fuzz_fleet.py --repo . --timebox 60
 # evidence campaign (the T0-a pattern: >=600 s via XR_FUZZ_SECONDS)
 XR_FUZZ_SECONDS=600 python3 tools/fuzz_fleet.py --repo .
 
-# contract-driven Mojo request generator (4 hosts; deterministic)
+# contract-driven Mojo request generator (12 hosts incl. cosmetic; deterministic)
 python3 tools/mojom_fuzz_gen.py --repo . --count 1000 --seed 20260910
 
 # corpus derivation (real artifacts only) + drift check
@@ -67,7 +71,7 @@ The libFuzzer lane consumes them; the fleet gate fails if any dir is empty.
 ## Farm rows
 
 - **HG-28** — the 24 h campaign: `python3 tools/policy_fuzz.py --timebox
-  86400 --seed <fixed>` (policy), and the CI libFuzzer jobs for the other
-  three cores.
+  86400 --seed <fixed>` (policy), and the CI libFuzzer jobs for the four
+  C++ cores (commands/settings/themes/cosmetic).
 - **HG-29** — Mojo bind-side fuzzing (clang + browser process; the
   generator `tools/mojom_fuzz_gen.py` runs today, the driver is P16).

@@ -1,0 +1,1 @@
+{"args":{"condition":"rule-unknown-pseudo"},"expect":"ok","method":"degrade-apply"}

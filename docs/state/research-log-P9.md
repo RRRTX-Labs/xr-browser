@@ -47,9 +47,10 @@ HG-31.
 
 ## R5 — ClusterFuzzLite (T8) — decision: not adopted
 
-Evaluated and **not adopted**. `build/fuzz/libfuzzer/` ships clang/libFuzzer
-entry points for the four cores (CI-side, HG-28); the in-house seeded fuzzers
-are the gate (g++ only, run everywhere). CLite was declined because: (a) it
+Evaluated and **not adopted**, then re-read at P12-T2 when the fleet grew to
+five targets (cosmetic added). `build/fuzz/libfuzzer/` ships clang/libFuzzer
+entry points for the cores (CI-side, HG-28); the in-house seeded fuzzers are
+the gate (g++ only, run everywhere). CLite was declined because: (a) it
 would add a hosted action + a container-registry pull (network) while this
 phase's law is zero new hosts; (b) its build_fuzzers/run_fuzzers contract
 assumes a gn/ninja Chromium build for browser targets — our cores build via

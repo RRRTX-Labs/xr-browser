@@ -1,0 +1,2 @@
+fuzz: 98081792 iters, 24557515 accepts, 40829761 refusals, 0 violations (seed 20260919, budget 600 s)
+test_cosmetic_fuzz: 24522090 checks, 0 failures

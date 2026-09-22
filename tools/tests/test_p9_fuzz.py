@@ -33,15 +33,21 @@ def test_mojom_fuzz_gen_deterministic(tmp_path: Path) -> None:
                  "--seed", "7", "--out", str(b_out))
     assert a.returncode == 0 and b.returncode == 0
     assert a_out.read_bytes() == b_out.read_bytes()
-    assert len(a_out.read_text().splitlines()) == 160
+    # P12-T2: twelve covered hosts (policy + 3 descriptor hosts + shield,
+    # route-manager, identity, vault, guard, downloads, activity-log,
+    # renderer/cosmetic) x 40 cases.
+    assert len(a_out.read_text().splitlines()) == 12 * 40
 
 
-def test_mojom_fuzz_gen_covers_four_hosts() -> None:
+def test_mojom_fuzz_gen_covers_twelve_hosts() -> None:
     r = run_tool("mojom_fuzz_gen.py", "--repo", str(REPO), "--count", "10",
                  "--seed", "3", "--json")
     doc = json.loads(r.stdout[r.stdout.index("{"):])
-    assert doc["per_host"] == {"commands": 10, "policy": 10,
-                               "settings": 10, "themes": 10}
+    assert doc["per_host"] == {
+        "activity-log": 10, "commands": 10, "downloads": 10, "guard": 10,
+        "identity": 10, "policy": 10, "renderer/cosmetic": 10,
+        "route-manager": 10, "settings": 10, "shield": 10, "themes": 10,
+        "vault": 10}
 
 
 def test_seed_corpus_check_green() -> None:
@@ -50,17 +56,18 @@ def test_seed_corpus_check_green() -> None:
 
 
 def test_seed_corpus_every_target_seeded() -> None:
-    for t in ("policy-core", "commands-core", "settings-core", "themes-core"):
+    for t in ("policy-core", "commands-core", "settings-core", "themes-core",
+              "cosmetic-core"):
         cdir = REPO / "build" / "fuzz" / "corpus" / t
         assert cdir.is_dir() and any(cdir.iterdir()), f"{t} unseeded"
 
 
-def test_fleet_yaml_discovers_four_cores() -> None:
+def test_fleet_yaml_discovers_five_cores() -> None:
     import yaml
     doc = yaml.safe_load((REPO / "build/fuzz/fleet.yaml").read_text())
     ids = [t["id"] for t in doc["targets"]]
     assert ids == ["policy-core", "commands-core", "settings-core",
-                   "themes-core"]
+                   "themes-core", "cosmetic-core"]
     # libFuzzer entry points must exist for every target (never referenced
     # before existing)
     for t in doc["targets"]:

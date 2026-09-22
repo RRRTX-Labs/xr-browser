@@ -1,0 +1,1 @@
+{"args":{"condition":"generic-set-only"},"expect":"ok","method":"degrade-apply"}

@@ -1,0 +1,27 @@
+== make -C renderer/cosmetic/tests test (9 suites + sha256 KAT) ==
+== test_selector ==
+  selector: 25 accepted, 23 refused
+test_selector: 399 checks, 0 failures
+== test_pseudo ==
+  pseudo table: 16 entries, 8 admitted, 8 refused
+test_pseudo: 425 checks, 0 failures
+== test_scope_key ==
+test_scope_key: 70 checks, 0 failures
+== test_style ==
+  style: 18 admitted, 29 refused
+test_style: 113 checks, 0 failures
+== test_keyset ==
+test_keyset: 62 checks, 0 failures
+== test_degrade ==
+  degrade: 14 conditions, 14 table rows
+test_degrade: 94 checks, 0 failures
+== test_blob_strict ==
+test_blob_strict: 107 checks, 0 failures
+== test_abpf ==
+test_abpf: 146 checks, 0 failures
+== test_cosmetic_fuzz ==
+fuzz: 5043200 iters, 1262579 accepts, 2099707 refusals, 0 violations (seed 20260919, budget 30 s)
+test_cosmetic_fuzz: 1260698 checks, 0 failures
+== test_sha256_kat ==
+test_sha256_kat: 10 checks, 0 failures
+ALL C++ COSMETIC TESTS PASSED

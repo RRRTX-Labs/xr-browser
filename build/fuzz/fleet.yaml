@@ -42,6 +42,18 @@ targets:
     libfuzzer_target: "themes_loader_fuzz"
     corpus_dir: "build/fuzz/corpus/themes-core"
     owner_phase: "P8"
+  # P12-T2: the fifth target — the cosmetic core's never-accept fuzzer runs
+  # under the same timebox law as a Makefile-lane test (not `make-test`: the
+  # lane's full `make test` runs ALL of its suites, which is the ci_lane
+  # job's surface, not the per-target fleet timebox).
+  - id: cosmetic-core
+    core: renderer/cosmetic
+    runner_makefile: "../xr-core/renderer/cosmetic/tests"
+    runner_binary: "build/test_cosmetic_fuzz"
+    runner: "make-test"
+    libfuzzer_target: "cosmetic_core_fuzz"
+    corpus_dir: "build/fuzz/corpus/cosmetic-core"
+    owner_phase: "P12"
 not_yet:
   # No Rust code exists and rustc is absent here — the plan's Rust targets are
   # accounted for as not-yet with their owning phase (never fabricated).

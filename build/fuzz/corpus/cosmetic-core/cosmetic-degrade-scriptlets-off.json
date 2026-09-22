@@ -1,0 +1,1 @@
+{"args":{"condition":"scriptlets-off"},"expect":"ok","method":"degrade-apply"}

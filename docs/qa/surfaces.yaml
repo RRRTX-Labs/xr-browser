@@ -111,7 +111,7 @@ surfaces:
       - "tools/seed_corpus.py"
       - "tools/policy_fuzz.py"
     farm: "HG-28 (24h campaign) · HG-29 (Mojo bind fuzz, clang+browser)"
-    green: "fleet 4 targets clean + corpus seeded; libFuzzer CI-side"
+    green: "fleet 5 targets clean + corpus seeded; libFuzzer CI-side"
   - id: "11.14"
     name: cannot-automate
     home: manual
