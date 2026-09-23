@@ -91,6 +91,51 @@ def fam_page(g: Gen) -> None:
     g.add("p-debug-dev-minimal", "debug-page", {}, flags=DEV)
     g.add("p-debug-dev-full", "debug-page", FULL_ARGS, flags=DEV)
 
+    # ---- the P12-T6 cosmetic riding row (stateless echo) ----------------
+    # Every field's closed vocabulary is pinned: flag on/off, the seam-guard
+    # state (armed/inert/hook-dead), and the verbatim scriptlet registry
+    # state. The shield page REPORTS cosmetic's state; it never derives it.
+    COS6 = {"cosmetic": {
+        "blob_cache_occupancy": "NOT-RUN (network-service side)",
+        "degrade_events": 3, "flag": "on", "generic_set_version": "generic-hide-set-v1",
+        "key_set_rules": 33, "refused_pseudos": 1, "refused_selectors": 4,
+        "scriptlet_registry_state": "inert: flag off", "seam_guard_state": "armed"}}
+    g.add("p-debug-cosmetic-on", "debug-page", COS6, flags=DEV)
+    g.add("p-debug-cosmetic-off", "debug-page",
+          dict(COS6, cosmetic=dict(COS6["cosmetic"], flag="off")), flags=DEV)
+    g.add("p-debug-cosmetic-guard-hook-dead", "debug-page",
+          dict(COS6, cosmetic=dict(COS6["cosmetic"],
+                                   seam_guard_state="hook-dead")), flags=DEV)
+    # the closed kMalformedInput set for the cosmetic riding row
+    g.add("p-debug-cosmetic-not-object", "debug-page",
+          {"cosmetic": 5}, flags=DEV)
+    g.add("p-debug-cosmetic-unknown-key", "debug-page",
+          {"cosmetic": dict(COS6["cosmetic"], zzz=1)}, flags=DEV)
+    g.add("p-debug-cosmetic-bad-flag", "debug-page",
+          {"cosmetic": dict(COS6["cosmetic"], flag="maybe")}, flags=DEV)
+    g.add("p-debug-cosmetic-missing-generic-version", "debug-page",
+          {"cosmetic": {k: v for k, v in COS6["cosmetic"].items()
+                        if k != "generic_set_version"}}, flags=DEV)
+    g.add("p-debug-cosmetic-bad-key-set-rules", "debug-page",
+          {"cosmetic": dict(COS6["cosmetic"], key_set_rules=-1)}, flags=DEV)
+    g.add("p-debug-cosmetic-bad-blob-occupancy", "debug-page",
+          {"cosmetic": dict(COS6["cosmetic"], blob_cache_occupancy=7)},
+          flags=DEV)
+    g.add("p-debug-cosmetic-bad-registry-state", "debug-page",
+          {"cosmetic": dict(COS6["cosmetic"], scriptlet_registry_state=7)},
+          flags=DEV)
+    g.add("p-debug-cosmetic-bad-refused", "debug-page",
+          {"cosmetic": dict(COS6["cosmetic"], refused_selectors=-1)},
+          flags=DEV)
+    g.add("p-debug-cosmetic-bad-refused-pseudos", "debug-page",
+          {"cosmetic": dict(COS6["cosmetic"], refused_pseudos=-1)},
+          flags=DEV)
+    g.add("p-debug-cosmetic-bad-degrade-events", "debug-page",
+          {"cosmetic": dict(COS6["cosmetic"], degrade_events=-1)}, flags=DEV)
+    g.add("p-debug-cosmetic-bad-seam-guard", "debug-page",
+          {"cosmetic": dict(COS6["cosmetic"], seam_guard_state="banana")},
+          flags=DEV)
+
     # ---- every page state renders (amber != "blocked nothing") ----------
     g.add("p-debug-state-engine-dead", "debug-page",
           {"engine_alive": False}, flags=DEV)

@@ -5,10 +5,12 @@ gen_shield_vectors.py by the touched-file size law (the same split as
 shield_vector_families_t4.py). Pins: the canonical row shape, redaction
 AT CREATION (query/fragment/port never reach `target`), the int64 wire
 law for epoch-scale numerics (mojom BlockEvent declares ts_millis/tab_id
-int64), every closed `why_code` (vocabulary law — each of the 11 codes
-appears at least once, with its reason-code-table default action), every
+int64), every closed `why_code` (vocabulary law — each of the 13 codes
+appears at least once, with its reason-code-table default action), the
+P12-T6 `page_modifying` flag (an injected/removed element is a page
+modification, never a block), every
 frozen action k-spelling, the zero boundaries, the contract-doc golden
-instance, and all 22 emitter `kMalformedInput` detail tokens. There is no
+instance, and all 23 emitter `kMalformedInput` detail tokens. There is no
 kRejected class: the emitter has no content-conflict semantics.
 """
 from __future__ import annotations
@@ -48,7 +50,11 @@ WHY_TABLE = [("rule-blocked", "kBlocked"), ("rule-allowed", "kAllowed"),
              ("engine-dead-fail-open", "kAllowed"),
              ("engine-poisoned-fail-open", "kAllowed"),
              ("kill-switch", "kAllowed"),
-             ("route-loss-fail-closed", "kBlocked")]
+             ("route-loss-fail-closed", "kBlocked"),
+             # P12-T6: page-modifying classes — an injected/removed element is
+             # NOT a blocked request (the Observatory's honest categorization).
+             ("cosmetic-injected-element", "kAllowed"),
+             ("rule-page-modifying", "kAllowed")]
 
 
 def fam_events(g: Gen) -> None:
@@ -63,6 +69,16 @@ def fam_events(g: Gen) -> None:
     for i, (why, action) in enumerate(WHY_TABLE):
         g.add(f"e-emit-why-{why}", "event-emit",
               dict(BASE, seq=100 + i, action=action, why_code=why))
+    # P12-T6: an injected/removed element is a page modification, never a
+    # block — the Observatory renders it that way (block-event-v1 §page-modifying).
+    g.add("e-emit-page-modifying-injected", "event-emit",
+          dict(FULL, why_code="cosmetic-injected-element",
+               page_modifying=True))
+    g.add("e-emit-page-modifying-rule", "event-emit",
+          dict(BASE, action="kAllowed", why_code="rule-page-modifying",
+               page_modifying=True))
+    g.add("e-emit-page-modifying-default-false", "event-emit",
+          dict(BASE, why_code="rule-blocked"))
     g.add("e-emit-redact-shop", "event-emit", dict(FULL, context=ctx(
         "https://shop.example/cart?cc=4111111111111111#pay",
         "shop.example", request_class="kNavigation")))
@@ -111,6 +127,7 @@ def fam_events(g: Gen) -> None:
          dict(BASE, context=dict(EMIT_CTX, request_class="kX"))),
         ("e-emit-ctx-empty-identity",
          dict(BASE, context=dict(EMIT_CTX, identity={"value": ""}))),
+        ("e-emit-page-modifying-not-bool", dict(BASE, page_modifying="yes")),
     ]
     for cid, args in malformed:
         g.add(cid, "event-emit", args)

@@ -46,7 +46,24 @@ REQUIRED_STRINGS = [
     "IDS_XR_SHIELD_STATE_ENGINE_POISONED",
     "IDS_XR_SHIELD_STATE_KILL_SWITCH",
     "IDS_XR_SHIELD_STATE_ROUTE_LOSS",
+    # P12-T6: the cosmetic riding row must render (it REPORTS cosmetic_host's
+    # state verbatim — never derives it), and every seam-guard enum value
+    # must render honestly (the stateText law extended to the guard union).
+    "IDS_XR_SHIELD_COSMETIC_HEADING",
+    "IDS_XR_SHIELD_COSMETIC_FLAG",
+    "IDS_XR_SHIELD_COSMETIC_GENERIC_SET",
+    "IDS_XR_SHIELD_COSMETIC_KEY_SET_RULES",
+    "IDS_XR_SHIELD_COSMETIC_BLOB_OCCUPANCY",
+    "IDS_XR_SHIELD_COSMETIC_SCRIPTLETS",
+    "IDS_XR_SHIELD_COSMETIC_REFUSED_ROW",
+    "IDS_XR_SHIELD_COSMETIC_DEGRADE",
+    "IDS_XR_SHIELD_COSMETIC_SEAM_GUARD",
+    "IDS_XR_SHIELD_COSMETIC_GUARD_ARMED",
+    "IDS_XR_SHIELD_COSMETIC_GUARD_INERT",
+    "IDS_XR_SHIELD_COSMETIC_GUARD_HOOK_DEAD",
+    "IDS_XR_SHIELD_COSMETIC_EMPTY",
 ]
+COSMETIC_GUARD_STATES = ["armed", "inert", "hook-dead"]
 REQUIRED_COMMANDS = ["shield.toggle", "shield.add-rule", "shield.remove-rule",
                      "shield.page"]
 
@@ -75,6 +92,17 @@ def view_states(view_path: Path) -> tuple[list[str], str]:
         raise SystemExit(f"FAIL: cannot locate SHIELD_PAGE_STATES in "
                          f"{view_path}")
     return re.findall(r"'([a-z-]+)'", m.group(1)), text
+
+
+def view_seam_guard_states(view_path: Path) -> list[str]:
+    """P12-T6: the seam-guard union the view must render. A state in the
+    host's closed guard vocabulary (armed/inert/hook-dead) with no view arm
+    is a forgotten debug row. """
+    text = view_path.read_text(encoding="utf-8")
+    m = re.search(r"COSMETIC_SEAM_GUARD_STATES\s*=\s*\[(.*?)\]", text, re.S)
+    if not m:
+        return []
+    return re.findall(r"'([a-z-]+)'", m.group(1))
 
 
 def main() -> int:
@@ -112,6 +140,21 @@ def main() -> int:
                 fails.append(f"stateText missing an arm for {state_id}")
         if "default:" not in arms:
             fails.append("stateText has no honest-unknown default arm")
+    # P12-T6: the seam-guard union must be complete and every guard arm
+    # rendered (a dropped guard state is a forgotten "hook-death = cosmetic
+    # off, never blank page" row — the exact posture the degrade law owns).
+    guard = view_seam_guard_states(view_path)
+    if guard != COSMETIC_GUARD_STATES:
+        fails.append(f"seam-guard union {guard} != {COSMETIC_GUARD_STATES} "
+                     "(every host guard state must be in the view's "
+                     "COSMETIC_SEAM_GUARD_STATES)")
+    for gs in COSMETIC_GUARD_STATES:
+        if f"case '{gs}':" not in view_text_src:
+            fails.append(f"seamGuardText missing an arm for {gs}"
+                         f" (never guessed)")
+    if "seamGuardText" not in view_text_src:
+        fails.append("view has no seamGuardText renderer for the cosmetic "
+                     "seam-guard row")
     # the enterprise force-disable note must carry the reason VERBATIM
     if "IDS_XR_SHIELD_FORCED_DISABLED" in view_text_src and \
             "REASON" not in view_text_src:
@@ -164,7 +207,8 @@ def main() -> int:
           f"{', '.join(host)}; fake vocabulary byte-identical; stateText "
           "arms + honest default; force-disable reason verbatim; "
           "shield.page behind build.channel-dev in roster + both "
-          "availability backends; grdp rows present)")
+          "availability backends; grdp rows present; cosmetic rows + "
+          f"seam-guard union {', '.join(guard)} rendered)")
     return 0
 
 
