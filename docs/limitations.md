@@ -132,3 +132,21 @@ isolation-matrix cells and reuse no waivers semantics (ADR-0046).
 
 | scope_id | scope | reason | expiry | owner |
 |---|---|---|---|---|
+
+
+## cosmetic exception ledger rows
+
+P12-T5 disclosure ledger for the cosmetic renderer seam's exception
+surface. The cosmetic surface consults the **same** P11
+`exception-add`/`scopes` object Shield writes — "shields down" flips one
+bit both read — so a row here is only ever a disclosure of a row that
+already exists in the shield ledger above (same `scope_id`, same scope
+cell, same reason, same monotonic expiry); a cosmetic-private exception
+would be a split-brain and is refused by the checker. The v1 surface ships
+no standing cosmetic exceptions, so this table starts EMPTY — an empty
+table passes, a missing section fails. Machine-checked by
+`tools/exception_ledger_check.py --as-of N` (expiry compared against
+`--as-of`, never `date.today()`).
+
+| scope_id | scope | reason | expiry | owner |
+|---|---|---|---|---|

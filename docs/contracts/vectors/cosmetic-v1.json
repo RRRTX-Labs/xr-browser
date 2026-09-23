@@ -3418,6 +3418,815 @@
    },
    "id": "blob-build-style-rule",
    "method": "blob-build"
+  },
+  {
+   "args": {
+    "frame_identity": "anon",
+    "frame_site": "ads.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "8b2a4c33dfd277fcaff56e3560f197a512aa42bda54be52f07b13ae4d261b384",
+    "partition": "2ca07275aed09b778350d14a3be2855e29ddc1feab552a453f2896673adf2e1a"
+   },
+   "id": "matrix-scope-key-identity-anon-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "anon",
+    "frame_site": "ads.example",
+    "navigation": "same-document",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "839c13e846a820410384ffc6ca06fae36073d77c8b96386ba16571d2165fcf93",
+    "partition": "2ca07275aed09b778350d14a3be2855e29ddc1feab552a453f2896673adf2e1a"
+   },
+   "id": "matrix-scope-key-identity-anon-same-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "df43082ec40058142885f3e913ce84b8977eeadc5060c77f41737abc2ab4d4a2",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "matrix-scope-key-identity-alice-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "same-document",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "59b6c26c6ade940484bdc90914d2088d7dc78d8d5f7b6bdd3d4fb3d64ef9b942",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "matrix-scope-key-identity-alice-same-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "bob@example.test",
+    "frame_site": "ads.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "fd5086e4f0d5c1586f341f44a3ca35c0e054d347fbd873d9cd7730ea81bdf646",
+    "partition": "c3540d9b42297906d20ddf421656f002ebd5e649be7797eb65fe72ed4cd43d93"
+   },
+   "id": "matrix-scope-key-identity-bob@example_test-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "bob@example.test",
+    "frame_site": "ads.example",
+    "navigation": "same-document",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "84f4bfde0405da084a324cf4243f79be8ce42427c7e60d4dbda297dce489b2cf",
+    "partition": "c3540d9b42297906d20ddf421656f002ebd5e649be7797eb65fe72ed4cd43d93"
+   },
+   "id": "matrix-scope-key-identity-bob@example_test-same-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "xr:00000000-0000-4000-8000-000000000001",
+    "frame_site": "ads.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "95529c8615709d397ed3729afa0399d8a823b77151abfcad3b202ac70cae9151",
+    "partition": "d7d09eb56132ed96c3950355b6216a355d8055a686ec6977de9bce55ae5066c3"
+   },
+   "id": "matrix-scope-key-identity-xr-00000000-0000-4000-8000-000000000001-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "xr:00000000-0000-4000-8000-000000000001",
+    "frame_site": "ads.example",
+    "navigation": "same-document",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "fe561a868ae68da9f79bd3d806e3e130725a7da97d14105de018773a351eea56",
+    "partition": "d7d09eb56132ed96c3950355b6216a355d8055a686ec6977de9bce55ae5066c3"
+   },
+   "id": "matrix-scope-key-identity-xr-00000000-0000-4000-8000-000000000001-same-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "xr:00000000-0000-4000-8000-000000000002",
+    "frame_site": "ads.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "455f6c7ce14bb8203d6dcc366455124fe9652d48d00a5693ab70aef6c4510f30",
+    "partition": "5b91a4e1b3e323a5202a5b533e1c252e665a0259dd61dc3f9be45b01f3c62e15"
+   },
+   "id": "matrix-scope-key-identity-xr-00000000-0000-4000-8000-000000000002-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "xr:00000000-0000-4000-8000-000000000002",
+    "frame_site": "ads.example",
+    "navigation": "same-document",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "a293c6bfe04650a916d32d11e26c9475c6a506f3028b62a534ba402a08d9c4f7",
+    "partition": "5b91a4e1b3e323a5202a5b533e1c252e665a0259dd61dc3f9be45b01f3c62e15"
+   },
+   "id": "matrix-scope-key-identity-xr-00000000-0000-4000-8000-000000000002-same-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
+    "frame_site": "ads.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "6f079d8431193313c011d68860f54f61e7cde8668603efe6b42dd3495310c688",
+    "partition": "8ee482b9eab6ea26c9a1e592b577565fec1c1f162b7a648da079179be7288297"
+   },
+   "id": "matrix-scope-key-identity-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
+    "frame_site": "ads.example",
+    "navigation": "same-document",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "0b2b93dd4354a6c22965cb1a0df662590698ac45486b30d723bd2f4838a9047f",
+    "partition": "8ee482b9eab6ea26c9a1e592b577565fec1c1f162b7a648da079179be7288297"
+   },
+   "id": "matrix-scope-key-identity-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz-same-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "df43082ec40058142885f3e913ce84b8977eeadc5060c77f41737abc2ab4d4a2",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "matrix-scope-key-site-ads_example-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "cross-document",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "df43082ec40058142885f3e913ce84b8977eeadc5060c77f41737abc2ab4d4a2",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "matrix-scope-key-site-ads_example-cross",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "frame.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "c4c98b622107b9a9036562b61e3f4350481743b579dfe4008db899d608df39df",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "matrix-scope-key-site-frame_example-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "frame.example",
+    "navigation": "cross-document",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "c4c98b622107b9a9036562b61e3f4350481743b579dfe4008db899d608df39df",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "matrix-scope-key-site-frame_example-cross",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "tracker.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "88544562529ea1e56a886e2eb070d0bf92cf9451e6c6d880626b0c43b67516f3",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "matrix-scope-key-site-tracker_example-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "tracker.example",
+    "navigation": "cross-document",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "88544562529ea1e56a886e2eb070d0bf92cf9451e6c6d880626b0c43b67516f3",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "matrix-scope-key-site-tracker_example-cross",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "widget.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "b544a5b1cd308d3bb8d7503dd602d91d546450fb630da537c1c5cda24d01d50d",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "matrix-scope-key-site-widget_example-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "widget.example",
+    "navigation": "cross-document",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "b544a5b1cd308d3bb8d7503dd602d91d546450fb630da537c1c5cda24d01d50d",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "matrix-scope-key-site-widget_example-cross",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "a.b.c.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "994ddf6e646805b67a25097c14c01a9ef59ed5a8397e1744b6527f4456b4eec2",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "matrix-scope-key-site-a_b_c_example-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "a.b.c.example",
+    "navigation": "cross-document",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "994ddf6e646805b67a25097c14c01a9ef59ed5a8397e1744b6527f4456b4eec2",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "matrix-scope-key-site-a_b_c_example-cross",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "xn--e1afmkfd.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "b06dd361e90297e8173d32477fd7a3b141bfbbb962bd9d0eb9b3d10bb6bca644",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "matrix-scope-key-site-xn--e1afmkfd_example-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "xn--e1afmkfd.example",
+    "navigation": "cross-document",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "b06dd361e90297e8173d32477fd7a3b141bfbbb962bd9d0eb9b3d10bb6bca644",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "matrix-scope-key-site-xn--e1afmkfd_example-cross",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "df43082ec40058142885f3e913ce84b8977eeadc5060c77f41737abc2ab4d4a2",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "matrix-scope-key-trust-anonymous-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "cross-document",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "df43082ec40058142885f3e913ce84b8977eeadc5060c77f41737abc2ab4d4a2",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "matrix-scope-key-trust-anonymous-cross-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "same-document",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "59b6c26c6ade940484bdc90914d2088d7dc78d8d5f7b6bdd3d4fb3d64ef9b942",
+    "partition": "9724d8d74863dc944da5ab3d9a0f7c3e4e78fd1df34bb8256e0b44408a3cd4de"
+   },
+   "id": "matrix-scope-key-trust-anonymous-same-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "initial",
+    "trust": "authenticated",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "a533f4329120a9d35315b44328ed2bf42ba1431dc54f5d77f9c3f0df6da5fe9a",
+    "partition": "1c845991828d4ffc1768fc37c76331f1ab5e44931deec2827842ff35a8220726"
+   },
+   "id": "matrix-scope-key-trust-authenticated-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "cross-document",
+    "trust": "authenticated",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "a533f4329120a9d35315b44328ed2bf42ba1431dc54f5d77f9c3f0df6da5fe9a",
+    "partition": "1c845991828d4ffc1768fc37c76331f1ab5e44931deec2827842ff35a8220726"
+   },
+   "id": "matrix-scope-key-trust-authenticated-cross-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "same-document",
+    "trust": "authenticated",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "16ba97cf649bdd7fecb3308807eb9f2a2dcb3cb6b48108c560db0865a1d78947",
+    "partition": "1c845991828d4ffc1768fc37c76331f1ab5e44931deec2827842ff35a8220726"
+   },
+   "id": "matrix-scope-key-trust-authenticated-same-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "initial",
+    "trust": "enterprise",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "af4cf47a3e41a6b7973c39903063ea57078a7e032b9b178182c31317d8e9eb62",
+    "partition": "ad4dfa390fa0c44012b4829ed90cba2a5f9c1bee9ac88d5bb2d5f382261ffd55"
+   },
+   "id": "matrix-scope-key-trust-enterprise-initial",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "cross-document",
+    "trust": "enterprise",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "af4cf47a3e41a6b7973c39903063ea57078a7e032b9b178182c31317d8e9eb62",
+    "partition": "ad4dfa390fa0c44012b4829ed90cba2a5f9c1bee9ac88d5bb2d5f382261ffd55"
+   },
+   "id": "matrix-scope-key-trust-enterprise-cross-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "frame_identity": "alice",
+    "frame_site": "ads.example",
+    "navigation": "same-document",
+    "trust": "enterprise",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "9f1bc60fcc9967f607c3018437b9b8d9a72764d11f7b650a9112c43045d297b0",
+    "partition": "ad4dfa390fa0c44012b4829ed90cba2a5f9c1bee9ac88d5bb2d5f382261ffd55"
+   },
+   "id": "matrix-scope-key-trust-enterprise-same-document",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "embedder_site": "top.example",
+    "frame_identity": "anon",
+    "frame_site": "ads.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "detail": "the embedder site is not an input to the scope key",
+    "error": "kRejected",
+    "reason": "embedder-refused"
+   },
+   "id": "matrix-scope-key-embedder-ads_example-top_example",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "embedder_site": "top.example",
+    "frame_identity": "anon",
+    "frame_site": "frame.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "detail": "the embedder site is not an input to the scope key",
+    "error": "kRejected",
+    "reason": "embedder-refused"
+   },
+   "id": "matrix-scope-key-embedder-frame_example-top_example",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "embedder_site": "search.example",
+    "frame_identity": "anon",
+    "frame_site": "ads.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "detail": "the embedder site is not an input to the scope key",
+    "error": "kRejected",
+    "reason": "embedder-refused"
+   },
+   "id": "matrix-scope-key-embedder-ads_example-search_example",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "embedder_site": "",
+    "frame_identity": "anon",
+    "frame_site": "ads.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "8b2a4c33dfd277fcaff56e3560f197a512aa42bda54be52f07b13ae4d261b384",
+    "partition": "2ca07275aed09b778350d14a3be2855e29ddc1feab552a453f2896673adf2e1a"
+   },
+   "id": "matrix-scope-key-embedder-empty",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "embedder_site": 123,
+    "frame_identity": "anon",
+    "frame_site": "ads.example",
+    "navigation": "initial",
+    "trust": "anonymous",
+    "url_class": "article"
+   },
+   "exit": 0,
+   "expect": {
+    "hex": "8b2a4c33dfd277fcaff56e3560f197a512aa42bda54be52f07b13ae4d261b384",
+    "partition": "2ca07275aed09b778350d14a3be2855e29ddc1feab552a453f2896673adf2e1a"
+   },
+   "id": "matrix-scope-key-embedder-nonstring",
+   "method": "scope-key"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"matrix-example_test-anonymous\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"60c6d465ed691160bdc02ff1c0f21af735be54006c319d8bd5d1796da96079db\"}",
+    "frame_scope": {
+     "identity_class": "anonymous",
+     "site": "example.test"
+    }
+   },
+   "exit": 0,
+   "expect": {
+    "blob_id": "matrix-example_test-anonymous",
+    "bytes": 24,
+    "compiled_selectors": 1,
+    "duplicates_removed": 0,
+    "page_modifying": 0,
+    "producer_refusals": 0,
+    "sha256": "60c6d465ed691160bdc02ff1c0f21af735be54006c319d8bd5d1796da96079db"
+   },
+   "id": "matrix-blob-a-anon-pass",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"matrix-example_test-anonymous\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"60c6d465ed691160bdc02ff1c0f21af735be54006c319d8bd5d1796da96079db\"}",
+    "frame_scope": {
+     "identity_class": "authenticated",
+     "site": "example.test"
+    }
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "scope-mismatch"
+   },
+   "id": "matrix-blob-a-auth-mismatch",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"matrix-example_test-anonymous\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"60c6d465ed691160bdc02ff1c0f21af735be54006c319d8bd5d1796da96079db\"}",
+    "frame_scope": {
+     "identity_class": "enterprise",
+     "site": "example.test"
+    }
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "scope-mismatch"
+   },
+   "id": "matrix-blob-a-enterprise-mismatch",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"matrix-example_test-anonymous\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"60c6d465ed691160bdc02ff1c0f21af735be54006c319d8bd5d1796da96079db\"}",
+    "frame_scope": {
+     "identity_class": "anonymous",
+     "site": "other.test"
+    }
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "scope-mismatch"
+   },
+   "id": "matrix-blob-a-cross-site-mismatch",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"matrix-example_test-authenticated\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"authenticated\",\"site\":\"example.test\"},\"sha256\":\"4620bbb186e0686b7edb1dc58c09e5874c0de99f840c6341827212beb481ed19\"}",
+    "frame_scope": {
+     "identity_class": "authenticated",
+     "site": "example.test"
+    }
+   },
+   "exit": 0,
+   "expect": {
+    "blob_id": "matrix-example_test-authenticated",
+    "bytes": 24,
+    "compiled_selectors": 1,
+    "duplicates_removed": 0,
+    "page_modifying": 0,
+    "producer_refusals": 0,
+    "sha256": "4620bbb186e0686b7edb1dc58c09e5874c0de99f840c6341827212beb481ed19"
+   },
+   "id": "matrix-blob-b-auth-pass",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"matrix-example_test-authenticated\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"authenticated\",\"site\":\"example.test\"},\"sha256\":\"4620bbb186e0686b7edb1dc58c09e5874c0de99f840c6341827212beb481ed19\"}",
+    "frame_scope": {
+     "identity_class": "anonymous",
+     "site": "example.test"
+    }
+   },
+   "exit": 0,
+   "expect": {
+    "error": "kRejected",
+    "reason": "scope-mismatch"
+   },
+   "id": "matrix-blob-b-anon-mismatch",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"matrix-other_test-anonymous\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"other.test\"},\"sha256\":\"8f58ef9ecb0c8c56ec2a92ad6cc19ce96cc9ee5ad4757abf82e46b87a18b9ca6\"}",
+    "frame_scope": {
+     "identity_class": "anonymous",
+     "site": "other.test"
+    }
+   },
+   "exit": 0,
+   "expect": {
+    "blob_id": "matrix-other_test-anonymous",
+    "bytes": 24,
+    "compiled_selectors": 1,
+    "duplicates_removed": 0,
+    "page_modifying": 0,
+    "producer_refusals": 0,
+    "sha256": "8f58ef9ecb0c8c56ec2a92ad6cc19ce96cc9ee5ad4757abf82e46b87a18b9ca6"
+   },
+   "id": "matrix-blob-c-pass",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"matrix-example_test-anonymous\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"60c6d465ed691160bdc02ff1c0f21af735be54006c319d8bd5d1796da96079db\"}",
+    "frame_scope": {
+     "embedder_site": "top.example",
+     "identity_class": "anonymous",
+     "site": "example.test"
+    }
+   },
+   "exit": 0,
+   "expect": {
+    "blob_id": "matrix-example_test-anonymous",
+    "bytes": 24,
+    "compiled_selectors": 1,
+    "duplicates_removed": 0,
+    "page_modifying": 0,
+    "producer_refusals": 0,
+    "sha256": "60c6d465ed691160bdc02ff1c0f21af735be54006c319d8bd5d1796da96079db"
+   },
+   "id": "matrix-blob-embedder-key-ignored",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "blob": "{\"blob_id\":\"matrix-example_test-anonymous\",\"generated_epoch\":1758000000,\"refusals\":[],\"rules\":[{\"action\":\"hide\",\"enabled\":true,\"id\":\"r1\",\"selector\":\"div > .ad\"}],\"schema\":\"xr-cosmetic-blob-v1\",\"schema_version\":1,\"scope\":{\"identity_class\":\"anonymous\",\"site\":\"example.test\"},\"sha256\":\"60c6d465ed691160bdc02ff1c0f21af735be54006c319d8bd5d1796da96079db\"}",
+    "frame_scope": {}
+   },
+   "exit": 0,
+   "expect": {
+    "detail": "frame_scope needs site and identity_class",
+    "error": "kMalformedInput"
+   },
+   "id": "matrix-blob-frame-scope-empty",
+   "method": "blob-check"
+  },
+  {
+   "args": {
+    "condition": "shields-down"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "shields-down",
+    "outcome": "generic-set-only",
+    "page_effect": "Site-specific rules are off. The generic set STILL applies, because a shields-down must not leave the page half-styled \u2014 the user asked for less filtering, not for a broken layout.",
+    "reason": "",
+    "reported": false
+   },
+   "id": "matrix-degrade-shields-down-off",
+   "method": "degrade-apply"
+  },
+  {
+   "args": {
+    "condition": "shields-down"
+   },
+   "exit": 0,
+   "expect": {
+    "condition": "shields-down",
+    "outcome": "generic-set-only",
+    "page_effect": "Site-specific rules are off. The generic set STILL applies, because a shields-down must not leave the page half-styled \u2014 the user asked for less filtering, not for a broken layout.",
+    "reason": "",
+    "reported": false
+   },
+   "flags": "--flag xr_shield_cosmetic_v1=on",
+   "id": "matrix-degrade-shields-down-xr_shield_cosmetic_v1=on",
+   "method": "degrade-apply"
   }
  ],
  "note": "P12-T1 golden vectors for the renderer/cosmetic host surface. Every `expect` was CAPTURED from cosmetic_host at generation time and then pinned; tools/cosmetic_vectors_check.py re-runs BOTH backends (the compiled C++ host and fakes/cosmetic.py) and requires byte-identical stdout and identical exit codes against these bytes. The refusal vocabulary is closed and copied from the C++ *ErrorName() tables \u2014 a rename on either side reddens this file rather than drifting. `exit` is pinned explicitly: 0 for an ok or typed rejection, 1 for a typed error, so a vector that changes exit class is a visible change and not a silent one.",

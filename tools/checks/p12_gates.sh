@@ -22,6 +22,14 @@ p12_cosmetic_core_gates() {
 
   echo "== P12-T3: generic hide set (budget + page-modifying count) =="
   "$PY" tools/cosmetic_generic_set_check.py --repo .
+
+  echo "== P12-T5: single scope object + the >=40 identity/OOPIF matrix =="
+  # One exception store: cosmetic consults the SAME P11 scopes object
+  # shield writes (shields-down flips one bit both read). The matrix floor
+  # and the four laws (embedder-refusal, frame-vs-frame key separation,
+  # identity key-set separation, per-identity partition) are asserted over
+  # the committed vectors, never prose.
+  "$PY" tools/cosmetic_scope_single_check.py --repo . --xr-core ../xr-core
 }
 
 p12_cosmetic_seam_gates() {

@@ -30,6 +30,17 @@ drift here is a lie about what the toggle granted). The section must EXIST; ZERO
 the same commit as the surface that grants it). These rows are NOT §1.13
 isolation-matrix cells and reuse no waivers semantics (ADR-0046).
 
+P12-T5 adds the THIRD ledger: `## cosmetic exception ledger rows` — the
+disclosure table for the cosmetic renderer seam's exception surface. The
+cosmetic surface consults the SAME P11 `exception-add`/`scopes` object as
+Shield ("shields down" flips one bit both read), so the columns, dimension
+grammar, reason law and monotonic expiry are THE P11 scope rules — checked
+by the same parse_scope_cell, expiry vs --as-of inclusive, never
+date.today(). A cosmetic row must ALSO exist word-for-word in the shield
+ledger: a cosmetic-private exception is the split-brain the phase exists to
+make impossible, and it reddens here. The section must EXIST; zero rows
+pass (the v1 surface ships no standing cosmetic exceptions).
+
 Exit: 0 pass · 1 fail · 2 usage.
 """
 from __future__ import annotations
@@ -49,6 +60,7 @@ LIMITATIONS = "docs/limitations.md"
 MATRIX_JSON = "../xr-core/test/isolation/isolation-matrix.json"
 LEDGER_HEADING = "## §1.13 exception ledger rows"
 SHIELD_HEADING = "## shield exception ledger rows"
+COSMETIC_HEADING = "## cosmetic exception ledger rows"
 SHIELD_DIMS = ("identity", "list_id", "rule_id", "site", "workspace")
 TOGGLE_PREFIX = "site-toggle:"
 TOGGLE_REASON = "user-site-toggle"
@@ -77,24 +89,7 @@ def ledger_rows(text: str) -> dict[str, dict[str, str]]:
 def shield_rows(text: str) -> tuple[bool, list[dict[str, str]]]:
     """Parse the shield exception-ledger table. Returns (section_present,
     rows) — rows keep the raw cells; validation lives in check_shield."""
-    rows: list[dict[str, str]] = []
-    present = False
-    in_table = False
-    for line in text.splitlines():
-        if line.strip() == SHIELD_HEADING:
-            present = True
-            in_table = True
-            continue
-        if in_table and line.strip().startswith("#"):
-            break
-        if in_table and line.strip().startswith("|") and \
-                "---" not in line and "scope_id" not in line:
-            cells = [c.strip() for c in line.strip().strip("|").split("|")]
-            if len(cells) >= 4 and cells[0]:
-                rows.append({"scope_id": cells[0], "scope": cells[1],
-                             "reason": cells[2], "expiry": cells[3],
-                             "owner": cells[4] if len(cells) > 4 else ""})
-    return present, rows
+    return _scope_ledger_rows(text, SHIELD_HEADING)
 
 
 def parse_scope_cell(cell: str) -> str:
@@ -172,6 +167,103 @@ def check_shield(repo: Path, as_of: int) -> tuple[list[str], list[str], int]:
     if not rows:
         info.append("ok(shield): ledger section present, zero rows (the v1 "
                     "host ships no standing exceptions)")
+    return fails, info, len(rows)
+
+
+def cosmetic_rows(text: str) -> tuple[bool, list[dict[str, str]]]:
+    """Parse the cosmetic exception-ledger table (P12-T5). Same cell shape
+    as shield_rows (the cosmetic surface consumes the SAME P11 scopes
+    object, so the column grammar is reused rather than restated)."""
+    return _scope_ledger_rows(text, COSMETIC_HEADING)
+
+
+def _scope_ledger_rows(text: str, heading: str) -> tuple[bool,
+                                                          list[dict[str, str]]]:
+    rows: list[dict[str, str]] = []
+    present = False
+    in_table = False
+    for line in text.splitlines():
+        if line.strip() == heading:
+            present = True
+            in_table = True
+            continue
+        if in_table and line.strip().startswith("#"):
+            break
+        if in_table and line.strip().startswith("|") and \
+                "---" not in line and "scope_id" not in line:
+            cells = [c.strip() for c in line.strip().strip("|").split("|")]
+            if len(cells) >= 4 and cells[0]:
+                rows.append({"scope_id": cells[0], "scope": cells[1],
+                             "reason": cells[2], "expiry": cells[3],
+                             "owner": cells[4] if len(cells) > 4 else ""})
+    return present, rows
+
+
+def check_cosmetic(repo: Path, as_of: int) -> tuple[list[str], list[str], int]:
+    """The P12-T5 cosmetic ledger — the T5 counterpart of check_shield. One
+    scope object, one grammar: the columns, dims, reason law, monotonic
+    expiry and inclusive boundary are THE P11 scope rules, checked by the
+    same parse_scope_cell. The v1 host ships a surface that consumes the
+    SHARED P11 scopes object, so a cosmetic ledger row is only legitimate as
+    a disclosure of a row that ALREADY exists in the shield ledger (a
+    cosmetic-private exception would be a split-brain); zero rows pass.
+    Returns (failures, info, row_count)."""
+    fails: list[str] = []
+    info: list[str] = []
+    lim = repo / LIMITATIONS
+    if not lim.exists():
+        return [f"{LIMITATIONS}: missing — cosmetic ledger cannot be "
+                "checked"], [], 0
+    text = lim.read_text(encoding="utf-8")
+    present, rows = cosmetic_rows(text)
+    if not present:
+        return [f"{LIMITATIONS}: no '{COSMETIC_HEADING}' section (P12-T5: "
+                "the cosmetic exception ledger must exist — zero rows is "
+                "fine, a missing section is drift)"], [], 0
+    # A cosmetic row must carry a scope the SHIELD ledger also carries
+    # (same object): parse the shield ledger and require scope_id equality,
+    # so a cosmetic-private exception (split-brain) is refused as drift.
+    sp, shield_tbl = shield_rows(text)
+    shield_ids: set[str] = set()
+    if sp:
+        for row in shield_tbl:
+            shield_ids.add(row["scope_id"])
+    for row in rows:
+        sid = row["scope_id"]
+        bad = parse_scope_cell(row["scope"])
+        if bad:
+            fails.append(f"{sid}: {bad}")
+        if not row["reason"]:
+            fails.append(f"{sid}: reason is empty (every exception scope "
+                         "carries a reason — T2 grammar)")
+        if not row["owner"]:
+            fails.append(f"{sid}: ledger row has an empty owner")
+        try:
+            expiry = int(row["expiry"])
+        except ValueError:
+            fails.append(f"{sid}: expiry {row['expiry']!r} is not a "
+                         "monotonic integer (no wall-clock dates in the "
+                         "cosmetic ledger)")
+            expiry = None
+        if expiry is not None:
+            if expiry < -1:
+                fails.append(f"{sid}: expiry {expiry} < -1 (-1 = never is "
+                             "the floor)")
+            elif expiry >= 0 and as_of >= expiry:
+                fails.append(f"{sid}: expiry {expiry} has passed as of "
+                             f"--as-of {as_of}")
+        if sid not in shield_ids:
+            fails.append(f"{sid}: cosmetic ledger row has no matching shield "
+                         "ledger row (one scope object: cosmetic consumes "
+                         "the SHARED P11 scopes — a cosmetic-private "
+                         "exception is a split-brain)")
+        if not any(f.startswith(sid + ":") for f in fails):
+            info.append(f"ok(cosmetic): {sid} scope={row['scope']} "
+                        f"expiry={row['expiry']}")
+    if not rows:
+        info.append("ok(cosmetic): ledger section present, zero rows (the "
+                    "v1 surface consumes the shared P11 scopes object — no "
+                    "cosmetic-private exceptions)")
     return fails, info, len(rows)
 
 
@@ -256,12 +348,14 @@ def main(argv: list[str]) -> int:
         return EXIT_USAGE
     fails, info = check(repo, mj, wall_as_of)
     shield_fails, shield_info, shield_n = check_shield(repo, args.as_of)
-    fails += shield_fails
-    info += shield_info
+    cosm_fails, cosm_info, cosm_n = check_cosmetic(repo, args.as_of)
+    fails += shield_fails + cosm_fails
+    info += shield_info + cosm_info
     if args.json:
         print(json.dumps({"tool": "exception_ledger_check",
                           "count": len(fails), "violations": fails,
                           "as_of": args.as_of, "shield_rows": shield_n,
+                          "cosmetic_rows": cosm_n,
                           "status": "pass" if not fails else "fail"},
                          sort_keys=True, indent=2))
     else:
@@ -271,7 +365,7 @@ def main(argv: list[str]) -> int:
             print(i)
         print(f"{'PASS' if not fails else 'FAIL'}: exception_ledger_check "
               f"({len(info)} ledger row(s) ok, {shield_n} shield row(s), "
-              f"{len(fails)} failure(s))")
+              f"{cosm_n} cosmetic row(s), {len(fails)} failure(s))")
     return EXIT_PASS if not fails else EXIT_FAIL
 
 

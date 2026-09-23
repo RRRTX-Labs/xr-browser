@@ -25,6 +25,9 @@ BASE_113 = ("## §1.13 exception ledger rows\n"
 SHIELD_HEAD = ("## shield exception ledger rows\n"
                "| scope_id | scope | reason | expiry | owner |\n"
                "|---|---|---|---|---|\n")
+COSMETIC_HEAD = ("## cosmetic exception ledger rows\n"
+                 "| scope_id | scope | reason | expiry | owner |\n"
+                 "|---|---|---|---|---|\n")
 MATRIX = {"cells": [{"mechanism": "gpu-texture-side-channel",
                      "verdict": "EXCEPTION"}]}
 
@@ -34,11 +37,17 @@ def run_tool(name: str, *args: str) -> subprocess.CompletedProcess[str]:
                           capture_output=True, text=True)
 
 
-def make_repo(tmp_path: Path, shield_md: str | None) -> tuple[Path, Path]:
-    """A repo whose §1.13 half is green, isolating the shield assertions."""
+def make_repo(tmp_path: Path, shield_md: str | None,
+              cosm_md: str = COSMETIC_HEAD) -> tuple[Path, Path]:
+    """A repo whose §1.13 half is green, isolating the shield assertions
+    (a cosmetic ledger section ships by default — P12-T5 added it)."""
     (tmp_path / "docs").mkdir(exist_ok=True)
-    text = BASE_113 + ("\n" + shield_md if shield_md is not None else "")
-    (tmp_path / "docs" / "limitations.md").write_text(text, encoding="utf-8")
+    parts = [BASE_113]
+    if shield_md is not None:
+        parts.append("\n" + shield_md)
+    parts.append("\n" + cosm_md)
+    (tmp_path / "docs" / "limitations.md").write_text(
+        "".join(parts), encoding="utf-8")
     mj = tmp_path / "matrix.json"
     mj.write_text(json.dumps(MATRIX), encoding="utf-8")
     return tmp_path, mj
@@ -202,3 +211,57 @@ def test_json_reports_shield_rows(tmp_path: Path) -> None:
     doc = json.loads(r.stdout)
     assert doc["shield_rows"] == 1 and doc["status"] == "pass"
     assert doc["as_of"] == 0
+
+
+# --- P12-T5: the cosmetic exception ledger (same scope object) ------------
+def test_cosmetic_zero_rows_pass_real_repo() -> None:
+    r = run_tool("exception_ledger_check.py", "--repo", str(REPO))
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "cosmetic" in r.stdout and "ok(cosmetic)" in r.stdout
+
+
+def test_cosmetic_section_missing_fails(tmp_path: Path) -> None:
+    repo, mj = make_repo(tmp_path, SHIELD_HEAD, "## no cosmetic here\n")
+    r = ledger(repo, mj)
+    assert r.returncode == 1
+    assert "cosmetic exception ledger rows" in r.stdout
+
+
+def test_cosmetic_private_row_is_split_brain(tmp_path: Path) -> None:
+    # A cosmetic row with no matching shield row: cosmetic consumes the
+    # SHARED P11 scopes object, so a private exception is a split-brain.
+    repo, mj = make_repo(
+        tmp_path, SHIELD_HEAD,
+        COSMETIC_HEAD + row("ex-c", "site=example.com", "r", "-1"))
+    r = ledger(repo, mj)
+    assert r.returncode == 1
+    assert "split-brain" in r.stdout
+
+
+def test_cosmetic_row_with_matching_shield_row_passes(tmp_path: Path) -> None:
+    shared = row("ex-a", "site=example.com", "user-allow", "-1")
+    repo, mj = make_repo(tmp_path, SHIELD_HEAD + shared,
+                         COSMETIC_HEAD + shared)
+    r = ledger(repo, mj, "--as-of", "5")
+    assert r.returncode == 0, r.stdout
+    assert "ok(cosmetic): ex-a" in r.stdout
+
+
+def test_cosmetic_wallclock_expiry_fails(tmp_path: Path) -> None:
+    shared_shield = row("ex-a", "site=example.com", "r", "-1")
+    shared_cosm = row("ex-a", "site=example.com", "r", "2027-01-01")
+    repo, mj = make_repo(tmp_path, SHIELD_HEAD + shared_shield,
+                         COSMETIC_HEAD + shared_cosm)
+    r = ledger(repo, mj)
+    assert r.returncode == 1
+    assert "not a monotonic integer" in r.stdout
+
+
+def test_json_reports_cosmetic_rows(tmp_path: Path) -> None:
+    shared = row("ex-a", "site=example.com", "r", "-1")
+    repo, mj = make_repo(tmp_path, SHIELD_HEAD + shared,
+                         COSMETIC_HEAD + shared)
+    r = ledger(repo, mj, "--json")
+    assert r.returncode == 0, r.stdout
+    doc = json.loads(r.stdout)
+    assert doc["cosmetic_rows"] == 1 and doc["status"] == "pass"
