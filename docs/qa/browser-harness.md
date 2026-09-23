@@ -91,3 +91,63 @@ Farm method, verbatim:
 4. Every divergence lands in `docs/shield/parity-divergences.md` as a
    pinned class BEFORE any band re-run; an unpinnable divergence is a
    stop-and-report (brief law), never a band adjustment.
+
+## P12-T7: cosmetic perf — the surrogate lane and the NOT-RUN farm halves
+
+The sandbox surrogate (`tools/cosmetic_bench.py`) drives `cosmetic_host`'s
+`key-set` path (the compiled core the renderer uses) and commits two rows
+into `docs/state/bench-trend.json`: `cosmetic_keyset_build_ms` (measured
+~2 ms against the 50 ms generic-set sustain budget) and
+`cosmetic_generic_set_rules` (the shipped 33). Both are labelled
+`surrogate:true` and `rig_class:trend`; `tools/perf_gate.py` refuses a
+cosmetic row without the label and pins every surrogate NEUTRAL — a
+synthetic number may never read as a browser measurement (this phase's
+disqualifier), and `tools/negatives/p12_t7.sh` keeps both red.
+
+The real halves are NOT-RUN (method pointers below). No page-level or
+compiled result is claimed anywhere in this tree.
+
+### document-start p95 method (NOT-RUN)
+
+`↦ NOT-RUN (method: docs/qa/browser-harness.md#document-start-p95)` —
+reference rig only, `cosmetic_document_start_add_ms` (≤4 ms p95):
+
+1. Farm browser at the pinned Chromium rev, `xr_shield_cosmetic_v1` on.
+2. Load the committed fixture-corpus pages (ad-layout set from P12-T1) and
+   measure mojom-request → first inline-style applied at `Document` start.
+3. p95 over ≥500 navigations, cold and warm; commit the bench JSON through
+   `tools/perf_gate.py` on a `reference` rig only.
+
+### blank-page detection over the fixture corpus (NOT-RUN)
+
+`↦ NOT-RUN (method: docs/qa/browser-harness.md#blank-page-detection)` —
+the down-the-page safety proof, never merged with the other two ways:
+
+1. Render fixture pages with the seam active; assert a non-empty layout
+   (blankness oracle) for every page, incl. the kill-switch suit where the
+   hook is forced to die.
+2. A page that rasterizes blank is a red; the degrade table's "render the
+   page unstyled" guarantee is proven here, not inferred from the host.
+
+### 50-hard-apps spot check (NOT-RUN)
+
+`↦ NOT-RUN (method: docs/qa/browser-harness.md#50-hard-apps)` — manual-
+design spot check over the P12 hard-app corpus: no layout corruption with
+the seam active, dark-mode + high-contrast × cosmetic interaction per the
+phase Manual row.
+
+### breakage-diff baseline ≤ +0.5 % (NOT-RUN)
+
+`↦ NOT-RUN (method: docs/qa/browser-harness.md#breakage-diff)` — compat
+corpus deltas: diff day-to-day breakage counts with the seam on vs off
+against the same-milestone Chrome; the baseline is ≤ +0.5 %, tracked per
+promotion (P12 DoD "corpus deltas within budget").
+
+### DOM-poll measurement vs the cited reference (NOT-RUN, UNVERIFIED)
+
+`↦ NOT-RUN (method: docs/qa/browser-harness.md#dom-poll)` —
+`cosmetic_dom_poll_cost_us`: measure the abpc DOM-poll cost on the
+reference rig and compare to the uBO reference measurement cited in
+`docs/state/research-log-P12.md`; **that citation is UNVERIFIED at
+close-out** — the budget row's source says so rather than inventing a
+number (`build/qa/perf/gen_perf_budgets.py`, `cosmetic-dom-poll-cost`).

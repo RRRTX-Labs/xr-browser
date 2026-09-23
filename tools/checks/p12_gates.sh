@@ -23,6 +23,16 @@ p12_cosmetic_core_gates() {
   echo "== P12-T3: generic hide set (budget + page-modifying count) =="
   "$PY" tools/cosmetic_generic_set_check.py --repo .
 
+  echo "== P12-T7: cosmetic bench rows committed (trend rig, surrogate-only) =="
+  # --check verifies docs/state/bench-trend.json carries the two cosmetic
+  # rows (cosmetic_keyset_build_ms, cosmetic_generic_set_rules). They are
+  # surrogate/model measures (cosmetic_host key-set path), never a Blink
+  # measurement: perf_gate's surrogate law refuses a cosmetic row without
+  # `surrogate: true`, and a surrogate row can never emit MET — the real
+  # document-start/blank-page halves are NOT-RUN in
+  # docs/qa/browser-harness.md.
+  "$PY" tools/cosmetic_bench.py --repo . --check
+
   echo "== P12-T5: single scope object + the >=40 identity/OOPIF matrix =="
   # One exception store: cosmetic consults the SAME P11 scopes object
   # shield writes (shields-down flips one bit both read). The matrix floor

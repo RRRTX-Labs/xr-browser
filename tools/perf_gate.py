@@ -139,6 +139,18 @@ def compare(repo: Path, bench: dict[str, Any]) -> dict[str, Any]:
                   if samples else None)
         if value is None:
             raise c.RunnerError(f"{metric}: no value or samples")
+        # P12-T7 surrogate law (the disqualifier, enforced): a cosmetic
+        # number measured in this sandbox is a SURROGATE (the surrogate
+        # cosmetic_host path), never the Blink seam. A surrogate row must say
+        # so (`surrogate: true`) or the gate REFUSES — a synthetic number
+        # presented as a budget assertion is this phase's disqualifier, not a
+        # prose rule.
+        surrogate = metric.startswith("cosmetic_")
+        if surrogate and not bool(row.get("surrogate")):
+            raise c.RunnerError(
+                f"{metric}: cosmetic rows are surrogate/model measures in "
+                "this sandbox — set `surrogate: true` or the number would "
+                "read as a Blink measurement it is not")
         budget_row = budgets.get(metric)
         if budget_row is None:
             # record-only: trend shape, no verdict claim
@@ -148,6 +160,11 @@ def compare(repo: Path, bench: dict[str, Any]) -> dict[str, Any]:
                              "rig_class": bench["rig_class"]})
             continue
         assert_class = budget_row["assert_class"]
+        if budget_row.get("value") is None:
+            raise c.RunnerError(
+                f"{metric}: no numeric budget is recorded (the source cite "
+                f"is UNVERIFIED) — supply the citation in "
+                f"docs/state/research-log-P12.md before any rig asserts it")
         if RIG_RANK.get(bench["rig_class"], -1) < RIG_RANK[assert_class]:
             raise c.RunnerError(
                 f"{metric}: {bench['rig_class']} rig cannot assert a "
@@ -155,7 +172,11 @@ def compare(repo: Path, bench: dict[str, Any]) -> dict[str, Any]:
                 f"{assert_class}) — rig-class law (docs/hw.md)")
         budget = float(budget_row["value"])
         ratio = value / budget if budget else float("inf")
-        if value <= budget:
+        if surrogate:
+            verdict = "NEUTRAL"  # a surrogate never asserts a budget: the
+            # real (browser-side) halves are NOT-RUN in docs/qa/
+            # browser-harness.md, so nothing here may read MET
+        elif value <= budget:
             verdict = "MET"
         elif ratio <= 1 + NOISE_BAND:
             verdict = "NEUTRAL"   # inside the noise band: never MET

@@ -162,6 +162,47 @@ def build(plan_text: str) -> dict:
         "core-side", "trend", "shield",
         "§4 P11 Perf (list apply ≤1.5 s background)")
 
+    # ---- P12-T7 cosmetic rows (trend-assertable) ----
+    # document-start add: §4 P12 Perf (document-start add ≤ 4 ms p95).
+    # browser-side reference: the end-to-end seam (mojom request → apply
+    # inline styles + selector engine) is a Blink measurement this sandbox
+    # cannot produce; a `trend` rig may never assert it (rig-class law).
+    add("cosmetic-document-start-add", "cosmetic_document_start_add_ms",
+        "ms", _extract_plan(plan_text,
+                            r"document-start add \u2264 (\d+) ms p95",
+                            "cosmetic document-start add"),
+        "browser-side", "reference", "cosmetic",
+        "§4 P12 Perf (document-start add ≤4 ms p95, budgeted)")
+    # DOM-poll (abpc) cost: ≤ the cited upstream uBO reference measure, NOT a
+    # claimable number — the citation must come from
+    # docs/state/research-log-P12.md; until it is VERIFIED this row's source
+    # must say UNVERIFIED rather than inventing a value, so benchmark-delta
+    # asserts (reference-class) stay out of the trend rig forever.
+    add("cosmetic-dom-poll-cost", "cosmetic_dom_poll_cost_us", "us", None,
+        "browser-side", "reference", "cosmetic",
+        "§4 P12 Perf (DOM-poll (abpc) cost ≤ the cited upstream uBO "
+        "reference measurement — see docs/state/research-log-P12.md); "
+        "UNVERIFIED source at close-out: no numeric budget claimed, "
+        "reference-rig only", 
+        "UNVERIFIED reference; never asserted on the trend rig")
+    # key-set build: the generic-set checker already measures a real
+    # build (~3.3 ms vs a 50 ms sustain budget), so this row's source IS the
+    # generated build/qa/perf/generic-set-budgets.json, not a guess. The
+    # trend cap is the 50 ms budget that file records; a slower rig is
+    # NEUTRAL, never MET.
+    add("cosmetic-keyset-build", "cosmetic_keyset_build_ms", "ms", 50,
+        "core-side", "trend", "cosmetic",
+        "§4 P12 Perf posture (the generic set costs document-start time on "
+        "every page); cap = the 50 ms key-set-build budget recorded in "
+        "build/qa/perf/generic-set-budgets.json (33 rules, measured "
+        "~1.9-3.3 ms on 2 CPUs — trend, never MET)",
+        "cap = the shipped generic set's sustain budget")
+    # generic-set size: cap = the shipped set's 33 rules.
+    add("cosmetic-generic-set-rules", "cosmetic_generic_set_rules", "rules",
+        33, "core-side", "trend", "cosmetic",
+        "§4 P12 T3 (generic hide set always-on); cap = the shipped set's 33 "
+        "rules (xr-lists/generic-hide-set.v1.json)")
+
     return {"schema_version": 1, "generated_from": PLAN_FILE,
             "rows": rows}
 
@@ -181,7 +222,7 @@ def main(argv: list[str]) -> int:
         return EXIT_FAIL
     try:
         doc = build(plan.read_text(encoding="utf-8"))
-    except ToolError as exc:
+    except RunnerError as exc:
         print(f"FAIL: {exc}")
         return EXIT_FAIL
     new = stable_json(doc) + "\n"
