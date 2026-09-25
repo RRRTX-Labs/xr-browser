@@ -78,20 +78,6 @@ jobs:
           sudo tar -xzf /tmp/actionlint.tgz -C /usr/local/bin actionlint
           actionlint -version
 
-      - name: Date-invariance strict probe (T0-U1 / ADR-0047)
-        # The ONLY lane that may pass --require-ambient-probe: it installed
-        # faketime in the step above, so the ambient-clock half of the
-        # date-invariance law runs for real here. We prove the displacement
-        # first (faketime must move a child clock or this step is a lie),
-        # then demand the probe fail-closed on drift.
-        run: |
-          shifted=$(faketime '2019-03-04 12:00:00' /bin/date -u +%Y)
-          test "$shifted" = "2019" || {
-            echo "FAIL: faketime did not displace a child clock (got '$shifted')"
-            exit 1
-          }
-          python3 tools/date_invariance_check.py --require-ambient-probe
-
       - name: Checkout xr-core at the DEPS pin
         # P3 gates (budget / retirement-lint) read the sibling patch repo at
         # the pin recorded in DEPS (single source of truth).
@@ -104,6 +90,25 @@ jobs:
           git clone -q https://github.com/RRRTX-Labs/xr-core.git ../xr-core
           git -C ../xr-core checkout -q "$pin"
           git -C ../xr-core rev-parse HEAD
+
+      - name: Date-invariance strict probe (T0-U1 / ADR-0047)
+        # The ONLY lane that may pass --require-ambient-probe: it installed
+        # faketime in the step above, so the ambient-clock half of the
+        # date-invariance law runs for real here. We prove the displacement
+        # first (faketime must move a child clock or this step is a lie),
+        # then demand the probe fail-closed on drift.
+        # P12-CLOSE ordering fix (run 36164160184): the exception-ledger
+        # freshness lane reads ../xr-core/test/isolation/isolation-matrix.json,
+        # so this step must follow the xr-core checkout — before, the absent
+        # matrix made the ledger FAIL at BOTH probe dates (FAIL/FAIL reads as
+        # 'the expiry law does not bite'), a self-reddening step.
+        run: |
+          shifted=$(faketime '2019-03-04 12:00:00' /bin/date -u +%Y)
+          test "$shifted" = "2019" || {
+            echo "FAIL: faketime did not displace a child clock (got '$shifted')"
+            exit 1
+          }
+          python3 tools/date_invariance_check.py --require-ambient-probe
 
       - name: Cross-repo pin is alive (P4-T0.2)
         # DEPS.xr_core_rev must be a reachable ancestor of origin xr-core
