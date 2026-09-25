@@ -21,7 +21,10 @@ p12_cosmetic_core_gates() {
   "$PY" tools/scriptlet_registry_check.py --repo .
 
   echo "== P12-T3: generic hide set (budget + page-modifying count) =="
-  "$PY" tools/cosmetic_generic_set_check.py --repo .
+  # --check: verify + never regenerate in-tree (a gate must not write into
+  # the repo — T0-d). The generator writes the committed trend row only when
+  # run WITHOUT --check (a deliberate, human re-measurement).
+  "$PY" tools/cosmetic_generic_set_check.py --repo . --check
 
   echo "== P12-T7: cosmetic bench rows committed (trend rig, surrogate-only) =="
   # --check verifies docs/state/bench-trend.json carries the two cosmetic
