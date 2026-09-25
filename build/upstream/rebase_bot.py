@@ -342,7 +342,14 @@ def main() -> int:
         print(f"wall-clock {report['wall_clock_seconds']}s, "
               f"{report['bytes_fetched']} B fetched, mode={report['mode']}, "
               f"source={report['source']}")
-    return 0 if report["verdict"] == "GREEN" else 1
+    # P12-CLOSE: a CLASSIFIED verdict (GREEN/DRIFT/BROKEN) is the treadmil's
+    # deliverable, not a crash — issue bundles were routed and the artifact
+    # upload below carries the report, so DRIFT/BROKEN must not redden the job
+    # (nightly-rebase-build.yml's own comment promised this since P4; the code
+    # returned 1 for every non-GREEN until now). A tool CRASH (ToolError, e.g.
+    # a 503 that outlived the fetch retries) still fails the job via
+    # main_with_guard's exit 1 — a broken treadmill must never look green.
+    return 0
 
 
 if __name__ == "__main__":

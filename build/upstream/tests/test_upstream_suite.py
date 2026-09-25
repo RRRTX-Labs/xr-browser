@@ -93,18 +93,26 @@ def test_dry_run_is_never_citable_as_applied_state(corpus_setup, tmp_path):
 
 
 def test_budget_break_injection_fails_gate(tmp_path):
-    """Budget-break injection: over-cap manifest must fail the T3 gate."""
+    """Budget-break injection: over-cap manifest must fail the T3 gate.
+
+    T0-U3 (P12-CLOSE): the budget unit is upstream FILES derived from the
+    *.patch diff headers, not patch entries. So the over-cap injection is
+    three patches touching three DISTINCT files (3 files > cap 2), proving
+    the FILE unit blocks — 3 entries on one shared file would be 1 file and
+    must NOT block.
+    """
     manifest = tmp_path / "manifest.yaml"
     rows = []
     for i in range(3):  # extension_chokepoint cap = 2
         rows += [f'  - id: "inj-{i}"', "    owner: \"@xr/security\"",
                  "    category: extension_chokepoint", "    files:",
-                 "      - \"extensions/test.txt\"",
+                 f'      - "extensions/test-{i}.txt"',
                  f"    dir: inj/{i}"]
         d = tmp_path / "inj" / str(i)
         d.mkdir(parents=True, exist_ok=True)
-        (d / "inj.patch").write_text("--- a/extensions/test.txt\n+++ b/extensions/test.txt\n"
-                                     "@@ -1 +1 @@\n-x\n+y\n", encoding="utf-8")
+        (d / "inj.patch").write_text(
+            f"--- a/extensions/test-{i}.txt\n+++ b/extensions/test-{i}.txt\n"
+            "@@ -1 +1 @@\n-x\n+y\n", encoding="utf-8")
     manifest.write_text(
         "schema_version: 1\ntotal_cap: 150\ncategories:\n"
         "  extension_chokepoint: { cap: 2 }\nallowed_roots:\n  - \"extensions/\"\n"

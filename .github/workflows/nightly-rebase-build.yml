@@ -107,8 +107,12 @@ jobs:
         run: |
           ./scripts/build rebase rebase --to "$CANARY_SHA" --dry-run --explain
           # verdict != GREEN is NOT a job failure: drift is expected treadmill
-          # output; the report + owner bundles are the deliverable. A tool
-          # crash (exit 2) fails the job.
+          # output; the report + owner bundles are the deliverable (P12-CLOSE
+          # made rebase_bot.py return 0 for any CLASSIFIED verdict — GREEN /
+          # DRIFT / BROKEN — so this promised-contract is real now). A tool
+          # CRASH (a fetch 503 that outlives its retries, a bad manifest…)
+          # raises ToolError and fails the job nonzero — a broken treadmill
+          # must never look green.
 
       - name: Assumption suite at the pin (blocking rows, §12.4)
         run: ./scripts/build assumptions run --use-deps --out work/upstream-cache
