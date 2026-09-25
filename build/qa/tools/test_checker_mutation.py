@@ -36,8 +36,8 @@ TARGETS = [
     #    into MET. Canary: a 10x-over-budget bench that MUST MISS.
     (
         "tools/perf_gate.py",
-        "        if value <= budget:\n",
-        "        if True:  # MUTATED: budget compare always MET\n",
+        "        elif value <= budget:\n",
+        "        elif True:  # MUTATED: budget compare always MET\n",
         "perf_gate",
         "MISSED",
     ),
