@@ -112,3 +112,17 @@ shield.memory.heading	IDS_XR_SHIELD_MEMORY_HEADING	‏«Cõré strûçtûré mé
 shield.memory.bytes	IDS_XR_SHIELD_MEMORY_BYTES	‏«Bûñdlé çáñõñîçál bytés ēxðañd »
 shield.memory.ring	IDS_XR_SHIELD_MEMORY_RING	‏«Rîñg évéñts ēxð»
 shield.memory.scopes	IDS_XR_SHIELD_MEMORY_SCOPES	‏«Exçéptîõñ sçõpés ēxðañ»
+shield.cosmetic.heading	IDS_XR_SHIELD_COSMETIC_HEADING	‏«Cõsmétîç fîltérîñg ēxðañd»
+shield.cosmetic.flag	IDS_XR_SHIELD_COSMETIC_FLAG	‏«Cõsmétîç flág ēxða»
+shield.cosmetic.generic.set	IDS_XR_SHIELD_COSMETIC_GENERIC_SET	‏«Géñérîç hîdé sét ēxðañ»
+shield.cosmetic.key.set.rules	IDS_XR_SHIELD_COSMETIC_KEY_SET_RULES	‏«Kéy-sét rûlés ēxða»
+shield.cosmetic.blob.occupancy	IDS_XR_SHIELD_COSMETIC_BLOB_OCCUPANCY	‏«Blõb-çáçhé õççûpáñçy ēxðañd »
+shield.cosmetic.scriptlets	IDS_XR_SHIELD_COSMETIC_SCRIPTLETS	‏«Sçrîptléts ēxð»
+shield.cosmetic.refused	IDS_XR_SHIELD_COSMETIC_REFUSED	‏«Réfûséd rûlés ēxða»
+shield.cosmetic.refused.row	IDS_XR_SHIELD_COSMETIC_REFUSED_ROW	‏«{SELECTORS} séléçtõrs,  ēxð{PSEUDOS} pséûdõ-çlássés ēxðañ»
+shield.cosmetic.degrade	IDS_XR_SHIELD_COSMETIC_DEGRADE	‏«Dégrádé évéñts ēxða»
+shield.cosmetic.seam.guard	IDS_XR_SHIELD_COSMETIC_SEAM_GUARD	‏«Séám gûárd ēxð»
+shield.cosmetic.guard.armed	IDS_XR_SHIELD_COSMETIC_GUARD_ARMED	‏«Arméd — hõõk béhîñd thé çõmpîlé-tîmé gûárd ēxðañd ēxðañd ē»
+shield.cosmetic.guard.inert	IDS_XR_SHIELD_COSMETIC_GUARD_INERT	‏«Iñért — flág õff, hõõk îdlé ēxðañd ēx»
+shield.cosmetic.guard.hook.dead	IDS_XR_SHIELD_COSMETIC_GUARD_HOOK_DEAD	‏«Hõõk déád — çõsmétîç õff, págé réñdérs ûñstyléd ēxðañd ēxðañd ēxð»
+shield.cosmetic.empty	IDS_XR_SHIELD_COSMETIC_EMPTY	‏«Nõ çõsmétîç státé îñ thîs páylõád ēxðañd ēxðañ»
