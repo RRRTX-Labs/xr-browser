@@ -21,6 +21,8 @@ is the living `block-event-v1` ledger row (`docs/contracts/block-event-v1.md`).
 | `engine-poisoned-fail-open` | `shield.why.enginePoisonedFailOpen` | the engine reported poison; browsing continues fail-open with an amber chip | `kAllowed` |
 | `kill-switch` | `shield.why.killSwitch` | the kill switch is on; blocking is suspended with an amber chip | `kAllowed` |
 | `route-loss-fail-closed` | `shield.why.routeLossFailClosed` | the egress route was lost; the request is held fail-closed (red chip) | `kBlocked` |
+| `cosmetic-injected-element` | `shield.why.cosmeticInjectedElement` | a cosmetic `remove` rule or soft-wall scriptlet injected/removed an element — page-modifying, not a blocked request (the Observatory labels it honestly) | `kAllowed` |
+| `rule-page-modifying` | `shield.why.rulePageModifying` | a page-modifying rule (cosmetic remove / scriptlet injection) applied | `kAllowed` |
 
 ## Stability laws
 

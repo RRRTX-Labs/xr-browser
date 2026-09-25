@@ -14670,6 +14670,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "||tracker.example^",
      "rule_id": "r-1",
@@ -14718,6 +14719,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "||tracker.example^",
      "rule_id": "r-1",
@@ -14761,6 +14763,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -14804,6 +14807,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -14847,6 +14851,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -14890,6 +14895,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -14933,6 +14939,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -14976,6 +14983,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -15019,6 +15027,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -15062,6 +15071,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -15105,6 +15115,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -15148,6 +15159,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -15191,6 +15203,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -15234,6 +15247,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -15277,6 +15291,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -15320,6 +15335,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -15363,6 +15379,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -15374,6 +15391,233 @@
     }
    },
    "id": "e-emit-why-route-loss-fail-closed",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kAllowed",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 111,
+    "ts_millis": 1234,
+    "why_code": "cosmetic-injected-element"
+   },
+   "expect": {
+    "row": {
+     "action": "kAllowed",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "page_modifying": false,
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 111,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "cosmetic-injected-element"
+    }
+   },
+   "id": "e-emit-why-cosmetic-injected-element",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kAllowed",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 112,
+    "ts_millis": 1234,
+    "why_code": "rule-page-modifying"
+   },
+   "expect": {
+    "row": {
+     "action": "kAllowed",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "page_modifying": false,
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 112,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "rule-page-modifying"
+    }
+   },
+   "id": "e-emit-why-rule-page-modifying",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "bundle_version": 2,
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "list_id": "l-1",
+    "page_modifying": true,
+    "rule": "||tracker.example^",
+    "rule_id": "r-1",
+    "seq": 7,
+    "tab_id": 3,
+    "ts_millis": 1234,
+    "why_code": "cosmetic-injected-element"
+   },
+   "expect": {
+    "row": {
+     "action": "kBlocked",
+     "bundle_version": 2,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "l-1",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "page_modifying": true,
+     "request_class": "kScript",
+     "rule": "||tracker.example^",
+     "rule_id": "r-1",
+     "seq": 7,
+     "tab_id": 3,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "cosmetic-injected-element"
+    }
+   },
+   "id": "e-emit-page-modifying-injected",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kAllowed",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "page_modifying": true,
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-page-modifying"
+   },
+   "expect": {
+    "row": {
+     "action": "kAllowed",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "page_modifying": true,
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 7,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "rule-page-modifying"
+    }
+   },
+   "id": "e-emit-page-modifying-rule",
+   "method": "event-emit"
+  },
+  {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "row": {
+     "action": "kBlocked",
+     "bundle_version": 0,
+     "contract_version": 1,
+     "event": "block_event",
+     "identity": "xr:a",
+     "list_id": "",
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "page_modifying": false,
+     "request_class": "kScript",
+     "rule": "",
+     "rule_id": "",
+     "seq": 7,
+     "tab_id": 0,
+     "target": "https://tracker.example/ad.js",
+     "ts_millis": 1234,
+     "why_code": "rule-blocked"
+    }
+   },
+   "id": "e-emit-page-modifying-default-false",
    "method": "event-emit"
   },
   {
@@ -15411,6 +15655,7 @@
       "registrable_domain": "shop.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kNavigation",
      "rule": "||tracker.example^",
      "rule_id": "r-1",
@@ -15459,6 +15704,7 @@
       "registrable_domain": "t.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kSubresource",
      "rule": "||tracker.example^",
      "rule_id": "r-1",
@@ -15504,6 +15750,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -15547,6 +15794,7 @@
       "registrable_domain": "plain.example",
       "scheme": "http"
      },
+     "page_modifying": false,
      "request_class": "kNavigation",
      "rule": "",
      "rule_id": "",
@@ -15590,6 +15838,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -15635,6 +15884,7 @@
       "registrable_domain": "tracker.example",
       "scheme": "https"
      },
+     "page_modifying": false,
      "request_class": "kScript",
      "rule": "",
      "rule_id": "",
@@ -16192,6 +16442,32 @@
    "method": "event-emit"
   },
   {
+   "args": {
+    "action": "kBlocked",
+    "context": {
+     "identity": {
+      "value": "xr:a"
+     },
+     "origin": {
+      "registrable_domain": "tracker.example",
+      "scheme": "https"
+     },
+     "request_class": "kScript",
+     "url": "https://tracker.example/ad.js?utm_source=x#player"
+    },
+    "page_modifying": "yes",
+    "seq": 7,
+    "ts_millis": 1234,
+    "why_code": "rule-blocked"
+   },
+   "expect": {
+    "detail": "page-modifying-not-bool",
+    "error": "kMalformedInput"
+   },
+   "id": "e-emit-page-modifying-not-bool",
+   "method": "event-emit"
+  },
+  {
    "args": {},
    "expect": {
     "states": [
@@ -16251,6 +16527,7 @@
     "bundles": null,
     "channel": "dev",
     "chip_count": 0,
+    "cosmetic": null,
     "engine": {
      "alive": true,
      "binding": "table-engine-v1",
@@ -16387,12 +16664,422 @@
   },
   {
    "args": {
+    "cosmetic": {
+     "blob_cache_occupancy": "NOT-RUN (network-service side)",
+     "degrade_events": 3,
+     "flag": "on",
+     "generic_set_version": "generic-hide-set-v1",
+     "key_set_rules": 33,
+     "refused_pseudos": 1,
+     "refused_selectors": 4,
+     "scriptlet_registry_state": "inert: flag off",
+     "seam_guard_state": "armed"
+    }
+   },
+   "expect": {
+    "bundles": null,
+    "channel": "dev",
+    "chip_count": 0,
+    "cosmetic": {
+     "blob_cache_occupancy": "NOT-RUN (network-service side)",
+     "degrade_events": 3,
+     "flag": "on",
+     "generic_set_version": "generic-hide-set-v1",
+     "key_set_rules": 33,
+     "refused_pseudos": 1,
+     "refused_selectors": 4,
+     "scriptlet_registry_state": "inert: flag off",
+     "seam_guard_state": "armed"
+    },
+    "engine": {
+     "alive": true,
+     "binding": "table-engine-v1",
+     "poisoned": false,
+     "rust_bound": false,
+     "vendored_pin": "adblock-0.13.3"
+    },
+    "enterprise": {
+     "force_disabled": false,
+     "reason": ""
+    },
+    "last_apply": null,
+    "lists": [],
+    "memory": {
+     "bundle_canonical_bytes": 0,
+     "ring_events": 0,
+     "scope_count": 0
+    },
+    "page_state": "normal",
+    "posture": {
+     "chip": "green",
+     "mode": "normal",
+     "reason": "normal"
+    },
+    "refused_directives": []
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-cosmetic-on",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "cosmetic": {
+     "blob_cache_occupancy": "NOT-RUN (network-service side)",
+     "degrade_events": 3,
+     "flag": "off",
+     "generic_set_version": "generic-hide-set-v1",
+     "key_set_rules": 33,
+     "refused_pseudos": 1,
+     "refused_selectors": 4,
+     "scriptlet_registry_state": "inert: flag off",
+     "seam_guard_state": "armed"
+    }
+   },
+   "expect": {
+    "bundles": null,
+    "channel": "dev",
+    "chip_count": 0,
+    "cosmetic": {
+     "blob_cache_occupancy": "NOT-RUN (network-service side)",
+     "degrade_events": 3,
+     "flag": "off",
+     "generic_set_version": "generic-hide-set-v1",
+     "key_set_rules": 33,
+     "refused_pseudos": 1,
+     "refused_selectors": 4,
+     "scriptlet_registry_state": "inert: flag off",
+     "seam_guard_state": "armed"
+    },
+    "engine": {
+     "alive": true,
+     "binding": "table-engine-v1",
+     "poisoned": false,
+     "rust_bound": false,
+     "vendored_pin": "adblock-0.13.3"
+    },
+    "enterprise": {
+     "force_disabled": false,
+     "reason": ""
+    },
+    "last_apply": null,
+    "lists": [],
+    "memory": {
+     "bundle_canonical_bytes": 0,
+     "ring_events": 0,
+     "scope_count": 0
+    },
+    "page_state": "normal",
+    "posture": {
+     "chip": "green",
+     "mode": "normal",
+     "reason": "normal"
+    },
+    "refused_directives": []
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-cosmetic-off",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "cosmetic": {
+     "blob_cache_occupancy": "NOT-RUN (network-service side)",
+     "degrade_events": 3,
+     "flag": "on",
+     "generic_set_version": "generic-hide-set-v1",
+     "key_set_rules": 33,
+     "refused_pseudos": 1,
+     "refused_selectors": 4,
+     "scriptlet_registry_state": "inert: flag off",
+     "seam_guard_state": "hook-dead"
+    }
+   },
+   "expect": {
+    "bundles": null,
+    "channel": "dev",
+    "chip_count": 0,
+    "cosmetic": {
+     "blob_cache_occupancy": "NOT-RUN (network-service side)",
+     "degrade_events": 3,
+     "flag": "on",
+     "generic_set_version": "generic-hide-set-v1",
+     "key_set_rules": 33,
+     "refused_pseudos": 1,
+     "refused_selectors": 4,
+     "scriptlet_registry_state": "inert: flag off",
+     "seam_guard_state": "hook-dead"
+    },
+    "engine": {
+     "alive": true,
+     "binding": "table-engine-v1",
+     "poisoned": false,
+     "rust_bound": false,
+     "vendored_pin": "adblock-0.13.3"
+    },
+    "enterprise": {
+     "force_disabled": false,
+     "reason": ""
+    },
+    "last_apply": null,
+    "lists": [],
+    "memory": {
+     "bundle_canonical_bytes": 0,
+     "ring_events": 0,
+     "scope_count": 0
+    },
+    "page_state": "normal",
+    "posture": {
+     "chip": "green",
+     "mode": "normal",
+     "reason": "normal"
+    },
+    "refused_directives": []
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-cosmetic-guard-hook-dead",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "cosmetic": 5
+   },
+   "expect": {
+    "detail": "cosmetic-not-object",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-cosmetic-not-object",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "cosmetic": {
+     "blob_cache_occupancy": "NOT-RUN (network-service side)",
+     "degrade_events": 3,
+     "flag": "on",
+     "generic_set_version": "generic-hide-set-v1",
+     "key_set_rules": 33,
+     "refused_pseudos": 1,
+     "refused_selectors": 4,
+     "scriptlet_registry_state": "inert: flag off",
+     "seam_guard_state": "armed",
+     "zzz": 1
+    }
+   },
+   "expect": {
+    "detail": "unknown-field:zzz",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-cosmetic-unknown-key",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "cosmetic": {
+     "blob_cache_occupancy": "NOT-RUN (network-service side)",
+     "degrade_events": 3,
+     "flag": "maybe",
+     "generic_set_version": "generic-hide-set-v1",
+     "key_set_rules": 33,
+     "refused_pseudos": 1,
+     "refused_selectors": 4,
+     "scriptlet_registry_state": "inert: flag off",
+     "seam_guard_state": "armed"
+    }
+   },
+   "expect": {
+    "detail": "bad-cosmetic-flag",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-cosmetic-bad-flag",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "cosmetic": {
+     "blob_cache_occupancy": "NOT-RUN (network-service side)",
+     "degrade_events": 3,
+     "flag": "on",
+     "key_set_rules": 33,
+     "refused_pseudos": 1,
+     "refused_selectors": 4,
+     "scriptlet_registry_state": "inert: flag off",
+     "seam_guard_state": "armed"
+    }
+   },
+   "expect": {
+    "detail": "missing-generic-set-version",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-cosmetic-missing-generic-version",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "cosmetic": {
+     "blob_cache_occupancy": "NOT-RUN (network-service side)",
+     "degrade_events": 3,
+     "flag": "on",
+     "generic_set_version": "generic-hide-set-v1",
+     "key_set_rules": -1,
+     "refused_pseudos": 1,
+     "refused_selectors": 4,
+     "scriptlet_registry_state": "inert: flag off",
+     "seam_guard_state": "armed"
+    }
+   },
+   "expect": {
+    "detail": "bad-key-set-rules",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-cosmetic-bad-key-set-rules",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "cosmetic": {
+     "blob_cache_occupancy": 7,
+     "degrade_events": 3,
+     "flag": "on",
+     "generic_set_version": "generic-hide-set-v1",
+     "key_set_rules": 33,
+     "refused_pseudos": 1,
+     "refused_selectors": 4,
+     "scriptlet_registry_state": "inert: flag off",
+     "seam_guard_state": "armed"
+    }
+   },
+   "expect": {
+    "detail": "bad-blob-cache-occupancy",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-cosmetic-bad-blob-occupancy",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "cosmetic": {
+     "blob_cache_occupancy": "NOT-RUN (network-service side)",
+     "degrade_events": 3,
+     "flag": "on",
+     "generic_set_version": "generic-hide-set-v1",
+     "key_set_rules": 33,
+     "refused_pseudos": 1,
+     "refused_selectors": 4,
+     "scriptlet_registry_state": 7,
+     "seam_guard_state": "armed"
+    }
+   },
+   "expect": {
+    "detail": "bad-scriptlet-registry-state",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-cosmetic-bad-registry-state",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "cosmetic": {
+     "blob_cache_occupancy": "NOT-RUN (network-service side)",
+     "degrade_events": 3,
+     "flag": "on",
+     "generic_set_version": "generic-hide-set-v1",
+     "key_set_rules": 33,
+     "refused_pseudos": 1,
+     "refused_selectors": -1,
+     "scriptlet_registry_state": "inert: flag off",
+     "seam_guard_state": "armed"
+    }
+   },
+   "expect": {
+    "detail": "bad-refused_selectors",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-cosmetic-bad-refused",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "cosmetic": {
+     "blob_cache_occupancy": "NOT-RUN (network-service side)",
+     "degrade_events": 3,
+     "flag": "on",
+     "generic_set_version": "generic-hide-set-v1",
+     "key_set_rules": 33,
+     "refused_pseudos": -1,
+     "refused_selectors": 4,
+     "scriptlet_registry_state": "inert: flag off",
+     "seam_guard_state": "armed"
+    }
+   },
+   "expect": {
+    "detail": "bad-refused_pseudos",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-cosmetic-bad-refused-pseudos",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "cosmetic": {
+     "blob_cache_occupancy": "NOT-RUN (network-service side)",
+     "degrade_events": -1,
+     "flag": "on",
+     "generic_set_version": "generic-hide-set-v1",
+     "key_set_rules": 33,
+     "refused_pseudos": 1,
+     "refused_selectors": 4,
+     "scriptlet_registry_state": "inert: flag off",
+     "seam_guard_state": "armed"
+    }
+   },
+   "expect": {
+    "detail": "bad-degrade_events",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-cosmetic-bad-degrade-events",
+   "method": "debug-page"
+  },
+  {
+   "args": {
+    "cosmetic": {
+     "blob_cache_occupancy": "NOT-RUN (network-service side)",
+     "degrade_events": 3,
+     "flag": "on",
+     "generic_set_version": "generic-hide-set-v1",
+     "key_set_rules": 33,
+     "refused_pseudos": 1,
+     "refused_selectors": 4,
+     "scriptlet_registry_state": "inert: flag off",
+     "seam_guard_state": "banana"
+    }
+   },
+   "expect": {
+    "detail": "bad-seam-guard-state",
+    "error": "kMalformedInput"
+   },
+   "flags": "--build-channel dev",
+   "id": "p-debug-cosmetic-bad-seam-guard",
+   "method": "debug-page"
+  },
+  {
+   "args": {
     "engine_alive": false
    },
    "expect": {
     "bundles": null,
     "channel": "dev",
     "chip_count": 0,
+    "cosmetic": null,
     "engine": {
      "alive": false,
      "binding": "table-engine-v1",
@@ -16431,6 +17118,7 @@
     "bundles": null,
     "channel": "dev",
     "chip_count": 0,
+    "cosmetic": null,
     "engine": {
      "alive": true,
      "binding": "table-engine-v1",
@@ -16469,6 +17157,7 @@
     "bundles": null,
     "channel": "dev",
     "chip_count": 0,
+    "cosmetic": null,
     "engine": {
      "alive": true,
      "binding": "table-engine-v1",
@@ -16507,6 +17196,7 @@
     "bundles": null,
     "channel": "dev",
     "chip_count": 0,
+    "cosmetic": null,
     "engine": {
      "alive": true,
      "binding": "table-engine-v1",
@@ -16549,6 +17239,7 @@
     "bundles": null,
     "channel": "dev",
     "chip_count": 0,
+    "cosmetic": null,
     "engine": {
      "alive": true,
      "binding": "table-engine-v1",
@@ -16590,6 +17281,7 @@
     "bundles": null,
     "channel": "dev",
     "chip_count": 0,
+    "cosmetic": null,
     "engine": {
      "alive": true,
      "binding": "table-engine-v1",
@@ -16631,6 +17323,7 @@
     "bundles": null,
     "channel": "dev",
     "chip_count": 0,
+    "cosmetic": null,
     "engine": {
      "alive": true,
      "binding": "table-engine-v1",

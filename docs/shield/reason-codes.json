@@ -67,6 +67,20 @@
    "text_key": "shield.why.routeLossFailClosed",
    "emits_when": "the egress route was lost; the request is held fail-closed (red chip)",
    "default_action": "kBlocked"
+  },
+  {
+   "why_code": "cosmetic-injected-element",
+   "text_key": "shield.why.cosmeticInjectedElement",
+   "emits_when": "a cosmetic `remove` rule or soft-wall scriptlet injected/removed an element — page-modifying, not a blocked request (the Observatory labels it honestly)",
+   "default_action": "kAllowed",
+   "page_modifying": true
+  },
+  {
+   "why_code": "rule-page-modifying",
+   "text_key": "shield.why.rulePageModifying",
+   "emits_when": "a page-modifying rule (cosmetic remove / scriptlet injection) applied; the observatory reports it as page-modifying, not as a block",
+   "default_action": "kAllowed",
+   "page_modifying": true
   }
  ]
 }

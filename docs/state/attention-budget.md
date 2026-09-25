@@ -94,6 +94,19 @@ ring — and nothing that escalates attention:
   (`xr-core/ui/shield/*.ts` + the `IDS_XR_SHIELD_*` strings) for
   attention-escalation vocabulary — any hit is a FAIL.
 
+## Cosmetic (P12-T6)
+
+Cosmetic filtering adds rows to the xr://shield dev page — cosmetic
+off/on, the generic-set version, per-site key-set sizes, blob-cache
+occupancy, the scriptlet registry state (verbatim), refused-selector
+counts, degrade events, the seam-guard state. Cosmetic adds rows and
+nothing else: no modal, no badge, no notification, no toast — silent
+otherwise. The chrome is unchanged by a hide rule; the Observatory (P13)
+reports page-modifying rows under their own category, which is a data
+label, never an attention surface. Gate: `tools/attention_check.py`
+enforces it (a cosmetic string carrying escalation vocabulary is a FAIL,
+and the cosmetic rows must exist on the page).
+
 ## 9. Enforcement
 
 - C++ suites (`settings` make test): counters unit/durability suites,

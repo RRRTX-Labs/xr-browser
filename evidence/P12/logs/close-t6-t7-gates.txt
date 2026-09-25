@@ -1,0 +1,28 @@
+== gen_perf_budgets --check (P12 rows diff-clean) ==
+PASS: gen_perf_budgets --check (22 rows transcribed, diff-clean)
+perf-budgets rows: 22
+  cosmetic-document-start-add = 4 reference
+  cosmetic-dom-poll-cost = None reference
+  cosmetic-keyset-build = 50 trend
+  cosmetic-generic-set-rules = 33 trend
+
+== cosmetic_bench --check (trend rig, surrogate rows committed) ==
+PASS: cosmetic-bench --check (rows present: cosmetic_generic_set_rules, cosmetic_keyset_build_ms)
+bench rows: ['cosmetic_keyset_build_ms', 'cosmetic_generic_set_rules']
+
+== perf_gate (surrogate law: cosmetic NEUTRAL, never MET) ==
+PASS: perf_gate --check (report diff-clean)
+
+== T6 shield vectors (327 case byte-parity) ==
+PASS: 327 shield vectors byte-identical across shield_host (C++) and fakes/shield.py (Python)
+
+== T6 block-event five-way sync ==
+...................                                                      [100%]
+19 passed in 0.29s
+
+== T6 shield_state_check + attention_check ==
+PASS: shield-state (all 5 host page states rendered: normal, engine-dead, engine-poisoned, kill-switch, route-loss; fake vocabulary byte-identical; stateText arms + honest default; force-disable reason verbatim; shield.page behind build.channel-dev in roster + both availability backends; grdp rows present; cosmetic rows + seam-guard union armed, inert, hook-dead rendered)
+PASS: attention-budget (P8-T6 policy markers present; P11-T6 shield rule: chip count only — no toast/badge/modal/notification vocabulary in any shield surface or string; 2 surface(s) + 50 shield message(s) scanned)
+
+== T6 xr_schema block-event ==
+PASS: xr_schema validate block-event

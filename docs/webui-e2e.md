@@ -268,3 +268,34 @@ here is implied PASS from the in-sandbox core/host/fake suites.
   `IDS_XR_SHIELD_*` message; the Python fake's `PAGE_STATES`
   (`xr-core/fakes/shield.py`) stays byte-identical to the host's
   `kPageStates` list — both enforced by `tools/shield_state_check.py`.
+
+### Flow 4 — cosmetic rows on xr://shield (P12-T6)
+
+The shield page's cosmetic rows report `cosmetic_host`'s state verbatim —
+the page never derives a cosmetic value (it is the same stateless-reports
+law as the shield rows). Each field rides the closed vocabulary of
+`xr-core/renderer/cosmetic/host_protocol.md`:
+
+- `flag` (`on`/`off`) — `xr_shield_cosmetic_v1`, default off; the off state
+  is asserted identical to today's product (no observer installed).
+- `generic_set_version` — `generic-hide-set-v1` (the shipped
+  `xr-lists/generic-hide-set.v1.json` schema id).
+- `key_set_rules` — per-site compiled key-set rule count.
+- `blob_cache_occupancy` — `"NOT-RUN (network-service side)"` verbatim (a
+  network-service value this host does not own; the page never invents a
+  number).
+- `scriptlet_registry_state` — `"inert: flag off"` verbatim when
+  `xr_shield_scriptlets` is off (produced by the host, so page and host
+  cannot drift).
+- `refused_selectors` / `refused_pseudos` — compile-time refusals, never
+  hidden.
+- `degrade_events` — observed degrade-table events.
+- `seam_guard_state` (`armed`/`inert`/`hook-dead`) — the document-start
+  hook's guard state; `hook-dead` degrades to cosmetic off, never a blank
+  page (degrade-safety law).
+
+Dev-only enforcement and the both-flag matrix ride the P11-T6
+`--build-channel dev` gate exactly as the shield rows do; the rows are
+covered by `tools/shield_state_check.py` (every enum value rendered) and
+`tools/attention_check.py` (cosmetic adds rows and nothing else — no
+notification/badge/modal vocabulary).

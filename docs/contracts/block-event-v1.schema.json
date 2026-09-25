@@ -4,7 +4,7 @@
  "contract_version": 1,
  "type": "object",
  "additionalProperties": false,
- "required": ["event", "contract_version", "seq", "ts_millis", "identity", "tab_id", "origin", "target", "rule_id", "rule", "list_id", "bundle_version", "action", "request_class", "why_code"],
+ "required": ["event", "contract_version", "seq", "ts_millis", "identity", "tab_id", "origin", "target", "rule_id", "rule", "list_id", "bundle_version", "action", "request_class", "why_code", "page_modifying"],
  "properties": {
   "event": { "const": "block_event" },
   "contract_version": { "type": "integer", "const": 1 },
@@ -28,6 +28,7 @@
   "bundle_version": { "type": "integer" },
   "action": { "type": "string", "enum": ["kBlocked", "kAllowed", "kRedirected", "kUpgraded"] },
   "request_class": { "type": "string", "enum": ["kNavigation", "kSubresource", "kScript", "kPermission", "kStorage", "kNetwork"] },
-  "why_code": { "type": "string", "enum": ["rule-blocked", "rule-allowed", "rule-redirected", "rule-replaced", "no-match", "no-bundle", "exception-scope", "engine-dead-fail-open", "engine-poisoned-fail-open", "kill-switch", "route-loss-fail-closed"] }
+  "why_code": { "type": "string", "enum": ["rule-blocked", "rule-allowed", "rule-redirected", "rule-replaced", "no-match", "no-bundle", "exception-scope", "engine-dead-fail-open", "engine-poisoned-fail-open", "kill-switch", "route-loss-fail-closed", "cosmetic-injected-element", "rule-page-modifying"] },
+  "page_modifying": { "type": "boolean" }
  }
 }

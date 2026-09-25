@@ -268,7 +268,21 @@ the expiry note 2 of 2 lives here, per the P7/P10 convention:
   `scriptlet_registry_state` is `"inert: flag off"` verbatim so page and host
   cannot drift. **Kept until the P16-exit review.**
 
-The P14+ xr://shield cosmetic rows, the reason-code table rows, and the
-`block-event-v1` page-modifying (injected-element) class are the T6-remainder
-work and will register here when they land — the registry entry, not a silent
-field addition.
+### P12-T6 (close-out): block-event-v1 page-modifying extension — registered
+
+The living `block-event-v1` row grew exactly ONE field (`page_modifying`,
+bool, default `false`) and TWO closed `why_code`s
+(`cosmetic-injected-element`, `rule-page-modifying`), all registered here
+rather than silently added:
+
+| Extension | How it lands | Gate that bites |
+|---|---|---|
+| `page_modifying` field | optional bool on `event-emit` (both backends: `xr-core/shield/host/shield_host.cc` + `fakes/shield.py`); absent ⇒ `false`, non-bool ⇒ `page-modifying-not-bool` | schema `additionalProperties:false` (golden validates); both-backend byte-parity (313 shield vectors) |
+| `cosmetic-injected-element` + `rule-page-modifying` codes | two rows in `docs/shield/reason-codes.{md,json}` + the schema enum + the host_protocol closed set + the vectors' usage | the five-way sync asserted in `docs/contracts/tests/test_block_event.py` (13 codes) |
+| xr://shield cosmetic rows + the P14 dev-page wiring | `xr-core/ui/shield/shield.ts` carries the cosmetic rows and `xr-core/renderer/cosmetic/host/cosmetic_host.cc` the `page-states`/`seam-guard-state` vocabulary; `tools/shield_state_check.py` + `tools/attention_check.py` extended | shield_state_check (every enum value rendered) + attention_check (no notification/badge/modal vocabulary for cosmetic) |
+
+An elected injection or removal is a page modification, never a block:
+the Observatory renders `page_modifying:true` rows under that category
+(plan §12 UX: "why blocked"/"shields down" cover cosmetic too). Both
+backends are byte-parity for the new field/codes (313 vectors, pinned by
+`shield_vectors_check.py` and `xr-core/shield/tests/test_golden_vectors.cc`).

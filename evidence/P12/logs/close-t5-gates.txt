@@ -1,0 +1,14 @@
+== cosmetic vectors regen --check (T5, >=150) ==
+249 vectors over 8 methods
+cosmetic-v1.json cases: 249
+
+== cosmetic vectors byte-parity (cosmetic_host + fakes/cosmetic.py) ==
+PASS: 249 cosmetic vectors byte-identical across cosmetic_host (C++) and fakes/cosmetic.py (Python)
+
+== scope/OOPIF matrix (>=40) ==
+o  single-scope-object: cosmetic surface carries no shield exception-store grammar (checked 'renderer/cosmetic', 'fakes/cosmetic.py')
+PASS: cosmetic_scope_single_check (49 matrix, 0 failure(s))
+
+== exception ledger cosmetic rows (monotonic --as-of) ==
+ok(cosmetic): ledger section present, zero rows (the v1 surface consumes the shared P11 scopes object — no cosmetic-private exceptions)
+PASS: exception_ledger_check (6 ledger row(s) ok, 0 shield row(s), 0 cosmetic row(s), 0 failure(s))

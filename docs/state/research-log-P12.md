@@ -82,3 +82,36 @@ artifact settles it. Sandbox facts are recorded per item where they matter.
   DRAFT; ADR-0048 is PROPOSED. Approval is a human act (HG-26 class) —
   the S0/CODEOWNERS machinery stays green either way, but the interface
   must not be treated as ratified copy until a human sets APPROVED.
+
+## T6 — block-event-v1 page-modifying class + the xr://shield cosmetic rows
+
+- **D11 — page-modifying is a DATA label, never copy.** The living
+  `block-event-v1` row gained one field (`page_modifying`, bool, default
+  `false`) and two closed `why_code`s (`cosmetic-injected-element`,
+  `rule-page-modifying`). An elected injection/removal is a page
+  modification, not a blocked request: the Observatory (P13) renders the
+  flag, so the honest categorization (`docs/renderer/scriptlets.md` says
+  page-modifying scriptlets "labelled page-modifying in the event schema")
+  is data, not a description someone might drop from a string. Both
+  backends emit the field byte-identically (313→327 shield vectors; the
+  5-way sync asserted by `docs/contracts/tests/test_block_event.py` grew
+  to 13 codes). Non-bool `page_modifying` → closed token
+  `page-modifying-not-bool`. Registered in
+  `docs/contracts/registry-post-freeze.md` (T6 close-out section) — not a
+  silent field addition.
+- **D12 — the shield page REPORTS cosmetic, never derives it.** The
+  `debug-page` cosmetic riding row (flag, generic-set version, per-site
+  key-set rules, blob-cache occupancy verbatim, scriptlet registry state
+  verbatim, refused-selector/pseudo counts, degrade events, seam-guard
+  state `armed|inert|hook-dead`) is a stateless echo in both backends;
+  every enum value is a closed vocabulary (unknown seam-guard state →
+  `bad-seam-guard-state`). `tools/shield_state_check.py` covers the
+  guard union and the cosmetic strings; `tools/attention_check.py` adds
+  the cosmetic rule (no notification/badge/modal vocabulary; planted
+  modal → red; the cosmetic rows must exist on the page).
+  `tools/negatives/p12_t6.sh` carries the three canaries.
+- **D13 — shield mutation re-run.** The T6 core byte move
+  (`shield/core/events.{h,cc}`) tripped `mutation_freshness`; full matrix
+  re-run at pin `f7c683d` (sampled:false, seed 20260924): 396/396,
+  deny-guard 61/61, first-run clean — transcript
+  `evidence/P12/logs/t6-mutation-shield.json`.

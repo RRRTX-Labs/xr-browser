@@ -42,7 +42,8 @@ exception scopes, and never widen the frozen `policy-change-event-v1`
   "bundle_version": 3,
   "action": "kBlocked",
   "request_class": "kScript",
-  "why_code": "rule-blocked"
+  "why_code": "rule-blocked",
+  "page_modifying": false
 }
 ```
 
@@ -77,7 +78,7 @@ the row's `target` does not: see the redaction law.)
   caller-supplied; the generator reads no clock (the
   `commands/core/dispatch.cc` ledger-row precedent).
 - **Every decision is an event.** `why_code` draws from the closed
-  verdict vocabulary (11 codes, `xr-core/shield/host_protocol.md`
+  verdict vocabulary (13 codes, `xr-core/shield/host_protocol.md`
   §Decision vocabularies); a row may record ANY verdict, not only
   blocks — the ledger accounts for allows and degraded-posture outcomes
   too (plan §data: every block/deny/grant decision carries its reason
@@ -87,6 +88,15 @@ the row's `target` does not: see the redaction law.)
   this blocked" copy P13 renders. Codes never change; keys never change;
   the copy behind a key may. Until P13 lands, the code itself is the
   user-visible fallback string.
+- **Page-modifying unless proven not (P12-T6).** The living row carries a
+  `page_modifying` flag (bool, default `false` — network blocks do not
+  modify the page). An elected injection or removal — a cosmetic `remove`
+  rule, a soft-wall scriptlet lifting `overflow:hidden` — is recorded
+  with `page_modifying: true` and one of the two closed page-modifying
+  `why_code`s (`cosmetic-injected-element`, `rule-page-modifying`), so
+  the Observatory reports it as a page modification, NEVER as a blocked
+  request. "Why was this blocked" / "shields down" cover cosmetic too
+  (plan §12 UX): the honest categorization is data on the row, not copy.
 - **Retention and locality (browser-side, P13).** The ledger persists
   per-identity, locally only (SQLite in the plan's data section), with a
   90-day rolling default retention, user-configurable, exportable by

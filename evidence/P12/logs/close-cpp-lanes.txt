@@ -1,0 +1,31 @@
+== shield C++ suites (make test) ==
+== test_apply ==
+test_apply: 43 checks, 0 failures
+== test_events ==
+test_events: 53 checks, 0 failures
+== test_match ==
+test_match: 84 checks, 0 failures
+== test_shield_host ==
+test_shield_host: 57 checks, 0 failures
+== test_golden_vectors ==
+test_golden_vectors: 493 checks, 0 failures
+== test_sha256_kat ==
+test_sha256_kat: 10 checks, 0 failures
+ALL C++ SHIELD TESTS PASSED
+make: Leaving directory '/home/user/xr-core/shield/tests'
+
+== cosmetic C++ suites (make test) ==
+== test_degrade ==
+  degrade: 14 conditions, 14 table rows
+test_degrade: 94 checks, 0 failures
+== test_blob_strict ==
+test_blob_strict: 107 checks, 0 failures
+== test_abpf ==
+test_abpf: 146 checks, 0 failures
+== test_cosmetic_fuzz ==
+fuzz: 2763776 iters, 693125 accepts, 1150460 refusals, 0 violations (seed 20260919, budget 30 s)
+test_cosmetic_fuzz: 692114 checks, 0 failures
+== test_sha256_kat ==
+test_sha256_kat: 10 checks, 0 failures
+ALL C++ COSMETIC TESTS PASSED
+make: Leaving directory '/home/user/xr-core/renderer/cosmetic/tests'

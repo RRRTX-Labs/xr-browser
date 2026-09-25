@@ -54,12 +54,12 @@
   "shield": {
    "killed": 396,
    "mutants": 396,
-   "note": "FIRST SCORE at T4 (research-log-P11.md D6): full matrix at pin cfbb344, 389/389 after the ParseSlot deny-guard find was discharged with NEW TESTS. P11-T5 RE-RUN (2026-09-13): the shield core moved (MakeLedgerRow + the event-emit emitter in events.cc/shield_host.cc/fakes + the int64 wire fix for mojom ts_millis/tab_id), so the FULL matrix ran again at pin 44f5306 (sampled:false, seed 20260913): 394 mutants (389 + 5 on the new emitter code), 394 killed, 100.00%, deny-guard 61/61 \u2014 FIRST-RUN clean: the T5 test additions (test_events +15, test_shield_host +13, 45 e-emit golden vectors) killed every new mutant; zero survivors to disposition. The T4 transcripts stay in evidence/P11/logs/t4-mutation-shield*. P11-T8 parity alignment RE-RUN (2026-09-15): the matcher semantics moved (D-7/D-8/D-9 \u2014 bundle.cc filter lowercasing, fake_engine.{h,cc} host-end anchor + trailing-wildcard strip + lowercased surface), so the FULL matrix ran again at pin 866387a (sampled:false, seed 20260915): 396 mutants (394 + 2 on the changed matcher lines), 396 killed, 100.00%, deny-guard 61/61 \u2014 FIRST-RUN clean: the new test_match pins (host-end ||d|, va.js*| both ways, case-insensitive surface) killed every new mutant; zero survivors to disposition. The T5 transcripts stay in evidence/P11/logs/t5-mutation-shield*.",
+   "note": "P12-T6 RE-RUN (2026-09-24): the shield core moved again (the page_modifying field on MakeLedgerRow + the two closed page-modifying why-codes in events.{h,cc}, plus the debug-page cosmetic riding row in shield_host.cc/fakes), so the FULL matrix ran again at pin f7c683d (sampled:false, seed 20260924): 396 mutants, 396 killed, 100.00%, deny-guard 61/61 \u2014 FIRST-RUN clean: the extended emitter (page_modifying) and the cosmetic debug-page riding row are killed by the new e-emit family golden vectors (51 cases) + test_events/test_shield_host/test_golden_vectors; zero survivors to disposition. Prior transcripts stay in evidence/P11/logs/t*-mutation-shield*.",
    "score_pct": 100.0,
-   "seed": 20260915,
+   "seed": 20260924,
    "survivors": [],
-   "transcript": "evidence/P11/logs/t8-mutation-shield-parity-align.json",
-   "xr_core_commit": "866387aadeb091422dbeb66075804248575bbbe6"
+   "transcript": "evidence/P12/logs/t6-mutation-shield.json",
+   "xr_core_commit": "f7c683d7884a659dab397ca01884b73b55e567da"
   },
   "themes": {
    "killed": 187,

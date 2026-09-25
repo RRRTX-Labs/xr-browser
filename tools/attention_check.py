@@ -38,6 +38,15 @@ POLICY_MARKERS = ["no upload", "LOCAL COUNTERS ONLY", "90", "day",
 SHIELD_MARKERS = ["## Shield (P11-T6)", "chip count", "no toasts",
                   "no badges-on-timer", "no modals", "no notifications",
                   "silent otherwise", "tier2", "attention_check.py"]
+# P12-T6: cosmetic adds rows to the shield page but MUST NOT gain its own
+# attention surface — no notification/badge/modal vocabulary for cosmetic
+# (the chrome is silent; the Observatory labels page-modifying rows, not a
+# pop-up). The marker + the scan below make a planted cosmetic modal RED.
+COSMETIC_MARKERS = ["## Cosmetic (P12-T6)", "cosmetic adds rows",
+                    "no modal", "no badge", "no notification",
+                    "silent otherwise"]
+COSMETIC_BANNED = re.compile(
+    r"\b(toast|badge|modal|notification)s?\b", re.IGNORECASE)
 
 BANNED = re.compile(r"\b(toast|badge|modal|notification)s?\b", re.IGNORECASE)
 CHIP_STRING = "IDS_XR_SHIELD_CHIP_COUNT"
@@ -84,6 +93,11 @@ def main() -> int:
         if re.sub(r"\s+", " ", m).lower() not in flat.lower():
             fails.append(f"shield-section marker missing or drifted: {m!r}")
 
+    # --- 2b) the P12-T6 cosmetic rule -------------------------------------
+    for m in COSMETIC_MARKERS:
+        if re.sub(r"\s+", " ", m).lower() not in flat.lower():
+            fails.append(f"cosmetic-section marker missing or drifted: {m!r}")
+
     surfaces = shield_surfaces()
     if not surfaces:
         fails.append("no shield view surfaces found under xr-core/ui/shield/")
@@ -109,8 +123,21 @@ def main() -> int:
             if BANNED.search(body):
                 fails.append(f"grdp {name} carries attention-escalation "
                              "vocabulary")
+        # P12-T6 cosmetic rule: no cosmetic string may escalate attention
+        # (a planted modal in a cosmetic label is RED, even though the
+        # generic shield scan would also catch it — the rule is named here
+        # so a reader knows cosmetic was checked, not merely adjacent).
+        for name, body in grdp_shield_messages():
+            if name.startswith("IDS_XR_SHIELD_COSMETIC_") and \
+                    COSMETIC_BANNED.search(body):
+                fails.append(f"cosmetic string {name} carries attention-"
+                             "escalation vocabulary")
         if not grdp_shield_messages():
             fails.append("grdp has no IDS_XR_SHIELD_* messages")
+        if not any(n.startswith("IDS_XR_SHIELD_COSMETIC_")
+                   for n, _ in grdp_shield_messages()):
+            fails.append("grdp has no IDS_XR_SHIELD_COSMETIC_* messages "
+                         "(the cosmetic rows would drop off the page)")
 
     if a.fixture_view:
         # negative fixture: the gate MUST fail

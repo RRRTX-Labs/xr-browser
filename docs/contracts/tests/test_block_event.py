@@ -155,7 +155,7 @@ def test_reason_code_five_way_sync():
     codes_proto = protocol_why_codes()
     md_text = CODES_MD.read_text(encoding="utf-8")
 
-    assert len(codes_json) == len(set(codes_json)) == 11
+    assert len(codes_json) == len(set(codes_json)) == 13
     assert sorted(codes_json) == sorted(enum) == sorted(codes_proto)
     assert len(keys) == len(set(keys)), "text_keys must be unique"
     assert all(k.startswith("shield.why.") for k in keys)
