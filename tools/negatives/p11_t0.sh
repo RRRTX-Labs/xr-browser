@@ -312,3 +312,47 @@ case_scheduled_lane_check_zero_discovery() {
     "$PY" tools/scheduled_lane_check.py --repo "$NEG_TMP/emptyroot"
 }
 neg_register scheduled_lane_check_zero_discovery
+
+# --- negative: scheduled_lane_check — a MIXED red (real work FAILED too)
+#         must stay HARD FAIL (the run-itself lane-health exemption must not
+#         excuse a run that also reddened real work; P12-CLOSE). -------------
+case_scheduled_lane_check_mixed_cascade() {
+  cat > "$NEG_TMP/mixedcascade.json" <<'JSON'
+{
+  "urls": {
+    "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/workflows": {
+      "workflows": [
+        {"id": 10, "name": "mixed", "state": "active",
+         "path": ".github/workflows/mixed.yml"}
+      ]
+    },
+    "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/workflows/10/runs?per_page=30": {
+      "workflow_runs": [
+        {"id": 1010, "event": "schedule", "status": "completed",
+         "conclusion": "failure",
+         "head_sha": "9999999999999999999999999999999999999999",
+         "created_at": "2026-09-11T07:00:00Z"}
+      ]
+    },
+    "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/1010/jobs": {
+      "jobs": [
+        {
+          "name": "j",
+          "conclusion": "failure",
+          "steps": [
+            {"name": "Real work", "conclusion": "failure"},
+            {"name": "Scheduled-lane health (P11-T0-c \u2014 a red nightly reddens within a day)", "conclusion": "failure"}
+          ]
+        }
+      ]
+    }
+  },
+  "touches": {"mixed.yml": "2026-09-10T00:00:00+00:00"},
+  "local": ["mixed.yml"]
+}
+JSON
+  neg_expect_reject "scheduled_lane_check: real-work failure + lane-health cascade stays HARD FAIL" \
+    'FAIL: mixed.yml' \
+    "$PY" tools/scheduled_lane_check.py --fixture "$NEG_TMP/mixedcascade.json"
+}
+neg_register scheduled_lane_check_mixed_cascade

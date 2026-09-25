@@ -50,6 +50,12 @@
           "name": "oldef-lane",
           "state": "active",
           "path": ".github/workflows/oldef.yml"
+        },
+        {
+          "id": 9,
+          "name": "selfred-lane",
+          "state": "active",
+          "path": ".github/workflows/selfred.yml"
         }
       ]
     },
@@ -260,6 +266,36 @@
         }
       ]
     },
+    "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/workflows/9/runs?per_page=30": {
+      "workflow_runs": [
+        {
+          "id": 999,
+          "event": "schedule",
+          "status": "completed",
+          "conclusion": "failure",
+          "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "created_at": "2026-09-11T07:22:20Z"
+        }
+      ]
+    },
+    "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/999/jobs": {
+      "jobs": [
+        {
+          "name": "selfred",
+          "conclusion": "failure",
+          "steps": [
+            {
+              "name": "Real work",
+              "conclusion": "success"
+            },
+            {
+              "name": "Scheduled-lane health (P11-T0-c \u2014 a red nightly reddens within a day)",
+              "conclusion": "failure"
+            }
+          ]
+        }
+      ]
+    },
     "https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/777/jobs": {
       "jobs": [
         {
@@ -283,7 +319,8 @@
     "off.yml": "2026-09-10T00:00:00+00:00",
     "verified.yml": "2026-09-11T11:00:00+00:00",
     "stillred.yml": "2026-09-11T13:00:00+00:00",
-    "oldef.yml": "2026-09-11T11:00:00+00:00"
+    "oldef.yml": "2026-09-11T11:00:00+00:00",
+    "selfred.yml": "2026-09-10T00:00:00+00:00"
   },
   "local": [
     "red.yml",
@@ -293,6 +330,7 @@
     "off.yml",
     "verified.yml",
     "stillred.yml",
-    "oldef.yml"
+    "oldef.yml",
+    "selfred.yml"
   ]
 }

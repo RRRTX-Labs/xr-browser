@@ -3,22 +3,20 @@
 
 P11-T0-c. Root cause: `compat-beta-parity`'s first scheduled run
 (34574063042, 2026-09-11 07:22 UTC) FAILED at its upload-artifact step and
-nobody noticed: nothing correlated "a scheduled lane went red" with
-anything — push-triggered gates cannot see it, the trigger IS the schedule.
+nobody noticed — push-triggered gates cannot see a scheduled run, the trigger
+IS the schedule.
 
 Law: for EVERY workflow with a `schedule:` trigger, resolve its MOST RECENT
-`schedule`-event run through the public API and verdict it: success -> PASS;
-failure on the CURRENT definition -> FAIL (failing job/step names from GET
-/actions/runs/<id>/jobs); failure with a fix landed since (file touched
-after the run, or a NEWER run succeeded) -> STALE-FAIL, visible NON-FATAL,
-never counted green; a NEWER run that ALSO failed on real work re-escalates
-to FAIL; failed ONLY its lane-health step -> exempt (the fleet check must
-never condemn a lane for the checker's own circular failure);
-no schedule run yet -> NOT-RUN visible; disabled -> SKIP visible; in flight
--> IN-PROGRESS visible; network absent -> SKIP exit 77 (skip-policy) AFTER
-`--self-test` proved every path OFFLINE (a SKIP never masks a broken
-checker). `--own-lane X` caps X's own verdict at visible non-fatal (every
-scheduled lane passes its own name; governance passes none).
+`schedule`-event run and verdict it: success -> PASS; failure on the CURRENT
+definition -> FAIL (job/step names from GET /actions/runs/<id>/jobs); a fix
+landed after (file touched, or a NEWER run succeeded) -> STALE-FAIL visible
+NON-FATAL, never counted green; a NEWER run that ALSO failed on real work
+re-escalates to FAIL; a run failing ONLY its own lane-health step -> exempt
+(run-level and newer-run-level: the fleet check never condemns a lane for its
+own circular failure); no schedule run -> NOT-RUN; disabled -> SKIP; in
+flight -> IN-PROGRESS; network absent -> SKIP exit 77 AFTER `--self-test`
+proved every path OFFLINE. `--own-lane X` caps X's own verdict at visible
+non-fatal (each lane passes its own name; governance passes none).
 
 Network: build/upstream/fetch.py only (the chokepoint; URLs built via
 fetch.github_api_url, P11-T1 — no https:// literal in this file). PyYAML =
@@ -85,14 +83,22 @@ def _last_touch(root: Path, wf_name: str,
     return r.stdout.strip() or None
 
 
+def _health_only(jobs: dict[str, Any]) -> bool:
+    """Failed ONLY its own Scheduled-lane health step (circular cascade)."""
+    steps: list[str] = []
+    for j in (jobs or {}).get("jobs", []):
+        if j.get("conclusion") in (None, "success", "skipped"):
+            continue
+        steps += [str(s.get("name", "")) for s in j.get("steps", [])
+                  if s.get("conclusion") not in (None, "success", "skipped")]
+    return bool(steps) and all(s.startswith("Scheduled-lane health")
+                               for s in steps)
+
+
 def _cap(wf_name: str, own_lane: str | None, verdict: str,
          detail: list[str]) -> tuple[str, list[str]]:
-    """Circularity guard: FROM INSIDE lane X (--own-lane X, as every
-    scheduled lane passes), X's own verdict is CAPPED at visible non-fatal —
-    the lane's real steps are the true test of itself; the fleet check must
-    never fail its own lane mid-run (run 34635371904: every work step green,
-    job red because the check condemned the lane from history that included
-    itself). Other lanes keep the full hard-FAIL law."""
+    """Circularity guard: FROM INSIDE lane X (--own-lane X) X's own verdict
+    caps at visible non-fatal (run 34635371904); other lanes keep hard-FAIL."""
     if verdict == "FAIL" and own_lane and wf_name == own_lane:
         detail.append("  STALE-FAIL (capped): --own-lane — a lane's real "
                       "steps are the true test of itself; the fleet check "
@@ -133,15 +139,16 @@ def check_lane(root: Path, wf_name: str, cron: str, workflows_api: dict,
     concl = run.get("conclusion")
     if concl == "success":
         return "PASS", [head + " — success"]
-    # A non-success completed schedule run: find the failing steps, then let
-    # NEWER runs of any event arbitrate — they test the current definition:
-    #   newer completed success -> fix VERIFIED, STALE-FAIL (non-fatal);
-    #   newer completed failure -> hard FAIL (still red right now, whatever
-    #                              the file dates say);
-    #   no newer run            -> FAIL vs STALE-FAIL by touch date.
+    # A non-success completed schedule run: failing steps first, then NEWER
+    # completed runs arbitrate — success -> fix VERIFIED (STALE-FAIL);
+    # another real failure -> FAIL; none -> FAIL vs STALE-FAIL by touch date.
     detail = [f"{head} — conclusion: {concl}"]
+    jobs = None
     try:
         jobs = _http(f"{REPO_API}/actions/runs/{run['id']}/jobs", fixture)
+    except RuntimeError:
+        detail.append("  (fixture: no canned jobs response)")
+    if jobs is not None:
         for job in jobs.get("jobs", []):
             if job.get("conclusion") in (None, "success", "skipped"):
                 continue
@@ -149,8 +156,15 @@ def check_lane(root: Path, wf_name: str, cron: str, workflows_api: dict,
                    if s.get("conclusion") not in ("success", "skipped", None)]
             detail.append(f"  job '{job.get('name')}': {job.get('conclusion')}"
                           f" failed step(s): {bad}")
-    except RuntimeError:
-        detail.append("  (fixture: no canned jobs response)")
+    # Exemption (run 35838547323): failing ONLY its own lane-health step is
+    # the fleet check's circular cascade, never this lane's real work.
+    if _health_only(jobs):
+        detail.append(
+            "  STALE-FAIL: this run failed ONLY its Scheduled-lane health "
+            "step — the lane's real work was green and the failure is the "
+            "fleet check's own circular cascade; visible, non-fatal, never "
+            "counted green by silence.")
+        return "STALE-FAIL", detail
     all_runs = runs.get("workflow_runs", [])
     newer = [r for r in all_runs if r.get("id") != run.get("id")
              and str(r.get("created_at", "")) > str(run.get("created_at", ""))]
@@ -166,24 +180,14 @@ def check_lane(root: Path, wf_name: str, cron: str, workflows_api: dict,
                 "the next scheduled fire will confirm. Visible, non-fatal, "
                 "never counted green by silence.")
             return "STALE-FAIL", detail
-        # Exemption (narrow, proven by run 34635371904): if the newer failed
-        # run's ONLY failed step is the Scheduled-lane health step itself, it
-        # cannot condemn this lane — the lane's real work was green and the
-        # failure is the fleet check's own (since-fixed) arbitration. Without
-        # this, the checker's first in-lane run poisons every later verdict.
+        # Exemption (run 34635371904): newer run failed ONLY the lane-health
+        # step — the fleet check's own circular cascade, not this lane's work.
         try:
             ljobs = _http(f"{REPO_API}/actions/runs/{latest['id']}/jobs",
                           fixture)
-            failed_steps = [
-                str(st.get("name", ""))
-                for j in ljobs.get("jobs", [])
-                if j.get("conclusion") not in (None, "success", "skipped")
-                for st in j.get("steps", [])
-                if st.get("conclusion") not in (None, "success", "skipped")]
         except RuntimeError:
-            failed_steps = []
-        if failed_steps and all(f.startswith("Scheduled-lane health")
-                                for f in failed_steps):
+            ljobs = None
+        if _health_only(ljobs):
             detail.append(
                 f"  STALE-FAIL: the newer {latest.get('event')} run "
                 f"{latest['id']} failed ONLY its Scheduled-lane health step "
@@ -214,9 +218,7 @@ SELF_TEST_FIXTURE_PATH = (Path(__file__).resolve().parent / "tests" /
 
 
 def load_self_test_fixture() -> dict[str, Any]:
-    """Canned API/touch data for --self-test (kept as a JSON fixture so the
-    tool itself stays small and the same file can drive negative fixtures
-    via --fixture)."""
+    """Canned API/touch data for --self-test (shared with negative fixtures)."""
     return json.loads(SELF_TEST_FIXTURE_PATH.read_text(encoding="utf-8"))
 
 
@@ -240,13 +242,11 @@ def run(root: Path, fixture: dict[str, Any] | None,
               f"github.com/RRRTX-Labs/xr-browser/actions manually; "
               f"--self-test proves the checker itself works offline")
         return EXIT_SKIP
-
     results: list[tuple[str, str, list[str]]] = []
     for wf_name, cron in lanes:
         verdict, detail = check_lane(root, wf_name, cron, workflows_api,
                                      fixture, own_lane)
         results.append((wf_name, verdict, detail))
-
     hard = [r for r in results if r[1] == "FAIL"]
     if as_json:
         print(json.dumps({
@@ -273,12 +273,13 @@ def run(root: Path, fixture: dict[str, Any] | None,
 
 
 def self_test(root: Path) -> int:
-    """Prove every verdict path offline (fixture mode; skip-policy law:
-    a SKIPping checker must still prove its failure path works)."""
+    """Prove every verdict path offline (fixture mode; skip-policy law: a
+    SKIPping checker must still prove its failure path works)."""
     fails: list[str] = []
     # 1. the mixed fixture: TWO hard FAILs (red.yml = silent red nightly;
     #    stillred.yml = newer run also failed), stale/verified/never/off
-    #    non-fatal, green PASS.
+    #    non-fatal, green PASS, plus selfred.yml = its own run failed ONLY
+    #    the lane-health step (run-itself circular exemption).
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
         rc = run(root, load_self_test_fixture(), as_json=False)
@@ -288,7 +289,7 @@ def self_test(root: Path) -> int:
                      f"exit 1, got {rc}")
     for expect in ("FAIL: red.yml", "FAIL: stillred.yml",
                    "STALE-FAIL: stale.yml", "STALE-FAIL: verified.yml",
-                   "STALE-FAIL: oldef.yml",
+                   "STALE-FAIL: oldef.yml", "STALE-FAIL: selfred.yml",
                    "PASS: green.yml", "NOT-RUN: never.yml",
                    "DISABLED: off.yml", "Upload the evidence",
                    "fix VERIFIED", "ALSO failed",
