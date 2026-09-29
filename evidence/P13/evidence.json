@@ -102,11 +102,18 @@
   {
    "id": "P13-T1",
    "dod": "Panel frame: 360px right-docked, keyboard-first, real focus-trap test with a planted leak that reddens; docs/webui-e2e.md carries both states.",
-   "status": "BLOCKED-PENDING-T1",
-   "source": "fixture",
+   "status": "VERIFIED",
+   "source": "local-run",
    "evidence": [
-    "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"
-   ]
+    "logs/t1-panel-frame.txt",
+    "../xr-core/ui/panel/panel-frame.ts",
+    "../xr-core/ui/panel/focus-trap.ts",
+    "../xr-core/ui/panel/tests/focus-trap.test.mjs",
+    "build/webui/panel-tests.sh",
+    "tools/negatives/p13_t1.sh",
+    "docs/webui-e2e.md"
+   ],
+   "notes": "The frame lands as xr-core/ui/panel/{focus-trap.ts,panel-frame.ts} + ui/panel/tests/focus-trap.test.mjs. Geometry: 360 px inline size, docked to the inline end, logical properties only (rtl_lint PASS — RTL needs no second code path). Modality: role=dialog + aria-modal + aria-labelledby, and the closed state renders `nothing` at all. Keyboard-first: open records the opener, Tab/Shift+Tab containment lives in focus-trap.ts (wrap at both ends; a Tab that would land outside is intercepted; a move that stays inside is left to the browser — the trap does not fight the tab order it need not fight), Escape dispatches a cancelable panel-close-request (the host owns `open`) and closing restores the opener. The acceptance criterion — a REAL focus-trap test with a planted leak that reddens — is met twice over: (a) the suite carries the planted-leak A/B in-file (the same invariant, containment bypassed, must report the escapes), and (b) `build/webui/panel-tests.sh --plant-leak` deletes containment in a scratch copy and REQUIRES the suite to redden — measured: 6 failures with the leak, 10/10 with it absent (logs/t1-panel-frame.txt). tools/negatives/p13_t1.sh registers three cases (leaked tree must redden the lane; clean sources must pass, control; --plant-leak must report its own detection), all three rejected/held as expected. No new framework: the pinned toolchain (lit/axe-core/esbuild/typescript) is untouched and npm_allowlist_check stays PASS; the tests run on node:test with a hand-rolled focus world because there is no browser and the dependency list is frozen. tsc --strict now includes ui/panel/*.ts (the toolchain lane type-checks the DOM half). Browser halves are NOT-RUN (method: docs/webui-e2e.md 'P13 stage: the panel (T1)'; the farm rig is HG-31); open latency is T7's budget row."
   },
   {
    "id": "P13-T2",

@@ -1,0 +1,46 @@
+P13-T1 — the panel frame: the transcripts behind the row.
+date: 2026-09-29 (sandbox; node 20.20.2, pinned toolchain from ui/toolchain)
+
+== 1. the containment suite, from the lane ==
+  ok 10 - planted leak: with containment bypassed the SAME invariant reports escapes
+    ---
+    duration_ms: 0.369475
+    ...
+  1..10
+  # tests 10
+  # suites 0
+  # pass 10
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+  # duration_ms 96.96994
+panel-tests: PASS (focus containment: wrap, intercept, re-open race, restore, planted-leak control)
+
+== 2. the planted leak must redden the suite (the T1 acceptance criterion) ==
+  # skipped 0
+  # todo 0
+  # duration_ms 93.26481
+panel-tests: PASS — the planted leak reddens the suite (containment is really tested)
+
+== 3. the registered negatives (T1 area only, N=3) ==
+ok: panel focus trap: containment deleted in a scratch core reddens the lane (rejected with expected reason)
+ok: panel focus trap positive control (clean sources pass the lane)
+ok: panel-tests --plant-leak: the lane reports that its planted leak was caught (in-band rejection observed)
+
+ALL NEGATIVE CASES REJECTED AS EXPECTED (N=3)
+
+== 4. the WebUI toolchain: tsc --strict now includes ui/panel/*.ts ==
+toolchain: node check-bundle.js (CSP on output)
+  csp: check-bundle: PASS (CSP-strict: no inline JS/eval, no runtime network, no sourcemap)
+toolchain: PASS (tsc-strict + deterministic bundle + CSP-clean) in /home/user/xr-core/ui/toolchain
+
+== 5. the lints that constrain the view ==
+l10n_extract.py      l10n_extract: 19 files, 0 raw-string violations, 0 missing ids -> CLEAN
+a11y_lint.py         a11y_lint: 0 violation(s) (PASS)
+rtl_lint.py          rtl_lint: 0 violation(s) (PASS)
+csp_lint.py          csp_lint: 0 violation(s) (PASS)
+
+== 6. what is NOT-RUN here ==
+real-browser focus geometry/tab order + SR announcements: NOT-RUN (method: docs/webui-e2e.md 'P13 stage: the panel (T1)' -> the farm rig, HG-31);
+panel open latency <=150 ms: T7, method docs/qa/browser-harness.md#panel-open-150ms.

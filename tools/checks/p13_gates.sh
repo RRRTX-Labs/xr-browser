@@ -62,3 +62,26 @@ p13_p0_gates() {
   echo "== P13-P0-C: phase-finality law (state interim|final; the 12-section report) =="
   "$PY" tools/evidence_finality.py --self-test
 }
+
+p13_t1_panel_gates() {
+  # P13-T1: the panel frame. Two halves, and both are the point:
+  #   * the focus-containment suite (node:test against the bundled core) — the
+  #     positive laws AND a planted leak inside the same file;
+  #   * `--plant-leak`, which deletes containment in a scratch copy and REQUIRES
+  #     the suite to redden. A lane that cannot fail proves nothing, and a focus
+  #     trap is the shape of code whose test passes while containing nothing.
+  # The DOM-facing half is `tsc --strict` (ui/panel/*.ts is in the toolchain
+  # include) + the farm; browser halves are NOT-RUN with methods in
+  # docs/qa/browser-harness.md. Node/registry absent => visible SKIP (77).
+  echo "== P13-T1: panel focus containment (real suite + planted leak must redden) =="
+  if bash build/webui/panel-tests.sh; then :; elif [ $? -eq 77 ]; then
+    echo "SKIP: panel focus-containment lane skipped (node/toolchain unavailable)"
+  else
+    echo "FAIL: panel focus-containment lane failed"; die
+  fi
+  if bash build/webui/panel-tests.sh --plant-leak; then :; elif [ $? -eq 77 ]; then
+    echo "SKIP: panel planted-leak lane skipped (node/toolchain unavailable)"
+  else
+    echo "FAIL: the planted focus leak did not redden the suite"; die
+  fi
+}

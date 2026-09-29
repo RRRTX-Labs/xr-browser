@@ -44,7 +44,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "f7c683d7884a659dab397ca01884b73b55e567da"     # xr-core P12-T1..T6: renderer/cosmetic complete (7 core modules, abpf validator, scriptlet registry, cosmetic_host 8 methods + host_protocol.md, fakes/cosmetic.py parity reference, 200+ golden vectors) + cosmetic.mojom (ninth interface) + test_cosmetic_fuzz.cc + the blink_seams 0300 document-start patch + P12-T5 (scope-key parity fix) + P12-T6 (block-event-v1 page_modifying field + the two closed page-modifying why-codes + the xr://shield cosmetic riding row, both backends byte-identical — 327 shield vectors). Pair-bumped same-day with the P12-CLOSE T6 commit per docs/process/cross-repo-pin.md.
+xr_core_rev: "cce1a7124d35f368434d93eb5858df707c9ac232"     # xr-core cce1a71 = P12-T6 (renderer/cosmetic complete, block-event-v1 page_modifying class, the xr://shield cosmetic riding row) + P13-T1 (ui/panel: the panel frame + the focus-containment core and its node:test suite; four IDS_XR_PANEL_* messages; ui/panel/*.ts inside tsconfig). Pair-bumped same-day with the P13-T1 commit per docs/process/cross-repo-pin.md.
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

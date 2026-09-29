@@ -207,6 +207,10 @@ else
   echo "FAIL: WebUI repro gate failed"; die
 fi
 
+# P13-T1: the panel's focus containment (moved to checks/p13_gates.sh by the
+# size law; the WebUI toolchain above type-checks the DOM half).
+p13_t1_panel_gates
+
 echo "== P7: CSP lint — no runtime network/eval in ui/** + commands/** =="
 "$PY" tools/csp_lint.py
 

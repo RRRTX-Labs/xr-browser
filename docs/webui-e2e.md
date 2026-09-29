@@ -299,3 +299,54 @@ Dev-only enforcement and the both-flag matrix ride the P11-T6
 covered by `tools/shield_state_check.py` (every enum value rendered) and
 `tools/attention_check.py` (cosmetic adds rows and nothing else — no
 notification/badge/modal vocabulary).
+
+## P13 stage: the panel (T1 frame)
+
+The accountability panel is one panel: 360 px, docked to the inline end of the
+window (right in LTR, left in RTL — logical properties only,
+`tools/rtl_lint.py`), keyboard-first, modal. T1 ships the FRAME; the tabs and
+their data surfaces land in T2–T7 and are registered declaratively into its
+slots, so this section covers the frame's two states and the keyboard laws.
+
+### The two states
+
+| state | what the user sees | what is asserted |
+|---|---|---|
+| `closed` | nothing: the frame renders `nothing` at all (no hidden-but-focusable ghost, no `display:none` copy of the panel in the DOM) — `ui/panel/panel-frame.ts` `render()` returns `nothing` while `open` is false. | `PANEL_STATES` = `['closed','open']`; the closed half is structural (there is no element to tab into). |
+| `open` | the frame: heading, close control, tab strip (empty state: `IDS_XR_PANEL_EMPTY` in an `aria-live="polite"` region — an empty panel SAYS it is empty), body slot, footer slot. `role="dialog"`, `aria-modal="true"`, `aria-labelledby` → the frame's own title id. | focus containment (below), the empty-state live region, and `aria-modal` presence. |
+
+### Keyboard model (all of it testable, none of it pointer-only)
+
+* **Open** — the host sets `open`; the frame records the element focus was on
+  (the *opener*) and focuses itself. If the host moves focus afterwards, the
+  next Tab is still contained: the re-open race is covered by a test.
+* **Tab / Shift+Tab** — containment law in `ui/panel/focus-trap.ts`: Tab from
+  the last focusable inside wraps to the first, Shift+Tab from the first wraps
+  to the last, and any Tab that would land OUTSIDE the frame is intercepted. A
+  Tab that stays inside is left to the browser (the trap never fights the tab
+  order it does not need to).
+* **Escape** — closes: the frame dispatches a cancelable
+  `panel-close-request` (the host owns `open`) and, on close, **restores focus
+  to the opener**.
+* **Focus is visible** — `:focus-visible` outline on the frame and its close
+  control (the a11y lint's rule, applied to this view too).
+
+### What runs where (and what is honestly NOT-RUN here)
+
+* `build/webui/panel-tests.sh` — bundles the containment core with the pinned
+  toolchain into a scratch dir OUTSIDE both repos, then runs
+  `ui/panel/tests/focus-trap.test.mjs` under `node:test`: wrap, intercept,
+  re-open race, leave-inside-alone, Escape, focusability filtering, a twelve-tab
+  invariant in both directions, and the **planted-leak A/B** (the same
+  invariant, with containment bypassed, must report escapes).
+* `build/webui/panel-tests.sh --plant-leak` — plants the leak the phase brief
+  names (containment deleted in a scratch copy) and requires the suite to
+  REDDEN. Registered as a negative (`tools/negatives/p13_t1.sh`), so a trap
+  whose test cannot fail is a gate failure, not a quiet pass.
+* `tools/negatives/p13_t1.sh` also runs the *leaked tree* through the lane and
+  requires the lane to fail, and asserts the clean sources pass (control).
+* **NOT-RUN here (method):** real-browser focus behaviour — tab order with real
+  shadow boundaries, OS-level screen-reader announcements, and the 360 px
+  geometry against real text metrics. Method: the P7 farm rig (HG-31) opens
+  `xr://settings`, sets `open=true`, and runs the two states above; the panel's
+  open-latency method is `docs/qa/browser-harness.md#panel-open-150ms` (T7).

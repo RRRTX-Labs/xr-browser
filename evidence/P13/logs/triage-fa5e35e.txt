@@ -1,0 +1,19 @@
+P13-P0-C — the law commit's hosted verdict (fa5e35e), read 2026-09-29.
+Unauthenticated tools/ci_triage.py cannot resolve right now (the shared 60/h
+per-IP core quota is exhausted by this sandbox's own polling), so this
+transcript is the authenticated read of the same PUBLIC endpoints; the
+annotation text is verbatim.
+
+$ curl -u "x-access-token:***" /repos/RRRTX-Labs/xr-browser/actions/runs/36612292945/jobs
+  job 109556480517 governance: completed/failure
+
+$ curl .../check-runs/109556480517/annotations
+  [warning] .github:2: Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+  [failure] .github:98: Process completed with exit code 1.
+  [failure] .github:96: governance: evidence/P12/evidence.json - /home/runner/work/xr-browser/xr-browser/evidence/P12/evidence.json: phase records head f96949914955, but no ci-run row carries a matching head_sha for workflow 'governance' (T0-U2) — a final-CI claim must point at the phase's own head, not an older one
+  [notice] .github:1: "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+
+Reading: the lane now fails on EXACTLY ONE finding — the P12 bundle's
+missing final-CI row, which is the honest report of the upstream outage
+recorded in evidence/P12/report.md section 10. The three earlier P13 heads
+and f969499 are documented in the same section.
