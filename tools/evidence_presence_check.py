@@ -51,6 +51,16 @@ LEGACY_EXEMPT_MAX_PHASE = 2
 # over-inclusive silence, so this matches a phase token anywhere in the
 # subject, case-insensitively.
 _PHASE_TOKEN_RE = re.compile(r"\bP(\d{1,3})\b", re.IGNORECASE)
+# Phase numbers start at 1 — the plan's own headings do (docs/plans/
+# XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md:553 "### Phase P1"), and
+# evidence/ has always held P1..P13. `P0` is the *blocker-label* namespace
+# inside a phase brief (P0-A…P0-D, mandated as commit subjects like
+# "P13-P0-A: …"), and this law measured today (2026-09-29) demanded an
+# evidence/P0/ bundle for it. Requiring a bundle for a label that denotes
+# tasks inside P13 would be a false positive, and the fix is a bound on what
+# a phase number CAN be, not a hand-listed exemption: P13 must still ship
+# evidence/P13/ (it does, from its first commit).
+PHASE_MIN_NUMBER = 1
 REQUIRED_FILES = ("evidence.json", "human-gates.md")
 
 
@@ -78,7 +88,9 @@ def phases_in_history(repo: Path, extra_repos: tuple[Path, ...] = ()) -> list[in
     for r in (repo, *extra_repos):
         for line in _subjects(r):
             for m in _PHASE_TOKEN_RE.finditer(line):
-                out.add(int(m.group(1)))
+                n = int(m.group(1))
+                if n >= PHASE_MIN_NUMBER:
+                    out.add(n)
     return sorted(out)
 
 

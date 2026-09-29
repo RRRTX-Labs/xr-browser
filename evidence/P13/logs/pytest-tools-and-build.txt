@@ -1,0 +1,3 @@
+SKIP: SKIP (tool absent: faketime) — needed for: the ambient-clock half of the date-invariance law (P12-T0-a, re-homed from a pip pin by P12-CLOSE T0-U1 / ADR-0047): an LD_PRELOAD displacement proving no gate verdict reads the wall calendar. Absent => the --as-of half is the verdict with the limitation stated; --require-ambient-probe is passed ONLY by the scheduled governance lane that installs it; install hint: apt-get install -y faketime (Debian/Ubuntu universe)
+5 external tool(s) absent on this host: the dependent tests SKIP with the reason above (never a silent pass).
+747 passed, 1 skipped in 241.42s (0:04:01)

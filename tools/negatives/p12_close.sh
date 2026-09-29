@@ -206,11 +206,16 @@ JSON
   # structural rule offline (the resolver SKIPs visibly, never a fail).
   u2_bundle '["governance","core-hardening"]' \
     ',{"id":"F4","dod":"hosted","status":"VERIFIED","source":"ci-run","ci_run":34905296564,"ci_job":104180441172,"workflow":"governance","head_sha":"'$PHASE_HEAD'","evidence":["logs/x.txt"]},{"id":"F5","dod":"hosted","status":"VERIFIED","source":"ci-run","ci_run":34905296809,"ci_job":104180441587,"workflow":"core-hardening","head_sha":"'$PHASE_HEAD'","evidence":["logs/x.txt"]}'
-  if "$PY" tools/evidence_check.py --repo "$B" --strict --only P12 \
-       >/dev/null 2>&1; then
+  # P13-P0-C: the same fixture must satisfy the finality law too (it already
+  # carries head + ci_claimed + same-head rows; this adds report.md).
+  neg_finality_props "$B" P12 "$PHASE_HEAD"
+  local out rc
+  out="$("$PY" tools/evidence_check.py --repo "$B" --strict --only P12 2>&1)" && rc=0 || rc=$?
+  if [ "$rc" -eq 0 ]; then
     echo "ok: T0-U2 positive control (same-head rows for both workflows pass offline)"
   else
     echo "NEGATIVE-FAIL: T0-U2 positive control must pass with same-head rows for every claimed workflow"
+    printf '%s\n' "$out" | sed 's/^/    | /'
     NEG_FAILURES=$((NEG_FAILURES + 1))
   fi
 }

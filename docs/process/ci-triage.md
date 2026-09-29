@@ -54,6 +54,32 @@ and exits **77**. `tools/fixtures/ci_triage/` holds recordings of the red SHA
 jobs), captured unauthenticated on 2026-09-29; they are trimmed to the fields
 the tool reads and exist so the self-test can prove the reader works offline.
 
+## It goes through the chokepoint, because the gate says so
+
+`tools/ci_triage.py` does **not** call `urllib` itself. Every request goes
+through `build/upstream/fetch.py` (`fetch.http_get`, and the base URL is
+`fetch.GITHUB_API` — not a second literal copy of the network surface), because
+`tools/fetch_allowlist_check.py` enforces exactly that: *all* network access in
+this repository flows through the chokepoint, whose allowlist is
+`chromium.googlesource.com`, `commondatastorage.googleapis.com`,
+`chromiumdash.appspot.com`, `api.github.com`, `static.crates.io`, `pypi.org`.
+
+This is not a style preference; it was measured. The first draft of this tool
+called `urllib.request.urlopen` directly, and the phase's own gate caught it —
+reproduced locally before any fix:
+
+```
+FAIL: tools/ci_triage.py: socket/HTTP call outside the chokepoint: urllib.request.urlopen
+FAIL: tools/ci_triage.py: URL literal in code outside the chokepoint (route through fetch.py): https://api.github.com
+FAIL: fetch_allowlist_check (267 files scanned; chokepoint build/upstream/fetch.py)
+```
+
+That lane runs inside `tools/run_checks.sh`, which is why the P0-B push
+(`ea996d9`) failed at the "Governance checks" step with `exit code 1`. The fix
+is the one the law wants: route through `fetch.py`, keep no second copy of the
+URL, and let the chokepoint keep its allowlist, redirect check and retry policy
+in one place.
+
 ## So the reason arrives by itself
 
 Since P13-P0B every gate step starts with `. tools/ci_capture.sh <lane>`

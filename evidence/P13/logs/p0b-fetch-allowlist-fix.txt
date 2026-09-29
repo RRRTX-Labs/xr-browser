@@ -1,0 +1,21 @@
+P13-P0-B follow-up: the egress-chokepoint lane caught the first draft.
+
+$ python3 tools/fetch_allowlist_check.py   # BEFORE the fix (ea996d9 tree)
+FAIL: tools/ci_triage.py: socket/HTTP call outside the chokepoint: urllib.request.urlopen
+FAIL: tools/ci_triage.py: URL literal in code outside the chokepoint (route through fetch.py): https://api.github.com
+FAIL: fetch_allowlist_check (267 files scanned; chokepoint build/upstream/fetch.py)
+
+Why this is the hosted red of ea996d9: that lane runs inside tools/run_checks.sh, which is
+the "Governance checks" step (the step the annotation names, exit code 1). Reproduced
+locally, so the fix is not a guess.
+
+$ python3 tools/fetch_allowlist_check.py   # AFTER routing ci_triage through fetch.py
+PASS: fetch_allowlist_check (267 files scanned; chokepoint build/upstream/fetch.py)
+
+$ python3 tools/ci_triage.py --self-test
+PASS: ci_triage self-test (red fixture surfaced exit code 126 + the failing step; a missing fixture degrades to BLOCKED-NET, never to a guess)
+
+$ python3 tools/ci_triage.py --offline tools/fixtures/ci_triage --sha 8db682f | head -3
+ci-triage: repo=RRRTX-Labs/xr-browser sha=8db682f
+  check-run compat: completed/failure
+  check-run treadmill: completed/failure

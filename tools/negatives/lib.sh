@@ -113,6 +113,67 @@ neg_finish() {
 #      fail — the exact bug class this phase exists to eliminate);
 #   2. the case count is DERIVED: dropping a case file changes N;
 #   3. a case file that registers nothing is an error.
+
+# --- P13-P0-C: make a fixture bundle satisfy the phase-finality law ----------
+# Fixtures exist to test ONE law each, but since P13-P0-C a bundle whose phase
+# dir is P12+ is also judged as FINAL (state absent => final): it needs a
+# report.md, a declared phase_head and a same-head ci-run row per claimed
+# workflow. This helper adds exactly those, so a positive control keeps
+# proving its own rule instead of failing on the new one. It never edits the
+# rows a case is testing.
+# Fixtures may only cite runs whose head matches the head they record: the
+# resolver checks the JOB's conclusion AND the run's head against the bundle's
+# recorded commits, so a fixed run id is only safe for the head it ran on.
+# (head prefix -> run, job) — both verified green + head-matched on 2026-09-29.
+neg_ci_pair_for_head() {   # <head> -> "run job"
+  case "$1" in
+    8fadb0ee*) echo "34615191984 103315238760" ;;   # core-hardening server-conformance
+    *)         echo "34905296564 104180441172" ;;   # governance at 7922648a
+  esac
+}
+
+neg_finality_props() {   # <repo-root> <phase-dir> [head]
+  local R="$1" PH="$2" head="${3:-0000000000000000000000000000000000000000}"
+  local CI_PAIR; CI_PAIR="$(neg_ci_pair_for_head "$head")"
+  mkdir -p "$R/evidence/$PH/logs"
+  [ -f "$R/evidence/$PH/human-gates.md" ] || printf 'fixture human gates\n' > "$R/evidence/$PH/human-gates.md"
+  [ -f "$R/evidence/$PH/logs/x.txt" ] || printf 'transcript\n' > "$R/evidence/$PH/logs/x.txt"
+  # shellcheck disable=SC2086
+  "$PY" - "$R" "$PH" "$head" $CI_PAIR <<'PYEOF'
+import json, pathlib, re, sys
+R, PH, head = sys.argv[1], sys.argv[2], sys.argv[3]
+CI_RUN, CI_JOB = sys.argv[4], sys.argv[5]
+d = pathlib.Path(R) / "evidence" / PH
+f = d / "evidence.json"
+doc = json.loads(f.read_text())
+if head == "0000000000000000000000000000000000000000" or not head:
+    # Prefer a head the bundle ALREADY records (pin/repos): the ci-run row's
+    # head_sha must agree with both phase_head and the recorded commit set, or
+    # the resolver's head check would redden the fixture for the wrong reason.
+    blob = " ".join(str(doc.get(k, "")) for k in ("pin", "repos"))
+    m = re.search(r"\b[0-9a-f]{7,40}\b", blob, re.I)
+    head = m.group(0) if m else head
+doc.setdefault("phase_head", head)
+doc.setdefault("ci_claimed", ["governance"])
+head = doc["phase_head"]
+rows = doc.get("dod_rows")
+if not isinstance(rows, list):
+    rows = []
+if not any(r.get("source") == "ci-run"
+           and str(r.get("head_sha", "")).lower().startswith(head[:7].lower())
+           for r in rows if isinstance(r, dict)):
+    rows.append({"id": f"{PH}-FIXTURE-CI", "dod": "fixture head coverage",
+                 "status": "VERIFIED", "source": "ci-run",
+                 "ci_run": int(CI_RUN), "ci_job": int(CI_JOB),
+                 "workflow": "governance", "head_sha": head,
+                 "evidence": ["logs/x.txt"]})
+doc["dod_rows"] = rows
+f.write_text(json.dumps(doc, indent=1))
+(d / "report.md").write_text("\n".join(f"## {i}. fixture section"
+                                       for i in range(1, 13)))
+PYEOF
+}
+
 neg_self_test() {
   local f before
 

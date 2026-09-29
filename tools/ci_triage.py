@@ -28,18 +28,46 @@ Stdlib only. Exit: 0 = triaged, nothing failing · 1 = failing check-run(s) foun
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import re
 import sys
-import urllib.error
-import urllib.request
 from pathlib import Path
 
 EXIT_PASS, EXIT_FAIL, EXIT_USAGE, EXIT_BLOCKED = 0, 1, 2, 77
-API = "https://api.github.com"
 RUN_ID_RE = re.compile(r"/actions/runs/(\d+)")
-UA = {"User-Agent": "xr-browser-ci-triage/1 (P13-P0-B; stdlib urllib)",
-      "Accept": "application/vnd.github+json"}
+
+
+def _fetch_module():
+    """Load build/upstream/fetch.py — the tree's ONLY network path (P9-T12).
+
+    tools/fetch_allowlist_check.py fails any HTTP call outside that chokepoint,
+    which is correct: the first draft of this tool called urllib directly and
+    the gate caught it (reproduced locally before the fix:
+    `FAIL: tools/ci_triage.py: socket/HTTP call outside the chokepoint:
+    urllib.request.urlopen`). Everything here therefore goes through
+    fetch.http_get, which also gives this tool the allowlist, the redirect
+    check and the retry/backoff policy for free.
+    """
+    root = Path(__file__).resolve().parents[1]
+    saved = sys.modules.get("_common")
+    cspec = importlib.util.spec_from_file_location("_common",
+                                                   root / "build" / "_common.py")
+    cmod = importlib.util.module_from_spec(cspec)
+    sys.modules["_common"] = cmod
+    try:
+        cspec.loader.exec_module(cmod)
+        fspec = importlib.util.spec_from_file_location(
+            "upstream_fetch", root / "build" / "upstream" / "fetch.py")
+        fmod = importlib.util.module_from_spec(fspec)
+        sys.modules["upstream_fetch"] = fmod
+        fspec.loader.exec_module(fmod)
+        return fmod
+    finally:
+        if saved is None:
+            sys.modules.pop("_common", None)
+        else:
+            sys.modules["_common"] = saved
 
 
 class BlockedNet(RuntimeError):
@@ -64,19 +92,22 @@ class Fetcher:
                     f"answer for {path}; a fixture-backed run must not guess")
             return json.loads(candidate.read_text(encoding="utf-8"))
         try:
-            req = urllib.request.Request(API + path, headers=UA)
-            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
-                return json.loads(resp.read().decode("utf-8"))
-        except urllib.error.HTTPError as exc:
-            if exc.code in (401, 403, 404, 429):
+            fetch = _fetch_module()
+            # The base URL is the chokepoint's own constant — a literal here
+            # would be a second, unreviewed copy of the network surface.
+            raw = fetch.http_get(fetch.GITHUB_API + path,
+                                 timeout=int(self.timeout))
+        except Exception as exc:  # FetchError (incl. HTTP 403/404), import failure
+            msg = str(exc)
+            code = re.search(r"HTTP (\d{3})", msg)
+            if code and code.group(1) in ("401", "403", "404", "429"):
                 raise BlockedNet(
-                    f"BLOCKED-NET (HTTP {exc.code} from {path}) — the endpoint "
-                    "refused this request; see docs/process/ci-triage.md for what "
-                    "is public and what needs admin") from exc
-            raise BlockedNet(f"BLOCKED-NET (HTTP {exc.code} from {path})") from exc
-        except Exception as exc:  # URLError, timeout, DNS, TLS …
-            raise BlockedNet(f"BLOCKED-NET ({type(exc).__name__}: {exc}) — no route "
-                             f"to api.github.com for {path}") from exc
+                    f"BLOCKED-NET (HTTP {code.group(1)} from {path}) — the "
+                    "endpoint refused this request; see docs/process/ci-triage.md "
+                    "for what is public and what needs admin") from exc
+            raise BlockedNet(f"BLOCKED-NET ({type(exc).__name__}: {msg}) — no "
+                            f"readable route to api.github.com for {path}") from exc
+        return json.loads(raw.decode("utf-8"))
 
 
 def fetch_check_runs(f: Fetcher, repo: str, sha: str) -> list[dict]:

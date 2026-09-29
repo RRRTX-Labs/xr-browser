@@ -1,0 +1,182 @@
+{
+ "phase": "P13",
+ "state": "interim",
+ "generated": "2026-09-29 (P13-P0-C part 1: the anchor half, so the P12 refresh can cite a green head)",
+ "plan": "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
+ "plan_sha256": "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b",
+ "source_labels": [
+  "local-run",
+  "fixture",
+  "ci-run",
+  "UNVERIFIED"
+ ],
+ "verdict_vocabulary": [
+  "VERIFIED",
+  "HUMAN-GATED",
+  "SIMULATED",
+  "BLOCKED",
+  "PARTIAL",
+  "NOT-BY-DESIGN"
+ ],
+ "not_done_by_design": [
+  "The phase is in flight: state is interim by declaration (docs/state/phase-base.json records phase P13), so *-PENDING-* rows name work that has not landed yet. They are resolved or corrected by appended rows as each item lands, and the state flips to final at the closing commit (the P13-P0-C law, tools/evidence_finality.py).",
+  "Rendered panel/browser results are NOT-RUN by construction in this sandbox (no gn/ninja, no Chromium checkout, no browser): every such claim is labelled NOT-RUN (method: docs/qa/browser-harness.md) rather than approximated.",
+  "The breakage queue's live half is HUMAN-GATED (filing is a human act — HG-33 in evidence/P13/human-gates.md); the fixture queue is labelled fixture in its path and in the tool's output."
+ ],
+ "human_gates": {
+  "path": "evidence/P13/human-gates.md",
+  "note": "authored 2026-09-29 by the P13 agent; one row per act this sandbox cannot perform"
+ },
+ "repos": {
+  "xr-browser": "P13 base 8db682f (P12 final); P0-A 9979cd0; P0-B ea996d9; this bundle lands with the P0-C anchor commit",
+  "xr-core": "f7c683d7884a659dab397ca01884b73b55e567da (P12-T6 pin; DEPS.xr_core_rev matches origin HEAD)"
+ },
+ "dod_rows": [
+  {
+   "id": "P13-P0-A",
+   "dod": "Index modes 100755 restored for the two gate entry points; the class made impossible by a mode gate over every workflow `run:` first-token repo path (interpreter invocations exempt); the in-place rewriter preserves the mode; a CI-identical local invocation exists and is documented.",
+   "status": "VERIFIED",
+   "source": "local-run",
+   "evidence": [
+    "tools/entrypoint_mode_check.py",
+    "tools/wfrun.py",
+    "tools/inplace.py",
+    "tools/negatives/p13_p0a.sh",
+    "tools/tests/test_entrypoint_mode.py",
+    "tools/tests/test_inplace_mode.py",
+    "docs/process/ci-invocation.md",
+    "logs/p0a-entrypoint-modes.txt"
+   ],
+   "notes": "Commit 9979cd0. Verified locally: pytest 9 passed across the two new test files; negatives N=4 rejected as expected; the repo check reports 5 workflows / 15 direct entry points / 38 interpreter-exempt; the size law passes. The CI run at 9979cd0 was RED, and the reason matters: the annotation read \"Process completed with exit code 1.\" at .github:39 with failing step \"Governance checks\" — i.e. the 126 is gone and a real gate failure surfaced. That failure was mine: docs/process/ci-invocation.md used a banned vocabulary word (tools/vocab_lint.py), reproduced locally at work/p13-p0a-localgate.log:18. See logs/triage-9979cd0.txt."
+  },
+  {
+   "id": "P13-P0-B",
+   "dod": "tools/ci_triage.py (stdlib-only, --json, --offline fixtures) names which endpoints are public and degrades to BLOCKED-NET, never to a guess; every workflow gate step emits ::error::<lane>: <first failing gate + reason>; a unit test pins the emitted line format.",
+   "status": "VERIFIED",
+   "source": "local-run",
+   "evidence": [
+    "tools/ci_triage.py",
+    "docs/process/ci-triage.md",
+    "tools/gate_annotation.py",
+    "tools/ci_capture.sh",
+    "tools/tests/test_gate_annotation.py",
+    "tools/tests/test_ci_triage.py",
+    "tools/fixtures/ci_triage",
+    "logs/triage-8db682f-red.txt",
+    "logs/p0b-fetch-allowlist-fix.txt"
+   ],
+   "notes": "Commit ea996d9. Measured live, unauthenticated: commits/<sha>/check-runs 200, check-runs/<id>/annotations 200, actions/runs/<id>/jobs 200, actions/runs/<id> 200, actions/runs/<id>/logs 403 (docs/process/ci-triage.md carries the table and both endpoint shapes). 49 gate steps wired with the capture preamble. The push at ea996d9 was RED on the negatives lane: the new law's requirements made two PRE-EXISTING strict-fixture positive controls red; reproduced locally, fixed in the next commit, transcript logs/triage-ea996d9.txt. Follow-up in the next commit: the push at ea996d9 was RED for a REAL reason, reproduced locally rather than guessed — tools/fetch_allowlist_check.py failed the tree because ci_triage.py called urllib directly (\"socket/HTTP call outside the chokepoint\"). The tool now routes every request through build/upstream/fetch.py and takes its base URL from that module's own constant; that lane is PASS. The hosted annotation for ea996d9 reads \"Process completed with exit code 1.\" at .github:39, failing step \"Governance checks\" — the same step, and the same reason the brief's failure condition 1 anticipated but for a cause this sandbox can show."
+  },
+  {
+   "id": "P13-P0-C",
+   "dod": "The state: interim|final law with four registered negatives; --require-phase-final wired into the gate; evidence/P12 refreshed to its true end state (append-only corrections, ci-run rows at the recorded head, 12-section report.md); evidence/P13 present in the same form.",
+   "status": "BLOCKED-PENDING-LAW",
+   "source": "local-run",
+   "evidence": [
+    "tools/evidence_finality.py",
+    "tools/evidence_strict.py",
+    "logs/p0a-presence-law.txt"
+   ],
+   "notes": "The law, its four negatives (plus the in-flight and presence-law controls), the --require-phase-final wiring and the P12 refresh land in the commit that follows this one; this commit carries the half that must exist FIRST for that commit's P12 ci-run rows to cite a green head: the presence-law P0 bound (a blocker label is not a phase) and the strict-fixture compatibility, plus this bundle."
+  },
+  {
+   "id": "P13-P0-D",
+   "dod": "The treadmill's nightly red root-caused (real drift vs 49fcf47's canary exit-contract change) with the local reproduction of the four exact treadmill steps; compat-beta-parity and sast shown to be propagation-only; no canary weakened; genuine drift recorded in the treadmill ledger.",
+   "status": "BLOCKED-PENDING-P0D",
+   "source": "fixture",
+   "evidence": [
+    "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"
+   ]
+  },
+  {
+   "id": "P13-T1",
+   "dod": "Panel frame: 360px right-docked, keyboard-first, real focus-trap test with a planted leak that reddens; docs/webui-e2e.md carries both states.",
+   "status": "BLOCKED-PENDING-T1",
+   "source": "fixture",
+   "evidence": [
+    "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"
+   ]
+  },
+  {
+   "id": "P13-T2",
+   "dod": "Site tab: TLS/cert, trust dial, per-site scopes through the single scope object, permissions summary, isolation card from P4's measured table, blocked-by-category with a why drill consuming docs/shield/reason-codes.json, typed fallback for unknown codes, cosmetic surface rows.",
+   "status": "BLOCKED-PENDING-T2",
+   "source": "fixture",
+   "evidence": [
+    "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"
+   ]
+  },
+  {
+   "id": "P13-T3",
+   "dod": "Observatory: ring to a virtualized list (2k cap + windowing math), filters, JSON/CSV export with the redaction contract (no query params by default; fuzzed against smuggling) and byte-parity across backends.",
+   "status": "BLOCKED-PENDING-T3",
+   "source": "fixture",
+   "evidence": [
+    "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"
+   ]
+  },
+  {
+   "id": "P13-T4",
+   "dod": "Breakage report: redacted context only, schema-enforced, on the P10 channel, local fixture queue labelled fixture, live queue HUMAN-GATED with a written drill.",
+   "status": "BLOCKED-PENDING-T4",
+   "source": "fixture",
+   "evidence": [
+    "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"
+   ]
+  },
+  {
+   "id": "P13-T5",
+   "dod": "Update-available UX: T1 tier only, no auto-update implication, --as-of only.",
+   "status": "BLOCKED-PENDING-T5",
+   "source": "fixture",
+   "evidence": [
+    "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"
+   ]
+  },
+  {
+   "id": "P13-T6",
+   "dod": "What-would-be-sent viewer: a single serializer source with a planted-field test.",
+   "status": "BLOCKED-PENDING-T6",
+   "source": "fixture",
+   "evidence": [
+    "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"
+   ]
+  },
+  {
+   "id": "P13-T7",
+   "dod": "Panel perf: open <=150ms, ring <=16fps; budget rows only via build/qa/perf/gen_perf_budgets.py --check; the trend rig never MET; browser halves NOT-RUN with methods.",
+   "status": "BLOCKED-PENDING-T7",
+   "source": "fixture",
+   "evidence": [
+    "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"
+   ]
+  },
+  {
+   "id": "P13-CONTRACTS",
+   "dod": "breakage-report-v1 + panel-tab-registration-v1 as schema + vectors + docs, registered post-freeze, ADRs as proposals; FROZEN.yaml untouched.",
+   "status": "BLOCKED-PENDING-CONTRACTS",
+   "source": "fixture",
+   "evidence": [
+    "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"
+   ]
+  },
+  {
+   "id": "P13-EVIDENCE",
+   "dod": "evidence/P13/{evidence.json,report.md,human-gates.md,logs} complete, state final, with same-head ci-run rows for every workflow that ran on the recorded head.",
+   "status": "BLOCKED-PENDING-CLOSE",
+   "source": "fixture",
+   "evidence": [
+    "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"
+   ]
+  },
+  {
+   "id": "P13-REPORT",
+   "dod": "The 12-section P13 report with section 10 carrying the CI state before any done claim.",
+   "status": "BLOCKED-PENDING-REPORT",
+   "source": "fixture",
+   "evidence": [
+    "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"
+   ]
+  }
+ ]
+}

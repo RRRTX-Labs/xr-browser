@@ -1,0 +1,14 @@
+P13-P0-B push (ea996d9) — triaged live 2026-09-29 (public endpoints):
+  check-run governance: completed/failure, failing step 9 "Governance checks",
+  annotation "[failure] .github:39: Process completed with exit code 1."
+  (the 126 is gone: the mode fix worked and a real gate failure surfaced)
+  /actions/runs/<id>/logs: HTTP 403 (admin-only; documented in docs/process/ci-triage.md)
+Local root cause (reproduced, not guessed): the P0-C finality law's new
+requirements made two PRE-EXISTING strict-fixture positive controls red
+(tools/negatives/p11_t0d.sh hosted-claim control, tools/negatives/p12_close.sh
+T0-U2 control). Fixed in the commit that carries this transcript:
+  - tools/negatives/lib.sh: neg_finality_props() makes a fixture bundle satisfy
+    the finality law, and neg_ci_pair_for_head() keeps a fixture's cited run
+    head-matched (the resolver checks the JOB conclusion AND the run's head);
+  - both controls now print their own evidence on failure instead of hiding it.
+Reproduction: tools/run_negatives.sh (full battery) — transcript below.

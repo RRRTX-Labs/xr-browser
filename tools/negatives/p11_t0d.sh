@@ -48,10 +48,16 @@ JSON
  ]
 }
 JSON
-  if "$PY" tools/evidence_check.py --repo "$R" --strict --only P12 >/dev/null 2>&1; then
+  # P13-P0-C: the fixture must also satisfy the finality law (report.md, a
+  # declared head, a same-head ci-run row) so this control still proves rule d.
+  neg_finality_props "$R" P12
+  local out rc
+  out="$("$PY" tools/evidence_check.py --repo "$R" --strict --only P12 2>&1)" && rc=0 || rc=$?
+  if [ "$rc" -eq 0 ]; then
     echo "ok: hosted-claim positive control (appended correction row resolves rule d)"
   else
     echo "NEGATIVE-FAIL: hosted-claim positive control must pass once the correction row is appended"
+    printf '%s\n' "$out" | sed 's/^/    | /'
     NEG_FAILURES=$((NEG_FAILURES + 1))
   fi
 }
