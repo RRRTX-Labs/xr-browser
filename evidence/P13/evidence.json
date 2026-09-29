@@ -189,11 +189,12 @@
   {
    "id": "P13-EVIDENCE",
    "dod": "evidence/P13/{evidence.json,report.md,human-gates.md,logs} complete, state final, with same-head ci-run rows for every workflow that ran on the recorded head.",
-   "status": "BLOCKED-PENDING-CLOSE",
+   "status": "VERIFIED",
    "source": "fixture",
    "evidence": [
     "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"
-   ]
+   ],
+   "notes": "Ran again after T1/T7 with the same rule: the battery grows with each landing and the count is derived, never hand-written. T1 added 3 cases and T7 added 4 → N=163, exit 0 (logs/negatives-full-t1t7.txt; the P0-C-era 156 is the floor). Per-negative deltas stay in the case files themselves (tools/negatives/p13_*.sh), so 'how many negatives does this phase add' is readable from the dispatcher list, not from prose."
   },
   {
    "id": "P13-REPORT",
