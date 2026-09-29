@@ -4,7 +4,9 @@
 # Register-Change trailer check (CI passes the PR base; default: full history).
 # Every check must pass (exit 0). Exit 1 = gate failed. --keep-going runs all;
 # --via-ci-invocation re-execs the gate exactly as the workflow does
-# (direct exec + range) — docs/process/ci-invocation.md.
+# (direct exec + range); --phase-final is the CLOSING invocation: the phase the
+# tree declares in flight must be final too (P13-P0-C). Docs:
+# docs/process/ci-invocation.md.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PY="${PYTHON:-python3}"
@@ -68,12 +70,9 @@ echo "== test suites =="
 p11_size_law
 p11_vendor_gates
 
-echo "== evidence bundles (contract: docs/contracts/evidence-bundle-v1.md) =="
-"$PY" tools/evidence_check.py
-# strict: auto-covers every bundle newer than the P2 legacy exemption (P3+);
-# P1/P2 stay exempt per the HG-25 ruling (no hardcoded list to forget, T0).
-# T0-U2: phase_head bundles print both heads compared (`head-match:` lines).
-"$PY" tools/evidence_check.py --strict
+# P13-P0-C: the evidence-bundle lane moved into tools/checks/p13_gates.sh by
+# the size law; --phase-final is its closing mode (see that function).
+p13_evidence_bundles
 p11_caps_gates
 
 echo "== spike: every file:line citation re-verified at the pin =="

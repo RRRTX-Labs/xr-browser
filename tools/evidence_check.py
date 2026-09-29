@@ -89,10 +89,11 @@ _OPEN_STATUS_PREFIXES = ("PARTIAL", "BLOCKED", "HUMAN-GATED")
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 # noqa: E402 — sibling tool modules (evidence_ci holds the T0-U2 head law).
-from evidence_ci import CI_RESOLVER, head_coverage_findings, hosted_claim_findings
+from evidence_ci import CI_RESOLVER
 # P12-T0-b: presence is a separate law from validity — see the sibling module.
+import evidence_finality as fin  # noqa: E402 - P13-P0-C finality law
 import evidence_presence_check as epc  # noqa: E402
-import runner_caps  # noqa: E402 - sibling tool module (P11-T0-d)
+from evidence_strict import strict_phase_findings  # noqa: E402 - T12 laws
 
 def strict_default_phases(root: Path) -> list[str]:
     """Phase dirs strict mode auto-covers when no explicit --only is given.
@@ -172,7 +173,8 @@ def _bundle_commits(doc: dict[str, Any]) -> set[str]:
 
 
 
-def check_file(path: Path, repo: Path, strict: bool) -> list[str]:
+def check_file(path: Path, repo: Path, strict: bool,
+               in_flight: str | None = None) -> list[str]:
     """Return a list of failure strings (empty == pass)."""
     fails: list[str] = []
     try:
@@ -232,61 +234,17 @@ def check_file(path: Path, repo: Path, strict: bool) -> list[str]:
                     fails.append(f"{path}: row {rid} cites missing artifact {c!r}")
 
     phase_num = _phase_number(path.parent.name)
-    if strict and phase_num is not None and phase_num >= T12_MIN_PHASE:
-        # T0-U2: phase_head bundles cite a same-head ci-run row per workflow.
-        fails.extend(head_coverage_findings(doc, rows, path))
-        # (b) a PARTIAL/BLOCKED/HUMAN-GATED row must be explained: the bundle
-        # carries a non-empty not_done_by_design (P8 shipped [] with partial
-        # work — that hole closes here).
-        if any(_is_open_status(str(r.get("status", ""))) for r in rows):
-            ndbd = doc.get("not_done_by_design")
-            if not isinstance(ndbd, list) or not ndbd:
-                fails.append(f"{path}: a PARTIAL/BLOCKED/HUMAN-GATED row "
-                             f"requires a non-empty not_done_by_design list "
-                             f"(P9-T12)")
-        # (a) ci-run rows: ids required; --strict resolves them machine-side.
-        bundle_commits = _bundle_commits(doc)
-        for row in rows:
-            if row.get("source") != CI_RUN_LABEL:
-                continue
-            rid = row.get("id", "<no id>")
-            run_id, job_id = row.get("ci_run"), row.get("ci_job")
-            if not run_id or not job_id:
-                fails.append(f"{path}: ci-run row {rid} must carry ci_run "
-                             f"and ci_job ids (P9-T12)")
-                continue
-            verdict = CI_RESOLVER(int(run_id), int(job_id), bundle_commits)
-            if verdict is True:
-                continue
-            if verdict is False:
-                fails.append(f"{path}: ci-run row {rid} run {run_id}/"
-                             f"{job_id} is not certifiably green (P9-T12)")
-            else:
-                print(f"SKIP: ci-run verification for {rid}: {verdict}",
-                      file=sys.stderr)
-        # (c) a local-run row must name its logs/* transcript.
-        for row in rows:
-            if row.get("source") != "local-run":
-                continue
-            rid = row.get("id", "<no id>")
-            cites = [str(e).strip() for e in (row.get("evidence") or [])
-                     if isinstance(e, str) and PATHISH_RE.match(str(e).strip())]
-            if not any(c.startswith("logs/") for c in cites):
-                fails.append(f"{path}: local-run row {rid} must cite a "
-                             f"logs/* transcript (P9-T12)")
-        # (d) P11-T0-d: a VERIFIED hosted claim needs a ci-run citation —
-        # on the row itself or on an appended correction row ("corrects").
-        fails.extend(hosted_claim_findings(rows, path))
-        # (e) P11-T0-d: a BLOCKED-* row whose blocker tool the capabilities
-        # ledger (hosted, run-cited) or this sandbox proves PRESENT is stale.
-        caps = runner_caps.load_caps(repo)
-        if caps is None:
-            print(f"SKIP: runner-capabilities ledger absent at "
-                  f"{repo / runner_caps.CAPS_RELPATH} — rule (e) "
-                  f"(stale-BLOCKED) inert for this run; visible, never "
-                  f"silent", file=sys.stderr)
-        else:
-            fails.extend(runner_caps.stale_blocked_findings(rows, caps, path))
+    if strict:
+        # P13-P0-C: the phase-finality law (state interim|final, the final
+        # vocabulary, the declared head, the claimed workflows, report.md).
+        # Scoped to the newest phases by the module itself.
+        fails.extend(fin.finality_findings(doc, rows, path, repo,
+                                          in_flight=in_flight))
+        # The T12 phase-head laws moved to tools/evidence_strict.py when this
+        # file hit the touched-file size ceiling (no behavior change).
+        fails.extend(strict_phase_findings(
+            doc, rows, path, repo, phase_num=phase_num,
+            resolver=CI_RESOLVER))
 
     gates = path.parent / "human-gates.md"
     if not gates.exists() or not gates.read_text(encoding="utf-8").strip():
@@ -295,7 +253,7 @@ def check_file(path: Path, repo: Path, strict: bool) -> list[str]:
     return fails
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="validate evidence/*/evidence.json bundles")
     ap.add_argument("--repo", default=".", help="repository root (default: cwd)")
     ap.add_argument("--dir", default="evidence", help="evidence root (default: evidence)")
@@ -307,13 +265,17 @@ def main() -> int:
                     help="comma-separated phase dirs to check (default: all; "
                          "in --strict mode without --only, auto P3+)")
     ap.add_argument("--json", action="store_true", help="emit JSON")
+    ap.add_argument("--require-phase-final", action="store_true",
+                    help="the closing form of the P13-P0-C law: every bundle "
+                         "must be final except the tree's declared in-flight "
+                         "phase (docs/state/phase-base.json)")
     ap.add_argument("--no-presence", action="store_true",
                     help="skip the P12-T0-b presence law (every phase in git "
                          "history must carry evidence.json + human-gates.md)")
     ap.add_argument("--also-repo", default="",
                     help="extra repo roots whose commit subjects also name "
                          "phases (e.g. ../xr-core)")
-    args = ap.parse_args()
+    args = ap.parse_args(argv)
 
     repo = Path(args.repo).resolve()
     root = repo / args.dir
@@ -336,9 +298,30 @@ def main() -> int:
               file=sys.stderr)
         return 2
 
+    in_flight = fin.in_flight_phase(repo) if args.strict else None
     results: dict[str, list[str]] = {}
     for f in files:
-        results[str(f.relative_to(repo))] = check_file(f, repo, args.strict)
+        results[str(f.relative_to(repo))] = check_file(f, repo, args.strict,
+                                                       in_flight=in_flight)
+    if args.strict and args.require_phase_final:
+        # The flag is the closing form: the newest phase may not hide behind
+        # the in-flight carve-out any more than a closed one may.
+        checked = {Path(f).parent.name for f in files}
+        if in_flight and in_flight in checked:
+            newest = f"evidence/{in_flight}/evidence.json"
+            if newest in results and not results[newest]:
+                doc = json.loads((repo / newest).read_text(encoding="utf-8"))
+                if str(doc.get("state", "final")).strip().lower() == "final":
+                    print(f"finality: --require-phase-final: {in_flight} "
+                          f"declares final at the closing commit — judged",
+                          file=sys.stderr)
+                else:
+                    results[newest] = [
+                        f"{newest}: --require-phase-final is set and "
+                        f"{in_flight} is the phase closing at this commit, "
+                        f"but the bundle still says 'interim' — flip it to "
+                        f"'final' with its report.md and its same-head ci-run "
+                        f"rows, or leave the phase open (P13-P0-C)"]
 
     # P12-T0-b: the presence law. Derived from git history, so a phase with
     # commits and no bundle FAILS here even though every existing bundle is

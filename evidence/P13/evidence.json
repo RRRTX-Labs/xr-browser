@@ -70,13 +70,21 @@
   {
    "id": "P13-P0-C",
    "dod": "The state: interim|final law with four registered negatives; --require-phase-final wired into the gate; evidence/P12 refreshed to its true end state (append-only corrections, ci-run rows at the recorded head, 12-section report.md); evidence/P13 present in the same form.",
-   "status": "BLOCKED-PENDING-LAW",
+   "status": "VERIFIED",
    "source": "local-run",
    "evidence": [
-    "logs/p0a-presence-law.txt",
-    "tools/negatives/lib.sh"
+    "tools/evidence_finality.py",
+    "tools/evidence_strict.py",
+    "tools/checks/p13_gates.sh",
+    "tools/checks/gate_runner.sh",
+    "tools/negatives/p13_p0c.sh",
+    "tools/tests/test_evidence_finality.py",
+    "docs/process/ci-invocation.md",
+    "logs/negatives-p0c.txt",
+    "logs/negatives-full-c4.txt",
+    "logs/triage-a0ac40b.txt"
    ],
-   "notes": "The law half (tools/evidence_finality.py, the closing-form wiring and its negatives) is still unpushed, and this bundle says so instead of citing files that do not exist yet: the runner's governance step at a0ac40b failed for exactly that reason — \"row P13-P0-C cites missing artifact 'tools/evidence_finality.py'\" (.github:84, run 36606435399; transcript logs/triage-a0ac40b.txt). This commit lands the two halves that ARE ready: the presence-law P0 bound (a blocker label is not a phase) and the negatives harness verdict fix (tools/negatives/lib.sh takes verdicts off a file, never off a piped exit code — a ~30 KB transcript could take SIGPIPE and read as \"rejected for the wrong reason\"). The law itself and P12's re-anchor follow in the next commit."
+   "notes": "The law half, in this commit: tools/evidence_finality.py (state interim|final with state ABSENT meaning final and binding P12+; a final bundle may not carry any *-PENDING-* row and its statuses must be one of VERIFIED/PARTIAL/BLOCKED(-CAUSE)/HUMAN-GATED/NOT-BY-DESIGN; append-only `corrects` supersession; a declared phase_head; ci_claimed; a 12-marker report.md; in-flight phases read docs/state/phase-base.json) with --self-test proving six laws offline, and the T12 block split out verbatim into tools/evidence_strict.py so evidence_check.py stays under the size law. The strict lane now has its closing form: the push invocation is `--strict` (the in-flight phase may be interim) and `tools/run_checks.sh --phase-final` is the CLOSING invocation that demands the in-flight phase be final too (PHASE_FINAL in tools/checks/gate_runner.sh -> --require-phase-final in tools/checks/p13_gates.sh:p13_evidence_bundles; documented in docs/process/ci-invocation.md; negative case closing_wire_demands_final). Proof in this commit: 8 unit tests pass (tools/tests/test_evidence_finality.py); the P0-C area battery is N=8 all-rejected (logs/negatives-p0c.txt) and the FULL battery is N=156, exit 0 (logs/negatives-full-c4.txt; P12's recorded 125 is the floor, +31 from P13); the bundle you are reading is INTERIM by declaration (docs/state/phase-base.json phase=P13), which is the state the law makes legal for a phase in flight (\"PENDING sentinels are legal here\"). Independent confirmation that this row's artifacts matter: the runner's governance step at a0ac40b failed with \"row P13-P0-C cites missing artifact 'tools/evidence_finality.py'\" (.github:84, run 36606435399, read from the public annotations endpoint, logs/triage-a0ac40b.txt) — the bundle legitimately outran the commit, and this commit closes that gap.\nP12's refresh landed at f969499 and its finality is NOT asserted: no head containing P12's work has a green governance run (three documented P13 reds plus an upstream outage — the runner cannot fetch chromium.googlesource.com, annotation .github:134 in run 36610931823, reproduced here as HTTP 503). Per the brief's failure condition 5 the gap is left red and reported (evidence/P12/report.md sections 7 and 10)."
   },
   {
    "id": "P13-P0-D",

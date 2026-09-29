@@ -16,10 +16,20 @@
 KEEP_GOING=0
 RANGE=""
 KR_FAILED=0
+# P13-P0-C: the closing form of the finality law. 0 (the default, and what CI
+# runs on every push) judges every CLOSED phase strictly and lets the phase the
+# tree declares in flight (docs/state/phase-base.json) be `state: "interim"` —
+# the only shape that is legal for a bundle which must exist from the phase's
+# first commit. 1 (`--phase-final`) is the CLOSING invocation: the in-flight
+# phase is demanded final too, so a phase cannot close with the sentinel still
+# in place. The clean-clone gate run recorded at a phase's final commit uses
+# `--phase-final`; docs/process/ci-invocation.md carries the two invocations.
+PHASE_FINAL=0
 
-# Consume --keep-going/--via-ci-invocation (if present) and arm the tracer; set
-# RANGE from the remaining first argument (the PR/push git range). Called BEFORE
-# the gate bodies so `set -E` is in effect for the sourced gate functions too.
+# Consume --keep-going/--via-ci-invocation/--phase-final (if present) and arm
+# the tracer; set RANGE from the remaining first argument (the PR/push git
+# range). Called BEFORE the gate bodies so `set -E` is in effect for the sourced
+# gate functions too.
 kr_parse_args() {
   local via_ci=0
   while :; do
@@ -32,6 +42,10 @@ kr_parse_args() {
         ;;
       --via-ci-invocation)
         via_ci=1
+        shift
+        ;;
+      --phase-final)
+        PHASE_FINAL=1
         shift
         ;;
       *) break ;;

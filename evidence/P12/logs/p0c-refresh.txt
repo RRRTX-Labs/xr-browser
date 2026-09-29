@@ -12,3 +12,21 @@ appended P12-CLOSE-DOD-10-C1 (corrects P12-CLOSE-DOD-10) -> PARTIAL
 appended P12-CLOSE-DOD-13-C1 (corrects P12-CLOSE-DOD-13) -> VERIFIED
 unchanged: state (absent), phase_head (absent), every original row's text
 next: --finality-only with the anchor head's run/job ids
+
+== P13-P0-C refresh, finality phase (append-only) ==
+command: python3 work/p12_refresh.py --finality-only --apply --anchor f96949914955b38e2c0204ef9792e685264672e7 \
+           --governance 36610931823/109551846052 --ci-absent-reason "<no green head>"
+anchor recorded as phase_head: f96949914955b38e2c0204ef9792e685264672e7
+ci_claimed: ['governance']  (core-hardening did not run: its path filter matched nothing)
+state: NOT asserted — the phase cannot be finalised while its hosted certification is
+       impossible; the law reads an absent state as final and reddens on exactly the
+       missing ci-run row, which is the outcome evidence/P12/report.md sections 7 and 10
+       stand behind.
+appended P12-CLOSE-DOD-11-C1 (corrects P12-CLOSE-DOD-11) -> PARTIAL
+appended P12-CLOSE-DOD-12-C1 (corrects P12-CLOSE-DOD-12) -> BLOCKED-CAUSE
+appended P12-CLOSE-DOD-14-C1 (corrects P12-CLOSE-DOD-14) -> VERIFIED
+appended P12-CLOSE-DOD-15-C1 (corrects P12-CLOSE-DOD-15) -> VERIFIED
+no ci-run row written: no green governance run exists at any head containing this
+       phase's work (upstream S-01 pin-fetch outage + the four documented reds)
+procedure to resume: evidence/P12/report.md section 10 (push, triage, append one
+       ci-run row at the green head, set phase_head to it, re-run --phase-final)

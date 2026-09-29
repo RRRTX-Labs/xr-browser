@@ -74,3 +74,25 @@ interpreter would hide it. That exact shape is a registered negative
 
 Both laws run in the `governance` gate (`tools/checks/p13_gates.sh`, lane
 `p13_p0_gates`), so they are enforced locally, in CI, and at push time.
+
+## The two invocations of the gate: push and phase-close
+
+The same file, two contracts (P13-P0-C):
+
+* **`tools/run_checks.sh [range]`** — the push gate. CI runs exactly this on
+  every push to `main`. Evidence bundles are judged **strict**, and the phase
+  the tree declares in flight (`docs/state/phase-base.json`) is allowed to be
+  `state: "interim"`: a bundle owed from a phase's *first* commit cannot be
+  final from its first commit.
+* **`tools/run_checks.sh --phase-final`** — the closing gate. The in-flight
+  phase must be `final` too (a 12-section `report.md`, a declared `phase_head`,
+  and a same-head `ci-run` row per claimed workflow). This is the invocation the
+  phase's final commit and the clean-clone gate run recorded in the phase report
+  use, so a phase cannot close with a `*-PENDING-*` sentinel still standing —
+  the "we forgot to flip the bundle" failure mode, which nothing else catches.
+  The flag is parsed in `tools/checks/gate_runner.sh` (`PHASE_FINAL=1`) and
+  turned into `--require-phase-final` by `tools/checks/p13_gates.sh`
+  (`p13_evidence_bundles`). Registered negatives:
+  `tools/negatives/p13_p0c.sh`, cases `interim_with_a_pending_row` (the push
+  invocation is green on an in-flight interim bundle) and
+  `closing_wire_demands_final` (the closing invocation refuses it).

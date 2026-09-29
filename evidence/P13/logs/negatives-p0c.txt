@@ -1,0 +1,21 @@
+P13-P0-C — the phase-finality negatives (the P0-C area only, N=8).
+date: 2026-09-29  (sandbox; the law itself is offline by construction)
+
+Cases 1-4 are the brief's; 5-6 are the presence-law controls; 7 is the
+harness verdict guard (the SIGPIPE class); 8 is the closing wire.
+
+$ bash /tmp/p0c_only.sh
+ok: final bundle with no ci-run row at its head reddens (T0-U2 head law) (rejected with expected reason)
+ok: final bundle whose ci-run resolves GREEN at the parent sha still reddens (head mismatch, not greenness) (rejected with expected reason)
+ok: final bundle carrying a *-PENDING-* row reddens (PENDING is interim's vocabulary) (rejected with expected reason)
+ok: interim + PENDING is green for the in-flight phase (the phase-in-progress shape)
+ok: an interim bundle for a phase that is NOT in flight reddens (interim may not be a closed phase's state) (rejected with expected reason)
+ok: P0 is a blocker label — P13's bundle satisfies the law, no evidence/P0/ demanded
+ok: a real phase token (P9) with no bundle still reddens (the bound did not disarm the law) (rejected with expected reason)
+ok: harness itself: a big-output rejection keeps its verdict (rejected with expected reason)
+ok: harness: a ~20 KB rejection still matches its expected reason
+ok: control — the in-flight interim bundle is green in the default (push) run
+ok: the closing run (--phase-final) reddens while the in-flight phase is still interim (rejected with expected reason)
+
+ALL NEGATIVE CASES REJECTED AS EXPECTED (N=8)
+P0C_ONLY_EXIT=0
