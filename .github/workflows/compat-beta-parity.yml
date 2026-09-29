@@ -53,6 +53,7 @@ jobs:
 
       - name: Compat corpus — validate + offline replay (real)
         run: |
+          . tools/ci_capture.sh compat-beta-parity
           python3 tools/compat.py validate
           python3 tools/compat.py replay
 
@@ -60,6 +61,7 @@ jobs:
         # The comparator is the deliverable here; real WPT runs need a browser
         # (HG-31). Synthetic sets exercise the 0.5% boundary + flaky rule.
         run: |
+          . tools/ci_capture.sh compat-beta-parity
           python3 tools/wpt_delta.py \
             docs/qa/wpt-fixtures/baseline.json \
             docs/qa/wpt-fixtures/within-tolerance.json
@@ -70,6 +72,7 @@ jobs:
 
       - name: Live corpus replay — SKIP-visible (browser required, HG-31)
         run: |
+          . tools/ci_capture.sh compat-beta-parity
           echo "SKIP: live corpus replay + real WPT run require a browser"
           echo "      (farm runbook: docs/qa/compat-corpus.md, HG-31)"
 
@@ -87,6 +90,7 @@ jobs:
         # law is what workflow_lint now enforces.
         if: always()
         run: |
+          . tools/ci_capture.sh compat-beta-parity
           mkdir -p compat-parity-evidence/xr-core-corpus
           cp -r ../xr-core/test/corpus/. compat-parity-evidence/xr-core-corpus/ || true
           cp -r docs/qa/wpt-fixtures compat-parity-evidence/wpt-fixtures || true
@@ -107,6 +111,7 @@ jobs:
         # runner) is a VISIBLE SKIP per the skip-policy — same pattern as
         # run_checks.sh — never a silent pass.
         run: |
+          . tools/ci_capture.sh compat-beta-parity
           python3 tools/scheduled_lane_check.py --own-lane compat-beta-parity.yml; rc=$?
           if [ "$rc" -eq 77 ]; then
             echo "SKIP: api.github.com unreachable/rate-limited from this runner — visible SKIP; governance re-checks on every push and run_checks proves the checker offline (--self-test)"

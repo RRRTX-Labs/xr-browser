@@ -62,6 +62,7 @@ jobs:
           git -C ../xr-core checkout --quiet "$XR_CORE_REV"
       - name: Mutation freshness gate
         run: |
+          . tools/ci_capture.sh core-hardening
           python3 tools/mutation_freshness.py --repo .
 
   mutation-commands:
@@ -86,6 +87,7 @@ jobs:
           git -C ../xr-core checkout --quiet "$XR_CORE_REV"
       - name: Commands mutation gate (sampled; full = HG-28 farm)
         run: |
+          . tools/ci_capture.sh core-hardening
           python3 tools/mutation_test.py --targets commands --sample 90 \
             --seed 20260911 --timebox 900 --jobs 2 --score-gate 90 --json \
             > /tmp/mutation-commands.json
@@ -117,6 +119,7 @@ jobs:
           git -C ../xr-core checkout --quiet "$XR_CORE_REV"
       - name: Settings mutation gate (sampled; full = HG-28 farm)
         run: |
+          . tools/ci_capture.sh core-hardening
           python3 tools/mutation_test.py --targets settings --sample 90 \
             --seed 20260911 --timebox 900 --jobs 2 --score-gate 90 --json \
             > /tmp/mutation-settings.json
@@ -148,6 +151,7 @@ jobs:
           git -C ../xr-core checkout --quiet "$XR_CORE_REV"
       - name: Themes mutation gate (sampled at the P8 gate, >=95)
         run: |
+          . tools/ci_capture.sh core-hardening
           python3 tools/mutation_test.py --targets themes --sample 90 \
             --seed 20260911 --timebox 900 --jobs 2 --score-gate 95 --json \
             > /tmp/mutation-themes.json
@@ -180,6 +184,7 @@ jobs:
           git -C ../xr-core checkout --quiet "$XR_CORE_REV"
       - name: Update mutation gate (sampled; >=95 = the T1 hard gate)
         run: |
+          . tools/ci_capture.sh core-hardening
           python3 tools/mutation_test.py --targets update --sample 90 \
             --seed 20260911 --timebox 900 --jobs 2 --score-gate 95 --json \
             > /tmp/mutation-update.json
@@ -202,10 +207,12 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - name: Rust toolchain versions (recorded for research item 8)
         run: |
+          . tools/ci_capture.sh core-hardening
           cargo --version || echo "SKIP: cargo absent on this runner image"
           rustc --version || echo "SKIP: rustc absent on this runner image"
       - name: Rust conformance (byte parity with the reference corpus)
         run: |
+          . tools/ci_capture.sh core-hardening
           # P12-T0-c: the whole result is asserted, not a substring any single
           # success can satisfy. cargo prints ONE `test result:` line PER
           # SUITE, so `grep -q "test result: ok"` was satisfiable by a job in
@@ -265,6 +272,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - name: Rust toolchain versions (recorded for research item 8)
         run: |
+          . tools/ci_capture.sh core-hardening
           cargo --version || echo "SKIP: cargo absent on this runner image"
           rustc --version || echo "SKIP: rustc absent on this runner image"
       - name: Checkout xr-core at the DEPS pin
@@ -273,9 +281,12 @@ jobs:
           git clone --quiet https://github.com/RRRTX-Labs/xr-core.git ../xr-core
           git -C ../xr-core checkout --quiet "$XR_CORE_REV"
       - name: Vendor tree integrity (offline verifier)
-        run: python3 tools/vendor_check.py --check
+        run: |
+          . tools/ci_capture.sh core-hardening
+          python3 tools/vendor_check.py --check
       - name: Lock-resolving release build from a byte-identical copy (runner-side fetch, --locked)
         run: |
+          . tools/ci_capture.sh core-hardening
           # P12-T0-c: pipefail + an explicit error hunt. `grep -q Finished`
           # alone could be satisfied by a line printed before the build died.
           set -euo pipefail
@@ -302,6 +313,7 @@ jobs:
       # stays a farm-lane NOT-RUN (docs/qa/browser-harness.md).
       - name: Offline closure build = the FFI shim (cdylib, source-replaced, grep-verified)
         run: |
+          . tools/ci_capture.sh core-hardening
           # P12-T0-c: pipefail + an explicit error hunt (see the copy build).
           set -euo pipefail
           cd ../xr-core/shield/engine
@@ -311,6 +323,7 @@ jobs:
           test -f target/release/libxr_shield_engine.so
       - name: Real-engine shield bench (>=50k decisions, trend-class hosted rig)
         run: |
+          . tools/ci_capture.sh core-hardening
           # P12-T0-c: pipefail so the bench's own exit status is not replaced
           # by tee's; the JSON `assert` below is the negative assertion.
           set -euo pipefail
@@ -356,6 +369,7 @@ jobs:
       # v1 matcher aligned to the vendored engine at xr-core 866387a).
       - name: Real-engine parity (vendored corpus vs the shim, bands enforced)
         run: |
+          . tools/ci_capture.sh core-hardening
           # P12-T0-c: pipefail + a NEGATIVE verdict hunt. P11 already made
           # this step assert on `--check` and the PASS verdict; pipefail closes
           # the remaining hole where the tool's own non-zero exit was replaced
@@ -386,6 +400,7 @@ jobs:
       - name: Post the conclusion
         if: always()
         run: |
+          . tools/ci_capture.sh core-hardening
           {
             echo "## shield-vendor (P11-T1/T7/T8)"
             echo "- vendored pin: adblock 0.13.3 (crate sha256 f44b96a6…)"
@@ -424,6 +439,7 @@ jobs:
           git -C ../xr-core checkout --quiet "$XR_CORE_REV"
       - name: Build the target's host binaries at the pin
         run: |
+          . tools/ci_capture.sh core-hardening
           make -C ../xr-core/policy/tests build
           make -C ../xr-core/commands/tests build
           make -C ../xr-core/settings/tests build
@@ -431,6 +447,7 @@ jobs:
           make -C ../xr-core/renderer/cosmetic/tests build
       - name: Fuzz timebox (600 s, ${{ matrix.target }})
         run: |
+          . tools/ci_capture.sh core-hardening
           python3 tools/fuzz_fleet.py --repo . --timebox 600 --seed 20260911 \
             --only ${{ matrix.target }} --json > /tmp/fuzz-fleet.json
           cat /tmp/fuzz-fleet.json
@@ -471,6 +488,7 @@ jobs:
 
       - name: Release-notes snapshot age vs the 30-day refresh budget
         run: |
+          . tools/ci_capture.sh core-hardening
           # The clock lives in the SHELL here, never in a Python verdict, so
           # tools/wall_clock_lint.py stays honest about what it proves.
           python3 tools/release_notes.py --train 152 \
@@ -510,6 +528,7 @@ jobs:
 
       - name: Scheduled-lane health (a red nightly reddens within a day)
         run: |
+          . tools/ci_capture.sh core-hardening
           python3 tools/scheduled_lane_check.py --own-lane core-hardening.yml; rc=$?
           if [ "$rc" -eq 77 ]; then
             echo "SKIP: api.github.com unreachable/rate-limited from this runner — visible SKIP; governance re-checks on every push"

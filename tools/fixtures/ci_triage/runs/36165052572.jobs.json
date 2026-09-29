@@ -1,0 +1,116 @@
+{
+ "jobs": [
+  {
+   "conclusion": "failure",
+   "id": 108170646843,
+   "name": "governance",
+   "steps": [
+    {
+     "conclusion": "success",
+     "name": "Set up job",
+     "number": 1
+    },
+    {
+     "conclusion": "success",
+     "name": "Checkout",
+     "number": 2
+    },
+    {
+     "conclusion": "success",
+     "name": "Set up Python 3.12",
+     "number": 3
+    },
+    {
+     "conclusion": "success",
+     "name": "Install pinned dev dependencies",
+     "number": 4
+    },
+    {
+     "conclusion": "success",
+     "name": "Install optional helper tools (P4-T0.1)",
+     "number": 5
+    },
+    {
+     "conclusion": "success",
+     "name": "Checkout xr-core at the DEPS pin",
+     "number": 6
+    },
+    {
+     "conclusion": "success",
+     "name": "Date-invariance strict probe (T0-U1 / ADR-0047)",
+     "number": 7
+    },
+    {
+     "conclusion": "success",
+     "name": "Cross-repo pin is alive (P4-T0.2)",
+     "number": 8
+    },
+    {
+     "conclusion": "failure",
+     "name": "Governance checks",
+     "number": 9
+    },
+    {
+     "conclusion": "skipped",
+     "name": "Workflow files lint (P4)",
+     "number": 10
+    },
+    {
+     "conclusion": "skipped",
+     "name": "Negative fixtures (gates must fail on bad input)",
+     "number": 11
+    },
+    {
+     "conclusion": "skipped",
+     "name": "Build-system gates (P2)",
+     "number": 12
+    },
+    {
+     "conclusion": "skipped",
+     "name": "Contract-freeze gates (P5)",
+     "number": 13
+    },
+    {
+     "conclusion": "skipped",
+     "name": "Mutation freshness gate (P10-T0-c \u2014 a stale score is a FAIL)",
+     "number": 14
+    },
+    {
+     "conclusion": "skipped",
+     "name": "Policy mutation gate (P6, sampled; full = HG-28)",
+     "number": 15
+    },
+    {
+     "conclusion": "skipped",
+     "name": "Policy fuzz timebox (P6; 24h campaign = HG-28)",
+     "number": 16
+    },
+    {
+     "conclusion": "skipped",
+     "name": "Policy bench (P6, record-only; budgets re-checked HG-28)",
+     "number": 17
+    },
+    {
+     "conclusion": "skipped",
+     "name": "Upstream treadmill gates (P3)",
+     "number": 18
+    },
+    {
+     "conclusion": "skipped",
+     "name": "Post Set up Python 3.12",
+     "number": 35
+    },
+    {
+     "conclusion": "success",
+     "name": "Post Checkout",
+     "number": 36
+    },
+    {
+     "conclusion": "success",
+     "name": "Complete job",
+     "number": 37
+    }
+   ]
+  }
+ ]
+}

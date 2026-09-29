@@ -103,6 +103,7 @@ jobs:
         # matrix made the ledger FAIL at BOTH probe dates (FAIL/FAIL reads as
         # 'the expiry law does not bite'), a self-reddening step.
         run: |
+          . tools/ci_capture.sh governance
           shifted=$(faketime '2019-03-04 12:00:00' /bin/date -u +%Y)
           test "$shifted" = "2019" || {
             echo "FAIL: faketime did not displace a child clock (got '$shifted')"
@@ -114,7 +115,9 @@ jobs:
         # DEPS.xr_core_rev must be a reachable ancestor of origin xr-core
         # main — otherwise every fresh clone (and this runner) is broken.
         # Unauthenticated, public remote only (docs/process/cross-repo-pin.md).
-        run: ./scripts/build sync check-pin-alive --json
+        run: |
+          . tools/ci_capture.sh governance
+          ./scripts/build sync check-pin-alive --json
 
       - name: Governance checks
         # Concrete SHAs (always resolvable with fetch-depth: 0):
@@ -127,6 +130,7 @@ jobs:
           # failed before any step executed (caught by actionlint, P4).
           CHECK_RANGE: ${{ github.event_name == 'pull_request' && format('{0}..HEAD', github.event.pull_request.base.sha) || (github.event.before != '0000000000000000000000000000000000000000' && format('{0}..HEAD', github.event.before) || '') }}
         run: |
+          . tools/ci_capture.sh governance
           if [ -n "$CHECK_RANGE" ]; then
             echo "checking range: $CHECK_RANGE"
             tools/run_checks.sh "$CHECK_RANGE"
@@ -139,13 +143,18 @@ jobs:
         # A workflow-expression compile error produces a run with ZERO jobs,
         # zero logs and zero check-runs. From the API it looks like a normal
         # failure, so this gate is the only place it is caught before GitHub.
-        run: ./scripts/build workflow-lint
+        run: |
+          . tools/ci_capture.sh governance
+          ./scripts/build workflow-lint
 
       - name: Negative fixtures (gates must fail on bad input)
-        run: tools/run_negatives.sh
+        run: |
+          . tools/ci_capture.sh governance
+          tools/run_negatives.sh
 
       - name: Build-system gates (P2)
         run: |
+          . tools/ci_capture.sh governance
           ./scripts/build test                                    # build + tools test suites
           python3 build/toolchain/provenance.py --verify # toolchain digests (R0)
           ./scripts/build brand-check --scan                       # endpoint-deny over the build surface
@@ -158,6 +167,7 @@ jobs:
       # ------------------------------------------------------------------
       - name: Contract-freeze gates (P5)
         run: |
+          . tools/ci_capture.sh governance
           ./scripts/build contracts all           # mojom_lint + manifest + vectors + freeze
           # fake-parity: golden vectors reproduced byte-for-byte by the fakes
           python3 tools/vectors_check.py --json > /dev/null
@@ -173,10 +183,12 @@ jobs:
       # ------------------------------------------------------------------
       - name: Mutation freshness gate (P10-T0-c — a stale score is a FAIL)
         run: |
+          . tools/ci_capture.sh governance
           python3 tools/mutation_freshness.py --repo .
 
       - name: Policy mutation gate (P6, sampled; full = HG-28)
         run: |
+          . tools/ci_capture.sh governance
           # Deterministic sample keeps CI time bounded (~10 min on 2 cores);
           # the score gate (>=90%) and deny-guard 100% apply to the sample.
           # evidence/P6/mutation-report.* records the full-matrix run.
@@ -192,12 +204,14 @@ jobs:
 
       - name: Policy fuzz timebox (P6; 24h campaign = HG-28)
         run: |
+          . tools/ci_capture.sh governance
           python3 tools/policy_fuzz.py --timebox 600 --seed 20260908 \
             --report /tmp/fuzz-ci.json --json
           cat /tmp/fuzz-ci.json
 
       - name: Policy bench (P6, record-only; budgets re-checked HG-28)
         run: |
+          . tools/ci_capture.sh governance
           # The tests Makefile redirects bench_main's stdout into
           # build/bench-results.json (human table + canonical JSON), so the
           # verdicts are read from that file — piping `make bench` captures
@@ -216,6 +230,7 @@ jobs:
       # ------------------------------------------------------------------
       - name: Upstream treadmill gates (P3)
         run: |
+          . tools/ci_capture.sh governance
           # patch budget: config must match the plan's §1.2 caps exactly...
           python3 build/upstream/gen_budget_config.py --check
           # ...the manifest must be under budget (blocking)...

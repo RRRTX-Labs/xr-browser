@@ -1,7 +1,7 @@
 # tools/negatives/p13_p0a.sh — P13-P0-A negative cases: the entry-point-mode
 # machinery and the mode-preservation law must be able to fail.
 #
-# Why these exist: the incident (5e3d1d4) was invisible locally for three
+# Why these exist: the incident (5e3d1d4) could not be seen locally for three
 # commits because `bash tools/run_checks.sh` cannot see a mode bit, and no lane
 # checked the INDEX at all. A gate for that class is worthless unless a planted
 # defect reddens it, so every case here plants the defect in a scratch mirror

@@ -44,8 +44,8 @@ The mode does two things, in order:
    same cwd — so the local run and the hosted step are the same process image.
 
 `bash tools/run_checks.sh --via-ci-invocation` (note the `bash`) is the useful
-form while the bit is still wrong: the wrapper makes the invisible mode visible
-even when the interpreter hides it. That exact shape is a registered negative
+form while the bit is still wrong: the wrapper reports the mode even when the
+interpreter would hide it. That exact shape is a registered negative
 (`tools/negatives/p13_p0a.sh`, case `ci_invocation_sees_a_644_entry_point`).
 
 ## The laws behind it

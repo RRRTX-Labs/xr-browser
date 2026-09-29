@@ -92,6 +92,7 @@ jobs:
 
       - name: Resolve the canary target (latest main via gitiles TEXT only)
         run: |
+          . tools/ci_capture.sh nightly-rebase-build
           sha=$(python3 - <<'EOF'
           import sys; sys.path.insert(0, "build/upstream")
           from fetch import GitilesFetchSource
@@ -105,6 +106,7 @@ jobs:
 
       - name: Canary rebase (classify at latest main; issues on drift)
         run: |
+          . tools/ci_capture.sh nightly-rebase-build
           ./scripts/build rebase rebase --to "$CANARY_SHA" --dry-run --explain
           # verdict != GREEN is NOT a job failure: drift is expected treadmill
           # output; the report + owner bundles are the deliverable (P12-CLOSE
@@ -115,21 +117,30 @@ jobs:
           # must never look green.
 
       - name: Assumption suite at the pin (blocking rows, §12.4)
-        run: ./scripts/build assumptions run --use-deps --out work/upstream-cache
+        run: |
+          . tools/ci_capture.sh nightly-rebase-build
+          ./scripts/build assumptions run --use-deps --out work/upstream-cache
 
       - name: Fast-lane watch + drills (SIMULATED, TEST keys)
         run: |
+          . tools/ci_capture.sh nightly-rebase-build
           ./scripts/build fastlane watch --json > work/upstream-cache/fastlane-watch.json
           ./scripts/build fastlane drill
 
       - name: Promotion series discovery (cadence as data)
-        run: ./scripts/build promotion discover
+        run: |
+          . tools/ci_capture.sh nightly-rebase-build
+          ./scripts/build promotion discover
 
       - name: Retirement ledger lint
-        run: ./scripts/build retire lint --xr-core ../xr-core
+        run: |
+          . tools/ci_capture.sh nightly-rebase-build
+          ./scripts/build retire lint --xr-core ../xr-core
 
       - name: Fork-health chart refresh (SKIP-visible)
-        run: ./scripts/build fork-health --xr-core ../xr-core
+        run: |
+          . tools/ci_capture.sh nightly-rebase-build
+          ./scripts/build fork-health --xr-core ../xr-core
 
       - name: Upload the treadmill evidence bundle
         if: always()
@@ -145,6 +156,7 @@ jobs:
         # Exit 77 (api.github.com unreachable) is a VISIBLE SKIP per the
         # skip-policy, never a silent pass; governance re-checks every push.
         run: |
+          . tools/ci_capture.sh nightly-rebase-build
           python3 tools/scheduled_lane_check.py --own-lane nightly-rebase-build.yml; rc=$?
           if [ "$rc" -eq 77 ]; then
             echo "SKIP: api.github.com unreachable/rate-limited from this runner — visible SKIP; governance re-checks on every push"

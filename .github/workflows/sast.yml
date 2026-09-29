@@ -46,24 +46,35 @@ jobs:
         run: python -m pip install --require-hashes -r tools/requirements-dev.txt
 
       - name: SAST rule registry gate (canary + literal scan)
-        run: python3 tools/sast_check.py --repo .
+        run: |
+          . tools/ci_capture.sh sast
+          python3 tools/sast_check.py --repo .
 
       - name: Mode-logic lint (one brain, L3)
-        run: python3 tools/mode_lint.py --root ../xr-core
+        run: |
+          . tools/ci_capture.sh sast
+          python3 tools/mode_lint.py --root ../xr-core
 
       - name: License audit (GPL-link hard fail)
-        run: python3 tools/license_audit.py --repo .
+        run: |
+          . tools/ci_capture.sh sast
+          python3 tools/license_audit.py --repo .
 
       - name: npm allowlist (axe-core ceremony)
-        run: python3 tools/npm_allowlist_check.py --repo .
+        run: |
+          . tools/ci_capture.sh sast
+          python3 tools/npm_allowlist_check.py --repo .
 
       - name: Copy lint (banned vocab + no score numbers)
-        run: python3 tools/copy_lint.py --repo .
+        run: |
+          . tools/ci_capture.sh sast
+          python3 tools/copy_lint.py --repo .
 
       - name: Scheduled-lane health (P11-T0-c — a red nightly reddens within a day)
         # Exit 77 (api.github.com unreachable) is a VISIBLE SKIP per the
         # skip-policy, never a silent pass; governance re-checks every push.
         run: |
+          . tools/ci_capture.sh sast
           python3 tools/scheduled_lane_check.py --own-lane sast.yml; rc=$?
           if [ "$rc" -eq 77 ]; then
             echo "SKIP: api.github.com unreachable/rate-limited from this runner — visible SKIP; governance re-checks on every push"

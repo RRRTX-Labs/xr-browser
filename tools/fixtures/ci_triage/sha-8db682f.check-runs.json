@@ -1,0 +1,91 @@
+{
+ "_capture": {
+  "auth": "none (public repo)",
+  "date": "2026-09-29",
+  "endpoint": "GET /repos/RRRTX-Labs/xr-browser/commits/8db682fe1c776ff8c6f8d5d357395d1e458ff015/check-runs",
+  "note": "trimmed to the fields ci_triage.py reads; the fixture is a RECORDING, not a reimplementation"
+ },
+ "check_runs": [
+  {
+   "conclusion": "failure",
+   "details_url": "https://github.com/RRRTX-Labs/xr-browser/actions/runs/36544991058/job/109329115399",
+   "head_sha": "8db682fe1c776ff8c6f8d5d357395d1e458ff015",
+   "id": 109329115399,
+   "name": "compat",
+   "status": "completed"
+  },
+  {
+   "conclusion": "failure",
+   "details_url": "https://github.com/RRRTX-Labs/xr-browser/actions/runs/36537416905/job/109304541358",
+   "head_sha": "8db682fe1c776ff8c6f8d5d357395d1e458ff015",
+   "id": 109304541358,
+   "name": "treadmill",
+   "status": "completed"
+  },
+  {
+   "conclusion": "failure",
+   "details_url": "https://github.com/RRRTX-Labs/xr-browser/actions/runs/36412999029/job/108897400990",
+   "head_sha": "8db682fe1c776ff8c6f8d5d357395d1e458ff015",
+   "id": 108897400990,
+   "name": "sast",
+   "status": "completed"
+  },
+  {
+   "conclusion": "failure",
+   "details_url": "https://github.com/RRRTX-Labs/xr-browser/actions/runs/36399720491/job/108854452700",
+   "head_sha": "8db682fe1c776ff8c6f8d5d357395d1e458ff015",
+   "id": 108854452700,
+   "name": "compat",
+   "status": "completed"
+  },
+  {
+   "conclusion": "failure",
+   "details_url": "https://github.com/RRRTX-Labs/xr-browser/actions/runs/36393645335/job/108834864577",
+   "head_sha": "8db682fe1c776ff8c6f8d5d357395d1e458ff015",
+   "id": 108834864577,
+   "name": "treadmill",
+   "status": "completed"
+  },
+  {
+   "conclusion": "success",
+   "details_url": "https://github.com/RRRTX-Labs/xr-browser/actions/runs/36306097751/job/108582955648",
+   "head_sha": "8db682fe1c776ff8c6f8d5d357395d1e458ff015",
+   "id": 108582955648,
+   "name": "compat",
+   "status": "completed"
+  },
+  {
+   "conclusion": "success",
+   "details_url": "https://github.com/RRRTX-Labs/xr-browser/actions/runs/36302428716/job/108572454859",
+   "head_sha": "8db682fe1c776ff8c6f8d5d357395d1e458ff015",
+   "id": 108572454859,
+   "name": "treadmill",
+   "status": "completed"
+  },
+  {
+   "conclusion": "failure",
+   "details_url": "https://github.com/RRRTX-Labs/xr-browser/actions/runs/36228154405/job/108366042058",
+   "head_sha": "8db682fe1c776ff8c6f8d5d357395d1e458ff015",
+   "id": 108366042058,
+   "name": "compat",
+   "status": "completed"
+  },
+  {
+   "conclusion": "failure",
+   "details_url": "https://github.com/RRRTX-Labs/xr-browser/actions/runs/36224609238/job/108356084262",
+   "head_sha": "8db682fe1c776ff8c6f8d5d357395d1e458ff015",
+   "id": 108356084262,
+   "name": "treadmill",
+   "status": "completed"
+  },
+  {
+   "conclusion": "failure",
+   "details_url": "https://github.com/RRRTX-Labs/xr-browser/actions/runs/36165052572/job/108170646843",
+   "head_sha": "8db682fe1c776ff8c6f8d5d357395d1e458ff015",
+   "id": 108170646843,
+   "name": "governance",
+   "status": "completed"
+  }
+ ],
+ "total_count": 10
+}

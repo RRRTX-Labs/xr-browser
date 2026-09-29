@@ -22,4 +22,11 @@ p13_p0_gates() {
   fi
   echo "== P13-P0-A: in-place rewrites preserve the mode (the defect shape loses it) =="
   "$PY" tools/inplace.py --self-test
+
+  # P0-B: the diagnosis path. The triage tool's self-test is offline and
+  # fixture-backed, so this lane never needs the network; the live endpoint set
+  # is exercised by the scheduled-lane checker and by the hosted call in the
+  # phase report.
+  echo "== P13-P0-B: CI triage reads the public check-run/annotation endpoints (offline self-test) =="
+  "$PY" tools/ci_triage.py --self-test
 }

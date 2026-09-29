@@ -1,0 +1,26 @@
+[
+ {
+  "annotation_level": "warning",
+  "end_line": 2,
+  "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+  "path": ".github",
+  "start_line": 2,
+  "title": ""
+ },
+ {
+  "annotation_level": "failure",
+  "end_line": 21,
+  "message": "Process completed with exit code 126.",
+  "path": ".github",
+  "start_line": 21,
+  "title": ""
+ },
+ {
+  "annotation_level": "notice",
+  "end_line": 1,
+  "message": "\"The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748\"",
+  "path": ".github",
+  "start_line": 1,
+  "title": ""
+ }
+]
