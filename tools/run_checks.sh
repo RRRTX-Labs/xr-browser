@@ -275,6 +275,7 @@ p9_test_lanes   # T1..T4 bodies live in checks/p9_gates.sh (P13-P0-A size law)
 
 echo "== P9-T5: perf budgets (plan-transcribed, diff-clean) + gate =="
 "$PY" build/qa/perf/gen_perf_budgets.py --repo . --check
+p13_t7_panel_perf_gates   # P13-T7 panel bench (size-law split)
 "$PY" tools/perf_gate.py --repo . --bench docs/state/bench-trend.json \
   --check --as-of 2026-09-10
 

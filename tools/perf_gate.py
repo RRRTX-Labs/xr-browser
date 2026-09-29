@@ -35,6 +35,10 @@ S0_PATHS = "docs/process/s0-paths.yaml"
 REPORT_MD = "docs/state/perf-budgets.md"
 NOISE_BAND = 0.02
 RIG_RANK = {"trend": 1, "reference": 2, "farm": 0}
+# Every subsystem whose real measurement needs a browser/Blink rig: its
+# sandbox numbers are SURROGATES and must say so (`surrogate: true`), and
+# they may never read MET (P12-T7 for cosmetic; P13-T7 added panel).
+SURROGATE_PREFIXES = ("cosmetic_", "panel_")
 
 
 def load_budgets(repo: Path) -> dict:
@@ -139,18 +143,19 @@ def compare(repo: Path, bench: dict[str, Any]) -> dict[str, Any]:
                   if samples else None)
         if value is None:
             raise c.RunnerError(f"{metric}: no value or samples")
-        # P12-T7 surrogate law (the disqualifier, enforced): a cosmetic
-        # number measured in this sandbox is a SURROGATE (the surrogate
-        # cosmetic_host path), never the Blink seam. A surrogate row must say
-        # so (`surrogate: true`) or the gate REFUSES — a synthetic number
-        # presented as a budget assertion is this phase's disqualifier, not a
-        # prose rule.
-        surrogate = metric.startswith("cosmetic_")
+        # P12-T7 surrogate law (the disqualifier, enforced), generalized by
+        # P13-T7 to every browser-side subsystem (SURROGATE_PREFIXES): a number
+        # measured in this sandbox is a SURROGATE — the cosmetic_host path for
+        # cosmetic, the frame's pure core under node for the panel — never the
+        # Blink measurement the budget describes. A surrogate row must say so
+        # (`surrogate: true`) or the gate REFUSES: a synthetic number presented
+        # as a budget assertion is the disqualifier, not a prose rule.
+        surrogate = metric.startswith(SURROGATE_PREFIXES)
         if surrogate and not bool(row.get("surrogate")):
             raise c.RunnerError(
-                f"{metric}: cosmetic rows are surrogate/model measures in "
-                "this sandbox — set `surrogate: true` or the number would "
-                "read as a Blink measurement it is not")
+                f"{metric}: {metric.split('_')[0]} rows are surrogate/model "
+                "measures in this sandbox — set `surrogate: true` or the "
+                "number would read as a Blink measurement it is not")
         budget_row = budgets.get(metric)
         if budget_row is None:
             # record-only: trend shape, no verdict claim

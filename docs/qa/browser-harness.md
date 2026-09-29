@@ -151,3 +151,44 @@ reference rig and compare to the uBO reference measurement cited in
 `docs/state/research-log-P12.md`; **that citation is UNVERIFIED at
 close-out** — the budget row's source says so rather than inventing a
 number (`build/qa/perf/gen_perf_budgets.py`, `cosmetic-dom-poll-cost`).
+
+## P13-T7: panel perf — the surrogate lane and the NOT-RUN farm halves
+
+What this sandbox measures is the frame's PURE CORE, and it says so: the two
+`panel_open_core_ms` / `panel_open_subtree_scans` rows come from
+`tools/panel_bench.py` (the bundled `ui/panel/focus-trap.ts` under node, over a
+4096-focusable synthetic document), the benches declare `surrogate: true`, and
+the comparator's rig-class law means a `trend` rig may never read `MET`
+(negative: `tools/negatives/p13_t7.sh`). The budget rows themselves are emitted
+only by `build/qa/perf/gen_perf_budgets.py`, transcribed from the pinned plan:
+`panel-open` and `panel-ring-scroll` from §11.7 / §4 P13 Perf, plus the
+surrogate ceiling.
+
+Both browser-side budgets stay NOT-RUN here, with their methods:
+
+### panel open ≤ 150 ms (NOT-RUN)
+
+`↦ NOT-RUN (method: docs/qa/browser-harness.md#panel-open-150ms)` — on the
+reference rig (HG-31): open `xr://settings` with a 20-tab profile and a
+populated ring, then toggle the panel with the keyboard; measure the time from
+the key event to the frame's first painted frame (`performance.mark` around the
+host's toggle + `requestAnimationFrame` to first paint), median of 20 opens and
+p90 with a cold tab strip. The budget is the plan's §11.7 `panel-open` row
+(150 ms); the panel's lazy-tab law is asserted structurally in the same run: the
+number of REGISTERED tabs must not affect the open time (open with 1 tab vs 20,
+delta inside the comparator's ±2 % noise band).
+
+### ring render ≤ 16 fps worst-case scroll (NOT-RUN)
+
+`↦ NOT-RUN (method: docs/qa/browser-harness.md#panel-ring-scroll)` — on the
+reference rig: fill the Observatory's ring to its 2k cap, then scroll the panel
+body continuously for 10 s while recording `requestAnimationFrame` timestamps;
+report the worst 1-s window's frames-per-second and the p99 frame interval. The
+budget is the plan's §4 P13 Perf row verbatim (`ring render ≤16 fps worst-case
+scroll`, transcribed as `panel-ring-scroll`); the run records the rig class and
+the window definition next to the number, because a frame-rate number without
+its window means nothing.
+
+Both methods need a real Blink rig, a real build and a real 2k-row ring; none of
+the three exists in this sandbox. The surrogate above is not a substitute — it
+is labelled a subset everywhere it appears.

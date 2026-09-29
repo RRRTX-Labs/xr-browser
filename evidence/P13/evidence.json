@@ -163,11 +163,19 @@
   {
    "id": "P13-T7",
    "dod": "Panel perf: open <=150ms, ring <=16fps; budget rows only via build/qa/perf/gen_perf_budgets.py --check; the trend rig never MET; browser halves NOT-RUN with methods.",
-   "status": "BLOCKED-PENDING-T7",
-   "source": "fixture",
+   "status": "VERIFIED",
+   "source": "local-run",
    "evidence": [
-    "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"
-   ]
+    "logs/t7-panel-perf.txt",
+    "tools/panel_bench.py",
+    "../xr-core/ui/panel/tests/panel-bench.mjs",
+    "build/qa/perf/gen_perf_budgets.py",
+    "docs/state/bench-trend.json",
+    "docs/state/perf-budgets.md",
+    "tools/negatives/p13_t7.sh",
+    "docs/qa/browser-harness.md"
+   ],
+   "notes": "Budget rows: build/qa/perf/gen_perf_budgets.py now emits the P13 rows and nothing else may (--check is diff-clean, 24 rows): `panel-ring-scroll` transcribed verbatim from §4 P13 Perf ('ring render ≤16 fps worst-case scroll' — the unit is the plan's, not reinterpreted), `panel-open` (already present from §11.7) and `panel-open-core-surrogate` whose cap is §11.7's 150 ms applied as a coarse ceiling to a SUBSET surrogate. Surfacing the browser-side rows also regenerated docs/state/perf-budgets.md (the report the comparator diffs). Measurable-in-sandbox half: tools/panel_bench.py bundles the frame's pure core with the pinned toolchain into scratch and measures the open-path decision over a 4096-focusable synthetic document — 0.0046 ms median of 200 (vs the 150 ms ceiling), and the open path reads exactly ONE subtree (its own) rather than walking the document: the lazy-tab property as a deterministic count, not a timing. The rows declare surrogate: true, rig_class is trend, and the comparator prints NEUTRAL — never MET (P12-T7's law, generalized in tools/perf_gate.py to every browser-side subsystem via SURROGATE_PREFIXES; the panel rows ride it, and tools/negatives/p13_t7.sh keeps it armed: N=4 — a trend rig asserting the browser-side panel_open_ms budget is refused, an undeclared panel_* surrogate is refused, a hand-edited budget value reddens the generator's --check, and a trend input missing the panel rows reddens the bench's --check). NOT-RUN here with methods written: panel open ≤150 ms (docs/qa/browser-harness.md#panel-open-150ms) and ring ≤16 fps (#panel-ring-scroll) both need the real Blink rig (HG-31) and a real 2k-row ring; the surrogate is labelled a subset everywhere it appears and no browser number is claimed."
   },
   {
    "id": "P13-CONTRACTS",

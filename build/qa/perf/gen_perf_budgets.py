@@ -203,6 +203,31 @@ def build(plan_text: str) -> dict:
         "§4 P12 T3 (generic hide set always-on); cap = the shipped set's 33 "
         "rules (xr-lists/generic-hide-set.v1.json)")
 
+    # ---- P13-T7 panel rows ----
+    # The plan's §4 P13 Perf line: "open ≤150 ms; ring render ≤16 fps
+    # worst-case scroll". Both are browser-side (Blink) numbers, transcribed
+    # verbatim — including the ring row's unit, fps, which is what the plan
+    # states (the generator does not reinterpret a budget it did not write).
+    # A `trend` rig may never assert either: the real rig is the farm
+    # (docs/qa/browser-harness.md#panel-open-150ms).
+    add("panel-ring-scroll", "panel_ring_scroll_fps", "fps",
+        _extract_plan(plan_text, r"ring render \u2264(\d+) fps worst-case scroll",
+                      "P13 ring render budget"),
+        "browser-side", "reference", "browser-perf",
+        "§4 P13 Perf (ring render ≤16 fps worst-case scroll) — browser-side: "
+        "NOT-RUN on the trend rig, method in "
+        "docs/qa/browser-harness.md#panel-ring-scroll")
+    # The measurable-in-sandbox half: the frame's PURE CORE on the open path.
+    # Cap = the §11.7 open budget applied as a coarse ceiling to a SUBSET
+    # surrogate (no layout, no style, no paint) — never MET on a trend rig.
+    add("panel-open-core-surrogate", "panel_open_core_ms", "ms",
+        _extract_117(s117, r"panel open \u2264(\d+) ms"),
+        "core-side", "trend", "browser-perf",
+        "§11.7 (panel open ≤150 ms) as a ceiling for the frame core surrogate "
+        "measured by tools/panel_bench.py (subset of the browser path: the "
+        "decision core only, no layout/style/paint) — trend, never MET",
+        "surrogate: the browser-side halves are NOT-RUN with methods")
+
     return {"schema_version": 1, "generated_from": PLAN_FILE,
             "rows": rows}
 

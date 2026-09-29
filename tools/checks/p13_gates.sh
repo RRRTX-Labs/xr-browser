@@ -85,3 +85,25 @@ p13_t1_panel_gates() {
     echo "FAIL: the planted focus leak did not redden the suite"; die
   fi
 }
+
+p13_t7_panel_perf_gates() {
+  # P13-T7: the panel's perf lane, in the two halves the law allows.
+  #   * the budget rows may come ONLY from build/qa/perf/gen_perf_budgets.py
+  #     (transcribed from the pinned plan; --check is diff-clean or the gate
+  #     fails — a hand-authored number is a falsification);
+  #   * the measurable-in-sandbox half is the frame's pure core, measured by
+  #     tools/panel_bench.py as a SURROGATE (`surrogate: true`, rig_class
+  #     trend, never MET). Measuring is best-effort (node/toolchain absent =>
+  #     visible SKIP); the committed trend rows are checked deterministically.
+  # The browser halves (open ≤150 ms, ring ≤16 fps) are NOT-RUN with their
+  # methods in docs/qa/browser-harness.md — no surrogate dresses as the rig.
+  # (The budget rows themselves are checked by the P9-T5 lane above, which owns
+  #  gen_perf_budgets --check; this lane owns the panel's own two halves.)
+  echo "== P13-T7: panel frame bench (surrogate, trend rig — never MET) =="
+  if "$PY" tools/panel_bench.py; then :; elif [ $? -eq 77 ]; then
+    echo "SKIP: panel bench skipped (node/toolchain unavailable) — sources shipped"
+  else
+    echo "FAIL: panel bench failed"; die
+  fi
+  "$PY" tools/panel_bench.py --check
+}

@@ -44,7 +44,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "cce1a7124d35f368434d93eb5858df707c9ac232"     # xr-core cce1a71 = P12-T6 (renderer/cosmetic complete, block-event-v1 page_modifying class, the xr://shield cosmetic riding row) + P13-T1 (ui/panel: the panel frame + the focus-containment core and its node:test suite; four IDS_XR_PANEL_* messages; ui/panel/*.ts inside tsconfig). Pair-bumped same-day with the P13-T1 commit per docs/process/cross-repo-pin.md.
+xr_core_rev: "18502410ae74c072e84efd4a1032790afbf2e259"     # xr-core 1850241 = P12-T6 (renderer/cosmetic complete, block-event-v1 page_modifying class, the xr://shield cosmetic riding row) + P13-T1 (ui/panel: the panel frame, the focus-containment core with its node:test suite and planted-leak control; four IDS_XR_PANEL_* messages; ui/panel/*.ts inside tsconfig) + P13-T7 (ui/panel/tests/panel-bench.mjs, the surrogate bench harness). Pair-bumped same-day with each P13 commit per docs/process/cross-repo-pin.md.
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

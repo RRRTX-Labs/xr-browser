@@ -2,7 +2,7 @@
 
 Generated with `--as-of 2026-09-10`. Do not hand-edit; regenerate with `tools/perf_gate.py --report-md`. Budgets transcribed from the pinned plan by `gen_perf_budgets.py`.
 
-Bench: trend-rig benches (policy resolve + themes apply + shield decision/apply) + cosmetic keyset (surrogate) (rig class **trend**)
+Bench: trend-rig benches (policy resolve + themes apply + shield decision/apply) + cosmetic keyset (surrogate) + panel frame core (surrogate) (rig class **trend**)
 
 | metric | value | budget | delta % | verdict | owner | plan |
 |---|---|---|---|---|---|---|
@@ -16,3 +16,5 @@ Bench: trend-rig benches (policy resolve + themes apply + shield decision/apply)
 | fake_decision_p99_ms | 43.87867700006609 | — | — | RECORD-ONLY |  | RECORD-ONLY |
 | cosmetic_keyset_build_ms | 2.0907630005240208 | 50.0 | -95.818 | NEUTRAL | @xr/platform | §4 P12 Perf posture (the generic set costs document-start time on every page); cap = the 50 ms key-set-build budget recorded in build/qa/perf/generic-set-budgets.json (33 rules, measured ~1.9-3.3 ms on 2 CPUs — trend, never MET) |
 | cosmetic_generic_set_rules | 33.0 | 33.0 | 0.0 | NEUTRAL | @xr/platform | §4 P12 T3 (generic hide set always-on); cap = the shipped set's 33 rules (xr-lists/generic-hide-set.v1.json) |
+| panel_open_core_ms | 0.004621 | 150.0 | -99.997 | NEUTRAL | @xr/platform | §11.7 (panel open ≤150 ms) as a ceiling for the frame core surrogate measured by tools/panel_bench.py (subset of the browser path: the decision core only, no layout/style/paint) — trend, never MET |
+| panel_open_subtree_scans | 1.0 | — | — | RECORD-ONLY |  | RECORD-ONLY |

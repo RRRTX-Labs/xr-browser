@@ -38,6 +38,52 @@ row is a remembered value. Written 2026-09-29; appended as the phase proceeds.
   and sha256s quoted in `evidence/P12/report.md` §① and §⑨ were re-derived in
   this turn from the tree itself.
 
+## R13 — the negatives harness lost a verdict to SIGPIPE (2026-09-29)
+
+`printf '%s' "$out" | grep -q PAT` under `set -o pipefail` returns 141 when
+`grep -q` exits at its first match and the writer then takes SIGPIPE. On a
+~30 KB transcript that reads, inside `if ! ...`, exactly like "the expected
+reason is absent": a correctly-behaving case reported as a harness failure.
+Reproduced deterministically at 3000 lines/20 KB; fixed by taking every verdict
+off a FILE (tools/negatives/lib.sh `neg_out_file`/`neg_out_has`/
+`neg_out_has_fixed`, and one `find | grep -q` rewritten to `[ -n "$junk" ]`).
+Transcript: evidence/P13/logs/negatives-harness-fix.txt.
+
+## R14 — the sandbox workspace drops `.git` (and `build/`) between turns
+
+Twice in this phase the shared workspace came back without both clones' `.git`
+directories and without every name in the snapshot exclusion list (`build/`,
+`dist/`, `.local/`), and without the executable bits on tracked scripts. The
+working files survive; the repository state does not. Recovery that works:
+clone into a scratch dir, copy the fresh `.git` into the working tree, restore
+the deleted tracked files (`git restore --worktree --source=HEAD
+--pathspec-from-file=<(git ls-files -d)`) and re-apply the index modes
+(`git ls-files -s | awk '$1=="100755"{print $4}'`). Nothing pushed was ever
+lost — the remote is the source of truth, which is why every landing in this
+phase ends with a push.
+
+## R15 — the hosted gate's S-01 step is weather (2026-09-29)
+
+`chromium.googlesource.com` answered this sandbox with HTTP 503 continuously
+through the phase, and at 17:52 UTC the hosted governance run failed on the
+same step for the same reason ("S-01 - BLOCKED-NET cannot fetch
+content/public/browser/content_browser_client.h at d04cdb24…: fetch failed …
+after 3 attempts", annotation .github:134 in run 36610931823). The next run
+(fa5e35e) passed S-01 and failed only on the P12 finding, so the step is
+intermittent, not broken: same-milestone measurements in docs/state/research-log-P11.md
+were taken when it was up. The gate fails closed on no network by design; the
+honest handling is a recorded BLOCKED-NET, never a softened check.
+
+## R16 — what a sandbox can honestly measure about the panel (T7)
+
+Two numbers are measurable without a browser: the frame's pure-core decision
+cost (median 0.0046 ms over a 4096-focusable synthetic document) and a COUNT —
+the open path reads exactly one subtree, its own. The second is the interesting
+one: it makes "lazy tabs" falsifiable without a clock, so the claim does not
+depend on the machine that produced it. The browser numbers (open ≤150 ms, ring
+≤16 fps) stay NOT-RUN with methods in docs/qa/browser-harness.md; a surrogate
+that dressed as the Blink rig would be the phase's disqualifier.
+
 ## Upstream-first ledger
 
 Nothing in P13 diverges from upstream in a way that needs a filed issue; if that

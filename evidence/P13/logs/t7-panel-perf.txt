@@ -1,0 +1,34 @@
+P13-T7 — panel perf: the budget rows, the surrogate, and what is NOT-RUN.
+date: 2026-09-29 (sandbox, 2 CPUs; node 20.20.2, pinned toolchain)
+
+== 1. the budget rows are generator-only (plan-transcribed) ==
+PASS: gen_perf_budgets --check (24 rows transcribed, diff-clean)
+   panel-open | panel_open_ms | ms 150 | reference | §11.7 (panel open ≤150 ms)
+   panel-ring-scroll | panel_ring_scroll_fps | fps 16 | reference | §4 P13 Perf (ring render ≤16 fps worst-case scroll) — browse
+   panel-open-core-surrogate | panel_open_core_ms | ms 150 | trend | §11.7 (panel open ≤150 ms) as a ceiling for the frame core s
+
+== 2. the surrogate bench (what this sandbox CAN measure) ==
+panel_bench: panel_open_core_ms = 0.00467 ms (surrogate, trend rig — never MET)
+panel_bench: panel_open_subtree_scans = 1 scans (surrogate, trend rig — never MET)
+panel_bench: PASS — committed trend rows present (core 0.0046 ms median of 200, open path reads 1 subtree(s) of a 4096-element document)
+
+== 3. the comparator: the surrogate reads NEUTRAL, never MET ==
+  NEUTRAL      cosmetic_keyset_build_ms
+  NEUTRAL      cosmetic_generic_set_rules
+  NEUTRAL      panel_open_core_ms
+  RECORD-ONLY  panel_open_subtree_scans
+PASS: perf_gate
+
+== 4. the T7 negatives (N=4) ==
+ok: panel budget: a trend rig may not assert the browser-side panel_open_ms budget (rejected with expected reason)
+ok: panel surrogate: a panel_* number that does not say 'surrogate: true' is refused (rejected with expected reason)
+ok: panel surrogate positive control (declared surrogate reads NEUTRAL, never MET)
+ok: panel budgets: a hand-edited budget value reddens gen_perf_budgets --check (rejected with expected reason)
+ok: panel bench: a trend input without the panel rows reddens --check (rejected with expected reason)
+
+ALL NEGATIVE CASES REJECTED AS EXPECTED (N=4)
+
+== 5. NOT-RUN, with methods (browser halves; no browser, no build, no 2k ring here) ==
+  panel open <=150 ms        : NOT-RUN (method: docs/qa/browser-harness.md#panel-open-150ms)
+  ring render <=16 fps scroll: NOT-RUN (method: docs/qa/browser-harness.md#panel-ring-scroll)
+  Both need a real Blink rig (HG-31) + a real 2k-row ring; the surrogate is labelled a subset everywhere it appears.
