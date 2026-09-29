@@ -2,7 +2,9 @@
 # run_checks.sh — the P1 governance gate (local + CI entry point).
 # Usage: tools/run_checks.sh [git-range]. git-range feeds dco_check and the
 # Register-Change trailer check (CI passes the PR base; default: full history).
-# Every check must pass (exit 0). Exit 1 = gate failed. --keep-going runs all.
+# Every check must pass (exit 0). Exit 1 = gate failed. --keep-going runs all;
+# --via-ci-invocation re-execs the gate exactly as the workflow does
+# (direct exec + range) — docs/process/ci-invocation.md.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PY="${PYTHON:-python3}"
@@ -11,6 +13,9 @@ PY="${PYTHON:-python3}"
 . "$(dirname "$0")/checks/p11_gates.sh"
 # P12-T1: the P12 feature gate bodies, same size-law split as above.
 . "$(dirname "$0")/checks/p12_gates.sh"
+# P13-P0-A: the P9 lanes that moved out (size law) + the P13 gate bodies.
+. "$(dirname "$0")/checks/p9_gates.sh"
+. "$(dirname "$0")/checks/p13_gates.sh"
 # T0-U1: --keep-going (tracer + tally live in checks/gate_runner.sh).
 . "$(dirname "$0")/checks/gate_runner.sh"; kr_parse_args "$@"
 
@@ -88,6 +93,8 @@ echo "== patch ledger incl. candidate (spike/) dirs =="
 
 echo "== workflow files: expressions + schema (compile error = zero jobs) =="
 "$PY" build/workflow_lint.py
+
+p13_p0_gates
 
 p11_lane_gates
 
@@ -261,19 +268,7 @@ fi
 # gate mode: canary + empty-input law. The fuzz fleet is wall-clock under the
 # timebox law (>=60 s gate / >=600 s evidence via XR_FUZZ_SECONDS).
 # ---------------------------------------------------------------------------
-echo "== P9-T1: browser-test fixture lint (fixtures are the spec) =="
-"$PY" tools/browser_test_lint.py --repo .
-
-echo "== P9-T2: isolation-matrix fake cells (identity x mechanism) =="
-"$PY" tools/isolation_matrix.py --repo . --check
-
-echo "== P9-T3: leaktest self-test + loopback canary (0 leaks) =="
-"$PY" tools/leaktest.py --repo . --self-test
-"$PY" tools/leaktest.py --repo . --mode loopback
-
-echo "== P9-T4: compat corpus validate + offline replay =="
-"$PY" tools/compat.py --repo . validate
-"$PY" tools/compat.py --repo . replay
+p9_test_lanes   # T1..T4 bodies live in checks/p9_gates.sh (P13-P0-A size law)
 
 echo "== P9-T5: perf budgets (plan-transcribed, diff-clean) + gate =="
 "$PY" build/qa/perf/gen_perf_budgets.py --repo . --check

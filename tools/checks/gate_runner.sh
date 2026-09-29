@@ -17,17 +17,65 @@ KEEP_GOING=0
 RANGE=""
 KR_FAILED=0
 
-# Consume --keep-going (if present) and arm the tracer; set RANGE from the
-# remaining first argument (the PR/push git range). Called BEFORE the gate
-# bodies so `set -E` is in effect for the sourced gate functions too.
+# Consume --keep-going/--via-ci-invocation (if present) and arm the tracer; set
+# RANGE from the remaining first argument (the PR/push git range). Called BEFORE
+# the gate bodies so `set -E` is in effect for the sourced gate functions too.
 kr_parse_args() {
-  if [ "${1:-}" = "--keep-going" ]; then
-    KEEP_GOING=1
-    shift
-    set -E +e   # keep-going: a failing lane is traced, never aborting
-    trap 'kr_lane_fail "$BASH_COMMAND"' ERR
-  fi
+  local via_ci=0
+  while :; do
+    case "${1:-}" in
+      --keep-going)
+        KEEP_GOING=1
+        shift
+        set -E +e   # keep-going: a failing lane is traced, never aborting
+        trap 'kr_lane_fail "$BASH_COMMAND"' ERR
+        ;;
+      --via-ci-invocation)
+        via_ci=1
+        shift
+        ;;
+      *) break ;;
+    esac
+  done
   RANGE="${1:-}"
+  if [ "$via_ci" = "1" ]; then
+    kr_ci_invocation "$RANGE"
+  fi
+}
+
+# kr_ci_invocation — run the gate the way the WORKFLOW runs it (P0-A item 4).
+#
+# The workflow says:
+#     tools/run_checks.sh "$CHECK_RANGE"        # direct exec, one argv
+# `bash tools/run_checks.sh` cannot see a mode bit, an argv difference, or a
+# `set -e`-with-range difference: bash IS the executable, so the file's mode is
+# not load-bearing. That invisibility is exactly how the exec bit stayed
+# dropped for three commits while every local run was green. This mode:
+#   1. asserts BOTH index (100755 — what a runner checks out) and filesystem
+#      executability, naming exit 126 and the fix instead of reproducing a
+#      "Permission denied" nobody can read;
+#   2. then `exec`s the literal workflow command line, so the local run and the
+#      hosted step are the same process image, argv and cwd.
+# The rule of record: "run the gate the way CI runs it."
+# Docs: docs/process/ci-invocation.md.
+kr_ci_invocation() {
+  local range="$1" self="./tools/run_checks.sh" mode idx
+  idx="$(git ls-files -s -- "$self" | awk '{print $1}')"
+  mode="$(stat -c '%a' "$self" 2>/dev/null || echo '???')"
+  if [ "$idx" != "100755" ] || [ ! -x "$self" ]; then
+    echo "CI-INVOCATION FAIL: $self is not executable (index mode ${idx:-untracked}, filesystem mode $mode)."
+    echo "  On a runner this is exactly: exit code 126, 'Process completed with exit code 126'."
+    echo "  \`bash $self\` cannot see it (bash is the executable). Fix: git update-index --chmod=+x $self"
+    return 1
+  fi
+  echo "== CI-invocation: exec $self ${range:-<no range: full history>} (the workflow's own command line) =="
+  # Argv fidelity matters as much as the mode: with an empty CHECK_RANGE the
+  # workflow calls the script with NO argument, not with "".
+  if [ -n "$range" ]; then
+    KR_CI_EXEC=1 exec "$self" "$range"
+  else
+    KR_CI_EXEC=1 exec "$self"
+  fi
 }
 
 # ERR-trap body: record one lane failure and continue. Returns 0 so the trap
