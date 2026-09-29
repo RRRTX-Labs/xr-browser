@@ -1,0 +1,67 @@
+P13-P0-C follow-up — the negatives harness lost a verdict to SIGPIPE.
+date: 2026-09-29  (local sandbox; no wall clock feeds any verdict)
+
+## 1. the symptom (run C2, work/p13-negatives-c2.log:153)
+NEGATIVE-FAIL: cosmetic byte-parity: keying on the embedder (naive optimization) reddens — rejected, but not for the expected reason
+    | (the transcript bytes that followed show a correct rejection: the
+    |  fake keyed on the embedder and drifted in BOTH cases)
+
+## 2. the mechanism, demonstrated on the fixed size (3000 lines, ~20 KB)
+$ bash -c 'set -o pipefail; out=$(seq 1 3000); printf "%s" "$out" | grep -qE "1"; echo rc=$?'
+rc=0 rc=0 rc=0 rc=0 rc=0 rc=0 rc=0 rc=0 rc=0 rc=0 rc=0 rc=0 
+  grep -q exits at its FIRST match; the writer then takes SIGPIPE and with
+  pipefail the pipeline status becomes 141 — indistinguishable, in an
+  "if ! ..." test, from "the expected reason is absent".
+
+## 3. the fix (tools/negatives/lib.sh:39-42, verdicts off a FILE)
+# producer finishes before grep exits. grep -q exits at the first match; on a
+# big $out (a cosmetic byte-parity transcript is ~30 KB) printf/seq then take
+# SIGPIPE, the pipeline status becomes 141, and `! ...` reports "not for the
+# expected reason" for a case that in fact behaved exactly as required. That
+# happened once in the P13-P0-C battery (2026-09-29, cosmetic naive-embedder
+# case) and would be indistinguishable from a real regression. So: capture to
+# a FILE once, then grep the file. No pipeline, no SIGPIPE, one verdict.
+NEG_LAST_OUT_FILE="${NEG_LAST_OUT_FILE:-${NEG_TMP:-${TMPDIR:-/tmp}}/.neg-last-out.$$}"
+neg_out_file() { printf '%s\n' "$1" >"$NEG_LAST_OUT_FILE"; }   # <captured out>
+neg_out_has()       { grep -qE "$1" "$NEG_LAST_OUT_FILE"; }    # <ERE>
+neg_out_has_fixed() { grep -qF "$1" "$NEG_LAST_OUT_FILE"; }    # <literal>
+
+  Converted call sites (no verdict rides a pipeline any more):
+    tools/negatives/p11_t0d.sh:116:  elif ! { neg_out_file "$out"; neg_out_has_fixed 'STALE BLOCKED'; }; then
+    tools/negatives/p11_t0d.sh:120:  elif { neg_out_file "$out"; neg_out_has_fixed 'row B-2'; }; then
+    tools/negatives/p11_t6.sh:55:  if { neg_out_file "$out"; neg_out_has_fixed 'build-channel-not-dev:release'; }; then
+    tools/negatives/p12_close.sh:130:  if [ "$rc" -ne 0 ] && neg_out_has_fixed "LANE FAIL" \
+    tools/negatives/p12_close.sh:131:       && neg_out_has_fixed "lane C ran"; then
+    tools/negatives/p12_close.sh:141:  if [ "$rc_d" -ne 0 ] && ! neg_out_has_fixed "lane C ran"; then
+    tools/negatives/p12_t0d.sh:22:  elif ! { neg_out_file "$out"; neg_out_has_fixed 'need >= 999999999 MiB free in'; }; then
+    tools/negatives/p12_t0d.sh:39:  elif ! { neg_out_file "$out"; neg_out_has_fixed 'SKIP (scratch space)'; }; then
+    tools/negatives/p12_t0d.sh:140:    elif ! { neg_out_file "$out"; neg_out_has_fixed 'SCRATCH-FAIL'; }; then
+    tools/negatives/p12_t7.sh:38:  elif ! { neg_out_file "$out"; neg_out_has_fixed "NEUTRAL"; }; then
+    tools/negatives/p13_p0a.sh:96:  if { neg_out_file "$out_clean"; neg_out_has_fixed 'FAIL (mode drift)'; }; then
+    tools/negatives/p13_p0b.sh:26:  elif ! { neg_out_file "$out"; neg_out_has '^::error::governance: .+ - .+$'; }; then
+    tools/negatives/p13_p0b.sh:30:  elif ! { neg_out_file "$out"; neg_out_has_fixed 'planted-gate'; }; then
+    tools/negatives/p13_p0b.sh:40:  if { neg_out_file "$out_ok"; neg_out_has_fixed '::error::'; }; then
+    tools/negatives/p13_p0b.sh:72:  if { neg_out_file "$out"; neg_out_has_fixed 'verdict:'; }; then
+
+## 4. the guard (tools/negatives/p13_p0c.sh, case 7)
+    # --- 7. the harness itself: a big-output rejection keeps its verdict --------
+    # The first C2 run of this battery caught a real harness bug: `printf BIG |
+    # grep -q PAT` takes SIGPIPE (141) when grep exits at its first match, and
+    # with `set -o pipefail` that 141 reads exactly like "the expected reason was
+    # absent". A gate that flakes red is a gate nobody trusts, so the guard is a
+    # case whose output is large and whose verdict must still be the right one.
+    case_harness_big_output_verdict() {
+      local before="$NEG_FAILURES"
+      neg_expect_reject "harness itself: a big-output rejection keeps its verdict" \
+        'BIG-MARKER' bash -c 'echo BIG-MARKER; seq 1 3000; exit 1'
+      if [ "$NEG_FAILURES" -ne "$before" ]; then
+        echo "NEGATIVE-FAIL: the harness lost a verdict on a big output (piped exit code?)"
+        NEG_FAILURES=$((NEG_FAILURES + 1))
+      else
+        echo "ok: harness: a ~20 KB rejection still matches its expected reason"
+      fi
+    }
+    neg_register harness_big_output_verdict
+
+## 5. re-run of the FULL battery (C3) is recorded in the same turn;
+     it must end ALL NEGATIVE CASES REJECTED AS EXPECTED with NEG_EXIT=0.

@@ -1,0 +1,14 @@
+== P13-P0-C refresh, content phase (append-only) ==
+date: 2026-09-19 (T0-U4 restructure; T0-U1..U3 transcripts appended) (script run; no wall clock in any verdict)
+why: a bundle cannot cite the run of the commit that contains it, so the
+     corrections that are TRUE WITHOUT AN ANCHOR HEAD land first, on their
+     own head, and the finality declaration (state/phase_head/ci rows)
+     lands in the following commit citing that head's green run.
+appended P12-CLOSE-DOD-4-C1 (corrects P12-CLOSE-DOD-4) -> VERIFIED
+appended P12-CLOSE-DOD-7-C1 (corrects P12-CLOSE-DOD-7) -> VERIFIED
+appended P12-CLOSE-DOD-8-C1 (corrects P12-CLOSE-DOD-8) -> VERIFIED
+appended P12-CLOSE-DOD-9-C1 (corrects P12-CLOSE-DOD-9) -> VERIFIED
+appended P12-CLOSE-DOD-10-C1 (corrects P12-CLOSE-DOD-10) -> PARTIAL
+appended P12-CLOSE-DOD-13-C1 (corrects P12-CLOSE-DOD-13) -> VERIFIED
+unchanged: state (absent), phase_head (absent), every original row's text
+next: --finality-only with the anchor head's run/job ids

@@ -1,0 +1,61 @@
+P13-P0-D — the treadmill's nightly red: root cause, with the evidence in order.
+
+1. What is red, and where.
+   Scheduled runs on 8db682f: treadmill 36537416905 (red), compat-beta-parity
+   36544991058 (red), sast 36412999029 (red), nightly cadence red 09-26,
+   green 09-27, red 09-28, red 09-29.
+   Failing step (treadmill): "Canary rebase (classify at latest main; issues
+   on drift)" — read from GET /actions/runs/<id>/jobs (public).
+
+2. What that step's contract says now.
+   P12-CLOSE's 49fcf47 ("the treadmill's canary exit contract made real")
+   changed build/upstream/rebase_bot.py so a CLASSIFIED verdict — GREEN,
+   DRIFT or BROKEN — exits 0, and only a tool CRASH (ToolError, e.g. a fetch
+   503 that outlived its retries) exits 1. That commit post-dates the first
+   red night, so every red night after it is either a crash or a different
+   failing step — not a classified drift verdict. Green 09-27 in the middle of
+   two red nights is the shape of weather, not of steady upstream drift.
+
+3. The crash shape, reproduced here (not guessed).
+   $ python3 -c "from fetch import GitilesFetchSource; GitilesFetchSource().ref_value('heads/main')"
+   FetchError: fetch failed for
+     https://chromium.googlesource.com/chromium/src/+refs/heads/main?format=JSON
+     after 3 attempts: HTTP Error 503: Service Unavailable
+   --- exit: 1
+   That is exactly the ToolError path 49fcf47 left red on purpose ("a broken
+   treadmill must never look green"). This sandbox measures that 503 as a
+   constant; the runner sees it intermittently at cron time.
+
+4. The steps that do not need googlesource still pass here.
+   ./scripts/build promotion discover   -> live via chromiumdash (allowlisted):
+        "Extended M152 (latest 152.0.7977.140, prev 152.0.7977.134,
+         published 2026-09-22T18:09:56Z)"                                  exit 0
+   ./scripts/build retire lint --xr-core ../xr-core -> PASS, 0 ledger rows exit 0
+   ./scripts/build fork-health --xr-core ../xr-core -> OK/SKIP rows (the
+        canary row reads "no run yet this cycle": it reports, never invents) exit 0
+   ./scripts/build assumptions run --use-deps --out work/upstream-cache
+        -> exit 1, egress (BLOCKED-NET in this sandbox)
+   (fork-health rewrote docs/state/fork-health.{md,json} in my checkout; both
+   were restored to HEAD before any commit — the tool writes state by design.)
+
+5. Conclusion (no fork change needed, no canary weakened).
+   The red is a FETCH CRASH, not genuine upstream drift: nothing to re-anchor,
+   nothing to add to the patch ledger as drift, and the canary's drift
+   predicate is untouched. The lane is red for network weather at the cron
+   hour; the classified-verdict path is proven green on 09-27. The two other
+   lanes (compat-beta-parity, sast) fail only at their own "Scheduled-lane
+   health" step, i.e. they are propagation reds — their analysis steps are
+   green (this also answers the standing P11 question about sast).
+
+6. What now makes this diagnosable next time.
+   The P0-B preamble (. tools/ci_capture.sh nightly-rebase-build) is on the
+   canary step, so the next red carries
+   ::error::nightly-rebase-build: <first failing gate> - <reason>
+   in the public annotation, instead of a bare "exit code 1".
+
+7. What would turn it green, and why the agent does not do it.
+   A bounded retry on transient 5xx inside the fetch path (or running the
+   canary at a different cron hour) would reduce the noise. Both change canary
+   behaviour and neither is demanded by this phase's brief, which forbids
+   softening a canary to get green; the recommendation is recorded here and
+   left to the human (HG-19: nightly activation is human-gated).

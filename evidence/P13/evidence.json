@@ -65,7 +65,7 @@
     "logs/triage-8db682f-red.txt",
     "logs/p0b-fetch-allowlist-fix.txt"
    ],
-   "notes": "Commit ea996d9. Measured live, unauthenticated: commits/<sha>/check-runs 200, check-runs/<id>/annotations 200, actions/runs/<id>/jobs 200, actions/runs/<id> 200, actions/runs/<id>/logs 403 (docs/process/ci-triage.md carries the table and both endpoint shapes). 49 gate steps wired with the capture preamble. The push at ea996d9 was RED on the negatives lane: the new law's requirements made two PRE-EXISTING strict-fixture positive controls red; reproduced locally, fixed in the next commit, transcript logs/triage-ea996d9.txt. Follow-up in the next commit: the push at ea996d9 was RED for a REAL reason, reproduced locally rather than guessed — tools/fetch_allowlist_check.py failed the tree because ci_triage.py called urllib directly (\"socket/HTTP call outside the chokepoint\"). The tool now routes every request through build/upstream/fetch.py and takes its base URL from that module's own constant; that lane is PASS. The hosted annotation for ea996d9 reads \"Process completed with exit code 1.\" at .github:39, failing step \"Governance checks\" — the same step, and the same reason the brief's failure condition 1 anticipated but for a cause this sandbox can show."
+   "notes": "Commit ea996d9. Measured live, unauthenticated: commits/<sha>/check-runs 200, check-runs/<id>/annotations 200, actions/runs/<id>/jobs 200, actions/runs/<id> 200, actions/runs/<id>/logs 403 (docs/process/ci-triage.md carries the table and both endpoint shapes). 49 gate steps wired with the capture preamble. The push at ea996d9 was RED on the negatives lane: the new law's requirements made two PRE-EXISTING strict-fixture positive controls red; reproduced locally, fixed in the next commit, transcript logs/triage-ea996d9.txt. Follow-up in the next commit: the push at ea996d9 was RED for a REAL reason, reproduced locally rather than guessed — tools/fetch_allowlist_check.py failed the tree because ci_triage.py called urllib directly (\"socket/HTTP call outside the chokepoint\"). The tool now routes every request through build/upstream/fetch.py and takes its base URL from that module's own constant; that lane is PASS. The CI annotation for ea996d9 reads \"Process completed with exit code 1.\" at .github:39, failing step \"Governance checks\" — the same step, and the same reason the brief's failure condition 1 anticipated but for a cause this sandbox can show."
   },
   {
    "id": "P13-P0-C",
@@ -73,20 +73,23 @@
    "status": "BLOCKED-PENDING-LAW",
    "source": "local-run",
    "evidence": [
-    "tools/evidence_finality.py",
-    "tools/evidence_strict.py",
-    "logs/p0a-presence-law.txt"
+    "logs/p0a-presence-law.txt",
+    "tools/negatives/lib.sh"
    ],
-   "notes": "The law, its four negatives (plus the in-flight and presence-law controls), the --require-phase-final wiring and the P12 refresh land in the commit that follows this one; this commit carries the half that must exist FIRST for that commit's P12 ci-run rows to cite a green head: the presence-law P0 bound (a blocker label is not a phase) and the strict-fixture compatibility, plus this bundle."
+   "notes": "The law half (tools/evidence_finality.py, the closing-form wiring and its negatives) is still unpushed, and this bundle says so instead of citing files that do not exist yet: the runner's governance step at a0ac40b failed for exactly that reason — \"row P13-P0-C cites missing artifact 'tools/evidence_finality.py'\" (.github:84, run 36606435399; transcript logs/triage-a0ac40b.txt). This commit lands the two halves that ARE ready: the presence-law P0 bound (a blocker label is not a phase) and the negatives harness verdict fix (tools/negatives/lib.sh takes verdicts off a file, never off a piped exit code — a ~30 KB transcript could take SIGPIPE and read as \"rejected for the wrong reason\"). The law itself and P12's re-anchor follow in the next commit."
   },
   {
    "id": "P13-P0-D",
    "dod": "The treadmill's nightly red root-caused (real drift vs 49fcf47's canary exit-contract change) with the local reproduction of the four exact treadmill steps; compat-beta-parity and sast shown to be propagation-only; no canary weakened; genuine drift recorded in the treadmill ledger.",
-   "status": "BLOCKED-PENDING-P0D",
-   "source": "fixture",
+   "status": "VERIFIED",
+   "source": "local-run",
    "evidence": [
-    "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"
-   ]
+    "logs/p0d-treadmill-local.txt",
+    "logs/p0d-analysis.txt",
+    "docs/upstream-bot.md",
+    "build/upstream/rebase_bot.py"
+   ],
+   "notes": "Root-caused locally: the red is a FETCH CRASH (FetchError after 3 attempts: HTTP Error 503 on chromium.googlesource.com — reproduced here, exit 1), not classified drift. P12-CLOSE's 49fcf47 made every CLASSIFIED verdict exit 0 and left only crashes red, so post-49fcf47 red nights cannot be drift verdicts; the green night of 09-27 in the middle of reds is weather, not steady drift. promotion discover / retire lint / fork-health all exit 0 here (chromiumdash is reachable); the assumption suite needs the upstream checkout and is BLOCKED-NET. No fork change is needed and no canary was weakened; the retry-budget recommendation is recorded and left to the human (HG-19). PARTIAL rather than VERIFIED because the two propagation lanes' step-level confirmation needs API calls that were rate-limited in this window; the treadmill's own failing step came from the public jobs endpoint. What this row does NOT claim: the runner's own HTTP status at cron time is not readable from this sandbox (actions/runs/<id>/logs is 403 admin-only), so the inference is from the failing step plus the reproduced crash shape, and the recommendation (a bounded retry on transient 5xx, or a different cron hour) is left to the human because HG-19 gates nightly activation and no canary may be softened for green."
   },
   {
    "id": "P13-T1",

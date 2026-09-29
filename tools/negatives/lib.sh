@@ -27,6 +27,20 @@ neg_register() {
   NEG_TOTAL=$((NEG_TOTAL + 1))
 }
 
+# --- P13-P0-C harness robustness: verdicts never ride a pipeline ------------
+# `printf '%s' "$out" | grep -q PAT` gives the RIGHT answer only when the
+# producer finishes before grep exits. grep -q exits at the first match; on a
+# big $out (a cosmetic byte-parity transcript is ~30 KB) printf/seq then take
+# SIGPIPE, the pipeline status becomes 141, and `! ...` reports "not for the
+# expected reason" for a case that in fact behaved exactly as required. That
+# happened once in the P13-P0-C battery (2026-09-29, cosmetic naive-embedder
+# case) and would be indistinguishable from a real regression. So: capture to
+# a FILE once, then grep the file. No pipeline, no SIGPIPE, one verdict.
+NEG_LAST_OUT_FILE="${NEG_LAST_OUT_FILE:-${NEG_TMP:-${TMPDIR:-/tmp}}/.neg-last-out.$$}"
+neg_out_file() { printf '%s\n' "$1" >"$NEG_LAST_OUT_FILE"; }   # <captured out>
+neg_out_has()       { grep -qE "$1" "$NEG_LAST_OUT_FILE"; }    # <ERE>
+neg_out_has_fixed() { grep -qF "$1" "$NEG_LAST_OUT_FILE"; }    # <literal>
+
 # neg_expect_reject <desc> <expected-pattern> <cmd...>
 # Assert the command EXITS NON-ZERO with the expected reason.
 neg_expect_reject() {
@@ -37,7 +51,7 @@ neg_expect_reject() {
   if [ "$rc" -eq 0 ]; then
     echo "NEGATIVE-FAIL: $desc — gate PASSED on bad input (rc=0)"
     NEG_FAILURES=$((NEG_FAILURES + 1))
-  elif ! printf '%s' "$out" | grep -qE "$pattern"; then
+  elif ! { neg_out_file "$out"; neg_out_has "$pattern"; }; then
     echo "NEGATIVE-FAIL: $desc — rejected, but not for the expected reason"
     printf '%s\n' "$out" | sed 's/^/    | /'
     NEG_FAILURES=$((NEG_FAILURES + 1))
@@ -58,7 +72,7 @@ neg_expect_inband() {
     echo "NEGATIVE-FAIL: $desc — command errored (rc=$rc); expected in-band rejection"
     printf '%s\n' "$out" | sed 's/^/    | /'
     NEG_FAILURES=$((NEG_FAILURES + 1))
-  elif ! printf '%s' "$out" | grep -qE "$pattern"; then
+  elif ! { neg_out_file "$out"; neg_out_has "$pattern"; }; then
     echo "NEGATIVE-FAIL: $desc — in-band rejection pattern not found"
     printf '%s\n' "$out" | sed 's/^/    | /'
     NEG_FAILURES=$((NEG_FAILURES + 1))
@@ -133,7 +147,24 @@ neg_ci_pair_for_head() {   # <head> -> "run job"
 }
 
 neg_finality_props() {   # <repo-root> <phase-dir> [head]
-  local R="$1" PH="$2" head="${3:-0000000000000000000000000000000000000000}"
+  local R="$1" PH="$2" head="${3:-}"
+  # The head must be known BEFORE the run/job pair is chosen: the resolver
+  # certifies a ci-run row only when the JOB is green AND the RUN's head_sha is
+  # a commit the bundle records, so a pair picked for the wrong head reddens the
+  # fixture for a reason that has nothing to do with the law under test. (This
+  # bit once the API quota returned: live resolution made it visible where the
+  # 403-era SKIP had hidden it — 2026-09-29.)
+  if [ -z "$head" ] || [ "$head" = "0000000000000000000000000000000000000000" ]; then
+    head="$("$PY" - "$R/evidence/$PH/evidence.json" <<'PYH'
+import json, re, sys
+doc = json.loads(open(sys.argv[1], encoding="utf-8").read())
+blob = " ".join(str(doc.get(k, "")) for k in ("pin", "repos"))
+m = re.search(r"\b[0-9a-f]{7,40}\b", blob, re.I)
+print(m.group(0) if m else "")
+PYH
+)"
+  fi
+  [ -n "$head" ] || head="0000000000000000000000000000000000000000"
   local CI_PAIR; CI_PAIR="$(neg_ci_pair_for_head "$head")"
   mkdir -p "$R/evidence/$PH/logs"
   [ -f "$R/evidence/$PH/human-gates.md" ] || printf 'fixture human gates\n' > "$R/evidence/$PH/human-gates.md"

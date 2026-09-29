@@ -35,7 +35,7 @@ case_perf_gate_surrogate_never_met() {
   if [ "$rc" -ne 0 ]; then
     echo "NEGATIVE-FAIL: perf_gate must PASS (no MISSED) on a surrogate below budget — it rules NEUTRAL, not an error"
     NEG_FAILURES=$((NEG_FAILURES + 1))
-  elif ! printf '%s' "$out" | grep -q "NEUTRAL"; then
+  elif ! { neg_out_file "$out"; neg_out_has_fixed "NEUTRAL"; }; then
     echo "NEGATIVE-FAIL: surrogate below budget must read NEUTRAL, never MET"
     printf '%s\n' "$out" | sed 's/^/    | /'
     NEG_FAILURES=$((NEG_FAILURES + 1))

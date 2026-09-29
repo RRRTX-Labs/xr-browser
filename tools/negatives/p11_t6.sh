@@ -52,7 +52,7 @@ case_t6_gate_drift() {
   local out
   out="$(printf '{"args":{},"method":"debug-page"}' \
     | "$PY" "$XR_CORE_ABS_T6/fakes/shield.py" 2>/dev/null)" || true
-  if printf '%s' "$out" | grep -q 'build-channel-not-dev:release'; then
+  if { neg_out_file "$out"; neg_out_has_fixed 'build-channel-not-dev:release'; }; then
     echo "ok: fake debug-page positive control (default channel refuses typed)"
   else
     echo "NEGATIVE-FAIL: the fake must refuse debug-page on the default channel"

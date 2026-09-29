@@ -93,7 +93,7 @@ case_entry_mode_drift_range() {
   # no mode change and must produce no drift finding.
   local out_clean
   out_clean="$("$PY" tools/entrypoint_mode_check.py --repo "$R" --range HEAD~2..HEAD~1 2>&1)" || true
-  if printf '%s' "$out_clean" | grep -q 'FAIL (mode drift)'; then
+  if { neg_out_file "$out_clean"; neg_out_has_fixed 'FAIL (mode drift)'; }; then
     echo "NEGATIVE-FAIL: the mode-drift law fired on a clean range"
     NEG_FAILURES=$((NEG_FAILURES + 1))
   else

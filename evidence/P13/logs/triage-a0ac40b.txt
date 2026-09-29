@@ -1,0 +1,10 @@
+ci-triage: repo=RRRTX-Labs/xr-browser sha=a0ac40b71eb7
+  check-run governance: completed/failure (run 36606435399, job: governance -> failure)
+    failing step: 9. Governance checks
+    (10 step(s) skipped after the failure — the cascade a bare exit code hides)
+    [warning] .github:2: Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+    [failure] .github:86: Process completed with exit code 1.
+    [failure] .github:84: governance: evidence/P13/evidence.json - /home/runner/work/xr-browser/xr-browser/evidence/P13/evidence.json: row P13-P0-C cites missing artifact 'tools/evidence_finality.py'
+    [notice] .github:1: "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+  verdict: RED — 1 failing check-run(s)
+  logs: run 36606435399: BLOCKED-NET (HTTP 403 from /repos/RRRTX-Labs/xr-browser/actions/runs/36606435399/logs) (/logs is admin-only; use --sha for the public path)

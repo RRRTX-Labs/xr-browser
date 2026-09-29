@@ -1,0 +1,39 @@
+P13-P0-D — local reproduction of the treadmill's exact steps (2026-09-29)
+sandbox egress: chromium.googlesource.com = HTTP 503 in ~0.08s (BLOCKED-NET)
+
+=== $ ./scripts/build promotion discover
+promotion series: Extended M152 (latest 152.0.7977.140, prev 152.0.7977.134, published 2026-09-22T18:09:56.766000+00:00) — live via chromiumdash:fetch_releases
+--- exit: 0
+
+=== $ ./scripts/build retire lint --xr-core ../xr-core
+PASS: retirement-lint (0 ledger rows)
+--- exit: 0
+
+=== $ ./scripts/build fork-health --xr-core ../xr-core
+OK     budget:hook_points: 0/45
+OK     budget:network_seams: 1/20
+OK     budget:ui: 1/35
+OK     budget:TOTAL: 4/150
+SKIP   seams-retired (§12.5 reward metric): 0
+SKIP   rebase canary (last run): no run yet this cycle
+SKIP   assumptions §12.4: no run recorded
+SKIP   fastlane drills: none recorded
+OK     feature-freeze marker: absent
+
+wrote docs/state/fork-health.md + docs/state/fork-health.json
+(4 row(s) SKIP/OVER/DRIFT — visible by design, L6)
+--- exit: 0
+
+
+=== $ python3 -c 'GitilesFetchSource().ref_value("heads/main")'   (the canary's first line)
+FetchError: fetch failed for https://chromium.googlesource.com/chromium/src/+refs/heads/main?format=JSON after 3 attempts: HTTP Error 503: Service Unavailable
+--- exit: 1 (ToolError: the crash shape that reddens the night)
+
+=== $ ./scripts/build assumptions run --use-deps --out work/upstream-cache
+P0 artifact: work/upstream-cache/20260929T174009Z-P0-assumption-A2.md
+P0 artifact: work/upstream-cache/20260929T174009Z-P0-assumption-A3.md
+P0 artifact: work/upstream-cache/20260929T174009Z-P0-assumption-A4.md
+P0 artifact: work/upstream-cache/20260929T174009Z-P0-assumption-A5.md
+P0 artifact: work/upstream-cache/20260929T174009Z-P0-assumption-A6.md
+P0 artifact: work/upstream-cache/20260929T174009Z-P0-assumption-A7.md
+--- exit: 1

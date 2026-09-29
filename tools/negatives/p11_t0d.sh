@@ -113,11 +113,11 @@ JSON
     echo "NEGATIVE-FAIL: stale BLOCKED (cargo proven present) passed strict — rule (e) inert"
     printf '%s\n' "$out" | sed 's/^/    | /'   # visibility law: show the findings
     NEG_FAILURES=$((NEG_FAILURES + 1))
-  elif ! printf '%s' "$out" | grep -q 'STALE BLOCKED'; then
+  elif ! { neg_out_file "$out"; neg_out_has_fixed 'STALE BLOCKED'; }; then
     echo "NEGATIVE-FAIL: rejected, but not as STALE BLOCKED"
     printf '%s\n' "$out" | sed 's/^/    | /'
     NEG_FAILURES=$((NEG_FAILURES + 1))
-  elif printf '%s' "$out" | grep -q 'row B-2'; then
+  elif { neg_out_file "$out"; neg_out_has_fixed 'row B-2'; }; then
     echo "NEGATIVE-FAIL: rule (e) fired on the UNOBSERVED tool (go) — the ledger must not certify what no run printed"
     printf '%s\n' "$out" | sed 's/^/    | /'   # visibility law: name the firing arm
     NEG_FAILURES=$((NEG_FAILURES + 1))

@@ -23,11 +23,11 @@ case_annotation_names_the_lane() {
   if [ "$rc" -eq 0 ]; then
     echo "NEGATIVE-FAIL: the forced-failure step exited 0"
     NEG_FAILURES=$((NEG_FAILURES + 1))
-  elif ! printf '%s' "$out" | grep -qE '^::error::governance: .+ - .+$'; then
+  elif ! { neg_out_file "$out"; neg_out_has '^::error::governance: .+ - .+$'; }; then
     echo "NEGATIVE-FAIL: no well-formed annotation was emitted"
     printf '%s\n' "$out" | sed 's/^/    | /'
     NEG_FAILURES=$((NEG_FAILURES + 1))
-  elif ! printf '%s' "$out" | grep -q 'planted-gate'; then
+  elif ! { neg_out_file "$out"; neg_out_has_fixed 'planted-gate'; }; then
     echo "NEGATIVE-FAIL: the annotation does not name the failing gate"
     printf '%s\n' "$out" | sed 's/^/    | /'
     NEG_FAILURES=$((NEG_FAILURES + 1))
@@ -37,7 +37,7 @@ case_annotation_names_the_lane() {
   # and the same body, succeeding, must emit NOTHING (no crying wolf)
   local out_ok
   out_ok="$(bash -c '. tools/ci_capture.sh governance; true' 2>&1)" || true
-  if printf '%s' "$out_ok" | grep -q '::error::'; then
+  if { neg_out_file "$out_ok"; neg_out_has_fixed '::error::'; }; then
     echo "NEGATIVE-FAIL: a green step emitted a failure annotation"
     NEG_FAILURES=$((NEG_FAILURES + 1))
   else
@@ -69,7 +69,7 @@ case_ci_triage_never_guesses() {
   # The refusal must not carry a verdict line (that would be the guess).
   local out
   out="$("$PY" tools/ci_triage.py --offline "$empty" --sha 0000000000000000000000000000000000000000 2>&1)" || true
-  if printf '%s' "$out" | grep -q 'verdict:'; then
+  if { neg_out_file "$out"; neg_out_has_fixed 'verdict:'; }; then
     echo "NEGATIVE-FAIL: the blocked path printed a verdict — that is the guess"
     NEG_FAILURES=$((NEG_FAILURES + 1))
   else

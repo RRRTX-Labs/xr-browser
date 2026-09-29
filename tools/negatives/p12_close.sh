@@ -126,8 +126,9 @@ SH
   # rc=$?` lets `set -euo pipefail` abort the dispatcher on the inner
   # script's (expected) non-zero exit before rc is even assigned.
   out="$(bash "$R/tools/run_checks.sh" --keep-going 2>&1)" && rc=0 || rc=$?
-  if [ "$rc" -ne 0 ] && printf '%s' "$out" | grep -q "LANE FAIL" \
-       && printf '%s' "$out" | grep -q "lane C ran"; then
+  neg_out_file "$out"
+  if [ "$rc" -ne 0 ] && neg_out_has_fixed "LANE FAIL" \
+       && neg_out_has_fixed "lane C ran"; then
     echo "ok: --keep-going reported the failures AND still ran the downstream lane (single pass)"
   else
     echo "NEGATIVE-FAIL: --keep-going must run every lane and report each failure"
@@ -136,7 +137,8 @@ SH
   fi
   # and the default path still aborts at the first failure
   out_d="$(bash "$R/tools/run_checks.sh" 2>&1)" && rc_d=0 || rc_d=$?
-  if [ "$rc_d" -ne 0 ] && ! printf '%s' "$out_d" | grep -q "lane C ran"; then
+  neg_out_file "$out_d"
+  if [ "$rc_d" -ne 0 ] && ! neg_out_has_fixed "lane C ran"; then
     echo "ok: default path still aborts at the first failing lane"
   else
     echo "NEGATIVE-FAIL: default path must abort at the first failing lane"

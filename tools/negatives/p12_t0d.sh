@@ -19,7 +19,7 @@ case_scratch_preflight_fails_fast() {
   if [ "$rc" -eq 0 ]; then
     echo "NEGATIVE-FAIL: scratch_require accepted an impossible free-space demand"
     NEG_FAILURES=$((NEG_FAILURES + 1))
-  elif ! printf '%s' "$out" | grep -q 'need >= 999999999 MiB free in'; then
+  elif ! { neg_out_file "$out"; neg_out_has_fixed 'need >= 999999999 MiB free in'; }; then
     echo "NEGATIVE-FAIL: scratch_require failed but did not name the requirement"
     printf '%s\n' "$out" | sed 's/^/    | /'
     NEG_FAILURES=$((NEG_FAILURES + 1))
@@ -36,7 +36,7 @@ case_scratch_preflight_skip_shape() {
   if [ "$rc" -ne 77 ]; then
     echo "NEGATIVE-FAIL: SCRATCH_SKIP_ON_SHORT must yield a visible SKIP (77), got rc=$rc"
     NEG_FAILURES=$((NEG_FAILURES + 1))
-  elif ! printf '%s' "$out" | grep -q 'SKIP (scratch space)'; then
+  elif ! { neg_out_file "$out"; neg_out_has_fixed 'SKIP (scratch space)'; }; then
     echo "NEGATIVE-FAIL: the SKIP line must be visible, not silent"
     NEG_FAILURES=$((NEG_FAILURES + 1))
   else
@@ -73,8 +73,12 @@ case_scratch_tar_excludes_build_outputs() {
   # Assert on FILES, not directories: `--exclude=*/build/*` matches the
   # CONTENTS of build/, so an emptied build/ directory may legitimately ride
   # along. What must never arrive is a .git object, a .o, or a .pyc.
-  if find "$D" -name '*.o' -o -name '*.pyc' | grep -q . \
-     || [ -e "$D/.git" ]; then
+  local junk
+  junk="$(find "$D" \( -name '*.o' -o -name '*.pyc' \) -print -quit)"
+  # `[ -n "$junk" ]`, never `find … | grep -q .`: grep -q exits at the first
+  # match and find then dies on SIGPIPE, so pipefail turns a detection into a
+  # 141 that reads exactly like "nothing found" (the P13-P0-C harness bug).
+  if [ -n "$junk" ] || [ -e "$D/.git" ]; then
     echo "NEGATIVE-FAIL: the exclude list did not keep build outputs out"
     NEG_FAILURES=$((NEG_FAILURES + 1))
   elif [ ! -f "$D/keep.txt" ]; then
@@ -133,7 +137,7 @@ case_scratch_refuses_repo_into_itself() {
     if [ "$rc" -eq 0 ]; then
       echo "NEGATIVE-FAIL: scratch_tar_tree accepted a self-nesting destination ($d)"
       NEG_FAILURES=$((NEG_FAILURES + 1))
-    elif ! printf '%s' "$out" | grep -q 'SCRATCH-FAIL'; then
+    elif ! { neg_out_file "$out"; neg_out_has_fixed 'SCRATCH-FAIL'; }; then
       echo "NEGATIVE-FAIL: refused $d but not with SCRATCH-FAIL"
       printf '%s\n' "$out" | sed 's/^/    | /'
       NEG_FAILURES=$((NEG_FAILURES + 1))
