@@ -28,11 +28,16 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 _p13t1_scratch_core() {
   local D="$1" leak="${2:-}"
   rm -rf "$D"
-  mkdir -p "$D/ui/panel/tests" "$D/ui/toolchain"
-  cp "$REPO_ROOT/../xr-core/ui/panel/focus-trap.ts" "$D/ui/panel/"
-  cp "$REPO_ROOT/../xr-core/ui/panel/panel-frame.ts" "$D/ui/panel/"
-  cp "$REPO_ROOT/../xr-core/ui/panel/tests/focus-trap.test.mjs" \
-     "$D/ui/panel/tests/"
+  mkdir -p "$D/ui/panel" "$D/ui/toolchain"
+  # P13-CLOSE: the lane grew (C-1…C-5 added the tab-registry, site,
+  # observatory, update, breakage and sent suites to the same script), so a
+  # fixture carrying only focus-trap/panel-frame stopped being a NEGATIVE
+  # fixture and started being a broken tree: the lane reddened at "esbuild could
+  # not resolve tab-registry.ts" — a red for the wrong reason, in the one case
+  # that must reject for the RIGHT one. Copy the panel as the lane actually
+  # reads it (the toolchain stays a symlink: no install, no network), then plant
+  # the leak in the copy.
+  cp -r "$REPO_ROOT/../xr-core/ui/panel/." "$D/ui/panel/"
   ln -s "$REPO_ROOT/../xr-core/ui/toolchain/node_modules" \
      "$D/ui/toolchain/node_modules"
   cp "$REPO_ROOT/../xr-core/ui/toolchain/package.json" "$D/ui/toolchain/" 2>/dev/null || true
@@ -54,7 +59,7 @@ case_panel_leaky_trap_reddens() {
   local D="$NEG_TMP/t1-leak"
   _p13t1_scratch_core "$D" leak
   neg_expect_reject "panel focus trap: containment deleted in a scratch core reddens the lane" \
-    'focus-containment suite failed' \
+    'focus-containment/tab-registry suite failed' \
     env XR_CORE="$D" bash build/webui/panel-tests.sh
   rm -rf "$D"
 }
