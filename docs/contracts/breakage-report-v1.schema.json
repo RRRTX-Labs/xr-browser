@@ -1,0 +1,46 @@
+{
+ "$schema-note": "Hand-rolled strict subset (no jsonschema dependency, per DEPENDENCY RULES). Validated by tools/xr_schema.py. additionalProperties is false everywhere. LAWS: `context` carries ONLY origin (scheme + registrable domain — no path, no query, no fragment), a UA-LESS browser version tag, the matched rule/list ids and the list's bundle version; page content, cookies, full URLs and user agents are absent BY SCHEMA, so a report that tries to carry them is refused before it is written, not scrubbed after. `queue` is const \"fixture\": this contract has no live mode in this repository, and a payload that claims otherwise cannot be validated. `sla` is DATA (label + hours + class), never a rendered sentence, so no tool can assert a median it did not measure. `created_at` is caller-supplied (`--as-of`): the generator contains no clock.",
+ "contract": "breakage-report",
+ "contract_version": 1,
+ "type": "object",
+ "additionalProperties": false,
+ "required": ["report", "contract_version", "created_at", "context", "sla", "queue", "user_note"],
+ "properties": {
+  "report": { "const": "breakage_report" },
+  "contract_version": { "type": "integer", "const": 1 },
+  "created_at": { "type": "string" },
+  "user_note": { "type": "string" },
+  "queue": { "type": "string", "const": "fixture" },
+  "context": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": ["origin", "browser_version_tag", "rule_id", "list_id", "bundle_version", "action"],
+   "properties": {
+    "origin": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": ["scheme", "registrable_domain"],
+     "properties": {
+      "scheme": { "type": "string", "enum": ["http", "https"] },
+      "registrable_domain": { "type": "string" }
+     }
+    },
+    "browser_version_tag": { "type": "string" },
+    "rule_id": { "type": "string" },
+    "list_id": { "type": "string" },
+    "bundle_version": { "type": "integer" },
+    "action": { "type": "string", "enum": ["kBlocked", "kAllowed", "kRedirected", "kUpgraded"] }
+   }
+  },
+  "sla": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": ["label", "hours", "class"],
+   "properties": {
+    "label": { "type": "string" },
+    "hours": { "type": "integer" },
+    "class": { "type": "string", "enum": ["corpus-linked", "unclassified"] }
+   }
+  }
+ }
+}

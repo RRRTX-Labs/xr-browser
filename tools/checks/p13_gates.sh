@@ -184,3 +184,18 @@ p13_c2_observatory_gates() {
   echo "== P13-T3: observatory export (redaction contract + smuggle corpus) =="
   "$PY" tools/observatory_export.py --check
 }
+
+p13_c3_breakage_gates() {
+  # P13-T4: the breakage report. The lane runs the vector suite: two accepted
+  # payloads that must validate, and eight refusals that must be refused WITH
+  # their class named (an extra `html` field, a missing required block, an origin
+  # carrying a path, a note carrying a URL/query, a cookie, a UA string, selector
+  # text, and `queue: "live"`).
+  #
+  # Nothing here touches the network: the report path has no transport in this
+  # repository, on purpose (docs/panel/breakage-report.md). Live filing is
+  # HUMAN-GATED, the queue is a local fixture tree labelled `fixture` in its path
+  # and in this tool's stdout, and no median is computed anywhere.
+  echo "== P13-T4: breakage report vectors (refusals pre-send, queue: fixture only) =="
+  "$PY" tools/breakage_report.py --check
+}

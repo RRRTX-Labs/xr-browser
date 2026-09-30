@@ -286,3 +286,5 @@ the Observatory renders `page_modifying:true` rows under that category
 (plan §12 UX: "why blocked"/"shields down" cover cosmetic too). Both
 backends are byte-parity for the new field/codes (313 vectors, pinned by
 `shield_vectors_check.py` and `xr-core/shield/tests/test_golden_vectors.cc`).
+
+| breakage-report-v1 | P13-T4 | LIVING | `breakage-report-v1.schema.json` + `docs/contracts/vectors/breakage-report-v1.json` | FROZEN.yaml untouched (14 rows still PENDING, HG-26); ratifying a contract is a human act |
