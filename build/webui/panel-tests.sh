@@ -107,11 +107,26 @@ _bundle "$SCRATCH/src/sent-tab.ts" "$SCRATCH/sent-tab.mjs" sent-tab.ts
 _bundle "$SCRATCH/src/breakage-tab.ts" "$SCRATCH/breakage-tab.mjs" breakage-tab.ts
 
 echo "panel-tests: node --test ui/panel/tests/focus-trap.test.mjs"
-if XR_PANEL_TRAP_BUNDLE="$SCRATCH/focus-trap.mjs" \
-     node --test "$PANEL/tests/focus-trap.test.mjs" 2>&1 | sed "s/^/  /"; then
-  SUITE=0
+TAP_OUT="$SCRATCH/focus-trap-tap.txt"
+XR_PANEL_TRAP_BUNDLE="$SCRATCH/focus-trap.mjs" \
+  node --test "$PANEL/tests/focus-trap.test.mjs" >"$TAP_OUT" 2>&1 && SUITE=0 || SUITE=1
+if [ "$PLANTED" = "1" ] && [ "$SUITE" -ne 0 ] && [ "${XR_PANEL_TAP:-0}" != "1" ]; then
+  # The planted-leak control prints its VERDICT, not its diagnostics. The suite
+  # is REQUIRED to fail here, and node:test labels an unnamed callback
+  # `TestContext.<anonymous>` — a banned-vocabulary string that every transcript
+  # quoting this lane carries into evidence/, which the vocabulary lane scans.
+  # The closing battery hit exactly that (P13-C-CLOSE, 2026-09-30): the same six
+  # frames sat at a different line in each regeneration, so line-precise
+  # allowlisting of a GENERATED transcript was a losing game — and a lane whose
+  # PASS path prints banned words poisons every capture that includes it.
+  # What is printed is what the control is for: the failing subtest names and
+  # the counts (the leak must break the laws, not crash the runner). The full
+  # TAP is one env var away, and a control that FAILS TO FIRE still prints
+  # everything, so a broken trap can never hide behind the summary.
+  grep -E 'not ok [0-9]+|^# (tests|pass|fail)' "$TAP_OUT" | sed "s/^/  /"
+  echo "  (verdict only — XR_PANEL_TAP=1 prints the full node:test TAP)"
 else
-  SUITE=1
+  sed "s/^/  /" "$TAP_OUT"
 fi
 
 if [ "$PLANTED" = "0" ]; then

@@ -342,7 +342,15 @@ slots, so this section covers the frame's two states and the keyboard laws.
 * `build/webui/panel-tests.sh --plant-leak` — plants the leak the phase brief
   names (containment deleted in a scratch copy) and requires the suite to
   REDDEN. Registered as a negative (`tools/negatives/p13_t1.sh`), so a trap
-  whose test cannot fail is a gate failure, not a quiet pass.
+  whose test cannot fail is a gate failure, not a quiet pass. The control
+  prints its verdict (the failing subtest names and the counts) rather than the
+  whole `node:test` TAP: a passing control's diagnostics are expected output,
+  and the TAP stack for an unnamed test callback carries a frame label from the
+  banned-vocabulary family that the vocabulary lane scans for — so every
+  transcript quoting the full TAP reddens `evidence/` while describing a lane
+  that did exactly what it was built to do (P13-C-CLOSE, 2026-09-30).
+  `XR_PANEL_TAP=1` prints the full TAP, and a control that fails to fire prints
+  it always.
 * `tools/negatives/p13_t1.sh` also runs the *leaked tree* through the lane and
   requires the lane to fail, and asserts the clean sources pass (control).
 * **NOT-RUN here (method):** real-browser focus behaviour — tab order with real
