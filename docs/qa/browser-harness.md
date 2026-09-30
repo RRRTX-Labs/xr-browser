@@ -192,3 +192,38 @@ its window means nothing.
 Both methods need a real Blink rig, a real build and a real 2k-row ring; none of
 the three exists in this sandbox. The surrogate above is not a substitute — it
 is labelled a subset everywhere it appears.
+
+## P13-T4/T6: the breakage report and the what-would-be-sent viewer (NOT-RUN)
+
+Two surfaces whose *rendered* halves stay unmeasured here, for the same reason as
+everything above: no browser (HG-31). The honest statement of each method:
+
+### breakage-report confirmation: one click, no modal (NOT-RUN)
+
+`↦ NOT-RUN (method: docs/qa/browser-harness.md#breakage-report-confirmation)` —
+on the reference rig: open the breakage tab with a blocked event selected, click
+the confirmation control once, and assert (a) the report is composed into the
+preview with the same field set the serializer would write, (b) no modal, dialog,
+badge, toast or banner appears anywhere in the frame, and (c) keyboard focus
+never moves to a notification surface. The structural half is asserted in
+`xr-core/ui/panel/tests/breakage-tab.test.mjs` (`assertConfirmable()` throws on
+that vocabulary); what the rig adds is that a real renderer cannot route around
+it.
+
+### what-would-be-sent: the preview equals the payload (NOT-RUN)
+
+`↦ NOT-RUN (method: docs/qa/browser-harness.md#what-would-be-sent-parity)` — on
+the reference rig: with a payload open in the viewer, copy the preview's rows out
+of the DOM and compare them, path for path and in order, with the bytes the
+serializer produces for the same payload; then plant an extra payload field and
+assert it appears in the rendered rows. The structural half is
+`ui/panel/tests/sent-tab.test.mjs` (planted `cookie` field must render,
+`hiddenFields()` must be empty); the rig's half is the DOM.
+
+### observatory export cost on a full 2k ring (NOT-RUN)
+
+`↦ NOT-RUN (method: docs/qa/browser-harness.md#observatory-export-cost)` — on the
+reference rig: fill the ring to its 2000-row cap, export JSON and CSV, and record
+the wall-clock cost and the produced size per format, with `rig_class` printed.
+No export cost or size number is claimed in this phase: the surrogate lane
+measures the frame's pure core, not the export.

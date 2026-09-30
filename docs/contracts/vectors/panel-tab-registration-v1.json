@@ -1,0 +1,93 @@
+{
+  "contract": "panel-tab-registration",
+  "contract_version": 1,
+  "note": "Vectors for the registration RECORD (docs/contracts/panel-tab-registration-v1.schema.json). The SEMANTIC refusals — an id the inventory does not declare (`unknown-tab-id`), two tabs claiming one `order` (`order-collision` / `duplicate-order`), a registration that renumbers itself (`order-mismatch`), an order outside the reserved band (`order-out-of-range`), the same id twice (`duplicate-id`) — are the registry's, not the schema's: they need the inventory to judge, and they are proven in xr-core/ui/panel/tests/tab-registry.test.mjs. This file proves the STRUCTURAL half, which is what a schema can honestly own.",
+  "accept": [
+    {
+      "case": "the site tab, exactly as ui/panel/tabs.json declares it",
+      "payload": {
+        "id": "site",
+        "title_msgid": "panel.tab.site",
+        "order": 10,
+        "requires_identity_scope": true
+      }
+    },
+    {
+      "case": "a tab that does not require an identity scope (update is per-installation, not per-identity)",
+      "payload": {
+        "id": "update",
+        "title_msgid": "panel.tab.update",
+        "order": 40,
+        "requires_identity_scope": false
+      }
+    }
+  ],
+  "refuse": [
+    {
+      "case": "extra-copy-field",
+      "expect_refusal": "additional property",
+      "why": "A registration may not carry copy. A tab title is a msgid; a string here is untranslatable prose that no l10n lane would ever see.",
+      "payload": {
+        "id": "site",
+        "title_msgid": "panel.tab.site",
+        "title": "Site",
+        "order": 10,
+        "requires_identity_scope": true
+      }
+    },
+    {
+      "case": "missing-title-msgid",
+      "expect_refusal": "required property missing",
+      "why": "Without a msgid the frame has nothing to render as a title, and the tab strip would fall back to the id — a machine token shown to a user.",
+      "payload": {
+        "id": "site",
+        "order": 10,
+        "requires_identity_scope": true
+      }
+    },
+    {
+      "case": "order-not-an-integer",
+      "expect_refusal": "expected integer",
+      "why": "A string order is how two tabs end up '10' and 10 sorting differently in the strip.",
+      "payload": {
+        "id": "site",
+        "title_msgid": "panel.tab.site",
+        "order": "10",
+        "requires_identity_scope": true
+      }
+    },
+    {
+      "case": "order-as-float",
+      "expect_refusal": "expected integer",
+      "why": "Fractional orders let a subsystem take 10.5 and quietly sit between two declared tabs that nobody asked it to move.",
+      "payload": {
+        "id": "site",
+        "title_msgid": "panel.tab.site",
+        "order": 10.5,
+        "requires_identity_scope": true
+      }
+    },
+    {
+      "case": "identity-scope-not-a-boolean",
+      "expect_refusal": "expected boolean",
+      "why": "The field decides whether the tab is offered per-identity. A truthy string ('yes', 'identity') decides it by accident, in a renderer, at the worst moment.",
+      "payload": {
+        "id": "site",
+        "title_msgid": "panel.tab.site",
+        "order": 10,
+        "requires_identity_scope": "yes"
+      }
+    },
+    {
+      "case": "id-not-a-string",
+      "expect_refusal": "expected string",
+      "why": "The id is the key the inventory, the allowlist and the deep link all share; a number here matches nothing and refuses nothing.",
+      "payload": {
+        "id": 10,
+        "title_msgid": "panel.tab.site",
+        "order": 10,
+        "requires_identity_scope": true
+      }
+    }
+  ]
+}

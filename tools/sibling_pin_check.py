@@ -96,6 +96,8 @@ REGISTER: dict[str, tuple[str, str]] = {
     "tools/sibling_pin_check.py": ("self", "this audit: pattern P6 is a string in it, so it matches itself"),
     "build/qa/_common.py": ("self", "xr_core_root() delegates to xr_sibling.check()"),
     "tools/coverage_check.py": ("routed", "roster read; the P13-C-P0.1 defect"),
+    "tools/panel_registry_check.py": ("routed", "P13-T6: reads the sibling's ui/panel inventory + grdp through xr_sibling.check"),
+    "tools/observatory_export.py": ("arg-only", "explicit --repo; the golden row it byte-compares is in this repo"),
     "build/webui/panel-tests.sh": ("routed", "P6 shell layout guess -> the xr_sibling CLI (P13-C-P0.2b)"),
     "build/webui/repro-check.sh": ("routed", "P6 shell layout guess -> the xr_sibling CLI (P13-C-P0.2b)"),
     "build/webui/toolchain.sh": ("routed", "P6 shell layout guess -> the xr_sibling CLI (P13-C-P0.2b)"),

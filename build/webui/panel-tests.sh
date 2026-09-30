@@ -89,6 +89,8 @@ cp "$PANEL/tab-registry.ts" "$SCRATCH/src/tab-registry.ts"
 cp "$PANEL/site-tab.ts" "$SCRATCH/src/site-tab.ts"
 cp "$PANEL/observatory-tab.ts" "$SCRATCH/src/observatory-tab.ts"
 cp "$PANEL/update-tab.ts" "$SCRATCH/src/update-tab.ts"
+cp "$PANEL/sent-tab.ts" "$SCRATCH/src/sent-tab.ts"
+cp "$PANEL/breakage-tab.ts" "$SCRATCH/src/breakage-tab.ts"
 
 _bundle() {   # <src-ts> <out-mjs> <label>
   ( cd "$TOOLCHAIN" && node_modules/.bin/esbuild "$1" --bundle --format=esm \
@@ -101,6 +103,8 @@ _bundle "$SCRATCH/src/tab-registry.ts" "$SCRATCH/tab-registry.mjs" tab-registry.
 _bundle "$SCRATCH/src/site-tab.ts" "$SCRATCH/site-tab.mjs" site-tab.ts
 _bundle "$SCRATCH/src/observatory-tab.ts" "$SCRATCH/observatory-tab.mjs" observatory-tab.ts
 _bundle "$SCRATCH/src/update-tab.ts" "$SCRATCH/update-tab.mjs" update-tab.ts
+_bundle "$SCRATCH/src/sent-tab.ts" "$SCRATCH/sent-tab.mjs" sent-tab.ts
+_bundle "$SCRATCH/src/breakage-tab.ts" "$SCRATCH/breakage-tab.mjs" breakage-tab.ts
 
 echo "panel-tests: node --test ui/panel/tests/focus-trap.test.mjs"
 if XR_PANEL_TRAP_BUNDLE="$SCRATCH/focus-trap.mjs" \
@@ -115,6 +119,24 @@ if [ "$PLANTED" = "0" ]; then
   if XR_PANEL_TABS_BUNDLE="$SCRATCH/tab-registry.mjs" \
      XR_PANEL_TABS_INVENTORY="$PANEL/tabs.json" \
      node --test "$PANEL/tests/tab-registry.test.mjs" 2>&1 | sed "s/^/  /"; then
+    :
+  else
+    SUITE=1
+  fi
+  # P13-T6: the what-would-be-sent viewer. One serializer drives both the
+  # payload and the preview; the planted-field control lives in the suite.
+  echo "panel-tests: node --test ui/panel/tests/sent-tab.test.mjs"
+  if XR_PANEL_SENT_BUNDLE="$SCRATCH/sent-tab.mjs" \
+     node --test "$PANEL/tests/sent-tab.test.mjs" 2>&1 | sed "s/^/  /"; then
+    :
+  else
+    SUITE=1
+  fi
+  # P13-T4: the breakage tab's core — a closed row set, a fixture-only queue,
+  # and a confirmation that throws if anything asks for a modal.
+  echo "panel-tests: node --test ui/panel/tests/breakage-tab.test.mjs"
+  if XR_PANEL_BREAKAGE_BUNDLE="$SCRATCH/breakage-tab.mjs" \
+     node --test "$PANEL/tests/breakage-tab.test.mjs" 2>&1 | sed "s/^/  /"; then
     :
   else
     SUITE=1
@@ -160,5 +182,5 @@ if [ "$SUITE" -ne 0 ]; then
   echo "panel-tests: FAIL — focus-containment/tab-registry suite failed"
   exit 1
 fi
-echo "panel-tests: PASS (focus containment: wrap, intercept, re-open race, restore, planted-leak control; tab registry: inventory bijection, typed refusals; site tab: single-scope dial, why-drill over every reason code + typed fallback; observatory: 2k ring, last-screenful clamp, a11y positions; update tab: closed verb set, no progress states)"
+echo "panel-tests: PASS (focus containment: wrap, intercept, re-open race, restore, planted-leak control; tab registry: inventory bijection, typed refusals; site tab: single-scope dial, why-drill over every reason code + typed fallback; observatory: 2k ring, last-screenful clamp, a11y positions; update tab: closed verb set, no progress states; breakage tab: closed row set, fixture queue, non-attentional confirm; what-would-be-sent: one serializer, planted field renders)"
 exit 0

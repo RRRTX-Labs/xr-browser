@@ -288,3 +288,4 @@ backends are byte-parity for the new field/codes (313 vectors, pinned by
 `shield_vectors_check.py` and `xr-core/shield/tests/test_golden_vectors.cc`).
 
 | breakage-report-v1 | P13-T4 | LIVING | `breakage-report-v1.schema.json` + `docs/contracts/vectors/breakage-report-v1.json` | FROZEN.yaml untouched (14 rows still PENDING, HG-26); ratifying a contract is a human act |
+| panel-tab-registration-v1 | P13-T6 | LIVING | `panel-tab-registration-v1.schema.json` + `docs/contracts/vectors/panel-tab-registration-v1.json` + `docs/adr/0049-panel-tab-registration-v1.md` | FROZEN.yaml untouched (14 rows still PENDING, HG-26); the runtime half is `xr-core/ui/panel/tab-registry.ts`, the gate half `tools/panel_registry_check.py` |

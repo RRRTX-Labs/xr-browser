@@ -135,11 +135,17 @@ surfaces:
     target: observatory
     command: panel.open
     phase: P13
+    # P13-C2: declared at landing (see the `sources:` note above).
+    sources:
+      - panel/observatory-tab.ts
   - surface: panel/breakage
     unit: tab
     target: breakage
     command: panel.open
     phase: P13
+    # P13-T4: declared at landing (see the `sources:` note above).
+    sources:
+      - panel/breakage-tab.ts
   - surface: panel/update
     unit: tab
     target: update
@@ -154,3 +160,6 @@ surfaces:
     target: sent
     command: panel.open
     phase: P13
+    # P13-C5: declared at landing (see the `sources:` note above).
+    sources:
+      - panel/sent-tab.ts

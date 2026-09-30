@@ -100,6 +100,21 @@ def _validate(node: Any, schema: dict[str, Any], path: str, errs: list[str],
         errs.append(f"{path}: must be false (contract invariant)")
 
 
+def validate_document(doc: Any, schema: dict[str, Any]) -> list[str]:
+    """Validate `doc` against a loaded schema; return the error list ([] = clean).
+
+    The public entry point exists so a lane that must validate a document
+    AGAINST a contract (not through the CLI's file+contract pair) reuses this
+    validator instead of growing a second copy of it — the P13-T6 registry lane
+    validates each tab record inside an inventory document. Same rules, one
+    implementation: a subset validator with two homes is a subset validator with
+    two behaviours.
+    """
+    errs: list[str] = []
+    _validate(doc, schema, "$", errs, schema)
+    return errs
+
+
 def cmd_validate(args) -> int:
     schema_path = Path(args.repo) / SCHEMA_DIR / SCHEMAS.get(args.contract, "")
     if not schema_path.exists():

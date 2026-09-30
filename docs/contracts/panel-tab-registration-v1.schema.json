@@ -1,0 +1,14 @@
+{
+ "$schema-note": "Hand-rolled strict subset, validated by tools/xr_schema.py (no jsonschema dependency, per DEPENDENCY RULES). This schema describes ONE tab registration record — the payload a subsystem hands to the registry — not the inventory document that lists them: the inventory is validated by tools/panel_registry_check.py against this record shape, because the hand-rolled validator deliberately has no `items` keyword and a schema that cannot validate its own list would be decoration. additionalProperties is false: a subsystem registers {id, title_msgid, order, requires_identity_scope} and nothing else, so a tab cannot smuggle in copy, a render callback, or a hardcoded route. `order` is the INVENTORY's number (ui/panel/tabs.json); the registry refuses a registration whose order disagrees with the inventory (`order-mismatch`), so this field is a read-back, not a choice. `title_msgid` is a message ID, never a sentence: the registry holds no copy and l10n_extract's R4 rule forbids space-bearing literals in ui/**.",
+ "contract": "panel-tab-registration",
+ "contract_version": 1,
+ "type": "object",
+ "additionalProperties": false,
+ "required": ["id", "title_msgid", "order", "requires_identity_scope"],
+ "properties": {
+  "id": { "type": "string" },
+  "title_msgid": { "type": "string" },
+  "order": { "type": "integer" },
+  "requires_identity_scope": { "type": "boolean" }
+ }
+}

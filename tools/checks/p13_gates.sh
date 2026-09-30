@@ -199,3 +199,21 @@ p13_c3_breakage_gates() {
   echo "== P13-T4: breakage report vectors (refusals pre-send, queue: fixture only) =="
   "$PY" tools/breakage_report.py --check
 }
+
+p13_c5_registry_gates() {
+  # P13-T6: the tab registry's gate half. The runtime half (ui/panel/
+  # tab-registry.ts: unknown-tab-id / order-collision / order-mismatch /
+  # duplicate-id, all typed) is proven by the node suite inside
+  # build/webui/panel-tests.sh; this lane proves the contract half, which a
+  # hand-edited JSON could otherwise walk past: the inventory validates against
+  # panel-tab-registration-v1, the vector file is EXECUTED (an accept payload
+  # the schema refuses reddens), every tab title msgid exists in the sibling's
+  # grdp, every declared tab CLAIMS its implementation (`skip:` is not a claim),
+  # and no frame names a tab id as a literal (the bypass law).
+  #
+  # Runs beside tools/coverage_check.py above: coverage_check owns the
+  # inventory↔allowlist bijection and the roster half of §10, this lane owns the
+  # claim, the schema, the grdp and the bypass. One law, one home.
+  echo "== P13-T6: panel tab registry (inventory ↔ schema ↔ vectors ↔ grdp ↔ allowlist claim) =="
+  "$PY" tools/panel_registry_check.py --repo .
+}

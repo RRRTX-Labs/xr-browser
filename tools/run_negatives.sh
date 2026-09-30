@@ -41,7 +41,7 @@ export PY
 # file must exist or the gate fails closed rather than silently dropping an
 # area). p9_ci.sh carries the T1–T12 runner canaries.
 NEG_FILES=(p1_p2.sh p3_p4.sh p5_p6.sh p7_p8.sh p9_core.sh p9_ci.sh p10_release.sh p11_t0.sh p11_t0d.sh p11_t0e.sh p11_t1.sh p11_t2.sh p11_t3.sh p11_t4.sh p11_t5.sh p11_t6.sh p11_t10.sh p12_t0.sh p12_t0d.sh p12_t2.sh p12_t5.sh p12_t6.sh p12_t7.sh p12_close.sh \
-  p13_p0a.sh p13_p0b.sh p13_p0c.sh p13_c01.sh p13_c01c.sh p13_c02.sh p13_c03.sh p13_c04.sh p13_c05.sh p13_c06.sh p13_c2.sh p13_c3.sh p13_t1.sh p13_t7.sh)
+  p13_p0a.sh p13_p0b.sh p13_p0c.sh p13_c01.sh p13_c01c.sh p13_c02.sh p13_c03.sh p13_c04.sh p13_c05.sh p13_c06.sh p13_c2.sh p13_c3.sh p13_c5.sh p13_t1.sh p13_t7.sh)
 
 if [ "${1:-}" = "--self-test" ]; then
   neg_self_test "${NEG_FILES[@]}"

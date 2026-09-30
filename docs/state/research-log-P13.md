@@ -89,3 +89,26 @@ that dressed as the Blink rig would be the phase's disqualifier.
 Nothing in P13 diverges from upstream in a way that needs a filed issue; if that
 changes, the entry lands here with the upstream path named and **no invented URL**
 (HG-32: filing upstream is a human act).
+
+## C-item citations (appended as the phase proceeds; every claim cites an artifact)
+
+| C-item | Claim | Citation |
+|---|---|---|
+| C-0.1 | the §10 unit is a DECLARED tab/section; `focus-trap.ts`/`panel-frame.ts` are the frame, not tabs | `docs/contracts/coverage-allowlist.yaml` (`panel/xr`, `unit: frame`, `sources:`), `tools/coverage_check.py` R1–R5 |
+| C-0.1 negatives | a landed undeclared surface bites; a non-tab source claimed under `panel/xr` is green; `skip:` is not a fix | `tools/negatives/p13_c01.sh` cases 1–6 |
+| C-0.1b | a11y/pseudo-locale/l10n artifacts regenerated at the pin | `docs/qa/axtree-snapshot.json`, `docs/qa/qyy/xr_strings.qyy.txt`, `docs/qa/l10n-ratchet.json` |
+| C-0.1c | no verdict-bearing assertion compares an embedded count literal; the grdp count is derived twice | `tools/l10n_count_law.py`, `tools/checks/p13_gates.sh::p13_l10n_count_law`, `tools/negatives/p13_c01c.sh` |
+| C-0.2 | every sibling consumer is routed through one resolver, and the pin is proven before a verdict | `tools/xr_sibling.py`, `tools/sibling_pin_check.py` (59 readers classified), `docs/process/cross-repo-pin.md`, `tools/negatives/p13_c02.sh` 1–5 |
+| C-0.3 | `--require-phase-final` binds on a `Phase-Close:` trailer; an in-flight phase may be interim without claiming closure | `tools/evidence_finality.py`, `docs/contracts/evidence-bundle-v1.md`, `tools/negatives/p13_c03.sh` 1–3 |
+| C-0.4 | P12 is `interim` by decision (option (a)), with a dated reason: a same-head green `governance` run does not exist and cannot be created four commits back | `evidence/P12/evidence.json` (`state`, `not_done_by_design[#]`), `evidence/P13/report.md` §9 |
+| C-0.5 | no VERIFIED row whose own text is false; every cited path in a bundle/report/human-gates exists | `tools/doc_reference_check.py`, `tools/negatives/p13_c05.sh` 1–4 |
+| C-0.6 | the three-exit-code lane shape is load-bearing (`else … die`) | `tools/checks/p13_gates.sh::p13_exit_code_lane`, `tools/negatives/p13_c06.sh` 1–5 |
+| C-1 (T2) | the Site tab reads ONE scope object; generic hides are not exception-able; isolation rows render NOT-RUN; scriptlets state INERT | `xr-core/ui/panel/site-tab.ts`, `ui/panel/tests/site-tab.test.mjs`, `docs/panel/site-tab.md` |
+| C-2 (T3) | ring cap 2000 with drop count; window clamps; a11y rowcount = filtered total; export refuses by class and the refused bytes never reach the writer; both formats share one field list | `xr-core/ui/panel/observatory-tab.ts`, `tools/observatory_export.py --check`, `tools/tests/test_p13_c2_observatory.py`, `tools/negatives/p13_c2.sh` 1–5, `docs/panel/observatory.md` |
+| C-2 enums | the export carries every enum-bearing ledger field; it may not invent a column | `tools/shield_state_check.py::observatory_findings`, `tools/observatory_export.py::FIELD_ALIASES` |
+| C-3 (T4) | context is origin/UA-less tag/rule/list/action by schema; six smuggle classes refused pre-send with the match WITHHELD; `queue: fixture`; SLA is data; no network code | `docs/contracts/breakage-report-v1.{schema.json,md}`, `tools/breakage_report.py --check`, `tools/negatives/p13_c3.sh` 1–3, `docs/panel/breakage-report.md` |
+| C-4 (T5) | the update tab's verb set is closed (no install/restart/apply) and its states cannot read as progress; the implication that an update happens by itself is banned copy | `xr-core/ui/panel/update-tab.ts`, `ui/panel/tests/update-tab.test.mjs`, `tools/vocab_lint.py`, `docs/state/vocab-allowlist.yaml` |
+| C-5 (T6) | tabs are declared, additive-only, order-spaced; unknown ids and collisions are typed refusals; a declared tab must CLAIM its implementation; no frame names a tab id | `docs/contracts/panel-tab-registration-v1.{schema.json,md}`, `xr-core/ui/panel/tab-registry.ts`, `ui/panel/tests/tab-registry.test.mjs`, `tools/panel_registry_check.py`, `tools/negatives/p13_c5.sh` 1–3, `docs/adr/0049-panel-tab-registration-v1.md` |
+| C-5 (T6) viewer | ONE serializer drives payload and preview; a planted field cannot be hidden | `xr-core/ui/panel/sent-tab.ts`, `ui/panel/tests/sent-tab.test.mjs`, `docs/panel/what-would-be-sent.md` |
+| C-3/C-5 docs | the report path's live half is a human act | `docs/panel/breakage-report.md`, `docs/adr/0050-breakage-report-v1.md`, `evidence/P13/human-gates.md` (HG-33) |
+| live/PAT rows | R1–R10 above; the push itself is the user's act (HG-20), performed through the token the user supplied for it | `evidence/P13/logs/`, `docs/process/ci-triage.md` |

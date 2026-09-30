@@ -207,10 +207,10 @@ else
   echo "FAIL: WebUI repro gate failed"; die
 fi
 
-# P13-T1/T3/T4 panel lanes (checks/p13_gates.sh; the WebUI toolchain above type-checks the DOM half).
+# P13-T1/T3/T4/T6 panel lanes (checks/p13_gates.sh; the WebUI toolchain above type-checks the DOM half).
 p13_t1_panel_gates
 p13_c2_observatory_gates
-p13_c3_breakage_gates
+p13_c3_breakage_gates; p13_c5_registry_gates
 
 echo "== P7: CSP lint — no runtime network/eval in ui/** + commands/** =="
 "$PY" tools/csp_lint.py
