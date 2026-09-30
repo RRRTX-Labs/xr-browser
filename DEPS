@@ -32,6 +32,15 @@
 #                  reject-tested required-int-field battery (85289cd) —
 #                  T0-b's resample surfaced a surviving deny-guard mutant
 #                  in policy store.cc and the test debt was paid at once.
+#                  P12 advances it to the pin P12 closed on (1850241), the base
+#                  of P13's work; P13 advances it through the panel frame
+#                  (focus-trap.ts, tab-registry.ts, tabs.json, tab-strip.ts and
+#                  the site/observatory/update/sent/breakage tabs with their node
+#                  suites) to the C-5 follow-on at 4353d36 — the revision P13's
+#                  ci-run rows cite, recorded in evidence/P13/evidence.json. The
+#                  lineage lines for P12/P13 are added here at P13's freeze
+#                  commit: the pin was pair-bumped with each commit, but this
+#                  block still ended at P11 (found closing the phase).
 #   gclient_url_scheme  P2-T1 (pinned https remotes only; no ssh, no file://)
 #
 # Chromium pin provenance (see docs/state/research-log-P2.md R1):

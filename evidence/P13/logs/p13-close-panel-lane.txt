@@ -1,0 +1,395 @@
+$ bash build/webui/panel-tests.sh   (the P13 panel lane: focus containment + tab registry + site + observatory + update + sent + breakage suites)
+panel-tests: node --test ui/panel/tests/focus-trap.test.mjs
+  TAP version 13
+  # Subtest: Tab from the last focusable wraps to the first — and never leaves
+  ok 1 - Tab from the last focusable wraps to the first — and never leaves
+    ---
+    duration_ms: 1.82762
+    ...
+  # Subtest: Shift+Tab from the first wraps to the last — and never leaves
+  ok 2 - Shift+Tab from the first wraps to the last — and never leaves
+    ---
+    duration_ms: 0.188469
+    ...
+  # Subtest: a Tab that would land outside the frame is intercepted, not trusted
+  ok 3 - a Tab that would land outside the frame is intercepted, not trusted
+    ---
+    duration_ms: 0.199946
+    ...
+  # Subtest: the re-open race: focus outside the frame is pulled in, in the direction of travel
+  ok 4 - the re-open race: focus outside the frame is pulled in, in the direction of travel
+    ---
+    duration_ms: 1.103942
+    ...
+  # Subtest: the browser move inside the frame is LEFT ALONE (the trap does not fight the tab order)
+  ok 5 - the browser move inside the frame is LEFT ALONE (the trap does not fight the tab order)
+    ---
+    duration_ms: 0.214247
+    ...
+  # Subtest: Escape closes; other keys are ignored
+  ok 6 - Escape closes; other keys are ignored
+    ---
+    duration_ms: 0.166417
+    ...
+  # Subtest: focusability: hidden, disabled and tabindex<0 elements are not reachable targets
+  ok 7 - focusability: hidden, disabled and tabindex<0 elements are not reachable targets
+    ---
+    duration_ms: 0.259312
+    ...
+  # Subtest: an empty frame contains nothing and asks the caller to decide
+  ok 8 - an empty frame contains nothing and asks the caller to decide
+    ---
+    duration_ms: 0.140096
+    ...
+  # Subtest: THE INVARIANT: twelve tabs in both directions never leave the frame
+  ok 9 - THE INVARIANT: twelve tabs in both directions never leave the frame
+    ---
+    duration_ms: 0.592626
+    ...
+  # Subtest: planted leak: with containment bypassed the SAME invariant reports escapes
+  ok 10 - planted leak: with containment bypassed the SAME invariant reports escapes
+    ---
+    duration_ms: 0.388097
+    ...
+  1..10
+  # tests 10
+  # suites 0
+  # pass 10
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+  # duration_ms 70.630921
+panel-tests: node --test ui/panel/tests/tab-registry.test.mjs
+  TAP version 13
+  # Subtest: the real inventory parses and declares the five P13 tabs in order
+  ok 1 - the real inventory parses and declares the five P13 tabs in order
+    ---
+    duration_ms: 2.025105
+    ...
+  # Subtest: a declared id registers; the registry starts empty of provided tabs
+  ok 2 - a declared id registers; the registry starts empty of provided tabs
+    ---
+    duration_ms: 1.445618
+    ...
+  # Subtest: an id absent from the inventory is refused unknown-tab-id, never dropped
+  ok 3 - an id absent from the inventory is refused unknown-tab-id, never dropped
+    ---
+    duration_ms: 0.394757
+    ...
+  # Subtest: two tabs claiming one order is refused inside the inventory itself
+  ok 4 - two tabs claiming one order is refused inside the inventory itself
+    ---
+    duration_ms: 0.26557
+    ...
+  # Subtest: an order outside the reserved range is refused
+  ok 5 - an order outside the reserved range is refused
+    ---
+    duration_ms: 0.244924
+    ...
+  # Subtest: registering the same id twice is duplicate-id
+  ok 6 - registering the same id twice is duplicate-id
+    ---
+    duration_ms: 0.254263
+    ...
+  # Subtest: the inventory owns order: a renumbering subsystem is refused order-mismatch
+  ok 7 - the inventory owns order: a renumbering subsystem is refused order-mismatch
+    ---
+    duration_ms: 0.268873
+    ...
+  # Subtest: order-collision names the tab already holding the slot
+  ok 8 - order-collision names the tab already holding the slot
+    ---
+    duration_ms: 0.288831
+    ...
+  # Subtest: a malformed entry is refused bad-shape and mutates nothing
+  ok 9 - a malformed entry is refused bad-shape and mutates nothing
+    ---
+    duration_ms: 0.497503
+    ...
+  # Subtest: the panel frame itself is a surface, not a tab
+  ok 10 - the panel frame itself is a surface, not a tab
+    ---
+    duration_ms: 0.282769
+    ...
+  # Subtest: the inventory note about the unit is the reason, not decoration
+  ok 11 - the inventory note about the unit is the reason, not decoration
+    ---
+    duration_ms: 0.189257
+    ...
+  1..11
+  # tests 11
+  # suites 0
+  # pass 11
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+  # duration_ms 75.162135
+panel-tests: node --test ui/panel/tests/sent-tab.test.mjs
+  TAP version 13
+  # Subtest: one serializer drives the preview: the field sets are identical
+  ok 1 - one serializer drives the preview: the field sets are identical
+    ---
+    duration_ms: 1.874846
+    ...
+  # Subtest: a PLANTED extra field becomes a visible row (the viewer cannot hide it)
+  ok 2 - a PLANTED extra field becomes a visible row (the viewer cannot hide it)
+    ---
+    duration_ms: 0.495077
+    ...
+  # Subtest: a structure the viewer cannot render is MARKED, not dropped
+  ok 3 - a structure the viewer cannot render is MARKED, not dropped
+    ---
+    duration_ms: 0.168748
+    ...
+  # Subtest: nulls are rows with the null marker, not absences
+  ok 4 - nulls are rows with the null marker, not absences
+    ---
+    duration_ms: 0.18248
+    ...
+  # Subtest: serialization is deterministic and ordered
+  ok 5 - serialization is deterministic and ordered
+    ---
+    duration_ms: 1.332076
+    ...
+  # Subtest: arrays of scalars flatten with indices, so nothing hides in them
+  ok 6 - arrays of scalars flatten with indices, so nothing hides in them
+    ---
+    duration_ms: 0.302329
+    ...
+  1..6
+  # tests 6
+  # suites 0
+  # pass 6
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+  # duration_ms 67.778966
+panel-tests: node --test ui/panel/tests/breakage-tab.test.mjs
+  TAP version 13
+  # Subtest: the row set is CLOSED: context, queue and SLA — and nothing else
+  ok 1 - the row set is CLOSED: context, queue and SLA — and nothing else
+    ---
+    duration_ms: 1.616609
+    ...
+  # Subtest: no row may carry page content, a cookie, a URL, a UA or a selector
+  ok 2 - no row may carry page content, a cookie, a URL, a UA or a selector
+    ---
+    duration_ms: 0.355823
+    ...
+  # Subtest: the queue says fixture, in the rows, with no live mode to choose
+  ok 3 - the queue says fixture, in the rows, with no live mode to choose
+    ---
+    duration_ms: 0.192617
+    ...
+  # Subtest: the SLA is DATA: label, hours and class also appear verbatim in the payload schema
+  ok 4 - the SLA is DATA: label, hours and class also appear verbatim in the payload schema
+    ---
+    duration_ms: 0.155091
+    ...
+  # Subtest: the confirmation is inline and one click — a MODAL is refused, not rendered
+  ok 5 - the confirmation is inline and one click — a MODAL is refused, not rendered
+    ---
+    duration_ms: 1.512255
+    ...
+  # Subtest: a forbidden piece of context is NAMED when refused
+  ok 6 - a forbidden piece of context is NAMED when refused
+    ---
+    duration_ms: 0.429036
+    ...
+  1..6
+  # tests 6
+  # suites 0
+  # pass 6
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+  # duration_ms 66.3602
+panel-tests: node --test ui/panel/tests/update-tab.test.mjs
+  TAP version 13
+  # Subtest: update availability is a comparison of two version strings
+  ok 1 - update availability is a comparison of two version strings
+    ---
+    duration_ms: 1.20918
+    ...
+  # Subtest: the verb set is CLOSED and contains no install/restart/apply
+  ok 2 - the verb set is CLOSED and contains no install/restart/apply
+    ---
+    duration_ms: 0.837386
+    ...
+  # Subtest: the only action offered is a link to the update page
+  ok 3 - the only action offered is a link to the update page
+    ---
+    duration_ms: 0.136443
+    ...
+  # Subtest: states that would imply the product updates itself are FORBIDDEN, and throw
+  ok 4 - states that would imply the product updates itself are FORBIDDEN, and throw
+    ---
+    duration_ms: 0.496567
+    ...
+  # Subtest: the rows come from P10 channel state and nothing else
+  ok 5 - the rows come from P10 channel state and nothing else
+    ---
+    duration_ms: 0.425995
+    ...
+  # Subtest: the summary says out loud that it implies nothing
+  ok 6 - the summary says out loud that it implies nothing
+    ---
+    duration_ms: 0.248763
+    ...
+  1..6
+  # tests 6
+  # suites 0
+  # pass 6
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+  # duration_ms 62.974661
+panel-tests: node --test ui/panel/tests/observatory-tab.test.mjs
+  TAP version 13
+  # Subtest: the cap is 2000 and the drop count is returned, never hidden
+  ok 1 - the cap is 2000 and the drop count is returned, never hidden
+    ---
+    duration_ms: 3.111893
+    ...
+  # Subtest: an empty list yields an empty window, not a negative index
+  ok 2 - an empty list yields an empty window, not a negative index
+    ---
+    duration_ms: 0.714785
+    ...
+  # Subtest: one screenful: first/last cover it exactly
+  ok 3 - one screenful: first/last cover it exactly
+    ---
+    duration_ms: 0.148428
+    ...
+  # Subtest: scrolling to the END yields a FULL screenful (the off-by-one that hides rows)
+  ok 4 - scrolling to the END yields a FULL screenful (the off-by-one that hides rows)
+    ---
+    duration_ms: 0.237665
+    ...
+  # Subtest: scrolling PAST the end clamps instead of blanking
+  ok 5 - scrolling PAST the end clamps instead of blanking
+    ---
+    duration_ms: 0.137351
+    ...
+  # Subtest: overscan extends the window on both sides but never past the list
+  ok 6 - overscan extends the window on both sides but never past the list
+    ---
+    duration_ms: 0.118611
+    ...
+  # Subtest: filter-THEN-scroll: the window is computed over the filtered length
+  ok 7 - filter-THEN-scroll: the window is computed over the filtered length
+    ---
+    duration_ms: 0.317785
+    ...
+  # Subtest: an absent filter means NO filter, not "match nothing"
+  ok 8 - an absent filter means NO filter, not "match nothing"
+    ---
+    duration_ms: 0.139766
+    ...
+  # Subtest: every RENDERED row carries its a11y position, and rowcount is the WHOLE list
+  ok 9 - every RENDERED row carries its a11y position, and rowcount is the WHOLE list
+    ---
+    duration_ms: 0.362833
+    ...
+  # Subtest: the header is honest about what the cap and the filter cost
+  ok 10 - the header is honest about what the cap and the filter cost
+    ---
+    duration_ms: 0.20863
+    ...
+  1..10
+  # tests 10
+  # suites 0
+  # pass 10
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+  # duration_ms 75.643323
+panel-tests: node --test ui/panel/tests/site-tab.test.mjs
+  TAP version 13
+  # Subtest: scope id is the canonical site-toggle form
+  ok 1 - scope id is the canonical site-toggle form
+    ---
+    duration_ms: 2.039055
+    ...
+  # Subtest: the dial is a function of the scope set, not a store
+  ok 2 - the dial is a function of the scope set, not a store
+    ---
+    duration_ms: 0.939386
+    ...
+  # Subtest: the module exposes no mutator: every control returns a request
+  ok 3 - the module exposes no mutator: every control returns a request
+    ---
+    duration_ms: 0.390176
+    ...
+  # Subtest: both consumers of the shields-down bit are named
+  ok 4 - both consumers of the shields-down bit are named
+    ---
+    duration_ms: 0.152181
+    ...
+  # Subtest: exception rows are the site scopes, ordered and complete
+  ok 5 - exception rows are the site scopes, ordered and complete
+    ---
+    duration_ms: 0.287043
+    ...
+  # Subtest: certificate rows are verbatim, and absence says so
+  ok 6 - certificate rows are verbatim, and absence says so
+    ---
+    duration_ms: 0.177969
+    ...
+  # Subtest: the why drill covers EVERY code in the reason-code table
+  ok 7 - the why drill covers EVERY code in the reason-code table
+    ---
+    duration_ms: 0.333503
+    ...
+  # Subtest: an unknown why_code is a TYPED FALLBACK, never a dropped row
+  ok 8 - an unknown why_code is a TYPED FALLBACK, never a dropped row
+    ---
+    duration_ms: 0.169638
+    ...
+  # Subtest: the isolation card is data-driven, row for row
+  ok 9 - the isolation card is data-driven, row for row
+    ---
+    duration_ms: 0.229065
+    ...
+  # Subtest: permissions summary sorts and names where grants live
+  ok 10 - permissions summary sorts and names where grants live
+    ---
+    duration_ms: 0.246909
+    ...
+  # Subtest: the always-on generic set is not exception-able, and says why
+  ok 11 - the always-on generic set is not exception-able, and says why
+    ---
+    duration_ms: 0.208253
+    ...
+  # Subtest: the scriptlet registry is present and INERT, and an unknown flag is never "off"
+  ok 12 - the scriptlet registry is present and INERT, and an unknown flag is never "off"
+    ---
+    duration_ms: 0.259744
+    ...
+  # Subtest: an isolation row with no measurement says not-run, never an empty cell
+  ok 13 - an isolation row with no measurement says not-run, never an empty cell
+    ---
+    duration_ms: 0.163756
+    ...
+  # Subtest: every isolation row value is a machine token (no space-bearing prose in ui/**)
+  ok 14 - every isolation row value is a machine token (no space-bearing prose in ui/**)
+    ---
+    duration_ms: 0.276194
+    ...
+  1..14
+  # tests 14
+  # suites 0
+  # pass 14
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+  # duration_ms 77.938728
+panel-tests: PASS (focus containment: wrap, intercept, re-open race, restore, planted-leak control; tab registry: inventory bijection, typed refusals; site tab: single-scope dial, why-drill over every reason code + typed fallback; observatory: 2k ring, last-screenful clamp, a11y positions; update tab: closed verb set, no progress states; breakage tab: closed row set, fixture queue, non-attentional confirm; what-would-be-sent: one serializer, planted field renders)
+rc=0

@@ -1,0 +1,15 @@
+$ python3 tools/panel_registry_check.py --repo .   (panel-tab-registration-v1 vs the real inventory)
+PASS: panel_registry_check (inventory ↔ schema ↔ grdp ↔ allowlist claim, bypass law; 0 failure(s))
+rc=0
+
+$ python3 tools/breakage_report.py --check   (breakage-report-v1 vectors + the fixture queue)
+PASS: breakage_report vectors (2 accepted, 8 refused pre-send with the class named) — queue mode: fixture only; live filing is HUMAN-GATED (docs/panel/breakage-report.md)
+rc=0
+
+$ python3 -m pytest tools/tests/test_p13_c3_breakage.py tools/tests/test_p13_c5_panel_registry.py -q
+..............                                                           [100%]
+14 passed in 1.60s
+
+$ sha256sum docs/contracts/FROZEN.yaml docs/contracts/INDEX.md
+0b79e43988f31df45d60d0c228d4e2693cc01fcfd1d38e4d0376741a03da01a1  docs/contracts/FROZEN.yaml
+7225489169944e381ec2ea15fdbd07233e4a53928a569fd3c3d8100c83b50f5d  docs/contracts/INDEX.md

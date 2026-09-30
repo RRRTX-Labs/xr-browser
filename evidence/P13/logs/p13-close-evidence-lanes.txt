@@ -1,0 +1,72 @@
+$ python3 tools/evidence_check.py --strict
+finality: P10: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+SKIP: ci-run verification for P10-DOD-2-C1: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34615191984
+SKIP: ci-run verification for P10-DOD-11-C1: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34615191984
+finality: P11: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+SKIP: ci-run verification for P11-DOD-T5: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34905296809
+SKIP: ci-run verification for P11-DOD-T8: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34905296809
+SKIP: ci-run verification for P11-DOD-13: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34905296564
+finality: P12: interim — DECLARED, not the in-flight phase (phase=P13); legal only because 1 dated not_done_by_design row(s) say what remains, and the final rules do not apply until closure is claimed (P13-C-P0.4)
+SKIP: ci-run verification for P12-DOD-T0-b-7: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34905296564
+finality: P13: interim — in flight per docs/state/phase-base.json (phase=P13); PENDING sentinels are legal here and the final rules do not apply
+finality: P3: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P4: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P5: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P6: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P7: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P8: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P9: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+SKIP: ci-run verification for DOD-12: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34511850763
+SKIP: ci-run verification for DOD-11-C1: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34511850763
+PASS: evidence/P10/evidence.json (strict)
+PASS: evidence/P11/evidence.json (strict)
+PASS: evidence/P12/evidence.json (strict)
+PASS: evidence/P13/evidence.json (strict)
+PASS: evidence/P3/evidence.json (strict)
+PASS: evidence/P4/evidence.json (strict)
+PASS: evidence/P5/evidence.json (strict)
+PASS: evidence/P6/evidence.json (strict)
+PASS: evidence/P7/evidence.json (strict)
+PASS: evidence/P8/evidence.json (strict)
+PASS: evidence/P9/evidence.json (strict)
+PASS: evidence_check (11 bundle(s), 0 failure(s); presence law: every phase in git history carries a bundle)
+rc=0
+
+$ python3 tools/evidence_check.py --strict --require-phase-final
+finality: P10: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+SKIP: ci-run verification for P10-DOD-2-C1: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34615191984
+SKIP: ci-run verification for P10-DOD-11-C1: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34615191984
+finality: P11: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+SKIP: ci-run verification for P11-DOD-T5: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34905296809
+SKIP: ci-run verification for P11-DOD-T8: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34905296809
+SKIP: ci-run verification for P11-DOD-13: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34905296564
+finality: P12: interim — DECLARED, not the in-flight phase (phase=P13); legal only because 1 dated not_done_by_design row(s) say what remains, and the final rules do not apply until closure is claimed (P13-C-P0.4)
+SKIP: ci-run verification for P12-DOD-T0-b-7: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34905296564
+finality: P13: interim — in flight per docs/state/phase-base.json (phase=P13); PENDING sentinels are legal here and the final rules do not apply
+finality: P3: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P4: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P5: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P6: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P7: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P8: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P9: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+SKIP: ci-run verification for DOD-12: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34511850763
+SKIP: ci-run verification for DOD-11-C1: offline (api.github.com unreachable): HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/xr-browser/actions/runs/34511850763
+finality: P13 interim (phase open; no closure claimed) — not a verdict
+PASS: evidence/P10/evidence.json (strict)
+PASS: evidence/P11/evidence.json (strict)
+PASS: evidence/P12/evidence.json (strict)
+PASS: evidence/P13/evidence.json (strict)
+PASS: evidence/P3/evidence.json (strict)
+PASS: evidence/P4/evidence.json (strict)
+PASS: evidence/P5/evidence.json (strict)
+PASS: evidence/P6/evidence.json (strict)
+PASS: evidence/P7/evidence.json (strict)
+PASS: evidence/P8/evidence.json (strict)
+PASS: evidence/P9/evidence.json (strict)
+PASS: evidence_check (11 bundle(s), 0 failure(s); presence law: every phase in git history carries a bundle)
+rc=0
+
+$ python3 tools/doc_reference_check.py --repo .
+PASS: doc_reference_check (3 file(s) scanned at or above P13, 25 pre-law file(s) grandfathered, 0 dangling citation(s))
+rc=0
