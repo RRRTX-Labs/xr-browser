@@ -1,0 +1,16 @@
+{
+  "schema": "xr-l10n-ratchet",
+  "schema_version": 1,
+  "metric": "xr-core/l10n/xr_strings.grdp <message> elements",
+  "messages": 136,
+  "direction": "grow-only",
+  "enforced_by": "tools/l10n_count_law.py --check (captured transcript) via tools/run_checks.sh and tools/tests/test_p8_t5_l10n.py",
+  "note": "P13-C-P0.1c: the grow-only floor for the single user-visible string source. The point of this FILE, rather than a number inside a test, is that it is data a reviewer sees change in the diff: the assertion in the test compares the derived count against this floor, so removing strings is a finding and adding them requires no edit at all. Precedent shape: P8's `ratchet: \"916 (grow-only)\"` row in docs/state/perf-budgets.json (generator-owned; a hand-edited value reddens gen_perf_budgets --check). History: P11-T6 +36 shield, P12-T6 +14 cosmetic, P13-T1 +4 panel, P13-C-P0.1 +5 panel tab titles (131 -> 136).",
+  "history": [
+    {"phase": "P8-T5", "messages": 58, "note": "the source is created"},
+    {"phase": "P11-T6", "messages": 94, "note": "+36 shield"},
+    {"phase": "P12-T6", "messages": 108, "note": "+14 cosmetic"},
+    {"phase": "P13-T1", "messages": 131, "note": "+4 panel frame strings +19 from earlier P13 lanes folded in at T1's count"},
+    {"phase": "P13-C-P0.1", "messages": 136, "note": "+5 panel.tab.* titles from the declared tab inventory"}
+  ]
+}

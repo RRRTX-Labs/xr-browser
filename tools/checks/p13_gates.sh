@@ -107,3 +107,35 @@ p13_t7_panel_perf_gates() {
   fi
   "$PY" tools/panel_bench.py --check
 }
+
+p13_l10n_count_law() {
+  # P13-C-P0.1c: the derived-count law. Two derived quantities, never a literal:
+  #   1. the count tools/grdp_check.py REPORTS, parsed out of its own stdout;
+  #   2. an INDEPENDENT count of <message> elements in the same .grdp;
+  # and then (2) against the grow-only ratchet docs/qa/l10n-ratchet.json.
+  #
+  # The tool's stdout is CAPTURED to a file and handed to the checker, never
+  # piped: a verdict may not ride a pipeline exit code (tools/negatives/lib.sh
+  # was fixed for exactly this in f969499), and a captured transcript is what
+  # makes the stale-count failure testable — feeding a STALE transcript is the
+  # registered negative (tools/negatives/p13_c01c.sh).
+  #
+  # What this replaced, verbatim from tools/tests/test_p8_t5_l10n.py:48 at
+  # e503f9e:  assert "OK (127 messages" in r.stdout  # P11-T6: +36; P12-T6: +14
+  # The tool was green at 136 while the literal still said 127. The number is
+  # not refreshed here; it does not exist any more. See docs/process/gate-law.md
+  # ("a verdict-bearing assertion compares derived values, never an embedded
+  # number") — this repo has now re-found that defect three times (P10's
+  # perf-budgets hand-edit refusal, P13-P0-C's negatives count, here).
+  local grdp="../xr-core/l10n/xr_strings.grdp" out
+  out="$(mktemp)"
+  if ! "$PY" tools/grdp_check.py --ids-from-schema >"$out"; then
+    echo "FAIL: grdp_check (strict xr_strings.grdp gate) — see its stderr above"
+    rm -f "$out"; die
+  fi
+  cat "$out"
+  "$PY" tools/l10n_count_law.py --grdp "$grdp" --tool-stdout "$out" --check || {
+    rm -f "$out"; die
+  }
+  rm -f "$out"
+}

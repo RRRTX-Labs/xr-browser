@@ -1,8 +1,10 @@
 """P8-T5 l10n tooling tests: grdp_check (strict xr_strings.grdp validator)
 and l10n_extract (raw user-visible string lint + id cross-check).
 
-Stdlib + pytest; runs on the real repo (uses ../xr-core). Positive tests pin
-the live tree state (58 messages, tree CLEAN) so drift fails loudly.
+Stdlib + pytest; runs on the real repo (uses ../xr-core). No positive test
+pins the live tree state with a NUMBER any more: P13-C-P0.1c removed the last
+one (see test_real_grdp_passes_strict_gate). The count law is derived-vs-derived
+plus a grow-only ratchet in docs/qa/l10n-ratchet.json.
 """
 from __future__ import annotations
 
@@ -42,10 +44,72 @@ def run(tool: str, *args: str, cwd: Path | None = None) -> subprocess.CompletedP
 
 # ---------------------------------------------------------------- grdp_check
 
+RATCHET = REPO / "docs" / "qa" / "l10n-ratchet.json"
+
+
+def _count_law():
+    """The derived-count law module (P13-C-P0.1c), imported not re-implemented."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("lcl", TOOLS / "l10n_count_law.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)  # type: ignore[union-attr]
+    return mod
+
+
 def test_real_grdp_passes_strict_gate() -> None:
+    """The tool is green AND its own words agree with the file.
+
+    This used to read `assert "OK (127 messages" in r.stdout  # P11-T6: +36
+    shield; P12-T6: +14 cosmetic` — a number copied out of a transcript into an
+    assertion, with a comment tracking which phase last bumped it. At the pin
+    the tool reported 136 while the literal still said 127: three phases had
+    edited it and P13 had not. Refreshing the number would reproduce the defect
+    with a fresher number, so the comparison is now DERIVED vs DERIVED — the
+    count the tool printed, against an independent count of `<message>` elements
+    in the same file. A disagreement fails; nothing here needs editing when a
+    phase adds a string.
+    """
     r = run("grdp_check.py", "--ids-from-schema")
     assert r.returncode == 0, r.stderr
-    assert "OK (127 messages" in r.stdout  # P11-T6: +36 shield; P12-T6: +14 cosmetic
+    law = _count_law()
+    derived = law.independent_count(GRDP)
+    reported = law.reported_count(r.stdout)
+    assert reported is not None, f"the tool printed no count line: {r.stdout!r}"
+    assert reported == derived, (
+        f"grdp_check reported {reported} messages; the file carries {derived}")
+
+
+def test_grdp_count_is_above_the_grow_only_ratchet() -> None:
+    """Decrease detection lives in a ratchet FILE, not in a test literal.
+
+    Shape precedent: P8's `ratchet: "916 (grow-only)"` row in perf-budgets.json.
+    Raising the floor is a reviewed act that shows up in the diff; adding a
+    string needs no edit at all.
+    """
+    law = _count_law()
+    doc = json.loads(RATCHET.read_text(encoding="utf-8"))
+    derived = law.independent_count(GRDP)
+    assert derived >= doc["messages"], (
+        f"{GRDP.name} holds {derived} messages, below the grow-only ratchet "
+        f"{doc['messages']} ({RATCHET})")
+    assert doc["direction"] == "grow-only"
+
+
+def test_count_law_reddens_on_a_stale_transcript(tmp_path: Path) -> None:
+    """The registered negative, asserted here too: a `.grdp` with an extra
+    message while the tool reports the old count is a FAILURE, not a pass."""
+    law = _count_law()
+    body = GRDP.read_text(encoding="utf-8")
+    extra = '<message name="IDS_XR_T_EXTRA" desc="extra" xr-id="t.extra">X</message>\n'
+    grown = tmp_path / "grown.grdp"
+    grown.write_text(body.replace("</grit-part>", extra + "</grit-part>"), encoding="utf-8")
+    stale = f"grdp_check: xr_strings.grdp OK ({law.independent_count(GRDP)} messages, isolation-card cross-check clean)\n"
+    fails = law.check(grown, stale, None)
+    assert fails and "but the tool reported" in fails[0], fails
+    # ...and the same pair, in agreement, passes (so the negative is not
+    # "everything reddens").
+    fresh = f"grdp_check: xr_strings.grdp OK ({law.independent_count(grown)} messages, ok)\n"
+    assert law.check(grown, fresh, None) == []
 
 
 def test_grdp_name_xrid_mismatch_fails(tmp_path: Path) -> None:

@@ -128,8 +128,8 @@ echo "== P5: isolation-card l10n well-formed + vocab-clean =="
 # user-visible text may be authored; the extractor lint refuses raw literals
 # in the views/payload and cross-checks every referenced id against the grdp.
 # ---------------------------------------------------------------------------
-echo "== P8-T5: l10n string source — xr_strings.grdp strict gate (schema ids, ph, desc, vocab, bidi, isolation-card) =="
-"$PY" tools/grdp_check.py --ids-from-schema
+echo "== P8-T5: l10n string source — xr_strings.grdp strict gate + the derived count law (P13-C-P0.1c) =="
+p13_l10n_count_law
 
 echo "== P8-T5: raw-string lint — no user-visible literals outside ids (ui/ + payload), id cross-check =="
 "$PY" tools/l10n_extract.py --check
