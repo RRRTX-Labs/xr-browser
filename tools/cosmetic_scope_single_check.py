@@ -42,6 +42,16 @@ Deterministic (no clock, no network); stdlib only. Exit 0 pass · 1 fail ·
 """
 from __future__ import annotations
 
+import os as _os
+import sys as _sys
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+from xr_sibling import resolve_or_exit as _resolve_or_exit  # noqa: E402
+
+
+def _sibling_of(repo):
+    """P13-C-P0.2: one helper, one pin law (docs/process/cross-repo-pin.md)."""
+    return _resolve_or_exit(repo, tool="cosmetic_scope_single_check").path
+
 import argparse
 import json
 import sys
@@ -187,7 +197,7 @@ def main(argv: list[str]) -> int:
     a = ap.parse_args(argv)
     repo = Path(a.repo).resolve()
     xr_core = Path(a.xr_core).resolve() if a.xr_core else \
-        (repo / "../xr-core").resolve()
+        _sibling_of(repo)
 
     try:
         doc = json.loads((repo / VECTORS).read_text(encoding="utf-8"))

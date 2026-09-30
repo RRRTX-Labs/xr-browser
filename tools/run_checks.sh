@@ -62,6 +62,7 @@ echo "== CODEOWNERS / S0 path sync =="
 echo "== test suites =="
 "$PY" -m pytest tools/tests/ -q
 
+p13_sibling_pin
 # ---------------------------------------------------------------------------
 # P4 gates. Network: citation-audit and check-pin-alive fetch read-only
 # upstream/git bytes through the allowlisted choke points (build/upstream/

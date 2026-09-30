@@ -138,12 +138,29 @@ def write_stable(path: Path, obj: Any, *, as_of: str) -> None:
 
 
 def xr_core_root() -> Path:
-    """Sibling xr-core checkout (the product tree). Fail-closed when absent."""
+    """Sibling xr-core checkout (the product tree). Fail-closed when absent.
+
+    P13-C-P0.2: this used to check EXISTENCE only, so a sibling at an older
+    commit was silently accepted and every verdict computed from it was
+    vacuous — the defect that let `coverage_check` pass locally while the hosted
+    run was red. The pin law now lives in ONE place, tools/xr_sibling.py, and
+    this function is a thin adapter so the ~20 existing callers inherit
+    existence + pin + clean-tree checks without a second copy of the path logic.
+    """
+    import sys as _sys
     here = Path(__file__).resolve().parents[2]      # build/qa/_common.py -> repo
-    cand = (here.parent / "xr-core").resolve()
-    if not (cand / ".git").exists() and not (cand / "README.md").exists():
-        raise RunnerError(f"no xr-core sibling checkout at {cand}")
-    return cand
+    _sys.path.insert(0, str(here / "tools"))
+    try:
+        import xr_sibling  # noqa: PLC0415
+        return xr_sibling.check(here).path
+    except ImportError as exc:  # pragma: no cover - layout breakage, loud
+        cand = (here.parent / "xr-core").resolve()
+        if not (cand / ".git").exists() and not (cand / "README.md").exists():
+            raise RunnerError(f"BLOCKED-LAYOUT: no xr-core sibling checkout at "
+                              f"{cand} (and tools/xr_sibling.py unimportable: {exc})")
+        return cand
+    except xr_sibling.SiblingError as err:  # type: ignore[union-attr]
+        raise RunnerError(f"xr_sibling: {err.code}: {err.message}") from None
 
 
 # --- bare-name collision union (P10) -------------------------------------

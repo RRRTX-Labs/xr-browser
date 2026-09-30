@@ -146,6 +146,21 @@ def check(repo: Path, *, override: str | None = None,
     return Sibling(path=path, head=head, pin=pin)
 
 
+def resolve_or_exit(repo: Path, *, override: str | None = None,
+                    tool: str = "tool") -> Sibling:
+    """`check()` for a command-line tool: on failure print the typed line to
+    stderr and exit 2, never raise a traceback and never return a guess.
+
+    Every routed tool calls this with its own name so the message names the
+    reader, not just the reader's symptom.
+    """
+    try:
+        return check(repo, override=override)
+    except SiblingError as err:
+        print(f"{tool}: {format_error(err)}", file=sys.stderr)
+        raise SystemExit(EXIT_USAGE) from None
+
+
 def format_error(err: SiblingError) -> str:
     """One line, greppable, with the code first: what a failure condition wants."""
     return f"{err.code}: {err.message}"

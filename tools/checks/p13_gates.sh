@@ -139,3 +139,17 @@ p13_l10n_count_law() {
   }
   rm -f "$out"
 }
+
+p13_sibling_pin() {
+  # P13-C-P0.2: the cross-repo pin law, run BEFORE every lane that consumes the
+  # sibling. A verdict computed from a sibling checkout is meaningless unless
+  # the sibling is at the pin; this lane proves it (present, HEAD ==
+  # DEPS.xr_core_rev, worktree clean) or refuses with BLOCKED-LAYOUT /
+  # STALE-SIBLING / DIRTY-SIBLING and exit 2 — never an ImportError, and never
+  # a vacuous pass. It also audits the register: every file that resolves a
+  # sibling path must be routed through tools/xr_sibling.py or classified with
+  # a reason, so the class cannot grow back silently.
+  # Docs: docs/process/cross-repo-pin.md.
+  echo "== P13-C-P0.2: cross-repo pin (sibling present, at DEPS.xr_core_rev, clean) + the resolver register =="
+  "$PY" tools/sibling_pin_check.py --repo .
+}

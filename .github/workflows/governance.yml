@@ -91,6 +91,18 @@ jobs:
           git -C ../xr-core checkout -q "$pin"
           git -C ../xr-core rev-parse HEAD
 
+      - name: "Cross-repo pin: sibling present, at DEPS.xr_core_rev, clean (P13-C-P0.2)"
+        # Ordering precedent (P12-CLOSE's 8db682f): this step runs AFTER the
+        # xr-core checkout, like every other lane that reads the sibling. It
+        # proves the pin BEFORE the lanes that consume it, so a stale or absent
+        # sibling is reported as BLOCKED-LAYOUT / STALE-SIBLING / DIRTY-SIBLING
+        # at the top of the run instead of surfacing as a vacuous pass deep in
+        # the gate. tools/run_checks.sh runs the same lane; this step exists so
+        # the diagnosis is a one-line failure, not a 40-minute red.
+        run: |
+          . tools/ci_capture.sh governance
+          python3 tools/sibling_pin_check.py --repo .
+
       - name: Date-invariance strict probe (T0-U1 / ADR-0047)
         # The ONLY lane that may pass --require-ambient-probe: it installed
         # faketime in the step above, so the ambient-clock half of the

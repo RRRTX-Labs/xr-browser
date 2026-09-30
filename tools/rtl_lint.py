@@ -22,7 +22,14 @@ import sys
 from pathlib import Path
 
 EXIT_PASS, EXIT_FAIL, EXIT_USAGE = 0, 1, 2
-XR_CORE = Path(__file__).resolve().parents[1].parent / "xr-core"
+# P13-C-P0.2: the sibling is resolved (and PROVEN at the DEPS pin, clean) by
+# the one shared helper — a layout guess here is what made this tool's verdict
+# silently vacuous against an older checkout. BLOCKED-LAYOUT / STALE-SIBLING /
+# DIRTY-SIBLING exit 2; docs/process/cross-repo-pin.md.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from xr_sibling import resolve_or_exit  # noqa: E402
+
+XR_CORE = resolve_or_exit(Path(__file__).resolve().parents[1], tool="rtl_lint").path
 
 RULES: list[tuple[str, re.Pattern]] = [
     ("left/right property", re.compile(r"(?m)^[ \t]*(left|right)[ \t]*:")),
