@@ -10,6 +10,7 @@ claim in the gated range rather than on a phase's position in a list.
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -44,9 +45,9 @@ def _tree(tmp_path: Path, phase: str = "P13") -> Path:
     return tmp_path
 
 
-def _run(tool: str, *args: str) -> subprocess.CompletedProcess:
+def _run(tool: str, *args: str, env: dict | None = None) -> subprocess.CompletedProcess:
     return subprocess.run([sys.executable, str(TOOLS / tool), *args],
-                          capture_output=True, text=True)
+                          capture_output=True, text=True, env=env)
 
 
 def test_state_absent_means_final_and_silence_reddens(tmp_path: Path) -> None:
@@ -144,9 +145,31 @@ def test_require_phase_final_binds_on_a_claim_not_on_position(tmp_path: Path) ->
         "ci_run": 1, "ci_job": 1, "conclusion": "success",
         "evidence": ["logs/local.txt"]}]
     (root / "evidence" / "P13" / "evidence.json").write_text(json.dumps(doc))
-    proc = _run("evidence_check.py", *base, "--require-phase-final", "--range", "HEAD")
+
+    # P13-C-P0.3b: the ci-run half is resolved OFFLINE, from a fixture, because
+    # the verdict must not depend on whether this host can reach api.github.com.
+    # Before this seam the test passed only while the network was down: the live
+    # resolver answered "offline" (a visible SKIP) when unreachable and
+    # "not certifiably green" (a FAIL) when it could ask, so the same tree read
+    # green here and red on a connected host. A test whose result is ambient
+    # weather is not a test.
+    fixture = tmp_path / "ci-runs.json"
+    fixture.write_text(json.dumps({"1/1": {"conclusion": "success",
+                                           "head_sha": HEAD_A}}), encoding="utf-8")
+    env = {**os.environ, "XR_CI_RUNS_FIXTURE": str(fixture)}
+    proc = _run("evidence_check.py", *base, "--require-phase-final", "--range", "HEAD",
+                env=env)
     assert proc.returncode == 0, proc.stdout + proc.stderr
     assert "judged" in proc.stderr
+
+    # …and the seam is not a bypass: the same fixture saying "failure" reddens,
+    # and a pair the fixture does not know reddens too (the API's own strictness).
+    for payload in ({"1/1": {"conclusion": "failure", "head_sha": HEAD_A}}, {}):
+        fixture.write_text(json.dumps(payload), encoding="utf-8")
+        proc = _run("evidence_check.py", *base, "--require-phase-final", "--range",
+                    "HEAD", env=env)
+        assert proc.returncode == 1, proc.stdout + proc.stderr
+        assert "not certifiably green" in proc.stdout
 
 
 def test_evidence_check_strict_calls_the_finality_law(tmp_path: Path) -> None:

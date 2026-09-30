@@ -10,6 +10,8 @@ split, not by compressing comments.
 """
 from __future__ import annotations
 
+import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -48,14 +50,51 @@ def _load_upstream_fetch() -> Any:
             sys.modules["_common"] = saved
 
 
+# P13-C-P0.3b: the OFFLINE seam. A verdict may not depend on whether this host
+# happens to reach api.github.com — the finality law's own test was green only
+# when the network was down, which makes it a flaky test AND a flaky gate. When
+# `XR_CI_RUNS_FIXTURE` names a JSON file, the fixture answers instead of the API,
+# with the API's own strictness: a pair the fixture does not know is a red (not a
+# skip), and a non-success conclusion is a red. Gates never set this variable;
+# it exists for fixture-driven tests, which is why it is an env var rather than a
+# flag on the checker (a flag in CI's argv is a flag someone can pass).
+FIXTURE_ENV = "XR_CI_RUNS_FIXTURE"
+
+
+def _fixture_verdict(run_id: int, job_id: int,
+                     bundle_commits: set[str]) -> bool | None:
+    """The fixture's verdict, or None when no fixture is configured."""
+    path = os.environ.get(FIXTURE_ENV)
+    if not path:
+        return None
+    try:
+        doc = json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return False  # an unreadable fixture resolves nothing: red, never a pass
+    entry = doc.get(f"{int(run_id)}/{int(job_id)}")
+    if not isinstance(entry, dict):
+        return False
+    if entry.get("conclusion") != "success":
+        return False
+    head = str(entry.get("head_sha") or "")
+    if head and bundle_commits and not any(
+            head.startswith(c) or c.startswith(head) for c in bundle_commits):
+        return False
+    return True
+
+
 def _default_ci_resolver(run_id: int, job_id: int,
                          bundle_commits: set[str]) -> bool | str:
     """Resolve a hosted-CI run via the chokepoint (fetch.py).
 
     True = verified green; False = verified not-green (must FAIL the bundle);
     a str = SKIP reason (offline / chokepoint unavailable). Never fabricates
-    an id: the ids come from the row, the verdict from the public API.
+    an id: the ids come from the row, the verdict from the public API (or, in
+    fixture-driven tests, from `XR_CI_RUNS_FIXTURE` — see `_fixture_verdict`).
     """
+    fixture = _fixture_verdict(run_id, job_id, bundle_commits)
+    if fixture is not None:
+        return fixture
     try:
         fetch = _load_upstream_fetch()
     except Exception as exc:  # import/layout trouble == cannot verify
