@@ -1,0 +1,57 @@
+........................................................................ [ 18%]
+........................................................................ [ 36%]
+........................................................................ [ 54%]
+.......F............F..........................................F........ [ 72%]
+.....................................................F.................. [ 90%]
+....................................                                     [100%]
+=================================== FAILURES ===================================
+_______________________ test_coverage_check_real_passes ________________________
+
+    def test_coverage_check_real_passes():
+>       assert run("coverage_check.py").returncode == 0
+E       AssertionError: assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/usr/local/bin/python3', '/tmp/p13base/xr-browser/tools/coverage_check.py'], returncode=1, std...e.ts) has no command registered (§10) — declare it in the allowlist with a command\nFAIL: coverage_check\n', stderr='').returncode
+E        +    where CompletedProcess(args=['/usr/local/bin/python3', '/tmp/p13base/xr-browser/tools/coverage_check.py'], returncode=1, std...e.ts) has no command registered (§10) — declare it in the allowlist with a command\nFAIL: coverage_check\n', stderr='') = run('coverage_check.py')
+
+tools/tests/test_p7_commands_tools.py:213: AssertionError
+______________________ test_real_grdp_passes_strict_gate _______________________
+
+    def test_real_grdp_passes_strict_gate() -> None:
+        r = run("grdp_check.py", "--ids-from-schema")
+        assert r.returncode == 0, r.stderr
+>       assert "OK (127 messages" in r.stdout  # P11-T6: +36 shield; P12-T6: +14 cosmetic
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert 'OK (127 messages' in 'grdp_check: xr_strings.grdp OK (131 messages, isolation-card cross-check clean)\n'
+E        +  where 'grdp_check: xr_strings.grdp OK (131 messages, isolation-card cross-check clean)\n' = CompletedProcess(args=['/usr/local/bin/python3', '/tmp/p13base/xr-browser/tools/grdp_check.py', '--ids-from-schema'], returncode=0, stdout='grdp_check: xr_strings.grdp OK (131 messages, isolation-card cross-check clean)\n', stderr='').stdout
+
+tools/tests/test_p8_t5_l10n.py:48: AssertionError
+_______________________ test_a11y_tree_golden_diff_clean _______________________
+
+    def test_a11y_tree_golden_diff_clean() -> None:
+        r = run_tool("a11y_tree.py", "--repo", str(REPO), "--check")
+>       assert r.returncode == 0, r.stdout
+E       AssertionError: FAIL: /tmp/p13base/xr-browser/docs/qa/axtree-snapshot.json drifted from the ui templates — regenerate with --gen
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/usr/local/bin/python3', '/tmp/p13base/xr-browser/tools/a11y_tree.py', '--repo', '/tmp/p13base...mp/p13base/xr-browser/docs/qa/axtree-snapshot.json drifted from the ui templates — regenerate with --gen\n', stderr='').returncode
+
+tools/tests/test_p9_a11y.py:60: AssertionError
+______________________ test_committed_artifact_diff_clean ______________________
+
+    def test_committed_artifact_diff_clean() -> None:
+        r = _run("--in", str(GRDP), "--out", str(ARTIFACT),
+                 "--as-of", "2026-09-10", "--check")
+>       assert r.returncode == 0, r.stdout + r.stderr
+E       AssertionError: FAIL: pseudo_locale artifact drift at /tmp/p13base/xr-browser/docs/qa/qyy/xr_strings.qyy.txt (regenerate with --out)
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/usr/local/bin/python3', '/tmp/p13base/xr-browser/tools/pseudo_locale.py', '--in', '/tmp/p13ba..._locale artifact drift at /tmp/p13base/xr-browser/docs/qa/qyy/xr_strings.qyy.txt (regenerate with --out)\n', stderr='').returncode
+
+tools/tests/test_p9_pseudo_locale.py:39: AssertionError
+=========================== short test summary info ============================
+FAILED tools/tests/test_p7_commands_tools.py::test_coverage_check_real_passes
+FAILED tools/tests/test_p8_t5_l10n.py::test_real_grdp_passes_strict_gate - As...
+FAILED tools/tests/test_p9_a11y.py::test_a11y_tree_golden_diff_clean - Assert...
+FAILED tools/tests/test_p9_pseudo_locale.py::test_committed_artifact_diff_clean
+4 failed, 392 passed in 466.10s (0:07:46)
+BEFORE_RC=1

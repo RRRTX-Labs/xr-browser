@@ -29,6 +29,13 @@ p13_evidence_bundles() {
   else
     "$PY" tools/evidence_check.py --strict
   fi
+  # P13-C-P0.5(b): a cited path that does not exist is not a method. The bundle
+  # checker validates a row's own text; this lane validates its CITATIONS —
+  # every docs/, evidence/ and build/ path in every bundle, human-gates file and
+  # report at or after the law's birth (P13) must exist on disk. Registered
+  # negative: tools/negatives/p13_c05.sh (planted dangling reference).
+  echo "== cited-path law (P13-C-P0.5b: a NOT-RUN method must exist) =="
+  "$PY" tools/doc_reference_check.py --repo .
 }
 
 p13_p0_gates() {
