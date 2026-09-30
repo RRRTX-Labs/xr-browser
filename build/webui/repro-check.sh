@@ -11,7 +11,16 @@
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"   # .../xr-browser/build/webui
 REPO="$(cd "$HERE/../.." && pwd)"       # .../xr-browser
-UI_CORE="${XR_CORE:-$(cd "$REPO/.." && pwd)/xr-core}"   # .../xr-core
+PY="${PYTHON:-python3}"
+# P13-C-P0.2b: resolved and PROVEN, never guessed. Was
+# `${XR_CORE:-$(cd "$REPO/.." && pwd)/xr-core}` — the same class as the python
+# tools, in shell, which the first sweep's patterns did not describe. A stale
+# sibling here would have run the right-looking lane against the wrong tree.
+UI_CORE="${XR_CORE:-}"
+if [ -z "$UI_CORE" ]; then
+  UI_CORE="$("$PY" "$REPO/tools/xr_sibling.py" --repo "$REPO" --print-path)" || {
+    echo "$(basename "$0"): FAIL — sibling checkout not at the DEPS pin (above)"; exit 2; }
+fi
 TOOLCHAIN="$UI_CORE/ui/toolchain"
 
 command -v node >/dev/null 2>&1 || { echo "repro-check: SKIP (node not installed)"; exit 77; }

@@ -133,3 +133,38 @@ PY
   fi
 }
 neg_register c02_unclassified_reader_reddens
+
+# --- 5: the SHELL shape is in the pattern set (P13-C-P0.2b) ------------------
+# Found by building on the law instead of trusting it: the first sweep's five
+# patterns were written from Python examples, so the panel lane's own language
+# was the gap — `build/webui/panel-tests.sh` read
+# `${XR_CORE:-$(cd "$REPO/.." && pwd)/xr-core}`, a layout guess spelled in shell,
+# and the audit did not see it. P6 exists because of that, and this case plants
+# the exact old line in a scratch tree: the audit must name the file.
+case_c02b_shell_layout_guess_reddens() {
+  local D="$NEG_TMP/c02b-shell" out rc
+  rm -rf "$D"
+  mkdir -p "$D/build/webui"
+  cp -r "$REPO_ROOT/tools" "$D/tools"
+  rm -rf "$D/tools/__pycache__" "$D/tools/tests/__pycache__"
+  cp "$REPO_ROOT/build/webui/panel-tests.sh" "$D/build/webui/panel-tests.sh"
+  python3 - "$D/build/webui/panel-tests.sh" <<'PY'
+import sys
+from pathlib import Path
+p = Path(sys.argv[1]); t = p.read_text(encoding="utf-8")
+s = t.index('UI_CORE="${XR_CORE:-}"')
+e = t.index('fi\n', s) + 3
+p.write_text(t[:s] + 'UI_CORE="${XR_CORE:-$(cd "$REPO/.." && pwd)/xr-core}"\n' + t[e:])
+PY
+  out="$("$PY" "$D/tools/sibling_pin_check.py" --repo "$D" --audit-only 2>&1)" && rc=0 || rc=$?
+  rm -rf "$D"
+  if [ "$rc" -eq 1 ] && { neg_out_file "$out"; \
+       neg_out_has_fixed "build/webui/panel-tests.sh"; }; then
+    echo "ok: the SHELL layout guess is caught by name (P6), which the first sweep missed"
+  else
+    echo "NEGATIVE-FAIL: a shell layout guess must be caught by name (rc=$rc)"
+    neg_out_file "$out"; sed 's/^/    | /' "$NEG_LAST_OUT_FILE"
+    NEG_FAILURES=$((NEG_FAILURES + 1))
+  fi
+}
+neg_register c02b_shell_layout_guess_reddens

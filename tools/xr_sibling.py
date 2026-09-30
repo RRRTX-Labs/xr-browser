@@ -179,6 +179,10 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--repo", default=".")
     ap.add_argument("--xr-core", default=None)
     ap.add_argument("--json", action="store_true")
+    # P13-C-P0.2b: a SHELL caller needs the path and nothing else, and asking it
+    # to parse the human line would be a second, worse reader of the same fact.
+    ap.add_argument("--print-path", action="store_true",
+                    help="print only the resolved sibling path (for `$(...)`)")
     args = ap.parse_args(argv)
     repo = Path(args.repo).resolve()
     try:
@@ -190,6 +194,9 @@ def main(argv: list[str]) -> int:
         else:
             print(format_error(err))
         return EXIT_USAGE
+    if args.print_path:
+        print(sib.path)
+        return 0
     print(json.dumps({"tool": "xr_sibling", "status": "ok",
                       "path": str(sib.path), "head": sib.head,
                       "pin": sib.pin}, indent=1) if args.json else

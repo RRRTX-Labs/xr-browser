@@ -77,16 +77,28 @@ PATTERNS = {
     "P3-repo-parent": re.compile(r'\b(root|repo|REPO)\.parent\s*/\s*"xr-core"'),
     "P4-explicit-arg": re.compile(r'default="[^"]*xr-core'),
     "P5-nested-parent": re.compile(r'parent\.parent(?:\.parent)?\s*/\s*"xr-core"'),
+    # P6 — the SHELL shape, missed by the first sweep and found by building on
+    # the law it protects: build/webui/panel-tests.sh resolved the sibling as
+    # `${XR_CORE:-$(cd "$REPO/.." && pwd)/xr-core}`, i.e. a layout guess spelled
+    # in shell. The sweep had looked at .py, .sh, .mjs, .yml — the gap was the
+    # PATTERN, not the extension: five regexes written from Python examples did
+    # not describe the one language the panel lane is written in.
+    "P6-shell-subshell-parent": re.compile(r'\(cd\s+\S*\s*\.\.[^)]*\)\s*/\s*xr-core'),
 }
-GUESSES = ("P1-layout-guess", "P2-resolve-guess", "P3-repo-parent", "P5-nested-parent")
+GUESSES = ("P1-layout-guess", "P2-resolve-guess", "P3-repo-parent",
+           "P5-nested-parent", "P6-shell-subshell-parent")
 
 # The register. Keys are repo-relative paths; values are (class, reason).
 # Generated from the P13-C-P0.2 audit scan of this tree; the audit FAILS on any
 # file with a resolution pattern that is missing here.
 REGISTER: dict[str, tuple[str, str]] = {
     "tools/xr_sibling.py": ("self", "the resolver and the pin law"),
+    "tools/sibling_pin_check.py": ("self", "this audit: pattern P6 is a string in it, so it matches itself"),
     "build/qa/_common.py": ("self", "xr_core_root() delegates to xr_sibling.check()"),
     "tools/coverage_check.py": ("routed", "roster read; the P13-C-P0.1 defect"),
+    "build/webui/panel-tests.sh": ("routed", "P6 shell layout guess -> the xr_sibling CLI (P13-C-P0.2b)"),
+    "build/webui/repro-check.sh": ("routed", "P6 shell layout guess -> the xr_sibling CLI (P13-C-P0.2b)"),
+    "build/webui/toolchain.sh": ("routed", "P6 shell layout guess -> the xr_sibling CLI (P13-C-P0.2b)"),
     "tools/a11y_lint.py": ("routed", "P1 layout guess -> resolve_or_exit"),
     "tools/csp_lint.py": ("routed", "P1 layout guess -> resolve_or_exit"),
     "tools/descriptors_to_docs.py": ("routed", "P1 layout guess -> resolve_or_exit"),
@@ -205,7 +217,10 @@ def audit(repo: Path) -> list[str]:
             continue
         src = path.read_text(encoding="utf-8")
         if ("from xr_sibling import" not in src and "import xr_sibling" not in src
-                and "_sibling_of(" not in src):
+                and "_sibling_of(" not in src
+                # a SHELL caller routes through the CLI, which is the same one
+                # resolver reached the only way a shell can reach it
+                and "tools/xr_sibling.py" not in src):
             fails.append(
                 f"{rel} is registered `routed` but does not import "
                 f"tools/xr_sibling.py — the register would be a claim about a "

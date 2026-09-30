@@ -63,6 +63,31 @@ p13_p0_gates() {
   "$PY" tools/evidence_finality.py --self-test
 }
 
+p13_exit_code_lane() {
+  # The SKIP law, in ONE place, and testable (P13-C-P0.6).
+  #
+  # <label> <skip-reason> <cmd...>: run a node/toolchain lane whose exit code is
+  # part of its contract — 0 pass, 77 "the environment is not here" (a visible
+  # skip, never a silent pass), anything else FAIL. The shape it replaces was
+  # `if cmd; then :; elif [ $? -eq 77 ]; then …` which is one deleted `else`
+  # away from turning a broken lane into a green one, and it read `$?` out of a
+  # `then :` branch to do it.
+  #
+  # The command is an ARGUMENT rather than a hardcoded path so
+  # tools/negatives/p13_c06.sh can drive all three exit codes against scratch
+  # scripts; a gate passes the real path, and no environment variable can move
+  # it. Returns nonzero via `die` for the FAIL case, exactly as an inline
+  # `else … die` did under the caller's `set -euo pipefail`.
+  local label="$1" skip="$2" rc=0
+  shift 2
+  "$@" || rc=$?
+  case "$rc" in
+    0) return 0 ;;
+    77) echo "SKIP: $label skipped ($skip)" ;;
+    *) echo "FAIL: $label failed (exit $rc)"; die ;;
+  esac
+}
+
 p13_t1_panel_gates() {
   # P13-T1: the panel frame. Two halves, and both are the point:
   #   * the focus-containment suite (node:test against the bundled core) — the
@@ -74,16 +99,10 @@ p13_t1_panel_gates() {
   # include) + the farm; browser halves are NOT-RUN with methods in
   # docs/qa/browser-harness.md. Node/registry absent => visible SKIP (77).
   echo "== P13-T1: panel focus containment (real suite + planted leak must redden) =="
-  if bash build/webui/panel-tests.sh; then :; elif [ $? -eq 77 ]; then
-    echo "SKIP: panel focus-containment lane skipped (node/toolchain unavailable)"
-  else
-    echo "FAIL: panel focus-containment lane failed"; die
-  fi
-  if bash build/webui/panel-tests.sh --plant-leak; then :; elif [ $? -eq 77 ]; then
-    echo "SKIP: panel planted-leak lane skipped (node/toolchain unavailable)"
-  else
-    echo "FAIL: the planted focus leak did not redden the suite"; die
-  fi
+  p13_exit_code_lane "panel focus-containment lane" \
+    "node/toolchain unavailable" bash build/webui/panel-tests.sh
+  p13_exit_code_lane "panel planted-leak lane" \
+    "node/toolchain unavailable" bash build/webui/panel-tests.sh --plant-leak
 }
 
 p13_t7_panel_perf_gates() {
@@ -100,11 +119,8 @@ p13_t7_panel_perf_gates() {
   # (The budget rows themselves are checked by the P9-T5 lane above, which owns
   #  gen_perf_budgets --check; this lane owns the panel's own two halves.)
   echo "== P13-T7: panel frame bench (surrogate, trend rig — never MET) =="
-  if "$PY" tools/panel_bench.py; then :; elif [ $? -eq 77 ]; then
-    echo "SKIP: panel bench skipped (node/toolchain unavailable) — sources shipped"
-  else
-    echo "FAIL: panel bench failed"; die
-  fi
+  p13_exit_code_lane "panel bench" \
+    "node/toolchain unavailable (sources shipped)" "$PY" tools/panel_bench.py
   "$PY" tools/panel_bench.py --check
 }
 

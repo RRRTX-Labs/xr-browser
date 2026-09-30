@@ -29,7 +29,19 @@
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 REPO="$(cd "$HERE/../.." && pwd)"
-UI_CORE="${XR_CORE:-$(cd "$REPO/.." && pwd)/xr-core}"
+PY="${PYTHON:-python3}"
+# P13-C-P0.2b: the sibling is RESOLVED AND PROVEN, never guessed. This was
+# `${XR_CORE:-$(cd "$REPO/.." && pwd)/xr-core}` — the same defect class as the
+# python tools, in the one language the first sweep's patterns did not describe:
+# a stale or absent ../xr-core here would have bundled a DIFFERENT panel into
+# the suite, and the suite would have passed. `--xr-core`/XR_CORE still wins as
+# an explicit override; otherwise one resolver answers, and BLOCKED-LAYOUT /
+# STALE-SIBLING / DIRTY-SIBLING are reported as themselves, exit 2.
+UI_CORE="${XR_CORE:-}"
+if [ -z "$UI_CORE" ]; then
+  UI_CORE="$("$PY" "$REPO/tools/xr_sibling.py" --repo "$REPO" --print-path)" || {
+    echo "panel-tests: FAIL — the sibling checkout is not at the DEPS pin (above)"; exit 2; }
+fi
 TOOLCHAIN="$UI_CORE/ui/toolchain"
 PANEL="$UI_CORE/ui/panel"
 SCRATCH="${TMPDIR:-/tmp}/xr-panel-tests.$$"
