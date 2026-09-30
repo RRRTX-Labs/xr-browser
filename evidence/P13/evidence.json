@@ -188,8 +188,8 @@
   },
   {
    "id": "P13-EVIDENCE",
-   "dod": "evidence/P13/{evidence.json,report.md,human-gates.md,logs} complete, state final, with same-head ci-run rows for every workflow that ran on the recorded head.",
-   "status": "VERIFIED",
+   "dod": "evidence/P13/{evidence.json,report.md,human-gates.md,logs} complete. PENDING, not VERIFIED: at the P13-C-P0.5 moment this row read as done while its own text was false — `state` was `interim`, there were ZERO `ci-run` rows, and `evidence/P13/report.md` did not exist, which the new doc-reference law now also reports (`tools/doc_reference_check.py` names `evidence/P13/report.md`). A row may not be VERIFIED at a moment when its own sentence is untrue. Flips to VERIFIED in the closing commit, together with `state: final`, the report, and the same-head `ci-run` rows for every workflow that ran on the phase's own head.",
+   "status": "BLOCKED-PENDING-EVIDENCE",
    "source": "fixture",
    "evidence": [
     "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md"

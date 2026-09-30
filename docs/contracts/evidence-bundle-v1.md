@@ -274,3 +274,46 @@ no trailer + `interim` ⇒ PASS **with the note**; trailer + `final` without a
 same-head `ci-run` ⇒ FAIL; and a `final` bundle with no trailer is still judged
 by the ordinary final rules — the carve-out is for an OPEN phase, never a shield
 for a bad bundle.
+
+---
+
+## Every cited path must exist (P13-C-P0.5b)
+
+A bundle's rows cite their instruments: `NOT-RUN (method: docs/qa/browser-harness.md)`,
+`evidence: [logs/t1-mutation.json]`, `plan: docs/plans/…`. Those citations are what
+make a deferral falsifiable — the reader can open the method, run it, and check
+that the number would have come from somewhere. **A citation that does not resolve
+converts the deferral into a claim with a decorative citation**, and it is
+unfalsifiable by construction: nobody can run a method that is not there, and
+nobody can distinguish a deliberate deferral from a typo.
+
+So: **every `docs/…`, `evidence/…` and `build/…` path cited in any bundle, any
+`human-gates.md` and any `report.md` must exist.** Enforced by
+`tools/doc_reference_check.py` (stdlib, offline, `--json`), whose scan is literal
+— no prefix fallback, no "close enough" — and which expands brace citations
+(`evidence/P13/{evidence.json,report.md,…}`), because that shorthand is exactly
+how a bundle lists the four things it claims to be complete, and one of them was
+missing when this was written.
+
+Found in the tree by its first run, not by imagination: `evidence/P13/human-gates.md`
+cited `docs/panel/breakage-report.md` twice for HG-33 (no such directory), and
+`build/qa/perf/perf_budgets.py` for HG-28 (the tool is `gen_perf_budgets.py`);
+`evidence/P13/evidence.json` listed a `report.md` that did not exist.
+
+**Scope is declared, never silent**: the law binds from **P13**, the phase that
+introduces it. Older bundles cite prose shapes (`docs/plans/..._v2.md`,
+`docs/adr/0001`, `evidence/P`) that were never literal paths, and prior-phase
+evidence is append-only — rewriting P1's prose to satisfy a checker written four
+phases later would be a worse act than leaving it. Grandfathered files are
+**counted and printed** (`25 pre-law file(s) grandfathered`), so a reader can see
+the boundary rather than trust it.
+
+**Deliberately not scanned**: prose in `docs/**` (a doc may cite a future file on
+purpose, with a human reading it) and `tools/…` citations (a tool reference is
+normally an instruction to run something, already covered by the tool's own
+gate). Named here so the boundary is a decision, not an oversight.
+
+Negatives (`tools/negatives/p13_c05.sh`, N=4): a dangling `build/…` citation in a
+P13 bundle ⇒ RED **and the path is named**; the same tree with the path planted ⇒
+GREEN; a pre-law bundle with the identical citation ⇒ skipped **and counted**; a
+brace citation whose members exist except one ⇒ RED.
