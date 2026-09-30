@@ -91,6 +91,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 # noqa: E402 — sibling tool modules (evidence_ci holds the T0-U2 head law).
 from evidence_ci import CI_RESOLVER
 # P12-T0-b: presence is a separate law from validity — see the sibling module.
+import evidence_closure as closure  # noqa: E402 - P13-C-P0.3 claim law
 import evidence_finality as fin  # noqa: E402 - P13-P0-C finality law
 import evidence_presence_check as epc  # noqa: E402
 from evidence_strict import strict_phase_findings  # noqa: E402 - T12 laws
@@ -266,9 +267,13 @@ def main(argv: list[str] | None = None) -> int:
                          "in --strict mode without --only, auto P3+)")
     ap.add_argument("--json", action="store_true", help="emit JSON")
     ap.add_argument("--require-phase-final", action="store_true",
-                    help="the closing form of the P13-P0-C law: every bundle "
-                         "must be final except the tree's declared in-flight "
-                         "phase (docs/state/phase-base.json)")
+                    help="the closing form of the finality law: a bundle whose "
+                         "phase carries a `Phase-Close: P<n>` trailer must be "
+                         "state 'final' (P13-C-P0.3). Without a trailer the "
+                         "flag is a no-op that prints '%s'" % "%s")
+    ap.add_argument("--range", default="",
+                    help="git range whose commits may carry Phase-Close trailers "
+                         "(default: HEAD only; CI passes the push range)")
     ap.add_argument("--no-presence", action="store_true",
                     help="skip the P12-T0-b presence law (every phase in git "
                          "history must carry evidence.json + human-gates.md)")
@@ -304,24 +309,17 @@ def main(argv: list[str] | None = None) -> int:
         results[str(f.relative_to(repo))] = check_file(f, repo, args.strict,
                                                        in_flight=in_flight)
     if args.strict and args.require_phase_final:
-        # The flag is the closing form: the newest phase may not hide behind
-        # the in-flight carve-out any more than a closed one may.
-        checked = {Path(f).parent.name for f in files}
-        if in_flight and in_flight in checked:
-            newest = f"evidence/{in_flight}/evidence.json"
-            if newest in results and not results[newest]:
-                doc = json.loads((repo / newest).read_text(encoding="utf-8"))
-                if str(doc.get("state", "final")).strip().lower() == "final":
-                    print(f"finality: --require-phase-final: {in_flight} "
-                          f"declares final at the closing commit — judged",
-                          file=sys.stderr)
-                else:
-                    results[newest] = [
-                        f"{newest}: --require-phase-final is set and "
-                        f"{in_flight} is the phase closing at this commit, "
-                        f"but the bundle still says 'interim' — flip it to "
-                        f"'final' with its report.md and its same-head ci-run "
-                        f"rows, or leave the phase open (P13-P0-C)"]
+        # P13-C-P0.3: closure is CLAIMED (`Phase-Close: P<n>`, the trailer
+        # discipline tools/dr_parse.py applies to Register-Change), never
+        # inferred from a phase's position in docs/state/phase-base.json — that
+        # trigger made the law unsatisfiable for the in-flight phase and
+        # reddened `governance` for the whole of every future phase while
+        # reporting a demand no commit could meet. See docs/contracts/
+        # evidence-bundle-v1.md ("state: interim | final, and WHEN the closing
+        # form binds") and tools/evidence_closure.py.
+        closure.apply_phase_final(results, repo, in_flight=in_flight,
+                                  claims=closure.closure_claims(
+                                      repo, args.range or None))
 
     # P12-T0-b: the presence law. Derived from git history, so a phase with
     # commits and no bundle FAILS here even though every existing bundle is

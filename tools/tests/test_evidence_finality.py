@@ -3,8 +3,8 @@
 The brief's four negatives live in tools/negatives/p13_p0c.sh (shell, as the
 gate runs them); these tests pin the same law where the rest of the suite
 lives, plus the wiring that makes it non-vacuous: `evidence_check --strict`
-must call it, and `--require-phase-final` must be able to force the in-flight
-phase to declare itself final.
+must call it, and that `--require-phase-final` binds on a `Phase-Close: P<n>`
+claim in the gated range rather than on a phase's position in a list.
 """
 
 from __future__ import annotations
@@ -100,16 +100,53 @@ def test_append_only_correction_clears_a_pending_row(tmp_path: Path) -> None:
     assert "superseded by appended corrections" in proc.stderr
 
 
-def test_require_phase_final_refuses_an_interim_closing_bundle(tmp_path: Path) -> None:
-    """evidence_check --strict --require-phase-final on the in-flight phase."""
+def test_require_phase_final_binds_on_a_claim_not_on_position(tmp_path: Path) -> None:
+    """P13-C-P0.3: closure is CLAIMED (`Phase-Close: P<n>`), never inferred.
+
+    Position-based triggering made the law unsatisfiable for the in-flight
+    phase — the presence law requires the bundle from the phase's FIRST commit,
+    and a bundle that must exist from commit one cannot be final from commit
+    one — so `governance` was red for the whole of every future phase while
+    reporting a demand no commit could meet.
+    """
     root = _tree(tmp_path, phase="P13")
     _bundle(root, "P13", {"phase": "P13", "state": "interim",
                           "dod_rows": [_row("VERIFIED")],
                           "not_done_by_design": ["still shipping"]})
     base = ["--repo", str(root), "--strict", "--only", "P13", "--no-presence"]
-    assert _run("evidence_check.py", *base).returncode == 0
+
+    # no claim: the flag is a no-op that SAYS SO rather than passing silently
     proc = _run("evidence_check.py", *base, "--require-phase-final")
-    assert proc.returncode == 1 and "--require-phase-final is set" in proc.stdout
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    assert "no closure claimed" in proc.stderr and "not a verdict" in proc.stderr
+
+    # with a claim in the range, the same bundle must be final
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    for k, v in (("user.email", "t@example.invalid"), ("user.name", "t")):
+        subprocess.run(["git", "-C", str(root), "config", k, v], check=True)
+    subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
+    subprocess.run(["git", "-C", str(root), "commit", "-qm", "closing",
+                    "-m", "Phase-Close: P13"], check=True)
+    proc = _run("evidence_check.py", *base, "--require-phase-final", "--range", "HEAD")
+    assert proc.returncode == 1, proc.stdout + proc.stderr
+    assert "claims this phase is closing" in proc.stdout
+
+    # and the claim is honoured when the bundle IS final
+    doc = json.loads((root / "evidence" / "P13" / "evidence.json").read_text())
+    doc["state"] = "final"
+    doc["dod_rows"] = [_row("VERIFIED")]
+    doc["phase_head"] = HEAD_A
+    doc["ci_claimed"] = ["governance"]
+    doc["dod_rows"] = [_row("VERIFIED"), {
+        "id": "X-CI", "dod": "hosted governance at the phase head",
+        "status": "VERIFIED", "source": "ci-run",
+        "workflow": "governance", "head_sha": HEAD_A,
+        "ci_run": 1, "ci_job": 1, "conclusion": "success",
+        "evidence": ["logs/local.txt"]}]
+    (root / "evidence" / "P13" / "evidence.json").write_text(json.dumps(doc))
+    proc = _run("evidence_check.py", *base, "--require-phase-final", "--range", "HEAD")
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    assert "judged" in proc.stderr
 
 
 def test_evidence_check_strict_calls_the_finality_law(tmp_path: Path) -> None:

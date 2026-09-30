@@ -194,3 +194,71 @@ rows). Bundle-level fields: `phase_head`, `ci_claimed`. Ledger schema:
 job?, step?, head?, log?, date, note?}]}}`; `present: true/false` requires
 non-empty `proven_by` with `ci_run`+`ci_job` or a `log` path, plus `date`;
 `UNOBSERVED` requires a `note` and forbids `version`.
+
+---
+
+## `state: interim | final`, and WHEN the closing form binds (P13-C-P0-C / P13-C-P0.3)
+
+Every bundle declares its own lifecycle. It has to: the **presence law**
+(`tools/evidence_presence_check.py`) requires a phase's bundle to exist from
+that phase's FIRST commit, and a bundle that must exist from commit one cannot
+be `final` from commit one.
+
+    state  "interim" | "final".   ABSENT MEANS FINAL — silence is a claim.
+
+* **`interim`** is legal for exactly one bundle: the phase the tree declares in
+  flight (`docs/state/phase-base.json`). Its rows may use `*-PENDING-*`
+  sentinels, and the final rules do not apply to it. An `interim` bundle for a
+  CLOSED or superseded phase is a FAILURE — that is the "interim at the closing
+  commit" hole this law exists to close.
+* **`final`** means every effective row status is in the final vocabulary
+  (`VERIFIED`, `PARTIAL`, `BLOCKED`, `BLOCKED-<CAUSE>`, `HUMAN-GATED`,
+  `NOT-BY-DESIGN`); no effective status may carry `PENDING`; `phase_head` must be
+  declared; `ci_claimed` must name `governance` (plus `core-hardening` when a
+  core was touched); and `evidence/P<n>/report.md` must exist carrying the
+  12-section report.
+* **Append-only corrections**: a row whose id appears in a later row's
+  `corrects` field is SUPERSEDED — the later row's status is effective and the
+  original text stays in place. History is not rewritten.
+
+### The closing form: `--require-phase-final` binds on a CLAIM
+
+`tools/evidence_check.py --strict --require-phase-final` is the closing
+invocation. It does **not** infer that a phase is closing from its position in
+any list — position-based triggering made the law unsatisfiable for the in-flight
+phase (the demand was `final`; the presence law demanded the bundle from commit
+one), so `governance` was red for the whole of every future phase while
+reporting a demand no commit could meet.
+
+**Closure is claimed.** A commit that closes a phase carries a trailer, in the
+same discipline `tools/dr_parse.py --check-trailers` applies to
+`Register-Change:` (ADR-0002 §2):
+
+```
+P13-C-CLOSE: close the phase
+
+<free text>
+
+Phase-Close: P13
+```
+
+With the trailer, that phase's bundle must be `final`, with `report.md` and a
+`ci-run` row at the phase's own recorded head for every claimed workflow.
+Without it the flag is a no-op that SAYS SO rather than passing silently:
+
+```
+finality: P13 interim (phase open; no closure claimed) — not a verdict
+```
+
+The word "verdict" is load-bearing: a pass that judged nothing must not be
+readable as a pass that judged everything.
+
+CI passes its push range (`tools/run_checks.sh --phase-final --via-ci-invocation
+"$RANGE"` → `--range` here), so every commit in the range may carry the claim;
+without `--range` only `HEAD` is read.
+
+**Negatives** (`tools/negatives/p13_c03.sh`, N=4): trailer + `interim` ⇒ FAIL;
+no trailer + `interim` ⇒ PASS **with the note**; trailer + `final` without a
+same-head `ci-run` ⇒ FAIL; and a `final` bundle with no trailer is still judged
+by the ordinary final rules — the carve-out is for an OPEN phase, never a shield
+for a bad bundle.

@@ -96,3 +96,35 @@ used to say only "exit code 1" — the diagnostic gap that made the previous hun
 take a phase. The lane name is in the annotation, and a unit test on the emitted
 line format (`tools/tests/test_gate_annotation.py`) fails if it ever stops
 being.
+
+---
+
+## What P13-C-P0.3 changed about reading a red `governance`
+
+Before this phase, a red `governance` run in the middle of a phase had a
+routine explanation that was NOT a defect: `--require-phase-final` demanded
+`state: "final"` from whichever phase happened to be newest in
+`docs/state/phase-base.json`, so every in-flight commit was red by construction
+and the failure text said so in the same words every time:
+
+```
+--require-phase-final is set and P13 is the phase closing at this commit, but
+the bundle still says 'interim'
+```
+
+That sentence is now impossible. Closure is claimed with a `Phase-Close: P<n>`
+trailer, so the rule for triage is:
+
+* a red run whose text mentions `Phase-Close` ⇒ **real**: a commit claims to
+  close a phase and the bundle is not final. The claim is in the commit message;
+  compare it to the bundle's `state`, `report.md` and `ci-run` rows.
+* a run with **no** `Phase-Close` trailer prints
+  `finality: <phase> interim (phase open; no closure claimed) — not a verdict`
+  and that line is **informational**. It is not a failure, and a `governance`
+  red in an open phase must be attributed to some OTHER lane — read the
+  annotation's `::error::<lane>:` line (added by P13-P0-B), not the finality
+  line.
+
+So the triage rule is: **never attribute a red to the finality lane unless the
+message names a `Phase-Close` claim.** Before P13 the opposite was true, which
+is why the first thing to check was the one thing that was always red.
