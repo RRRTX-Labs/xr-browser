@@ -9,9 +9,11 @@
 # Cases 5/6 are the presence-law control for the `P13-P0-A` subject shape: the
 # blocker label P0 is not a phase (no evidence/P0/ is demanded), while a real
 # phase token still demands its bundle.
-# Case 8 guards the CLOSING wire: `--phase-final` is the one invocation that
-# demands the in-flight phase be final, and a phase must not be able to close
-# with `state: "interim"` still standing.
+# Case 8 guards the CLOSING wire: a commit that CLAIMS closure (P13-C-P0.3's
+# `Phase-Close: P13` trailer) must not be able to leave `state: "interim"`
+# standing. The claim is what binds the law now, so the fixture makes it —
+# position in docs/state/phase-base.json no longer triggers anything, which is
+# the whole point of the fix.
 #
 # Determinism: cases 1–2 exercise evidence_ci's head law through a fixture
 # resolver (evidence_check's own SKIP-not-guess shape), so no network is
@@ -190,8 +192,17 @@ case_closing_wire_demands_final() {
     return 0
   fi
   echo "ok: control — the in-flight interim bundle is green in the default (push) run"
-  # (b) the closing invocation must refuse to let the phase close like that
-  neg_expect_reject "the closing run (--phase-final) reddens while the in-flight phase is still interim" \
+  # (b) the closing invocation must refuse to let the phase close like that —
+  # and since P13-C-P0.3 closure is CLAIMED, the fixture has to make the claim
+  # (`Phase-Close: P13`) before the closing form binds at all. That ordering is
+  # the point: the run WITHOUT the trailer is the control above.
+  git -C "$R" init -q
+  git -C "$R" config user.email f@example.invalid
+  git -C "$R" config user.name fixture
+  git -C "$R" add -A
+  git -C "$R" commit -q --allow-empty -m "P13-C-CLOSE: close the phase" \
+    -m "Phase-Close: P13"
+  neg_expect_reject "the closing run (--phase-final) reddens when a Phase-Close trailer claims an interim phase" \
     "still says 'interim'" \
     "$PY" "$REPO_ROOT/tools/evidence_check.py" --repo "$R" --strict \
     --require-phase-final --no-presence --only P13

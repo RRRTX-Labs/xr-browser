@@ -206,11 +206,23 @@ be `final` from commit one.
 
     state  "interim" | "final".   ABSENT MEANS FINAL — silence is a claim.
 
-* **`interim`** is legal for exactly one bundle: the phase the tree declares in
-  flight (`docs/state/phase-base.json`). Its rows may use `*-PENDING-*`
-  sentinels, and the final rules do not apply to it. An `interim` bundle for a
-  CLOSED or superseded phase is a FAILURE — that is the "interim at the closing
-  commit" hole this law exists to close.
+* **`interim`** is legal in exactly two cases (P13-C-P0.4):
+  1. the phase the tree declares in flight (`docs/state/phase-base.json`) — its
+     rows may use `*-PENDING-*` sentinels and the final rules do not apply; or
+  2. **declared in writing**: any other phase, provided at least one
+     `not_done_by_design` row OPENS with an ISO date. It then prints
+     `finality: <phase>: interim — DECLARED, not the in-flight phase` naming the
+     dated rows, the T0-U2 same-head claim does not bind it (it has made no
+     final-CI claim; `phase_head`/`ci_claimed` are its recorded *intent*), and
+     `partial work` is not a free pass — an undated interim has no author and no
+     date on it and is a FAILURE.
+
+  Either way, an `interim` bundle for a phase that CLAIMS closure is a FAILURE —
+  that is the "interim at the closing commit" hole this law exists to close. The
+  second case exists because a phase can land its substance while its same-head
+  CI claim is unmakeable (no green run at its recorded head, and a run four
+  commits back cannot be created); the alternatives are to cite someone else's
+  green run — the exact evasion T0-U2 stops — or to say so out loud, dated.
 * **`final`** means every effective row status is in the final vocabulary
   (`VERIFIED`, `PARTIAL`, `BLOCKED`, `BLOCKED-<CAUSE>`, `HUMAN-GATED`,
   `NOT-BY-DESIGN`); no effective status may carry `PENDING`; `phase_head` must be

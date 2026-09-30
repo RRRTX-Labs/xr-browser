@@ -73,8 +73,14 @@ def strict_phase_findings(doc: dict[str, Any], rows: list[dict[str, Any]],
     if phase_num is None or phase_num < T12_MIN_PHASE:
         return fails
 
-    # T0-U2: phase_head bundles cite a same-head ci-run row per workflow.
-    fails.extend(head_coverage_findings(doc, rows, path))
+    # T0-U2: phase_head bundles cite a same-head ci-run row per workflow —
+    # for FINAL bundles. A bundle that declares `interim` has made no final-CI
+    # claim to match, so the rule does not bind it: `phase_head`/`ci_claimed`
+    # are then the phase's INTENT, recorded in advance so the closing commit has
+    # something to satisfy (P13-C-P0.4). Binding it here would make the brief's
+    # "declare interim with a reasoned date" answer impossible to take.
+    if str(doc.get("state", "final")).strip().lower() != "interim":
+        fails.extend(head_coverage_findings(doc, rows, path))
     # (b) a PARTIAL/BLOCKED/HUMAN-GATED row must be explained: the bundle
     # carries a non-empty not_done_by_design (P8 shipped [] with partial
     # work — that hole closes here).

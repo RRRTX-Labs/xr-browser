@@ -60,6 +60,51 @@ def closure_note(phase: str) -> str:
             f"— not a verdict")
 
 
+ISO_DATE_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
+
+
+def interim_verdict(doc: dict, phase: str, in_flight: str | None) -> tuple[bool, str]:
+    """Is `state: interim` legal for this bundle? (legal, message) — P13-C-P0.4.
+
+    Legal in exactly two cases:
+
+    1. it IS the in-flight phase (docs/state/phase-base.json) — PENDING
+       sentinels are legal there and the final rules do not apply;
+    2. it DECLARES interim outside that window **in writing**: at least one
+       `not_done_by_design` row opening with an ISO date.
+
+    Why (2) exists. P12 landed its substance while its same-head CI claim cannot
+    exist — no green `governance` run exists at its recorded head, and a run four
+    commits back cannot be created retroactively. The brief's two permitted
+    answers were "declare interim with a dated reason" or "cite a green run at
+    the phase's own head"; the second is unavailable, and the forbidden third is
+    to point at someone else's green run. Declaring interim is therefore the
+    honest act, and this rule is what keeps it from being a free pass: an
+    undated interim has no author and no date on it, and the closing form
+    (apply_phase_final) makes interim illegal the moment a `Phase-Close: <phase>`
+    trailer exists. So the hole the P13-P0-C law closed — interim as a place to
+    hide a finished-but-unproven phase — stays closed from both directions.
+    """
+    if in_flight is not None and phase == in_flight.strip():
+        return True, (f"finality: {phase}: interim — in flight per "
+                      f"docs/state/phase-base.json (phase={in_flight}); "
+                      f"PENDING sentinels are legal here and the final rules do "
+                      f"not apply")
+    dated = [r for r in (doc.get("not_done_by_design") or [])
+             if ISO_DATE_RE.match(str(r).strip())]
+    if dated:
+        return True, (f"finality: {phase}: interim — DECLARED, not the "
+                      f"in-flight phase (phase={in_flight}); legal only because "
+                      f"{len(dated)} dated not_done_by_design row(s) say what "
+                      f"remains, and the final rules do not apply until closure "
+                      f"is claimed (P13-C-P0.4)")
+    return False, (f"state 'interim' but this is not the in-flight phase "
+                   f"(docs/state/phase-base.json says {in_flight!r}) and no "
+                   f"dated not_done_by_design row says why — a phase may only "
+                   f"stay open in WRITING, dated, and never as the state of a "
+                   f"closed/superseded phase (P13-P0-C)")
+
+
 def apply_phase_final(results: dict, repo: Path, *, claims: set[str],
                       in_flight: str | None) -> None:
     """Enforce the claim: every phase that claims closure must be `final`.

@@ -59,6 +59,8 @@ import argparse
 import json
 import re
 import sys
+
+import evidence_closure as closure  # noqa: E402 - P13-C-P0.4 state law
 from pathlib import Path
 from typing import Any
 
@@ -161,16 +163,11 @@ def finality_findings(doc: dict[str, Any], rows: list[dict[str, Any]],
     origin = ("declared" if raw_state is not None else "absent => final")
 
     if state == "interim":
-        if is_in_flight:
-            print(f"finality: {bundle.name}: interim — in flight per "
-                  f"docs/state/phase-base.json (phase={in_flight}); PENDING "
-                  f"sentinels are legal here and the final rules do not apply",
-                  file=sys.stderr)
-            return fails
-        fails.append(f"state 'interim' but this is not the in-flight "
-                     f"phase (docs/state/phase-base.json says "
-                     f"{in_flight!r}) — interim may never be the state of a "
-                     f"closed/superseded phase (P13-P0-C)")
+        legal, msg = closure.interim_verdict(doc, bundle.name, in_flight)
+        if legal:
+            print(msg, file=sys.stderr)
+        else:
+            fails.append(msg)
         return fails
 
     # ---- state == final ----------------------------------------------------
