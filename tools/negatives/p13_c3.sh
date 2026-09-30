@@ -20,9 +20,11 @@ case_c3_smuggle_classes_refused_pre_send() {
   while IFS='|' read -r want note secret; do
     [ -n "$want" ] || continue
     total=$((total + 1))
+    # P13-C-CLOSE: one statement, so `set -e` cannot swallow the refusal this
+    # case exists to observe (the bare capture + `rc=$?` pair ended the battery
+    # at case 1 of 3 with no FAIL line on 2026-09-30).
     out="$("$PY" "$BR" --from-event "$R/event.json" --note "$note" \
-        --as-of 2026-09-30T00:00:00Z --validate-only 2>&1)"
-    rc=$?
+        --as-of 2026-09-30T00:00:00Z --validate-only 2>&1)" && rc=0 || rc=$?
     neg_out_file "$out"
     if [ "$rc" -eq 1 ] && neg_out_has_fixed "$want" && ! neg_out_has_fixed "$secret"; then
       ok=$((ok + 1))

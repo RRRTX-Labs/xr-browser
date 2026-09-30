@@ -139,7 +139,9 @@ case_presence_law_p0_is_a_label() {
   printf 't\n' > "$R/evidence/P13/logs/t.txt"
   ( cd "$R" && git init -q . && git -c user.email=n@n -c user.name=n add -A \
       && git -c user.email=n@n -c user.name=n commit -qm "P13-P0-A: the blocker-label subject shape" )
-  out="$("$PY" "$REPO_ROOT/tools/evidence_presence_check.py" --repo "$R" 2>&1)"; rc=$?
+  # P13-C-CLOSE: guarded capture shape (same bug class as p13_c3.sh).
+  out="$("$PY" "$REPO_ROOT/tools/evidence_presence_check.py" --repo "$R" 2>&1)" \
+    && rc=0 || rc=$?
   if [ "$rc" -ne 0 ]; then
     echo "NEGATIVE-FAIL: a 'P13-P0-A' subject must not demand an evidence/P0/ bundle"
     printf '%s\n' "$out" | sed 's/^/    | /'

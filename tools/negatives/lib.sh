@@ -7,12 +7,24 @@
 # structural:
 #   * a registered case that never ran is an ERROR (zero-case law);
 #   * a case whose command exits 0 (gate PASSED on bad input) is an ERROR —
-#     the "negative harness that cannot fail" bug class P9 exists to kill.
+#     the "negative harness that cannot fail" bug class P9 exists to kill;
+#   * a case that captures a tool's output without capturing its STATUS in the
+#     guarded shape is an ERROR — under `set -e` the capture assignment exits
+#     the shell the moment the tool refuses, and refusing is what these cases
+#     ask for. The battery used to die at case 1 of 3 with no FAIL line; the
+#     linter below makes that shape impossible to reintroduce (P13-C-CLOSE,
+#     2026-09-30).
 #
 # Case files register cases with `neg_register <name>` and define a
 # `case_<name>()` function that builds its fixture and calls
 # `neg_expect_reject` / `neg_expect_inband`. Registration is cheap (no
 # fixture work), so sourcing a file can never be mistaken for running it.
+
+# Law 4 shells out to $PY (the linter). The dispatcher exports PY; this keeps
+# the library usable standalone too (a library that only works inside one
+# caller is a library whose laws cannot be exercised on their own).
+: "${PY:=${PYTHON:-python3}}"
+export PY
 
 NEG_TOTAL=0
 NEG_RUN=0
@@ -205,44 +217,156 @@ f.write_text(json.dumps(doc, indent=1))
 PYEOF
 }
 
-neg_self_test() {
-  local f before
+# neg_lint_bare_captures <case-file...> — law 4 of the harness self-test.
+#
+# The incident (P13-C-CLOSE, 2026-09-30): tools/negatives/p13_c3.sh captured a
+# refusing tool with
+#     out="$("$PY" "$BR" ... 2>&1)"
+#     rc=$?
+# Under the battery's `set -e` the ASSIGNMENT carries the command's status, so
+# the first refusal — the thing the case exists to observe — ended the whole
+# run: no FAIL line, no summary, the remaining case files never sourced, and a
+# product-looking red in a transcript that was really a harness bug.
+#
+# The required shape is one statement, so the status is captured even when the
+# tool refuses:
+#     out="$("$PY" "$BR" ... 2>&1)" && rc=0 || rc=$?
+#
+# A capture whose status is deliberately discarded (`... || true`) is not a
+# verdict and is not flagged. Output: one line per offender; rc=1 if any.
+neg_lint_bare_captures() {
+  # Non-files are skipped inside the linter (a missing case file is already a
+  # hard error in the dispatcher; this law is about the shape of what exists).
+  "$PY" - "$@" <<'PYLINT'
+import re
+import sys
 
-  # (1) rc=0 canary
-  before=$NEG_FAILURES
-  neg_expect_reject "self-test canary: harness flags rc=0" "x" /bin/true
+CAPTURE = re.compile(r'^\s*[A-Za-z_][A-Za-z0-9_]*="\$\(')
+GUARDED = re.compile(r'&&\s*[A-Za-z_][A-Za-z0-9_]*=0\s*\|\|')
+STATUS_READ = re.compile(r'(^|[^\w$])[A-Za-z_][A-Za-z0-9_]*=\$\?')
+
+bad = 0
+for path in sys.argv[1:]:
+    try:
+        raw = open(path, encoding="utf-8").read().splitlines()
+    except OSError:
+        continue
+    # join backslash continuations so a capture spanning lines is one statement
+    logical, buf, start = [], "", 0
+    for i, line in enumerate(raw, 1):
+        if not buf:
+            start = i
+        buf += line[:-1] if line.rstrip().endswith("\\") else line
+        if not line.rstrip().endswith("\\"):
+            logical.append((start, buf))
+            buf = ""
+    if buf:
+        logical.append((start, buf))
+    for idx, (lineno, text) in enumerate(logical):
+        stripped = text.strip()
+        if not CAPTURE.match(stripped):
+            continue
+        if GUARDED.search(stripped):
+            continue          # the guarded shape: status taken on one statement
+        if re.search(r'\|\|\s*true\s*$', stripped):
+            continue          # status deliberately discarded: never a verdict
+        # what follows the capture, on this statement or the next one
+        tail = stripped.split(')"', 1)[1] if ')"' in stripped else ''
+        nxt = logical[idx + 1][1].strip() if idx + 1 < len(logical) else ""
+        if STATUS_READ.search(tail) or STATUS_READ.search(nxt):
+            print(f"  {path}:{lineno}: capture whose status is read without the "
+                  "guarded shape (`cmd) && rc=0 || rc=$?`)")
+            bad += 1
+sys.exit(1 if bad else 0)
+PYLINT
+}
+
+neg_self_test() {   # <case-file...> — the same list the dispatcher will source
+  # Every law here is a CANARY: it proves the harness can fail, not that a
+  # product rule holds. Two properties were added on 2026-09-30 (P13-C-CLOSE)
+  # after the battery died silently at case 1 of 3:
+  #   * the canaries are counter-neutral — a canary that reddens the gate it is
+  #     demonstrating is a trap for the next reader;
+  #   * every capture of a subshell's status is guarded, because under `set -e`
+  #     the very failure a law expects to observe would abort the run instead.
+
+  # (1) a case whose command exits 0 MUST redden the gate.
+  local before=$NEG_FAILURES
+  neg_expect_reject "self-test canary: harness flags rc=0" "x" /bin/true >/dev/null
   if [ "$NEG_FAILURES" -ne "$((before + 1))" ]; then
     echo "SELF-TEST FAIL: a command that exits 0 did not redden the gate"
     exit 1
   fi
+  NEG_FAILURES=$before        # counter-neutral: the canary was not a real case
   echo "ok: self-test (rc=0 canary fires — the harness can fail)"
 
-  # (2) dropping a case file changes the derived N
-  local n_all n_minus
-  n_all=$( ( . tools/negatives/lib.sh
+  # (2) the case count is DERIVED: dropping a case file changes N.
+  # `set +e` inside the walk: sourcing 40 case files is a measurement, and one
+  # unexpected non-zero must not abort the self-test before it reports.
+  local n_all="" n_minus=""
+  n_all=$( ( set +e
+             . tools/negatives/lib.sh
              for f in "$@"; do . "tools/negatives/$f"; done
-             echo "$NEG_TOTAL" ) )
-  n_minus=$( ( . tools/negatives/lib.sh
+             printf '%s' "$NEG_TOTAL" ) ) || n_all=""
+  n_minus=$( ( set +e
+               . tools/negatives/lib.sh
                for f in "$@"; do
                  [ "$f" = "${1:-}" ] || . "tools/negatives/$f"
                done
-               echo "$NEG_TOTAL" ) )
-  if [ "$n_all" -lt 1 ] || [ "$n_minus" -ge "$n_all" ]; then
+               printf '%s' "$NEG_TOTAL" ) ) || n_minus=""
+  if [ -z "$n_all" ] || [ -z "$n_minus" ] || [ "$n_all" -lt 1 ] \
+     || [ "$n_minus" -ge "$n_all" ]; then
     echo "SELF-TEST FAIL: dropping a case file did not change N (count is not derived)"
     exit 1
   fi
   echo "ok: self-test (dropping a case file changes N: $n_all -> $n_minus)"
 
-  # (3) a registered case that never ran is an error
-  local ghost_rc
-  ghost_rc=$( ( . tools/negatives/lib.sh
+  # (3) a registered case that never ran is an error.
+  # The guarded capture matters here: neg_finish exits non-zero on purpose, so
+  # a bare `ghost_rc=$( ... )` would abort the self-test instead of judging it.
+  local ghost_rc=""
+  ghost_rc=$( ( set +e
+                . tools/negatives/lib.sh
                 neg_register ghost_without_body
                 neg_run_all
                 neg_finish
-                echo "$?" ) )
+                printf '0' ) ) || ghost_rc=$?
   if [ "$ghost_rc" -eq 0 ]; then
     echo "SELF-TEST FAIL: a registered case with no body did not error"
     exit 1
   fi
   echo "ok: self-test (registered-but-never-ran case errors)"
+
+  # (4) law 4 — every case file captures tool status in the guarded shape, and
+  # the linter that enforces it bites on the incident itself. Without the
+  # canary this law would be a vacuous green: a linter that matches nothing
+  # looks exactly like a tree with no offenders.
+  local canary files=() f
+  canary="$(mktemp "${NEG_TMP:-${TMPDIR:-/tmp}}/neg-lint-canary.XXXXXX.sh")"
+  cat >"$canary" <<'CANARY'
+case_canary() {
+  out="$(false)"
+  rc=$?
+  [ "$rc" -eq 1 ] || echo "unreachable"
+}
+CANARY
+  local canary_rc=0
+  neg_lint_bare_captures "$canary" >/dev/null 2>&1 || canary_rc=$?
+  rm -f "$canary"
+  if [ "$canary_rc" -ne 1 ]; then
+    echo "SELF-TEST FAIL: the bare-capture linter did not bite the incident shape"
+    exit 1
+  fi
+  for f in "$@"; do
+    if [ -f "$f" ]; then files+=("$f"); elif [ -f "tools/negatives/$f" ]; then files+=("tools/negatives/$f"); fi
+  done
+  if [ "${#files[@]}" -eq 0 ]; then
+    echo "SELF-TEST FAIL: no case file handed to the linter (nothing to check is not a pass)"
+    exit 1
+  fi
+  if ! neg_lint_bare_captures "${files[@]}"; then
+    echo "SELF-TEST FAIL: a case file captures a tool's status without the guarded shape"
+    exit 1
+  fi
+  echo "ok: self-test (no bare command capture in the case files; linter canary bites)"
 }

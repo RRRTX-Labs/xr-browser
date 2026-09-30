@@ -49,6 +49,15 @@ if [ "${1:-}" = "--self-test" ]; then
   exit 0
 fi
 
+# P13-C-CLOSE: the canaries run on EVERY invocation, not only when asked. A
+# self-test behind an opt-in flag is a law that stops being exercised the first
+# time nobody passes the flag — which is exactly what happened: law 4 (the
+# bare-capture linter) existed and was green while the battery itself was dying
+# silently. Placement matters twice over: AFTER NEG_FILES (the derived-count
+# canary needs the list) and BEFORE the case files are sourced (a broken
+# harness must fail before 205 cases pretend to have run).
+neg_self_test "${NEG_FILES[@]}"
+
 for f in "${NEG_FILES[@]}"; do
   if [ ! -f "tools/negatives/$f" ]; then
     echo "NEGATIVE GATE FAILED: case file tools/negatives/$f missing (a dropped area is invisible otherwise)"
