@@ -109,7 +109,7 @@ surfaces:
     unit: frame
     command: panel.open
     phase: P13
-    sources: [panel/focus-trap.ts, panel/panel-frame.ts, panel/tab-registry.ts]
+    sources: [panel/focus-trap.ts, panel/panel-frame.ts, panel/tab-registry.ts, panel/tab-strip.ts]
   # --- XR Panel tabs (land P13, T2-T6). The inventory is xr-core's
   # ui/panel/tabs.json; `target` is the tab id the panel opens at.
   #

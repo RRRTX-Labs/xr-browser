@@ -126,3 +126,12 @@ shield.cosmetic.guard.armed	IDS_XR_SHIELD_COSMETIC_GUARD_ARMED	‏«Arméd — h
 shield.cosmetic.guard.inert	IDS_XR_SHIELD_COSMETIC_GUARD_INERT	‏«Iñért — flág õff, hõõk îdlé ēxðañd ēx»
 shield.cosmetic.guard.hook.dead	IDS_XR_SHIELD_COSMETIC_GUARD_HOOK_DEAD	‏«Hõõk déád — çõsmétîç õff, págé réñdérs ûñstyléd ēxðañd ēxðañd ēxð»
 shield.cosmetic.empty	IDS_XR_SHIELD_COSMETIC_EMPTY	‏«Nõ çõsmétîç státé îñ thîs páylõád ēxðañd ēxðañ»
+panel.heading	IDS_XR_PANEL_HEADING	‏«Páñél ē»
+panel.close	IDS_XR_PANEL_CLOSE	‏«Clõsé ē»
+panel.tabs	IDS_XR_PANEL_TABS	‏«Páñél tábs ēxð»
+panel.empty	IDS_XR_PANEL_EMPTY	‏«Nõ táb hás régîstéréd yét ēxðañd ēx»
+panel.tab.site	IDS_XR_PANEL_TAB_SITE	‏«Sîté »
+panel.tab.observatory	IDS_XR_PANEL_TAB_OBSERVATORY	‏«Obsérvátõry ēxð»
+panel.tab.breakage	IDS_XR_PANEL_TAB_BREAKAGE	‏«Répõrt á brõkéñ sîté ēxðañd »
+panel.tab.update	IDS_XR_PANEL_TAB_UPDATE	‏«Updátés ē»
+panel.tab.sent	IDS_XR_PANEL_TAB_SENT	‏«Whát wõûld bé séñt ēxðañd»

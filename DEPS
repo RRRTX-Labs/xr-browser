@@ -44,7 +44,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "9fd376cb1ba0d6e4dd2df37429194edd27afa66a"     # xr-core 9fd376c = P13-T1/T7 (panel frame, focus containment, bench surrogate) + P13-C-P0.1 (ui/panel/tabs.json — the DECLARED tab inventory — and ui/panel/tab-registry.ts, the typed refusal surface the §10 unit is read from; five panel.tab.* titles, 131 -> 136 messages). Pair-bumped same-day with each P13 commit per docs/process/cross-repo-pin.md.
+xr_core_rev: "a2b7815a93deff916e5e03d5ed3e0d8bfb1fce66"     # xr-core a2b7815 = P13-T1/T7 + P13-C-P0.1 (ui/panel/tabs.json, tab-registry.ts) + P13-C-P0.1b (ui/panel/tab-strip.ts — the registry-driven tablist; registry diagnostics as machine tokens for l10n_extract R4). Pair-bumped same-day with each P13 commit per docs/process/cross-repo-pin.md.
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"
