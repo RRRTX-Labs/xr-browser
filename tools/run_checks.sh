@@ -161,7 +161,6 @@ echo "== P8-T6+P11-T6: attention-budget policy of record + shield chip-count-onl
 echo "== P8-T7: help<->settings deep-link contract lint (schema <-> registry, both directions) =="
 "$PY" tools/help_deep_link.py
 
-
 # ---------------------------------------------------------------------------
 # P6 gates (policy resolver v1). All offline except the C++ suite, which
 # requires g++ and SKIPs VISIBLY when absent (skip-policy law) — the hosted
@@ -211,6 +210,7 @@ fi
 # P13-T1: the panel's focus containment (moved to checks/p13_gates.sh by the
 # size law; the WebUI toolchain above type-checks the DOM half).
 p13_t1_panel_gates
+p13_c2_observatory_gates
 
 echo "== P7: CSP lint — no runtime network/eval in ui/** + commands/** =="
 "$PY" tools/csp_lint.py

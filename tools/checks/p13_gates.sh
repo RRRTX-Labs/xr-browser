@@ -169,3 +169,18 @@ p13_sibling_pin() {
   echo "== P13-C-P0.2: cross-repo pin (sibling present, at DEPS.xr_core_rev, clean) + the resolver register =="
   "$PY" tools/sibling_pin_check.py --repo .
 }
+
+p13_c2_observatory_gates() {
+  # P13-T3: the Observatory's export law — redaction is CONTRACT, and the point
+  # of the lane is not "there is a redaction function" but "the refused bytes
+  # never reach the writer". The tool's --check runs the smuggle corpus (query
+  # params, fragments, user:pass@, cookies, UA strings, selector text), asserts
+  # each refusal class by name, and byte-compares the exporter's output for the
+  # committed golden block-event row — the row the C++ core emits and the Python
+  # fake reproduces byte-for-byte.
+  #
+  # Python stdlib only and offline, so there is no SKIP path: this lane either
+  # runs or the tree is broken.
+  echo "== P13-T3: observatory export (redaction contract + smuggle corpus) =="
+  "$PY" tools/observatory_export.py --check
+}
