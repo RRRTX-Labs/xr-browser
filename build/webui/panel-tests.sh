@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
-# build/webui/panel-tests.sh — the panel's focus-containment lane (P13-T1).
+# build/webui/panel-tests.sh — the panel's pure-core lanes (P13-T1, P13-C-P0.1).
 #
 # What runs:
 #   1. esbuild-bundles xr-core/ui/panel/focus-trap.ts into a SCRATCH directory
 #      outside both repos (tests never write into the tree), using the pinned,
 #      allowlisted toolchain (ui/toolchain: lit/axe-core/esbuild/typescript);
 #   2. runs xr-core/ui/panel/tests/focus-trap.test.mjs under node:test against
-#      that bundle.
+#      that bundle;
+#   2b. the same for tab-registry.ts + tests/tab-registry.test.mjs, with the
+#      REAL inventory (ui/panel/tabs.json) pointed in — the runtime half of the
+#      P13-C-P0.1 §10 unit change (a tab is DECLARED; a `.ts` file is not a tab).
 #
 # Why a bundle and not the .ts directly: this sandbox has no browser and the
 # toolchain is dependency-frozen (no jsdom/happy-dom, no node TS loader), so the
@@ -67,19 +70,34 @@ PY
 else
   cp "$PANEL/focus-trap.ts" "$SCRATCH/src/focus-trap.ts"
 fi
+cp "$PANEL/tab-registry.ts" "$SCRATCH/src/tab-registry.ts"
 
-SRC="$SCRATCH/src/focus-trap.ts"
-BUNDLE="$SCRATCH/focus-trap.mjs"
-( cd "$TOOLCHAIN" && node_modules/.bin/esbuild "$SRC" --bundle --format=esm \
-    --platform=neutral --target=es2022 --outfile="$BUNDLE" --log-level=warning ) \
-  || { echo "panel-tests: FAIL — esbuild could not bundle focus-trap.ts"; exit 1; }
+_bundle() {   # <src-ts> <out-mjs> <label>
+  ( cd "$TOOLCHAIN" && node_modules/.bin/esbuild "$1" --bundle --format=esm \
+      --platform=neutral --target=es2022 --outfile="$2" --log-level=warning ) \
+    || { echo "panel-tests: FAIL — esbuild could not bundle $3"; exit 1; }
+}
+
+_bundle "$SCRATCH/src/focus-trap.ts" "$SCRATCH/focus-trap.mjs" focus-trap.ts
+_bundle "$SCRATCH/src/tab-registry.ts" "$SCRATCH/tab-registry.mjs" tab-registry.ts
 
 echo "panel-tests: node --test ui/panel/tests/focus-trap.test.mjs"
-if XR_PANEL_TRAP_BUNDLE="$BUNDLE" node --test "$PANEL/tests/focus-trap.test.mjs" 2>&1 \
-    | sed "s/^/  /"; then
+if XR_PANEL_TRAP_BUNDLE="$SCRATCH/focus-trap.mjs" \
+     node --test "$PANEL/tests/focus-trap.test.mjs" 2>&1 | sed "s/^/  /"; then
   SUITE=0
 else
   SUITE=1
+fi
+
+if [ "$PLANTED" = "0" ]; then
+  echo "panel-tests: node --test ui/panel/tests/tab-registry.test.mjs"
+  if XR_PANEL_TABS_BUNDLE="$SCRATCH/tab-registry.mjs" \
+     XR_PANEL_TABS_INVENTORY="$PANEL/tabs.json" \
+     node --test "$PANEL/tests/tab-registry.test.mjs" 2>&1 | sed "s/^/  /"; then
+    :
+  else
+    SUITE=1
+  fi
 fi
 
 if [ "$PLANTED" = "1" ]; then
@@ -91,8 +109,8 @@ if [ "$PLANTED" = "1" ]; then
   exit 0
 fi
 if [ "$SUITE" -ne 0 ]; then
-  echo "panel-tests: FAIL — focus-containment suite failed"
+  echo "panel-tests: FAIL — focus-containment/tab-registry suite failed"
   exit 1
 fi
-echo "panel-tests: PASS (focus containment: wrap, intercept, re-open race, restore, planted-leak control)"
+echo "panel-tests: PASS (focus containment: wrap, intercept, re-open race, restore, planted-leak control; tab registry: inventory bijection, typed refusals)"
 exit 0

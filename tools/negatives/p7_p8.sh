@@ -54,12 +54,17 @@ NEG
 }
 neg_register menu_tier1_budget
 
-# --- 30. coverage_check: a LANDED surface with no registered command -------
+# --- 30. coverage_check: a LANDED source nothing claims --------------------
+# P13-C-P0.1 fixed this check's unit (a declared tab/section, not a `.ts` file),
+# so the reason string moved: an undeclared `ui/settings/rogue-section.ts` now
+# fails as an UNACCOUNTED SOURCE rather than as a "surface with no command".
+# Same bite, same law, and the fixture is unchanged — a file that lands without
+# anyone declaring which surface it implements is still red.
 case_coverage_undeclared() {
   local CV="$NEG_TMP/cov"; mkdir -p "$CV/ui/settings"
   printf 'export class Rogue {}\n' > "$CV/ui/settings/rogue-section.ts"
-  neg_expect_reject "coverage_check: landed settings surface maps to no command (§10)" \
-    'has no command registered' \
+  neg_expect_reject "coverage_check: a landed source no surface claims reddens (§10)" \
+    'unaccounted source settings/rogue-section.ts' \
     "$PY" tools/coverage_check.py --ui-root "$CV/ui"
 }
 neg_register coverage_undeclared

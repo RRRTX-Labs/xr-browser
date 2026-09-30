@@ -1,48 +1,146 @@
-# docs/contracts/coverage-allowlist.yaml — §10 command-coverage ratchet (P7-T9).
+# docs/contracts/coverage-allowlist.yaml — §10 command-coverage ratchet
+# (P7-T9; the UNIT was fixed in P13-C-P0.1).
 #
 # `tools/coverage_check.py` enforces the §10 law verbatim: "any feature without
 # a command does not ship (CI check: every `Settings` section and panel tab maps
-# to a command)." Settings pages (P8) and XR Panel tabs (P13) don't exist yet,
-# so this file ARMS the ratchet NOW: each future surface is pre-declared with the
-# roster command that must cover it. The check then fails if (a) a declared
-# surface's covering command drifts out of the registry, or (b) a surface LANDS
-# in the tree (a `ui/settings/<x>` or `ui/panel/<x>` source) without a registered
-# covering command — the "future-bite" (fixture-proven in the P7 test).
+# to a command)."
+#
+# ## Why the unit is a declared TAB/SECTION and not a file
+#
+# Until P13-C-P0.1 the check treated any `ui/panel/<name>.ts` as a surface, and
+# at e503f9e that reddened the lane twice:
+#
+#     FAIL: landed surface panel/focus-trap (panel/focus-trap.ts) has no
+#           command registered (§10)
+#     FAIL: landed surface panel/panel-frame (panel/panel-frame.ts) has no ...
+#
+# A focus trap and a frame are not tabs. They are the implementation of ONE
+# declared surface, `panel/xr`. The law was right; the check's unit was wrong,
+# and the honest repair is the declaration mechanism this file now carries —
+# never an exemption, never a synthetic command for a trap, never a synthetic
+# tab in the inventory (all three are registered negatives).
+#
+# So each entry declares:
+#   surface  the tab id / section id the law is about (`panel/<tab-id>` for a
+#            tab, `settings/<section-id>` for a settings section);
+#   unit     tab | section | frame | page | about — what KIND of declared thing
+#            this is. Only `tab`/`section` entries are joined to an inventory;
+#            `frame` is the panel itself (see below);
+#   target   for a tab: the argument the covering command is addressed with;
+#   command  the roster command that must cover the surface. It must be
+#            REGISTERED in xr-core's roster_v1.json or the lane fails (R1);
+#   sources  the ui-root-relative `.ts` files that implement the surface. Every
+#            non-test `.ts` under ui/{settings,panel}/ must appear in exactly
+#            ONE entry's list (R2); an entry naming a file that is not in the
+#            tree fails (R3) — a stale claim is a coverage hole with a citation;
+#   phase    the phase that lands it.
+#
+# ## The panel's covering command (the recorded call)
+#
+# Every P13 tab is covered by the SAME registered tier-1 command, `panel.open`,
+# addressed with the tab as its target (`target:` above). That is a recorded
+# decision, not a shortcut, and the alternative was considered and refused:
+#
+#   * adding a `panel.<tab>` command per tab would be a change to the §10
+#     command REGISTRY, which lives in xr-core and ripples into the frozen
+#     command-descriptor contract, the help/deep-link table, the menu model,
+#     `docs/contracts/commands.md`, and xr-core's C++ matcher golden rankings
+#     (`commands/tests/golden-rankings.json`, `test_matcher.cc`). P13 is not
+#     allowed to redesign a frozen cross-phase contract unilaterally (plan §1.11
+#     amendment route) and 26 -> 31 commands is not a P13 edit;
+#   * a `skip:` for `focus-trap` / `panel-frame` is the forbidden fix
+#     (`tools/negatives/p13_c01.sh`, case `c01_skip_pattern_is_not_a_fix`);
+#   * leaving the file-as-unit scan in place is what the phase brief calls red.
+#
+# The teeth are unchanged and now point at the right thing: a tab that is
+# registered at runtime but not declared here is a FINDING (inventory ⊄
+# allowlist), and a declaration that outruns the inventory is a FINDING
+# (allowlist ⊄ inventory). Both directions are negatives.
 #
 # This is the P6-T5 "allowlist that turns into a ratchet" pattern: the entries
 # are obligations, not permissions, and they bite the moment the surface lands.
 
 schema: xr-coverage-allowlist
-schema_version: 1
+schema_version: 2
 
 surfaces:
-  # --- Settings sections (land in P8) — each maps to a roster settings-jump. ---
+  # --- Settings sections (landed P8). The settings schema's own `sections`
+  # array is the inventory these are joined to (R5). ------------------------
   - surface: settings/network
+    unit: section
     command: settings.network
     phase: P8
+    sources: [settings/network.ts]
   - surface: settings/privacy
+    unit: section
     command: settings.privacy
     phase: P8
+    sources: [settings/privacy.ts]
   - surface: settings/identity
+    unit: section
     command: settings.identity
     phase: P8
+    sources: [settings/identity.ts]
   # --- About/update surface (lands in P10-T8) — ratchet-safe tier-2 trio. ----
   - surface: about/update
+    unit: about
     command: update.about
     phase: P10
   - surface: about/check-now
+    unit: about
     command: update.check-now
     phase: P10
   - surface: about/manual-download
+    unit: about
     command: update.manual-download
     phase: P10
   # --- xr://shield dev page (lands in P11-T6) — the dev-only debug page is a
   # surface like any other: it ships BEHIND a command (shield.page, tier2,
   # predicate build.channel-dev), never beside the registry. ------------------
   - surface: shield/page
+    unit: page
     command: shield.page
     phase: P11
-  # --- XR Panel (lands in P13) — maps to the tier-1 panel.open command. -------
+    sources: [shield/shield.ts]
+  # --- XR Panel, the frame (lands in P13-T1). The frame is NOT a tab: it is
+  # the surface `panel.open` opens. focus-trap.ts implements its containment,
+  # panel-frame.ts its chrome, tab-registry.ts the declarative tab API. -------
   - surface: panel/xr
+    unit: frame
+    command: panel.open
+    phase: P13
+    sources: [panel/focus-trap.ts, panel/panel-frame.ts, panel/tab-registry.ts]
+  # --- XR Panel tabs (land P13, T2-T6). The inventory is xr-core's
+  # ui/panel/tabs.json; `target` is the tab id the panel opens at.
+  #
+  # A tab entry carries `sources:` only once its implementation lands, and the
+  # law then FORCES the line in the same commit: the moment
+  # `ui/panel/<tab>-tab.ts` exists, R2 fires until this file claims it. That is
+  # the property the old file-as-unit scan lacked — a file could land without
+  # anyone saying which surface it was for. (Each tab's `sources:` line below
+  # names the file that landed for it; the pair is reviewed together.)
+  - surface: panel/site
+    unit: tab
+    target: site
+    command: panel.open
+    phase: P13
+  - surface: panel/observatory
+    unit: tab
+    target: observatory
+    command: panel.open
+    phase: P13
+  - surface: panel/breakage
+    unit: tab
+    target: breakage
+    command: panel.open
+    phase: P13
+  - surface: panel/update
+    unit: tab
+    target: update
+    command: panel.open
+    phase: P13
+  - surface: panel/sent
+    unit: tab
+    target: sent
     command: panel.open
     phase: P13
