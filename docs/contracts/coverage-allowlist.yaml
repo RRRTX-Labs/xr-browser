@@ -145,6 +145,10 @@ surfaces:
     target: update
     command: panel.open
     phase: P13
+    # P13-C4: declared at landing (the R2 law demands it the moment the file
+    # appears under ui/panel/).
+    sources:
+      - panel/update-tab.ts
   - surface: panel/sent
     unit: tab
     target: sent

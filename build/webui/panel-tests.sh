@@ -88,6 +88,7 @@ fi
 cp "$PANEL/tab-registry.ts" "$SCRATCH/src/tab-registry.ts"
 cp "$PANEL/site-tab.ts" "$SCRATCH/src/site-tab.ts"
 cp "$PANEL/observatory-tab.ts" "$SCRATCH/src/observatory-tab.ts"
+cp "$PANEL/update-tab.ts" "$SCRATCH/src/update-tab.ts"
 
 _bundle() {   # <src-ts> <out-mjs> <label>
   ( cd "$TOOLCHAIN" && node_modules/.bin/esbuild "$1" --bundle --format=esm \
@@ -99,6 +100,7 @@ _bundle "$SCRATCH/src/focus-trap.ts" "$SCRATCH/focus-trap.mjs" focus-trap.ts
 _bundle "$SCRATCH/src/tab-registry.ts" "$SCRATCH/tab-registry.mjs" tab-registry.ts
 _bundle "$SCRATCH/src/site-tab.ts" "$SCRATCH/site-tab.mjs" site-tab.ts
 _bundle "$SCRATCH/src/observatory-tab.ts" "$SCRATCH/observatory-tab.mjs" observatory-tab.ts
+_bundle "$SCRATCH/src/update-tab.ts" "$SCRATCH/update-tab.mjs" update-tab.ts
 
 echo "panel-tests: node --test ui/panel/tests/focus-trap.test.mjs"
 if XR_PANEL_TRAP_BUNDLE="$SCRATCH/focus-trap.mjs" \
@@ -113,6 +115,14 @@ if [ "$PLANTED" = "0" ]; then
   if XR_PANEL_TABS_BUNDLE="$SCRATCH/tab-registry.mjs" \
      XR_PANEL_TABS_INVENTORY="$PANEL/tabs.json" \
      node --test "$PANEL/tests/tab-registry.test.mjs" 2>&1 | sed "s/^/  /"; then
+    :
+  else
+    SUITE=1
+  fi
+  # P13-T5: the update tab's pure core (closed verb set; no progress states).
+  echo "panel-tests: node --test ui/panel/tests/update-tab.test.mjs"
+  if XR_PANEL_UPDATE_BUNDLE="$SCRATCH/update-tab.mjs" \
+     node --test "$PANEL/tests/update-tab.test.mjs" 2>&1 | sed "s/^/  /"; then
     :
   else
     SUITE=1
@@ -150,5 +160,5 @@ if [ "$SUITE" -ne 0 ]; then
   echo "panel-tests: FAIL — focus-containment/tab-registry suite failed"
   exit 1
 fi
-echo "panel-tests: PASS (focus containment: wrap, intercept, re-open race, restore, planted-leak control; tab registry: inventory bijection, typed refusals; site tab: single-scope dial, why-drill over every reason code + typed fallback; observatory: 2k ring, last-screenful clamp, a11y positions)"
+echo "panel-tests: PASS (focus containment: wrap, intercept, re-open race, restore, planted-leak control; tab registry: inventory bijection, typed refusals; site tab: single-scope dial, why-drill over every reason code + typed fallback; observatory: 2k ring, last-screenful clamp, a11y positions; update tab: closed verb set, no progress states)"
 exit 0

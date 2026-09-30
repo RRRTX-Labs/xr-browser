@@ -497,3 +497,35 @@ allowlist:
     whose kAnonymous renders as exactly this string; the blob's scope must compare equal to the frame's derived
     scope key, so the two vocabularies cannot diverge. The banned sense is a marketing claim ('browse anonymously');
     this is a machine-compared partition label.
+# P13-T5 (update-available UX): the auto-update family is banned project copy,
+# because the product notifies and never updates itself. Four of the five hits
+# below are the PLAN describing distribution channels or NEGATING the behaviour;
+# the fifth is this phase's own evidence row stating the prohibition. Each is
+# line-precise, so if any of these lines changes the entry stops covering it.
+- path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+  line: 200
+  pattern: auto-update
+  justification: "\xA71.8 Tor identity: 'Tor identity disables auto-update by policy and surfaces the fact' \
+    \u2014 a NEGATION of the behaviour, and a policy statement about the channel, not a claim that XR updates \
+    \ itself quietly."
+- path: docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md
+  line: 200
+  pattern: auto-update
+  justification: "Same \xA71.8 Tor-identity negation as the master plan (v2 file: identical citations, see \
+    \ pinned-copy entry)."
+- path: docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md
+  line: 1724
+  pattern: auto-update
+  justification: "\xA71.14 Windows packaging: 'per-user default (auto-update via task)' names how the OS \
+    \ channel delivers updates \u2014 a deployment fact about packaging, not a UI claim that an update \
+    \ happened by itself."
+- path: docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md
+  line: 1724
+  pattern: auto-update
+  justification: "Same \xA71.14 Windows packaging citation as the master plan (v2 file: identical citations, \
+    \ see pinned-copy entry)."
+- path: evidence/P13/evidence.json
+  line: 147
+  pattern: auto-update
+  justification: "P13-T5's own DoD row: 'Update-available UX: T1 tier only, no auto-update implication' \
+    \u2014 the row STATES the prohibition it is judged against."

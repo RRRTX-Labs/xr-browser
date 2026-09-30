@@ -77,6 +77,13 @@ BANNED: list[tuple[str, re.Pattern[str]]] = [
     ("% protected", re.compile(r"%\s*protected", re.IGNORECASE)),
     ("protection/security score", re.compile(r"(?:protection|security)[-\s]?scores?\b", re.IGNORECASE)),
     ("stealth", re.compile(r"\bstealth\b", re.IGNORECASE)),
+    # P13-T5 (update-available UX): the product notifies, it never updates
+    # itself. Copy that says otherwise is a false claim about behaviour, which
+    # is why this family is machine-checked rather than style-reviewed.
+    ("auto-update", re.compile(r"\bauto[\s-]?updates?\b", re.IGNORECASE)),
+    ("updated automatically", re.compile(r"\bupdat(?:e|es|ed)\b[^.]{0,48}\bautomatically\b",
+                                         re.IGNORECASE)),
+    ("silent update", re.compile(r"\bsilent(?:ly)?[\s-]updates?\b", re.IGNORECASE)),
 ]
 
 SCAN_DIR_GLOBS = (".github", "ci", "docs", "evidence")
