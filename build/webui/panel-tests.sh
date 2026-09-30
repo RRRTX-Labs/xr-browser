@@ -9,7 +9,10 @@
 #      that bundle;
 #   2b. the same for tab-registry.ts + tests/tab-registry.test.mjs, with the
 #      REAL inventory (ui/panel/tabs.json) pointed in — the runtime half of the
-#      P13-C-P0.1 §10 unit change (a tab is DECLARED; a `.ts` file is not a tab).
+#      P13-C-P0.1 §10 unit change (a tab is DECLARED; a `.ts` file is not a tab);
+#   2c. site-tab.ts (P13-T2) against the REAL reason-code table
+#      (docs/shield/reason-codes.json), so the two repos cannot drift about the
+#      closed verdict vocabulary.
 #
 # Why a bundle and not the .ts directly: this sandbox has no browser and the
 # toolchain is dependency-frozen (no jsdom/happy-dom, no node TS loader), so the
@@ -83,6 +86,7 @@ else
   cp "$PANEL/focus-trap.ts" "$SCRATCH/src/focus-trap.ts"
 fi
 cp "$PANEL/tab-registry.ts" "$SCRATCH/src/tab-registry.ts"
+cp "$PANEL/site-tab.ts" "$SCRATCH/src/site-tab.ts"
 
 _bundle() {   # <src-ts> <out-mjs> <label>
   ( cd "$TOOLCHAIN" && node_modules/.bin/esbuild "$1" --bundle --format=esm \
@@ -92,6 +96,7 @@ _bundle() {   # <src-ts> <out-mjs> <label>
 
 _bundle "$SCRATCH/src/focus-trap.ts" "$SCRATCH/focus-trap.mjs" focus-trap.ts
 _bundle "$SCRATCH/src/tab-registry.ts" "$SCRATCH/tab-registry.mjs" tab-registry.ts
+_bundle "$SCRATCH/src/site-tab.ts" "$SCRATCH/site-tab.mjs" site-tab.ts
 
 echo "panel-tests: node --test ui/panel/tests/focus-trap.test.mjs"
 if XR_PANEL_TRAP_BUNDLE="$SCRATCH/focus-trap.mjs" \
@@ -110,6 +115,17 @@ if [ "$PLANTED" = "0" ]; then
   else
     SUITE=1
   fi
+  # P13-T2: the Site tab's pure core. The why table is xr-browser's own
+  # (docs/shield/reason-codes.json), so this lane also proves the two repos
+  # agree on the closed verdict vocabulary without a copy in either.
+  echo "panel-tests: node --test ui/panel/tests/site-tab.test.mjs"
+  if XR_PANEL_SITE_BUNDLE="$SCRATCH/site-tab.mjs" \
+     XR_PANEL_WHY_TABLE="$REPO/docs/shield/reason-codes.json" \
+     node --test "$PANEL/tests/site-tab.test.mjs" 2>&1 | sed "s/^/  /"; then
+    :
+  else
+    SUITE=1
+  fi
 fi
 
 if [ "$PLANTED" = "1" ]; then
@@ -124,5 +140,5 @@ if [ "$SUITE" -ne 0 ]; then
   echo "panel-tests: FAIL — focus-containment/tab-registry suite failed"
   exit 1
 fi
-echo "panel-tests: PASS (focus containment: wrap, intercept, re-open race, restore, planted-leak control; tab registry: inventory bijection, typed refusals)"
+echo "panel-tests: PASS (focus containment: wrap, intercept, re-open race, restore, planted-leak control; tab registry: inventory bijection, typed refusals; site tab: single-scope dial, why-drill over every reason code + typed fallback)"
 exit 0

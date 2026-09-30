@@ -124,6 +124,12 @@ surfaces:
     target: site
     command: panel.open
     phase: P13
+    # P13-C1: declared at LANDING. ui/panel/site-tab.ts is this tab's pure core,
+    # and the moment that file enters the sibling tree the unaccounted-source
+    # law (tools/coverage_check.py R2) demands it be named here — so a file
+    # cannot arrive under ui/panel/ without someone saying what it is for.
+    sources:
+      - panel/site-tab.ts
   - surface: panel/observatory
     unit: tab
     target: observatory
