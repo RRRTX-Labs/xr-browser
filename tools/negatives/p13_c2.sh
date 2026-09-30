@@ -71,3 +71,30 @@ case_c2_rule_that_looks_like_a_fragment_survives() {
   fi
 }
 neg_register c2_rule_that_looks_like_a_fragment_survives
+
+# --- 5: a new enum-bearing ledger field the observatory forgot => red --------
+# P13-C2 remainder (the brief's "shield_state_check.py extended to every new
+# enum value the observatory renders"): the export's canonical FIELDS must carry
+# every enum-bearing block-event-v1 property. The fixture drops `page_modifying`
+# — the field P12-T6 added — because that is exactly how a later phase's new
+# enum value ends up rendered nowhere: the export keeps compiling and the column
+# is simply absent. The lane must redden, and name the field.
+case_c2_export_missing_enum_field_reddens() {
+  local D="$NEG_TMP/c2-enum"
+  rm -rf "$D"; mkdir -p "$D"
+  sed 's/"why_code", "page_modifying")/"why_code")/' \
+    "$REPO_ROOT/tools/observatory_export.py" > "$D/observatory_export.py"
+  if cmp -s "$D/observatory_export.py" "$REPO_ROOT/tools/observatory_export.py"; then
+    echo "NEGATIVE-FAIL: the fixture did not drop page_modifying (the sed no longer matches)"
+    NEG_FAILURES=$((NEG_FAILURES + 1))
+    return
+  fi
+  # The fixture mode is the gate's own self-proof: it MUST redden, and it exits
+  # 0 with the finding named (a red gate that exits non-zero here would be
+  # indistinguishable from a broken fixture).
+  neg_expect_inband "an enum-bearing ledger field missing from the export reddens" \
+    "omits 'page_modifying'" \
+    "$PY" "$REPO_ROOT/tools/shield_state_check.py" --fixture-export "$D/observatory_export.py"
+}
+
+neg_register c2_export_missing_enum_field_reddens

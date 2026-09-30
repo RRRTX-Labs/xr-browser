@@ -48,9 +48,18 @@ from urllib.parse import urlsplit
 
 # The exported field set, in this order, for BOTH formats. One list, so a new
 # column cannot appear in JSON and be missing from CSV.
-FIELDS = ("seq", "ts_millis", "identity", "type", "origin", "target",
+FIELDS = ("seq", "ts_millis", "identity", "request_class", "origin", "target",
           "rule_id", "rule", "list_id", "bundle_version", "action",
           "why_code", "page_modifying")
+
+# P13-T3: the canonical names are block-event-v1's own (the ledger's), so the
+# export cannot invent a column the schema does not define — `request_class`, not
+# a friendlier `type`. The renderer's name for that field IS `type` (it is the
+# observatory's filter dimension), and the difference is declared here rather
+# than silently translated at a call site: shield_state_check.py asserts both
+# halves (every enum-bearing ledger field is exported; the alias the tab filters
+# on is declared rather than guessed).
+FIELD_ALIASES = {"request_class": "type"}
 
 # Fields no row may carry into an export. Refused by CLASS, with the class named,
 # so the caller is told what they tried to send rather than that "a field" was
@@ -132,9 +141,18 @@ def redact_row(row: dict, *, full: bool = False) -> dict:
     return out
 
 
+def _pick(row: dict, name: str):
+    """The canonical field, or the value the caller stored under its alias."""
+    if name in row:
+        return row[name]
+    alias = FIELD_ALIASES.get(name)
+    return row.get(alias) if alias else None
+
+
 def export_rows(rows: list[dict], *, full: bool = False) -> list[dict]:
     """Every row redacted, in the canonical field order, or Refused."""
-    return [{k: r.get(k) for k in FIELDS} for r in (redact_row(r, full=full) for r in rows)]
+    return [{k: _pick(r, k) for k in FIELDS}
+            for r in (redact_row(r, full=full) for r in rows)]
 
 
 def to_json(rows: list[dict], *, full: bool = False) -> bytes:

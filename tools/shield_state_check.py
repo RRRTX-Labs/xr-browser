@@ -36,6 +36,19 @@ ROSTER = REPO.parent / "xr-core" / "commands" / "core" / "roster_v1.json"
 AVAIL_CC = REPO.parent / "xr-core" / "commands" / "core" / "availability.cc"
 FAKE_CMDS = REPO.parent / "xr-core" / "fakes" / "commands.py"
 GRDP = REPO.parent / "xr-core" / "l10n" / "xr_strings.grdp"
+# P13-T3: the Observatory renders the ledger, so the ledger's enum surface is a
+# law too. The export's canonical field list must carry every enum-bearing
+# property block-event-v1 defines (a new enum value the observatory cannot
+# export is a value it silently never shows), and it may not name a property the
+# schema does not have (an invented column is a claim about data that does not
+# exist). The tab's own row type must carry the fields it filters and drills on.
+BLOCK_EVENT_SCHEMA = REPO / "docs/contracts/block-event-v1.schema.json"
+OBS_EXPORT = REPO / "tools/observatory_export.py"
+OBS_TAB = REPO.parent / "xr-core" / "ui" / "panel" / "observatory-tab.ts"
+# Fields whose values come from a closed vocabulary — i.e. values a renderer
+# must be able to name, not free text.
+ENUM_FIELDS = ("action", "why_code", "request_class", "page_modifying")
+TAB_ROW_FIELDS = ("type", "origin", "why_code", "rule_id", "list_id")
 
 REQUIRED_STRINGS = [
     "IDS_XR_SHIELD_DEV_ONLY",
@@ -105,11 +118,83 @@ def view_seam_guard_states(view_path: Path) -> list[str]:
     return re.findall(r"'([a-z-]+)'", m.group(1))
 
 
+def export_aliases(path: Path | None = None) -> dict[str, str]:
+    """The exporter's declared FIELD_ALIASES (canonical name -> renderer name)."""
+    text = (path or OBS_EXPORT).read_text(encoding="utf-8")
+    m = re.search(r"^FIELD_ALIASES = \{(.*?)\}", text, re.S | re.M)
+    if not m:
+        return {}
+    return dict(re.findall(r'"([a-z_]+)":\s*"([a-z_]+)"', m.group(1)))
+
+
+def export_fields(path: Path | None = None) -> list[str]:
+    """The exporter's canonical field tuple, read from its own source.
+
+    Read rather than imported: this gate deliberately does not execute another
+    tool, and a tuple is a declaration. The pattern is anchored on the
+    assignment so a mention of a field in prose cannot satisfy it.
+    """
+    text = (path or OBS_EXPORT).read_text(encoding="utf-8")
+    m = re.search(r"^FIELDS = \((.*?)\)", text, re.S | re.M)
+    if not m:
+        return []
+    return re.findall(r'"([a-z_]+)"', m.group(1))
+
+
+def block_event_enum_fields() -> list[str]:
+    """Property names whose schema carries an `enum` (plus the closed bool)."""
+    schema = json.loads(BLOCK_EVENT_SCHEMA.read_text(encoding="utf-8"))
+    props = schema.get("properties", {})
+    return [name for name, sub in props.items() if isinstance(sub, dict) and "enum" in sub]
+
+
+def observatory_findings(fixture_export: Path | None = None) -> list[str]:
+    """P13-T3's enum surface: export ⊇ schema enums, export ⊆ schema fields."""
+    fails: list[str] = []
+    schema = json.loads(BLOCK_EVENT_SCHEMA.read_text(encoding="utf-8"))
+    props = set(schema.get("properties", {}))
+    fields = export_fields(fixture_export)
+    if not fields:
+        return ["observatory_export.py declares no FIELDS tuple — nothing to check"]
+    for name in ENUM_FIELDS:
+        if name not in schema.get("properties", {}):
+            continue  # the schema dropped it; the schema's own tests own that
+        if name not in fields:
+            fails.append(f"the export's FIELDS omits {name!r}, an enum-bearing "
+                         f"block-event property — a new enum value the "
+                         f"observatory cannot export is one it never shows")
+    for name in fields:
+        if name not in props:
+            fails.append(f"the export's FIELDS names {name!r}, which "
+                         f"block-event-v1 does not define — an invented column")
+    tab = OBS_TAB.read_text(encoding="utf-8") if OBS_TAB.is_file() else ""
+    if not tab:
+        fails.append(f"{OBS_TAB} is missing — the observatory tab's row type "
+                     f"cannot be checked")
+    else:
+        for name in TAB_ROW_FIELDS:
+            if f"{name}:" not in tab:
+                fails.append(f"the observatory tab's row type does not carry "
+                             f"{name!r}, which it filters or drills on")
+    for canonical, alias in export_aliases(fixture_export).items():
+        if canonical not in fields:
+            fails.append(f"the exporter aliases {canonical!r} to {alias!r} but "
+                         f"does not export {canonical!r} — an alias for a column "
+                         f"that is not there")
+        elif alias not in tab:
+            fails.append(f"the exporter declares the alias {alias!r} for "
+                         f"{canonical!r} and the tab no longer uses it")
+    return fails
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(prog="shield-state-check",
                                  description=__doc__.splitlines()[0])
     ap.add_argument("--fixture-view", default=None,
                     help="negative fixture: a view file missing a state")
+    ap.add_argument("--fixture-export", default=None,
+                    help="negative fixture: an exporter source whose FIELDS is "
+                         "missing an enum-bearing ledger field")
     a = ap.parse_args()
     host = host_states()
     if not host:
@@ -188,7 +273,9 @@ def main() -> int:
         if needle not in path.read_text(encoding="utf-8"):
             fails.append(f"{path.name} does not register build.channel-dev")
 
-    if a.fixture_view:
+    fails.extend(observatory_findings(Path(a.fixture_export) if a.fixture_export else None))
+
+    if a.fixture_view or a.fixture_export:
         # negative fixture: the gate MUST fail
         if fails:
             print(f"ok: negative fixture reddened ({fails[0]})")
@@ -208,7 +295,10 @@ def main() -> int:
           "arms + honest default; force-disable reason verbatim; "
           "shield.page behind build.channel-dev in roster + both "
           "availability backends; grdp rows present; cosmetic rows + "
-          f"seam-guard union {', '.join(guard)} rendered)")
+          f"seam-guard union {', '.join(guard)} rendered; observatory enum "
+          f"surface: export FIELDS ⊇ {', '.join(ENUM_FIELDS)} and ⊆ the "
+          f"block-event-v1 properties, tab row type carries "
+          f"{', '.join(TAB_ROW_FIELDS)})")
     return 0
 
 
