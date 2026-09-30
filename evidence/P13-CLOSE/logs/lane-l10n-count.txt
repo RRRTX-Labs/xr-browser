@@ -1,0 +1,4 @@
+$ bash -c python3 tools/grdp_check.py --ids-from-schema > /tmp/grdp.out 2>&1; cat /tmp/grdp.out; python3 tools/l10n_count_law.py --grdp ../xr-core/l10n/xr_strings.grdp --tool-stdout /tmp/grdp.out --check
+grdp_check: xr_strings.grdp OK (136 messages, isolation-card cross-check clean)
+PASS: l10n_count_law — the tool's reported count and an independent count of xr_strings.grdp agree at 136 message(s), and 136 >= the grow-only ratchet 136
+rc=0

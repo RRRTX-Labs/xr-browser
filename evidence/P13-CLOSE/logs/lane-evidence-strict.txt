@@ -1,0 +1,25 @@
+$ python3 tools/evidence_check.py --strict
+finality: P10: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P11: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P12: interim — DECLARED, not the in-flight phase (phase=P13); legal only because 1 dated not_done_by_design row(s) say what remains, and the final rules do not apply until closure is claimed (P13-C-P0.4)
+finality: P13: interim — in flight per docs/state/phase-base.json (phase=P13); PENDING sentinels are legal here and the final rules do not apply
+finality: P3: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P4: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P5: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P6: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P7: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P8: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P9: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+PASS: evidence/P10/evidence.json (strict)
+PASS: evidence/P11/evidence.json (strict)
+PASS: evidence/P12/evidence.json (strict)
+PASS: evidence/P13/evidence.json (strict)
+PASS: evidence/P3/evidence.json (strict)
+PASS: evidence/P4/evidence.json (strict)
+PASS: evidence/P5/evidence.json (strict)
+PASS: evidence/P6/evidence.json (strict)
+PASS: evidence/P7/evidence.json (strict)
+PASS: evidence/P8/evidence.json (strict)
+PASS: evidence/P9/evidence.json (strict)
+PASS: evidence_check (11 bundle(s), 0 failure(s); presence law: every phase in git history carries a bundle)
+rc=0

@@ -1,0 +1,9 @@
+$ python3 tools/host_protocol_check.py
+  discovered host: commands (9 method(s): bindings-clear, bindings-list, bindings-set, flag-status, invoke, list, menu-model, query, register)
+  discovered host: renderer/cosmetic (8 method(s): blob-build, blob-check, degrade-apply, flag-status, key-set, page-states, scope-key, selector-parse)
+  discovered host: settings (8 method(s): counters-dump, flag-status, get, router-resolve, schema-dump, search, sections, set)
+  discovered host: shield (15 method(s): RecentEvents, Status, apply, bundle-check, bundle-load, debug-page, event-emit, exception-add, exception-remove, exception-sweep, flag-status, match, page-states, posture, site-toggle)
+  discovered host: themes (7 method(s): apply, current, flag-status, import, list, system-mode, validate-doc)
+  discovered host: update (7 method(s): about-state, about-states, backoff, cohort, epoch-apply, flag-status, verify)
+PASS: host_protocol_check (6 host(s), every method literal documented, response law declared)
+rc=0

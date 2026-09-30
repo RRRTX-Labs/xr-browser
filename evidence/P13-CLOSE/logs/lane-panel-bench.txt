@@ -1,0 +1,4 @@
+$ python3 tools/panel_bench.py
+panel_bench: panel_open_core_ms = 0.005777999999999999 ms (surrogate, trend rig — never MET)
+panel_bench: panel_open_subtree_scans = 1 scans (surrogate, trend rig — never MET)
+rc=0

@@ -1,0 +1,3 @@
+$ python3 tools/shield_state_check.py
+PASS: shield-state (all 5 host page states rendered: normal, engine-dead, engine-poisoned, kill-switch, route-loss; fake vocabulary byte-identical; stateText arms + honest default; force-disable reason verbatim; shield.page behind build.channel-dev in roster + both availability backends; grdp rows present; cosmetic rows + seam-guard union armed, inert, hook-dead rendered; observatory enum surface: export FIELDS ⊇ action, why_code, request_class, page_modifying and ⊆ the block-event-v1 properties, tab row type carries type, origin, why_code, rule_id, list_id)
+rc=0

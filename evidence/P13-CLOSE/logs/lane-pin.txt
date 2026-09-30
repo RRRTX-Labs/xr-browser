@@ -1,0 +1,4 @@
+$ python3 tools/sibling_pin_check.py --repo .
+pin: xr-core 4353d368d1734a858e4e46c0a72b1c35e3c7b755 == DEPS 4353d368d1734a858e4e46c0a72b1c35e3c7b755 (clean worktree)
+PASS: sibling_pin_check (60 sibling reader(s) classified, arg-only=16, gate-ordered=14, probe=4, routed=4, self=2, test=20)
+rc=0

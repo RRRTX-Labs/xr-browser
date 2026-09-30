@@ -1,0 +1,3 @@
+$ python3 tools/dev_deps_closure_check.py --repo .
+PASS: dev_deps_closure_check (every marker-free transitive of the 6 pinned distributions is pinned and hashed in tools/requirements-dev.txt; extra-only and sub-floor-marker requirements excluded by the same rule pip -r applies — offline, fixture-based)
+rc=0

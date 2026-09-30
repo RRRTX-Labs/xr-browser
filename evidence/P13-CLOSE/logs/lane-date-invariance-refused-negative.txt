@@ -1,0 +1,4 @@
+$ python3 tools/date_invariance_check.py --dates 2026-09-30,2027-03-14
+FAIL: date_invariance_check — 1 problem(s):
+  FRESHNESS exception-ledger: probe dates 2026-09-30..2027-03-14 do not straddle the 2027-06-01 expiry boundary, so this run cannot prove the law still bites
+rc=1

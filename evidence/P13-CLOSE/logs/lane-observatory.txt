@@ -1,0 +1,3 @@
+$ python3 tools/observatory_export.py --check
+PASS: observatory_export (7 smuggle case(s), 3 parity row(s) — default has no query params and no fragments, credentials are refused not stripped, and no refused byte reached the writer)
+rc=0

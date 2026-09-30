@@ -1,0 +1,26 @@
+$ ./scripts/build test
+........................................................................ [  7%]
+........................................................................ [ 15%]
+........................................................................ [ 23%]
+........................................................................ [ 31%]
+........................................................................ [ 39%]
+........................................................................ [ 47%]
+........................................................................ [ 55%]
+........................................................................ [ 63%]
+........................................................................ [ 71%]
+........................................................................ [ 79%]
+........................................................................ [ 86%]
+............................................................s........... [ 94%]
+............s..................................                          [100%]
+==================== optional external tools (SKIP policy) =====================
+SKIP: SKIP (tool absent: minisign) — needed for: TEST-ONLY artifact signature in the fast-lane drill (P3-T5); install hint: apt-get install -y minisign (Ubuntu universe)
+SKIP: SKIP (tool absent: codesign) — needed for: macOS TEST signing passthrough (P2-T7); install hint: Xcode command line tools (macOS runners only)
+SKIP: SKIP (tool absent: signtool) — needed for: Windows TEST signing passthrough (P2-T7); install hint: Windows SDK (Windows runners only)
+SKIP: SKIP (tool absent: actionlint) — needed for: deep check of .github/workflows expressions and schema (P4) — a compile error there yields a run with zero jobs and no logs; the always-on half of build/workflow_lint.py still runs without it; install hint: github.com/rhysd/actionlint releases (CI installs it pinned by version + tarball sha256)
+SKIP: SKIP (tool absent: faketime) — needed for: the ambient-clock half of the date-invariance law (P12-T0-a, re-homed from a pip pin by P12-CLOSE T0-U1 / ADR-0047): an LD_PRELOAD displacement proving no gate verdict reads the wall calendar. Absent => the --as-of half is the verdict with the limitation stated; --require-ambient-probe is passed ONLY by the scheduled governance lane that installs it; install hint: apt-get install -y faketime (Debian/Ubuntu universe)
+5 external tool(s) absent on this host: the dependent tests SKIP with the reason above (never a silent pass).
+=========================== short test summary info ============================
+SKIPPED [1] build/tests/test_workflow_lint.py:120: SKIP (tool absent: actionlint) — needed for: deep check of .github/workflows expressions and schema (P4) — a compile error there yields a run with zero jobs and no logs; the always-on half of build/workflow_lint.py still runs without it; install hint: github.com/rhysd/actionlint releases (CI installs it pinned by version + tarball sha256)
+SKIPPED [1] build/skip_policy.py:105: SKIP (tool absent: minisign) — needed for: TEST-ONLY artifact signature in the fast-lane drill (P3-T5); install hint: apt-get install -y minisign (Ubuntu universe)
+909 passed, 2 skipped in 270.21s (0:04:30)
+BUILD_TEST_RC=0

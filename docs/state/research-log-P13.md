@@ -112,3 +112,104 @@ changes, the entry lands here with the upstream path named and **no invented URL
 | C-5 (T6) viewer | ONE serializer drives payload and preview; a planted field cannot be hidden | `xr-core/ui/panel/sent-tab.ts`, `ui/panel/tests/sent-tab.test.mjs`, `docs/panel/what-would-be-sent.md` |
 | C-3/C-5 docs | the report path's live half is a human act | `docs/panel/breakage-report.md`, `docs/adr/0050-breakage-report-v1.md`, `evidence/P13/human-gates.md` (HG-33) |
 | live/PAT rows | R1–R10 above; the push itself is the user's act (HG-20), performed through the token the user supplied for it | `evidence/P13/logs/`, `docs/process/ci-triage.md` |
+
+### R17 — the closing battery: seven findings, and none of them a product law (2026-09-30)
+
+The battery that closes P13 (`tools/run_checks.sh` bare, `tools/run_checks.sh
+e503f9e..HEAD`, `./scripts/build test`, then 39 lane captures) went green only
+after seven findings, none of which was a product law: each is an artefact of the
+harness, the sandbox, or a moved anchor, and each is recorded here with what was
+measured, so the next reader does not have to rediscover it.
+
+**1. The negative battery could die silently — and did.** `tools/negatives/p13_c3.sh`
+captured a refusing tool with a bare `out="$(...)"` followed by `rc=$?`. Under
+the battery's `set -e` the ASSIGNMENT carries the command's status, so the very
+first refusal — the thing the case exists to observe — ended the run: no FAIL
+line, no summary, the remaining case files never sourced, and a product-looking
+red in a transcript that was really a harness bug. Repairs: the guarded shape
+`out="$(cmd …)" && rc=0 || rc=$?` in both offenders (`p13_c3.sh`,
+`p13_p0c.sh`); a new law 4, `neg_lint_bare_captures` (multi-line aware; a
+capture whose status is deliberately discarded with `|| true` is not a verdict
+and is not flagged) with its own canary, because a linter that matches nothing
+looks exactly like a tree with no offenders; law 3's ghost-case walk guarded
+(`|| ghost_rc=$?` — `neg_finish` exits non-zero on purpose), law 2's
+registration walks wrapped in `set +e`, and law 1 made quiet and
+counter-neutral (a canary that reddens the gate it is demonstrating is a trap
+for the next reader). `tools/run_negatives.sh` now runs `neg_self_test` on
+EVERY invocation — placed after `NEG_FILES` (the derived-count canary needs the
+list) and before the case files are sourced (a broken harness must fail before
+205 cases pretend to have run). Exercised end to end: dropping a case file moves
+the derived count (205 -> 198), the ghost case errors, the bare-capture canary
+bites, and `evidence/P13-CLOSE/logs/negatives.txt` ends
+`ALL NEGATIVE CASES REJECTED AS EXPECTED (N=205)` / `NEG_EXIT=0` with 1 visible
+SKIP (faketime).
+
+**2. A directory NAME is a measurement hazard.** Every worktree file under a
+directory named `build/` was absent after a sandbox restore: xr-browser
+`build/**` (275 files) and `scripts/build`, xr-core `common/tests/build/**` (5)
+and `third_party/rust/vendor/thiserror-1.0.69/build/probe.rs`. The reds were
+real and correctly named, which is the point: 15 failures read
+`DIRTY-SIBLING: uncommitted changes at .../xr-core — HEAD agrees with the pin
+but the tree does not, so the files read are not the pinned files` (the sibling
+resolver refusing to read a tree that is not the pinned tree) and `vendor_check`
+reported `MISSING file build/probe.rs` against the upstream publish. Repair:
+restore the deleted paths only — `git checkout -- .` in a tree holding
+uncommitted work discards that work, which is exactly what one pass of this
+window cost.
+
+**3. `$TMPDIR` here is a 993 MiB tmpfs.** `pytest`'s tmp_path filled it
+(`/tmp/pytest-of-user` = 899 MiB) and the build-test capture read
+`OSError: [Errno 28] No space left on device` — 229 failed / 629 passed / 2
+skipped / 50 errors in 41 s, numbers that describe the volume, not the product
+and are never to be quoted as a result. The closing runs set
+`TMPDIR=/home/user/work/tmp` (on the 20 GiB root); the harness's own scratch
+already prefers the repo-local `work/scratch` and fails fast when it is short.
+
+**4. The touched-file size law caught a real offender, measured on the
+WORKTREE.** `tools/tests/test_p7_commands_tools.py` reached 402 lines (limit
+380). Split, not shortened: `tools/tests/test_p7_coverage_check.py` (103 lines)
+now carries the five `coverage_check` tests and their fixtures; the parent keeps
+parity / menu-model / descriptors / lint. Both files pass; the law reports 76
+touched `.py`/`.sh` files, all <= 380.
+
+**5. The meta-gate's ANCHOR drifted, not the law.** P13-P0-C moved the
+`not_done_by_design` invariant out of `tools/evidence_check.py` into
+`tools/evidence_strict.py`. `build/qa/tools/test_checker_mutation.py` still
+searched the runner and died with `AssertionError: defect anchor not found in
+tools/evidence_check.py` — the meta-gate doing precisely its job. Repair: a
+target may name the sibling that carries the anchor (`mutate_rel`), and the copy
+closure is TRANSITIVE (`evidence_strict` imports `runner_caps`, which
+`evidence_check` does not) — a one-level copy would have reproduced the P11-T4
+failure mode, where the mutated copy dies on ModuleNotFoundError and the canary
+"escapes" for the wrong reason, which is a red canary that looks green.
+`control=tripped, mutation=escaped` for all three targets, rc=0.
+
+**6. Transcripts are inputs, and a GENERATED transcript has no stable line
+numbers.** The P13-T1 panel lane's `--plant-leak` control prints node's TAP for
+its expected failure, and node's stack frames for unnamed callbacks carry a
+banned-vocabulary family word; every capture that included the lane (the closing
+battery's `runchecks-full.txt` and the lane's own capture) reddened
+`vocab_lint`. The six frames sat at lines 667 / 670 / 671 across three
+regenerations — the captures are 148-158 PASS lines long depending on lanes
+whose output follows live CI state — so line-precise allowlisting of a
+*generated* transcript is a losing game, and blanket-allowlisting it would be
+worse. Repair at the source: the control prints its VERDICT — the failing
+subtest names and the counts (6 of 10, the same "6 failures with the leak" the
+T1 evidence row records) — while `XR_PANEL_TAP=1` prints the full TAP and a
+control that FAILS TO FIRE prints everything, so a broken trap can never hide
+behind the summary. After that no entry was needed: the closing captures carry
+zero banned-vocabulary hits and `docs/state/vocab-allowlist.yaml` is unchanged
+from `e51b749`.
+
+**7. The pin was unpublished.** `check-pin-alive` failed with
+`DEPS xr_core_rev 4353d368… is not fetchable from origin` — a real red with the
+right name and the right cure: the xr-core commit had to reach `origin/main`
+before the cross-repo pin could be called alive.
+
+Battery, final shape: `run_checks.sh` bare rc=0 (154 PASS lines);
+`run_checks.sh e503f9e..HEAD` rc=0 (158 PASS lines); `./scripts/build test`
+909 passed / 2 skipped / 0 failed in 278 s; 39 lane captures, all rc=0 except
+the two visible SKIPs (`ci-triage` 77, `scheduled-lanes` 77) and the deliberate
+refusal transcript (`date-invariance --dates 2026-09-30,2027-03-14`, rc=1, the
+twin dates do not straddle the 2027-06-01 boundary and the tool says so);
+negatives N=205 / rc=0.

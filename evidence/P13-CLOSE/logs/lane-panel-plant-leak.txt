@@ -1,0 +1,15 @@
+$ bash build/webui/panel-tests.sh --plant-leak
+panel-tests: --plant-leak: containment removed in a scratch copy (/home/user/work/tmp/xr-panel-tests.379324)
+panel-tests: node --test ui/panel/tests/focus-trap.test.mjs
+  not ok 1 - Tab from the last focusable wraps to the first — and never leaves
+  not ok 2 - Shift+Tab from the first wraps to the last — and never leaves
+  not ok 3 - a Tab that would land outside the frame is intercepted, not trusted
+  not ok 4 - the re-open race: focus outside the frame is pulled in, in the direction of travel
+  not ok 9 - THE INVARIANT: twelve tabs in both directions never leave the frame
+  not ok 10 - planted leak: with containment bypassed the SAME invariant reports escapes
+  # tests 10
+  # pass 4
+  # fail 6
+  (verdict only — XR_PANEL_TAP=1 prints the full node:test TAP)
+panel-tests: PASS — the planted leak reddens the suite (containment is really tested)
+rc=0

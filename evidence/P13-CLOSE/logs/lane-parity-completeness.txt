@@ -1,0 +1,11 @@
+$ python3 tools/parity_completeness.py
+PASS: themes: methods covered by parity corpus
+PASS: settings: methods covered by parity corpus
+PASS: commands: methods covered by parity corpus
+PASS: update: methods covered by parity corpus
+PASS: policy: methods covered by parity corpus
+PASS: shield: methods covered by parity corpus
+PASS: renderer/cosmetic: methods covered by parity corpus
+PASS: derived pair list == manifest (7 row(s) cross-checked against xr-core/*/host discovery)
+PASS: parity_completeness (7 pair(s), 0 failure(s))
+rc=0

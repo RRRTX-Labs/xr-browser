@@ -1,0 +1,3 @@
+$ python3 tools/doc_reference_check.py --repo .
+PASS: doc_reference_check (3 file(s) scanned at or above P13, 25 pre-law file(s) grandfathered, 0 dangling citation(s))
+rc=0

@@ -1,0 +1,13 @@
+$ python3 tools/scheduled_lane_check.py
+PASS: compat-beta-parity.yml
+    compat-beta-parity.yml: schedule run 36691891813 head e503f9e6d created 2026-09-30T08:47:14Z — success
+PASS: core-hardening.yml
+    core-hardening.yml: schedule run 36698568649 head e503f9e6d created 2026-09-30T09:49:32Z — success
+PASS: nightly-rebase-build.yml
+    nightly-rebase-build.yml: schedule run 36684384651 head e503f9e6d created 2026-09-30T07:33:32Z — success
+STALE-FAIL: sast.yml
+    sast.yml: schedule run 36412999029 head 8db682fe1 created 2026-09-28T11:00:01Z — conclusion: failure
+      job 'sast': failure failed step(s): ['Scheduled-lane health (P11-T0-c — a red nightly reddens within a day)']
+      STALE-FAIL: this run failed ONLY its Scheduled-lane health step — the lane's real work was green and the failure is the fleet check's own circular cascade; visible, non-fatal, never counted green by silence.
+PASS: scheduled_lane_check (4 scheduled lane(s); PASS=3, STALE-FAIL=1; every non-green state above is visible and non-fatal BY RULE, never silently dropped)
+rc=0
