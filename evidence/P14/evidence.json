@@ -89,9 +89,10 @@
         "logs/p0-4-census-clean-clone.txt",
         "logs/p0-4-entrypoint-fix.txt",
         "logs/p0-4-pytest-full.txt",
+        "logs/p14-full-gate-4ddcb21-keepgoing.txt",
         "docs/state/research-log-P14.md"
       ],
-      "notes": "The clean-clone census RAN (6530cb1a, both linters installed, 154 lanes PASS) and failed exactly 2 lanes \u2014 one root cause: run_checks.sh + run_negatives.sh were index-100644 while governance.yml executes them directly (runner exit 126 class). Fixed mode-only at d15769c; both census lanes re-proved green at the fix tree (entrypoint_mode_check PASS, full pytest 444 passed \u2014 transcripts above). The remaining half is the SAME census re-run on a clean clone at the closing tree to show 0 FAIL lanes end-to-end; that run belongs to the phase close (with P0-3), not to this interim row. Not done by design: see the phase-level not_done_by_design."
+      "notes": "The clean-clone census RAN (6530cb1a, both linters installed, 154 lanes PASS) and failed exactly 2 lanes \u2014 one root cause: run_checks.sh + run_negatives.sh were index-100644 while governance.yml executes them directly (runner exit 126 class). Fixed mode-only at d15769c; both census lanes re-proved at the fix tree. The FULL keep-going gate at 4ddcb21 then ran green end-to-end with exactly ONE red lane: check-pin-alive, because the xr-core commits are local until the human pushes (the lane is fail-closed by design and stays red until then). Remaining for the close: the same clean-clone census re-run at the closing tree AFTER the push (0 FAIL lanes, parity line pasted). Not done by design: phase-level declarations."
     },
     {
       "id": "P14-T0",

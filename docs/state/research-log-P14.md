@@ -352,3 +352,41 @@ the not_done_by_design rows point there, so no claim floats without a
 home. Evidence rows for T0–T10 are set to their honest statuses
 (VERIFIED only where the row's own DoD text is satisfiable in this
 tree; NOT-RUN where the browser is the subject).
+
+## The full gate at 4ddcb21 — one red lane, and it is the honest one
+
+**Result:** keep-going at 4ddcb21 = 205 lane PASS lines, ONE red:
+`check-pin-alive` (DEPS 7d70013 not fetchable from origin — the xr-core
+commits are local until the human pushes; the lane is fail-closed BY
+DESIGN and no bypass was attempted). ci-parity printed PARTIAL with 4
+CI-stricter lanes (down from 5 — entry-point modes went green here after
+d15769c). Transcript: evidence/P14/logs/p14-full-gate-4ddcb21-keepgoing.txt.
+
+**Three environment lessons this gate run cost (all infrastructure, none
+code):**
+
+1. **The tmpfs ceiling.** The 993 MiB /tmp is enough for ONE gate run's
+   pytest lane ONLY when it starts pristine. Leftover pytest-of-user
+   fixtures from earlier runs (880 MiB) made the lane die with ENOSPC in
+   a shape that looks exactly like a 16-test regression. Check `df /tmp`
+   before believing a mass pytest failure.
+2. **Never point the gate's TMPDIR at the big disk unconditionally.**
+   One pytest session's retained fixtures measured ~20 GiB — on /tmp the
+   tmpfs cap hid that; on the root disk it filled 20 GiB and killed git
+   itself (`index.lock write error. Out of diskspace`). The census
+   configuration (default TMPDIR, pristine /tmp) is the proven one.
+3. **Never delete a live process's temp tree.** Clearing
+   /tmp/pytest-of-user while the gate was mid-run turned 1 real red lane
+   into 166 — every later lane's scratch died. Clean BEFORE, never
+   DURING.
+
+**The gate found four real defects on the way (all fixed in 4ddcb21's
+lineage):** the identity suite lane was never recorded in ci-lanes.json
+(the census's own lesson, re-taught); the fuzz fleet needed the in-tree
+test_fuzz binary while building it dirtied the sibling — solved properly
+by gitignoring identity/tests/build/ like every other core, not by
+building and hiding; the identity core had no mutation score — FULL
+matrix run and recorded (199/199 killed, deny-guard 19/19, zero
+survivors); and mint.cc reached across cores for sha256 — now the alias
+shim like its siblings (ADR-0043). The mojom_fuzz_gen "failure" was the
+OOM killer under tmpfs pressure; re-ran clean.
