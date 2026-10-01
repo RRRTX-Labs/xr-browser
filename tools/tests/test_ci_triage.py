@@ -55,3 +55,58 @@ def test_logs_endpoint_is_reported_as_admin_only_not_assumed() -> None:
     assert "admin-only" in proc.stdout, (
         "the /logs finding must be reported from the measured response, not "
         "silently omitted")
+
+
+# --- P14-P0-2 (C-0.7): RATE-LIMITED vs ADMIN-ONLY are different facts -------
+# The P13 incident: a 403 from an exhausted unauthenticated quota
+# (/rate_limit core 60/60, reset hourly) was first read as "the endpoint is
+# private". The two classifications must read differently and the 429 case
+# must never be labelled a privilege wall.
+
+
+def test_a_429_is_rate_limited_never_admin_only() -> None:
+    import ci_triage
+    msg = ci_triage.classify_refusal(
+        "/repos/RRRTX-Labs/xr-browser/actions/runs/1/logs",
+        "HTTP 429 fetching https://api.github.com/repos/RRRTX-Labs/"
+        "xr-browser/actions/runs/1/logs")
+    assert "RATE-LIMITED" in msg, msg
+    assert "ADMIN-ONLY" not in msg, msg
+    assert "/rate_limit" in msg, "the row must name the discriminator"
+
+
+def test_a_403_names_the_quota_discriminator() -> None:
+    import ci_triage
+    msg = ci_triage.classify_refusal(
+        "/repos/RRRTX-Labs/xr-browser/actions/runs/1/logs",
+        "HTTP 403 fetching https://api.github.com/repos/RRRTX-Labs/"
+        "xr-browser/actions/runs/1/logs")
+    assert "ADMIN-ONLY-or-QUOTA" in msg, msg
+    assert "/rate_limit" in msg, msg
+
+
+def test_the_fetcher_wiring_carries_the_classification() -> None:
+    """The classifier is not dead code: Fetcher.get's BlockedNet messages go
+    through it (a monkeypatched chokepoint raises the canned failures)."""
+    import ci_triage
+
+    class Canned(Exception):
+        pass
+
+    class FakeFetch:
+        GITHUB_API = "https://api.github.com"
+
+        def http_get(self, path: str, timeout: int = 20) -> bytes:
+            raise Canned("HTTP 429 fetching " + path)
+
+    f = ci_triage.Fetcher(offline=None)
+    orig = ci_triage._fetch_module
+    ci_triage._fetch_module = lambda: FakeFetch()
+    try:
+        try:
+            f.get("/repos/x/y", fixture="whatever.json")
+            raise AssertionError("a 429 must raise BlockedNet")
+        except ci_triage.BlockedNet as exc:
+            assert "RATE-LIMITED" in str(exc), str(exc)
+    finally:
+        ci_triage._fetch_module = orig

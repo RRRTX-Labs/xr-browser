@@ -54,12 +54,20 @@
     {
       "id": "P14-P0-2",
       "dod": "tools/ci_parity_check.py (stdlib-only, --json/--check, --self-test) diffing the local host's capability against what the workflows demand: optional tools incl. composite cases (actionlint without shellcheck), entry-point modes, sibling pin, dev-dep installability, network reachability with re-prove-at-report-time; wired early into run_checks.sh with the final tally echoing its verdict line; RATE-LIMITED vs ADMIN-ONLY classified distinctly in tools/ci_triage.py.",
-      "status": "BLOCKED-PENDING-P0-2",
-      "source": "UNVERIFIED",
+      "status": "VERIFIED",
+      "source": "local-run",
       "evidence": [
-        "docs/state/research-log-P14.md"
+        "tools/ci_parity_check.py",
+        "tools/ci_parity_probes.py",
+        "tools/checks/p14_gates.sh",
+        "tools/ci_triage.py",
+        "tools/negatives/p14_p02.sh",
+        "docs/process/ci-invocation.md",
+        "docs/state/research-log-P14.md",
+        "logs/p0d-parity-before.txt",
+        "logs/p0e-parity-after.txt"
       ],
-      "notes": "Lands in the next commit (P14-P0-2); this bundle is written as-you-go per the brief's verification plan."
+      "notes": "Both files under the 380-line law (316 + 257) via the probes split; wired early in run_checks.sh (p14_gates.sh) with the P5 block moved verbatim to checks/p5_gates.sh by the same size law; kr_finish re-echoes the verdict line in the final tally. --self-test passes (12 checks); negatives p14_p02.sh adds 4 cases (N=209, all rejected as expected); the sabotage negative proves the self-test can fail. ci_triage classify_refusal (C-0.7): 429 => RATE-LIMITED, 401/403 => ADMIN-ONLY-or-QUOTA naming /rate_limit; 3 new pytest fixture tests. The before transcript reproduces the P13-CLOSE host shape (composite gap row printed while workflow-lint says 'ran, clean' — silently shallower); the after transcript shows the gap closed and the four honest ABSENT rows remaining. Full gate at this tree: logs/p0f-full-gate-at-p0-2.txt."
     },
     {
       "id": "P14-P0-3",

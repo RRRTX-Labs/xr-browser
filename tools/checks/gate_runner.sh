@@ -118,6 +118,13 @@ die() {
 # with the tally when any lane failed (the failures were already printed with
 # their command text), else the all-green banner.
 kr_finish() {
+  # P14-P0-2: the final tally echoes the parity verdict — the honesty
+  # mechanism. A phase may not report "gate green" while the parity line
+  # said lanes were weaker locally; a reader of the gate's last lines sees
+  # both facts, always, in both modes.
+  if [ -n "${P14_PARITY_VERDICT:-}" ]; then
+    echo "parity verdict: $P14_PARITY_VERDICT"
+  fi
   if [ "$KEEP_GOING" = "1" ]; then
     if [ "$KR_FAILED" -gt 0 ]; then
       echo "FAIL: $KR_FAILED lane(s) failed (see the 'LANE FAIL (keep-going)'"

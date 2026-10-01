@@ -18,11 +18,20 @@ PY="${PYTHON:-python3}"
 # P13-P0-A: the P9 lanes that moved out (size law) + the P13 gate bodies.
 . "$(dirname "$0")/checks/p9_gates.sh"
 . "$(dirname "$0")/checks/p13_gates.sh"
+# P14-P0-2: the parity lane's bodies (+ the P5 block moved out by the same
+# size law; see checks/p5_gates.sh for the move's provenance).
+. "$(dirname "$0")/checks/p5_gates.sh"
+. "$(dirname "$0")/checks/p14_gates.sh"
 # T0-U1: --keep-going (tracer + tally live in checks/gate_runner.sh).
 . "$(dirname "$0")/checks/gate_runner.sh"; kr_parse_args "$@"
 
 echo "== plan pin =="
 "$PY" tools/plan_pin_check.py
+
+# P14-P0-2: the parity line runs EARLY (before the lanes it explains), and
+# the final tally re-echoes its verdict. A printed fact, never a gate red.
+p14_parity
+p14_parity_selftest
 
 echo "== feature registry (plan §2 ↔ docs/registry/*) =="
 "$PY" tools/registry_lint.py
@@ -99,30 +108,11 @@ p13_p0_gates
 p11_lane_gates
 
 # ---------------------------------------------------------------------------
-# P5 contract-freeze gates (§1.11). mojom_lint/contracts_manifest/vectors/
-# freeze run offline; amend_guard is warn-only pre-stamp and enforcing post.
+# P5 contract-freeze gates (§1.11). Bodies moved to checks/p5_gates.sh by the
+# P14-P0-2 size-law split (run_checks sits at the 380-line ceiling); the
+# lanes themselves are unchanged.
 # ---------------------------------------------------------------------------
-echo "== P5: mojom structural lint (banned surface, kVersion, budgets) =="
-"$PY" tools/mojom_lint.py --roundtrip ../xr-core/mojom
-
-echo "== P5: §1.11 contracts manifest (14 items) + §2.10 reserved surface =="
-"$PY" tools/contracts_manifest.py
-
-echo "== P5: golden-vector fake parity (byte-stable) =="
-"$PY" tools/vectors_check.py
-
-echo "== P5: contract freeze register (FROZEN.yaml, ratified=PENDING) =="
-"$PY" tools/freeze_check.py
-
-echo "== P5: contract-amendment RFC trailer gate (T10) =="
-if [ -n "$RANGE" ]; then
-  "$PY" tools/amend_guard.py --range "$RANGE"
-else
-  "$PY" tools/amend_guard.py --range HEAD~1..HEAD
-fi
-
-echo "== P5: isolation-card l10n well-formed + vocab-clean =="
-"$PY" -c "import json,sys; d=json.load(open('../xr-core/l10n/isolation_card.json')); assert d['legal']=='PENDING-HG-1'; assert d['strings']; print('isolation-card OK', len(d['strings']),'strings')"
+p5_contract_gates
 
 # ---------------------------------------------------------------------------
 # P8-T5 gates (one l10n string source). xr_strings.grdp is the only place

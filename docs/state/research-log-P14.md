@@ -54,3 +54,93 @@ What the fix does **not** prove: that no *future* workflow edit reintroduces
 the class. That is P0-2's job — the parity tool prints whether shellcheck is
 present locally, and the hosted lane always has it, so the next
 local-green/hosted-red of this class is at least visible before the push.
+
+## P0-2 — the parity tool: what this host lacks, as a printed fact
+
+The mechanism: `tools/ci_parity_check.py` (+ the host probes in
+`tools/ci_parity_probes.py`, split by the touched-file size law), wired early
+into `run_checks.sh` via `tools/checks/p14_gates.sh`; the final tally
+(`kr_finish`) re-echoes the verdict line; `docs/process/ci-invocation.md` §
+"the parity line" documents the contract.
+
+Design decisions, each recorded because the next agent will need them:
+
+* **Exit 0 on PARTIAL, by design.** A red gate would train people to install
+  everything or to ignore the lane; the enforcement is the echoed verdict
+  line plus the report law (evidence §⑨ must quote it). The negative battery
+  pins this: `tools/negatives/p14_p02.sh` case
+  `parity_gap_is_partial_and_exits_zero` FAILS if PARTIAL ever becomes a
+  gate red.
+* **A run with no verdict line IS a gate red.** The lane function refuses a
+  verdict-less run (the never-silent law); the negative proves it with a
+  PATH-stubbed interpreter.
+* **Network probes go through the fetch chokepoint and are re-proved every
+  run** — never cached, never read from a note. `updates.rrrtx.labs` (the
+  release egress policy row) is NOT probed: the chokepoint refuses it by
+  design (it is HG-38 policy data, not a fetch surface), and the refusal is
+  itself the printed row.
+* **4xx ≠ blocked.** A 403/404 answer proves DNS+routing+TLS work; only 5xx,
+  timeouts and connection failures are "blocked" rows (the P13 503 shape).
+  RATE-LIMITED vs ADMIN-ONLY for a given 403 is `ci_triage`'s call —
+  finished here: `classify_refusal` (C-0.7) gives 429 its own
+  RATE-LIMITED class and 401/403 the ADMIN-ONLY-or-QUOTA class that names
+  `/rate_limit` as the discriminator. Two fixture tests +
+  `negatives/p14_p02.sh` case 4 pin it.
+* **The self-test proves the verdict is a function of the host** (the
+  all-present case prints PASS; the sabotage negative — `verdict_of`
+  forced to always-PASS in a scratch copy — must FAIL the self-test).
+  A detector that always prints one verdict detects nothing.
+
+Measured on this host, 2026-10-01 (transcripts
+`evidence/P14/logs/p0d-parity-before.txt` and `p0e-parity-after.txt`):
+
+* The **before** capture reproduces the P13-CLOSE host shape exactly
+  (actionlint present, shellcheck removed): the composite row prints
+  `actionlint+shellcheck COMPOSITE GAP … the shellcheck pass will not run
+  here — the exact shape of the P13-CLOSE governance red`, while
+  `./scripts/build workflow-lint` on the same shape says only
+  `actionlint: ran, clean` — **silently shallower**, which is the whole bug.
+* The **after** capture (both linters present) drops the composite row and
+  still honestly prints PARTIAL for what this host really lacks:
+  cargo/rustc (Rust lanes), faketime (the ambient date probe),
+  minisign (the sign drill). Python differs (3.13.14 local vs the runner's
+  pinned 3.12) — printed as a note, deliberately not counted as a weaker
+  lane.
+* The api.github.com quota line printed `core 60/60` at capture time — this
+  sandbox's unauthenticated quota was exhausted (reset hourly), which is
+  exactly the state P13 misread as "the endpoint is private". The parity
+  tool prints the numbers so the next reader cannot repeat the mistake.
+
+What this does NOT prove: that the hosted runner image's shellcheck version
+(whatever ubuntu-latest ships) equals 0.10.0 — the row prints the local
+version and the ledger records the runner's presence by run-proof, not by
+version. If a finding class ever turns on the runner's shellcheck version,
+that fact is findable in the run logs, not assumed here.
+
+### P0-2 addendum — where the probe URLs live (a law found by the gate itself)
+
+The first full-gate run reddened `fetch_allowlist_check` on the parity tool's
+probe URLs: URL literals in code outside the chokepoint are refused
+(the ci_triage precedent — "a literal here would be a second, unreviewed copy
+of the network surface"). Two candidate fixes were rejected before the
+shipped one:
+
+* **Rejected:** URL constants in `build/upstream/fetch.py` — the file sits at
+  the 380-line touched-file ceiling (measured: 380 before, 403 after), and
+  the size law splits by responsibility, never by squeezing the chokepoint.
+* **Rejected:** an `EXEMPT_FILES` entry for the parity tools — the exemption
+  also disables the network-import/socket checks for the whole file; a
+  narrower fix exists.
+
+**Shipped:** the canonical probe paths are reviewable DATA —
+`docs/state/parity-probe-paths.json` (host → canonical read-only path → what
+real lane fetches it), the same class as `release/egress-allowlist.json`, and
+inside the `docs/state/` class the checker itself sanctions for doc-data.
+The chokepoint file is **untouched** and remains the ONLY enforcement: every
+probe still goes through `fetch.http_get`, whose `assert_url_allowed` runs on
+every call regardless of what the data file says — the data can never widen
+the network surface, only name paths within it. Two laws pin the contract in
+`tools/tests/test_ci_parity.py`: every data host must be on the chokepoint's
+allowlist, every allowlisted host must have a path (completeness — a gap is
+its own visible row in the tool's output, never a silent skip), and the
+probes module holds no URL literals of its own.

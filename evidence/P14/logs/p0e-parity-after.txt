@@ -1,0 +1,40 @@
+# P14-P0-2: the parity tool on the RESTORED host (both linters present)
+# date: 2026-10-01; the four honest ABSENT rows remain (this host has no rust
+# toolchain, no faketime, no minisign — CI's lanes are stricter there, printed)
+
+$ python3 tools/ci_parity_check.py --deadline 10
+== ci-parity: local capability vs hosted lanes (P14-P0-2) ==
+  optional tools (helper-tools.yaml + workflow installs + runner ledger):
+    actionlint         present
+    cargo              ABSENT (CI has this; the lane will be stricter there)
+    codesign           absent (normal for a Linux lane; not stricter on CI)
+    faketime           ABSENT (CI has this; the lane will be stricter there)
+    g++                present
+    make               present
+    minisign           ABSENT (CI has this; the lane will be stricter there)
+    python3.12         differs (local interpreter 3.13.14 vs the runner's pinned python3.12; a version gap is a printed note, not a weaker lane)
+    rustc              ABSENT (CI has this; the lane will be stricter there)
+    shellcheck         present
+    signtool           absent (normal for a Linux lane; not stricter on CI)
+  entry-point modes: PASS (0 finding(s))
+  sibling pin: PASS — ../xr-core at DEPS.xr_core_rev 4353d368d173… (clean)
+  dev-deps: closure check PASS; pip dry-run: installable (require-hashes dry run ok)
+  network (live probes through the fetch chokepoint, re-proved now,
+           never inherited from any note):
+    api.github.com                       reachable  0.03 s
+    chromium.googlesource.com            reachable  0.62 s
+    chromiumdash.appspot.com             reachable  0.06 s
+    commondatastorage.googleapis.com     reachable  0.03 s
+    pypi.org                             reachable  0.03 s
+    static.crates.io                     reachable  0.08 s
+    updates.rrrtx.labs                   refused    chokepoint refuses (not a fetch surface — release-client policy data, HG-38)
+    api.github.com quota: core 60/60, reset 1790835577 (epoch)
+ci-parity: PARTIAL (4 lane(s) will be stricter on CI: cargo (Rust conformance + shield vendor/shim lanes); faketime (date-invariance ambient probe (the scheduled governance lane installs it and demands it)); minisign (P3 fast-lane TEST signing drill); rustc (Rust conformance + shield vendor/shim lanes)) — exit 0 by design: a printed fact, never a gate red; re-run to re-prove
+exit: 0
+
+$ ./scripts/build workflow-lint   (both linters present: the deep pass is the runner's)
+  actionlint: ran, clean
+PASS: workflow-lint
+
+$ python3 tools/ci_parity_check.py --self-test | tail -1
+PASS: ci_parity --self-test

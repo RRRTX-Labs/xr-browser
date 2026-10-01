@@ -1,0 +1,41 @@
+# P14-P0-2: the parity tool on the ORIGINAL problem host shape
+# (actionlint present, shellcheck absent — the P13-CLOSE agent's exact environment,
+#  reproduced for this capture by 'sudo apt-get remove -y shellcheck'; restored
+#  immediately after — see p0e-parity-after.txt for the restored run)
+# date: 2026-10-01
+
+$ python3 tools/ci_parity_check.py --deadline 10
+== ci-parity: local capability vs hosted lanes (P14-P0-2) ==
+  optional tools (helper-tools.yaml + workflow installs + runner ledger):
+    actionlint         present
+    cargo              ABSENT (CI has this; the lane will be stricter there)
+    codesign           absent (normal for a Linux lane; not stricter on CI)
+    faketime           ABSENT (CI has this; the lane will be stricter there)
+    g++                present
+    make               present
+    minisign           ABSENT (CI has this; the lane will be stricter there)
+    python3.12         differs (local interpreter 3.13.14 vs the runner's pinned python3.12; a version gap is a printed note, not a weaker lane)
+    rustc              ABSENT (CI has this; the lane will be stricter there)
+    shellcheck         ABSENT (CI has this; the lane will be stricter there)
+    signtool           absent (normal for a Linux lane; not stricter on CI)
+    actionlint+shellcheck COMPOSITE GAP: actionlint present but shellcheck absent => the shellcheck pass will not run here — the exact shape of the P13-CLOSE governance red
+  entry-point modes: PASS (0 finding(s))
+  sibling pin: PASS — ../xr-core at DEPS.xr_core_rev 4353d368d173… (clean)
+  dev-deps: closure check PASS; pip dry-run: installable (require-hashes dry run ok)
+  network (live probes through the fetch chokepoint, re-proved now,
+           never inherited from any note):
+    api.github.com                       reachable  0.04 s
+    chromium.googlesource.com            reachable  3.98 s
+    chromiumdash.appspot.com             reachable  0.12 s
+    commondatastorage.googleapis.com     reachable  0.04 s
+    pypi.org                             reachable  0.03 s
+    static.crates.io                     reachable  0.08 s
+    updates.rrrtx.labs                   refused    chokepoint refuses (not a fetch surface — release-client policy data, HG-38)
+    api.github.com quota: core 60/60, reset 1790835560 (epoch)
+ci-parity: PARTIAL (6 lane(s) will be stricter on CI: cargo (Rust conformance + shield vendor/shim lanes); faketime (date-invariance ambient probe (the scheduled governance lane installs it and demands it)); minisign (P3 fast-lane TEST signing drill); rustc (Rust conformance + shield vendor/shim lanes); shellcheck (actionlint's shell-script pass (the SC2251 class)); actionlint+shellcheck (actionlint's shellcheck pass)) — exit 0 by design: a printed fact, never a gate red; re-run to re-prove
+exit: 0
+
+$ ./scripts/build workflow-lint   (same host shape: the deep pass is SILENTLY shallower —
+  actionlint runs, its shellcheck half does not, and nothing prints that fact)
+  actionlint: ran, clean
+PASS: workflow-lint

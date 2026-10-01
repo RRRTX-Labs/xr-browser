@@ -99,15 +99,40 @@ class Fetcher:
                                  timeout=int(self.timeout))
         except Exception as exc:  # FetchError (incl. HTTP 403/404), import failure
             msg = str(exc)
-            code = re.search(r"HTTP (\d{3})", msg)
-            if code and code.group(1) in ("401", "403", "404", "429"):
-                raise BlockedNet(
-                    f"BLOCKED-NET (HTTP {code.group(1)} from {path}) — the "
-                    "endpoint refused this request; see docs/process/ci-triage.md "
-                    "for what is public and what needs admin") from exc
+            # P14-P0-2: the four refusal codes classify distinctly (C-0.7);
+            # classify_refusal says why and names the discriminator.
+            reason = classify_refusal(path, msg)
+            if reason:
+                raise BlockedNet(reason) from exc
             raise BlockedNet(f"BLOCKED-NET ({type(exc).__name__}: {msg}) — no "
                             f"readable route to api.github.com for {path}") from exc
         return json.loads(raw.decode("utf-8"))
+
+
+def classify_refusal(path: str, msg: str) -> str:
+    """P14-P0-2 (P13-CLOSE C-0.7): RATE-LIMITED and ADMIN-ONLY are DIFFERENT
+    facts and must read differently. A 429 is always a spent quota; a 401/403
+    is a refusal for THIS caller that can be either a privilege wall (the
+    documented /logs case) or a spent quota (the P13 incident: /rate_limit
+    said core 60/60 unauthenticated, reset hourly — the endpoint was never
+    private). The row names the discriminator instead of guessing."""
+    code = re.search(r"HTTP(?: Error)? (\d{3})", msg)
+    status = code.group(1) if code else ""
+    if status == "429":
+        return (f"BLOCKED-NET (RATE-LIMITED: HTTP 429 from {path}) — the "
+                "caller's quota is spent; re-probe after the reset (GET "
+                "/rate_limit is free and does not consume it); never "
+                "conclude access-denied from a rate limit")
+    if status in ("401", "403"):
+        return (f"BLOCKED-NET (ADMIN-ONLY-or-QUOTA: HTTP {status} from "
+                f"{path}) — refused for this caller; a 403 can be a spent "
+                "quota (P13: /rate_limit showed core 60/60) or a privilege "
+                "wall — GET /rate_limit separates them")
+    if status == "404":
+        return (f"BLOCKED-NET (HTTP 404 from {path}) — the endpoint refused "
+                "this request; see docs/process/ci-triage.md for what is "
+                "public and what needs admin")
+    return ""
 
 
 def fetch_check_runs(f: Fetcher, repo: str, sha: str) -> list[dict]:
@@ -193,7 +218,15 @@ def triage(f: Fetcher, repo: str, sha: str = "", run_id: int | None = None) -> d
             out["log_access"] = f"run {rid}: /logs returned 200 (readable by this token)"
         except BlockedNet as exc:
             first = str(exc).split("—")[0].strip()
-            out["log_access"] = f"run {rid}: {first} (/logs is admin-only; use --sha for the public path)"
+            # P14-P0-2: a rate-limited /logs probe must not be read as a
+            # privilege wall — the two facts say different things about the
+            # endpoint (C-0.7).
+            if "RATE-LIMITED" in str(exc):
+                out["log_access"] = (f"run {rid}: {first} (/logs hit the "
+                                     "rate limit — re-probe after the "
+                                     "reset; do NOT conclude admin-only)")
+            else:
+                out["log_access"] = f"run {rid}: {first} (/logs is admin-only; use --sha for the public path)"
     return out
 
 

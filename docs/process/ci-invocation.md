@@ -96,3 +96,56 @@ The same file, two contracts (P13-P0-C):
   `tools/negatives/p13_p0c.sh`, cases `interim_with_a_pending_row` (the push
   invocation is green on an in-flight interim bundle) and
   `closing_wire_demands_final` (the closing invocation refuses it).
+
+## The parity line: what your host lacks vs what the lanes demand (P14-P0-2)
+
+Run the gate on a laptop and you are not running the gate the runner runs.
+Not an approximation: five distinct times this program has shipped a
+local-green/hosted-red, and the fifth — actionlint runs its shellcheck pass
+only when shellcheck is installed on the host — could not surface locally by
+construction. `tools/ci_parity_check.py` (run early by `run_checks.sh`, wired
+in `tools/checks/p14_gates.sh`) makes the difference a printed fact:
+
+```
+$ python3 tools/ci_parity_check.py
+== ci-parity: local capability vs hosted lanes (P14-P0-2) ==
+  optional tools (helper-tools.yaml + workflow installs + runner ledger):
+    actionlint         present
+    shellcheck         ABSENT (CI has this; the lane will be stricter there)
+    ...
+ci-parity: PARTIAL (N lane(s) will be stricter on CI: …) — exit 0 by design
+```
+
+The laws behind it:
+
+* **Never a gate red.** PASS and PARTIAL both exit 0: a laptop legitimately
+  lacks CI's tools, and a red gate would train people to install everything
+  or ignore the lane. The enforcement is that the gate's **final tally echoes
+  the verdict line** (`kr_finish` in `tools/checks/gate_runner.sh`) and
+  `evidence/P<n>/report.md` §⑨ must quote it — a phase may not report "gate
+  green" while the parity line says five lanes were weaker locally. A run
+  that prints no `ci-parity:` verdict line IS a gate red (a run without a
+  verdict is not a verdict).
+* **Composite gaps are named as composites.** actionlint present but
+  shellcheck absent prints its own row — "the shellcheck pass will not run
+  here" — because the two individually-present rows would otherwise hide the
+  one gap that mattered. Same for faketime (the ambient date probe is
+  SKIP-visible locally, demanded on CI).
+* **Entry-point modes and the sibling pin are reused, not re-implemented**
+  (`tools/entrypoint_mode_check.py`, `tools/xr_sibling.py`); dev-dep
+  installability runs the closure check's offline fixture path plus a live
+  `pip install --require-hashes --dry-run`.
+* **Network rows are re-proved at every run, never inherited.** One GET per
+  allowlisted host through the `build/upstream/fetch.py` chokepoint (the only
+  network call in the tree), under one deadline, with the api.github.com
+  quota printed alongside — because the P13 incident was a 403 from a spent
+  unauthenticated quota (`/rate_limit core 60/60`) being read as "the
+  endpoint is private", and `chromium.googlesource.com` was a real 503 that
+  was 200 hours later. A blocked row is a fact about *this run*, not a note
+  for the next one. `ci_triage.py` classifies RATE-LIMITED and ADMIN-ONLY
+  distinctly for the same reason (`classify_refusal`, C-0.7).
+* **The tool proves itself.** `--self-test` (also a gate lane,
+  `p14_parity_selftest`) must pass: it proves the verdict is a function of
+  the host — the all-present case prints PASS, the gap case prints PARTIAL
+  naming the gap — because a detector that always prints one verdict detects
+  nothing. Registered negative: `tools/negatives/p14_p02.sh`.

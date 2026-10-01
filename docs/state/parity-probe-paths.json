@@ -1,0 +1,14 @@
+{
+ "schema": "xr-parity-probe-paths",
+ "schema_version": 1,
+ "comment": "P14-P0-2: the canonical read-only probe path per fetch-allowlisted host, consumed by tools/ci_parity_probes.py (the local-vs-CI parity tool). This is REVIEWABLE DATA, not a second network surface: the chokepoint (build/upstream/fetch.py ALLOWED_HOSTS + assert_url_allowed) remains the ONLY enforcement of which hosts may be fetched, and it runs on every http_get regardless of what this file says. Every entry is a real object a real lane fetches, so the HTTP answer is meaningful (the gitiles ref tip, the API's free quota endpoint, the snapshot manifest, the dash root, the exact vendored .crate the P11 ceremony pins, the PyPI root). A host on the fetch allowlist WITHOUT an entry here is a completeness error the parity tool reports as its own row, never a silent skip.",
+ "generated": "2026-10-01 (P14-P0-2)",
+ "probe_paths": [
+  {"host": "chromium.googlesource.com", "path": "https://chromium.googlesource.com/chromium/src/+refs/heads/main?format=JSON", "what_fetches_it": "citation-audit / check-pin-alive (the ref tip)"},
+  {"host": "api.github.com", "path": "https://api.github.com/rate_limit", "what_fetches_it": "ci_triage + the parity quota note (free: does not consume quota)"},
+  {"host": "commondatastorage.googleapis.com", "path": "https://commondatastorage.googleapis.com/chromium-browser-snapshots/Linux_x64/LAST_CHANGE", "what_fetches_it": "the snapshot manifest (Chromium tooling's own endpoint)"},
+  {"host": "chromiumdash.appspot.com", "path": "https://chromiumdash.appspot.com/", "what_fetches_it": "promotion discovery (latest/prev release)"},
+  {"host": "static.crates.io", "path": "https://static.crates.io/crates/adblock/adblock-0.13.3.crate", "what_fetches_it": "the P11 vendored-crate ceremony (adblock-rust 0.13.3, the exact pinned tarball)"},
+  {"host": "pypi.org", "path": "https://pypi.org/", "what_fetches_it": "the dev-deps closure ceremony (pinned release metadata)"}
+ ]
+}
