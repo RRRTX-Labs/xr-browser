@@ -35,7 +35,11 @@ REPO = Path(__file__).resolve().parents[2]
 XR_CORE = REPO.parent / "xr-core"
 CORPUS = TOOLS / "parity" / "corpus-identity.json"
 FIXTURE = XR_CORE / "fakes" / "fixtures" / "identity-v1.json"
-HOST = XR_CORE / "identity" / "tests" / "build" / "identity_host"
+# The build is OUT-OF-TREE: building in the sibling would leave
+# identity/tests/build/ behind and every pin-faithful gate would then rightly
+# call xr-core DIRTY (the files it reads must be the pinned files).
+BUILD_DIR = REPO / "work" / "scratch" / "pytest-identity-build"
+HOST = BUILD_DIR / "identity_host"
 FAKE = XR_CORE / "fakes" / "identity.py"
 
 HAVE_CPP = shutil.which("g++") is not None and shutil.which("make") is not None
@@ -46,7 +50,8 @@ def host() -> Path:
     if not HAVE_CPP:
         pytest.skip("g++/make absent — C++ identity host skipped (skip-policy)")
     r = subprocess.run(["make", "-C", str(XR_CORE / "identity" / "tests"),
-                        "build"], capture_output=True, text=True)
+                        "build", f"BUILD={BUILD_DIR}"],
+                       capture_output=True, text=True)
     if r.returncode != 0:
         raise RuntimeError(f"make failed for identity:\n{r.stderr[-400:]}")
     return HOST

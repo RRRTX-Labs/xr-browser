@@ -47,8 +47,8 @@
 #                  (2b5a576), attribution (70a793e), the identity host +
 #                  protocol doc (e52bea2), and the fleet-timebox fuzz
 #                  oracle (420d854) and the host typed-error exit fix
-#                  (a5aef55) — pair-bumped same-day per
-#                  docs/process/cross-repo-pin.md.
+#                  (a5aef55), the session store (P14-T8, 3973ff3), and the isolation-matrix identity cells (P14-T6/sec-req-2, 05b83eb) —
+#                  pair-bumped same-day per docs/process/cross-repo-pin.md.
 #   gclient_url_scheme  P2-T1 (pinned https remotes only; no ssh, no file://)
 #
 # Chromium pin provenance (see docs/state/research-log-P2.md R1):
@@ -61,7 +61,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "a5aef553f46d21903a3482c97f2a6eee6d599a66"     # xr-core 0dd5748 (C-1b..C-5: site-tab, observatory-tab, update-tab, sent-tab + their node suites; the registry lane\'s inventory, grdp and roster reads) = P13-T1/T7 + P13-C-P0.1 (ui/panel/tabs.json, tab-registry.ts) + P13-C-P0.1b (ui/panel/tab-strip.ts — the registry-driven tablist; registry diagnostics as machine tokens for l10n_extract R4). Pair-bumped same-day with each P13 commit per docs/process/cross-repo-pin.md.
+xr_core_rev: "05b83eb81f270756e6b2c42b2d00c73037d58701"     # xr-core 0dd5748 (C-1b..C-5: site-tab, observatory-tab, update-tab, sent-tab + their node suites; the registry lane\'s inventory, grdp and roster reads) = P13-T1/T7 + P13-C-P0.1 (ui/panel/tabs.json, tab-registry.ts) + P13-C-P0.1b (ui/panel/tab-strip.ts — the registry-driven tablist; registry diagnostics as machine tokens for l10n_extract R4). Pair-bumped same-day with each P13 commit per docs/process/cross-repo-pin.md.
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

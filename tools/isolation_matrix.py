@@ -23,6 +23,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+
 import sys
 from pathlib import Path
 from typing import Any
@@ -30,6 +31,8 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "build" / "qa"))
 from _common import EXIT_FAIL, EXIT_PASS, EXIT_USAGE, RunnerError, as_of_arg, \
     iso, require_cases, seed_rng, stable_json  # noqa: E402
+from identity_iso_cells import (  # noqa: E402  (P14 size-law split)
+    IDENTITY_MECHS, run_identity_cells)
 
 MATRIX_DEFAULT = "../xr-core/test/isolation/matrix.yaml"
 OUT_JSON = "../xr-core/test/isolation/isolation-matrix.json"
@@ -38,7 +41,6 @@ OUT_MD = "../xr-core/test/isolation/isolation-matrix.md"
 ORIGIN = {"scheme": "https", "registrable_domain": "example.com",
           "port": 443}
 REQUEST_CLASS = "kStorage"
-
 
 def load_resolver(xr_core: Path) -> Any:
     """Import the pure resolver fake from xr-core (no side effects)."""
@@ -54,7 +56,6 @@ def load_resolver(xr_core: Path) -> Any:
     spec.loader.exec_module(mod)  # type: ignore[union-attr]
     return mod
 
-
 def resolve(mod: Any, vid: str, trust: str) -> dict[str, Any]:
     req = {"identity": {"value": vid}, "origin": ORIGIN,
            "trust_context": trust, "request_class": REQUEST_CLASS}
@@ -62,7 +63,6 @@ def resolve(mod: Any, vid: str, trust: str) -> dict[str, Any]:
     if "ok" not in res:
         raise RunnerError(f"resolver returned {stable_json(res)}")
     return res["ok"]
-
 
 # (mechanism) -> (policyA, policyB) -> (passed, detail). `A` is the stricter
 # of the pair when a ladder order exists; the pair is symmetric.
@@ -72,35 +72,29 @@ def _check_storage(p: dict[str, Any]) -> tuple[bool, str]:
                             "kFortressPartition"},
             f"storage_scope={sc['scope']} in_memory={sc['in_memory']}")
 
-
 def _check_vault(p: dict[str, Any]) -> tuple[bool, str]:
     v = p["vault_scope"]
     ok = isinstance(v["autofill_allowed"], bool) and not v["export_allowed"]
     return ok, f"autofill={v['autofill_allowed']} export={v['export_allowed']}"
-
 
 def _check_egress(p: dict[str, Any]) -> tuple[bool, str]:
     e = p["egress"]
     return e["route"] in {"kDirect", "kProxy", "kTor"}, \
         f"route={e['route']} block_3p={e['block_third_party']}"
 
-
 def _check_permissions(p: dict[str, Any]) -> tuple[bool, str]:
     perms = p["permissions"]
     ok = all(v in {"kAsk", "kDeny"} for v in perms.values())
     return ok, f"perms={stable_json(perms)}"
 
-
 def _check_fingerprint(p: dict[str, Any]) -> tuple[bool, str]:
     return p["fingerprint"]["mode"] in {"kReduce", "kStrict"}, \
         f"mode={p['fingerprint']['mode']}"
-
 
 def _check_process(p: dict[str, Any]) -> tuple[bool, str]:
     pp = p["process_policy"]
     return pp["site_isolated"] is True, \
         f"site_isolated={pp['site_isolated']} dedicated={pp['dedicated_process']}"
-
 
 CHECKERS = {
     "storage-scope": _check_storage,
@@ -111,13 +105,14 @@ CHECKERS = {
     "process-isolation": _check_process,
 }
 
-
 def run_fake_cells(mod: Any, matrix: dict[str, Any]) -> list[dict[str, Any]]:
     cells: list[dict[str, Any]] = []
     idents = {i["id"]: i for i in matrix["identities"]}
     for mech in matrix["mechanisms"]:
         if mech["mode"] != "fake":
             continue
+        if mech["id"] in IDENTITY_MECHS:
+            continue  # identity-core cells: run_identity_cells (the host)
         checker = CHECKERS[mech["id"]]
         for a, b in matrix["identity_pairs"]:
             ia, ib = idents[a], idents[b]
@@ -131,7 +126,6 @@ def run_fake_cells(mod: Any, matrix: dict[str, Any]) -> list[dict[str, Any]]:
                 "mode": "fake", "verdict": "PASS" if passed else "FAIL",
                 "detail": f"{a}: {da}; {b}: {db}"})
     return cells
-
 
 def run_adversarial(mod: Any, matrix: dict[str, Any]) -> tuple[int, list[str]]:
     """Seeded cross-identity storm: purity + deny-safety."""
@@ -162,7 +156,6 @@ def run_adversarial(mod: Any, matrix: dict[str, Any]) -> tuple[int, list[str]]:
             violations.append("deny-safety: unknown identity not deny-default")
     return rounds, violations
 
-
 def render_md(cells: list[dict[str, Any]], matrix: dict[str, Any],
               as_of: str) -> str:
     by_verdict: dict[str, int] = {}
@@ -181,7 +174,6 @@ def render_md(cells: list[dict[str, Any]], matrix: dict[str, Any],
         lines.append(f"| {c['mechanism']} | {'/'.join(c['pair'])} | "
                      f"{c['mode']} | {c['verdict']} | {c['detail']} |")
     return "\n".join(lines) + "\n"
-
 
 def main(argv: list[str]) -> int:
     p = argparse.ArgumentParser(prog="isolation_matrix", description=__doc__)
@@ -215,6 +207,8 @@ def main(argv: list[str]) -> int:
 
     mod = load_resolver(xr_core)
     cells: list[dict[str, Any]] = run_fake_cells(mod, matrix)
+    # P14 identity-core cells (the host/suite path, not the resolver fake).
+    cells += run_identity_cells(xr_core, matrix)
     rounds, violations = run_adversarial(mod, matrix)
     if violations:
         for v in violations[:10]:
@@ -289,7 +283,6 @@ def main(argv: list[str]) -> int:
             return EXIT_FAIL
         print("PASS: isolation_matrix")
     return EXIT_PASS if not failures else EXIT_FAIL
-
 
 if __name__ == "__main__":
     raise SystemExit(main(sys.argv[1:]))
