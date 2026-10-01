@@ -117,6 +117,83 @@ version and the ledger records the runner's presence by run-proof, not by
 version. If a finding class ever turns on the runner's shellcheck version,
 that fact is findable in the run logs, not assumed here.
 
+## seam decision (P14-T0) — written BEFORE the implementation commits
+
+**The artifact read:** `docs/state/research-log-P4.md` (the measurement),
+`xr-core/mojom/identity.mojom`'s PROVISIONING TIMING note (the frozen
+contract's own record of it), ADR-0042, `xr-core/test/isolation/matrix.yaml`
+and `isolation-matrix.json` (the §11.4 cells), and `fakes/identity.py` (the
+behavioural fake whose vectors the new core must stay byte-compatible with).
+
+**The measurement lines the decision rests on** (all file:line@pin from the
+P4 log, re-verified by `./scripts/build spike citation-audit` at this tree):
+
+* `content/browser/site_info.cc:335` — the embedder override
+  (`GetStoragePartitionConfigForSite`) is consulted **only when the UrlInfo
+  carries no config**, and `:282` takes the config from `url_info` when
+  present — i.e. upstream's own call order makes the R2-class override a
+  FALLBACK, not a primary.
+* `content/public/browser/site_instance.h:255` —
+  `SiteInstance::CreateForFixedStoragePartition(BrowserContext*, const
+  GURL&, const StoragePartitionConfig&)`, documented as creating a
+  SiteInstance in a new BrowsingInstance whose custom StoragePartition is
+  **preserved across navigations**; `site_instance_impl.cc:244-256` builds
+  the fixed-config UrlInfo and CHECKs the config is non-default.
+* `content/browser/browsing_instance.cc:178-183` — one StoragePartition per
+  BrowsingInstance is upstream's own CHECK-enforced invariant; RPH reuse
+  requires `InSameStoragePartition` (`render_process_host_impl.cc:4947`).
+* `content/public/browser/storage_partition_config.h:37/:57` — an empty
+  `partition_domain` **is** the default partition: the fail-open trap this
+  phase's mint must make unrepresentable (opaque UUIDs, never empty, never
+  site- or name-derived).
+* `chrome/browser/ui/navigator/browser_navigator.cc:479-504` —
+  `CreateTargetContents()` is the earliest embedder point where "which
+  identity is this tab?" is answerable, before the WebContents exists: the
+  binding race §1.4 feared does not exist at this seam.
+
+**The choice: ship the R3 public seam.** Identity v1's partition selection is
+`SiteInstance::CreateForFixedStoragePartition` at WebContents-creation time
+(the `CreateTargetContents` point), with an opaque-UUID `partition_domain`
+and `in_memory=true` for Disposables (R6: `storage_partition_impl.cc:3378`
+— `GetStoragePartitionPath()` returns nullopt when in-memory). The R2-class
+embedder override is the **documented fallback**, not the shipped primary:
+it is site-keyed (wrong granularity for identity-per-window — the partition
+must follow the window's identity, not the site), and it only runs when the
+UrlInfo is config-less, which is exactly the case the fixed-partition seam
+prevents. This is the same resolution the frozen contract already encodes
+(`identity.mojom`: "identity MUST be attached BEFORE the first SiteInstance
+association; an identity CANNOT be attached to an existing tab without a
+destructive reload (MoveTab encodes this ordering dependency)").
+
+**Does the measurement support the plan's assumption?** The plan locked
+"R2 seam (or documented fallback shipped)". The measurement shows the R2-
+*named* mechanism is real but fallback-by-construction, and the spike's own
+R3 finding is the seam that is public, patch-free (§12.7 satisfied: zero
+`content/**` changes, zero patch-budget consumption) and CHECK-guarded
+upstream. That IS the plan's parenthetical — the documented fallback is what
+ships — so there is no cross-subsystem redesign question and nothing to
+escalate. The seam needs no seam patch at all, so the patch budget is
+untouched by this decision (`budget.md` unchanged: 4 entries / 21 files /
+150 cap).
+
+**What this decision does NOT prove:**
+
+* No runtime behaviour — nothing was compiled against Chromium (HG-9; every
+  browser-measured claim in this phase is NOT-RUN with its method in
+  `docs/qa/browser-harness.md`). The seam's existence, publicity and
+  invariants are static, cited facts; its behaviour under load is the rig's
+  to prove.
+* DNS isolation is qualified, not proven: R5 measured one
+  `HostResolverManager` per NetworkService (`network_service.cc:492`), so
+  "per-identity DNS" is NOT claimable from the seam choice; per-partition
+  `NetworkContext` params (`storage_partition_impl.cc:3506`) are the hook
+  that exists, and the OS resolver cache is outside the browser entirely.
+* Storage-key plumbing for BroadcastChannel/SharedWorker/`window.name` was
+  never fetched (P4's recorded census gap) — the §11.4 matrix documents
+  those cells rather than guessing them.
+* The R2-vs-R3 granularity argument is a design argument from the measured
+  call order, not a measured runtime difference.
+
 ### P0-2 addendum — where the probe URLs live (a law found by the gate itself)
 
 The first full-gate run reddened `fetch_allowlist_check` on the parity tool's
