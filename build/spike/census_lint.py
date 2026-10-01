@@ -8,7 +8,13 @@ named surfaces and field set are enforced rather than requested:
   * the owner is one of the Plan's owner letters {A, B, E, F, G};
   * the patch estimate parses as "<n> files x <category> [+ ...]" and every
     category is a real §1.2 budget category;
-  * the severity is S1/S2/S3 and the landing phase looks like a phase token.
+  * the severity is S1/S2/S3 and the landing phase looks like a phase token;
+  * (P14-T9) the fix-closure table has EXACTLY one row per census id, a
+    status from {closed-core, matrix-covered, exception-documented,
+    open-browser}, a closing artifact whose path EXISTS in the repo or the
+    pinned sibling, and — for open-browser rows — a non-empty method for
+    the browser half (a NOT-RUN row must carry its method; the cited-path
+    law, applied to the census).
 
 Exit 0 pass · 1 fail · 2 usage.
 """
@@ -58,6 +64,15 @@ BUDGET_CATEGORIES = {"branding", "hook_points", "blink_seams", "content_seams",
 ESTIMATE_RE = re.compile(r"^\s*(\d+)\s+files?\s*x\s+([\w_]+)\s*$")
 PHASE_RE = re.compile(r"^P\d{1,2}$")
 PLACEHOLDERS = {"tbd", "?", "-", "—", "", "n/a", "todo", "fixme"}
+
+# ---- P14-T9: the fix-closure table ---------------------------------------
+CLOSURE_HEADER = ["id", "P14 outcome", "status",
+                  "closing artifact (verified to exist)",
+                  "the browser half (method when it runs)"]
+N_CLOSURE_COLS = 5
+VALID_CLOSURE = {"closed-core", "matrix-covered", "exception-documented",
+                 "open-browser"}
+ARTIFACT_PATH_RE = re.compile(r"(\.\./xr-core/[\w./-]+|[a-z]+/[\w./-]+)")
 
 
 def _cells(line: str) -> list[str]:
@@ -132,7 +147,64 @@ def lint(path: Path) -> tuple[list[dict[str, Any]], list[str]]:
     dupes = {i for i in ids if ids.count(i) > 1}
     for d in sorted(dupes):
         failures.append(f"duplicate census id: {d}")
+    failures += lint_closure(path, checked, root_hint=path.parents[2]
+                             if len(path.parents) > 2 else None)
     return checked, failures
+
+
+def _resolve(root: Path, token: str) -> Path:
+    p = Path(token)
+    return (root / p).resolve() if not p.is_absolute() else p
+
+
+def lint_closure(path: Path, census_rows: list[dict[str, Any]],
+                 root_hint: Path | None = None) -> list[str]:
+    """Enforce the P14 fix-closure table (one honest row per census id)."""
+    failures: list[str] = []
+    root = root_hint if root_hint is not None else path.parents[2]
+    closures: dict[str, list[str]] = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not line.strip().startswith("|"):
+            continue
+        cells = _cells(line)
+        if len(cells) != N_CLOSURE_COLS or not re.match(r"^C-\d{2}$",
+                                                        cells[0]):
+            continue
+        if cells[0].lower() in closures:
+            failures.append(f"closure: duplicate row for {cells[0]}")
+        closures[cells[0]] = cells
+    census_ids = {r["id"] for r in census_rows}
+    for cid in sorted(census_ids - set(closures)):
+        failures.append(f"closure: census id {cid} has no closure row")
+    for cid in sorted(set(closures) - census_ids):
+        failures.append(f"closure: row {cid} matches no census id")
+    for cid, cells in sorted(closures.items()):
+        _rid, _outcome, status, artifact, browser_half = cells
+        if status not in VALID_CLOSURE:
+            failures.append(f"closure {cid}: status {status!r} not in "
+                            f"{sorted(VALID_CLOSURE)}")
+        tokens = [m.group(1).rstrip(".,;)") for m in
+                  ARTIFACT_PATH_RE.finditer(artifact)]
+        if not tokens:
+            failures.append(f"closure {cid}: no citable path in the "
+                            "artifact column")
+        elif not any(_resolve(root, tok).exists() for tok in tokens):
+            failures.append(f"closure {cid}: artifact path(s) {tokens} do "
+                            "not exist (a closing artifact that cannot be "
+                            "opened is a claim, not a citation)")
+        if status == "closed-core" and not any(
+                tok.startswith("../xr-core/") and _resolve(root, tok).exists()
+                for tok in tokens):
+            failures.append(f"closure {cid}: closed-core must cite an "
+                            "existing ../xr-core artifact (the law lives "
+                            "in the core)")
+        if status == "open-browser" and (
+                browser_half.strip().lower() in PLACEHOLDERS
+                or len(browser_half.strip()) < 20):
+            failures.append(f"closure {cid}: open-browser row must name "
+                            "the method that will prove the fix (the "
+                            "cited-path law)")
+    return failures
 
 
 def main() -> int:

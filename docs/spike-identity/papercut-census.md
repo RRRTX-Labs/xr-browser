@@ -43,3 +43,39 @@ Owner letters follow the Plan: **A** Platform/Chromium · **B** Browser UI ·
 * Rows C-01, C-04, C-08, C-10, C-11, C-12 and C-15 are also threat-model rows
   (TM-P4-1..TM-P4-7) — the census and the threat model are the same facts seen
   from the maintainer's and the defender's side.
+
+## P14 fix closure (added when the identity runtime landed — the honesty section)
+
+The "landing phase" column above says every fix was *planned* for P14. What
+P14 actually landed is the identity **runtime** (provisioning, binding,
+hibernation, templates, attribution, session — xr-core `identity/`, pinned by
+`DEPS.xr_core_rev`), which is the substrate these fifteen fixes plug into.
+This section records, per row, what closed and what did not — a census whose
+closure column says "fixed" fifteen times, with no compiled browser in the
+tree, would be the dishonesty this repository bans.
+
+Statuses (enforced by `census-lint`, negative-proven in `run_negatives.sh`):
+**closed-core** = the removing law exists and is *proven* in the identity
+core/suites; **matrix-covered** = the mechanism is exercised by a passing
+isolation-matrix cell (fake mode — the model, not the build); **exception-
+documented** = consciously not fixed, a §1.13 published-limitations row;
+**open-browser** = not fixed in P14, and the row names the method that will
+prove it when the browser build exists (a NOT-RUN row must carry its method).
+
+| id | P14 outcome | status | closing artifact (verified to exist) | the browser half (method when it runs) |
+|----|-------------|--------|--------------------------------------|----------------------------------------|
+| C-01 | Downloads shelf/history stay Profile-level; the identity-scoped `downloads-metadata` mechanism is specified but not executed | open-browser | ../xr-core/test/isolation/matrix.yaml (cell `downloads-metadata`, mode browser, NOT-RUN) | spike/probes/isolation_matrix_browsertest.cc — one download per identity, assert no shelf/history crossover |
+| C-02 | Print settings/destination MRU stay shared; `print` cell specified, not executed | open-browser | ../xr-core/test/isolation/matrix.yaml (cell `print`, mode browser, NOT-RUN) | per-identity print from the probe matrix; assert per-identity destinations |
+| C-03 | `chrome://inspect` still enumerates across identities; `devtools-attach` cell specified, not executed | open-browser | ../xr-core/test/isolation/matrix.yaml (cell `devtools-attach`, mode browser, NOT-RUN) | attach in A, list targets, assert B's tabs are not enumerable |
+| C-04 | Omnibox providers still read Profile-level history; `omnibox` cell specified, not executed | open-browser | ../xr-core/test/isolation/matrix.yaml (cell `omnibox`, mode browser, NOT-RUN) | type a B-only prefix in A, assert no completion |
+| C-05 | Cross-identity drag is unblocked in the model; `drag-across-identity` cell specified, not executed | open-browser | ../xr-core/test/isolation/matrix.yaml (cell `drag-across-identity`, mode browser, NOT-RUN) | drag URL A→B, assert refused or re-keyed |
+| C-06 | Find pre-fill is a UI string; no mechanism landed | open-browser | docs/qa/browser-harness.md (mixed-identity walkthrough method) | find "foo" in A, switch to B, assert the field is not pre-filled |
+| C-07 | PiP ownership unchanged; no mechanism landed | open-browser | docs/qa/browser-harness.md (mixed-identity walkthrough method) | PiP in A, close the tab, assert the window closes with it |
+| C-08 | Notification permission/DB stay Profile-level; `serviceworker` + `notification-state` cells specified, not executed | open-browser | ../xr-core/test/isolation/matrix.yaml (cells `serviceworker`, `notification-state`, mode browser, NOT-RUN) | SW per identity, fire a notification, assert the click targets the originating partition |
+| C-09 | `chrome://` pages still load in the default partition; no matrix cell yet | open-browser | docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md (§1.13 published limitations — WebUI partitioning) | open `chrome://settings` per identity, assert own partition or the §1.13 row is the disclosure |
+| C-10 | Autofill store stays Profile-level; no matrix cell yet | open-browser | docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md (§1.13 published limitations — autofill) | save a card in B, focus a field in A, assert no cross suggestion |
+| C-11 | Soft-reuse half: the `process-isolation` cell PASSES in fake mode (never co-located); tab-search half not executed | matrix-covered | ../xr-core/test/isolation/matrix.yaml (cell `process-isolation`, mode fake, PASS) | tab search across 50 tabs / 2 identities, assert filtered results + no shared RPH |
+| C-12 | Shared favicon cache consciously NOT fixed — a timing side channel that survives partitioning | exception-documented | ../xr-core/test/isolation/matrix.yaml (cell `favicon-cache`, mode exception) + docs/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN.md §1.13 | disclosed, not proven; revisit only with per-identity favicon storage (owner A, post-P14) |
+| C-13 | OS-level drag-out writes to the shared desktop; no mechanism landed | open-browser | docs/qa/browser-harness.md (mixed-identity walkthrough method) | drag out of A to the desktop, drop into B, assert identity-scoped path or refusal |
+| C-14 | The session store carries each tab's recorded binding; restore REFUSES (kMalformedInput, tab named) rather than fall back to the default partition — proven by 345-check seeded chaos suite + the `session-restore-no-bleed` matrix cell (PASS, all 5 pairs) | closed-core | ../xr-core/identity/core/session.h + ../xr-core/identity/tests/test_session_chaos.cc | kill -9 / restore drill on the real browser (docs/qa/drill.md, NOT-RUN this phase) |
+| C-15 | Extension registry stays per-Profile; the chokepoint cannot land before extensions exist | open-browser | ../xr-core/test/isolation/matrix.yaml (cell `extension-availability`, mode not-yet, phase P13) | install a test extension, assert it cannot correlate two identities' tabs |
