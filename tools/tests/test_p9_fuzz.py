@@ -57,17 +57,19 @@ def test_seed_corpus_check_green() -> None:
 
 def test_seed_corpus_every_target_seeded() -> None:
     for t in ("policy-core", "commands-core", "settings-core", "themes-core",
-              "cosmetic-core"):
+              "cosmetic-core", "identity-core"):
         cdir = REPO / "build" / "fuzz" / "corpus" / t
         assert cdir.is_dir() and any(cdir.iterdir()), f"{t} unseeded"
 
 
-def test_fleet_yaml_discovers_five_cores() -> None:
+def test_fleet_yaml_discovers_every_core() -> None:
     import yaml
     doc = yaml.safe_load((REPO / "build/fuzz/fleet.yaml").read_text())
     ids = [t["id"] for t in doc["targets"]]
+    # six since P14 (identity): one row per C++ core that exists — a new
+    # core without a fleet row is invisible to the never-crash law.
     assert ids == ["policy-core", "commands-core", "settings-core",
-                   "themes-core", "cosmetic-core"]
+                   "themes-core", "cosmetic-core", "identity-core"]
     # libFuzzer entry points must exist for every target (never referenced
     # before existing)
     for t in doc["targets"]:

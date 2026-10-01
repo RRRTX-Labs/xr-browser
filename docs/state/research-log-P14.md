@@ -221,3 +221,54 @@ the network surface, only name paths within it. Two laws pin the contract in
 allowlist, every allowlisted host must have a path (completeness — a gap is
 its own visible row in the tool's output, never a silent skip), and the
 probes module holds no URL literals of its own.
+
+## T1/T2/T3/T10 — the identity subsystem lands (xr-core 420d854, pair-bumped)
+
+Six xr-core commits (85e4a2a core → 23e3acb templates → 2b5a576 binding →
+70a793e attribution → e52bea2 host → 420d854 fleet-timebox fuzz), all with
+green `make test` suites under `-std=c++20 -Wall -Wextra -Werror
+-D_FORTIFY_SOURCE=2`, pair-bumped same-day in DEPS (the cross-repo-pin law).
+
+Decisions recorded (why, not just what):
+
+* **Two host surfaces, one binary.** The frozen mojom v1 surface
+  ({method,args} JSON) keeps the P5 fake envelope and replays
+  BYTE-IDENTICALLY against fakes/identity.py — verified for all 15 corpus
+  cases before the corpus was committed. The P14 living surface
+  (provision/templates/ceremony/scheduler/binding/attribution) ships as
+  SUBCOMMANDS (the policy_host precedent), because the alternative — a
+  second `method ==` table — would demand a Python fake speaking the new
+  surface, i.e. a post-freeze amendment of a contract we did not need to
+  touch. The living surface is covered by the C++ suite +
+  tools/tests/test_p14_identity.py and recorded as data in
+  tools/parity/manifest.json (`living_surface` field): accounted for,
+  never silently omitted.
+* **The frozen table's 40-char third entry** (`…00000000000ef`) is a quirk
+  frozen with the v1 fixtures: the shape law accepts 39 AND 40, the entropy
+  mint always produces the canonical 39, and the quirk is documented at the
+  constant (mint.h). A v2 amendment would normalize; none is smuggled in.
+* **mode_lint:** /identity/ carries the frozen mojom grade field
+  (kStandard/kFortress wire spellings). Rather than dodge the lint, the
+  exemption is in xr-core/policy/mode_lint.cfg with the full rationale
+  (grade is DATA the resolver consumes; no tier decisions in identity) —
+  S0 review surface, the documented path the lint itself prescribes.
+* **The hex-encoding limit, honestly stated:** LooksOpaque rejects literal
+  probe embeds (the name-in-domain bug); a hex-ENCODED name is
+  shape-indistinguishable and undetectable by containment. The LAW that
+  actually prevents name-derived domains is the mint's purity (sha256 of
+  caller entropy only) + the host's entropy duty — test_mint documents
+  this rather than pretending a checker could catch every encoding.
+* **Fuzz oracle obeys the fleet timebox law** (XR_FUZZ_SECONDS/XR_FUZZ_SEED,
+  the themes shape): ~565k ops/s, 9.6M invariant checks in a 3 s smoke,
+  0 violations across seeds. The invariants are checked CONTINUOUSLY
+  (mint opacity, purge-verify, no-resurrect, never-auto-switch, ceremony
+  completeness, attribution sum), not just at exit.
+
+The gate found real things during this work (recorded so the next agent
+does not re-learn them): creating a host mid-gate reddens
+host_protocol_check + parity_completeness by DESIGN (the P11-T0-a law —
+write the protocol doc in the same commit as the host); the sibling tree
+must be CLEAN and AT THE PIN for any xr-browser gate run (stage new-core
+work outside the tree while gating P0 items); mode_lint scans xr-core
+tests too (tier tokens in test assertions need the exemption, like
+shield/tests before us).

@@ -1,0 +1,23 @@
+{
+ "schema_version": 1,
+ "pair": "identity",
+ "protocol": "../xr-core/identity/host_protocol.md",
+ "provenance": "P14-T1. Every method in identity/host_protocol.md has >=1 case (parity-completeness law). The six cases are the FROZEN mojom v1 surface (mojom/identity.mojom, fakes/identity.py): each replays BYTE-IDENTICALLY against the compiled identity_host and the fake (tools/tests/test_p14_identity.py asserts stdout byte-equality and exit-code equality per case). The LIVING subcommand surface (provision/templates/ceremony/scheduler/binding/attribution) is NOT the frozen contract and has no fake counterpart — it is covered by the C++ suite (xr-core/identity/tests/) plus test_p14_identity.py, the policy-precedent split recorded in tools/parity/manifest.json. Case families: happy paths per method, the P4 timing finding (MoveTab after_nav), unknown identities, bad grade, fixture-table exhaustion, and _seed seeding exactly as the fake defines it.",
+ "cases": [
+  {"id": "create_standard", "method": "Create", "args": {"grade": "kStandard"}, "expect": "ok"},
+  {"id": "create_fortress", "method": "Create", "args": {"grade": "kFortress"}, "expect": "ok"},
+  {"id": "create_ephemeral", "method": "Create", "args": {"grade": "kStandard", "ephemeral": true}, "expect": "ok"},
+  {"id": "create_bad_grade", "method": "Create", "args": {"grade": "kNope"}, "expect": "ok"},
+  {"id": "create_table_exhausted", "method": "Create", "args": {"_seed": [{"grade": "kStandard"}, {"grade": "kStandard"}, {"grade": "kStandard"}]}, "expect": "ok"},
+  {"id": "activate_seeded", "method": "Activate", "args": {"_seed": [{}], "id": {"value": "xr:00000000-0000-4000-8000-000000000001"}}, "expect": "ok"},
+  {"id": "activate_unknown", "method": "Activate", "args": {"id": {"value": "xr:ghost"}}, "expect": "ok"},
+  {"id": "hibernate_seeded", "method": "Hibernate", "args": {"_seed": [{}], "id": {"value": "xr:00000000-0000-4000-8000-000000000001"}}, "expect": "ok"},
+  {"id": "promote_seeded", "method": "PromoteToFortressProfile", "args": {"_seed": [{}], "id": {"value": "xr:00000000-0000-4000-8000-000000000001"}}, "expect": "ok"},
+  {"id": "promote_unknown", "method": "PromoteToFortressProfile", "args": {"id": {"value": "xr:ghost"}}, "expect": "ok"},
+  {"id": "destroy_seeded", "method": "Destroy", "args": {"_seed": [{}], "id": {"value": "xr:00000000-0000-4000-8000-000000000001"}}, "expect": "ok"},
+  {"id": "destroy_unknown", "method": "Destroy", "args": {"id": {"value": "xr:ghost"}}, "expect": "ok"},
+  {"id": "move_after_nav_rejected", "method": "MoveTab", "args": {"to": "x", "after_nav": true}, "expect": "ok"},
+  {"id": "move_ok", "method": "MoveTab", "args": {"_seed": [{}], "to": "xr:00000000-0000-4000-8000-000000000001", "tab_id": 7, "from": ""}, "expect": "ok"},
+  {"id": "move_unknown_to", "method": "MoveTab", "args": {"to": "ghost", "after_nav": false}, "expect": "ok"}
+ ]
+}

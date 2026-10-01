@@ -36,6 +36,12 @@
    "corpus": "tools/parity/corpus-cosmetic.json",
    "id": "renderer/cosmetic",
    "protocol": "../xr-core/renderer/cosmetic/host_protocol.md"
+  },
+  {
+   "corpus": "tools/parity/corpus-identity.json",
+   "id": "identity",
+   "living_surface": "the P14 subcommand surface (provision/templates/ceremony/scheduler/binding/attribution) has no fake counterpart BY DESIGN \u2014 the policy_host precedent: covered by xr-core/identity/tests (the C++ suite) + tools/tests/test_p14_identity.py, recorded HERE as data, never a silent omission",
+   "protocol": "../xr-core/identity/host_protocol.md"
   }
  ],
  "schema_version": 1

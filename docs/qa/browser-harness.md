@@ -227,3 +227,38 @@ reference rig: fill the ring to its 2000-row cap, export JSON and CSV, and recor
 the wall-clock cost and the produced size per format, with `rig_class` printed.
 No export cost or size number is claimed in this phase: the surrogate lane
 measures the frame's pure core, not the export.
+
+## Identity switch / wake budgets (P14-T1) — METHOD, not a result
+
+The plan's `switch ≤ 200 ms` and `wake ≤ 200 ms to first paint` are rig
+budgets. Method (a real rig, never this sandbox): build the pinned
+Chromium + `xr/identity` wiring at the seam decision's primary seam, drive
+N=30 switches/wakes between two provisioned identities via the CDP harness
+(`build/spike/cdp.py` shape), record time-to-first-paint from
+`Page.frameStartedLoading` to the first `PaintTime` marker, report p50/p95
+against the budget rows in `docs/state/perf-budgets.json` (identity rows:
+`rig_class: trend`). The state-machine halves (cap, eviction order,
+no-resurrect) are pure core and ARE tested here
+(`xr-core/identity/tests/test_hibernate.cc`).
+
+## Mixed-identity walkthrough ×3 themes (P14-T4) — METHOD
+
+Three themes (light / dark / high-contrast) × the mixed-identity
+walkthrough (create Work + Disposable, open a tab in each, move a tab
+across, destroy the disposable) on the visual-rig; snapshot the color-bar +
+pill + amber-dashed-border states per layout × theme into the visual CI
+corpus (`--check`; regeneration is a deliberate act with its own command —
+never rewrite in-tree).
+
+## Move-confirm usability session (P14-T3) — METHOD
+
+6 non-engineer participants; task = move a tab across identities with the
+confirm dialog; pass = the participant can say what the move will lose
+BEFORE confirming (unaided). Recorded as a human gate (the phase report's
+HG section); no surrogate exists and none may be invented.
+
+## SR announcement audit (P14-T4) — METHOD
+
+With a screen reader active, focus a tab in each identity kind; the
+identity name + glyph must be announced. Axe-core `--check` covers the
+static assertions; the live SR pass is the audit method (human gate).

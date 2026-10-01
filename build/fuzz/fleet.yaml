@@ -1,4 +1,5 @@
-# The fuzz fleet (P9-T8) — one row per C++ core that exists today.
+# The fuzz fleet (P9-T8) — one row per C++ core that exists today
+# (six since P14: identity).
 # `runner` is the in-house seeded fuzzer (g++ here AND the Makefile lane);
 # `libfuzzer_target` is the CI-side clang/libFuzzer entry (build/fuzz/
 # libfuzzer/, built only where clang exists — never in this sandbox).
@@ -54,6 +55,18 @@ targets:
     libfuzzer_target: "cosmetic_core_fuzz"
     corpus_dir: "build/fuzz/corpus/cosmetic-core"
     owner_phase: "P12"
+  # P14-T1: the sixth target — the identity core's never-crash oracle
+  # (mint opacity, purge-verify, no-resurrect, never-auto-switch, ceremony
+  # completeness, attribution sum — asserted continuously; see
+  # xr-core/identity/tests/test_fuzz.cc).
+  - id: identity-core
+    core: identity
+    runner_makefile: "../xr-core/identity/tests"
+    runner_binary: "build/test_fuzz"
+    runner: "make-test"
+    libfuzzer_target: "identity_core_fuzz"
+    corpus_dir: "build/fuzz/corpus/identity-core"
+    owner_phase: "P14"
 not_yet:
   # No Rust code exists and rustc is absent here — the plan's Rust targets are
   # accounted for as not-yet with their owning phase (never fabricated).

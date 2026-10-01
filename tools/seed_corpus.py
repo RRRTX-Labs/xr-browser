@@ -85,6 +85,10 @@ def derive(repo: Path) -> dict[str, list[tuple[str, str]]]:
     # 51 committed {method,args} cases that the differential oracle and the
     # coverage test already replay), byte-copies of committed artifacts.
     seeds["cosmetic-core"] = parity_seeds(repo, core, "cosmetic", "cosmetic")
+    # P14-T1: the sixth fleet target. Identity's seeds are the frozen
+    # {method,args} corpus cases — byte-copies of committed artifacts (the
+    # same 15 cases test_p14_identity.py replays for host-vs-fake parity).
+    seeds["identity-core"] = parity_seeds(repo, core, "identity", "identity")
     return seeds
 
 

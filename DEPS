@@ -41,6 +41,14 @@
 #                  lineage lines for P12/P13 are added here at P13's freeze
 #                  commit: the pin was pair-bumped with each commit, but this
 #                  block still ended at P11 (found closing the phase).
+#                  P14 advances it to the identity core (420d854): the
+#                  opaque mint + lifecycle with purge-and-verify + cap/
+#                  hibernation (85e4a2a), templates (23e3acb), binding
+#                  (2b5a576), attribution (70a793e), the identity host +
+#                  protocol doc (e52bea2), and the fleet-timebox fuzz
+#                  oracle (420d854) and the host typed-error exit fix
+#                  (a5aef55) — pair-bumped same-day per
+#                  docs/process/cross-repo-pin.md.
 #   gclient_url_scheme  P2-T1 (pinned https remotes only; no ssh, no file://)
 #
 # Chromium pin provenance (see docs/state/research-log-P2.md R1):
@@ -53,7 +61,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "4353d368d1734a858e4e46c0a72b1c35e3c7b755"     # xr-core 0dd5748 (C-1b..C-5: site-tab, observatory-tab, update-tab, sent-tab + their node suites; the registry lane\'s inventory, grdp and roster reads) = P13-T1/T7 + P13-C-P0.1 (ui/panel/tabs.json, tab-registry.ts) + P13-C-P0.1b (ui/panel/tab-strip.ts — the registry-driven tablist; registry diagnostics as machine tokens for l10n_extract R4). Pair-bumped same-day with each P13 commit per docs/process/cross-repo-pin.md.
+xr_core_rev: "a5aef553f46d21903a3482c97f2a6eee6d599a66"     # xr-core 0dd5748 (C-1b..C-5: site-tab, observatory-tab, update-tab, sent-tab + their node suites; the registry lane\'s inventory, grdp and roster reads) = P13-T1/T7 + P13-C-P0.1 (ui/panel/tabs.json, tab-registry.ts) + P13-C-P0.1b (ui/panel/tab-strip.ts — the registry-driven tablist; registry diagnostics as machine tokens for l10n_extract R4). Pair-bumped same-day with each P13 commit per docs/process/cross-repo-pin.md.
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

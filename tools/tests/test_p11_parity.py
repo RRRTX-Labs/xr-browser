@@ -140,7 +140,12 @@ def test_completeness_gate_positive_with_update_pair() -> None:
     # unlisted host is a FAILURE — a hardcoded number is what makes the
     # gate notice one.
     assert "renderer/cosmetic: methods covered by parity corpus" in r.stdout
-    assert "7 pair(s), 0 failure(s)" in r.stdout
+    # P14-T1: identity is the 8th stdio host (the frozen mojom surface;
+    # its living subcommands are the policy-precedent split, recorded as
+    # data in the manifest). The count is asserted for the same reason as
+    # above: a hardcoded number is what makes the gate notice a 9th.
+    assert "identity: methods covered by parity corpus" in r.stdout
+    assert "8 pair(s), 0 failure(s)" in r.stdout
 
 
 def test_phantom_pair_fails(tmp_path: Path) -> None:
