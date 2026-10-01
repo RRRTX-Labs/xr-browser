@@ -525,7 +525,9 @@ allowlist:
   justification: "Same \xA71.14 Windows packaging citation as the master plan (v2 file: identical citations, \
     \ see pinned-copy entry)."
 - path: evidence/P13/evidence.json
-  line: 147
+  line: 148
   pattern: auto-update
   justification: "P13-T5's own DoD row: 'Update-available UX: T1 tier only, no auto-update implication' \
-    \u2014 the row STATES the prohibition it is judged against."
+    \u2014 the row STATES the prohibition it is judged against. (Line 147 -> 148: P14-P0-1 \
+    appended a dated not_done_by_design row earlier in the same JSON object \u2014 an append-only \
+    correction that shifts serialization, not an edit to this row's content.)"

@@ -1,0 +1,24 @@
+# P14-P0-1: the AFTER state — the four SC2251 sites rewritten as explicit checks
+# date: 2026-10-01; host: P14 agent sandbox; actionlint 1.7.7 (sha256-verified), shellcheck 0.10.0 (apt)
+
+$ ./scripts/build workflow-lint
+  checked: .github/workflows/compat-beta-parity.yml
+  checked: .github/workflows/core-hardening.yml
+  checked: .github/workflows/governance.yml
+  checked: .github/workflows/nightly-rebase-build.yml
+  checked: .github/workflows/sast.yml
+  actionlint: ran, clean
+PASS: workflow-lint
+exit: 0
+
+$ raw actionlint over all five workflow files
+actionlint exit: 0
+
+$ grep -n '^\s*!' .github/workflows/*.yml   (statement-level negation sweep)
+grep exit: 1 (1 = no hits: the class is gone)
+
+$ grep -c 'pipefail' — the four cmd|tee pipelines' scripts (234/302/335/400) each set it:
+232:          set -euo pipefail
+299:          set -euo pipefail
+333:          set -euo pipefail
+397:          set -euo pipefail

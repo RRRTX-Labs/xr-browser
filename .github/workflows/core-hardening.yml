@@ -233,7 +233,14 @@ jobs:
           cd release/server/rust
           cargo test --locked 2>&1 | tee /tmp/rust-conformance.log
           grep -q "test result: ok" /tmp/rust-conformance.log
-          ! grep -q "test result: FAILED" /tmp/rust-conformance.log
+          # P14-P0-1: the old shape was `! grep -q "test result: FAILED"
+          # /tmp/rust-conformance.log` — a statement-level `!` is exempt from
+          # errexit (shellcheck SC2251), so the assertion could never fire and
+          # the step survived a FAILED line. The explicit check can.
+          if grep -q "test result: FAILED" /tmp/rust-conformance.log; then
+            echo "FAIL: a cargo suite reported FAILED (see /tmp/rust-conformance.log)"
+            exit 1
+          fi
           SUITES=$(grep -c "^test result:" /tmp/rust-conformance.log)
           EXPECTED_SUITES=4
           echo "cargo suites reporting a result: $SUITES (expected $EXPECTED_SUITES)"
@@ -294,7 +301,15 @@ jobs:
           cd /tmp/adblock-test
           cargo build --locked --release 2>&1 | tee /tmp/shield-vendor-test.log
           grep -q "Finished" /tmp/shield-vendor-test.log
-          ! grep -qE "^error(\[|:)" /tmp/shield-vendor-test.log
+          # P14-P0-1: same SC2251 class as the rust-conformance step. This one
+          # happened to be the script's last statement, so its negated status
+          # DID propagate (shellcheck 0.10.0 correctly does not flag it there)
+          # — but that safety evaporates the moment anyone appends a line, so
+          # it is rewritten as the explicit check like its three siblings.
+          if grep -qE "^error(\[|:)" /tmp/shield-vendor-test.log; then
+            echo "FAIL: the vendored-copy build emitted a rustc error (see /tmp/shield-vendor-test.log)"
+            exit 1
+          fi
       # P11-T8: the shim's FIRST compilation happens here (hosted lane by
       # law — no local cargo build exists or is claimed; lib.rs cites the
       # vendored API path:line it was written against). This step is also
@@ -319,7 +334,12 @@ jobs:
           cd ../xr-core/shield/engine
           cargo build --release --offline 2>&1 | tee /tmp/shield-shim-build.log
           grep -q "Finished" /tmp/shield-shim-build.log
-          ! grep -qE "^error(\[|:)" /tmp/shield-shim-build.log
+          # P14-P0-1: SC2251 — the `! grep` form skipped errexit, so this hunt
+          # was inert and the `test -f` line below masked its exit entirely.
+          if grep -qE "^error(\[|:)" /tmp/shield-shim-build.log; then
+            echo "FAIL: the offline shim build emitted a rustc error (see /tmp/shield-shim-build.log)"
+            exit 1
+          fi
           test -f target/release/libxr_shield_engine.so
       - name: Real-engine shield bench (>=50k decisions, trend-class hosted rig)
         run: |
@@ -379,7 +399,13 @@ jobs:
             --shim ../xr-core/shield/engine/target/release/libxr_shield_engine.so \
             --check --json 2>&1 | tee /tmp/shield-parity-real.json
           grep -q '"verdict": "PASS"' /tmp/shield-parity-real.json
-          ! grep -q '"verdict": "FAIL"' /tmp/shield-parity-real.json
+          # P14-P0-1: SC2251 — the NEGATIVE verdict hunt was a statement-level
+          # `!` (exempt from errexit), so the python checks below it decided
+          # the step's status even when a FAIL verdict sat in the log.
+          if grep -q '"verdict": "FAIL"' /tmp/shield-parity-real.json; then
+            echo "FAIL: shield parity reported verdict FAIL (see /tmp/shield-parity-real.json)"
+            exit 1
+          fi
           python3 - <<'PY'
           import json
           line = next(l for l in open('/tmp/shield-parity-real.json')

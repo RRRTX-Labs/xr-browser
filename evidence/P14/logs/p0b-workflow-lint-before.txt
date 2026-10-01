@@ -1,0 +1,45 @@
+# P14-P0-1: the BEFORE state — reproduced at the pin (724b466) with BOTH linters installed
+# date: 2026-10-01; host: P14 agent sandbox; actionlint 1.7.7 (sha256-verified), shellcheck 0.10.0 (apt)
+
+$ ./scripts/build workflow-lint
+  checked: .github/workflows/compat-beta-parity.yml
+  checked: .github/workflows/core-hardening.yml
+  checked: .github/workflows/governance.yml
+  checked: .github/workflows/nightly-rebase-build.yml
+  checked: .github/workflows/sast.yml
+  actionlint: ran, findings
+  FAIL: actionlint: .github/workflows/core-hardening.yml:214:9: shellcheck reported issue in this script: SC2251:info:22:1: This ! is not on a condition and skips errexit. Use `&& exit 1` instead, or make sure $? is checked [shellcheck]
+  FAIL: actionlint:     |
+  FAIL: actionlint: 214 |         run: |
+  FAIL: actionlint:     |         ^~~~
+  FAIL: actionlint: .github/workflows/core-hardening.yml:315:9: shellcheck reported issue in this script: SC2251:info:7:1: This ! is not on a condition and skips errexit. Use `&& exit 1` instead, or make sure $? is checked [shellcheck]
+  FAIL: actionlint:     |
+  FAIL: actionlint: 315 |         run: |
+  FAIL: actionlint:     |         ^~~~
+  FAIL: actionlint: .github/workflows/core-hardening.yml:371:9: shellcheck reported issue in this script: SC2251:info:11:1: This ! is not on a condition and skips errexit. Use `&& exit 1` instead, or make sure $? is checked [shellcheck]
+  FAIL: actionlint:     |
+  FAIL: actionlint: 371 |         run: |
+  FAIL: actionlint:     |         ^~~~
+FAIL: workflow-lint (12 finding(s))
+
+$ raw actionlint (what the hosted runner's shellcheck-enabled pass reports)
+.github/workflows/core-hardening.yml:214:9: shellcheck reported issue in this script: SC2251:info:22:1: This ! is not on a condition and skips errexit. Use `&& exit 1` instead, or make sure $? is checked [shellcheck]
+    |
+214 |         run: |
+    |         ^~~~
+.github/workflows/core-hardening.yml:315:9: shellcheck reported issue in this script: SC2251:info:7:1: This ! is not on a condition and skips errexit. Use `&& exit 1` instead, or make sure $? is checked [shellcheck]
+    |
+315 |         run: |
+    |         ^~~~
+.github/workflows/core-hardening.yml:371:9: shellcheck reported issue in this script: SC2251:info:11:1: This ! is not on a condition and skips errexit. Use `&& exit 1` instead, or make sure $? is checked [shellcheck]
+    |
+371 |         run: |
+    |         ^~~~
+actionlint exit: 0
+
+$ grep -n '^\s*!' .github/workflows/*.yml   (statement-level negation sweep)
+.github/workflows/core-hardening.yml:236:          ! grep -q "test result: FAILED" /tmp/rust-conformance.log
+.github/workflows/core-hardening.yml:297:          ! grep -qE "^error(\[|:)" /tmp/shield-vendor-test.log
+.github/workflows/core-hardening.yml:322:          ! grep -qE "^error(\[|:)" /tmp/shield-shim-build.log
+.github/workflows/core-hardening.yml:382:          ! grep -q '"verdict": "FAIL"' /tmp/shield-parity-real.json
+grep exit: 0 (0 = hits found)

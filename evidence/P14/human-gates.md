@@ -1,0 +1,20 @@
+# P14 human gates
+
+One row per act this sandbox cannot perform. Authored 2026-10-01 by the P14
+agent. Green checks never satisfy a human gate; the row says what a human
+must read or do. Numbering continues the program's HG sequence; the gates the
+phase brief itself names are listed first.
+
+| id | gate | what a human must read / do | recorded |
+|---|---|---|---|
+| HG-S0-IDENTITY | Dual senior review of `xr/identity/` provisioning + session paths (plan security req 1; `xr-core/identity/**` and `xr-core/mojom/identity.mojom` are S0 per CODEOWNERS) | Two senior reviewers read: the partition-domain mint (opaque UUID v4 via `//xr/common` randomness, never name/site-derived), the destroy purge-and-verify path (zero-bytes assertion + planted-leftover negative), the hibernation state machine (wake never resurrects a purged disposable), the prefs-namespace fail-safe (unreadable ⇒ no overrides), and the session/restore binding. Invariants to confirm: no identity state in URLs or IPC-visible strings; Σ attributed ≤ measured total; concurrency cap enforced before partition creation. No review happened in this phase; every automated check passing does not change this row. | open |
+| HG-26 | The 14 PENDING rows in `docs/contracts/FROZEN.yaml` remain unratified; P14 wants a NEW freeze row (IdentityProvisioning internals) | A maintainer ratifies or rejects the proposed rows; the proposal is recorded in `docs/contracts/registry-post-freeze.md` (P14 section) and is NOT applied. FROZEN.yaml bytes stay untouched. | open (carried) |
+| HG-34 | Branch protection on both repos (direct pushes to main still accepted — P13 demonstrated why that is a hazard) | A maintainer enables required status checks (governance, core-hardening) and forbids direct pushes once the agent loop ends. | open (carried) |
+| HG-20 | The PAT from the P12/P13 dispatch chats is still unrevoked | The user revokes/rotates it. The P14 agent never touches that token; `tools/secret_scan.py --all` stays green. | open (carried) |
+| HG-35 | ADR approvals (0049/0050 PROPOSED; any new P14 ADR likewise) | A maintainer reviews and moves ADRs PROPOSED → ACCEPTED or rejects. | open (carried) |
+| HG-28 | Real-rig mutation matrices (24 h) and real-rig MET rows | Run on the calibrated rig; this sandbox proves the model halves only. | open (carried) |
+| HG-31/9/27 | Browser rig runs (switch/wake to first paint), real mojom bindings, rendered chrome | `docs/qa/browser-harness.md` methods; every browser-measured claim in this phase is NOT-RUN with that path. | open (carried) |
+| HG-33 | Live breakage-queue filing | Human act; the fixture queue is the tree's coverage. | open (carried) |
+| HG-32 | Upstream-first issue filings | Where no upstream issue exists, the ledger says so; filings are human. | open (carried) |
+| HG-19 | Nightly activation/retry policy for the treadmill | Maintainer decision. | open (carried) |
+| HG-P14-USABILITY | The 6-non-engineer move-confirm usability session and the SR announcement audit | People, not CI: 6 participants × the mixed-identity walkthrough ×3 themes; the confirm dialog's naming of what is lost, and the tab-focus SR announcement, observed on a real screen reader. Method recorded in `docs/qa/browser-harness.md`; no result is claimed here. | open (new this phase) |

@@ -93,6 +93,19 @@ tools:
     added_on: 2026-09-07
     added_by: "P4 (hosted-CI root cause)"
 
+  - name: shellcheck
+    role: "The shell-script pass actionlint runs INSIDE its workflow-lint deep check. actionlint executes shellcheck on every run: block itself when shellcheck is installed on the host — which is exactly why P13-CLOSE's governance lane was red hosted while every local run was green: this sandbox had actionlint but not shellcheck, so the SC2251 errexit-negation finding in core-hardening.yml could not surface locally (the fifth local-green/hosted-red cause; P14-P0-1 fixed the finding, this entry formalizes the tool)."
+    required: false
+    policy: "absent -> build/workflow_lint.py still runs its always-on checks and actionlint's shellcheck pass simply does not execute (actionlint reports only its own findings); tools/ci_parity_check.py (P14-P0-2) prints the composite case as 'the shellcheck pass will not run here' so the gap is a printed fact, never a surprise. The hosted governance lane always has it (preinstalled on the ubuntu runner image)."
+    install_ci: "preinstalled on GitHub-hosted ubuntu runners (actionlint is the part governance.yml installs itself); local-only use: apt-get install -y shellcheck (0.10.0 on this sandbox's image)"
+    install_dev: "apt-get install shellcheck | brew install shellcheck"
+    license: "GPL-3.0 (koalaman/shellcheck) — installed as an OS package, never vendored and never linked into the product; a CI/dev-only binary"
+    source_url: "https://github.com/koalaman/shellcheck"
+    rationale: "Zero repo dependencies (no pip, no vendored code). The alternative — treating actionlint alone as 'the workflow linter' — is what let a lint finding whose strictness depends on host OS packages ride five phases of local-green/hosted-red. Recording the tool here is what lets the parity tool (P14-P0-2) name the composite gap."
+    owner: "E (Release engineering)"
+    added_on: "2026-10-01"
+    added_by: "P14-P0-1 (the fifth local-green/hosted-red cause)"
+
   - name: faketime
     role: "The ambient-clock HALF of the date-invariance law (P12-T0-a). tools/date_invariance_check.py re-runs every date-aware gate lane at two far-apart --as-of values (the deterministic half) and, when this tool is present, under an LD_PRELOAD-displaced wall clock (the ambient half) with --as-of pinned at the gate's own value. Both halves must agree; the displaced half proves no lane secretly reads the calendar."
     required: false

@@ -21,7 +21,8 @@
   "not_done_by_design": [
     "The phase is in flight: state is interim by declaration (docs/state/phase-base.json records phase P13), so *-PENDING-* rows name work that has not landed yet. They are resolved or corrected by appended rows as each item lands, and the state flips to final at the closing commit (the P13-P0-C law, tools/evidence_finality.py).",
     "Rendered panel/browser results are NOT-RUN by construction in this sandbox (no gn/ninja, no Chromium checkout, no browser): every such claim is labelled NOT-RUN (method: docs/qa/browser-harness.md) rather than approximated.",
-    "The breakage queue's live half is HUMAN-GATED (filing is a human act — HG-33 in evidence/P13/human-gates.md); the fixture queue is labelled fixture in its path and in the tool's output."
+    "The breakage queue's live half is HUMAN-GATED (filing is a human act — HG-33 in evidence/P13/human-gates.md); the fixture queue is labelled fixture in its path and in the tool's output.",
+    "2026-10-01 — P14-P0-1 (append-only, no row above is edited): P13 remains interim solely because its closing declaration commit (Phase-Close: P13, citing same-head green governance + core-hardening runs) lands after P14-P0-1/P0-2 are pushed and hosted-green — the two-commit resolution is the established answer (P13-CLOSE). P14 rotates docs/state/phase-base.json to itself, so P13 leaves the in-flight window NOW and this dated row is what keeps its interim legal until the close. What remains is the closing citation itself; everything deliverable in-tree at 724b466 is delivered and recorded by the rows below."
   ],
   "human_gates": {
     "path": "evidence/P13/human-gates.md",

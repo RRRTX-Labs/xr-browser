@@ -1,0 +1,14 @@
+# P14-P0-1: the linters installed exactly as CI installs them
+# date: 2026-10-01
+
+$ curl -sSL -o actionlint.tgz https://github.com/rhysd/actionlint/releases/download/v1.7.7/actionlint_1.7.7_linux_amd64.tar.gz
+$ echo "023070a287cd8cccd71515fedc843f1985bf96c436b7effaecce67290e7e0757  actionlint.tgz" | sha256sum -c
+actionlint.tgz: OK
+
+$ actionlint -version
+1.7.7
+installed by downloading from release page
+built with go1.23.4 compiler for linux/amd64
+
+$ shellcheck --version | grep -E '^(version|shellcheck)'   (apt-get install -y shellcheck; local-only — the runner image ships its own; license line omitted from the capture, recorded in docs/dependencies/helper-tools.yaml instead)
+version: 0.10.0

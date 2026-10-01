@@ -1,0 +1,236 @@
+{
+  "phase": "P14",
+  "state": "interim",
+  "generated": "2026-10-01 (P14-P0-1: the bundle exists from the phase's first commit — the presence law; rows are appended as work lands, never rewritten)",
+  "plan": "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
+  "plan_sha256": "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b",
+  "source_labels": [
+    "local-run",
+    "fixture",
+    "ci-run",
+    "UNVERIFIED",
+    "NOT-RUN"
+  ],
+  "verdict_vocabulary": [
+    "VERIFIED",
+    "HUMAN-GATED",
+    "SIMULATED",
+    "BLOCKED",
+    "PARTIAL",
+    "NOT-BY-DESIGN",
+    "NOT-RUN"
+  ],
+  "not_done_by_design": [
+    "The phase is in flight: state is interim by declaration (docs/state/phase-base.json records phase P14), so *-PENDING-* rows name work that has not landed yet. They are resolved or corrected by appended rows as each item lands, and the state flips to final at the closing commit (the P13-P0-C law, tools/evidence_finality.py).",
+    "Rendered browser results (switch/wake timing to first paint, rendered chrome, RSS megabytes) are NOT-RUN by construction in this sandbox (no gn/ninja, no Chromium checkout, no browser): every such claim will be labelled NOT-RUN with its method in docs/qa/browser-harness.md, never approximated. T10's memory rows are generator-owned trend rows, never MET here.",
+    "Dual senior S0 review of xr/identity/ provisioning + session paths is a human act (the plan's security req): it is recorded HUMAN-GATED in evidence/P14/human-gates.md with the exact files and invariants a reviewer must read; green checks never satisfy it."
+  ],
+  "human_gates": {
+    "path": "evidence/P14/human-gates.md",
+    "note": "authored 2026-10-01 by the P14 agent; one row per act this sandbox cannot perform"
+  },
+  "repos": {
+    "xr-browser": "phase opened at 724b466094683c61c1a4695fed2044e34c586c55 (origin/main, P13-C-CLOSE-FREEZE); the closing declaration commit records the content head whose runs it cites",
+    "xr-core": "4353d368d1734a858e4e46c0a72b1c35e3c7b755 at phase open (DEPS.xr_core_rev matches); pair-bumped same-day with each P14 commit per docs/process/cross-repo-pin.md"
+  },
+  "dod_rows": [
+    {
+      "id": "P14-P0-1",
+      "dod": "The errexit/`!` class fixed everywhere in the workflow set: the four statement-level negations in core-hardening.yml rewritten as explicit if-grep-then-exit-1 checks; every run: block relying on set -e with a negation, pipeline, or $(…) in a condition swept and each hit fixed or recorded harmless with its line number; ./scripts/build workflow-lint clean with actionlint AND shellcheck installed.",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        ".github/workflows/core-hardening.yml",
+        "docs/state/research-log-P14.md",
+        "docs/dependencies/helper-tools.yaml",
+        "docs/state/phase-base.json",
+        "evidence/P13/evidence.json",
+        "logs/p0a-linter-versions.txt",
+        "logs/p0b-workflow-lint-before.txt",
+        "logs/p0c-workflow-lint-after.txt"
+      ],
+      "notes": "actionlint 1.7.7 (sha256-verified against governance.yml's pin) + shellcheck 0.10.0 installed; before transcript reproduces the runner annotation (SC2251 at core-hardening.yml run-block 214:9); after transcript: PASS, actionlint ran clean, zero statement-level `!` across all five workflows. This commit also rotates docs/state/phase-base.json to P14 (the presence law demands this bundle from the first P14 commit) and appends the dated not_done_by_design row that keeps evidence/P13 interim legal until its closing declaration (P0-3). The runner-side confirmation at this head is recorded by the P0-3 close (governance success), not claimed here. Lanes re-run green at this exact tree: license_audit, pytest (13), doc_reference_check, vocab_lint, evidence_check --strict (12 bundles, 0 failures), evidence_finality (14 bundles), workflow-lint."
+    },
+    {
+      "id": "P14-P0-2",
+      "dod": "tools/ci_parity_check.py (stdlib-only, --json/--check, --self-test) diffing the local host's capability against what the workflows demand: optional tools incl. composite cases (actionlint without shellcheck), entry-point modes, sibling pin, dev-dep installability, network reachability with re-prove-at-report-time; wired early into run_checks.sh with the final tally echoing its verdict line; RATE-LIMITED vs ADMIN-ONLY classified distinctly in tools/ci_triage.py.",
+      "status": "BLOCKED-PENDING-P0-2",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "docs/state/research-log-P14.md"
+      ],
+      "notes": "Lands in the next commit (P14-P0-2); this bundle is written as-you-go per the brief's verification plan."
+    },
+    {
+      "id": "P14-P0-3",
+      "dod": "P13 closed (state final, Phase-Close: P13, phase_head + same-head ci-run rows for governance AND core-hardening with per-step conclusions, scheduled-lane view) and P12 closed the same way, after the lint fix is pushed and hosted-green; supersession of PENDING rows machine-checked with its negative fixture.",
+      "status": "BLOCKED-PENDING-P0-3",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "evidence/P13/evidence.json",
+        "evidence/P12/evidence.json"
+      ],
+      "notes": "Requires green hosted runs at a pushed head containing P0-1; lands after that push. P13's two unsuperseded PENDING rows (P13-EVIDENCE, P13-REPORT) get append-only corrections in the same close."
+    },
+    {
+      "id": "P14-P0-4",
+      "dod": "The census: run_checks.sh --keep-going on a clean clone at the pin with both linters installed = 0 FAIL lanes; bare run_checks.sh and the CI invocation (range) both exit 0; parity line pasted.",
+      "status": "BLOCKED-PENDING-P0-4",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "docs/state/research-log-P14.md"
+      ],
+      "notes": "Runs on the tree after P0-2 lands (the parity tool is part of the gate by then)."
+    },
+    {
+      "id": "P14-T0",
+      "dod": "Seam decision written BEFORE implementation: the P4 measurement read, the R2-or-fallback choice with its evidence line and what it does not prove, in docs/state/research-log-P14.md §seam decision.",
+      "status": "BLOCKED-PENDING-T0",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "docs/state/research-log-P4.md"
+      ],
+      "notes": "First implementation commit per the brief's commit order."
+    },
+    {
+      "id": "P14-T1",
+      "dod": "xr/identity/ provisioning: opaque-UUID partition-domain mint, overlay rows, icon/color/glyph, per-identity prefs namespace; lifecycle activate/hibernate/destroy with purge-and-verify; concurrency cap + hibernation model (state machine, cap, eviction order, wake-after-purge refused) tested in pure core; switch/wake budgets as generator rows with NOT-RUN browser halves.",
+      "status": "BLOCKED-PENDING-T1",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "docs/state/research-log-P14.md"
+      ],
+      "notes": "xr-core/identity/ does not exist yet; fakes/identity.py is the behavioural fake it must stay byte-compatible with (vectors)."
+    },
+    {
+      "id": "P14-T2",
+      "dod": "Templates engine: Personal/Work/Research/Banking/Shopping + Disposable/Tor; Tor inert-with-reason (route binding is P31); creation ceremony lists every applied default, machine-checked (a new default not listed reddens).",
+      "status": "BLOCKED-PENDING-T2",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "docs/state/research-log-P14.md"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "P14-T3",
+      "dod": "Window/tab binding: default-identity per window; move-across-identity = confirm + reload naming what is lost; right-click open-in-identity; suggestion never auto-switches (planted auto-switch reddens); groups cannot span identities enforced in move logic with refusal reason.",
+      "status": "BLOCKED-PENDING-T3",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "docs/state/research-log-P14.md"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "P14-T4",
+      "dod": "Visual system in all layouts: 2px tab color bar + glyph, identity pill, ephemeral amber-dashed border, SR-announced on tab focus; per-layout × per-theme snapshot in visual CI via the existing qyy/axe machinery, gates --check never rewriting in-tree.",
+      "status": "BLOCKED-PENDING-T4",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "docs/state/research-log-P14.md"
+      ],
+      "notes": "Rendered-chrome verification itself is NOT-RUN (method: docs/qa/browser-harness.md); the snapshot machinery and its --check gate are what this tree can prove."
+    },
+    {
+      "id": "P14-T5",
+      "dod": "History/bookmarks identity tagging via the ledger overlay: identity_id on every ledger event class through a post-freeze amendment (registry entry + schema + vectors + both backends byte-identical); omnibox filtering cannot see across identities; upstream history untouched (byte-differential oracle).",
+      "status": "BLOCKED-PENDING-T5",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "docs/contracts/registry-post-freeze.md"
+      ],
+      "notes": "FROZEN.yaml bytes stay untouched; the amendment is a registry-post-freeze.md row, never an edit to a frozen schema."
+    },
+    {
+      "id": "P14-T6",
+      "dod": "Disposable identities: in-memory partitions; close ⇒ zero-bytes FS-diff wired to the P9 matrix with the planted-leftover negative; the no-vault-access policy row asserted CONSULTED on the path, not merely present.",
+      "status": "BLOCKED-PENDING-T6",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "docs/state/research-log-P14.md"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "P14-T7",
+      "dod": "xr://identities manager: create/rename/recolor/archive, per-identity stats (tabs, storage size + purge button, permission count), reset-all dev escape; shield_state_check extended to every new state (extend, never bypass); attention_check green with the new copy.",
+      "status": "BLOCKED-PENDING-T7",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "docs/state/research-log-P14.md"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "P14-T8",
+      "dod": "Crash/restore: session store carries identity binding; restore-never-bleeds drill method committed; the lifecycle chaos test run for what this tree can run; real-process halves NOT-RUN (method: existing path).",
+      "status": "BLOCKED-PENDING-T8",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "docs/state/research-log-P14.md"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "P14-T9",
+      "dod": "Papercut closure from the P4 census: every row closed or deferred-with-owner (status, test, owner, budget); zero silent rows.",
+      "status": "BLOCKED-PENDING-T9",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "docs/state/research-log-P14.md"
+      ],
+      "notes": "The census artifact is located first (grep docs/state/); if unfindable, stop and report per the brief."
+    },
+    {
+      "id": "P14-T10",
+      "dod": "Memory accounting: attribution model (ownership ledger, sum-identity law Σ attributed ≤ measured total, planted double count reddens); idle-identity-overhead and window-open-delta rows generator-owned rig_class: trend, never MET here; real MB/percent numbers NOT-RUN and absent from the tree (grep audit).",
+      "status": "BLOCKED-PENDING-T10",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "docs/state/research-log-P14.md"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "P14-SECURITY",
+      "dod": "Security requirements: S0 dual-review honestly HUMAN-GATED with named files/invariants; brute-force derivation probes (partition name, URL, title, log line) planted and reddening; cross-identity process assertion in a fast lane citing the P4/P6 partition code; zero new crypto/egress/deps; purge-verified; least-privilege fail-safe (unreadable prefs namespace ⇒ no overrides, never all-defaults).",
+      "status": "BLOCKED-PENDING-SECURITY",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "evidence/P14/human-gates.md"
+      ],
+      "notes": "Delivered across T1/T2/T6 with their own rows; this row is the cross-check."
+    },
+    {
+      "id": "P14-CONTRACTS",
+      "dod": "Contracts: ledger identity_id amendment via registry-post-freeze.md with schema + vectors + byte-parity both backends; any new mojom ADR PROPOSED + mojom_fuzz coverage 12→13; FROZEN.yaml sha256 unchanged; the proposed IdentityProvisioning freeze row recorded as a human ratification item.",
+      "status": "BLOCKED-PENDING-CONTRACTS",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "docs/contracts/registry-post-freeze.md"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "P14-DOCS",
+      "dod": "The identity documentation set this phase owes: nine guides in the identity doc family (provisioning, lifecycle, templates, binding, visual, disposable, manager, restore, memory-accounting — created by this phase's docs commit, cited here only after they exist) + the seam-decision artifact; measured-shared-state §1.13 regenerated; browser-harness methods; webui-e2e; ci-invocation parity section; papercut census extended; no doc asserts a browser-measured/human-reviewed/org-approved outcome.",
+      "status": "BLOCKED-PENDING-DOCS",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "docs/state/research-log-P14.md"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "P14-EVIDENCE",
+      "dod": "evidence/P14/ complete: evidence.json rows for every DoD item with existing artifact paths, report.md in the 12-section order (⑨ quoting the parity verdict line, ⑩ the final-SHA hosted state before any done sentence), human-gates.md, logs/ transcripts; state flips final at the closing declaration commit.",
+      "status": "BLOCKED-PENDING-EVIDENCE",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "evidence/P14/human-gates.md"
+      ],
+      "notes": ""
+    }
+  ]
+}
