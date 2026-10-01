@@ -15,6 +15,20 @@ SUITE_MAPS = {
         "json.cc": ["test_json"],
         "json_parse.cc": ["test_json"],
     },
+    # P14 lane — the identity core (provisioning/lifecycle/binding/session).
+    # The chaos suite maps to session.cc (its kill-point cycles are the
+    # session store's real exerciser); the fuzz oracle stays OUT per the
+    # wall-clock law (its invariants are continuously checked, but a fuzz
+    # run per mutant would dominate the matrix).
+    "identity": {
+        "mint.cc": ["test_mint"],
+        "identity.cc": ["test_identity"],
+        "hibernate.cc": ["test_hibernate"],
+        "templates.cc": ["test_templates"],
+        "binding.cc": ["test_binding"],
+        "attribution.cc": ["test_attribution"],
+        "session.cc": ["test_session_chaos"],
+    },
     "policy": {  # P6 lane — unchanged, byte-for-byte the default path
         "effective_policy.cc": ["test_vectors", "test_resolve", "test_snapshot"],
         "resolve.cc": ["test_vectors", "test_resolve"],

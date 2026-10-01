@@ -86,6 +86,16 @@
    ],
    "transcript": "evidence/P11/logs/t1-mutation-update.json",
    "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
+  },
+  "identity": {
+   "killed": 199,
+   "mutants": 199,
+   "note": "P14 FIRST SCORING (2026-10-01): the eighth discovered core. FULL matrix (sampled:false, seed 20261001) at the pin after the sha256 alias-shim fix: 199 mutants, 199 killed, 100.00%, deny-guard 19/19 (the kMalformedInput/kRejected validation arms) \u2014 first-run clean, zero survivors to disposition. Suite maps: mint->test_mint, identity->test_identity, hibernate->test_hibernate, templates->test_templates, binding->test_binding, attribution->test_attribution, session->test_session_chaos (the chaos suite IS the session store's exerciser); the wall-clock fuzz oracle stays out of the per-mutant maps per the P10 law.",
+   "score_pct": 100.0,
+   "seed": 20261001,
+   "survivors": [],
+   "transcript": "evidence/P14/logs/t-mutation-identity.json",
+   "xr_core_commit": "7d70013dd3158608879255223738dbc733d7a6ba"
   }
  },
  "schema": "xr-mutation-scores",

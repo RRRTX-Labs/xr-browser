@@ -3,6 +3,7 @@
   "lanes": [
     "commands",
     "common",
+    "identity",
     "policy",
     "renderer/cosmetic",
     "settings",
