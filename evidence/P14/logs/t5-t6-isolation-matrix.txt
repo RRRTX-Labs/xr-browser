@@ -1,0 +1,2 @@
+isolation_matrix: 45 fake cells executed / 110 not-run / 20 exception / 175 cells total; adversarial 200 rounds clean
+PASS: isolation_matrix

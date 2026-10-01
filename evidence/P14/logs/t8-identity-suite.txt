@@ -1,0 +1,22 @@
+make: Entering directory '/home/user/xr-core/identity/tests'
+== test_mint ==
+identity/mint: 39 checks, 0 failures
+== test_identity ==
+identity/lifecycle: 51 checks, 0 failures
+== test_hibernate ==
+identity/hibernate: 56 checks, 0 failures
+== test_templates ==
+identity/templates: 57 checks, 0 failures
+== test_binding ==
+identity/binding: 44 checks, 0 failures
+== test_attribution ==
+identity/attribution: 19 checks, 0 failures
+== test_session_chaos ==
+identity/session+chaos: 345 checks, 0 failures
+== test_fuzz ==
+identity/fuzz: 81377688 checks, 0 failures
+identity fuzz: 0 violations (seed 20260910, 30 s budget, 14338388 iters)
+== test_sha256_kat ==
+test_sha256_kat: 10 checks, 0 failures
+ALL C++ IDENTITY TESTS PASSED
+make: Leaving directory '/home/user/xr-core/identity/tests'

@@ -262,3 +262,45 @@ HG section); no surrogate exists and none may be invented.
 With a screen reader active, focus a tab in each identity kind; the
 identity name + glyph must be announced. Axe-core `--check` covers the
 static assertions; the live SR pass is the audit method (human gate).
+
+## Disposable zero-bytes close: the FS-diff halves (P14-T6)
+
+The claim is "close ⇒ zero bytes on disk". Nothing in this tree may claim
+it for the real browser; what shipped is every half that can be shipped:
+
+* **Harness (shipped, real):** `build/spike/fsdiff.py` — snapshot/diff of
+  sha256+size per path, no ignore lists, symlinks recorded not followed;
+  exercised against synthetic trees by `build/spike/tests/test_spike.py`
+  (added/removed/changed, single-byte change, empty tree, symlink).
+* **Model (shipped, real):** the identity host's destroy is
+  purge-AND-VERIFY — `zero_residual_verified` is computed, not assumed —
+  and the planted-cookie-jar negative proves the verification bites
+  (a dirty destroy FAILS). Wired to the P9 matrix as the
+  `disposable-zero-residue` cell (all 5 identity pairs, fake mode).
+* **Policy (shipped, model):** the resolver fake's `vault_scope` for the
+  ephemeral identity is `autofill_allowed: False, export_allowed: False`
+  — the "no vault access" row is active in the model.
+* **NOT-RUN (the browser half, method):** snapshot the real profile
+  directory, run a disposable create/use/destroy cycle, re-snapshot, and
+  assert the diff is empty — `build/spike/probe_driver.py` around
+  `fsdiff.py` at the farm. This is the same method the P4 spike named;
+  it is restated here because T6's DoD sentence ("wired to P9 matrix") is
+  now true of the model half, and the FS half still has no build to run
+  against. No surrogate was invented.
+
+## `xr://identities` manager + per-identity stats (P14-T7)
+
+* **Data core (shipped, real):** the stats the page renders exist as
+  cores — per-identity RSS attribution (`xr-core/identity/core/attribution`,
+  19 checks), per-identity storage size with a purge-verified close
+  (`identity/core/identity`), permission-state overlay counts
+  (`xr-core/fakes/policy_resolver.py`). The manager's mojom surface is
+  REVIEW-COMPLETE (contracts/review/03-identity-manager-v1.md; human
+  sign-off pending, HG-26).
+* **NOT-RUN (the page, method):** the WebUI itself — create/rename/
+  recolor/archive, the stats table, the purge button — lands on the P13
+  panel infrastructure when a browser build exists; no views code is in
+  this tree and none may be stubbed to look shipped. Method: the page's
+  data calls go through the same frozen host methods the tests drive;
+  the purge button asserts the same `zero_residual_verified` the matrix
+  cell asserts.

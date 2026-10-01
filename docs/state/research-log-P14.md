@@ -272,3 +272,83 @@ must be CLEAN and AT THE PIN for any xr-browser gate run (stage new-core
 work outside the tree while gating P0 items); mode_lint scans xr-core
 tests too (tier tokens in test assertions need the exemption, like
 shield/tests before us).
+
+## P14-T8/T5/T6/T9 + P0-4 — the second landing set (216cdda lineage)
+
+**P0-4, the census verdict.** The clean-clone census at 6530cb1a ran 156
+lanes: 154 PASS, 2 FAIL, one root cause — `tools/run_checks.sh` and
+`tools/run_negatives.sh` sat at index-100644 while `governance.yml`
+executes them DIRECTLY (on a runner: exit 126, the class that kept the
+governance lane red for three commits in P13). Fix is mode-only
+(d15769c, same blob hashes): `git update-index --chmod=+x`. Lesson
+recorded before, now re-learned as a LAW: **the on-disk mode must match
+the index too** — the negatives battery mirrors the WORKING TREE, so a
+correct index with wrong disk bits reddened the interpreted-exemption
+control (`bash <path>` must pass for a 644 file). After `chmod 755` on
+disk, disk == index == workflow expectation.
+
+**The disk-full impostor.** Mid-run, 16 pytest lanes failed at once with
+write errors — the census and the negatives battery had filled the 993 MiB
+/tmp tmpfs (759 MiB of pytest-of-user fixtures). Symptom looked like a
+mass regression; `df` said otherwise. Lesson: when MANY lanes fail
+simultaneously with OSError/[Errno 28], check space FIRST; the census
+transcript is worth keeping in evidence/P14/logs/ precisely because it
+also documents the environment's limits.
+
+**T8, the session store.** The contract (core/session.h): Snapshot drops
+disposable-bound tabs AND reports the drop (never silent); RestoreSession
+refuses any tab naming a non-live identity — kMalformedInput, tab id in
+the error, "never defaulting" — so C-14's failure mode (restore falls
+back to the default partition and silently merges identities) is
+unrepresentable in the core. A disposable inside a session file is tamper,
+never restorable. The chaos test's first draft destroyed the SAME
+disposable at every kill-point and failed its own verification — the
+second destroy is refused by design (no-resurrect). The honest shape is
+the real crash loop: provision a FRESH disposable per cycle, bind tab 6
+to it, snapshot, destroy, restore, assert its tab never comes back.
+345 checks across seeds 20260910/7/424242.
+
+**T5/T6/security-req-2, the identity matrix cells.** Three new fake-mode
+mechanisms drive the identity HOST and the chaos SUITE (not the P6
+resolver fake): disposable-zero-residue (clean close verified AND the
+planted cookie jar fails destroy), identity-derivation-probe (six probes
+per pair: partition name / URL / title / log line / a real vid /
+partner-name — no source embedded, opaque shape only),
+session-restore-no-bleed (the suite is the assertion). Two lessons: (a)
+the runner grew past the 380-line size law mid-edit — split by
+responsibility into tools/identity_iso_cells.py, the P13 precedent;
+(b) a WIRING bug the count exposed: `run_identity_cells` was imported
+but never CALLED — the run still passed with the OLD 30 cells (a
+plausible number!). A new lane that "passes" at the old count is the
+quietest failure shape there is; grep the new mechanism id in the
+generated record before believing a green run.
+
+**The DIRTY-SIBLING law, twice.** In-place `make` in xr-core/identity/
+tests leaves build/ in the sibling and every pin-faithful gate (coverage,
+csp, a11y, rtl, panel lanes) correctly refuses to read it. Two fixes:
+the matrix runner and the pytest host fixture both build OUT-OF-TREE
+(`BUILD=` override into xr-browser/work/scratch), and the Makefile now
+accepts absolute BUILD paths (the run recipe's `./$(BUILD)/` prefix broke
+them — a slash-bearing path needs no `./`). Rule for everything forward:
+**nothing this repo runs may write into the sibling.**
+
+**T9, the census closes honestly.** The closure table has one row per
+C-id with a status from a closed vocabulary — closed-core (C-14 only),
+matrix-covered (C-11's soft-reuse half), exception-documented (C-12
+favicon, §1.13), open-browser (the rest, each naming its method). The
+lint ENFORCES it: missing row, invented status, ghost artifact,
+placeholder method, and closed-core-without-the-../xr-core-law all
+redden (six negatives in tools/negatives/p14_t9.sh, N=215 gate green).
+The fixture lesson: an earlier negative owns `$NEG_TMP/xr-core` as a real
+directory (p3_p4's patch fixtures), so a SHARED sibling symlink lands
+inside it and stops resolving — every fixture gets its own private
+`census-<name>/root + ../xr-core` layout.
+
+**T6/T7 homes.** The FS-diff harness (build/spike/fsdiff.py, synthetic-
+tree tests) and the manager-page method (data cores real: attribution 19
+checks, purge-verified storage, permission overlay counts; the page
+itself NOT-RUN with method) now live in docs/qa/browser-harness.md —
+the not_done_by_design rows point there, so no claim floats without a
+home. Evidence rows for T0–T10 are set to their honest statuses
+(VERIFIED only where the row's own DoD text is satisfiable in this
+tree; NOT-RUN where the browser is the subject).

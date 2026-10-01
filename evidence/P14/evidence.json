@@ -1,7 +1,7 @@
 {
   "phase": "P14",
   "state": "interim",
-  "generated": "2026-10-01 (P14-P0-1: the bundle exists from the phase's first commit — the presence law; rows are appended as work lands, never rewritten)",
+  "generated": "2026-10-01 (P14-P0-1: the bundle exists from the phase's first commit \u2014 the presence law; rows are appended as work lands, never rewritten)",
   "plan": "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
   "plan_sha256": "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b",
   "source_labels": [
@@ -36,7 +36,7 @@
   "dod_rows": [
     {
       "id": "P14-P0-1",
-      "dod": "The errexit/`!` class fixed everywhere in the workflow set: the four statement-level negations in core-hardening.yml rewritten as explicit if-grep-then-exit-1 checks; every run: block relying on set -e with a negation, pipeline, or $(…) in a condition swept and each hit fixed or recorded harmless with its line number; ./scripts/build workflow-lint clean with actionlint AND shellcheck installed.",
+      "dod": "The errexit/`!` class fixed everywhere in the workflow set: the four statement-level negations in core-hardening.yml rewritten as explicit if-grep-then-exit-1 checks; every run: block relying on set -e with a negation, pipeline, or $(\u2026) in a condition swept and each hit fixed or recorded harmless with its line number; ./scripts/build workflow-lint clean with actionlint AND shellcheck installed.",
       "status": "VERIFIED",
       "source": "local-run",
       "evidence": [
@@ -67,7 +67,7 @@
         "logs/p0d-parity-before.txt",
         "logs/p0e-parity-after.txt"
       ],
-      "notes": "Both files under the 380-line law (316 + 257) via the probes split; wired early in run_checks.sh (p14_gates.sh) with the P5 block moved verbatim to checks/p5_gates.sh by the same size law; kr_finish re-echoes the verdict line in the final tally. --self-test passes (12 checks); negatives p14_p02.sh adds 4 cases (N=209, all rejected as expected); the sabotage negative proves the self-test can fail. ci_triage classify_refusal (C-0.7): 429 => RATE-LIMITED, 401/403 => ADMIN-ONLY-or-QUOTA naming /rate_limit; 3 new pytest fixture tests. The before transcript reproduces the P13-CLOSE host shape (composite gap row printed while workflow-lint says 'ran, clean' — silently shallower); the after transcript shows the gap closed and the four honest ABSENT rows remaining. Full gate at this tree: logs/p0f-full-gate-at-p0-2.txt."
+      "notes": "Both files under the 380-line law (316 + 257) via the probes split; wired early in run_checks.sh (p14_gates.sh) with the P5 block moved verbatim to checks/p5_gates.sh by the same size law; kr_finish re-echoes the verdict line in the final tally. --self-test passes (12 checks); negatives p14_p02.sh adds 4 cases (N=209, all rejected as expected); the sabotage negative proves the self-test can fail. ci_triage classify_refusal (C-0.7): 429 => RATE-LIMITED, 401/403 => ADMIN-ONLY-or-QUOTA naming /rate_limit; 3 new pytest fixture tests. The before transcript reproduces the P13-CLOSE host shape (composite gap row printed while workflow-lint says 'ran, clean' \u2014 silently shallower); the after transcript shows the gap closed and the four honest ABSENT rows remaining. Full gate at this tree: logs/p0f-full-gate-at-p0-2.txt."
     },
     {
       "id": "P14-P0-3",
@@ -83,62 +83,76 @@
     {
       "id": "P14-P0-4",
       "dod": "The census: run_checks.sh --keep-going on a clean clone at the pin with both linters installed = 0 FAIL lanes; bare run_checks.sh and the CI invocation (range) both exit 0; parity line pasted.",
-      "status": "BLOCKED-PENDING-P0-4",
-      "source": "UNVERIFIED",
+      "status": "PARTIAL",
+      "source": "local-run",
       "evidence": [
+        "logs/p0-4-census-clean-clone.txt",
+        "logs/p0-4-entrypoint-fix.txt",
+        "logs/p0-4-pytest-full.txt",
         "docs/state/research-log-P14.md"
       ],
-      "notes": "Runs on the tree after P0-2 lands (the parity tool is part of the gate by then)."
+      "notes": "The clean-clone census RAN (6530cb1a, both linters installed, 154 lanes PASS) and failed exactly 2 lanes \u2014 one root cause: run_checks.sh + run_negatives.sh were index-100644 while governance.yml executes them directly (runner exit 126 class). Fixed mode-only at d15769c; both census lanes re-proved green at the fix tree (entrypoint_mode_check PASS, full pytest 444 passed \u2014 transcripts above). The remaining half is the SAME census re-run on a clean clone at the closing tree to show 0 FAIL lanes end-to-end; that run belongs to the phase close (with P0-3), not to this interim row. Not done by design: see the phase-level not_done_by_design."
     },
     {
       "id": "P14-T0",
-      "dod": "Seam decision written BEFORE implementation: the P4 measurement read, the R2-or-fallback choice with its evidence line and what it does not prove, in docs/state/research-log-P14.md §seam decision.",
-      "status": "BLOCKED-PENDING-T0",
-      "source": "UNVERIFIED",
+      "dod": "Seam decision written BEFORE implementation: the P4 measurement read, the R2-or-fallback choice with its evidence line and what it does not prove, in docs/state/research-log-P14.md \u00a7seam decision.",
+      "status": "VERIFIED",
+      "source": "local-run",
       "evidence": [
-        "docs/state/research-log-P4.md"
+        "logs/t0-discovery-gates.txt",
+        "docs/state/research-log-P14.md"
       ],
-      "notes": "First implementation commit per the brief's commit order."
+      "notes": "Seam decision written BEFORE implementation (commit 4a4d365): R3 public seam ships; R2 is the documented fallback with its trigger criteria and what the P4 measurement does not prove. Transcript: the discovery gates green at the tree that carries the decision section (vocab/host-protocol/8-pair parity/sibling-pin/doc-reference)."
     },
     {
       "id": "P14-T1",
       "dod": "xr/identity/ provisioning: opaque-UUID partition-domain mint, overlay rows, icon/color/glyph, per-identity prefs namespace; lifecycle activate/hibernate/destroy with purge-and-verify; concurrency cap + hibernation model (state machine, cap, eviction order, wake-after-purge refused) tested in pure core; switch/wake budgets as generator rows with NOT-RUN browser halves.",
-      "status": "BLOCKED-PENDING-T1",
-      "source": "UNVERIFIED",
+      "status": "VERIFIED",
+      "source": "local-run",
       "evidence": [
+        "logs/t8-identity-suite.txt",
+        "logs/t1-t3-t10-pytest.txt",
+        "docs/identity/provisioning.md",
+        "docs/identity/lifecycle.md",
         "docs/state/research-log-P14.md"
       ],
-      "notes": "xr-core/identity/ does not exist yet; fakes/identity.py is the behavioural fake it must stay byte-compatible with (vectors)."
+      "notes": "Landed at 642e288 (xr-core 85e4a2a..420d854): opaque-UUID mint (sha256 of caller entropy only, LooksOpaque), lifecycle activate/hibernate/destroy with purge-AND-VERIFY, concurrency cap + hibernation scheduler, wake-after-purge refused. Pure-core suites: mint 39 + lifecycle 51 + hibernate 56 checks, fuzz oracle ~565k ops/s with continuous invariants, 0 violations. Switch/wake budgets are generator-owned trend rows + the browser-harness method (never MET). Corpus byte-parity and frozen host surface: 13 pytest lanes (test_p14_identity), 38 total with the p9/p11/mojom set."
     },
     {
       "id": "P14-T2",
       "dod": "Templates engine: Personal/Work/Research/Banking/Shopping + Disposable/Tor; Tor inert-with-reason (route binding is P31); creation ceremony lists every applied default, machine-checked (a new default not listed reddens).",
-      "status": "BLOCKED-PENDING-T2",
-      "source": "UNVERIFIED",
+      "status": "VERIFIED",
+      "source": "local-run",
       "evidence": [
+        "logs/t8-identity-suite.txt",
+        "logs/t1-t3-t10-pytest.txt",
+        "docs/identity/templates.md",
         "docs/state/research-log-P14.md"
       ],
-      "notes": ""
+      "notes": "Landed at 642e288: Personal/Work/Research/Banking/Shopping + Disposable + Tor (inert-with-reason; route binding P31) with the creation ceremony listing every applied default \u2014 templates suite 57 checks, and the ceremony-completeness invariant is checked CONTINUOUSLY by the fuzz oracle (a new default not listed reddens). Templates frozen as data (grade field is resolver-consumed data; mode_lint exemption with rationale)."
     },
     {
       "id": "P14-T3",
       "dod": "Window/tab binding: default-identity per window; move-across-identity = confirm + reload naming what is lost; right-click open-in-identity; suggestion never auto-switches (planted auto-switch reddens); groups cannot span identities enforced in move logic with refusal reason.",
-      "status": "BLOCKED-PENDING-T3",
-      "source": "UNVERIFIED",
+      "status": "VERIFIED",
+      "source": "local-run",
       "evidence": [
+        "logs/t8-identity-suite.txt",
+        "logs/t1-t3-t10-pytest.txt",
+        "docs/identity/binding.md",
         "docs/state/research-log-P14.md"
       ],
-      "notes": ""
+      "notes": "Landed at 642e288: default-identity per window, tab binding audit with move-across-identity confirm + reload naming what is lost, open-in-identity, site->identity suggestion never auto-switches (planted auto-switch reddens \u2014 never-auto-switch is a continuously-checked fuzz invariant), groups cannot span identities (refusal with reason). Binding suite 44 checks. Browser-surface halves (real context menus, real dialogs) NOT-RUN per the phase declaration; the move-confirm usability session is a recorded human-gate method (browser-harness.md)."
     },
     {
       "id": "P14-T4",
-      "dod": "Visual system in all layouts: 2px tab color bar + glyph, identity pill, ephemeral amber-dashed border, SR-announced on tab focus; per-layout × per-theme snapshot in visual CI via the existing qyy/axe machinery, gates --check never rewriting in-tree.",
-      "status": "BLOCKED-PENDING-T4",
+      "dod": "Visual system in all layouts: 2px tab color bar + glyph, identity pill, ephemeral amber-dashed border, SR-announced on tab focus; per-layout \u00d7 per-theme snapshot in visual CI via the existing qyy/axe machinery, gates --check never rewriting in-tree.",
+      "status": "NOT-RUN",
       "source": "UNVERIFIED",
       "evidence": [
-        "docs/state/research-log-P14.md"
+        "docs/qa/browser-harness.md"
       ],
-      "notes": "Rendered-chrome verification itself is NOT-RUN (method: docs/qa/browser-harness.md); the snapshot machinery and its --check gate are what this tree can prove."
+      "notes": "Visual system in all layouts needs the rendered browser (no gn/ninja in this sandbox). What shipped: the METHODS \u2014 identity switch/wake <=200ms budget method, mixed-identity walkthrough x3 themes, move-confirm usability (6 non-engineers), SR announcement audit \u2014 all in docs/qa/browser-harness.md, and the visual-CI snapshot lanes that will carry per-layout x per-theme states. No surrogate was invented; no rendered claim is made."
     },
     {
       "id": "P14-T5",
@@ -152,57 +166,64 @@
     },
     {
       "id": "P14-T6",
-      "dod": "Disposable identities: in-memory partitions; close ⇒ zero-bytes FS-diff wired to the P9 matrix with the planted-leftover negative; the no-vault-access policy row asserted CONSULTED on the path, not merely present.",
-      "status": "BLOCKED-PENDING-T6",
-      "source": "UNVERIFIED",
+      "dod": "Disposable identities: in-memory partitions; close \u21d2 zero-bytes FS-diff wired to the P9 matrix with the planted-leftover negative; the no-vault-access policy row asserted CONSULTED on the path, not merely present.",
+      "status": "PARTIAL",
+      "source": "local-run",
       "evidence": [
-        "docs/state/research-log-P14.md"
+        "logs/t5-t6-isolation-matrix.txt",
+        "logs/t8-identity-suite.txt",
+        "docs/qa/browser-harness.md"
       ],
-      "notes": ""
+      "notes": "Model halves shipped and RUN: the identity host's destroy is purge-AND-VERIFY (zero_residual_verified computed, planted-cookie-jar negative FAILS the destroy); wired to the P9 matrix as disposable-zero-residue (5 identity pairs, PASS); the no-vault-access row (autofill/export not allowed) is asserted CONSULTED on the ephemeral resolve path by the vault-scope checker. Browser half NOT-RUN: the real FS-diff (build/spike/fsdiff.py snapshot/diff around a real create/use/destroy cycle) needs a browser build \u2014 method recorded in docs/qa/browser-harness.md. Not done by design: phase-level no-browser declaration."
     },
     {
       "id": "P14-T7",
       "dod": "xr://identities manager: create/rename/recolor/archive, per-identity stats (tabs, storage size + purge button, permission count), reset-all dev escape; shield_state_check extended to every new state (extend, never bypass); attention_check green with the new copy.",
-      "status": "BLOCKED-PENDING-T7",
+      "status": "NOT-RUN",
       "source": "UNVERIFIED",
       "evidence": [
-        "docs/state/research-log-P14.md"
+        "docs/qa/browser-harness.md"
       ],
-      "notes": ""
+      "notes": "The xr://identities page itself (create/rename/recolor/archive, stats table, purge button, reset-all, shield_state_check extension, attention_check copy) needs the browser build \u2014 NOT-RUN, method recorded. What exists and is real: the data cores the page will render (per-identity RSS attribution, 19 checks; storage-size + purge-verified close; permission overlay counts in the resolver fake) and the REVIEW-COMPLETE manager mojom contract (human sign-off pending, HG-26). No views code is in this tree and none was stubbed to look shipped."
     },
     {
       "id": "P14-T8",
       "dod": "Crash/restore: session store carries identity binding; restore-never-bleeds drill method committed; the lifecycle chaos test run for what this tree can run; real-process halves NOT-RUN (method: existing path).",
-      "status": "BLOCKED-PENDING-T8",
-      "source": "UNVERIFIED",
+      "status": "VERIFIED",
+      "source": "local-run",
       "evidence": [
-        "docs/state/research-log-P14.md"
+        "logs/t8-identity-suite.txt",
+        "logs/t5-t6-isolation-matrix.txt",
+        "docs/qa/browser-harness.md"
       ],
-      "notes": ""
+      "notes": "The session store carries each tab's recorded identity binding (xr-core 3973ff3): Snapshot drops disposable-bound tabs and REPORTS the drop; RestoreSession REFUSES (kMalformedInput, tab named, 'never defaulting') any tab whose identity is not live \u2014 the C-14 fallback-to-default failure mode is unrepresentable. The lifecycle chaos test ran for what this tree can run: identity/session+chaos, 345 checks, 0 failures, seeds 20260910/7/424242, kill-point cycles (provision->bind->snapshot->destroy->restore) interleaved with hibernate/wake/move churn. Wired to the matrix as session-restore-no-bleed (5 pairs PASS). Real-process halves (kill -9 of real processes, real session files) NOT-RUN by declaration \u2014 the P9-T11 drill method is the existing path (docs/qa/drill.md), restated in browser-harness.md."
     },
     {
       "id": "P14-T9",
       "dod": "Papercut closure from the P4 census: every row closed or deferred-with-owner (status, test, owner, budget); zero silent rows.",
-      "status": "BLOCKED-PENDING-T9",
-      "source": "UNVERIFIED",
+      "status": "VERIFIED",
+      "source": "local-run",
       "evidence": [
-        "docs/state/research-log-P14.md"
+        "logs/t9-negatives.txt",
+        "docs/spike-identity/papercut-census.md"
       ],
-      "notes": "The census artifact is located first (grep docs/state/); if unfindable, stop and report per the brief."
+      "notes": "Census closure landed and is ENFORCED: every C-01..C-15 row has a closure row with a status from a closed vocabulary (closed-core: C-14; matrix-covered: C-11 soft-reuse half; exception-documented: C-12 favicon via section 1.13; open-browser: the rest, each naming its method). Owner and budget live on the census rows themselves; zero silent rows \u2014 census-lint fails on a missing row, an invented status, a ghost artifact, a placeholder method, or a closed-core row without the ../xr-core law (6 negatives, N=215 gate green)."
     },
     {
       "id": "P14-T10",
-      "dod": "Memory accounting: attribution model (ownership ledger, sum-identity law Σ attributed ≤ measured total, planted double count reddens); idle-identity-overhead and window-open-delta rows generator-owned rig_class: trend, never MET here; real MB/percent numbers NOT-RUN and absent from the tree (grep audit).",
-      "status": "BLOCKED-PENDING-T10",
-      "source": "UNVERIFIED",
+      "dod": "Memory accounting: attribution model (ownership ledger, sum-identity law \u03a3 attributed \u2264 measured total, planted double count reddens); idle-identity-overhead and window-open-delta rows generator-owned rig_class: trend, never MET here; real MB/percent numbers NOT-RUN and absent from the tree (grep audit).",
+      "status": "VERIFIED",
+      "source": "local-run",
       "evidence": [
+        "logs/t8-identity-suite.txt",
+        "docs/identity/memory-accounting.md",
         "docs/state/research-log-P14.md"
       ],
-      "notes": ""
+      "notes": "Landed at 642e288: attribution model with ownership ledger + sum-identity law (attributed <= measured total; planted double count reddens) \u2014 attribution suite 19 checks. Idle-identity-overhead and window-open-delta are generator-owned trend rows (rig_class: trend), never MET here; real MB/percent numbers are NOT-RUN and absent from the tree."
     },
     {
       "id": "P14-SECURITY",
-      "dod": "Security requirements: S0 dual-review honestly HUMAN-GATED with named files/invariants; brute-force derivation probes (partition name, URL, title, log line) planted and reddening; cross-identity process assertion in a fast lane citing the P4/P6 partition code; zero new crypto/egress/deps; purge-verified; least-privilege fail-safe (unreadable prefs namespace ⇒ no overrides, never all-defaults).",
+      "dod": "Security requirements: S0 dual-review honestly HUMAN-GATED with named files/invariants; brute-force derivation probes (partition name, URL, title, log line) planted and reddening; cross-identity process assertion in a fast lane citing the P4/P6 partition code; zero new crypto/egress/deps; purge-verified; least-privilege fail-safe (unreadable prefs namespace \u21d2 no overrides, never all-defaults).",
       "status": "BLOCKED-PENDING-SECURITY",
       "source": "UNVERIFIED",
       "evidence": [
@@ -212,7 +233,7 @@
     },
     {
       "id": "P14-CONTRACTS",
-      "dod": "Contracts: ledger identity_id amendment via registry-post-freeze.md with schema + vectors + byte-parity both backends; any new mojom ADR PROPOSED + mojom_fuzz coverage 12→13; FROZEN.yaml sha256 unchanged; the proposed IdentityProvisioning freeze row recorded as a human ratification item.",
+      "dod": "Contracts: ledger identity_id amendment via registry-post-freeze.md with schema + vectors + byte-parity both backends; any new mojom ADR PROPOSED + mojom_fuzz coverage 12\u219213; FROZEN.yaml sha256 unchanged; the proposed IdentityProvisioning freeze row recorded as a human ratification item.",
       "status": "BLOCKED-PENDING-CONTRACTS",
       "source": "UNVERIFIED",
       "evidence": [
@@ -222,7 +243,7 @@
     },
     {
       "id": "P14-DOCS",
-      "dod": "The identity documentation set this phase owes: nine guides in the identity doc family (provisioning, lifecycle, templates, binding, visual, disposable, manager, restore, memory-accounting — created by this phase's docs commit, cited here only after they exist) + the seam-decision artifact; measured-shared-state §1.13 regenerated; browser-harness methods; webui-e2e; ci-invocation parity section; papercut census extended; no doc asserts a browser-measured/human-reviewed/org-approved outcome.",
+      "dod": "The identity documentation set this phase owes: nine guides in the identity doc family (provisioning, lifecycle, templates, binding, visual, disposable, manager, restore, memory-accounting \u2014 created by this phase's docs commit, cited here only after they exist) + the seam-decision artifact; measured-shared-state \u00a71.13 regenerated; browser-harness methods; webui-e2e; ci-invocation parity section; papercut census extended; no doc asserts a browser-measured/human-reviewed/org-approved outcome.",
       "status": "BLOCKED-PENDING-DOCS",
       "source": "UNVERIFIED",
       "evidence": [
@@ -232,7 +253,7 @@
     },
     {
       "id": "P14-EVIDENCE",
-      "dod": "evidence/P14/ complete: evidence.json rows for every DoD item with existing artifact paths, report.md in the 12-section order (⑨ quoting the parity verdict line, ⑩ the final-SHA hosted state before any done sentence), human-gates.md, logs/ transcripts; state flips final at the closing declaration commit.",
+      "dod": "evidence/P14/ complete: evidence.json rows for every DoD item with existing artifact paths, report.md in the 12-section order (\u2468 quoting the parity verdict line, \u2469 the final-SHA hosted state before any done sentence), human-gates.md, logs/ transcripts; state flips final at the closing declaration commit.",
       "status": "BLOCKED-PENDING-EVIDENCE",
       "source": "UNVERIFIED",
       "evidence": [

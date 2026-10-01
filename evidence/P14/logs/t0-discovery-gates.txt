@@ -1,0 +1,11 @@
+== discovery gates at 216cdda (tree carries the T0 seam decision, 4a4d365) ==
+--- vocab_lint
+PASS: vocab_lint
+--- host_protocol_check
+PASS: host_protocol_check (7 host(s), every method literal documented, response law declared)
+--- parity_completeness
+PASS: parity_completeness (8 pair(s), 0 failure(s))
+--- sibling_pin_check
+PASS: sibling_pin_check (61 sibling reader(s) classified, arg-only=16, gate-ordered=14, probe=4, routed=4, self=2, test=21)
+--- doc_reference_check
+PASS: doc_reference_check (5 file(s) scanned at or above P13, 25 pre-law file(s) grandfathered, 0 dangling citation(s))
