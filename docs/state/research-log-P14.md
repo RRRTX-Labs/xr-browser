@@ -476,3 +476,19 @@ The forward-looking statement for P0-4's third invocation: GitHub scans
 post-fix hosted governance run is the authoritative re-proof at the final
 pin. Both hosted findings are recorded here with their fixes; neither was
 waived, weakened, or re-ranged away.
+
+## The green (post-fix, hosted)
+
+governance run 93 (id 37300087036, job 111730485966, head 6b09082, range
+f09afd2..6b09082): **success** — the full battery on GitHub's runner, both
+prior findings gone: the mode-drift law passes on the forward range, and
+the toolchain lane resolves a sibling that can no longer go dirty
+(xr-core 81376ac untracked the committed artifacts). core-hardening run 38
+and sast run 4 at the same head: success. The hosted CI is green at the
+final pushed pin — which is also P0-4's "CI invocation (range) exit 0",
+proven by CI itself.
+
+The remaining P14 work is the phase close (P0-3): evidence_finality, the
+12-section report, the state flip, and the same-head ci-run rows citing
+run 93 — plus the open human gates (HG-S0-IDENTITY dual review first
+among them).
