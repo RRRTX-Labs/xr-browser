@@ -390,3 +390,57 @@ matrix run and recorded (199/199 killed, deny-guard 19/19, zero
 survivors); and mint.cc reached across cores for sha256 — now the alias
 shim like its siblings (ADR-0043). The mojom_fuzz_gen "failure" was the
 OOM killer under tmpfs pressure; re-ran clean.
+
+## The fleet OOM postmortem — two append-only histories, one law (9ee4952)
+
+**The find.** The first bare-gate run at the pushed 818f379 failed its
+LAST lane: `FAIL: identity-core rc=-9` — the OOM killer. The census
+(keep-going, same tree, same clone) had passed the same lane an hour
+earlier, so the first reads were "environment flake"; the standing
+re-run with clean /tmp passed, and the full-fleet standalone failed
+AGAIN. dmesg gave the fact no log could: `test_fuzz invoked oom-killer`,
+anon-rss 1.16 GB, oom_score_adj 100 — the fuzz binary itself was both
+the allocator and the victim.
+
+**Two measurement traps, recorded so nobody repeats them:**
+1. /proc/<pid> sampling of a backgrounded env-prefixed command read the
+   SHELL WRAPPER's status, not the binary's — "flat 1.6 MB" for a
+   process ps showed at 1 GB+. `ps -C <comm>` is the honest instrument.
+2. The OOM was intermittent because the peak (~1.1-1.2 GB) only crosses
+   the 2 GB line when tmpfs holds pytest fixtures (~450 MB of unswappable
+   shmem). "Passes on a clean /tmp" is not "bounded" — it is "marginal".
+
+**The math that made it a must-fix, not a flake:** the fleet evidence
+timebox law is 600 s. At the measured ~18 MB/s of audit growth, a 600 s
+campaign needs >12 GB — it would OOM ANY runner, not just this sandbox.
+The gate lane was the early warning for a broken evidence campaign.
+
+**Root cause, two of them:** BindingModel.changes_ (append-only audit;
+~10M rows in 60 s of oracle ops) and Scheduler.evictions_ (one event per
+user hibernate; ~250 MB per 60 s). Both are "evidence" structures with
+no bound — the store itself was already bounded (live ≤ 32), so the
+oracle's own comment ("bound the campaign's memory footprint") was true
+for the store and false for the histories.
+
+**The fix is contract-preserving compaction, not truncation:**
+CompactAudit keeps the LATEST row per tab — exactly the fold
+session::Snapshot already computes — and the suggestion log keeps its
+tail; CompactEvictions keeps the newest events in order, LRU untouched.
+Both drop-only (never-auto-switch cannot appear by construction),
+both deterministic, both proven by new deterministic cases — the money
+assertion is Snapshot BYTES before == after compaction
+(test_binding 44→71; test_hibernate 56→83).
+
+**Measured after:** 60 s / 33.8M iters and 120 s / 73M iters both FLAT
+at ~43 MB RSS; the 600 s campaign runs at the same 43 MB (transcript:
+evidence/P14/logs/t-fuzz-identity-600s.txt). Mutation matrix re-run at
+the fix pin: 204/204 killed (the five new compaction mutants die on the
+new cases), deny-guard 19/19, zero survivors — recorded in
+mutation-scores.json at 9ee4952.
+
+**The ceremony this forced (all re-run, nothing waved through):** DEPS
+re-bump to 9ee4952; mutation-freshness PASS at the new pin; the host
+corpus byte-parity re-proven (38 pytest lanes); the full local gate; and
+the P0-4 census triplet (clean-clone census + bare + CI-range) re-run at
+the final pushed pin — the earlier 818f379 census remains valid for the
+tree it ran at; the phase close cites the final one.
