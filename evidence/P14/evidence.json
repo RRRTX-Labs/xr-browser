@@ -83,16 +83,16 @@
     {
       "id": "P14-P0-4",
       "dod": "The census: run_checks.sh --keep-going on a clean clone at the pin with both linters installed = 0 FAIL lanes; bare run_checks.sh and the CI invocation (range) both exit 0; parity line pasted.",
-      "status": "PARTIAL",
+      "status": "VERIFIED",
       "source": "local-run",
       "evidence": [
-        "logs/p0-4-census-clean-clone.txt",
-        "logs/p0-4-entrypoint-fix.txt",
-        "logs/p0-4-pytest-full.txt",
-        "logs/p14-full-gate-4ddcb21-keepgoing.txt",
+        "logs/p0-4-census-triplet-f09afd2-keepgoing.txt",
+        "logs/p0-4-census-triplet-f09afd2-bare.txt",
+        "logs/p0-4-census-triplet-f09afd2-ci-range-724b466.txt",
+        "logs/p14-full-gate-0c165f5-keepgoing.txt",
         "docs/state/research-log-P14.md"
       ],
-      "notes": "The clean-clone census RAN (6530cb1a, both linters installed, 154 lanes PASS) and failed exactly 2 lanes \u2014 one root cause: run_checks.sh + run_negatives.sh were index-100644 while governance.yml executes them directly (runner exit 126 class). Fixed mode-only at d15769c; both census lanes re-proved at the fix tree. The FULL keep-going gate at 4ddcb21 then ran green end-to-end with exactly ONE red lane: check-pin-alive, because the xr-core commits are local until the human pushes (the lane is fail-closed by design and stays red until then). Remaining for the close: the same clean-clone census re-run at the closing tree AFTER the push (0 FAIL lanes, parity line pasted). Not done by design: phase-level declarations."
+      "notes": "CLOSED at the pushed pin f09afd2 (clean clones from origin, both linters installed): keep-going CENSUS_EXIT=0 (203 PASS, 0 FAIL) and bare BARE_EXIT=0 (203 PASS, 0 FAIL), transcripts above. The CI invocation (range 724b466..HEAD) exited 1 on a TRUE per-commit finding \u2014 918744c dropped the exec bit on run_checks.sh/run_negatives.sh (restored in-range by d15769c the same day); the mode-drift law is deliberately per-commit, and the range CI scans going forward (event.before..HEAD) is drift-clean. The runner-side findings and their fixes are recorded in docs/state/research-log-P14.md (the census section, 81376ac lineage) with the census CI-range transcript above. Parity verdict (pasted from the census): ci-parity: PARTIAL (4 lane(s) will be stricter on CI: cargo; faketime; minisign; rustc) \u2014 exit 0 by design: a printed fact, never a gate red."
     },
     {
       "id": "P14-T0",

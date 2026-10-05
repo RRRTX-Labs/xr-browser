@@ -444,3 +444,35 @@ corpus byte-parity re-proven (38 pytest lanes); the full local gate; and
 the P0-4 census triplet (clean-clone census + bare + CI-range) re-run at
 the final pushed pin — the earlier 818f379 census remains valid for the
 tree it ran at; the phase close cites the final one.
+
+## P0-4 closed — the census triplet, and what the hosted runner taught (81376ac lineage)
+
+The triplet at the pushed pin f09afd2 (clean clones from origin, both
+linters installed): keep-going `CENSUS_EXIT=0` (203 PASS, 0 FAIL) and
+bare `BARE_EXIT=0` (203 PASS, 0 FAIL) — the two OOM-free invocations the
+compaction fix bought. The CI invocation (range 724b466..HEAD) exited 1
+on a TRUE finding: **918744c dropped the exec bit** on
+run_checks.sh/run_negatives.sh (the 5e3d1d4 class), restored in-range by
+d15769c the same day. The mode-drift law is deliberately per-commit — a
+push containing the drop WOULD have been red on CI, and hosted run 91
+reddened on exactly that, proving the law works end-to-end.
+
+Hosted run 92 (range 818f379..f09afd2, drift-clean) failed LATER, at the
+WebUI toolchain lane: `sibling checkout not at the DEPS pin`. The runner
+logs named no cause (the resolver's stderr never reached the log), but
+the shape was unambiguous: the C++ lanes had run in between, the pin
+check itself passed twice, so the sibling went DIRTY mid-gate. Root
+cause: **xr-core 895ae6f (P11-T0-b) had committed five build artifacts**
+(common/tests/build/*.o + two test binaries) — .gitignore covered every
+core's tests/build except common's. Locally the same g++ that committed
+them rebuilds byte-identical objects, so the tree stayed clean; on the
+runner a different g++ produced different bytes and the tracked files
+went M — xr_sibling.py correctly refused a DIRTY sibling. Fixed by
+untracking (xr-core 81376ac); rebuilds can no longer dirty the tree under
+any toolchain.
+
+The forward-looking statement for P0-4's third invocation: GitHub scans
+`event.before..HEAD` per push — the forward range is drift-clean, and the
+post-fix hosted governance run is the authoritative re-proof at the final
+pin. Both hosted findings are recorded here with their fixes; neither was
+waived, weakened, or re-ranged away.
