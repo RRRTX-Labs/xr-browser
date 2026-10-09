@@ -29,6 +29,19 @@ SUITE_MAPS = {
         "attribution.cc": ["test_attribution"],
         "session.cc": ["test_session_chaos"],
     },
+    # P15: the permission firewall core (ADR-0051). Each TU maps to the suites
+    # that build WITHOUT the policy tree (the matrix copies only this target and
+    # common/). test_cross_core needs ../../policy and is therefore NOT mapped
+    # here; overlay mutants in policy/core are dispositioned in the score record.
+    "permissions": {
+        "store.cc": ["test_store", "test_ops"],
+        "ops.cc": ["test_ops", "test_expiry", "test_isolation"],
+        "audit.cc": ["test_audit", "test_ops"],
+        "merge.cc": ["test_merge", "test_isolation"],
+        "present.cc": ["test_present"],
+        "envelope.cc": ["test_envelope", "test_store"],
+        "types.cc": ["test_ops", "test_store", "test_audit"],
+    },
     "policy": {  # P6 lane — unchanged, byte-for-byte the default path
         "effective_policy.cc": ["test_vectors", "test_resolve", "test_snapshot"],
         "resolve.cc": ["test_vectors", "test_resolve"],
