@@ -1,0 +1,43 @@
+mutation[permissions]: 90 mutants, killed 90, survived 0, score 100.00% (gate >= 90.0%), deny-guard 23/23, elapsed 167.5s -> PASS
+{
+ "deny_guard_killed": 23,
+ "deny_guard_mutants": 23,
+ "deny_guard_survivors": 0,
+ "gate": "PASS",
+ "killed": 90,
+ "operators": [
+  "ROR:== -> !=",
+  "ROR:!= -> ==",
+  "ROR:< -> <=",
+  "ROR:<= -> <",
+  "ROR:> -> >=",
+  "ROR:>= -> >",
+  "LOR:&& -> ||",
+  "LOR:|| -> &&",
+  "BOOL:true -> false",
+  "BOOL:false -> true",
+  "AOR:0 -> 1",
+  "AOR:1 -> 2",
+  "AOR:2 -> 3"
+ ],
+ "sampled": true,
+ "score_gate_pct": 90.0,
+ "score_pct": 100.0,
+ "seed": 20260908,
+ "suites": [
+  "test_audit",
+  "test_envelope",
+  "test_expiry",
+  "test_isolation",
+  "test_merge",
+  "test_ops",
+  "test_present",
+  "test_store"
+ ],
+ "survived": 0,
+ "survivors": [],
+ "target": "xr-core/permissions/core/*.cc",
+ "tool": "mutation_test",
+ "total_mutants": 90,
+ "truncated_by_timebox": false
+}

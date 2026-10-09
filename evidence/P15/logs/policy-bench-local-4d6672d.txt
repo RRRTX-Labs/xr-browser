@@ -1,0 +1,7 @@
+make: Entering directory '/home/user/xr-core/policy/tests'
+make: Leaving directory '/home/user/xr-core/policy/tests'
+benchmark (us)                      p50        p99      p99.9  budget
+resolve_cold                      5.517     13.007     32.220  cold <=200us: MET
+cache_warm_pinned_read            0.083      0.137      2.496  warm <=5us: MET
+snapshot_apply_40               712.426   1139.660   1659.729  apply <=2000us: MET
+{"budgets":{"cache_warm_pinned_read_us":5,"resolve_cold_us":200,"snapshot_apply_us":2000},"cache_warm_pinned_read":{"p50":0.083,"p99":0.137,"p99.9":2.496},"environment":{"compiler":"g++ 14.2.0 (recorded in build log)","flags":"-std=c++20 -O2 -Wall -Wextra -Werror -D_FORTIFY_SOURCE=2"},"iterations":100000,"resolve_cold":{"p50":5.517,"p99":13.007,"p99.9":32.22},"snapshot_apply_40":{"p50":712.426,"p99":1139.66,"p99.9":1659.729},"unit":"microseconds","verdicts":{"cache_warm_pinned_read":"MET","resolve_cold":"MET","snapshot_apply_40":"MET"},"warmup_excluded":true}

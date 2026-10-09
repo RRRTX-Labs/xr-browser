@@ -31,6 +31,7 @@
     "GN build wiring for xr-core/permissions cannot be checked (no gn in this sandbox).",
     "Live propagation to open tabs and the browser runtime are not built (sandbox and scope).",
     "The full mutation matrix is not run (HG-28 farm); the recorded matrices are sampled, and they say so.",
+    "The policy mutation gate is red at 4d6672d: 62/90 killed, deny-guard 11/23, with 28 OPEN survivors (HG-P15-MUTATION). The gate is not weakened.",
     "Reference-hardware bench re-check (HG-28).",
     "Dual S0 review of the permissions core (HG-P15-S0-REVIEW).",
     "Hosted results at the final head are read from the Actions API after the push; they are not claimed in-tree.",
@@ -41,7 +42,7 @@
     "note": "authored 2026-10-09 by the P15 agent; one row per act this sandbox cannot perform or that a human must decide"
   },
   "repos": {
-    "xr-browser": "phase opened at 01baba0d6ce8d923b833e30dbf25463211ec8d91 (origin/main, P14 close). Code head 503589f (pre-evidence). The final head is the evidence commit (see the run summary).",
+    "xr-browser": "phase opened at 01baba0d6ce8d923b833e30dbf25463211ec8d91 (origin/main, P14 close). Code head 3fe8d7e (the mutation-harness fix; pre-evidence). The final head is the evidence commit (see the run summary).",
     "xr-core": "phase opened at 81376ac6da284faf28098acc39314b17231bea95. Pushed: e2caedc, 98946b1, 410f34d, aab82f4, 8b26589, f71fcdf, 4d6672d (DEPS.xr_core_rev = 4d6672d)."
   },
   "dod_rows": [
@@ -231,18 +232,20 @@
     },
     {
       "id": "P15-MUT",
-      "dod": "Mutation evidence for the new core and for the overlay consult in policy/core.",
+      "dod": "Mutation evidence: planted defects, the sampled CI matrices, and the harness correction.",
       "status": "PARTIAL",
       "source": "local-run",
       "evidence": [
         "logs/p15-planted-owner-4d6672d.txt",
+        "logs/mutation-policy-fixed-4d6672d.json",
+        "logs/mutation-permissions-fixed-4d6672d.txt",
         "logs/mutation-policy-ci.json",
         "logs/mutation-permissions-ci.json",
         "logs/p15-mutation-owner-f71fcdf.txt",
         "logs/p15-mutation-run.txt",
         "docs/state/mutation-scores.json"
       ],
-      "notes": "Planted defects, owning suite, at xr-core 4d6672d (logs/p15-planted-owner-4d6672d.txt): all 11 are killed by a reported test failure in the suite that owns the mutated file, and the unmutated control passes. This corrects two earlier claims. At 8b26589 the owning policy suite killed only M04 (three policy cases were added at f71fcdf), and the original M02 and M07 were killed by a compile error and a segfault. Sampled CI matrices at 8b26589 (--sample 90 --seed 20260908, the governance command): policy 90/90 killed, deny-guard 23/23; permissions 90/90 killed, deny-guard 23/23. The full matrix is not run (HG-28 farm)."
+      "notes": "Planted defects, owning suite, at xr-core 4d6672d: all 11 killed by a reported test failure, and the control passes. Sampled CI matrices (--sample 90 --seed 20260908, the governance command), under the fixed harness (xr-browser 3fe8d7e): policy 62/90 killed, deny-guard 11/23, FAIL, with 28 survivors recorded as OPEN; permissions 90/90, deny-guard 23/23, PASS. The earlier 90/90 policy result was produced by a harness that counted build failures as kills and reused stale objects, and it is superseded. Two earlier claims are corrected in the research log (section 10). The full matrix is HG-28, and the policy gate scope is HG-P15-MUTATION."
     },
     {
       "id": "P15-FROZEN",
@@ -265,7 +268,7 @@
       "evidence": [
         "logs/gate-candidate-503589f.txt"
       ],
-      "notes": "Final candidate at code head 503589f (xr-core 4d6672d): exit 1, 164 PASS lines, 1 SKIP (actionlint, absent), 3 failing lanes, all bundle-presence (P15 in git history as logs/ without a bundle; the evidence commit supplies it): evidence_check, evidence_check --strict, release check --channel dev. Other lanes PASS, including mutation-freshness (10 cores fresh), the ten C++ suite lanes, the P15 contract, write-path, attention, fetch allowlist, core-hygiene, secret-scan, DCO, sibling pin, and pytest (444 passed). Transcript: logs/gate-candidate-503589f.txt."
+      "notes": "Final candidate at code head 503589f (xr-core 4d6672d): exit 1, 164 PASS lines, 1 SKIP (actionlint, absent), 3 failing lanes, all bundle-presence (P15 in git history as logs/ without a bundle; the evidence commit supplies it): evidence_check, evidence_check --strict, release check --channel dev. Other lanes PASS, including mutation-freshness (10 cores fresh), the ten C++ suite lanes, the P15 contract, write-path, attention, fetch allowlist, core-hygiene, secret-scan, DCO, sibling pin, and pytest (444 passed). The candidate gate does not run the full negative suite or the governance-only steps: the hosted governance run at 66c0c6a failed its negative fixture, and the replay at 3fe8d7e is recorded in the research log (section 10, items 13-16). Transcript: logs/gate-candidate-503589f.txt."
     },
     {
       "id": "P15-HOSTED",

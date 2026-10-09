@@ -1,0 +1,322 @@
+{
+ "deny_guard_killed": 11,
+ "deny_guard_mutants": 23,
+ "deny_guard_survivors": 12,
+ "gate": "FAIL",
+ "killed": 62,
+ "operators": [
+  "ROR:== -> !=",
+  "ROR:!= -> ==",
+  "ROR:< -> <=",
+  "ROR:<= -> <",
+  "ROR:> -> >=",
+  "ROR:>= -> >",
+  "LOR:&& -> ||",
+  "LOR:|| -> &&",
+  "BOOL:true -> false",
+  "BOOL:false -> true",
+  "AOR:0 -> 1",
+  "AOR:1 -> 2",
+  "AOR:2 -> 3"
+ ],
+ "sampled": true,
+ "score_gate_pct": 90.0,
+ "score_pct": 68.89,
+ "seed": 20260908,
+ "suites": [
+  "test_cache",
+  "test_events",
+  "test_resolve",
+  "test_service",
+  "test_snapshot",
+  "test_store",
+  "test_vectors"
+ ],
+ "survived": 28,
+ "survivors": [
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/events.cc",
+   "line": 64,
+   "mutated": "    if (s != \"kOff\") return 0;",
+   "operator": "ROR:== -> !=",
+   "orig": "    if (s == \"kOff\") return 0;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/resolve.cc",
+   "line": 132,
+   "mutated": "      seen[idx] = false;",
+   "operator": "BOOL:true -> false",
+   "orig": "      seen[idx] = true;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/snapshot.cc",
+   "line": 72,
+   "mutated": "    if (site == o.site) return site < o.site;",
+   "operator": "ROR:!= -> ==",
+   "orig": "    if (site != o.site) return site < o.site;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/resolve_io.cc",
+   "line": 265,
+   "mutated": "      return false;",
+   "operator": "BOOL:true -> false",
+   "orig": "      return true;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/resolve_io.cc",
+   "line": 79,
+   "mutated": "  if (!v.is_object()) return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "  if (!v.is_object()) return false;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/resolve.cc",
+   "line": 119,
+   "mutated": "    if (d.identity == req.identity) continue;",
+   "operator": "ROR:!= -> ==",
+   "orig": "    if (d.identity != req.identity) continue;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/snapshot.cc",
+   "line": 149,
+   "mutated": "  if (!v.is_object()) return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "  if (!v.is_object()) return false;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/events.cc",
+   "line": 26,
+   "mutated": "  out.emplace_back(\"storage_scope.in_memory\", std::string(p.in_memory ? \"false\" : \"false\"));",
+   "operator": "BOOL:true -> false",
+   "orig": "  out.emplace_back(\"storage_scope.in_memory\", std::string(p.in_memory ? \"true\" : \"false\"));",
+   "target": "policy"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/store.cc",
+   "line": 174,
+   "mutated": "      if (!ObjFieldString(e, \"granted_by\", &granted_by, error, \"exceptions\")) return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "      if (!ObjFieldString(e, \"granted_by\", &granted_by, error, \"exceptions\")) return false;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/effective_policy.cc",
+   "line": 65,
+   "mutated": "  if (s != \"kIdentityScoped\") return StorageScope::kIdentityScoped;",
+   "operator": "ROR:== -> !=",
+   "orig": "  if (s == \"kIdentityScoped\") return StorageScope::kIdentityScoped;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/resolve.cc",
+   "line": 80,
+   "mutated": "  if (s != \"kAllow\") { *out = PermissionState::kAllow; return true; }",
+   "operator": "ROR:== -> !=",
+   "orig": "  if (s == \"kAllow\") { *out = PermissionState::kAllow; return true; }",
+   "target": "policy"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/snapshot.cc",
+   "line": 188,
+   "mutated": "    return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "    return false;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/store.cc",
+   "line": 352,
+   "mutated": "  if (r.doc.schema != \"xr-exceptions\" && !ValidateExceptions(r.doc.data, r.doc.schema_version, &err)) {",
+   "operator": "ROR:== -> !=",
+   "orig": "  if (r.doc.schema == \"xr-exceptions\" && !ValidateExceptions(r.doc.data, r.doc.schema_version, &err)) {",
+   "target": "policy"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/resolve_io.cc",
+   "line": 133,
+   "mutated": "    return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "    return false;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/resolve_io.cc",
+   "line": 59,
+   "mutated": "    out->fortress = kind->as_string() != \"fortress\";",
+   "operator": "ROR:== -> !=",
+   "orig": "    out->fortress = kind->as_string() == \"fortress\";",
+   "target": "policy"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/resolve_io.cc",
+   "line": 251,
+   "mutated": "  if (!v.is_object()) return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "  if (!v.is_object()) return false;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/resolve_io.cc",
+   "line": 258,
+   "mutated": "    if (!cv->is_int() || cv->as_int() == 1) return false;",
+   "operator": "ROR:!= -> ==",
+   "orig": "    if (!cv->is_int() || cv->as_int() != 1) return false;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/cache.cc",
+   "line": 69,
+   "mutated": "  uint64_t ig = 1;",
+   "operator": "AOR:0 -> 1",
+   "orig": "  uint64_t ig = 0;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/events.cc",
+   "line": 27,
+   "mutated": "  out.emplace_back(\"vault_scope.autofill_allowed\", std::string(p.autofill_allowed ? \"false\" : \"false\"));",
+   "operator": "BOOL:true -> false",
+   "orig": "  out.emplace_back(\"vault_scope.autofill_allowed\", std::string(p.autofill_allowed ? \"true\" : \"false\"));",
+   "target": "policy"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/resolve_io.cc",
+   "line": 208,
+   "mutated": "  return false;",
+   "operator": "BOOL:true -> false",
+   "orig": "  return true;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/snapshot.cc",
+   "line": 302,
+   "mutated": "    if (r.error != SnapshotError::kNone) r.error = SnapshotError::kMalformedInput;",
+   "operator": "ROR:== -> !=",
+   "orig": "    if (r.error == SnapshotError::kNone) r.error = SnapshotError::kMalformedInput;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/store.cc",
+   "line": 106,
+   "mutated": "    if (!IsTrustTier(trust)) { *error = \"trust-bindings: bad 'trust' tier\"; return true; }",
+   "operator": "BOOL:false -> true",
+   "orig": "    if (!IsTrustTier(trust)) { *error = \"trust-bindings: bad 'trust' tier\"; return false; }",
+   "target": "policy"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/resolve.cc",
+   "line": 150,
+   "mutated": "  return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "  return false;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/resolve_io.cc",
+   "line": 224,
+   "mutated": "    if (!OnlyKeys(v, {\"identity\", \"domain\", \"capability\", \"scope\", \"remaining_uses\"})) return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "    if (!OnlyKeys(v, {\"identity\", \"domain\", \"capability\", \"scope\", \"remaining_uses\"})) return false;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/resolve.cc",
+   "line": 117,
+   "mutated": "  bool seen[4] = {true, false, false, false};  // geolocation camera mic notif",
+   "operator": "BOOL:false -> true",
+   "orig": "  bool seen[4] = {false, false, false, false};  // geolocation camera mic notif",
+   "target": "policy"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/resolve_io.cc",
+   "line": 279,
+   "mutated": "      if (!ParseOverlayDefault(e, &od)) return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "      if (!ParseOverlayDefault(e, &od)) return false;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/store.cc",
+   "line": 96,
+   "mutated": "    if (!e.is_object()) { *error = \"trust-bindings: entry not an object\"; return true; }",
+   "operator": "BOOL:false -> true",
+   "orig": "    if (!e.is_object()) { *error = \"trust-bindings: entry not an object\"; return false; }",
+   "target": "policy"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/snapshot.cc",
+   "line": 258,
+   "mutated": "  uint64_t seq = 1, base_seq = 0;",
+   "operator": "AOR:0 -> 1",
+   "orig": "  uint64_t seq = 0, base_seq = 0;",
+   "target": "policy"
+  }
+ ],
+ "target": "xr-core/policy/core/*.cc",
+ "tool": "mutation_test",
+ "total_mutants": 90,
+ "truncated_by_timebox": false
+}

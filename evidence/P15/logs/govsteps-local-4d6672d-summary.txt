@@ -1,0 +1,31 @@
+== negatives
+   rc=1 negatives
+== tools_mutation_tests
+   rc=0 tools_mutation_tests
+== contracts_all
+   rc=0 contracts_all
+== vectors_check
+   rc=0 vectors_check
+== contracts_pytest
+   rc=0 contracts_pytest
+== budget_config
+   rc=0 budget_config
+== budget_gate
+   rc=0 budget_gate
+== budget_state
+   rc=0 budget_state
+== rebase_selftest
+   rc=0 rebase_selftest
+== assumptions
+   rc=0 assumptions
+== retire_lint
+   rc=0 retire_lint
+== fetch_allowlist
+   rc=0 fetch_allowlist
+== policy_bench
+   rc=0 policy_bench
+== policy_fuzz
+   rc=0 policy_fuzz
+== permissions_matrix
+   rc=0 permissions_matrix
+== DONE
