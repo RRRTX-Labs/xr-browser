@@ -56,7 +56,7 @@ Visible skips, not hidden ones. The final transcript shows one SKIP, actionlint 
 
 ## 6. Decisions that need humans
 
-HG-P15-MUTATION: the operator chose option A this session (harden all three cores; thresholds and seeds unchanged). It is executed locally at `13a5f7d`. A maintainer should accept the four argued equivalent survivors (research log items 26 and 28). The hosted confirmation is reported in the run summary.
+HG-P15-MUTATION: the operator chose option A this session (harden all three cores; thresholds and seeds unchanged). It is executed locally at `13a5f7d`. A maintainer should accept the seven argued equivalent survivors (policy 2, settings 3, update 2; research log items 26 and 28). The hosted confirmation is reported in the run summary.
 
 See `evidence/P15/human-gates.md`. The main ones: ratify or amend ADR-0051 (HG-P15-ADR51); decide the register path (HG-P15-REGISTER); review the permissions core as S0 (HG-P15-S0-REVIEW); accept the xr-core committer record (HG-P15-COMMITTER); revoke or rotate the token that was pasted into the conversation (HG-P15-TOKEN).
 
