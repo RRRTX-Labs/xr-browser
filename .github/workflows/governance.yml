@@ -30,13 +30,14 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    # Backstop for the whole gate suite. Post-P9 the steps sum to roughly
-    # 13 min (governance: pytest + C++ lanes + differential fuzz 120s +
-    # fuzz fleet 5x60s + T1-T12 gates) + 10 min (P6 fuzz timebox 600s) +
-    # mutation sample (timebox 900) + build-system/contracts/treadmill, i.e.
-    # ~35 min observed on a 2-core runner. 45 leaves headroom for
-    # shared-runner variability without changing any gate.
-    timeout-minutes: 45
+    # Backstop for the whole gate suite. Observed on the hosted runner at
+    # 091a4da: "Governance checks" ~22 min, negative fixtures ~4, build-system
+    # ~6, policy mutation gate ~5, policy fuzz timebox 10 min, then the bench
+    # and treadmill. The job passed the former 45-minute backstop and was
+    # cancelled during the policy fuzz step. The backstop is raised to 90
+    # minutes for shared-runner variability. No gate, threshold, seed or
+    # timebox changed.
+    timeout-minutes: 90
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
