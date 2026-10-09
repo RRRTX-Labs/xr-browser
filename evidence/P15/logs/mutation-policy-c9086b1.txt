@@ -1,0 +1,18 @@
+mutation[policy]: 90 mutants, killed 74, survived 16, score 82.22% (gate >= 90.0%), deny-guard 20/23, elapsed 280.5s -> FAIL
+  SURVIVOR core/events.cc:64 ROR:== -> != if (s != "kOff") return 0;
+  SURVIVOR core/resolve.cc:132 BOOL:true -> false seen[idx] = false;
+  SURVIVOR core/snapshot.cc:72 ROR:!= -> == if (site == o.site) return site < o.site;
+  SURVIVOR core/resolve.cc:119 ROR:!= -> == if (d.identity == req.identity) continue;
+  SURVIVOR core/snapshot.cc:149 BOOL:false -> true if (!v.is_object()) return true;
+  SURVIVOR core/events.cc:26 BOOL:true -> false out.emplace_back("storage_scope.in_memory", std::string(p.in_memory ? "false" : "false"));
+  SURVIVOR core/effective_policy.cc:65 ROR:== -> != if (s != "kIdentityScoped") return StorageScope::kIdentityScoped;
+  SURVIVOR core/resolve.cc:80 ROR:== -> != if (s != "kAllow") { *out = PermissionState::kAllow; return true; }
+  SURVIVOR core/snapshot.cc:188 BOOL:false -> true return true;
+  SURVIVOR core/store.cc:352 ROR:== -> != if (r.doc.schema != "xr-exceptions" && !ValidateExceptions(r.doc.data, r.doc.schema_version, &err)) {
+  SURVIVOR core/cache.cc:69 AOR:0 -> 1 uint64_t ig = 1;
+  SURVIVOR core/events.cc:27 BOOL:true -> false out.emplace_back("vault_scope.autofill_allowed", std::string(p.autofill_allowed ? "false" : "false"));
+  SURVIVOR core/snapshot.cc:302 ROR:== -> != if (r.error != SnapshotError::kNone) r.error = SnapshotError::kMalformedInput;
+  SURVIVOR core/resolve.cc:150 BOOL:false -> true return true;
+  SURVIVOR core/resolve.cc:117 BOOL:false -> true bool seen[4] = {true, false, false, false};  // geolocation camera mic notif
+  SURVIVOR core/snapshot.cc:258 AOR:0 -> 1 uint64_t seq = 1, base_seq = 0;
+POLICY_RC=1

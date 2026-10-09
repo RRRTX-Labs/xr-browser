@@ -1,0 +1,71 @@
+{
+ "deny_guard_killed": 5,
+ "deny_guard_mutants": 5,
+ "deny_guard_survivors": 0,
+ "gate": "PASS",
+ "killed": 87,
+ "operators": [
+  "ROR:== -> !=",
+  "ROR:!= -> ==",
+  "ROR:< -> <=",
+  "ROR:<= -> <",
+  "ROR:> -> >=",
+  "ROR:>= -> >",
+  "LOR:&& -> ||",
+  "LOR:|| -> &&",
+  "BOOL:true -> false",
+  "BOOL:false -> true",
+  "AOR:0 -> 1",
+  "AOR:1 -> 2",
+  "AOR:2 -> 3"
+ ],
+ "sampled": true,
+ "score_gate_pct": 90.0,
+ "score_pct": 96.67,
+ "seed": 20260911,
+ "suites": [
+  "test_counters",
+  "test_recall_corpus",
+  "test_router",
+  "test_sections",
+  "test_settings_schema",
+  "test_settings_search"
+ ],
+ "survived": 3,
+ "survivors": [
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 78,
+   "mutated": "    if (v >= best) best = v;",
+   "operator": "ROR:> -> >=",
+   "orig": "    if (v > best) best = v;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 150,
+   "mutated": "          if (v >= best) best = v;",
+   "operator": "ROR:> -> >=",
+   "orig": "          if (v > best) best = v;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 93,
+   "mutated": "      while (start < low.size()) {",
+   "operator": "ROR:<= -> <",
+   "orig": "      while (start <= low.size()) {",
+   "target": "settings"
+  }
+ ],
+ "target": "xr-core/settings/core/*.cc",
+ "tool": "mutation_test",
+ "total_mutants": 90,
+ "truncated_by_timebox": false
+}

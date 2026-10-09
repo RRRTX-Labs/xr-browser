@@ -1,0 +1,5 @@
+mutation[settings]: 90 mutants, killed 87, survived 3, score 96.67% (gate >= 90.0%), deny-guard 5/5, elapsed 214.1s -> PASS
+  SURVIVOR core/search.cc:78 ROR:> -> >= if (v >= best) best = v;
+  SURVIVOR core/search.cc:150 ROR:> -> >= if (v >= best) best = v;
+  SURVIVOR core/search.cc:93 ROR:<= -> < while (start < low.size()) {
+SETTINGS_RC=0
