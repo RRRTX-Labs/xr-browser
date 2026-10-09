@@ -52,7 +52,8 @@
 #                  P15 advances it to the permission firewall core (aab82f4): the overlay
 #                  carrier in the resolver request (e2caedc), the permissions core library
 #                  (98946b1), its nine-suite test set, bench and the cross-core overlay
-#                  vectors (410f34d), and the store mutation sweep (aab82f4). ADR-0051 is DRAFT. Pair-bumped same-day per
+#                  vectors (410f34d), the store mutation sweep (aab82f4), and the policy
+#                  mutation kills (8b26589). ADR-0051 is DRAFT. Pair-bumped same-day per
 #                  docs/process/cross-repo-pin.md.
 #   gclient_url_scheme  P2-T1 (pinned https remotes only; no ssh, no file://)
 #
@@ -66,7 +67,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "aab82f4a77f880fb209d3f01ff8fbd1a0e39085e"     # xr-core aab82f4 (P15 permission firewall: overlay carrier e2caedc, permissions core 98946b1, suite + cross-core vectors 410f34d, store mutation sweep aab82f4; ADR-0051 DRAFT). Replaces the P14 pin 81376ac. The P15 brief flagged the old trailing comment (0dd5748, P13) as stale; it is replaced here.
+xr_core_rev: "8b265898e952e419dd07081ca878960f20460359"     # xr-core 8b26589 (P15 permission firewall: overlay carrier e2caedc, permissions core 98946b1, suite + cross-core vectors 410f34d, store mutation sweep aab82f4, policy mutation kills 8b26589; ADR-0051 DRAFT). Replaces the P14 pin 81376ac. The P15 brief flagged the old trailing comment (0dd5748, P13) as stale; it is replaced here.
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

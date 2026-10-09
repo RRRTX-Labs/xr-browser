@@ -1,0 +1,32 @@
+# Mutation run, P15 overlay + permissions core (planted defects in a scratch copy).
+# Scripts: evidence/P15/mutation/mutate.py (run 1) and mutate_policy_overlay.py (run 2).
+# Each mutant is applied to a copy of xr-core/{policy,common,permissions}, then
+# `make test` runs in the suite that OWNS the mutated file. KILLED = non-zero exit.
+
+## Run 1 (mutate.py). M01-M05 were run against policy/tests (the frozen 66-vector
+## suite), which cannot observe overlay behaviour. That is a suite-selection
+## error in run 1; run 2 re-runs M01-M05 against permissions/tests.
+('M01 7d fail-open at equality', 'SURVIVED', '')
+('M02 deny-list ignored', 'KILLED', '')
+('M03 corrupt overlay not denying', 'SURVIVED', '')
+('M04 grant ignores identity (cross-identity leak)', 'SURVIVED', '')
+('M05 malformed overlay treated as absent (fail-open)', 'SURVIVED', '')
+('M06 store round-trip check removed (dup keys accepted)', 'KILLED', 'test_store: 86 checks, 12 failures')
+('M07 sweep boundary fail-open (< instead of <=)', 'KILLED', '')
+('M08 fallback mislabelled as identity overlay', 'KILLED', 'test_merge: 36 checks, 7 failures')
+('M09 ceiling overflow not logged', 'KILLED', 'test_present: 23 checks, 4 failures')
+('M10 extras accept kAllow', 'KILLED', 'test_store: 86 checks, 3 failures')
+('M11 origin redaction disabled', 'KILLED', 'test_ops: 80 checks, 3 failures')
+SUMMARY: 7 killed of 11   (run 1; suite-selection error for M01-M05)
+
+## Run 2 (mutate_policy_overlay.py): M01-M05 against permissions/tests (cross-core lane)
+('M01 7d fail-open at equality', 'KILLED', 'test_cross_core: 40 checks, 5 failures')
+('M02 deny-list ignored', 'KILLED', '')
+('M03 corrupt overlay not denying', 'KILLED', 'test_cross_core: 48 checks, 15 failures')
+('M04 grant ignores identity (cross-identity leak)', 'KILLED', 'test_cross_core: 39 checks, 5 failures')
+('M05 malformed overlay treated as absent (fail-open)', 'KILLED', 'test_cross_core.cc:143: FAILED vector unknown-key-is-corrupt')
+SUMMARY: 5 killed of 5
+
+## Combined: 11 of 11 planted defects killed by the suite that owns the mutated file.
+## Note: test_store ran before the mutation sweep was added (86 checks). The
+## final suite runs 2257 checks in test_store; the kill results still hold.

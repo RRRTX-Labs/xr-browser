@@ -1,0 +1,24 @@
+make: Entering directory '/home/user/xr-core/policy/tests'
+== test_vectors ==
+test_vectors: 268 checks, 0 failures
+== test_resolve ==
+test_resolve: 82 checks, 0 failures
+== test_purity ==
+test_purity: 912 checks, 0 failures
+== test_cache ==
+test_cache: 400031 checks, 0 failures
+== test_snapshot ==
+test_snapshot: 53 checks, 0 failures
+== test_store ==
+test_store: 855 checks, 0 failures
+== test_events ==
+test_events: 31 checks, 0 failures
+== test_enterprise ==
+test_enterprise: 25 checks, 0 failures
+== test_service ==
+SKIP (tool absent: minisign) — signed-managed-path half of test_service; unsigned-ignored halves ran. Install minisign to exercise the verified path (CI does).
+test_service: 31 checks, 0 failures
+== test_sha256_kat ==
+test_sha256_kat: 10 checks, 0 failures
+ALL C++ POLICY TESTS PASSED
+make: Leaving directory '/home/user/xr-core/policy/tests'

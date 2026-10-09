@@ -1,0 +1,14 @@
+PASS: permission-contract (frozen 66 vectors + FROZEN.yaml byte-pinned; 9 audit golden row(s) schema-valid and canonical; 33 overlay vector(s) well-formed)
+rc=0
+ok: negative fixture reddened (origin 'https://example.com/private/path' is not a bare registrable domain)
+rc=0
+ok: negative fixture reddened ($.usage_active: additional property not allowed)
+rc=0
+FAIL: renderer/evil.cc:2 includes permissions/core/ops.h outside permissions/: #include "permissions/core/ops.h"
+FAIL: renderer/evil.cc:3 overlay mutator called outside permissions/: void Evil() { GrantTemp(store, req, 1); }
+FAIL: permission-write-path (2 second write path(s))
+write-path fixture rc=1
+PASS: attention-budget (P8-T6 policy markers present; P11-T6 shield rule: chip count only — no toast/badge/modal/notification vocabulary in any shield surface or string; 2 surface(s) + 50 shield message(s) scanned)
+attention rc=0
+ok: negative fixture reddened (planted_present.h:2 permission surface carries escalation vocabulary: void Show() { /* a modal dialog */ })
+attention-permission-fixture rc=0

@@ -1,103 +1,113 @@
 {
- "comment": "P10-T0-c/T1: recorded mutation scores per xr-core core. Law: a score is a statement about specific bytes \u2014 each record pins the xr-core commit whose core/** the FULL matrix ran against (sampled:false); tools/mutation_freshness.py fails the gate when a core's core/** changes without a fresh transcript. Survivor dispositions are mandatory. P11 re-arm (2026-09-11): all six cores re-run FULL (sampled:false) at the T0-b dedup pin 85289cd \u2014 freshness debt from the shared-primitives move paid, and `common` scored for the first time. The dedup shrank the per-core mutant surfaces (the moved files are now mutated ONCE, under common). P11-T4 (2026-09-12): the seventh discovered core `shield` scored for the first time (lane added to mutation_targets.py; FULL matrix at pin cfbb344 after the first run's ParseSlot deny-guard find was discharged with new tests \u2014 research-log-P11.md D6); P11-T5 2026-09-13: shield re-run FULL at pin 44f5306 after the emitter landed \u2014 394/394, first-run clean). P11-T6 2026-09-13: commands re-run FULL at pin 62b2c92 after the dev-channel predicate landed \u2014 219/219, first-run clean; shield/core bytes unchanged at T6 (the T6 host/fake changes live in shield/host and fakes/, outside the core/** freshness surface) so the T5 shield record stands. P11-T8 2026-09-15: shield re-run FULL at pin 866387a after the parity-alignment matcher changes \u2014 396/396, first-run clean.",
- "cores": {
-  "commands": {
-   "killed": 219,
-   "mutants": 219,
-   "note": "P11-T6 re-run FULL at pin 62b2c92 after the build.channel-dev predicate landed in availability.cc: 215->219 mutants (+4 on the new predicate arm), 100% killed first-run, deny-guard 8/8.",
-   "score_pct": 100.0,
-   "seed": 20260913,
-   "survivors": [],
-   "transcript": "evidence/P11/logs/t6-mutation-commands.json",
-   "xr_core_commit": "62b2c923aa7a48f6adc84299af956be74bf5bf01"
-  },
-  "common": {
-   "killed": 199,
-   "mutants": 199,
-   "note": "FIRST SCORE for the T0-b shared-primitives core: 199 mutants over common/core/{sha256,json,json_parse}.cc killed 100% by the shared KAT (test_sha256_kat, 10 vectors incl. the 2^29-bit length case) + the moved parser corpus (test_json, 66 checks); deny-guard 10/10.",
-   "score_pct": 100.0,
-   "seed": 20260911,
-   "survivors": [],
-   "transcript": "evidence/P11/logs/t1-mutation-common.json",
-   "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
-  },
-  "policy": {
-   "killed": 578,
-   "mutants": 578,
-   "note": "re-arm at the T0-b dedup pin: mutant surface shrank 777->578 because sha256.cc/json.cc/json_parse.cc moved to common/core (now scored separately as `common`); every remaining mutant killed, deny-guard included.",
-   "score_pct": 100.0,
-   "seed": 20260911,
-   "survivors": [],
-   "transcript": "evidence/P11/logs/t1-mutation-policy.json",
-   "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
-  },
-  "renderer/cosmetic": {
-   "killed": 418,
-   "mutants": 418,
-   "note": "P12-T8 freshness law: re-run after the four new core modules (style.cc, keyset.cc, degrade.cc, blob.cc) and the abpf validator landed, so the recorded score covered 3 of 7 TUs. Full matrix (--sample 0, sampled:false, seed 20260918) over renderer/cosmetic/core/*.cc: 418 mutants, 418 killed, 0 survivors, so no equivalent-mutant disposition is needed. deny-guard 22/22: every refusal-return site in these files is reached by a test, which is the property that matters for a parser whose whole job is refusing. Gate 95%, score 100.00%. This is a CORE-level result \u2014 the C++ unit suites kill every mutant in these files. It says nothing about rendered behaviour: no browser measurement exists in this phase (gn and ninja are absent) and the page-level assertions are HG-31.",
-   "score_pct": 100.0,
-   "seed": 20260918,
-   "survivors": [],
-   "transcript": "evidence/P12/logs/t1-mutation-cosmetic.json",
-   "xr_core_commit": "4f3be7a8fe863d19a404162b43e2bc19c68a5baa"
-  },
-  "settings": {
-   "killed": 286,
-   "mutants": 286,
-   "note": "re-arm at the T0-b dedup pin: 485->286 mutants (the five deduped files now live in common/core, scored there); 100% killed.",
-   "score_pct": 100.0,
-   "seed": 20260911,
-   "survivors": [],
-   "transcript": "evidence/P11/logs/t1-mutation-settings.json",
-   "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
-  },
-  "shield": {
-   "killed": 396,
-   "mutants": 396,
-   "note": "P12-T6 RE-RUN (2026-09-24): the shield core moved again (the page_modifying field on MakeLedgerRow + the two closed page-modifying why-codes in events.{h,cc}, plus the debug-page cosmetic riding row in shield_host.cc/fakes), so the FULL matrix ran again at pin f7c683d (sampled:false, seed 20260924): 396 mutants, 396 killed, 100.00%, deny-guard 61/61 \u2014 FIRST-RUN clean: the extended emitter (page_modifying) and the cosmetic debug-page riding row are killed by the new e-emit family golden vectors (51 cases) + test_events/test_shield_host/test_golden_vectors; zero survivors to disposition. Prior transcripts stay in evidence/P11/logs/t*-mutation-shield*.",
-   "score_pct": 100.0,
-   "seed": 20260924,
-   "survivors": [],
-   "transcript": "evidence/P12/logs/t6-mutation-shield.json",
-   "xr_core_commit": "f7c683d7884a659dab397ca01884b73b55e567da"
-  },
-  "themes": {
-   "killed": 187,
-   "mutants": 187,
-   "note": "re-arm at the T0-b dedup pin: 386->187 mutants (dedup move); 100% killed.",
-   "score_pct": 100.0,
-   "seed": 20260911,
-   "survivors": [],
-   "transcript": "evidence/P11/logs/t1-mutation-themes.json",
-   "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
-  },
-  "update": {
-   "killed": 215,
-   "mutants": 216,
-   "note": "re-arm at the T0-b dedup pin: 415->216 mutants (dedup move); the ONE survivor is the same equivalent mutant P10 dispositioned (clamp boundary coincides at d==0 \u2014 no test can distinguish identical behavior); disposition carried forward verbatim.",
-   "score_pct": 99.54,
-   "seed": 20260911,
-   "survivors": [
-    {
-     "disposition": "equivalent-mutant: update/core/backoff.cc:26 SecondsUntilNextCheck `d > 0 ? d : 0` mutated to `d >= 0` \u2014 at d == 0 the mutant returns d, which IS 0; identical behavior for every input (the clamp and its boundary coincide). No test can distinguish it; killing it would require changing the expression, not the behavior.",
-     "id": "core/backoff.cc:26 ROR:> -> >=",
-     "operator": "ROR:> -> >="
+  "comment": "P10-T0-c/T1: recorded mutation scores per xr-core core. Law: a score is a statement about specific bytes — each record pins the xr-core commit whose core/** the FULL matrix ran against (sampled:false); tools/mutation_freshness.py fails the gate when a core's core/** changes without a fresh transcript. Survivor dispositions are mandatory. P11 re-arm (2026-09-11): all six cores re-run FULL (sampled:false) at the T0-b dedup pin 85289cd — freshness debt from the shared-primitives move paid, and `common` scored for the first time. The dedup shrank the per-core mutant surfaces (the moved files are now mutated ONCE, under common). P11-T4 (2026-09-12): the seventh discovered core `shield` scored for the first time (lane added to mutation_targets.py; FULL matrix at pin cfbb344 after the first run's ParseSlot deny-guard find was discharged with new tests — research-log-P11.md D6); P11-T5 2026-09-13: shield re-run FULL at pin 44f5306 after the emitter landed — 394/394, first-run clean). P11-T6 2026-09-13: commands re-run FULL at pin 62b2c92 after the dev-channel predicate landed — 219/219, first-run clean; shield/core bytes unchanged at T6 (the T6 host/fake changes live in shield/host and fakes/, outside the core/** freshness surface) so the T5 shield record stands. P11-T8 2026-09-15: shield re-run FULL at pin 866387a after the parity-alignment matcher changes — 396/396, first-run clean.",
+  "cores": {
+    "commands": {
+      "killed": 219,
+      "mutants": 219,
+      "note": "P11-T6 re-run FULL at pin 62b2c92 after the build.channel-dev predicate landed in availability.cc: 215->219 mutants (+4 on the new predicate arm), 100% killed first-run, deny-guard 8/8.",
+      "score_pct": 100.0,
+      "seed": 20260913,
+      "survivors": [],
+      "transcript": "evidence/P11/logs/t6-mutation-commands.json",
+      "xr_core_commit": "62b2c923aa7a48f6adc84299af956be74bf5bf01"
+    },
+    "common": {
+      "killed": 199,
+      "mutants": 199,
+      "note": "FIRST SCORE for the T0-b shared-primitives core: 199 mutants over common/core/{sha256,json,json_parse}.cc killed 100% by the shared KAT (test_sha256_kat, 10 vectors incl. the 2^29-bit length case) + the moved parser corpus (test_json, 66 checks); deny-guard 10/10.",
+      "score_pct": 100.0,
+      "seed": 20260911,
+      "survivors": [],
+      "transcript": "evidence/P11/logs/t1-mutation-common.json",
+      "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
+    },
+    "policy": {
+      "killed": 90,
+      "mutants": 90,
+      "note": "P15 sampled CI matrix (--sample 90 --seed 20260908, the governance command) at 8b26589: 90/90 killed, deny-guard 23/23. The two survivors of the earlier 40-mutant sample (resolve_io.cc:68 deny guard; resolve.cc:136 overlay isolation) are killed by test_resolve at 8b26589 (each mutant applied to a scratch copy: SIGSEGV and exit 1). NOT the full matrix: the full run is HG-28 (farm).",
+      "score_pct": 100.0,
+      "seed": 20260908,
+      "survivors": [],
+      "transcript": "evidence/P15/logs/mutation-policy-ci.json",
+      "xr_core_commit": "8b265898e952e419dd07081ca878960f20460359"
+    },
+    "renderer/cosmetic": {
+      "killed": 418,
+      "mutants": 418,
+      "note": "P12-T8 freshness law: re-run after the four new core modules (style.cc, keyset.cc, degrade.cc, blob.cc) and the abpf validator landed, so the recorded score covered 3 of 7 TUs. Full matrix (--sample 0, sampled:false, seed 20260918) over renderer/cosmetic/core/*.cc: 418 mutants, 418 killed, 0 survivors, so no equivalent-mutant disposition is needed. deny-guard 22/22: every refusal-return site in these files is reached by a test, which is the property that matters for a parser whose whole job is refusing. Gate 95%, score 100.00%. This is a CORE-level result — the C++ unit suites kill every mutant in these files. It says nothing about rendered behaviour: no browser measurement exists in this phase (gn and ninja are absent) and the page-level assertions are HG-31.",
+      "score_pct": 100.0,
+      "seed": 20260918,
+      "survivors": [],
+      "transcript": "evidence/P12/logs/t1-mutation-cosmetic.json",
+      "xr_core_commit": "4f3be7a8fe863d19a404162b43e2bc19c68a5baa"
+    },
+    "settings": {
+      "killed": 286,
+      "mutants": 286,
+      "note": "re-arm at the T0-b dedup pin: 485->286 mutants (the five deduped files now live in common/core, scored there); 100% killed.",
+      "score_pct": 100.0,
+      "seed": 20260911,
+      "survivors": [],
+      "transcript": "evidence/P11/logs/t1-mutation-settings.json",
+      "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
+    },
+    "shield": {
+      "killed": 396,
+      "mutants": 396,
+      "note": "P12-T6 RE-RUN (2026-09-24): the shield core moved again (the page_modifying field on MakeLedgerRow + the two closed page-modifying why-codes in events.{h,cc}, plus the debug-page cosmetic riding row in shield_host.cc/fakes), so the FULL matrix ran again at pin f7c683d (sampled:false, seed 20260924): 396 mutants, 396 killed, 100.00%, deny-guard 61/61 — FIRST-RUN clean: the extended emitter (page_modifying) and the cosmetic debug-page riding row are killed by the new e-emit family golden vectors (51 cases) + test_events/test_shield_host/test_golden_vectors; zero survivors to disposition. Prior transcripts stay in evidence/P11/logs/t*-mutation-shield*.",
+      "score_pct": 100.0,
+      "seed": 20260924,
+      "survivors": [],
+      "transcript": "evidence/P12/logs/t6-mutation-shield.json",
+      "xr_core_commit": "f7c683d7884a659dab397ca01884b73b55e567da"
+    },
+    "themes": {
+      "killed": 187,
+      "mutants": 187,
+      "note": "re-arm at the T0-b dedup pin: 386->187 mutants (dedup move); 100% killed.",
+      "score_pct": 100.0,
+      "seed": 20260911,
+      "survivors": [],
+      "transcript": "evidence/P11/logs/t1-mutation-themes.json",
+      "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
+    },
+    "update": {
+      "killed": 215,
+      "mutants": 216,
+      "note": "re-arm at the T0-b dedup pin: 415->216 mutants (dedup move); the ONE survivor is the same equivalent mutant P10 dispositioned (clamp boundary coincides at d==0 — no test can distinguish identical behavior); disposition carried forward verbatim.",
+      "score_pct": 99.54,
+      "seed": 20260911,
+      "survivors": [
+        {
+          "disposition": "equivalent-mutant: update/core/backoff.cc:26 SecondsUntilNextCheck `d > 0 ? d : 0` mutated to `d >= 0` — at d == 0 the mutant returns d, which IS 0; identical behavior for every input (the clamp and its boundary coincide). No test can distinguish it; killing it would require changing the expression, not the behavior.",
+          "id": "core/backoff.cc:26 ROR:> -> >=",
+          "operator": "ROR:> -> >="
+        }
+      ],
+      "transcript": "evidence/P11/logs/t1-mutation-update.json",
+      "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
+    },
+    "identity": {
+      "killed": 204,
+      "mutants": 204,
+      "note": "P14 RE-RUN (2026-10-05): the core changed (CompactAudit + CompactEvictions — bounded campaign memory; see the fleet OOM postmortem in research-log-P14), so the FULL matrix re-ran at pin 9ee4952 (sampled:false, seed 20261001): 204 mutants, 204 killed, 100.00%, deny-guard 19/19 — the five new compaction mutants (ROR/LOR arms on the keep/drop boundaries) are killed by the new deterministic cases (Snapshot-bytes equivalence, eviction tail order). Zero survivors. Prior transcript: evidence/P14/logs/t-mutation-identity.json (199/199 at 7d70013).",
+      "score_pct": 100.0,
+      "seed": 20261001,
+      "survivors": [],
+      "transcript": "evidence/P14/logs/t-mutation-identity-v2.json",
+      "xr_core_commit": "9ee4952ce89cf1caa076027d1cfa9566a005b16c"
+    },
+    "permissions": {
+      "killed": 90,
+      "mutants": 90,
+      "note": "P15 sampled matrix (--sample 90 --seed 20260908) at 8b26589: 90/90 killed, deny-guard 23/23. NOT the full matrix: the full run is HG-28 (farm).",
+      "score_pct": 100.0,
+      "seed": 20260908,
+      "survivors": [],
+      "transcript": "evidence/P15/logs/mutation-permissions-ci.json",
+      "xr_core_commit": "8b265898e952e419dd07081ca878960f20460359"
     }
-   ],
-   "transcript": "evidence/P11/logs/t1-mutation-update.json",
-   "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
   },
-  "identity": {
-   "killed": 204,
-   "mutants": 204,
-   "note": "P14 RE-RUN (2026-10-05): the core changed (CompactAudit + CompactEvictions \u2014 bounded campaign memory; see the fleet OOM postmortem in research-log-P14), so the FULL matrix re-ran at pin 9ee4952 (sampled:false, seed 20261001): 204 mutants, 204 killed, 100.00%, deny-guard 19/19 \u2014 the five new compaction mutants (ROR/LOR arms on the keep/drop boundaries) are killed by the new deterministic cases (Snapshot-bytes equivalence, eviction tail order). Zero survivors. Prior transcript: evidence/P14/logs/t-mutation-identity.json (199/199 at 7d70013).",
-   "score_pct": 100.0,
-   "seed": 20261001,
-   "survivors": [],
-   "transcript": "evidence/P14/logs/t-mutation-identity-v2.json",
-   "xr_core_commit": "9ee4952ce89cf1caa076027d1cfa9566a005b16c"
-  }
- },
- "schema": "xr-mutation-scores",
- "schema_version": 1
+  "schema": "xr-mutation-scores",
+  "schema_version": 1
 }

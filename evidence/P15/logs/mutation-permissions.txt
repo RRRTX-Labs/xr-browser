@@ -1,0 +1,3 @@
+mutation[permissions]: 40 mutants, killed 40, survived 0, score 100.00% (gate >= 90.0%), deny-guard 12/12, elapsed 24.9s -> PASS
+mutation: targets=permissions -> PASS
+MUT_EXIT=0

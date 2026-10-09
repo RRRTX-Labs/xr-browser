@@ -1,0 +1,5 @@
+mutation[policy]: 40 mutants, killed 38, survived 2, score 95.00% (gate >= 90.0%), deny-guard 8/9, elapsed 71.9s -> FAIL
+  SURVIVOR core/resolve_io.cc:68 ROR:!= -> == if (id == nullptr && !id->is_string()) return false;
+  SURVIVOR core/resolve.cc:136 ROR:!= -> == if (g.identity == req.identity || g.domain != req.registrable_domain) continue;
+mutation: targets=policy -> FAIL
+MUT_EXIT=1

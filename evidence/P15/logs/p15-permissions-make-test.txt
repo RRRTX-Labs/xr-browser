@@ -1,0 +1,20 @@
+g++ -std=c++20 -O2 -Wall -Wextra -Werror -D_FORTIFY_SOURCE=2 -I../.. test_store.cc build/perm_types.o build/perm_envelope.o build/perm_store.o build/perm_ops.o build/perm_audit.o build/perm_merge.o build/perm_present.o build/common_json.o build/common_json_parse.o -o build/test_store -pthread
+== test_store ==
+test_store: 2257 checks, 0 failures
+== test_ops ==
+test_ops: 80 checks, 0 failures
+== test_expiry ==
+test_expiry: 47 checks, 0 failures
+== test_isolation ==
+test_isolation: 1204 checks, 0 failures
+== test_merge ==
+test_merge: 36 checks, 0 failures
+== test_present ==
+test_present: 23 checks, 0 failures
+== test_envelope ==
+test_envelope: 15 checks, 0 failures
+== test_audit ==
+test_audit: 36 checks, 0 failures
+== test_cross_core ==
+test_cross_core: 38 checks, 0 failures
+ALL C++ PERMISSIONS TESTS PASSED

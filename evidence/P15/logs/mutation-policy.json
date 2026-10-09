@@ -1,0 +1,62 @@
+{
+ "deny_guard_killed": 8,
+ "deny_guard_mutants": 9,
+ "deny_guard_survivors": 1,
+ "gate": "FAIL",
+ "killed": 38,
+ "operators": [
+  "ROR:== -> !=",
+  "ROR:!= -> ==",
+  "ROR:< -> <=",
+  "ROR:<= -> <",
+  "ROR:> -> >=",
+  "ROR:>= -> >",
+  "LOR:&& -> ||",
+  "LOR:|| -> &&",
+  "BOOL:true -> false",
+  "BOOL:false -> true",
+  "AOR:0 -> 1",
+  "AOR:1 -> 2",
+  "AOR:2 -> 3"
+ ],
+ "sampled": true,
+ "score_gate_pct": 90.0,
+ "score_pct": 95.0,
+ "seed": 20260908,
+ "suites": [
+  "test_cache",
+  "test_events",
+  "test_resolve",
+  "test_service",
+  "test_snapshot",
+  "test_store",
+  "test_vectors"
+ ],
+ "survived": 2,
+ "survivors": [
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/resolve_io.cc",
+   "line": 68,
+   "mutated": "  if (id == nullptr && !id->is_string()) return false;",
+   "operator": "ROR:!= -> ==",
+   "orig": "  if (id != nullptr && !id->is_string()) return false;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/resolve.cc",
+   "line": 136,
+   "mutated": "    if (g.identity == req.identity || g.domain != req.registrable_domain) continue;",
+   "operator": "ROR:!= -> ==",
+   "orig": "    if (g.identity != req.identity || g.domain != req.registrable_domain) continue;",
+   "target": "policy"
+  }
+ ],
+ "target": "xr-core/policy/core/*.cc",
+ "tool": "mutation_test",
+ "total_mutants": 40,
+ "truncated_by_timebox": false
+}
