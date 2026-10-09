@@ -130,8 +130,10 @@ def apply_and_build(tmp: Path, target: str, mutant: dict[str, Any],
     bdir = tmp / target / "tests" / "build"
     for t in make_targets:
         (tmp / target / "tests" / t).unlink(missing_ok=True)
-    for obj in bdir.glob(f"*{Path(mutant['file']).stem}*.o"):
-        obj.unlink()
+    # Nested layouts (update/settings: build/update/core/x.o) match by name too.
+    for obj in bdir.rglob("*.o"):
+        if Path(mutant["file"]).stem in obj.name:
+            obj.unlink()
     r = subprocess.run(
         ["make", "-C", str(tmp / target / "tests"), "-j", str(jobs), *make_targets],
         capture_output=True, text=True,
