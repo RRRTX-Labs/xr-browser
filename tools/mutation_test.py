@@ -124,6 +124,14 @@ def apply_and_build(tmp: Path, target: str, mutant: dict[str, Any],
     if target == "shield" and (
             "test_golden_vectors" in suites or "test_shield_host" in suites):
         make_targets.append("build/shield_host")
+    # make compares mtimes, and rapid rewrites here share one timestamp, so a
+    # stale object (or binary) from the previous mutant would be reused: a
+    # false survivor. Drop the mapped binaries and the TU's objects first.
+    bdir = tmp / target / "tests" / "build"
+    for t in make_targets:
+        (tmp / target / "tests" / t).unlink(missing_ok=True)
+    for obj in bdir.glob(f"*{Path(mutant['file']).stem}*.o"):
+        obj.unlink()
     r = subprocess.run(
         ["make", "-C", str(tmp / target / "tests"), "-j", str(jobs), *make_targets],
         capture_output=True, text=True,
@@ -242,6 +250,11 @@ def main(argv: list[str]) -> int:
                     deny_guard_total += 1
                     deny_guard_killed += 1
                 m["disposition"] = "killed(build)"
+                # Restore before the next mutant. A broken TU left in place
+                # fails every later mutant that shares it: a false kill.
+                (tmp / target / m["file"]).write_text(
+                    (root / target / m["file"]).read_text(encoding="utf-8"),
+                    encoding="utf-8")
                 continue
             was_killed, run_log = run_suites(tmp, target, m["suites"],
                                              vectors_env)
