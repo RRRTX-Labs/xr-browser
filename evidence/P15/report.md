@@ -1,0 +1,64 @@
+# P15 report — Permission Firewall v1 (interim)
+
+**State: interim.** This phase is NOT done. Several rows are PARTIAL or BLOCKED (see `evidence.json`), and the sandbox could not execute the Chromium or browser-runtime half of the brief. Hosted results at the final head are read from the Actions API after the push and reported in the run summary, not claimed here. The phase stays interim until every gate is green and every row resolves.
+
+## 0. Heads
+
+- xr-browser: opened at `01baba0d6ce8d923b833e30dbf25463211ec8d91` (P14 close). Code head `503589f` (the candidate gate ran there). The final head is the evidence commit that carries this file, which is the head of `main` after the push. This file does not record its own SHA.
+- xr-core: `81376ac` at open, then `e2caedc`, `98946b1`, `410f34d`, `aab82f4`, `8b26589`, `f71fcdf`, `4d6672d`, all pushed to `main`. `DEPS.xr_core_rev` = `4d6672d04876b4daa29bd10355de0d3801c8f9b5`.
+- Pin moves (DEPS `xr_core_rev`, each pushed the same day under the cross-repo pin process): `81376ac` → `aab82f4` (`bbed863`) → `8b26589` (`f416731`, after the 40-mutant survivors) → `f71fcdf` (`a54056f`) → `4d6672d` (`503589f`, after the audit in §7).
+
+## 1. What shipped (code and contracts)
+
+- **Resolver carrier (xr-core):** `ResolveRequest.permission_overlay`, a strict parse, and a pure consult in `resolve.cc`. The 66 frozen vectors and their expectations are byte-identical and still pass.
+- **Permissions core (xr-core `permissions/core/`):** store with canonical round-trip, state-machine ops that emit audit rows, audit rows (permission-audit-event-v1 plus the frozen ActivityRow), the labelled merge, the prompt presentation and T3 ceiling, and the extras envelope.
+- **Tests and bench (xr-core):** nine permissions suites with 2,257 + 80 + 47 + 1,204 + 36 + 23 + 15 + 36 + 38 checks, 0 failures. The policy suite's `test_resolve` runs 107 checks (three P15 owning-suite cases were added). Cross-core vectors run through the real resolver. Bench numbers are measured on one host.
+- **Contracts and decisions (xr-browser):** ADR-0051 (DRAFT), permission-audit-event-v1 (schema, golden, doc), permission-overlay-v1 (seam doc, 33 vectors), two registry rows, and the P15-T7 section of the attention ledger.
+- **Gates (xr-browser):** `permission_contract_check.py` (frozen bytes, golden, vectors), `permission_write_path_check.py` (write-path law), the T7 rule in `attention_check.py`, four negative cases, and the `permissions` lane in `ci-lanes.json`.
+
+## 2. Verification
+
+- Policy frozen suite: `test_vectors: 268 checks, 0 failures` (unchanged from base). `test_resolve: 107 checks, 0 failures`.
+- **Planted defects, owning suite (final, xr-core `4d6672d`):** all eleven planted defects are killed by a reported test failure in the suite that owns the mutated file (`evidence/P15/logs/p15-planted-owner-4d6672d.txt`). The unmutated control passes for both suites. The compile-clean M02c stands in for M02, whose only kill was a compile error.
+- **Corrections (both are in the transcripts and in research log §10):** at `8b26589` the owning policy suite killed only M04 of the five overlay defects, and the earlier "11 of 11 killed by the owning suite" line was wrong. M07 was killed by a segfault in `test_expiry`, not by an assertion; the test was fixed at `4d6672d`.
+- **Sampled CI matrices** (policy and permissions, 90 mutants each, seed 20260908, the governance command) ran at `8b26589`: 90/90 killed, deny-guard 23/23 each. These are sampled, not the full matrix, which is HG-28.
+- Store fuzz row (deterministic): 2,168 single-byte mutants of the fixture. 2,104 refused, and 64 accepted only as canonical bytes. None loads as a partial or silently repaired store. libFuzzer is NOT RUN (no clang).
+- Baseline census at `01baba0`: exit 0, 165 PASS, 0 FAIL, 4 SKIP (sandbox tools absent).
+- Candidate gate at `503589f` with xr-core `4d6672d`: see §5.
+
+## 3. Task status (from `evidence.json`)
+
+- VERIFIED: T1 (store and overlay), T3 (expiry), T6 (merge), T7 (attention), T9.1 (cross-identity), T9.2 (write-path), T10 (bench, one host), FROZEN (frozen bytes), CLOSE (artifacts).
+- PARTIAL: T0 (register row blocked by the validator), T2 (the patch half and the Panel are not built), T4 (contract and generator verified; the Activity-tab rendering is not built), T5 (A4 anchor upgrade not done), T9.3 (libFuzzer not run), MUT (the full matrix is HG-28), GATE-CANDIDATE (see §5).
+- BLOCKED-DEFERRED: T8 (settings section), T9.4 (Chromium isolation-matrix cells).
+- HUMAN-GATED: T9.5 (S0 dual review). ADR-0051 is DRAFT, and its ratification is a human act.
+- BLOCKED-PENDING-PUSH: HOSTED (governance and core-hardening at the final head; read after the push).
+
+## 4. Not done, and why
+
+Each item carries its method path in `docs/state/research-log-P15.md` §6. Scope items are scope, not sandbox limits: the A4 anchors (googlesource is reachable), the settings section, and the matrix cells. The sandbox-limited items are libFuzzer (no clang), the GN build check (no gn), and the rendered browser (no gn or ninja). The register row is blocked by the validator, and that is a human decision (HG-P15-REGISTER).
+
+## 5. Gates
+
+Final candidate: xr-browser `503589f` (code head) with xr-core `4d6672d` (the pinned head). Fresh clones under `/var/tmp/p15/final5`, with `TMPDIR` on the root filesystem. Command: `./tools/run_checks.sh --keep-going`, as CI runs it. Transcript: `evidence/P15/logs/gate-candidate-503589f.txt`.
+
+Result: exit 1, with 164 PASS lines, 3 failing lanes, and 1 SKIP (actionlint, absent as at baseline). All three failing lanes trace to one cause: P15 appears in git history with a `logs/` directory and no bundle. They are `evidence_check` (default), `evidence_check --strict`, and the release gate `check --channel dev` (its finality item reads the same law). The evidence commit supplies the bundle, and the three lanes were re-run locally against it (see below). Every other lane passed: mutation-freshness (10 cores fresh at the pin), all ten C++ suite lanes (policy and permissions included), the P15 contract lane, the write-path law, the attention rule, the fetch allowlist, core-hygiene, secret-scan, DCO, the sibling pin, lane discovery, and pytest (444 passed).
+
+Local re-run with the bundle in the working tree (before the evidence commit): `evidence_check` (15 bundles, 0 failures), `evidence_check --strict` (13 bundles, 0 failures), `evidence_finality` (in-flight phase P15, 0 failures), and `release_gate check --channel dev` (7 lanes green, 0 missing). The presence law is satisfied once the bundle is in history; hosted results at the final head are read after the push.
+
+Earlier candidate, superseded: xr-browser `f416731` with xr-core `8b26589` exited 1, with 159 PASS lines and 3 failing lanes. All three trace to one cause, which is that P15 appears in git history without a bundle: `evidence_check`, `evidence_check --strict`, and the release gate `check --channel dev`, whose finality item reads the same presence law. Transcript: `evidence/P15/logs/gate-candidate-f416731.txt`. The baseline at `01baba0` exited 0.
+
+Visible skips, not hidden ones. The final transcript shows one SKIP, actionlint (absent, as at baseline). The earlier candidate (`f416731`) reported 8 hosted `ci-run` verifications as offline, because unauthenticated GitHub API calls returned HTTP 403 from this sandbox. Those lines do not appear in the final transcript, and this report does not claim the hosted verifications were run locally.
+
+## 6. Decisions that need humans
+
+See `evidence/P15/human-gates.md`. The main ones: ratify or amend ADR-0051 (HG-P15-ADR51); decide the register path (HG-P15-REGISTER); review the permissions core as S0 (HG-P15-S0-REVIEW); accept the xr-core committer record (HG-P15-COMMITTER); revoke or rotate the token that was pasted into the conversation (HG-P15-TOKEN).
+
+## 7. Issues found in-session
+
+Recorded in `docs/state/research-log-P15.md` §10. The notable ones:
+
+- The first serializer lost the corrupt flag on save, and a test caught it before any push.
+- **Owning-suite gap in policy/core.** A planted-defect audit found that the owning policy suite killed only one of the five overlay defects at `8b26589`. Three policy cases were added at `f71fcdf`, and the first M02 kill was a compile error (fixed with the compile-clean M02c).
+- **A segfault counted as a kill** (M07). `test_expiry` read rows that might not exist. The guards are in `4d6672d`.
+- **Stale kill records.** The first planted-defect run used an 86-check `test_store`, before the store sweep grew the suite to 2,257. All eleven are re-verified at the final suite sizes.

@@ -23,7 +23,8 @@
   "not_done_by_design": [
     "The phase is in flight: state is interim by declaration (docs/state/phase-base.json records phase P14), so *-PENDING-* rows name work that has not landed yet. They are resolved or corrected by appended rows as each item lands, and the state flips to final at the closing commit (the P13-P0-C law, tools/evidence_finality.py).",
     "Rendered browser results (switch/wake timing to first paint, rendered chrome, RSS megabytes) are NOT-RUN by construction in this sandbox (no gn/ninja, no Chromium checkout, no browser): every such claim will be labelled NOT-RUN with its method in docs/qa/browser-harness.md, never approximated. T10's memory rows are generator-owned trend rows, never MET here.",
-    "Dual senior S0 review of xr/identity/ provisioning + session paths is a human act (the plan's security req): it is recorded HUMAN-GATED in evidence/P14/human-gates.md with the exact files and invariants a reviewer must read; green checks never satisfy it."
+    "Dual senior S0 review of xr/identity/ provisioning + session paths is a human act (the plan's security req): it is recorded HUMAN-GATED in evidence/P14/human-gates.md with the exact files and invariants a reviewer must read; green checks never satisfy it.",
+    "2026-10-09 \u2014 P15 opened on top of P14 (docs/state/phase-base.json rotated to P15; append-only, no row above is edited). P14 remains interim solely because its closing declaration (P14-CLOSE, prompts/PHASE-P14-CLOSE.md) has not landed: the file is absent from xr-browser (human gate HG-P15-P14CLOSE). Its rows are unchanged."
   ],
   "human_gates": {
     "path": "evidence/P14/human-gates.md",

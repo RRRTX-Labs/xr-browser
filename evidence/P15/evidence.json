@@ -1,0 +1,295 @@
+{
+  "phase": "P15",
+  "state": "interim",
+  "generated": "2026-10-09 (P15 phase open; interim until every gate is green and every row resolves)",
+  "plan": "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
+  "plan_sha256": "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b",
+  "source_labels": [
+    "local-run",
+    "fixture",
+    "ci-run",
+    "UNVERIFIED",
+    "NOT-RUN"
+  ],
+  "verdict_vocabulary": [
+    "VERIFIED",
+    "HUMAN-GATED",
+    "SIMULATED",
+    "BLOCKED",
+    "PARTIAL",
+    "NOT-BY-DESIGN",
+    "NOT-RUN"
+  ],
+  "not_done_by_design": [
+    "T0: the decision-register row is not appended (dr_parse fixes DR-01..DR-30; human gate HG-P15-REGISTER).",
+    "T2: the <=4-file patch half and the Panel surface are not built (scope).",
+    "T4: rendering in the P13 Activity tab is not built (scope; the rows are generated and verified).",
+    "T5: the A4 anchor upgrade in build/upstream/assumptions.yaml is not done (scope; method in the research log).",
+    "T8: the settings section xr://settings/permissions is not started (scope).",
+    "T9.3: libFuzzer is not run (no clang in this sandbox; method in the research log).",
+    "T9.4: the Chromium isolation-matrix cells are not wired (scope).",
+    "GN build wiring for xr-core/permissions cannot be checked (no gn in this sandbox).",
+    "Live propagation to open tabs and the browser runtime are not built (sandbox and scope).",
+    "The full mutation matrix is not run (HG-28 farm); the recorded matrices are sampled, and they say so.",
+    "Reference-hardware bench re-check (HG-28).",
+    "Dual S0 review of the permissions core (HG-P15-S0-REVIEW).",
+    "Hosted results at the final head are read from the Actions API after the push; they are not claimed in-tree.",
+    "P14-CLOSE is not present in the repository (HG-P15-P14CLOSE)."
+  ],
+  "human_gates": {
+    "path": "evidence/P15/human-gates.md",
+    "note": "authored 2026-10-09 by the P15 agent; one row per act this sandbox cannot perform or that a human must decide"
+  },
+  "repos": {
+    "xr-browser": "phase opened at 01baba0d6ce8d923b833e30dbf25463211ec8d91 (origin/main, P14 close). Code head 503589f (pre-evidence). The final head is the evidence commit (see the run summary).",
+    "xr-core": "phase opened at 81376ac6da284faf28098acc39314b17231bea95. Pushed: e2caedc, 98946b1, 410f34d, aab82f4, 8b26589, f71fcdf, 4d6672d (DEPS.xr_core_rev = 4d6672d)."
+  },
+  "dod_rows": [
+    {
+      "id": "P15-T0",
+      "dod": "ADR-0051 DRAFT records the carrier and the capability envelope, with alternatives and a does-not-prove list; the decision-register row and the bundle skeleton.",
+      "status": "PARTIAL",
+      "source": "local-run",
+      "evidence": [
+        "docs/adr/0051-permission-overlay-carrier.md",
+        "docs/state/research-log-P15.md",
+        "evidence/P15/human-gates.md",
+        "docs/register/decisions.yaml",
+        "logs/gate-candidate-503589f.txt"
+      ],
+      "notes": "ADR-0051 is written as DRAFT and is not approved. The register row is NOT appended: tools/dr_parse.py fixes the id set at DR-01..DR-30, so a DR-31 row fails the validator. Human gate HG-P15-REGISTER."
+    },
+    {
+      "id": "P15-T1",
+      "dod": "Per-identity overlay store: corrupt means deny; the Fortress deny-list is data; PromptSuppressed.",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "../xr-core/permissions/core/store.cc",
+        "../xr-core/permissions/tests/test_store.cc",
+        "../xr-core/policy/core/resolve.cc",
+        "../xr-core/policy/core/resolve_io.cc",
+        "logs/p15-permissions-make-test.txt"
+      ],
+      "notes": "test_store: 2,257 checks, 0 failures (corrupt matrix, plus the 2,168-mutant sweep). The resolver consult is covered by test_cross_core (33 vectors) and by the policy test additions (test_resolve: 91 checks)."
+    },
+    {
+      "id": "P15-T2",
+      "dod": "One-time grant presentation as tested data: the button order and the identity-scope copy key. The <=4-file patch half is deferred.",
+      "status": "PARTIAL",
+      "source": "local-run",
+      "evidence": [
+        "../xr-core/permissions/core/present.cc",
+        "../xr-core/permissions/tests/test_present.cc",
+        "logs/gate-candidate-503589f.txt"
+      ],
+      "notes": "Verified as data: one-time first for sensitive capabilities, the scope copy key, and the T3 prompt model. NOT built: the <=4-file patch half and the Panel surface (not_done_by_design)."
+    },
+    {
+      "id": "P15-T3",
+      "dod": "Expiry engine for once, session and 7d, with the clock passed as a parameter.",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "../xr-core/permissions/core/ops.cc",
+        "../xr-core/permissions/tests/test_expiry.cc",
+        "../xr-core/permissions/tests/test_cross_core.cc",
+        "logs/p15-permissions-make-test.txt"
+      ],
+      "notes": "test_expiry: 47 checks. The 7d boundary is exact at expires_at (fail-closed at equality), sessions end on a session change, once grants end when spent, sweeps are idempotent, and time is monotone."
+    },
+    {
+      "id": "P15-T4",
+      "dod": "permission-audit-event-v1 (post-freeze) and the kPermission ActivityLog rows.",
+      "status": "PARTIAL",
+      "source": "local-run",
+      "evidence": [
+        "docs/contracts/permission-audit-event-v1.md",
+        "docs/contracts/permission-audit-event-v1.schema.json",
+        "docs/contracts/tests/golden-permission-audit-event.jsonl",
+        "tools/permission_contract_check.py",
+        "../xr-core/permissions/core/audit.cc",
+        "../xr-core/permissions/tests/test_audit.cc",
+        "logs/p15-contract-and-rules.txt"
+      ],
+      "notes": "VERIFIED here: the contract, the schema, the golden regenerated byte-for-byte by the C++ generator, origin redaction, and the two fixtures that must redden. NOT built: rendering in the P13 Activity tab (not_done_by_design)."
+    },
+    {
+      "id": "P15-T5",
+      "dod": "Revoke-all per identity, revoke-by-site, and the A4 anchor upgrade.",
+      "status": "PARTIAL",
+      "source": "local-run",
+      "evidence": [
+        "../xr-core/permissions/core/ops.cc",
+        "../xr-core/permissions/tests/test_ops.cc",
+        "../xr-core/permissions/tests/test_isolation.cc",
+        "logs/gate-candidate-503589f.txt"
+      ],
+      "notes": "Revoke-by-site and revoke-all are VERIFIED (tombstones, no widening, deny-list kept). NOT done: the A4 anchor upgrade in build/upstream/assumptions.yaml. This is session scope, not a sandbox limit: googlesource is reachable (see research log section 6)."
+    },
+    {
+      "id": "P15-T6",
+      "dod": "Labelled global-fallback merge: no hidden grants.",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "../xr-core/permissions/core/merge.cc",
+        "../xr-core/permissions/tests/test_merge.cc",
+        "logs/p15-mutation-run.txt"
+      ],
+      "notes": "test_merge: 36 checks. The exhaustive fortress x identity x global cube (24 cells) has no silent widening and no unlabelled fallback. A planted mislabel is caught."
+    },
+    {
+      "id": "P15-T7",
+      "dod": "Attention budget for permission prompts: anchored, never stacked, 3 per hour, overflow demoted and logged.",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "docs/state/attention-budget.md",
+        "tools/attention_check.py",
+        "../xr-core/permissions/core/present.cc",
+        "../xr-core/permissions/tests/test_present.cc",
+        "logs/p15-contract-and-rules.txt"
+      ],
+      "notes": "The P15-T7 section is checked by attention_check (markers, banned vocabulary on the permission surface, the 3/hour constant, max stacked 1). A planted modal reddens the gate. test_present: 23 checks."
+    },
+    {
+      "id": "P15-T8",
+      "dod": "Settings section xr://settings/permissions.",
+      "status": "BLOCKED-DEFERRED",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "docs/state/research-log-P15.md"
+      ],
+      "notes": "Not started in this session. This is scope, not a sandbox limit: the WebUI toolchain (node 20) is present. Method: a WebUI section in xr-core/settings/, type-checked by the existing toolchain, plus the coverage bijection."
+    },
+    {
+      "id": "P15-T9.1",
+      "dod": "Cross-identity negatives (A's operations never change B), with a planted identity-ignoring lookup that the check must catch.",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "../xr-core/permissions/tests/test_isolation.cc",
+        "../xr-core/permissions/tests/test_cross_core.cc",
+        "logs/p15-permissions-make-test.txt"
+      ],
+      "notes": "test_isolation: 1,204 checks over a 4 x 4 x 25 grid (400 cells). The planted lookup is caught by the same grid."
+    },
+    {
+      "id": "P15-T9.2",
+      "dod": "Write-path lint with a negative: a second write path to the overlay store is RED.",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "tools/permission_write_path_check.py",
+        "tools/negatives/p15_permissions.sh",
+        "logs/p15-contract-and-rules.txt"
+      ],
+      "notes": "PASS over 271 product sources. The planted renderer-side call reddens. The negative is registered in run_negatives.sh (N=4 cases, all pass)."
+    },
+    {
+      "id": "P15-T9.3",
+      "dod": "Fuzz row for the store loader.",
+      "status": "PARTIAL",
+      "source": "local-run",
+      "evidence": [
+        "../xr-core/permissions/tests/test_store.cc",
+        "logs/gate-candidate-503589f.txt"
+      ],
+      "notes": "VERIFIED here: an exhaustive deterministic single-byte mutation sweep (2,168 mutants of a 379-byte fixture; 2,104 refused, 64 canonical-accepted, none silently repaired). NOT run: libFuzzer (no clang in this sandbox)."
+    },
+    {
+      "id": "P15-T9.4",
+      "dod": "Isolation-matrix Chromium cells for the identity overlay.",
+      "status": "BLOCKED-DEFERRED",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "tools/isolation_matrix.py"
+      ],
+      "notes": "Not wired in this session. This is scope, not a sandbox limit. Method: add the P15 cells to tools/isolation_matrix.py and run it in the lane that owns the matrix."
+    },
+    {
+      "id": "P15-T9.5",
+      "dod": "Dual senior review of the permissions core and the overlay consult (S0).",
+      "status": "HUMAN-GATED",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "evidence/P15/human-gates.md"
+      ],
+      "notes": "Gate HG-P15-S0-REVIEW. The agent does not stand in for a reviewer."
+    },
+    {
+      "id": "P15-T10",
+      "dod": "Bench for the permission firewall, with the hardware caveat stated.",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "../xr-core/permissions/bench/bench_main.cc",
+        "logs/bench-results.json"
+      ],
+      "notes": "MEASURED on one shared host, -O2, 100,000 iterations per case, percentiles reported. These are verdicts for this host, not budgets. The reference-hardware re-check is HG-28."
+    },
+    {
+      "id": "P15-MUT",
+      "dod": "Mutation evidence for the new core and for the overlay consult in policy/core.",
+      "status": "PARTIAL",
+      "source": "local-run",
+      "evidence": [
+        "logs/p15-planted-owner-4d6672d.txt",
+        "logs/mutation-policy-ci.json",
+        "logs/mutation-permissions-ci.json",
+        "logs/p15-mutation-owner-f71fcdf.txt",
+        "logs/p15-mutation-run.txt",
+        "docs/state/mutation-scores.json"
+      ],
+      "notes": "Planted defects, owning suite, at xr-core 4d6672d (logs/p15-planted-owner-4d6672d.txt): all 11 are killed by a reported test failure in the suite that owns the mutated file, and the unmutated control passes. This corrects two earlier claims. At 8b26589 the owning policy suite killed only M04 (three policy cases were added at f71fcdf), and the original M02 and M07 were killed by a compile error and a segfault. Sampled CI matrices at 8b26589 (--sample 90 --seed 20260908, the governance command): policy 90/90 killed, deny-guard 23/23; permissions 90/90 killed, deny-guard 23/23. The full matrix is not run (HG-28 farm)."
+    },
+    {
+      "id": "P15-FROZEN",
+      "dod": "The frozen contracts stay byte-identical: FROZEN.yaml, the 66 frozen resolver vectors, and policy/tests expectations.",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "docs/contracts/FROZEN.yaml",
+        "docs/contracts/vectors/policy-resolver-v1.json",
+        "tools/permission_contract_check.py",
+        "logs/p15-policy-make-test.txt"
+      ],
+      "notes": "permission_contract_check pins both by sha256 (FROZEN 0b79e439..., vectors 8d35c4c3...). The policy suite still reports test_vectors: 268 checks, 0 failures."
+    },
+    {
+      "id": "P15-GATE-CANDIDATE",
+      "dod": "Full local gate on the candidate code head (xr-browser 503589f with xr-core 4d6672d).",
+      "status": "PARTIAL",
+      "source": "local-run",
+      "evidence": [
+        "logs/gate-candidate-503589f.txt"
+      ],
+      "notes": "Final candidate at code head 503589f (xr-core 4d6672d): exit 1, 164 PASS lines, 1 SKIP (actionlint, absent), 3 failing lanes, all bundle-presence (P15 in git history as logs/ without a bundle; the evidence commit supplies it): evidence_check, evidence_check --strict, release check --channel dev. Other lanes PASS, including mutation-freshness (10 cores fresh), the ten C++ suite lanes, the P15 contract, write-path, attention, fetch allowlist, core-hygiene, secret-scan, DCO, sibling pin, and pytest (444 passed). Transcript: logs/gate-candidate-503589f.txt."
+    },
+    {
+      "id": "P15-HOSTED",
+      "dod": "Hosted governance and core-hardening at the final head.",
+      "status": "BLOCKED-PENDING-PUSH",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "docs/state/research-log-P15.md"
+      ],
+      "notes": "Read from the Actions API after the push, and reported in the run summary. A commit cannot record its own hosted result, so it is not claimed in-tree."
+    },
+    {
+      "id": "P15-CLOSE",
+      "dod": "Closing artifacts: the evidence bundle, the human gates, the report, and the research log.",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "evidence/P15/report.md",
+        "evidence/P15/human-gates.md",
+        "docs/state/research-log-P15.md",
+        "evidence/P15/evidence.json",
+        "logs/gate-candidate-503589f.txt"
+      ],
+      "notes": "All four artifacts exist. The phase state is interim, and no 'done' wording appears."
+    }
+  ]
+}

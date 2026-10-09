@@ -1,0 +1,22 @@
+# P15 planted-defect check against the OWNING suite — xr-core 4d6672d (final)
+# Command: python3 evidence/P15/mutation/planted_owner_check.py (run at xr-core 4d6672d, scratch copies).
+# KILLED = non-zero exit. kind=test: a reported check/FAILED line. kind=compile: build failure (NOT a test kill).
+# M02 (original) is a compile-error kill and is superseded by M02c (compile-clean, same defect).
+
+# xr-core head 4d6672d; scratch copies under /var/tmp/p15/planted; TMPDIR-independent
+CONTROL unmutated | owner=policy | rc=0 | PASS | 
+CONTROL unmutated | owner=perm | rc=0 | PASS | 
+M01 7d fail-open at equality | owner=policy | KILLED rc=2 | kind=test | test_resolve: 107 checks, 1 failures || cross-core: KILLED rc=2 kind=test | test_cross_core: 40 checks, 5 failures
+M02 deny-list ignored | owner=policy | KILLED rc=2 | kind=compile | ../../policy/core/resolve.cc:111:20: error: unused variable ‘id’ [-Werror=unused-variable]
+M03 corrupt overlay not denying | owner=policy | KILLED rc=2 | kind=test | test_resolve: 107 checks, 4 failures || cross-core: KILLED rc=2 kind=test | test_cross_core: 48 checks, 15 failures
+M04 grant ignores identity (cross-identity leak) | owner=policy | KILLED rc=2 | kind=test | test_resolve: 107 checks, 1 failures || cross-core: KILLED rc=2 kind=test | test_cross_core: 39 checks, 5 failures
+M05 malformed overlay treated as absent (fail-open) | owner=policy | KILLED rc=2 | kind=test | test_resolve: 107 checks, 4 failures || cross-core: KILLED rc=2 kind=test | test_cross_core: 46 checks, 10 failures
+M06 store round-trip check removed (dup keys accepted) | owner=permissions | KILLED rc=2 | kind=test | test_store: 2257 checks, 12 failures
+M07 sweep boundary fail-open (< instead of <=) | owner=permissions | KILLED rc=2 | kind=test | test_expiry: 44 checks, 5 failures
+M08 fallback mislabelled as identity overlay | owner=permissions | KILLED rc=2 | kind=test | test_merge: 36 checks, 7 failures
+M09 ceiling overflow not logged | owner=permissions | KILLED rc=2 | kind=test | test_present: 23 checks, 4 failures
+M10 extras accept kAllow | owner=permissions | KILLED rc=2 | kind=test | test_store: 2257 checks, 3 failures
+M11 origin redaction disabled | owner=permissions | KILLED rc=2 | kind=test | test_ops: 80 checks, 3 failures
+M02c deny-list ignored (compile-clean) | owner=policy | KILLED rc=2 | kind=test | test_resolve: 107 checks, 2 failures || cross-core: KILLED rc=2 kind=test | test_cross_core: 41 checks, 6 failures
+DONE
+script rc=0

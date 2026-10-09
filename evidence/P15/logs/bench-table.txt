@@ -1,0 +1,6 @@
+case                                        p50          p99        p99.9  (ns, 100000 iters)
+store load (strict, cold)                966618      1618588      2502308
+warm projection (read)                   314645       552564       820513
+resolve with overlay (cold)              198807       282028       347885
+single overlay mutation                   16165        43189        89414
+caveat: one host, shared CPU, -O2; not reference hardware (HG-28)

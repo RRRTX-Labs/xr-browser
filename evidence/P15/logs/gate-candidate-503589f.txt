@@ -1,0 +1,999 @@
+== plan pin ==
+PASS: plan_pin_check
+== P14-P0-2: ci-parity (local capability vs hosted lanes; a printed fact, never a gate red) ==
+== ci-parity: local capability vs hosted lanes (P14-P0-2) ==
+  optional tools (helper-tools.yaml + workflow installs + runner ledger):
+    actionlint         ABSENT (CI has this; the lane will be stricter there)
+    cargo              ABSENT (CI has this; the lane will be stricter there)
+    codesign           absent (normal for a Linux lane; not stricter on CI)
+    faketime           ABSENT (CI has this; the lane will be stricter there)
+    g++                present
+    make               present
+    minisign           ABSENT (CI has this; the lane will be stricter there)
+    python3.12         differs (local interpreter 3.13.16 vs the runner's pinned python3.12; a version gap is a printed note, not a weaker lane)
+    rustc              ABSENT (CI has this; the lane will be stricter there)
+    shellcheck         ABSENT (CI has this; the lane will be stricter there)
+    signtool           absent (normal for a Linux lane; not stricter on CI)
+  entry-point modes: PASS (0 finding(s))
+  sibling pin: PASS — ../xr-core at DEPS.xr_core_rev 4d6672d04876… (clean)
+  dev-deps: closure check PASS; pip dry-run: installable (require-hashes dry run ok)
+  network (live probes through the fetch chokepoint, re-proved now,
+           never inherited from any note):
+    api.github.com                       reachable  0.06 s
+    chromium.googlesource.com            reachable  0.16 s
+    chromiumdash.appspot.com             reachable  0.07 s
+    commondatastorage.googleapis.com     reachable  0.04 s
+    pypi.org                             reachable  0.03 s
+    static.crates.io                     reachable  0.07 s
+    updates.rrrtx.labs                   refused    chokepoint refuses (not a fetch surface — release-client policy data, HG-38)
+    api.github.com quota: core 7/60, reset 1791533335 (epoch)
+ci-parity: PARTIAL (6 lane(s) will be stricter on CI: actionlint (workflow-lint deep pass (expressions+schema)); cargo (Rust conformance + shield vendor/shim lanes); faketime (date-invariance ambient probe (the scheduled governance lane installs it and demands it)); minisign (P3 fast-lane TEST signing drill); rustc (Rust conformance + shield vendor/shim lanes); shellcheck (actionlint's shell-script pass (the SC2251 class))) — exit 0 by design: a printed fact, never a gate red; re-run to re-prove
+== P14-P0-2: ci-parity --self-test (the detector can detect) ==
+ci_parity --self-test:
+  ok: absent CI tool -> ABSENT row that counts
+  ok: platform-optional absence does not count
+  ok: actionlint-without-shellcheck => composite row
+  ok: both present => no composite row
+  ok: retryable 5xx -> blocked, counted (the P13 shape)
+  ok: 4xx -> reachable (the host answered; not a stricter lane)
+  ok: chokepoint refusal -> refused, never a probe
+  ok: all-present host => PASS
+  ok: gap host => PARTIAL naming faketime
+  ok: red mode/closure lanes are named
+  ok: apt names parsed
+  ok: release tarball tool parsed
+PASS: ci_parity --self-test
+== P15-T4: permission contract (frozen bytes, audit golden, overlay vectors) ==
+PASS: permission-contract (frozen 66 vectors + FROZEN.yaml byte-pinned; 9 audit golden row(s) schema-valid and canonical; 33 overlay vector(s) well-formed)
+== P15-T9.2: write-path law (overlay mutators confined to xr-core/permissions/) ==
+PASS: permission-write-path (overlay mutators confined to xr-core/permissions/; 271 product source(s) scanned)
+== feature registry (plan §2 ↔ docs/registry/*) ==
+PASS: registry_lint
+== decision register (schema) ==
+PASS: dr_parse
+== decision register (Register-Change trailers) ==
+PASS: dr_parse
+== license audit (canonical MPL-2.0 + copyleft scan) ==
+PASS: license_audit
+== T0-U1: dev-dependency closure (pinned transitives hashed) ==
+PASS: dev_deps_closure_check (every marker-free transitive of the 6 pinned distributions is pinned and hashed in tools/requirements-dev.txt; extra-only and sub-floor-marker requirements excluded by the same rule pip -r applies — offline, fixture-based)
+== DCO signoff ==
+PASS: dco_check
+== threat model v0 structure ==
+PASS: check_threat_model
+== banned-vocabulary lint ==
+PASS: vocab_lint
+== CODEOWNERS / S0 path sync ==
+PASS: owners_sync
+== test suites ==
+........................................................................ [ 16%]
+........................................................................ [ 32%]
+........................................................................ [ 48%]
+........................................................................ [ 64%]
+........................................................................ [ 81%]
+........................................................................ [ 97%]
+............                                                             [100%]
+444 passed in 578.16s (0:09:38)
+== P13-C-P0.2: cross-repo pin (sibling present, at DEPS.xr_core_rev, clean) + the resolver register ==
+pin: xr-core 4d6672d04876b4daa29bd10355de0d3801c8f9b5 == DEPS 4d6672d04876b4daa29bd10355de0d3801c8f9b5 (clean worktree)
+PASS: sibling_pin_check (61 sibling reader(s) classified, arg-only=16, gate-ordered=14, probe=4, routed=4, self=2, test=21)
+== P11-T0-e: touched-file size law (every .py/.sh touched this phase is <=380 lines) ==
+PASS: touched-file size law (26 touched .py/.sh in 724b466094683c61c1a4695fed2044e34c586c55..HEAD, all <= 380 lines)
+== P11-T1: vendored Rust pin (offline verification + the chokepoint law) ==
+PASS: vendor_check (59 vendored crates verified against the lock; root pin sealed per-file; closure complete offline; licenses + advisories clean)
+PASS: fetch_allowlist_check (290 files scanned; chokepoint build/upstream/fetch.py)
+== evidence bundles (contract: docs/contracts/evidence-bundle-v1.md) ==
+PASS: evidence/P1/evidence.json (structural)
+PASS: evidence/P10/evidence.json (structural)
+PASS: evidence/P11/evidence.json (structural)
+PASS: evidence/P12/evidence.json (structural)
+PASS: evidence/P13/evidence.json (structural)
+PASS: evidence/P14/evidence.json (structural)
+PASS: evidence/P2/evidence.json (structural)
+PASS: evidence/P3/evidence.json (structural)
+PASS: evidence/P4/evidence.json (structural)
+PASS: evidence/P5/evidence.json (structural)
+PASS: evidence/P6/evidence.json (structural)
+PASS: evidence/P7/evidence.json (structural)
+PASS: evidence/P8/evidence.json (structural)
+PASS: evidence/P9/evidence.json (structural)
+FAIL: evidence_presence_check: P15: evidence bundle logs/-only — missing ['evidence.json', 'human-gates.md']; a logs/ directory without a bundle is not evidence (P11's shape, P12-T0-b)
+FAIL: evidence_check (14 bundle(s), 1 failure(s); presence law: every phase in git history carries a bundle)
+LANE FAIL (keep-going): "$PY" tools/evidence_check.py
+finality: P10: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P11: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P12: interim — DECLARED, not the in-flight phase (phase=P14); legal only because 1 dated not_done_by_design row(s) say what remains, and the final rules do not apply until closure is claimed (P13-C-P0.4)
+finality: P13: interim — DECLARED, not the in-flight phase (phase=P14); legal only because 1 dated not_done_by_design row(s) say what remains, and the final rules do not apply until closure is claimed (P13-C-P0.4)
+finality: P14: interim — in flight per docs/state/phase-base.json (phase=P14); PENDING sentinels are legal here and the final rules do not apply
+finality: P3: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P4: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P5: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P6: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P7: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P8: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P9: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+PASS: evidence/P10/evidence.json (strict)
+PASS: evidence/P11/evidence.json (strict)
+PASS: evidence/P12/evidence.json (strict)
+PASS: evidence/P13/evidence.json (strict)
+PASS: evidence/P14/evidence.json (strict)
+PASS: evidence/P3/evidence.json (strict)
+PASS: evidence/P4/evidence.json (strict)
+PASS: evidence/P5/evidence.json (strict)
+PASS: evidence/P6/evidence.json (strict)
+PASS: evidence/P7/evidence.json (strict)
+PASS: evidence/P8/evidence.json (strict)
+PASS: evidence/P9/evidence.json (strict)
+FAIL: evidence_presence_check: P15: evidence bundle logs/-only — missing ['evidence.json', 'human-gates.md']; a logs/ directory without a bundle is not evidence (P11's shape, P12-T0-b)
+FAIL: evidence_check (12 bundle(s), 1 failure(s); presence law: every phase in git history carries a bundle)
+LANE FAIL (keep-going): "$PY" tools/evidence_check.py --strict
+== cited-path law (P13-C-P0.5b: a NOT-RUN method must exist) ==
+PASS: doc_reference_check (5 file(s) scanned at or above P13, 25 pre-law file(s) grandfathered, 0 dangling citation(s))
+PASS: runner-capabilities ledger (7 entries, every present/absent claim cited by a real run or transcript; UNOBSERVED entries say why)
+PASS: runner_caps --self-test (citation law + UNOBSERVED law + empty-ledger law + stale-BLOCKED rule, all proven offline)
+== spike: every file:line citation re-verified at the pin ==
+rows checked: 23  {'PASS': 23, 'FAIL': 0, 'DRIFT': 0, 'BLOCKED-NET': 0}
+log: evidence/P4/logs/citation-audit.txt
+PASS: citation-audit
+== spike: papercut census schema ==
+census rows: 15  named surfaces required: 13
+PASS: census-lint
+== spike: probe driver static + fixture lanes ==
+PASS  driver.policy.isolation_bypass           isolation-bypass flag(s) refused: --disable-site-isolation-t
+PASS  driver.policy.clean_flags                no refusal
+PASS  driver.fsdiff.detect                     {"added": ["a/y.bin"], "removed": [], "changed": ["a/x.bin"]
+PASS  driver.fsdiff.stable                     {"added": [], "removed": [], "changed": []}
+PASS  driver.cdp.roundtrip                     {"echo": "SystemInfo.getInfo"}
+PASS  driver.cdp.loopback_only                 CdpError raised
+PASS  driver.fixture.origin                    7 file(s) scanned; 0 real-domain token(s)
+PASS: probe-driver (7 row(s), 0 failure(s))
+== cross-repo pin alive (DEPS xr_core_rev reachable from origin) ==
+PASS: check-pin-alive
+== patch ledger incl. candidate (spike/) dirs ==
+PASS: xr-patch
+== workflow files: expressions + schema (compile error = zero jobs) ==
+  checked: .github/workflows/compat-beta-parity.yml
+  checked: .github/workflows/core-hardening.yml
+  checked: .github/workflows/governance.yml
+  checked: .github/workflows/nightly-rebase-build.yml
+  checked: .github/workflows/sast.yml
+  actionlint: SKIP (tool absent: actionlint) — needed for: deep check of .github/workflows expressions and schema (P4) — a compile error there yields a run with zero jobs and no logs; the always-on half of build/workflow_lint.py still runs without it; install hint: github.com/rhysd/actionlint releases (CI installs it pinned by version + tarball sha256)
+PASS: workflow-lint
+== P13-P0-A: workflow entry-point modes (index 100755 for direct exec) + mode-drift law ==
+workflow files: 5; directly executed repo paths: 15; interpreted invocations EXEMPT: 39 (`bash`/`python3 <path>` — the interpreter is the executable, so the file's mode is not load-bearing)
+  exempt (interpreted): .github/workflows/compat-beta-parity.yml:113 python3 tools/scheduled_lane_check.py
+  exempt (interpreted): .github/workflows/compat-beta-parity.yml:52 python tools/requirements-dev.txt
+  exempt (interpreted): .github/workflows/compat-beta-parity.yml:55 python3 tools/compat.py
+  exempt (interpreted): .github/workflows/compat-beta-parity.yml:63 python3 tools/wpt_delta.py
+  exempt (interpreted): .github/workflows/core-hardening.yml:121 python3 tools/mutation_test.py
+  exempt (interpreted): .github/workflows/core-hardening.yml:153 python3 tools/mutation_test.py
+  exempt (interpreted): .github/workflows/core-hardening.yml:186 python3 tools/mutation_test.py
+  exempt (interpreted): .github/workflows/core-hardening.yml:291 python3 tools/vendor_check.py
+  exempt (interpreted): .github/workflows/core-hardening.yml:345 python3 build/qa/perf/shield_bench.py
+  exempt (interpreted): .github/workflows/core-hardening.yml:345 python3 tools/perf_gate.py
+  exempt (interpreted): .github/workflows/core-hardening.yml:391 python3 tools/shield_parity.py
+  exempt (interpreted): .github/workflows/core-hardening.yml:475 python3 tools/fuzz_fleet.py
+  exempt (interpreted): .github/workflows/core-hardening.yml:513 python tools/requirements-dev.txt
+  exempt (interpreted): .github/workflows/core-hardening.yml:516 python3 tools/release_notes.py
+  exempt (interpreted): .github/workflows/core-hardening.yml:553 python tools/requirements-dev.txt
+  exempt (interpreted): .github/workflows/core-hardening.yml:556 python3 tools/scheduled_lane_check.py
+  exempt (interpreted): .github/workflows/core-hardening.yml:64 python3 tools/mutation_freshness.py
+  exempt (interpreted): .github/workflows/core-hardening.yml:89 python3 tools/mutation_test.py
+  exempt (interpreted): .github/workflows/governance.yml:102 python3 tools/sibling_pin_check.py
+  exempt (interpreted): .github/workflows/governance.yml:117 python3 tools/date_invariance_check.py
+  exempt (interpreted): .github/workflows/governance.yml:168 python3 build/gn/resolve_args.py
+  exempt (interpreted): .github/workflows/governance.yml:168 python3 build/toolchain/provenance.py
+  exempt (interpreted): .github/workflows/governance.yml:181 python3 tools/vectors_check.py
+  exempt (interpreted): .github/workflows/governance.yml:197 python3 tools/mutation_freshness.py
+  exempt (interpreted): .github/workflows/governance.yml:202 python3 tools/mutation_test.py
+  exempt (interpreted): .github/workflows/governance.yml:218 python3 tools/policy_fuzz.py
+  exempt (interpreted): .github/workflows/governance.yml:244 python3 tools/fetch_allowlist_check.py
+  exempt (interpreted): .github/workflows/governance.yml:54 python tools/requirements-dev.txt
+  exempt (interpreted): .github/workflows/nightly-rebase-build.yml:158 python3 tools/scheduled_lane_check.py
+  exempt (interpreted): .github/workflows/nightly-rebase-build.yml:82 python tools/requirements-dev.txt
+  exempt (interpreted): .github/workflows/sast.yml:46 python tools/requirements-dev.txt
+  exempt (interpreted): .github/workflows/sast.yml:49 python3 tools/sast_check.py
+  exempt (interpreted): .github/workflows/sast.yml:54 python3 tools/mode_lint.py
+  exempt (interpreted): .github/workflows/sast.yml:59 python3 tools/license_audit.py
+  exempt (interpreted): .github/workflows/sast.yml:64 python3 tools/npm_allowlist_check.py
+  exempt (interpreted): .github/workflows/sast.yml:69 python3 tools/copy_lint.py
+  exempt (interpreted): .github/workflows/sast.yml:76 python3 tools/scheduled_lane_check.py
+PASS: every workflow-invoked direct entry point is 100755 in the index and no commit in range dropped an exec bit
+== P13-P0-A: in-place rewrites preserve the mode (the defect shape loses it) ==
+ok: a 0755 fixture survives an in-place rewrite (0o755 -> 0o755)
+ok: a 0644 fixture stays 0644
+ok: a new file gets the explicit default (0o644), not the umask
+ok: the write-new-then-replace shape loses it (0o644) — the 5e3d1d4 class, reproduced
+PASS: in-place rewrites preserve mode (helper + canary)
+== P13-P0-B: CI triage reads the public check-run/annotation endpoints (offline self-test) ==
+PASS: ci_triage self-test (red fixture surfaced exit code 126 + the failing step; a missing fixture degrades to BLOCKED-NET, never to a guess)
+== P13-P0-C: phase-finality law (state interim|final; the 12-section report) ==
+finality: P12: final (declared) — judging the final vocabulary, the declared head, the claimed workflows and report.md
+finality: P12: final (declared) — judging the final vocabulary, the declared head, the claimed workflows and report.md
+finality: P12: final (declared) — judging the final vocabulary, the declared head, the claimed workflows and report.md
+finality: P12: 1 row(s) superseded by appended corrections (append-only): R1
+finality: P12: final (declared) — judging the final vocabulary, the declared head, the claimed workflows and report.md
+finality: P13: interim — in flight per docs/state/phase-base.json (phase=P13); PENDING sentinels are legal here and the final rules do not apply
+finality: P4: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+PASS: evidence_finality self-test (final vocabulary + PENDING law, append-only correction, report.md, in-flight interim, invented state, pre-law scoping — all proven offline)
+== P11-T0-c: scheduled-lane health (a red nightly is a red check within a day) ==
+PASS: scheduled_lane_check --self-test (hard-fail, stale-fix, newer-run-verified, newer-run-still-red, lane-health-only exemption, own-lane cap, green, not-run and disabled paths all proven offline)
+PASS: compat-beta-parity.yml
+    compat-beta-parity.yml: schedule run 37755123314 head 01baba0d6 created 2026-10-08T09:13:11Z — success
+PASS: core-hardening.yml
+    core-hardening.yml: schedule run 37607105196 head 01baba0d6 created 2026-10-07T10:23:43Z — success
+PASS: nightly-rebase-build.yml
+    nightly-rebase-build.yml: schedule run 37747378951 head 01baba0d6 created 2026-10-08T08:03:58Z — success
+PASS: sast.yml
+    sast.yml: schedule run 37303947978 head 6b0908208 created 2026-10-05T11:35:45Z — success
+PASS: scheduled_lane_check (4 scheduled lane(s); PASS=4; every non-green state above is visible and non-fatal BY RULE, never silently dropped)
+== P5: mojom structural lint (banned surface, kVersion, budgets) ==
+PASS: mojom_lint (11 files)
+== P5: §1.11 contracts manifest (14 items) + §2.10 reserved surface ==
+PASS: contracts_manifest (14 items)
+== P5: golden-vector fake parity (byte-stable) ==
+  policy-resolver-v1.json: 66/66 ok  sha256=8d35c4c33adcc050…
+  route-manager-v1.json: 9/9 ok  sha256=a57c3252fbcc45e4…
+  update-v1.json: 73/73 ok  sha256=f5d1ca9282afcd56…
+PASS: vectors_check
+== P5: contract freeze register (FROZEN.yaml, ratified=PENDING) ==
+PASS: freeze_check
+== P5: contract-amendment RFC trailer gate (T10) ==
+PASS: amend_guard (stamped=True)
+== P5: isolation-card l10n well-formed + vocab-clean ==
+isolation-card OK 8 strings
+== P8-T5: l10n string source — xr_strings.grdp strict gate + the derived count law (P13-C-P0.1c) ==
+grdp_check: xr_strings.grdp OK (136 messages, isolation-card cross-check clean)
+PASS: l10n_count_law — the tool's reported count and an independent count of xr_strings.grdp agree at 136 message(s), and 136 >= the grow-only ratchet 136
+== P8-T5: raw-string lint — no user-visible literals outside ids (ui/ + payload), id cross-check ==
+l10n_extract: 26 files, 0 raw-string violations, 0 missing ids -> CLEAN
+== P9-T0-b: qyy pseudo-locale render (deterministic) + self-test ==
+PASS: pseudo_locale self-test (canaries fire; tokens verbatim; RTL markers present)
+PASS: pseudo_locale qyy render diff-clean (136 messages, mean 36.9 chars)
+== P8-T6+P11-T6: attention-budget policy of record + shield chip-count-only rule ==
+PASS: attention-budget (P8-T6 policy markers present; P11-T6 shield rule: chip count only — no toast/badge/modal/notification vocabulary in any shield surface or string; 2 surface(s) + 50 shield message(s) scanned)
+== P8-T7: help<->settings deep-link contract lint (schema <-> registry, both directions) ==
+help_deep_link: OK (3 sections, 24 enabled commands, contract markers present)
+== P11-T0-b: no-new-crypto gate (ONE copy of a public algorithm, never a new one — ADR-0043) ==
+PASS: no_new_crypto_check (134 file(s) scanned; one sha256.cc, one json.cc, one json_parse.cc — all in common/core; no constants/libs/banned symbols/PRNG/undispositioned std::hash outside the allowlist)
+PASS: no_new_crypto_check --self-test (6 planted rule violations + 1 planted copy all reddened)
+== P6: mode_lint — L3 one-brain ban + L13 intent headers ==
+mode_lint: 0 violation(s) (PASS)
+== P6: policy.md regeneration diff-clean (generated, no hand drift) ==
+policy.md: regeneration diff-clean (13739 bytes)
+== P6: policy-change-event-v1 schema validates (incl. absence laws) ==
+PASS: xr_schema validate policy-change-event
+== P6/P7/P8/P9-T0-c: discovered C++ suite lanes (every xr-core/*/tests/Makefile) ==
+PASS: lane commands: C++ suites passed
+PASS: lane common: C++ suites passed
+PASS: lane identity: C++ suites passed
+PASS: lane permissions: C++ suites passed
+PASS: lane policy: C++ suites passed
+PASS: lane renderer/cosmetic: C++ suites passed
+PASS: lane settings: C++ suites passed
+PASS: lane shield: C++ suites passed
+PASS: lane themes: C++ suites passed
+PASS: lane update: C++ suites passed
+PASS: ci_lane_discovery (10/10 lanes)
+== P7: ≤12 hook patch round-trip vs the pinned Chromium rev ==
+rev            : d04cdb24d67b081f6cf80200ffc5233f44b61109
+patch          : 11938 B  sha256 13fd46ae06ac127a…
+hook files (4): chrome/browser/ui/views/BUILD.gn, chrome/browser/ui/views/toolbar/app_menu.cc, chrome/browser/ui/views/toolbar/toolbar_view.cc, chrome/browser/ui/views/frame/browser_frame_view.cc
+payload files (5): chrome/browser/ui/xr/BUILD.gn, chrome/browser/ui/xr/xr_command_bridge.cc, chrome/browser/ui/xr/xr_command_bridge.h, chrome/browser/ui/xr/xr_identity_color_bar.cc, chrome/browser/ui/xr/xr_identity_color_bar.h
+total files    : 9 (cap ≤12)
+never-list     : PASS (all files under chrome/browser/ui/**)
+apply          : PASS
+verify         : PASS
+revert         : PASS (byte-exact: True)
+negative       : expected FAIL (patch is bound to the pinned bytes), observed FAIL
+PASS: ui-skeleton patch round-trip
+== P7: WebUI toolchain (tsc-strict + deterministic bundle + CSP) ==
+toolchain: npm ci --ignore-scripts (lock-pinned, --ignore-scripts)
+toolchain: tsc -p /var/tmp/p15/final5/xr-core/ui (strict)
+toolchain: node build.mjs (deterministic bundle)
+  build: built dist/ (bundle.js + index.html + tokens.css)
+toolchain: node check-bundle.js (CSP on output)
+  csp: check-bundle: PASS (CSP-strict: no inline JS/eval, no runtime network, no sourcemap)
+toolchain: PASS (tsc-strict + deterministic bundle + CSP-clean) in /var/tmp/p15/final5/xr-core/ui/toolchain
+== P7: WebUI reproducibility — two builds byte-identical (R1 rung) ==
+repro-check: bundle build_a=4e6c6d2bd3b59ed5aee48b9a9aef61b3bf8949fef2a8b76ccbb0342ca6d2541d
+repro-check: bundle build_b=4e6c6d2bd3b59ed5aee48b9a9aef61b3bf8949fef2a8b76ccbb0342ca6d2541d
+repro-check: all    build_a=87cb52c69e56b824400a5d44556ea20dd2b5fe1f27ae8982bdd0141c4549172b
+repro-check: all    build_b=87cb52c69e56b824400a5d44556ea20dd2b5fe1f27ae8982bdd0141c4549172b
+repro-check: PASS — two independent builds are byte-identical (R1 repro rung)
+== P13-T1: panel focus containment (real suite + planted leak must redden) ==
+panel-tests: node --test ui/panel/tests/focus-trap.test.mjs
+  TAP version 13
+  # Subtest: Tab from the last focusable wraps to the first — and never leaves
+  ok 1 - Tab from the last focusable wraps to the first — and never leaves
+    ---
+    duration_ms: 2.206621
+    ...
+  # Subtest: Shift+Tab from the first wraps to the last — and never leaves
+  ok 2 - Shift+Tab from the first wraps to the last — and never leaves
+    ---
+    duration_ms: 0.31141
+    ...
+  # Subtest: a Tab that would land outside the frame is intercepted, not trusted
+  ok 3 - a Tab that would land outside the frame is intercepted, not trusted
+    ---
+    duration_ms: 0.241745
+    ...
+  # Subtest: the re-open race: focus outside the frame is pulled in, in the direction of travel
+  ok 4 - the re-open race: focus outside the frame is pulled in, in the direction of travel
+    ---
+    duration_ms: 1.319252
+    ...
+  # Subtest: the browser move inside the frame is LEFT ALONE (the trap does not fight the tab order)
+  ok 5 - the browser move inside the frame is LEFT ALONE (the trap does not fight the tab order)
+    ---
+    duration_ms: 0.249995
+    ...
+  # Subtest: Escape closes; other keys are ignored
+  ok 6 - Escape closes; other keys are ignored
+    ---
+    duration_ms: 0.161464
+    ...
+  # Subtest: focusability: hidden, disabled and tabindex<0 elements are not reachable targets
+  ok 7 - focusability: hidden, disabled and tabindex<0 elements are not reachable targets
+    ---
+    duration_ms: 0.294078
+    ...
+  # Subtest: an empty frame contains nothing and asks the caller to decide
+  ok 8 - an empty frame contains nothing and asks the caller to decide
+    ---
+    duration_ms: 0.266665
+    ...
+  # Subtest: THE INVARIANT: twelve tabs in both directions never leave the frame
+  ok 9 - THE INVARIANT: twelve tabs in both directions never leave the frame
+    ---
+    duration_ms: 0.838577
+    ...
+  # Subtest: planted leak: with containment bypassed the SAME invariant reports escapes
+  ok 10 - planted leak: with containment bypassed the SAME invariant reports escapes
+    ---
+    duration_ms: 0.401158
+    ...
+  1..10
+  # tests 10
+  # suites 0
+  # pass 10
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+  # duration_ms 76.214311
+panel-tests: node --test ui/panel/tests/tab-registry.test.mjs
+  TAP version 13
+  # Subtest: the real inventory parses and declares the five P13 tabs in order
+  ok 1 - the real inventory parses and declares the five P13 tabs in order
+    ---
+    duration_ms: 1.985732
+    ...
+  # Subtest: a declared id registers; the registry starts empty of provided tabs
+  ok 2 - a declared id registers; the registry starts empty of provided tabs
+    ---
+    duration_ms: 1.644971
+    ...
+  # Subtest: an id absent from the inventory is refused unknown-tab-id, never dropped
+  ok 3 - an id absent from the inventory is refused unknown-tab-id, never dropped
+    ---
+    duration_ms: 0.383928
+    ...
+  # Subtest: two tabs claiming one order is refused inside the inventory itself
+  ok 4 - two tabs claiming one order is refused inside the inventory itself
+    ---
+    duration_ms: 0.279385
+    ...
+  # Subtest: an order outside the reserved range is refused
+  ok 5 - an order outside the reserved range is refused
+    ---
+    duration_ms: 0.266291
+    ...
+  # Subtest: registering the same id twice is duplicate-id
+  ok 6 - registering the same id twice is duplicate-id
+    ---
+    duration_ms: 0.225228
+    ...
+  # Subtest: the inventory owns order: a renumbering subsystem is refused order-mismatch
+  ok 7 - the inventory owns order: a renumbering subsystem is refused order-mismatch
+    ---
+    duration_ms: 0.24712
+    ...
+  # Subtest: order-collision names the tab already holding the slot
+  ok 8 - order-collision names the tab already holding the slot
+    ---
+    duration_ms: 0.274649
+    ...
+  # Subtest: a malformed entry is refused bad-shape and mutates nothing
+  ok 9 - a malformed entry is refused bad-shape and mutates nothing
+    ---
+    duration_ms: 0.341913
+    ...
+  # Subtest: the panel frame itself is a surface, not a tab
+  ok 10 - the panel frame itself is a surface, not a tab
+    ---
+    duration_ms: 0.339995
+    ...
+  # Subtest: the inventory note about the unit is the reason, not decoration
+  ok 11 - the inventory note about the unit is the reason, not decoration
+    ---
+    duration_ms: 0.210981
+    ...
+  1..11
+  # tests 11
+  # suites 0
+  # pass 11
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+  # duration_ms 73.956024
+panel-tests: node --test ui/panel/tests/sent-tab.test.mjs
+  TAP version 13
+  # Subtest: one serializer drives the preview: the field sets are identical
+  ok 1 - one serializer drives the preview: the field sets are identical
+    ---
+    duration_ms: 1.966853
+    ...
+  # Subtest: a PLANTED extra field becomes a visible row (the viewer cannot hide it)
+  ok 2 - a PLANTED extra field becomes a visible row (the viewer cannot hide it)
+    ---
+    duration_ms: 0.413189
+    ...
+  # Subtest: a structure the viewer cannot render is MARKED, not dropped
+  ok 3 - a structure the viewer cannot render is MARKED, not dropped
+    ---
+    duration_ms: 0.171037
+    ...
+  # Subtest: nulls are rows with the null marker, not absences
+  ok 4 - nulls are rows with the null marker, not absences
+    ---
+    duration_ms: 0.139047
+    ...
+  # Subtest: serialization is deterministic and ordered
+  ok 5 - serialization is deterministic and ordered
+    ---
+    duration_ms: 1.099358
+    ...
+  # Subtest: arrays of scalars flatten with indices, so nothing hides in them
+  ok 6 - arrays of scalars flatten with indices, so nothing hides in them
+    ---
+    duration_ms: 0.191686
+    ...
+  1..6
+  # tests 6
+  # suites 0
+  # pass 6
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+  # duration_ms 66.495955
+panel-tests: node --test ui/panel/tests/breakage-tab.test.mjs
+  TAP version 13
+  # Subtest: the row set is CLOSED: context, queue and SLA — and nothing else
+  ok 1 - the row set is CLOSED: context, queue and SLA — and nothing else
+    ---
+    duration_ms: 1.889444
+    ...
+  # Subtest: no row may carry page content, a cookie, a URL, a UA or a selector
+  ok 2 - no row may carry page content, a cookie, a URL, a UA or a selector
+    ---
+    duration_ms: 0.364268
+    ...
+  # Subtest: the queue says fixture, in the rows, with no live mode to choose
+  ok 3 - the queue says fixture, in the rows, with no live mode to choose
+    ---
+    duration_ms: 0.242546
+    ...
+  # Subtest: the SLA is DATA: label, hours and class also appear verbatim in the payload schema
+  ok 4 - the SLA is DATA: label, hours and class also appear verbatim in the payload schema
+    ---
+    duration_ms: 0.169612
+    ...
+  # Subtest: the confirmation is inline and one click — a MODAL is refused, not rendered
+  ok 5 - the confirmation is inline and one click — a MODAL is refused, not rendered
+    ---
+    duration_ms: 1.527552
+    ...
+  # Subtest: a forbidden piece of context is NAMED when refused
+  ok 6 - a forbidden piece of context is NAMED when refused
+    ---
+    duration_ms: 0.436503
+    ...
+  1..6
+  # tests 6
+  # suites 0
+  # pass 6
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+  # duration_ms 68.307631
+panel-tests: node --test ui/panel/tests/update-tab.test.mjs
+  TAP version 13
+  # Subtest: update availability is a comparison of two version strings
+  ok 1 - update availability is a comparison of two version strings
+    ---
+    duration_ms: 1.174575
+    ...
+  # Subtest: the verb set is CLOSED and contains no install/restart/apply
+  ok 2 - the verb set is CLOSED and contains no install/restart/apply
+    ---
+    duration_ms: 1.146227
+    ...
+  # Subtest: the only action offered is a link to the update page
+  ok 3 - the only action offered is a link to the update page
+    ---
+    duration_ms: 0.153174
+    ...
+  # Subtest: states that would imply the product updates itself are FORBIDDEN, and throw
+  ok 4 - states that would imply the product updates itself are FORBIDDEN, and throw
+    ---
+    duration_ms: 0.533613
+    ...
+  # Subtest: the rows come from P10 channel state and nothing else
+  ok 5 - the rows come from P10 channel state and nothing else
+    ---
+    duration_ms: 1.148186
+    ...
+  # Subtest: the summary says out loud that it implies nothing
+  ok 6 - the summary says out loud that it implies nothing
+    ---
+    duration_ms: 0.228189
+    ...
+  1..6
+  # tests 6
+  # suites 0
+  # pass 6
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+  # duration_ms 68.632314
+panel-tests: node --test ui/panel/tests/observatory-tab.test.mjs
+  TAP version 13
+  # Subtest: the cap is 2000 and the drop count is returned, never hidden
+  ok 1 - the cap is 2000 and the drop count is returned, never hidden
+    ---
+    duration_ms: 3.365439
+    ...
+  # Subtest: an empty list yields an empty window, not a negative index
+  ok 2 - an empty list yields an empty window, not a negative index
+    ---
+    duration_ms: 0.71199
+    ...
+  # Subtest: one screenful: first/last cover it exactly
+  ok 3 - one screenful: first/last cover it exactly
+    ---
+    duration_ms: 1.006532
+    ...
+  # Subtest: scrolling to the END yields a FULL screenful (the off-by-one that hides rows)
+  ok 4 - scrolling to the END yields a FULL screenful (the off-by-one that hides rows)
+    ---
+    duration_ms: 0.178121
+    ...
+  # Subtest: scrolling PAST the end clamps instead of blanking
+  ok 5 - scrolling PAST the end clamps instead of blanking
+    ---
+    duration_ms: 0.137201
+    ...
+  # Subtest: overscan extends the window on both sides but never past the list
+  ok 6 - overscan extends the window on both sides but never past the list
+    ---
+    duration_ms: 0.118044
+    ...
+  # Subtest: filter-THEN-scroll: the window is computed over the filtered length
+  ok 7 - filter-THEN-scroll: the window is computed over the filtered length
+    ---
+    duration_ms: 0.3361
+    ...
+  # Subtest: an absent filter means NO filter, not "match nothing"
+  ok 8 - an absent filter means NO filter, not "match nothing"
+    ---
+    duration_ms: 0.134463
+    ...
+  # Subtest: every RENDERED row carries its a11y position, and rowcount is the WHOLE list
+  ok 9 - every RENDERED row carries its a11y position, and rowcount is the WHOLE list
+    ---
+    duration_ms: 0.359259
+    ...
+  # Subtest: the header is honest about what the cap and the filter cost
+  ok 10 - the header is honest about what the cap and the filter cost
+    ---
+    duration_ms: 0.214636
+    ...
+  1..10
+  # tests 10
+  # suites 0
+  # pass 10
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+  # duration_ms 77.424727
+panel-tests: node --test ui/panel/tests/site-tab.test.mjs
+  TAP version 13
+  # Subtest: scope id is the canonical site-toggle form
+  ok 1 - scope id is the canonical site-toggle form
+    ---
+    duration_ms: 2.189897
+    ...
+  # Subtest: the dial is a function of the scope set, not a store
+  ok 2 - the dial is a function of the scope set, not a store
+    ---
+    duration_ms: 0.815935
+    ...
+  # Subtest: the module exposes no mutator: every control returns a request
+  ok 3 - the module exposes no mutator: every control returns a request
+    ---
+    duration_ms: 0.419649
+    ...
+  # Subtest: both consumers of the shields-down bit are named
+  ok 4 - both consumers of the shields-down bit are named
+    ---
+    duration_ms: 0.143962
+    ...
+  # Subtest: exception rows are the site scopes, ordered and complete
+  ok 5 - exception rows are the site scopes, ordered and complete
+    ---
+    duration_ms: 0.266326
+    ...
+  # Subtest: certificate rows are verbatim, and absence says so
+  ok 6 - certificate rows are verbatim, and absence says so
+    ---
+    duration_ms: 0.183857
+    ...
+  # Subtest: the why drill covers EVERY code in the reason-code table
+  ok 7 - the why drill covers EVERY code in the reason-code table
+    ---
+    duration_ms: 0.355542
+    ...
+  # Subtest: an unknown why_code is a TYPED FALLBACK, never a dropped row
+  ok 8 - an unknown why_code is a TYPED FALLBACK, never a dropped row
+    ---
+    duration_ms: 0.128343
+    ...
+  # Subtest: the isolation card is data-driven, row for row
+  ok 9 - the isolation card is data-driven, row for row
+    ---
+    duration_ms: 0.25858
+    ...
+  # Subtest: permissions summary sorts and names where grants live
+  ok 10 - permissions summary sorts and names where grants live
+    ---
+    duration_ms: 0.271751
+    ...
+  # Subtest: the always-on generic set is not exception-able, and says why
+  ok 11 - the always-on generic set is not exception-able, and says why
+    ---
+    duration_ms: 0.249609
+    ...
+  # Subtest: the scriptlet registry is present and INERT, and an unknown flag is never "off"
+  ok 12 - the scriptlet registry is present and INERT, and an unknown flag is never "off"
+    ---
+    duration_ms: 0.32334
+    ...
+  # Subtest: an isolation row with no measurement says not-run, never an empty cell
+  ok 13 - an isolation row with no measurement says not-run, never an empty cell
+    ---
+    duration_ms: 0.195466
+    ...
+  # Subtest: every isolation row value is a machine token (no space-bearing prose in ui/**)
+  ok 14 - every isolation row value is a machine token (no space-bearing prose in ui/**)
+    ---
+    duration_ms: 0.410247
+    ...
+  1..14
+  # tests 14
+  # suites 0
+  # pass 14
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+  # duration_ms 87.975596
+panel-tests: PASS (focus containment: wrap, intercept, re-open race, restore, planted-leak control; tab registry: inventory bijection, typed refusals; site tab: single-scope dial, why-drill over every reason code + typed fallback; observatory: 2k ring, last-screenful clamp, a11y positions; update tab: closed verb set, no progress states; breakage tab: closed row set, fixture queue, non-attentional confirm; what-would-be-sent: one serializer, planted field renders)
+panel-tests: --plant-leak: containment removed in a scratch copy (/var/tmp/p15/scratch/xr-panel-tests.239407)
+panel-tests: node --test ui/panel/tests/focus-trap.test.mjs
+  not ok 1 - Tab from the last focusable wraps to the first — and never leaves
+  not ok 2 - Shift+Tab from the first wraps to the last — and never leaves
+  not ok 3 - a Tab that would land outside the frame is intercepted, not trusted
+  not ok 4 - the re-open race: focus outside the frame is pulled in, in the direction of travel
+  not ok 9 - THE INVARIANT: twelve tabs in both directions never leave the frame
+  not ok 10 - planted leak: with containment bypassed the SAME invariant reports escapes
+  # tests 10
+  # pass 4
+  # fail 6
+  (verdict only — XR_PANEL_TAP=1 prints the full node:test TAP)
+panel-tests: PASS — the planted leak reddens the suite (containment is really tested)
+== P13-T3: observatory export (redaction contract + smuggle corpus) ==
+PASS: observatory_export (7 smuggle case(s), 3 parity row(s) — default has no query params and no fragments, credentials are refused not stripped, and no refused byte reached the writer)
+== P13-T4: breakage report vectors (refusals pre-send, queue: fixture only) ==
+PASS: breakage_report vectors (2 accepted, 8 refused pre-send with the class named) — queue mode: fixture only; live filing is HUMAN-GATED (docs/panel/breakage-report.md)
+== P13-T6: panel tab registry (inventory ↔ schema ↔ vectors ↔ grdp ↔ allowlist claim) ==
+PASS: panel_registry_check (inventory ↔ schema ↔ grdp ↔ allowlist claim, bypass law; 0 failure(s))
+== P7: CSP lint — no runtime network/eval in ui/** + commands/** ==
+csp_lint: 0 violation(s) (PASS)
+== P7: a11y lint — ARIA APG combobox + aria-live + focus-visible ==
+a11y_lint: 0 violation(s) (PASS)
+== P7: RTL lint — logical-properties-only CSS ==
+rtl_lint: 0 violation(s) (PASS)
+== P7: commands.md regeneration diff-clean (roster → doc, no hand drift) ==
+PASS: /var/tmp/p15/final5/xr-browser/docs/contracts/commands.md is up to date
+== P7: menu model — Tier-1 ≤9 + tier separation + golden diff ==
+PASS: menu_model_check (Tier-1 ≤9, tier separation, stable order)
+== P7: §10 coverage ratchet (every future surface maps to a command) ==
+PASS: coverage_check (unit: declared tab/section; 0 failure(s))
+== T0: upstream added-file canary — live pin->pin classification (fetch.py) ==
+GREEN: all patches apply cleanly at the target rev — proceed to promotion/DEPS-bump review (human presses the button; L24)
+wall-clock 9.055s, 1146661 B fetched, mode=dry-run, source=real
+== P11-T0-a: host protocol doc gate (every method-dispatching host documented, both directions) ==
+  discovered host: commands (9 method(s): bindings-clear, bindings-list, bindings-set, flag-status, invoke, list, menu-model, query, register)
+  discovered host: identity (6 method(s): Activate, Create, Destroy, Hibernate, MoveTab, PromoteToFortressProfile)
+  discovered host: renderer/cosmetic (8 method(s): blob-build, blob-check, degrade-apply, flag-status, key-set, page-states, scope-key, selector-parse)
+  discovered host: settings (8 method(s): counters-dump, flag-status, get, router-resolve, schema-dump, search, sections, set)
+  discovered host: shield (15 method(s): RecentEvents, Status, apply, bundle-check, bundle-load, debug-page, event-emit, exception-add, exception-remove, exception-sweep, flag-status, match, page-states, posture, site-toggle)
+  discovered host: themes (7 method(s): apply, current, flag-status, import, list, system-mode, validate-doc)
+  discovered host: update (7 method(s): about-state, about-states, backoff, cohort, epoch-apply, flag-status, verify)
+PASS: host_protocol_check (7 host(s), every method literal documented, response law declared)
+== P11-T2: shield decision engine (vectors regenerate deterministically + both-backend byte parity) ==
+PASS: docs/contracts/vectors/shield-v1.json regenerates byte-identical (327 cases)
+PASS: 327 shield vectors byte-identical across shield_host (C++) and fakes/shield.py (Python)
+PASS: xr_schema validate block-event
+PASS: claims-lint (1 note file(s); no unsupported superlatives; evidence links, not adjectives)
+PASS: shield-state (all 5 host page states rendered: normal, engine-dead, engine-poisoned, kill-switch, route-loss; fake vocabulary byte-identical; stateText arms + honest default; force-disable reason verbatim; shield.page behind build.channel-dev in roster + both availability backends; grdp rows present; cosmetic rows + seam-guard union armed, inert, hook-dead rendered; observatory enum surface: export FIELDS ⊇ action, why_code, request_class, page_modifying and ⊆ the block-event-v1 properties, tab row type carries type, origin, why_code, rule_id, list_id)
+== P11-T3: xr-lists pipeline (compile vectors + frozen-schema bundle check + signed round-trip) ==
+PASS: docs/contracts/vectors/xr-lists-compile-v1.json regenerates byte-identical (100 cases, 47 refusal cases)
+ok: frozen list-bundle-manifest-v1.md untouched (sha256 d0d9e09f7492ed50… == pin)
+ok: frozen list-bundle-manifest-v1.schema.json untouched (sha256 8f9e576b3ff7fc5c… == pin)
+ok: refusal coverage (47 refusal cases, 13 families covered, vocabulary closed)
+ok: testdata/bundle.json regenerates byte-identical
+ok: testdata/LICENSE.attribution.txt regenerates byte-identical
+ok: testdata/manifest.json regenerates byte-identical
+PASS: list_bundle_check (frozen schema untouched + manifest schema-valid + binding + state laws + refusal coverage + byte-identical regeneration)
+  ok: compile hotpin-v1 — wrote bundle -> /var/tmp/p15/scratch/tmp.QsixCAX6S7/bundle-v1.json (0 refusals)
+  ok: compile hotpin-v2 (the bad list is hot-pinned OUT as signed data)
+  ok: attribution sidecar + shape law — wrote /var/tmp/p15/scratch/tmp.QsixCAX6S7/LICENSE.attribution.txt (2 lists, shape law enforced)
+  ok: sign: runtime keygen + detached gpg signature (TEST channel)
+  ok: verify: detached signature OK — ok: gpg detached verify (manifest-v1.json vs manifest-v1.json.asc)
+  ok: one-byte tamper detected
+  ok: wrong keyring rejected
+  ok: gpg-absent => visible SKIP (77), never a silent pass
+  ok: minisign-absent => visible SKIP (P10's minisign-on-CI pattern)
+  ok: release-channel refused by sign_artifact (fail-closed)
+  ok: attribution shape law reddens (not-4-segments + name-mismatch)
+  ok: host bundle-check binds the signed manifest (2 lists)
+  ok: data tamper refused by the binding (manifest-sha256)
+  ok: hot-pin-out dropped the bad list WITHOUT network (offline stdio host); every frame answered exactly once around apply
+  ok: replay path — re-offered bad bundle refused (downgrade), equal re-offer refused; lkg/pins laws held
+PASS: xr-lists round-trip (15 cells executed: real gpg sign/verify/tamper/wrong-key, SKIP-visible absences, release-channel refusal, attribution law, host binding + hot-pin-out + replay)
+== P11-T7: shield bench rows committed (trend rig; no re-measurement) ==
+PASS: shield-bench --check (rows present: fake_decision_p99_ms, fakecore_decision_p99_ms, list_apply_ms, rss_structures_mb)
+== P11-T8: parity corpus deterministic + fake/TableEngine lane in band ==
+gen_parity_corpus --check: IDENTICAL (1533)
+shield_parity (fake): 1533 cases — agreement 100.0% (band >=98.0), FP 0.0% (band <=0.5), provenance 100.0% (band >=98.0), FN 0 — PASS
+== P11 DoD-10: shield network-seam patch round-trip at the pin (real fetch) ==
+rev            : d04cdb24d67b081f6cf80200ffc5233f44b61109
+patch          : 11841 B  sha256 3ced9302a782aefd…
+hook files (3): services/network/BUILD.gn, services/network/url_loader.cc, services/network/network_context.cc
+payload files (2): services/network/xr/xr_shield_gate.cc, services/network/xr/xr_shield_gate.h
+total files    : 5 (DoD-10 cap ≤8)
+never-list     : PASS (all files under services/network/**)
+apply          : PASS
+verify         : PASS
+revert         : PASS (byte-exact: True)
+negative       : perturbed-anchor apply FAIL (expected FAIL (patch is bound to the pinned bytes))
+== P9-T0-a: parity completeness (every protocol method has corpus cases) ==
+PASS: themes: methods covered by parity corpus
+PASS: settings: methods covered by parity corpus
+PASS: commands: methods covered by parity corpus
+PASS: update: methods covered by parity corpus
+PASS: policy: methods covered by parity corpus
+PASS: shield: methods covered by parity corpus
+PASS: renderer/cosmetic: methods covered by parity corpus
+PASS: identity: methods covered by parity corpus
+PASS: derived pair list == manifest (8 row(s) cross-checked against xr-core/*/host discovery)
+PASS: parity_completeness (8 pair(s), 0 failure(s))
+== P9-T0-a: byte-differential fuzz (C++ host vs fake, seeded) ==
+pair themes: 621 requests, 0 divergences
+pair settings: 629 requests, 0 divergences
+pair commands: 594 requests, 0 divergences
+pair shield: 665 requests, 0 divergences
+PASS: differential_fuzz (2509 requests, 0 divergences)
+== P9-T1: browser-test fixture lint (fixtures are the spec) ==
+browser_test_lint: 0 violation(s) (PASS)
+== P9-T2: isolation-matrix fake cells (identity x mechanism) ==
+PASS: isolation_matrix --check (matrix record diff-clean)
+== P9-T3: leaktest self-test + loopback canary (0 leaks) ==
+PASS: leaktest self-test (clean baseline; planted egress detected; blind harness refused)
+leaktest: 30 probe x state cells executed, 0 leak(s)
+PASS: leaktest (loopback)
+== P9-T4: compat corpus validate + offline replay ==
+compat validate: 20 entries checked, 0 violation(s) (PASS)
+compat replay: 20 entries checked, 0 violation(s) (PASS)
+== P9-T5: perf budgets (plan-transcribed, diff-clean) + gate ==
+PASS: gen_perf_budgets --check (24 rows transcribed, diff-clean)
+== P13-T7: panel frame bench (surrogate, trend rig — never MET) ==
+panel_bench: panel_open_core_ms = 0.010126 ms (surrogate, trend rig — never MET)
+panel_bench: panel_open_subtree_scans = 1 scans (surrogate, trend rig — never MET)
+panel_bench: PASS — committed trend rows present (core 0.0046 ms median of 200, open path reads 1 subtree(s) of a 4096-element document)
+PASS: perf_gate --check (report diff-clean)
+== P9-T6: visual-diff stdlib engine self-test ==
+PASS: visual_diff self-test (identical clean; 1px/theme/RTL flagged; threshold honored; expired waiver red; valid waiver green)
+== P12-T0-a: date-invariance law (no wall clock in a gate verdict) ==
+PASS: wall_clock_lint (149 gate-closure file(s) scanned; 0 verdict-affecting wall-clock reads outside an argument default; 10 non-verdict timestamp(s) allowlisted as data, 0 dead rows)
+PASS: wall_clock_lint self-test (6 planted/permitted shapes discriminated)
+PASS: date_invariance_check (3 invariant lane(s) identical across 2 dates [2026-01-01 .. 2038-01-18]; 1 freshness lane(s) still bite across their expiry boundary; ambient-clock probe UNAVAILABLE (faketime absent) — the --as-of half is proven, the wall-clock half is NOT — the push gate is date-invariant and no freshness law was weakened)
+== P9-T7: npm allowlist + copy lint + AXTree snapshot + keyboard tasks ==
+npm_allowlist_check: 35 package(s) checked, 0 violation(s) (PASS)
+copy_lint: 136 string(s) checked, 0 violation(s) (PASS)
+PASS: a11y_tree --check (39 nodes, diff-clean)
+keyboard_tasks_check: 12 task(s), 0 violation(s) (PASS)
+== P9-T8: fuzz corpus seeds + contract generator + fleet (timebox law) ==
+seed_corpus: 142 seed(s) verified (policy-core=36, commands-core=11, settings-core=10, themes-core=19, cosmetic-core=51, identity-core=15)
+PASS: seed_corpus --check
+mojom_fuzz_gen: 12000 cases (policy=1000, commands=1000, settings=1000, themes=1000, shield=1000, route-manager=1000, identity=1000, vault=1000, guard=1000, downloads=1000, activity-log=1000, renderer/cosmetic=1000)
+covers: PolicyResolver:policy:1000 commands:commands:1000 settings:settings:1000 themes:themes:1000 Shield:shield:1000 RouteManager:route-manager:1000 IdentityManager:identity:1000 VaultService:vault:1000 GuardLedger:guard:1000 DownloadSafety:downloads:1000 ActivityLog:activity-log:1000 Cosmetic:renderer/cosmetic:1000
+PASS: mojom_fuzz_gen
+fuzz_fleet: 6 target(s) x 60s clean (corpus dirs seeded)
+PASS: fuzz_fleet
+== P9-T9: SAST rule registry (canary + real-tree clean) ==
+sast_check: 10 rule(s), 0 violation(s) (PASS)
+== P9-T10/T11: drill matrices (kill matrix + update drill, complete) ==
+drill_check: 0 violation(s) (PASS)
+== P10-T0-c: mutation freshness (a stale score is a FAIL, not a note) ==
+fresh cores: commands, common, identity, permissions, policy, renderer/cosmetic, settings, shield, themes, update
+PASS: mutation-freshness (pin 4d6672d04876, 10 core(s) fresh)
+== P10-T1: update golden vectors, cross-backend BYTE parity (73 cases) ==
+byte-identical: 73/73 cases across update_host (C++) and fakes/update.py (Python)
+PASS: update-vectors (73 cases, both backends, both flags)
+== P10-T1: std-only core import hygiene (no Chromium includes in core/**) ==
+PASS: core-hygiene (121 files across 9 cores: commands, common, identity, permissions, policy, settings, shield, themes, update; std/libc includes only, no Chromium, no cross-core escapes)
+== P10-T2: update-server spec + conformance (reference) + fuzz + size ==
+PASS: xr_schema validate server-version-graph
+PASS: xr_schema validate server-channels
+PASS: xr_schema validate server-cohorts
+PASS: xr_schema validate server-epochs
+PASS: update_server_ref self-check (render+verify+statelessness+cap; response 669 bytes)
+PASS: spec/README.md diff-clean
+PASS: spec_generated.rs diff-clean (3 variants)
+PASS: conformance corpus consistent (51 cases, 22 render-31 responses, 29 typed refusals)
+PASS: server conformance (reference): 51 cases (22 render-31 responses byte-exact, 29 typed refusals; stateless; canonical)
+fuzz: 461501 iters, 148401 render-31 responses, 313100 typed refusals, 0 violations (seed 20260911, budget 30 s)
+PASS: server fuzz (never-accept-without-valid-signature/epoch, statelessness, canonical refusals, cap)
+response: 1379 bytes raw, 435 bytes gzip (limit 2048; 3 offer(s) rendered)
+request cap: 65536 bytes (over-cap refused before parse — measured by the conformance corpus, case too-large)
+PASS: server-size (response 1379B <= 2048B, gzip 435B; cap enforced)
+== P10-T5/T7/T8: rollout drill + claims/notes + about-state coverage ==
+== rollout/rollback drill (update_host + reference server; store /var/tmp/p15/scratch/tmpqmiisj_c) ==
+  [ok] serve+accept
+  [ok] refuse-downgrade
+  [ok] replay-refusal
+  [ok] ramp-boundary-49-in
+  [ok] ramp-boundary-50-out
+  [ok] epoch-revocation-applied
+  [ok] revocation-forces-manual-path
+  [ok] stale-notice-ignored
+  [ok] auto-rollout-refused-until-p38
+  [ok] crash-hook-dev-only
+cells executed: 10 / not-run: 0
+PASS: rollout drill (serve/accept, downgrade+replay refusals, ramp boundaries, epoch revocation -> forced manual path, stale ignored, auto-rollout refused until P38, dev-only hook)
+PASS: release-notes diff-clean (train-152.md; offline fixture, fetched 2026-09-14, as-of 2026-09-14 — date-invariant)
+PASS: claims-lint (1 note file(s); no unsupported superlatives; evidence links, not adjectives)
+PASS: about-state (all 7 host states rendered: idle, checking, available, downloading, ready, failed, refused; failed/refused carry reason + manual path + check-again; roster + grdp rows present)
+== P10-T3: key-ceremony docs + the both-repos secret absence proof ==
+PASS: secret-scan (3454 files across both repos; no private key material, no credential shapes; the absence of release keys is the honest state — ADR-0004/HG-36)
+PASS: ceremony-check (ceremony.md + key-hierarchy.md + README complete; secret-scan clean across both repos; release-key generation refused by tooling)
+== P10-T4: signing matrix (gpg REAL in sandbox; argv-exact mac/win) ==
+  ok: gpg keygen — PASS: linux-repo test key generated in /var/tmp/p15/scratch/tmp.tETTtN2EHC/gnupghome (TEST ONLY — release keys are HSM-born, HG-36)
+  ok: clearsign InRelease
+  ok: verify OK — PASS: signature verified (InRelease against keyring /var/tmp/p15/scratch/tmp.tETTtN2EHC/gnupghome)
+  ok: one-byte tamper detected (FAIL: verification FAILED (InRelease.tampered): gpg: Signatu...)
+  ok: wrong keyring rejected
+  ok: repomd.xml detached .asc verify
+  ok: appimage write+check — PASS: appimage-meta round-trip (XR-0.9.18.2-x86_64.AppImage: beta 0.9.18.2, digest ok, stub sig ok)
+  ok: tampered image refused (FAIL: XR-0.9.18.2-x86_64.AppImage: payload digest/size misma...)
+  ok: argv-stub matrix (5 exact argv shapes + provider guard, stub-recorded)
+  ok: beta without XR_SIGN_PROVIDER refused — REFUSED: channel 'beta' requires XR_SIGN_PROVIDER (a real si...
+  ok: stable with provider accepted (argv construction only; real sigs = HG-37)
+PASS: signing matrix (14 cells executed: gpg real round-trip, tamper, wrong-key; appimage round-trip; argv-exact; provider guard)
+PASS: packaging-matrix (6 rows complete: owner + signing + update-registration + artifacts; tier-2 capability statements present; signing tools exist)
+== P10-T7: license report + unknown-license-fails-build law ==
+license report: 18 dependency eval(s) (1 rejected-and-not-shipped; 0 unknown-license: none)
+PASS: license-report (18 entries; every dependency eval represented; unknown-license law clean)
+== P10-T9: release gate (dev green on synthetic; beta/stable MUST fail closed) ==
+== release gate: channel dev ==
+  [--] signing: TEST-ONLY banner (dev lane — the core prints 'test-only: …' on every accept; HG-36 for production)
+  [ok] signing: dev/nightly-test: TEST-ONLY is the honest state, banner in every result
+  [ok] sbom+licenses: PASS: sbom_gate
+  [ok] attestation: PASS: attestation verified offline (attestation-example.json; pinned TEST-ONLY key; 0 subject artifact(s) re-digested; one-byte tamper law holds by construction — demonstrated in the negative fixture)
+  [XX] evidence: finality: P9: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+  [ok] leak-report: evidence/P10/logs/t9-leak-report.txt
+  [ok] notes+voice: release_notes --check + claims_lint
+  [ok] drills: rollout drill transcript (10/10 cells)
+
+release gate — channel 'dev': 6 lane(s) green, 1 missing
+  MISSING: evidence: finality: P9: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged — MISSING/BLOCKED
+FAIL: release check --channel dev — the gate certifies nothing without its evidence; do not call this a release
+LANE FAIL (keep-going): "$PY" tools/release_gate.py check --channel dev --artifact work/release-check/synthetic-artifact.bin
+ok: release check --channel beta exits non-zero (fail-closed, missing items enumerated)
+ok: release check --channel stable exits non-zero (fail-closed, missing items enumerated)
+== P10-T0-b: kill matrix, hosts-local EXECUTION (the P9 deferral closed) ==
+  executed: commands/mid-dispatch/SIGKILL (4 iteration(s))
+  executed: commands/mid-dispatch/SIGTERM (4 iteration(s))
+  executed: commands/mid-write/SIGKILL (4 iteration(s))
+  executed: commands/mid-write/SIGTERM (4 iteration(s))
+  executed: commands/corrupt-load/- (1 iteration(s))
+  NOT-RUN : identity/*/* — no drill surface registered for this host
+  executed: policy/mid-dispatch/SIGKILL (4 iteration(s))
+  executed: policy/mid-dispatch/SIGTERM (4 iteration(s))
+  NOT-RUN : policy/mid-write/* — policy_host has no binary write mode (PolicyStore::Save is library-level; the host write path lands with P11+ IPC) — file-level law proven by policy/tests/test_store.cc
+  executed: policy/mid-snapshot/SIGKILL (4 iteration(s))
+  NOT-RUN : cosmetic/*/* — no drill surface registered for this host
+  executed: settings/mid-dispatch/SIGKILL (4 iteration(s))
+  executed: settings/mid-dispatch/SIGTERM (4 iteration(s))
+  executed: settings/mid-write/SIGKILL (4 iteration(s))
+  executed: settings/mid-write/SIGTERM (4 iteration(s))
+  executed: settings/corrupt-load/- (1 iteration(s))
+  NOT-RUN : shield/*/* — no drill surface registered for this host
+  executed: themes/mid-dispatch/SIGKILL (4 iteration(s))
+  executed: themes/mid-dispatch/SIGTERM (4 iteration(s))
+  executed: themes/mid-write/SIGKILL (4 iteration(s))
+  executed: themes/mid-write/SIGTERM (4 iteration(s))
+  executed: themes/corrupt-load/- (1 iteration(s))
+  NOT-RUN : update/*/* — no drill surface registered for this host
+  executed: commands/disposable-zero-bytes/- (1 iteration(s))
+  executed: settings/disposable-zero-bytes/- (1 iteration(s))
+  executed: themes/disposable-zero-bytes/- (1 iteration(s))
+  NOT-RUN : browser/process-kill/* — needs the farm browser process tree + VM snapshots (HG-33)
+  NOT-RUN : renderer/process-kill/* — needs the farm browser process tree + VM snapshots (HG-33)
+  NOT-RUN : network/process-kill/* — needs the farm browser process tree + VM snapshots (HG-33)
+  NOT-RUN : vaultd/process-kill/* — needs the farm browser process tree + VM snapshots (HG-33)
+  NOT-RUN : tord/process-kill/* — needs the farm browser process tree + VM snapshots (HG-33)
+  NOT-RUN : wgd/process-kill/* — needs the farm browser process tree + VM snapshots (HG-33)
+  NOT-RUN : inspect/process-kill/* — needs the farm browser process tree + VM snapshots (HG-33)
+  NOT-RUN : gpu/process-kill/* — needs the farm browser process tree + VM snapshots (HG-33)
+  cells executed: 21 (kill iterations: 66), cells not-run: 13
+PASS: kill-matrix
+== P9-T12: §11 surface completeness (every surface homed) ==
+surfaces_check: 15 surface(s), 0 violation(s) (PASS)
+== P9 meta: mutation-check the checker (3 runners, defect must escape) ==
+tools/perf_gate.py: control=tripped, mutation=escaped
+tools/surfaces_check.py: control=tripped, mutation=escaped
+tools/evidence_check.py: control=tripped, mutation=escaped
+test_checker_mutation: 3 target(s), 0 failure(s) (PASS)
+== P12-T1: cosmetic core ↔ host ↔ fake parity (the living contract) ==
+PASS: 249 cosmetic vectors byte-identical across cosmetic_host (C++) and fakes/cosmetic.py (Python)
+== P12-T1: scriptlet registry (admitted/refused, execution OFF) ==
+PASS: scriptlet_registry_check (12 admitted (4 page-modifying), 4 refused, execution=off, main_world=false)
+== P12-T3: generic hide set (budget + page-modifying count) ==
+PASS: cosmetic_generic_set_check (33 rules (4 page-modifying), always-on, not exception-able, build 2.08 ms)
+== P12-T7: cosmetic bench rows committed (trend rig, surrogate-only) ==
+PASS: cosmetic-bench --check (rows present: cosmetic_generic_set_rules, cosmetic_keyset_build_ms)
+== P12-T5: single scope object + the >=40 identity/OOPIF matrix ==
+o  matrix: 49 cases (floor 40)
+o  vectors: 249 (floor 150)
+o  single-scope-object: cosmetic surface carries no shield exception-store grammar (checked 'renderer/cosmetic', 'fakes/cosmetic.py')
+PASS: cosmetic_scope_single_check (49 matrix, 0 failure(s))
+== P12-T1: patch budget ledger (files declared == files touched) ==
+PASS: patch_manifest_check (patches: 4, files: 21, drifted: 0 — declared `files:` equals the patch diff in both directions)
+== P12-T1: blink_seams guard lint (every hook behind #if defined(XR_…)) ==
+PASS: blink_guard_lint (hooks: 1, guarded: 1, unguarded: 0)
+== P12-T1: cosmetic seam patch round-trip at the pin (real upstream fetch) ==
+rev            : d04cdb24d67b081f6cf80200ffc5233f44b61109
+patch          : 12728 B  sha256 40ece1cf3f6d2de4…
+hook files (2): third_party/blink/renderer/core/BUILD.gn, third_party/blink/renderer/core/dom/document.cc
+payload files (3): third_party/blink/renderer/core/xr/BUILD.gn, third_party/blink/renderer/core/xr/xr_cosmetic_seam.cc, third_party/blink/renderer/core/xr/xr_cosmetic_seam.h
+total files    : 5 (blink_seams cap ≤25)
+never-list     : PASS (all files under third_party/blink/renderer/core/**)
+compiled       : NOT-RUN (gn/ninja absent — no Chromium build claimed)
+apply          : PASS
+verify         : PASS
+revert         : PASS (byte-exact: True)
+negative       : perturbed-anchor apply FAIL (expected FAIL (patch is bound to the pinned bytes))
+parity verdict: ci-parity: PARTIAL (6 lane(s) will be stricter on CI: actionlint (workflow-lint deep pass (expressions+schema)); cargo (Rust conformance + shield vendor/shim lanes); faketime (date-invariance ambient probe (the scheduled governance lane installs it and demands it)); minisign (P3 fast-lane TEST signing drill); rustc (Rust conformance + shield vendor/shim lanes); shellcheck (actionlint's shell-script pass (the SC2251 class))) — exit 0 by design: a printed fact, never a gate red; re-run to re-prove
+FAIL: 3 lane(s) failed (see the 'LANE FAIL (keep-going)'
+lines above; the default gate aborts at the first of them)
+GATE_RC=1

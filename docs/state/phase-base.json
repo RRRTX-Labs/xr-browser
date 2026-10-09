@@ -1,5 +1,5 @@
 {
- "base_commit": "724b466094683c61c1a4695fed2044e34c586c55",
+ "base_commit": "01baba0d6ce8d923b833e30dbf25463211ec8d91",
  "history": [
   {
    "base_commit": "7fa253f1dbd827ba66a3cd563536d9932713c09a",
@@ -15,9 +15,14 @@
    "base_commit": "724b466094683c61c1a4695fed2044e34c586c55",
    "phase": "P14",
    "recorded": "2026-10-01"
+  },
+  {
+   "base_commit": "01baba0d6ce8d923b833e30dbf25463211ec8d91",
+   "phase": "P15",
+   "recorded": "2026-10-09"
   }
  ],
  "law": "touched-file size law (P11-T0-e): every .py/.sh under build/, tools/, release/ touched between base_commit..HEAD must be <=380 lines \u2014 stricter than the whole-tree 400-LOC law; enforced by build/tests/test_file_size_law.py --touched (run_checks p11_size_law + governance) and mirrored in pytest",
- "note": "base_commit = the parent of the first P14 commit (the P13-C-CLOSE-FREEZE commit 724b466). Updated at each phase start; prior bases are kept in history (append-only). P14 rotates as the law requires, so the touched-file law bites on P14's own edits rather than on P13's.",
- "phase": "P14"
+ "note": "base_commit = the parent of the first P15 commit (the P14 close head 01baba0). Updated at each phase start; prior bases are kept in history (append-only). P15 rotates as the law requires, so the touched-file law bites on P15's own edits.",
+ "phase": "P15"
 }
