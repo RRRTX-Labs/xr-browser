@@ -67,12 +67,39 @@ def grdp_shield_messages() -> list[tuple[str, str]]:
         text, re.S)]
 
 
+# --- P15-T7: the permission-prompt rule (anchored, never stacked, ceiling) --
+PERM_MARKERS = ["## Permissions (P15-T7)", "anchored prompt", "never stacked",
+                "demote one tier", "logged", "no modal", "no badge", "no toast",
+                "3 per hour"]
+PERM_SOURCES = [CORE / "permissions" / "core" / "present.h",
+                CORE / "permissions" / "core" / "present.cc"]
+# "notification" is a capability name in permission copy, so the permission
+# scan bans the escalation nouns only (the shield scan keeps the wider list).
+PERM_BANNED = re.compile(r"\b(toast|badge|modal)s?\b", re.IGNORECASE)
+
+
+def permission_fails(paths: list[Path]) -> list[str]:
+    out: list[str] = []
+    for src in paths:
+        if not src.exists():
+            out.append(f"permission surface missing: {src}")
+            continue
+        for i, line in enumerate(src.read_text(encoding="utf-8").splitlines(), 1):
+            if PERM_BANNED.search(line):
+                out.append(f"{src.name}:{i} permission surface carries escalation "
+                           f"vocabulary: {line.strip()[:72]}")
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(prog="attention-check",
                                  description=__doc__.splitlines()[0])
     ap.add_argument("--fixture-view", default=None,
                     help="negative fixture: a shield view file carrying "
                          "banned attention vocabulary")
+    ap.add_argument("--fixture-permission", default=None,
+                    help="negative fixture: a permission surface file carrying "
+                         "banned attention vocabulary (P15-T7)")
     a = ap.parse_args()
     fails: list[str] = []
 
@@ -97,6 +124,20 @@ def main() -> int:
     for m in COSMETIC_MARKERS:
         if re.sub(r"\s+", " ", m).lower() not in flat.lower():
             fails.append(f"cosmetic-section marker missing or drifted: {m!r}")
+
+    # --- 2c) the P15-T7 permission rule ----------------------------------
+    for m in PERM_MARKERS:
+        if re.sub(r"\s+", " ", m).lower() not in flat.lower():
+            fails.append(f"permission-section marker missing or drifted: {m!r}")
+    if not a.fixture_view and not a.fixture_permission:
+        fails += permission_fails(PERM_SOURCES)
+        present = PERM_SOURCES[0]
+        if present.exists():
+            ptext = present.read_text(encoding="utf-8")
+            if "kT3PromptsPerHour = 3" not in ptext:
+                fails.append("present.h: the T3 ceiling constant drifted from 3 per hour")
+            if "max_stacked = 1" not in ptext:
+                fails.append("present.h: max_stacked is no longer 1 (prompts would stack)")
 
     surfaces = shield_surfaces()
     if not surfaces:
@@ -139,6 +180,14 @@ def main() -> int:
             fails.append("grdp has no IDS_XR_SHIELD_COSMETIC_* messages "
                          "(the cosmetic rows would drop off the page)")
 
+    if a.fixture_permission:
+        # negative fixture: a planted permission surface MUST redden the gate
+        pfails = permission_fails([Path(a.fixture_permission)])
+        if pfails:
+            print(f"ok: negative fixture reddened ({pfails[0]})")
+            return 0
+        print("FAIL: negative fixture did NOT redden (the permission rule cannot fail)")
+        return 1
     if a.fixture_view:
         # negative fixture: the gate MUST fail
         if fails:

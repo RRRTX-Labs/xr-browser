@@ -4,6 +4,7 @@
     "commands",
     "common",
     "identity",
+    "permissions",
     "policy",
     "renderer/cosmetic",
     "settings",

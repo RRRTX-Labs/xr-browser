@@ -22,6 +22,7 @@ PY="${PYTHON:-python3}"
 # size law; see checks/p5_gates.sh for the move's provenance).
 . "$(dirname "$0")/checks/p5_gates.sh"
 . "$(dirname "$0")/checks/p14_gates.sh"
+. "$(dirname "$0")/checks/p15_gates.sh"
 # T0-U1: --keep-going (tracer + tally live in checks/gate_runner.sh).
 . "$(dirname "$0")/checks/gate_runner.sh"; kr_parse_args "$@"
 
@@ -32,6 +33,9 @@ echo "== plan pin =="
 # the final tally re-echoes its verdict. A printed fact, never a gate red.
 p14_parity
 p14_parity_selftest
+
+# P15: the permission-firewall lanes (ADR-0051). Printed in the order they run.
+p15_lanes
 
 echo "== feature registry (plan §2 ↔ docs/registry/*) =="
 "$PY" tools/registry_lint.py
