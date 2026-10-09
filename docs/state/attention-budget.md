@@ -107,6 +107,26 @@ label, never an attention surface. Gate: `tools/attention_check.py`
 enforces it (a cosmetic string carrying escalation vocabulary is a FAIL,
 and the cosmetic rows must exist on the page).
 
+## Permissions (P15-T7)
+
+Permission prompts are anchored prompts (tier T3). The ceiling is structural
+(enforced by `AttentionCeiling` in `xr-core/permissions/core/present.cc` and
+proven in `xr-core/permissions/tests/test_present.cc`), not a note to a
+reviewer:
+
+- Anchored prompt: a permission prompt is an anchored prompt. No modal, no
+  badge, no toast. Permission surfaces carry no attention-escalation
+  vocabulary (`tools/attention_check.py` scans them). The word
+  "notification" names the capability and is not banned here.
+- Ceiling: at most 3 per hour, counted by the local counter only (LOCAL COUNTERS
+  ONLY; never uploaded). Over the ceiling, demote one tier to T2; the demotion is
+  logged. Nothing is dropped silently.
+- Never stacked: a second permission prompt while one is pending gets the same
+  treatment: demote one tier, and the demotion is logged. Max stacked prompts is 1.
+- Identity scope: an identity-scoped prompt says where the grant applies (copy
+  key `perm.scope.only_in_identity`, plan line 809). The copy is an l10n key,
+  not a string in the core.
+
 ## 9. Enforcement
 
 - C++ suites (`settings` make test): counters unit/durability suites,

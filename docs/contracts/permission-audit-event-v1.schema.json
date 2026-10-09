@@ -1,0 +1,93 @@
+{
+ "$schema-note": "Hand-rolled strict subset (no jsonschema dependency, per DEPENDENCY RULES). Validated per line by tools/xr_schema.py (validate_document) through tools/permission_contract_check.py, because the golden is JSON Lines. additionalProperties is false everywhere. ABSENCE LAWS: NO usage, quota, or active-count field of any kind (the schema has no property for them, so a planted one is rejected); NO free-text origin (a bare registrable domain or the empty string for identity-wide rows: the bare-domain rule is enforced by the C++ generator, RedactOrigin, and by the Python contract check, since this validator has no pattern keyword). Generator: xr-core/permissions/core/audit.cc (golden bytes tested in xr-core/permissions/tests/test_audit.cc).",
+ "contract": "permission-audit-event",
+ "contract_version": 1,
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "contract",
+  "contract_version",
+  "event",
+  "identity",
+  "capability",
+  "origin",
+  "scope",
+  "ts_millis",
+  "ttl_millis",
+  "reason",
+  "deciding_layer",
+  "determinism_note"
+ ],
+ "properties": {
+  "contract": {
+   "const": "permission-audit-event"
+  },
+  "contract_version": {
+   "type": "integer",
+   "const": 1
+  },
+  "event": {
+   "type": "string",
+   "enum": [
+    "grant",
+    "revoke",
+    "expiry"
+   ]
+  },
+  "identity": {
+   "type": "string"
+  },
+  "capability": {
+   "type": "string",
+   "enum": [
+    "geolocation",
+    "camera",
+    "microphone",
+    "notifications"
+   ]
+  },
+  "origin": {
+   "type": "string"
+  },
+  "scope": {
+   "type": "string",
+   "enum": [
+    "once",
+    "session",
+    "7d",
+    "identity_default",
+    "identity_deny_list"
+   ]
+  },
+  "ts_millis": {
+   "type": "integer"
+  },
+  "ttl_millis": {
+   "type": "integer"
+  },
+  "reason": {
+   "type": "string",
+   "enum": [
+    "user-grant",
+    "user-default",
+    "ttl",
+    "used",
+    "session_end",
+    "revoke_site",
+    "revoke_all",
+    "fortress-deny-list"
+   ]
+  },
+  "deciding_layer": {
+   "type": "string",
+   "enum": [
+    "identity_overlay",
+    "global_fallback"
+   ]
+  },
+  "determinism_note": {
+   "type": "string",
+   "const": "ts_millis is caller-supplied; the core reads no clock; identical inputs give identical bytes"
+  }
+ }
+}

@@ -1,0 +1,1556 @@
+{
+  "contract": "policy-resolver-permission-overlay",
+  "contract_version": 1,
+  "count": 33,
+  "note": "ADDITIVE to policy-resolver-v1.json (the 66 frozen vectors are untouched). Inputs are literal resolver requests; expected carries the four frozen PermissionState fields only. Written under ADR-0051 (DRAFT).",
+  "vectors": [
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAsk",
+          "geolocation": "kAsk",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "baseline-absent-overlay",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAsk",
+          "geolocation": "kAsk",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "inert-empty-overlay",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [],
+          "grants": []
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kDeny",
+          "geolocation": "kDeny",
+          "microphone": "kDeny",
+          "notifications": "kDeny"
+        }
+      },
+      "name": "corrupt-flag-denies-identity-a",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "corrupt": true
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kDeny",
+          "geolocation": "kDeny",
+          "microphone": "kDeny",
+          "notifications": "kDeny"
+        }
+      },
+      "name": "corrupt-flag-denies-identity-b",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000b2"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "corrupt": true
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kDeny",
+          "geolocation": "kDeny",
+          "microphone": "kDeny",
+          "notifications": "kDeny"
+        }
+      },
+      "name": "unknown-key-is-corrupt",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [],
+          "grants": [],
+          "zzz": 1
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kDeny",
+          "geolocation": "kDeny",
+          "microphone": "kDeny",
+          "notifications": "kDeny"
+        }
+      },
+      "name": "explicit-null-is-corrupt",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": null,
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kDeny",
+          "geolocation": "kDeny",
+          "microphone": "kDeny",
+          "notifications": "kDeny"
+        }
+      },
+      "name": "bad-state-name-is-corrupt",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [
+            {
+              "capability": "camera",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "state": "kAllowAll"
+            }
+          ],
+          "denied_identities": [],
+          "grants": []
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kDeny",
+          "geolocation": "kDeny",
+          "microphone": "kDeny",
+          "notifications": "kDeny"
+        }
+      },
+      "name": "duplicate-default-is-corrupt",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [
+            {
+              "capability": "camera",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "state": "kAllow"
+            },
+            {
+              "capability": "camera",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "state": "kDeny"
+            }
+          ],
+          "denied_identities": [],
+          "grants": []
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kDeny",
+          "geolocation": "kDeny",
+          "microphone": "kDeny",
+          "notifications": "kDeny"
+        }
+      },
+      "name": "unknown-scope-is-corrupt",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [],
+          "grants": [
+            {
+              "capability": "camera",
+              "domain": "example.com",
+              "expires_at": 5,
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "scope": "forever"
+            }
+          ]
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kDeny",
+          "geolocation": "kDeny",
+          "microphone": "kDeny",
+          "notifications": "kDeny"
+        }
+      },
+      "name": "extra-as-default-is-corrupt",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [
+            {
+              "capability": "sensors",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "state": "kAllow"
+            }
+          ],
+          "denied_identities": [],
+          "grants": []
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kDeny",
+          "geolocation": "kDeny",
+          "microphone": "kDeny",
+          "notifications": "kDeny"
+        }
+      },
+      "name": "session-grant-without-id-is-corrupt",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [],
+          "grants": [
+            {
+              "capability": "camera",
+              "domain": "example.com",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "scope": "session"
+            }
+          ]
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kDeny",
+          "geolocation": "kDeny",
+          "microphone": "kDeny",
+          "notifications": "kDeny"
+        }
+      },
+      "name": "grant-extra-field-is-corrupt",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [],
+          "grants": [
+            {
+              "capability": "camera",
+              "domain": "example.com",
+              "expires_at": 9,
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "remaining_uses": 1,
+              "scope": "once"
+            }
+          ]
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kDeny",
+          "geolocation": "kDeny",
+          "microphone": "kDeny",
+          "notifications": "kDeny"
+        }
+      },
+      "name": "fortress-denied-identity-a-is-deny-all",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [
+            "xr:00000000-0000-4000-8000-0000000000a1"
+          ],
+          "grants": []
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAsk",
+          "geolocation": "kAsk",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "fortress-deny-leaves-identity-b",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000b2"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [
+            "xr:00000000-0000-4000-8000-0000000000a1"
+          ],
+          "grants": []
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kDeny",
+          "geolocation": "kDeny",
+          "microphone": "kDeny",
+          "notifications": "kDeny"
+        }
+      },
+      "name": "deny-list-beats-identity-allow",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [
+            {
+              "capability": "camera",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "state": "kAllow"
+            }
+          ],
+          "denied_identities": [
+            "xr:00000000-0000-4000-8000-0000000000a1"
+          ],
+          "grants": []
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kDeny",
+          "geolocation": "kDeny",
+          "microphone": "kDeny",
+          "notifications": "kDeny"
+        }
+      },
+      "name": "deny-list-beats-active-grant",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [
+            "xr:00000000-0000-4000-8000-0000000000a1"
+          ],
+          "grants": [
+            {
+              "capability": "geolocation",
+              "domain": "example.com",
+              "expires_at": 605800000,
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "scope": "7d"
+            }
+          ]
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAllow",
+          "geolocation": "kAsk",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "default-allow-camera-for-a",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [
+            {
+              "capability": "camera",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "state": "kAllow"
+            }
+          ],
+          "denied_identities": [],
+          "grants": []
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAsk",
+          "geolocation": "kAsk",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "default-allow-camera-for-a-not-b",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000b2"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [
+            {
+              "capability": "camera",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "state": "kAllow"
+            }
+          ],
+          "denied_identities": [],
+          "grants": []
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAsk",
+          "geolocation": "kDeny",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "default-deny-geolocation",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [
+            {
+              "capability": "geolocation",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "state": "kDeny"
+            }
+          ],
+          "denied_identities": [],
+          "grants": []
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAsk",
+          "geolocation": "kAsk",
+          "microphone": "kAsk",
+          "notifications": "kDeny"
+        }
+      },
+      "name": "default-deny-notifications-overrides-tier-ask",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [
+            {
+              "capability": "notifications",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "state": "kDeny"
+            }
+          ],
+          "denied_identities": [],
+          "grants": []
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAllow",
+          "geolocation": "kAsk",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "isolation-two-identities-two-defaults-a",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [
+            {
+              "capability": "camera",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "state": "kAllow"
+            },
+            {
+              "capability": "camera",
+              "identity": "xr:00000000-0000-4000-8000-0000000000b2",
+              "state": "kDeny"
+            }
+          ],
+          "denied_identities": [],
+          "grants": []
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kDeny",
+          "geolocation": "kAsk",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "isolation-two-identities-two-defaults-b",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000b2"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [
+            {
+              "capability": "camera",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "state": "kAllow"
+            },
+            {
+              "capability": "camera",
+              "identity": "xr:00000000-0000-4000-8000-0000000000b2",
+              "state": "kDeny"
+            }
+          ],
+          "denied_identities": [],
+          "grants": []
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAsk",
+          "geolocation": "kAllow",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "7d-grant-active-one-ms-before-expiry",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [],
+          "grants": [
+            {
+              "capability": "geolocation",
+              "domain": "example.com",
+              "expires_at": 1000001,
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "scope": "7d"
+            }
+          ]
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAsk",
+          "geolocation": "kAsk",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "7d-grant-at-expiry-is-inactive",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [],
+          "grants": [
+            {
+              "capability": "geolocation",
+              "domain": "example.com",
+              "expires_at": 1000000,
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "scope": "7d"
+            }
+          ]
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAsk",
+          "geolocation": "kAsk",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "7d-grant-expired",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [],
+          "grants": [
+            {
+              "capability": "geolocation",
+              "domain": "example.com",
+              "expires_at": 999999,
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "scope": "7d"
+            }
+          ]
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAsk",
+          "geolocation": "kAsk",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "7d-grant-other-domain-no-effect",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [],
+          "grants": [
+            {
+              "capability": "geolocation",
+              "domain": "other.example",
+              "expires_at": 605800000,
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "scope": "7d"
+            }
+          ]
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAsk",
+          "geolocation": "kAsk",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "7d-grant-other-identity-no-effect",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [],
+          "grants": [
+            {
+              "capability": "geolocation",
+              "domain": "example.com",
+              "expires_at": 605800000,
+              "identity": "xr:00000000-0000-4000-8000-0000000000b2",
+              "scope": "7d"
+            }
+          ]
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAllow",
+          "geolocation": "kAsk",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "once-unspent-allows",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [],
+          "grants": [
+            {
+              "capability": "camera",
+              "domain": "example.com",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "remaining_uses": 1,
+              "scope": "once"
+            }
+          ]
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAsk",
+          "geolocation": "kAsk",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "once-spent-does-not-allow",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [],
+          "grants": [
+            {
+              "capability": "camera",
+              "domain": "example.com",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "remaining_uses": 0,
+              "scope": "once"
+            }
+          ]
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAsk",
+          "geolocation": "kAsk",
+          "microphone": "kAllow",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "session-grant-matching-session-allows",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [],
+          "grants": [
+            {
+              "capability": "microphone",
+              "domain": "example.com",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "scope": "session",
+              "session_id": "s1"
+            }
+          ]
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAsk",
+          "geolocation": "kAsk",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "session-grant-other-session-inert",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [],
+          "grants": [
+            {
+              "capability": "microphone",
+              "domain": "example.com",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "scope": "session",
+              "session_id": "s0"
+            }
+          ]
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAllow",
+          "geolocation": "kAsk",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "grant-widens-over-default-deny",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 1000000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [
+            {
+              "capability": "camera",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "state": "kDeny"
+            }
+          ],
+          "denied_identities": [],
+          "grants": [
+            {
+              "capability": "camera",
+              "domain": "example.com",
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "remaining_uses": 1,
+              "scope": "once"
+            }
+          ]
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    },
+    {
+      "expected": {
+        "permissions": {
+          "camera": "kAsk",
+          "geolocation": "kAsk",
+          "microphone": "kAsk",
+          "notifications": "kAsk"
+        }
+      },
+      "name": "7d-grant-same-request-later-clock-expires",
+      "request": {
+        "identities": [
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000a1"
+          },
+          {
+            "ephemeral": false,
+            "fortress": false,
+            "value": "xr:00000000-0000-4000-8000-0000000000b2"
+          }
+        ],
+        "identity": {
+          "value": "xr:00000000-0000-4000-8000-0000000000a1"
+        },
+        "now_ms": 605800000,
+        "origin": {
+          "registrable_domain": "example.com",
+          "scheme": "https"
+        },
+        "permission_overlay": {
+          "contract_version": 1,
+          "defaults": [],
+          "denied_identities": [],
+          "grants": [
+            {
+              "capability": "geolocation",
+              "domain": "example.com",
+              "expires_at": 605800000,
+              "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+              "scope": "7d"
+            }
+          ]
+        },
+        "request_class": "kNavigation",
+        "session_id": "s1"
+      }
+    }
+  ]
+}
