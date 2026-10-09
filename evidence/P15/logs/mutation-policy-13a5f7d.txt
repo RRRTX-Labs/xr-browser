@@ -1,0 +1,73 @@
+# P15 policy mutation matrix at xr-core 13a5f7d (CI parameters, fixed harness).
+# Tree: identical to 2a55818 (pre-rewrite c9086b1) plus the four policy test commits
+#   a6b4c69, 471a6a1, bc7e81a, 13a5f7d. policy/core is unchanged since 2a55818.
+# Command: python3 tools/mutation_test.py --xr-core /home/user/xr-core --targets policy
+#   --sample 90 --seed 20260908 --timebox 900 --jobs 2 --score-gate 90 --json
+# Host: 2 vCPU, g++ 14.2, Linux sandbox. Elapsed 309.9 s, not truncated by the timebox.
+# Survivors: 2, both equivalent (research log section 10, item 26).
+# ---- harness output follows ----
+mutation[policy]: 90 mutants, killed 88, survived 2, score 97.78% (gate >= 90.0%), deny-guard 23/23, elapsed 309.9s -> PASS
+  SURVIVOR core/cache.cc:69 AOR:0 -> 1 uint64_t ig = 1;
+  SURVIVOR core/snapshot.cc:258 AOR:0 -> 1 uint64_t seq = 1, base_seq = 0;
+{
+ "deny_guard_killed": 23,
+ "deny_guard_mutants": 23,
+ "deny_guard_survivors": 0,
+ "gate": "PASS",
+ "killed": 88,
+ "operators": [
+  "ROR:== -> !=",
+  "ROR:!= -> ==",
+  "ROR:< -> <=",
+  "ROR:<= -> <",
+  "ROR:> -> >=",
+  "ROR:>= -> >",
+  "LOR:&& -> ||",
+  "LOR:|| -> &&",
+  "BOOL:true -> false",
+  "BOOL:false -> true",
+  "AOR:0 -> 1",
+  "AOR:1 -> 2",
+  "AOR:2 -> 3"
+ ],
+ "sampled": true,
+ "score_gate_pct": 90.0,
+ "score_pct": 97.78,
+ "seed": 20260908,
+ "suites": [
+  "test_cache",
+  "test_events",
+  "test_resolve",
+  "test_service",
+  "test_snapshot",
+  "test_store",
+  "test_vectors"
+ ],
+ "survived": 2,
+ "survivors": [
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/cache.cc",
+   "line": 69,
+   "mutated": "  uint64_t ig = 1;",
+   "operator": "AOR:0 -> 1",
+   "orig": "  uint64_t ig = 0;",
+   "target": "policy"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/snapshot.cc",
+   "line": 258,
+   "mutated": "  uint64_t seq = 1, base_seq = 0;",
+   "operator": "AOR:0 -> 1",
+   "orig": "  uint64_t seq = 0, base_seq = 0;",
+   "target": "policy"
+  }
+ ],
+ "target": "xr-core/policy/core/*.cc",
+ "tool": "mutation_test",
+ "total_mutants": 90,
+ "truncated_by_timebox": false
+}

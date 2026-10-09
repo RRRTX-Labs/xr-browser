@@ -22,155 +22,25 @@
       "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
     },
     "policy": {
-      "killed": 62,
+      "killed": 88,
       "mutants": 90,
-      "score_pct": 68.89,
+      "note": "P15 at xr-core 13a5f7d (owning-suite kills in four commits on top of 2a55818). Sampled CI matrix (--sample 90 --seed 20260908, the governance command, fixed harness): killed 88 of 90 (97.78%), deny-guard 23 of 23, gate PASS at 90%, not truncated by the timebox. The 2 survivors are equivalent mutants, argued by code reading (research log section 10, item 26): cache.cc:69 and snapshot.cc:258. Earlier records at 4d6672d (62/90, FAIL, 28 OPEN) and at c9086b1 (74/90, FAIL, local) are superseded. Not the full matrix: the full run is HG-28 (farm).",
+      "score_pct": 97.78,
       "seed": 20260908,
       "survivors": [
         {
+          "disposition": "EQUIVALENT (argued, not sampled): the initializer `uint64_t ig = 0;` is overwritten on every path before it is read; cache.cc:71 assigns ig on both branches of the ternary.",
           "id": "core/cache.cc:69 AOR:0 -> 1",
-          "operator": "AOR:0 -> 1",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
+          "operator": "AOR:0 -> 1"
         },
         {
-          "id": "core/effective_policy.cc:65 ROR:== -> !=",
-          "operator": "ROR:== -> !=",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/events.cc:26 BOOL:true -> false",
-          "operator": "BOOL:true -> false",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/events.cc:27 BOOL:true -> false",
-          "operator": "BOOL:true -> false",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/events.cc:64 ROR:== -> !=",
-          "operator": "ROR:== -> !=",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/resolve.cc:80 ROR:== -> !=",
-          "operator": "ROR:== -> !=",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/resolve.cc:117 BOOL:false -> true",
-          "operator": "BOOL:false -> true",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/resolve.cc:119 ROR:!= -> ==",
-          "operator": "ROR:!= -> ==",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/resolve.cc:132 BOOL:true -> false",
-          "operator": "BOOL:true -> false",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/resolve.cc:150 BOOL:false -> true",
-          "operator": "BOOL:false -> true",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/resolve_io.cc:59 ROR:== -> !=",
-          "operator": "ROR:== -> !=",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/resolve_io.cc:79 BOOL:false -> true",
-          "operator": "BOOL:false -> true",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/resolve_io.cc:133 BOOL:false -> true",
-          "operator": "BOOL:false -> true",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/resolve_io.cc:208 BOOL:true -> false",
-          "operator": "BOOL:true -> false",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/resolve_io.cc:224 BOOL:false -> true",
-          "operator": "BOOL:false -> true",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/resolve_io.cc:251 BOOL:false -> true",
-          "operator": "BOOL:false -> true",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/resolve_io.cc:258 ROR:!= -> ==",
-          "operator": "ROR:!= -> ==",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/resolve_io.cc:265 BOOL:true -> false",
-          "operator": "BOOL:true -> false",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/resolve_io.cc:279 BOOL:false -> true",
-          "operator": "BOOL:false -> true",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/snapshot.cc:72 ROR:!= -> ==",
-          "operator": "ROR:!= -> ==",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/snapshot.cc:149 BOOL:false -> true",
-          "operator": "BOOL:false -> true",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/snapshot.cc:188 BOOL:false -> true",
-          "operator": "BOOL:false -> true",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
+          "disposition": "EQUIVALENT (argued, not sampled): `uint64_t seq = 0` is overwritten by ParseEnvelope on every success path (snapshot.cc:199-200); the failure path returns before seq is read (snapshot.cc:260-262).",
           "id": "core/snapshot.cc:258 AOR:0 -> 1",
-          "operator": "AOR:0 -> 1",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/snapshot.cc:302 ROR:== -> !=",
-          "operator": "ROR:== -> !=",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/store.cc:96 BOOL:false -> true",
-          "operator": "BOOL:false -> true",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/store.cc:106 BOOL:false -> true",
-          "operator": "BOOL:false -> true",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/store.cc:174 BOOL:false -> true",
-          "operator": "BOOL:false -> true",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
-        },
-        {
-          "id": "core/store.cc:352 ROR:== -> !=",
-          "operator": "ROR:== -> !=",
-          "disposition": "OPEN: not killed at 4d6672d (fixed harness, sampled CI matrix). Needs a test that fails this mutant; P15 leaves it open (research log section 10)."
+          "operator": "AOR:0 -> 1"
         }
       ],
-      "transcript": "evidence/P15/logs/mutation-policy-fixed-4d6672d.json",
-      "xr_core_commit": "4d6672d04876b4daa29bd10355de0d3801c8f9b5",
-      "note": "P15 CORRECTED at xr-core 4d6672d under the fixed harness (tools/mutation_test.py, commit 3fe8d7e). The sampled CI matrix (--sample 90 --seed 20260908, the governance command) kills 62 of 90 (68.89%), deny-guard 11 of 23. That FAILS the governance gate (score >= 90%, deny-guard survivors = 0). The earlier 90/90 at 8b26589 came from a harness that counted build failures as kills and reused stale objects. The 28 survivors are listed with disposition OPEN. Killing them is the remaining work. NOT the full matrix: the full run is HG-28 (farm)."
+      "transcript": "evidence/P15/logs/mutation-policy-13a5f7d.json",
+      "xr_core_commit": "13a5f7d980101ac8d61b707d7728674f268f8990"
     },
     "renderer/cosmetic": {
       "killed": 418,
