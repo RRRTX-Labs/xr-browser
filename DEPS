@@ -49,6 +49,11 @@
 #                  oracle (420d854) and the host typed-error exit fix
 #                  (a5aef55), the session store (P14-T8, 3973ff3), the isolation-matrix identity cells (P14-T6/sec-req-2, 05b83eb), the out-of-tree test build fix (1572031), the identity hygiene set (sha256 shim + gitignore, 7d70013), the bounded-campaign compaction fix (9ee4952), and the tracked-artifacts untrack (81376ac) —
 #                  pair-bumped same-day per docs/process/cross-repo-pin.md.
+#                  P15 advances it to the permission firewall core (aab82f4): the overlay
+#                  carrier in the resolver request (e2caedc), the permissions core library
+#                  (98946b1), its nine-suite test set, bench and the cross-core overlay
+#                  vectors (410f34d), and the store mutation sweep (aab82f4). ADR-0051 is DRAFT. Pair-bumped same-day per
+#                  docs/process/cross-repo-pin.md.
 #   gclient_url_scheme  P2-T1 (pinned https remotes only; no ssh, no file://)
 #
 # Chromium pin provenance (see docs/state/research-log-P2.md R1):
@@ -61,7 +66,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "81376ac6da284faf28098acc39314b17231bea95"     # xr-core 0dd5748 (C-1b..C-5: site-tab, observatory-tab, update-tab, sent-tab + their node suites; the registry lane\'s inventory, grdp and roster reads) = P13-T1/T7 + P13-C-P0.1 (ui/panel/tabs.json, tab-registry.ts) + P13-C-P0.1b (ui/panel/tab-strip.ts — the registry-driven tablist; registry diagnostics as machine tokens for l10n_extract R4). Pair-bumped same-day with each P13 commit per docs/process/cross-repo-pin.md.
+xr_core_rev: "aab82f4a77f880fb209d3f01ff8fbd1a0e39085e"     # xr-core aab82f4 (P15 permission firewall: overlay carrier e2caedc, permissions core 98946b1, suite + cross-core vectors 410f34d, store mutation sweep aab82f4; ADR-0051 DRAFT). Replaces the P14 pin 81376ac. The P15 brief flagged the old trailing comment (0dd5748, P13) as stale; it is replaced here.
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"
