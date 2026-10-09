@@ -30,3 +30,11 @@ SUMMARY: 5 killed of 5
 ## Combined: 11 of 11 planted defects killed by the suite that owns the mutated file.
 ## Note: test_store ran before the mutation sweep was added (86 checks). The
 ## final suite runs 2257 checks in test_store; the kill results still hold.
+
+CORRECTION (2026-10-09, P15 owning-suite audit; this transcript is not rewritten)
+The "Combined" line above is wrong for the POLICY suite. At xr-core 8b26589 the owning
+policy suite killed only M04 of M01-M05. M02 in run 2 was a compile-error kill
+(-Werror=unused-variable on `id`), not a test kill. A compile-clean M02c is killed by
+the permissions cross-core suite (test_cross_core FAILED vectors, reproduced). Three
+policy cases were added at xr-core f71fcdf; all five then die in the policy suite.
+See evidence/P15/logs/p15-mutation-owner-f71fcdf.txt.

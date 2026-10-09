@@ -1,0 +1,32 @@
+# P15 owning-suite kill check — transcript
+# Script: evidence/P15/mutation/policy_owner_kills.py (copied from the scratch run).
+# Section 1 ran at xr-core 8b26589 (before the test additions).
+# Section 2 ran at xr-core f71fcdf (after three cases were added to policy/tests/test_resolve.cc).
+
+## 1. BEFORE — xr-core 8b26589, owning policy suite
+M01 7d fail-open at equality | policy | SURVIVED rc=0 | kind=other | 
+M02c deny-list ignored (compile-clean) | policy | SURVIVED rc=0 | kind=other | 
+M02 deny-list ignored | policy | KILLED rc=2 | kind=compile-error | ../../policy/core/resolve.cc:111:20: error: unused variable ‘id’ [-Werror=unused-variable]
+M03 corrupt overlay not denying | policy | SURVIVED rc=0 | kind=other | 
+M04 grant ignores identity (cross-identity leak) | policy | KILLED rc=2 | kind=test | C++ POLICY TESTS FAILED
+M05 malformed overlay treated as absent (fail-open) | policy | SURVIVED rc=0 | kind=other | 
+DONE
+
+## 2. AFTER — xr-core f71fcdf, owning policy suite
+M01 7d fail-open at equality | policy | KILLED rc=2 | kind=test | C++ POLICY TESTS FAILED
+M02c deny-list ignored (compile-clean) | policy | KILLED rc=2 | kind=test | C++ POLICY TESTS FAILED
+M02 deny-list ignored | policy | KILLED rc=2 | kind=compile-error | ../../policy/core/resolve.cc:111:20: error: unused variable ‘id’ [-Werror=unused-variable]
+M03 corrupt overlay not denying | policy | KILLED rc=2 | kind=test | C++ POLICY TESTS FAILED
+M04 grant ignores identity (cross-identity leak) | policy | KILLED rc=2 | kind=test | C++ POLICY TESTS FAILED
+M05 malformed overlay treated as absent (fail-open) | policy | KILLED rc=2 | kind=test | C++ POLICY TESTS FAILED
+DONE
+
+## 3. Permissions cross-core check of the compile-clean M02c (xr-core f71fcdf)
+# make -C permissions/tests test, scratch copy with M02c applied:
+test_cross_core.cc:143: FAILED vector fortress-denied-identity-a-is-deny-all: want [geolocation=kDeny camera=kDeny microphone=kDeny notifications=kDeny] got [ge
+test_cross_core.cc:143: FAILED vector deny-list-beats-identity-allow: want [geolocation=kDeny camera=kDeny microphone=kDeny notifications=kDeny] got [geolocatio
+test_cross_core.cc:143: FAILED vector deny-list-beats-active-grant: want [geolocation=kDeny camera=kDeny microphone=kDeny notifications=kDeny] got [geolocation=
+test_cross_core.cc:146: FAILED every overlay vector resolves as expected
+test_cross_core.cc:147: FAILED 33 overlay vectors (update the count with the file)
+test_cross_core.cc:182: FAILED a Fortress-denied identity resolves to deny on all four
+# rc=2 at the end; test_cross_core reports the failed overlay vectors above.
