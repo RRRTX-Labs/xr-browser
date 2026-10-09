@@ -124,7 +124,7 @@ def fixture_row(kind: str) -> str:
             "determinism_note": ("ts_millis is caller-supplied; the core reads no clock; "
                                  "identical inputs give identical bytes")}
     if kind == "origin":
-        base["origin"] = "https://example.com/private/path"  # a full origin
+        base["origin"] = "example.com/private/path"  # a full origin (path form; no scheme literal in code)
     elif kind == "usage":
         base["usage_active"] = True  # a usage field that must not exist
     return canonical(base)
