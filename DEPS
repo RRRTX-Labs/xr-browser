@@ -67,7 +67,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "f71fcdfb68e3f5c432557424ad1368afa80f0779"     # xr-core f71fcdf (P15 permission firewall: overlay carrier e2caedc, permissions core 98946b1, suite + cross-core vectors 410f34d, store mutation sweep aab82f4, policy mutation kills 8b26589, policy owning-suite kills f71fcdf; ADR-0051 DRAFT). Replaces the P14 pin 81376ac. The P15 brief flagged the old trailing comment (0dd5748, P13) as stale; it is replaced here.
+xr_core_rev: "4d6672d04876b4daa29bd10355de0d3801c8f9b5"     # xr-core 4d6672d (P15 permission firewall: overlay carrier e2caedc, permissions core 98946b1, suite + cross-core vectors 410f34d, store mutation sweep aab82f4, policy mutation kills 8b26589, policy owning-suite kills f71fcdf, expiry-test row-read guards 4d6672d; ADR-0051 DRAFT). Replaces the P14 pin 81376ac. The P15 brief flagged the old trailing comment (0dd5748, P13) as stale; it is replaced here.
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"
