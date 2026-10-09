@@ -73,3 +73,4 @@ Recorded in `docs/state/research-log-P15.md` §10. The notable ones:
 
 - **Author rule (this round).** The first commits of this round carried the P15 agent as author. They were rewritten (author only; trees identical) before the first push. The rule is in research log §8 and item 24.
 - **Transient negative failure (this round).** The negatives suite failed once on the panel lane's `npm ci` inside a scratch copy. The cause was not confirmed. The lane run directly passed, and the full suite re-run passed 219 of 219. Both transcripts are in `evidence/P15/logs`.
+- **Governance backstop (this round).** At `091a4da` the governance job reached its 45-minute backstop during the policy fuzz step and was cancelled. The policy mutation gate had already passed. The backstop is raised to 90 minutes, and no gate changed (research log item 30; HG-P15-BACKSTOP).
