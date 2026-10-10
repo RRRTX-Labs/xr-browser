@@ -1,0 +1,18 @@
+# P14-CLOSE C-4 security transcript (xr-core a569801 (identity/, fakes/ and test/isolation byte-identical to dec1d83), xr-browser base fc9a8c4 + working tree)
+
+$ timeout 900 python3 -m pytest tools/tests/test_p14c_security.py -q
+......                                                                   [100%]
+6 passed in 15.16s
+exit=0
+
+$ (cd ../xr-core/identity/tests && make -s build/test_derivation build/test_identity && ./build/test_derivation && ./build/test_identity)
+identity/derivation: 163 checks, 0 failures
+identity/lifecycle: 52 checks, 0 failures
+exit=0
+
+$ python3 tools/isolation_matrix.py --repo . --check
+PASS: isolation_matrix --check (matrix record diff-clean)
+exit=0
+
+$ grep -o 'fs-diff clean close[^"]*' ../xr-core/test/isolation/isolation-matrix.json | sort | uniq -c
+      5 fs-diff clean close 0 paths + planted leftover caught=True

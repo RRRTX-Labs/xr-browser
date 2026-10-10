@@ -291,3 +291,25 @@ backends are byte-parity for the new field/codes (313 vectors, pinned by
 | panel-tab-registration-v1 | P13-T6 | LIVING | `panel-tab-registration-v1.schema.json` + `docs/contracts/vectors/panel-tab-registration-v1.json` + `docs/adr/0049-panel-tab-registration-v1.md` | FROZEN.yaml untouched (14 rows still PENDING, HG-26); the runtime half is `xr-core/ui/panel/tab-registry.ts`, the gate half `tools/panel_registry_check.py` |
 | permission-audit-event-v1 | P15-T4 | LIVING | `permission-audit-event-v1.schema.json` + `permission-audit-event-v1.md` + `tests/golden-permission-audit-event.jsonl` | POST-FREEZE; FROZEN.yaml untouched; not ratified (ADR-0051 DRAFT, HG-35). Generator `xr-core/permissions/core/audit.cc`; per-line gate `tools/permission_contract_check.py`. |
 | permission-overlay-v1 | P15-T1 | LIVING | `permission-overlay-v1.md` + `vectors/permission-overlay-v1.json` | Additive input to policy-resolver-v1 (frozen 66 vectors byte-pinned, untouched). Consumer `xr-core/policy/core/resolve.cc`; cross-core lane `xr-core/permissions/tests/test_cross_core.cc`. |
+
+### P14-CLOSE C-2 (P14-T5): `identity_id` on every ledger event class — amendment record
+
+Plan §4 P14 contracts-out: "ledger identity_id everywhere". Recorded HERE as
+an amendment record, not applied to any frozen or living schema in place:
+
+* **No stamping condition blocks it** (brief failure condition 1 checked):
+  the frozen `ActivityRow` (`xr_types.mojom`, FROZEN.yaml row PENDING) already
+  carries `IdentityId identity`; the living `permission-audit-event-v1` already
+  requires `identity`. The living `block-event-v1` and `policy-change-event-v1`
+  have no identity field, and their schemas are NOT edited — the requirement is
+  carried by a wrapping overlay record instead, so no golden byte moves.
+* **The overlay** wraps an event of ANY of the ten classes (the eight frozen
+  `ActivityKind` values + `kHistory`/`kBookmark`) with a REQUIRED, mint-shaped
+  `identity_id`. A row without one is refused at tag time and reads as
+  `unknown` (provenance `unknown`, never attributed to the current identity)
+  at filter time. Upstream history is untouched: the overlay is a side table
+  keyed by `url_id`/`visit_id`, and the differential oracle proves zero delta.
+
+| Contract | Phase | Files | Review packet | Freeze status |
+|---|---|---|---|---|
+| ledger-identity-overlay-v1 | P14-T5 (P14-CLOSE C-2) | `ledger-identity-overlay-v1.md` + `ledger-identity-overlay-v1.schema.json` + golden `vectors/ledger-identity-overlay-v1.json` (byte-identical across `xr-core/identity/host/identity_host` living cmds `ledger-tag`/`omnibox-filter`/`history-oracle` → `identity/core/ledger_tag.cc`, and the twin `xr-core/fakes/ledger_identity.py`) | `ledger-identity-overlay-v1.md` §Review | LIVING (POST-FREEZE; FROZEN.yaml byte-identical; not ratified — HG-26). Gate `tools/ledger_identity_check.py` (both backends + coverage + schema + oracle); negatives `tools/negatives/p14c_c2.sh` (planted omnibox leak, planted upstream write ⇒ DELTA, C++ planted leak) |

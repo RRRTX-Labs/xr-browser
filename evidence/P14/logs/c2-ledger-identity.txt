@@ -1,0 +1,29 @@
+# P14-CLOSE C-2 ledger identity overlay transcript (xr-core a569801 (identity/, fakes/ and test/isolation byte-identical to dec1d83), xr-browser base fc9a8c4 + working tree)
+
+$ python3 tools/ledger_identity_check.py
+history-oracle: upstream history diff-clean (2 vectors)
+PASS: ledger_identity_check (35 vectors, 10 event classes, backends: C++ identity_host + Python twin)
+exit=0
+
+$ python3 tools/ledger_identity_check.py --twin ../xr-core/fakes/ledger_identity.py
+history-oracle: upstream history diff-clean (2 vectors)
+PASS: ledger_identity_check (35 vectors, 10 event classes, backends: Python twin only (--twin ../xr-core/fakes/ledger_identity.py: C++ half SKIPPED))
+exit=77
+
+$ (cd ../xr-core/identity/tests && make -s build/test_ledger_tag && ./build/test_ledger_tag)
+identity/ledger_tag: 131 checks, 0 failures
+exit=0
+
+$ tools/run_negatives.sh (p14c_c2.sh only; carries the C-4 partition-share case too)
+ok: planted cross-identity omnibox leak reddens the overlay replay (rejected with expected reason)
+ok: planted upstream history write -> oracle verdict DELTA
+ok: planted upstream history write reddens the overlay replay (rejected with expected reason)
+ok: ledger overlay law 'coverage' reddens on its planted defect (rejected with expected reason)
+ok: ledger overlay law 'schema' reddens on its planted defect (rejected with expected reason)
+ok: ledger overlay law 'drift' reddens on its planted defect (rejected with expected reason)
+ok: ledger overlay law 'generator' reddens on its planted defect (rejected with expected reason)
+ok: C++ planted omnibox leak (ledger_tag.cc) reddens test_ledger_tag (rejected with expected reason)
+ok: C++ planted cross-identity partition share reddens test_derivation (rejected with expected reason)
+
+ALL NEGATIVE CASES REJECTED AS EXPECTED (N=5)
+exit=0

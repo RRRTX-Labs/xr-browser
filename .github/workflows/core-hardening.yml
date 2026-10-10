@@ -443,7 +443,10 @@ jobs:
     # ~30 min in, and each target is independently evidenced this way).
     strategy:
       matrix:
-        target: [policy-core, commands-core, settings-core, themes-core, cosmetic-core]
+        # Must equal build/fuzz/fleet.yaml's target ids (the sync law:
+        # tools/tests/test_fleet_matrix_sync.py; identity-core was missing
+        # from P14-T1 until P14-CLOSE).
+        target: [policy-core, commands-core, settings-core, themes-core, cosmetic-core, identity-core]
       fail-fast: false
     runs-on: ubuntu-latest
     permissions:
@@ -471,6 +474,7 @@ jobs:
           make -C ../xr-core/settings/tests build
           make -C ../xr-core/themes/tests build
           make -C ../xr-core/renderer/cosmetic/tests build
+          make -C ../xr-core/identity/tests build
       - name: Fuzz timebox (600 s, ${{ matrix.target }})
         run: |
           . tools/ci_capture.sh core-hardening

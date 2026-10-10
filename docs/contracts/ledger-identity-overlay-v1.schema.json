@@ -1,0 +1,17 @@
+{
+ "$schema-note": "Hand-rolled strict subset (no jsonschema dependency). Validated by tools/xr_schema.py (contract id ledger-identity-overlay) and, for every successful vector, by tools/ledger_identity_check.py. identity_id is REQUIRED: there is no optional form and no default. The mint shape (xr: + v4-shaped UUID) is enforced by BOTH backends (identity/core/ledger_tag.cc via DomainShapeOk, fakes/ledger_identity.py domain_shape_ok), because this validator has no pattern keyword. event is the wrapped event of any class, carried byte-for-byte; its own contract (block-event-v1, policy-change-event-v1, permission-audit-event-v1, the frozen ActivityRow export) is unchanged.",
+ "contract": "ledger-identity-overlay",
+ "contract_version": 1,
+ "type": "object",
+ "additionalProperties": false,
+ "required": ["event", "event_class", "identity_id", "schema"],
+ "properties": {
+  "schema": {"type": "string", "const": "ledger-identity-overlay-v1"},
+  "identity_id": {"type": "string"},
+  "event_class": {
+   "type": "string",
+   "enum": ["kPolicy", "kBlock", "kPermission", "kIdentity", "kRoute", "kVault", "kGuard", "kDownload", "kHistory", "kBookmark"]
+  },
+  "event": {"type": "object"}
+ }
+}

@@ -27,10 +27,15 @@ import json
 import re
 import shutil
 import subprocess
+import sys
+import tempfile
 from pathlib import Path
 from typing import Any
 
 from _common import RunnerError  # noqa: E402
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "build" / "spike"))
+import fsdiff  # noqa: E402  (P4-T5's real FS-diff; T6 wires it into this cell)
 
 # ---------------------------------------------------------------------------
 # P14 identity-core cells (the identity host + suite; security req 2, T6, T8)
@@ -70,11 +75,25 @@ def _host_json(host: Path, sub: str, args: dict[str, Any]) -> dict[str, Any]:
     return json.loads(p.stdout)
 
 
-def _scenario(host: Path, ops: list[dict[str, Any]]) -> dict[str, Any]:
+def _scenario(host: Path, ops: list[dict[str, Any]],
+              cwd: Path | None = None) -> dict[str, Any]:
     p = subprocess.run([str(host), "scenario",
                         json.dumps({"ops": ops}, sort_keys=True)],
-                       capture_output=True, text=True, timeout=60)
+                       capture_output=True, text=True, timeout=60,
+                       cwd=str(cwd) if cwd else None)
     return json.loads(p.stdout)
+
+
+def _fs_cycle(host: Path, ops: list[dict[str, Any]]
+              ) -> tuple[dict[str, Any], dict[str, list[str]]]:
+    """Run one scenario with a FRESH scratch dir as the host's cwd and return
+    (scenario result, fsdiff of that dir before/after). The diff is measured
+    (sha256 per path, build/spike/fsdiff.py), never assumed."""
+    with tempfile.TemporaryDirectory(prefix="xr-t6-fsdiff.") as td:
+        root = Path(td)
+        before = fsdiff.snapshot(root)
+        res = _scenario(host, ops, cwd=root)
+        return res, fsdiff.diff(before, fsdiff.snapshot(root))
 
 
 def run_identity_cells(xr_core: Path, matrix: dict[str, Any]
@@ -100,7 +119,10 @@ def run_identity_cells(xr_core: Path, matrix: dict[str, Any]
                     {"op": "provision", "entropy": f"iso-{a}-{b}-clean",
                      "in_memory": True}])
                 dom = prov["steps"][0]["record"]["domain"]
-                clean = _scenario(host, [
+                # T6 FS-diff: each cycle runs with a fresh scratch dir as
+                # the host cwd; the clean close must leave ZERO paths, and the
+                # planted leftover (plant-fs-leftover) MUST show up.
+                clean, fs_clean = _fs_cycle(host, [
                     {"op": "provision", "entropy": f"iso-{a}-{b}-clean",
                      "in_memory": True},
                     {"op": "destroy", "domain": dom}])
@@ -108,12 +130,16 @@ def run_identity_cells(xr_core: Path, matrix: dict[str, Any]
                     {"op": "provision", "entropy": f"iso-{a}-{b}-dirty",
                      "in_memory": True}])
                 dom2 = prov2["steps"][0]["record"]["domain"]
-                dirty = _scenario(host, [
+                dirty, fs_dirty = _fs_cycle(host, [
                     {"op": "provision", "entropy": f"iso-{a}-{b}-dirty",
                      "in_memory": True},
                     {"op": "plant-residual", "domain": dom2,
                      "kind": "cookies", "bytes": 512},
-                    {"op": "destroy", "domain": dom2}])
+                    {"op": "destroy", "domain": dom2},
+                    {"op": "plant-fs-leftover", "path": "leftover.bin",
+                     "bytes": 64}])
+                okfs = (fsdiff.is_empty(fs_clean) and
+                        fs_dirty["added"] == ["leftover.bin"])
                 okc = (clean["steps"][1]["ok"] is True and
                        clean["steps"][1]["zero_residual_verified"] is True)
                 okd = (dirty["steps"][2]["ok"] is False and
@@ -121,9 +147,10 @@ def run_identity_cells(xr_core: Path, matrix: dict[str, Any]
                 cells.append({
                     "mechanism": "disposable-zero-residue", "pair": [a, b],
                     "mode": "fake",
-                    "verdict": "PASS" if okc and okd else "FAIL",
+                    "verdict": "PASS" if okc and okd and okfs else "FAIL",
                     "detail": (f"clean close verified={okc}; planted cookie "
-                               f"jar fails destroy={okd}")})
+                               f"jar fails destroy={okd}; fs-diff clean close "
+                               f"0 paths + planted leftover caught={okfs}")})
             elif mech["id"] == "identity-derivation-probe":
                 # Security req 2: the brute-force probe corpus — try to
                 # derive an identity from a partition name / URL / title /

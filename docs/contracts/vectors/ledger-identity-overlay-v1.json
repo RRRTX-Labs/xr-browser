@@ -1,0 +1,506 @@
+{
+ "contract": "ledger-identity-overlay-v1",
+ "schema_version": 1,
+ "generator": "tools/ledger_identity_check.py --regen (Python twin); replayed against BOTH backends by the gate",
+ "vectors": [
+  {
+   "id": "tag-kPolicy",
+   "cmd": "ledger-tag",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "event_class": "kPolicy",
+    "event": {
+     "kind": "kPolicy",
+     "summary": "row"
+    }
+   },
+   "expect_stdout": "{\"event\":{\"kind\":\"kPolicy\",\"summary\":\"row\"},\"event_class\":\"kPolicy\",\"identity_id\":\"xr:00000000-0000-4000-8000-00000000000a\",\"schema\":\"ledger-identity-overlay-v1\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kPolicy-no-identity",
+   "cmd": "ledger-tag",
+   "args": {
+    "event_class": "kPolicy",
+    "event": {
+     "kind": "kPolicy"
+    }
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"identity-id-required\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kBlock",
+   "cmd": "ledger-tag",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "event_class": "kBlock",
+    "event": {
+     "kind": "kBlock",
+     "summary": "row"
+    }
+   },
+   "expect_stdout": "{\"event\":{\"kind\":\"kBlock\",\"summary\":\"row\"},\"event_class\":\"kBlock\",\"identity_id\":\"xr:00000000-0000-4000-8000-00000000000a\",\"schema\":\"ledger-identity-overlay-v1\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kBlock-no-identity",
+   "cmd": "ledger-tag",
+   "args": {
+    "event_class": "kBlock",
+    "event": {
+     "kind": "kBlock"
+    }
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"identity-id-required\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kPermission",
+   "cmd": "ledger-tag",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "event_class": "kPermission",
+    "event": {
+     "kind": "kPermission",
+     "summary": "row"
+    }
+   },
+   "expect_stdout": "{\"event\":{\"kind\":\"kPermission\",\"summary\":\"row\"},\"event_class\":\"kPermission\",\"identity_id\":\"xr:00000000-0000-4000-8000-00000000000a\",\"schema\":\"ledger-identity-overlay-v1\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kPermission-no-identity",
+   "cmd": "ledger-tag",
+   "args": {
+    "event_class": "kPermission",
+    "event": {
+     "kind": "kPermission"
+    }
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"identity-id-required\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kIdentity",
+   "cmd": "ledger-tag",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "event_class": "kIdentity",
+    "event": {
+     "kind": "kIdentity",
+     "summary": "row"
+    }
+   },
+   "expect_stdout": "{\"event\":{\"kind\":\"kIdentity\",\"summary\":\"row\"},\"event_class\":\"kIdentity\",\"identity_id\":\"xr:00000000-0000-4000-8000-00000000000a\",\"schema\":\"ledger-identity-overlay-v1\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kIdentity-no-identity",
+   "cmd": "ledger-tag",
+   "args": {
+    "event_class": "kIdentity",
+    "event": {
+     "kind": "kIdentity"
+    }
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"identity-id-required\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kRoute",
+   "cmd": "ledger-tag",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "event_class": "kRoute",
+    "event": {
+     "kind": "kRoute",
+     "summary": "row"
+    }
+   },
+   "expect_stdout": "{\"event\":{\"kind\":\"kRoute\",\"summary\":\"row\"},\"event_class\":\"kRoute\",\"identity_id\":\"xr:00000000-0000-4000-8000-00000000000a\",\"schema\":\"ledger-identity-overlay-v1\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kRoute-no-identity",
+   "cmd": "ledger-tag",
+   "args": {
+    "event_class": "kRoute",
+    "event": {
+     "kind": "kRoute"
+    }
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"identity-id-required\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kVault",
+   "cmd": "ledger-tag",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "event_class": "kVault",
+    "event": {
+     "kind": "kVault",
+     "summary": "row"
+    }
+   },
+   "expect_stdout": "{\"event\":{\"kind\":\"kVault\",\"summary\":\"row\"},\"event_class\":\"kVault\",\"identity_id\":\"xr:00000000-0000-4000-8000-00000000000a\",\"schema\":\"ledger-identity-overlay-v1\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kVault-no-identity",
+   "cmd": "ledger-tag",
+   "args": {
+    "event_class": "kVault",
+    "event": {
+     "kind": "kVault"
+    }
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"identity-id-required\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kGuard",
+   "cmd": "ledger-tag",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "event_class": "kGuard",
+    "event": {
+     "kind": "kGuard",
+     "summary": "row"
+    }
+   },
+   "expect_stdout": "{\"event\":{\"kind\":\"kGuard\",\"summary\":\"row\"},\"event_class\":\"kGuard\",\"identity_id\":\"xr:00000000-0000-4000-8000-00000000000a\",\"schema\":\"ledger-identity-overlay-v1\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kGuard-no-identity",
+   "cmd": "ledger-tag",
+   "args": {
+    "event_class": "kGuard",
+    "event": {
+     "kind": "kGuard"
+    }
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"identity-id-required\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kDownload",
+   "cmd": "ledger-tag",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "event_class": "kDownload",
+    "event": {
+     "kind": "kDownload",
+     "summary": "row"
+    }
+   },
+   "expect_stdout": "{\"event\":{\"kind\":\"kDownload\",\"summary\":\"row\"},\"event_class\":\"kDownload\",\"identity_id\":\"xr:00000000-0000-4000-8000-00000000000a\",\"schema\":\"ledger-identity-overlay-v1\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kDownload-no-identity",
+   "cmd": "ledger-tag",
+   "args": {
+    "event_class": "kDownload",
+    "event": {
+     "kind": "kDownload"
+    }
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"identity-id-required\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kHistory",
+   "cmd": "ledger-tag",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "event_class": "kHistory",
+    "event": {
+     "kind": "kHistory",
+     "summary": "row"
+    }
+   },
+   "expect_stdout": "{\"event\":{\"kind\":\"kHistory\",\"summary\":\"row\"},\"event_class\":\"kHistory\",\"identity_id\":\"xr:00000000-0000-4000-8000-00000000000a\",\"schema\":\"ledger-identity-overlay-v1\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kHistory-no-identity",
+   "cmd": "ledger-tag",
+   "args": {
+    "event_class": "kHistory",
+    "event": {
+     "kind": "kHistory"
+    }
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"identity-id-required\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kBookmark",
+   "cmd": "ledger-tag",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "event_class": "kBookmark",
+    "event": {
+     "kind": "kBookmark",
+     "summary": "row"
+    }
+   },
+   "expect_stdout": "{\"event\":{\"kind\":\"kBookmark\",\"summary\":\"row\"},\"event_class\":\"kBookmark\",\"identity_id\":\"xr:00000000-0000-4000-8000-00000000000a\",\"schema\":\"ledger-identity-overlay-v1\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-kBookmark-no-identity",
+   "cmd": "ledger-tag",
+   "args": {
+    "event_class": "kBookmark",
+    "event": {
+     "kind": "kBookmark"
+    }
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"identity-id-required\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-empty-identity",
+   "cmd": "ledger-tag",
+   "args": {
+    "identity_id": "",
+    "event_class": "kBlock",
+    "event": {}
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"identity-id-required\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-display-name-is-not-an-id",
+   "cmd": "ledger-tag",
+   "args": {
+    "identity_id": "Work",
+    "event_class": "kBlock",
+    "event": {}
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"identity-id-malformed\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-unknown-class",
+   "cmd": "ledger-tag",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "event_class": "kTelemetry",
+    "event": {}
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"unknown-event-class:kTelemetry\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "tag-event-not-object",
+   "cmd": "ledger-tag",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "event_class": "kBlock",
+    "event": [
+     1
+    ]
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"event-not-object\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "args-not-object",
+   "cmd": "ledger-tag",
+   "args": [
+    "xr:00000000-0000-4000-8000-00000000000a"
+   ],
+   "expect_stdout": "{\"detail\":\"args must be a JSON object\",\"error\":\"kMalformedInput\"}\n",
+   "expect_exit": 1
+  },
+  {
+   "id": "tag-unicode-event-bytes",
+   "cmd": "ledger-tag",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "event_class": "kHistory",
+    "event": {
+     "title": "caf\u00e9 \u2014 \ud83d\ude00"
+    }
+   },
+   "expect_stdout": "{\"event\":{\"title\":\"caf\\u00e9 \\u2014 \\ud83d\\ude00\"},\"event_class\":\"kHistory\",\"identity_id\":\"xr:00000000-0000-4000-8000-00000000000a\",\"schema\":\"ledger-identity-overlay-v1\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "omnibox-a-sees-only-a",
+   "cmd": "omnibox-filter",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "rows": [
+     {
+      "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+      "url": "https://a.example/"
+     },
+     {
+      "identity_id": "xr:00000000-0000-4000-8000-00000000000b",
+      "url": "https://b-secret.example/"
+     },
+     {
+      "url": "https://untagged.example/"
+     },
+     {
+      "identity_id": "garbage",
+      "url": "https://bad.example/"
+     }
+    ]
+   },
+   "expect_stdout": "{\"current\":[{\"identity_id\":\"xr:00000000-0000-4000-8000-00000000000a\",\"url\":\"https://a.example/\"}],\"identity_id\":\"xr:00000000-0000-4000-8000-00000000000a\",\"unknown\":[{\"provenance\":\"unknown\",\"url\":\"https://untagged.example/\"},{\"provenance\":\"unknown\",\"url\":\"https://bad.example/\"}]}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "omnibox-b-sees-only-b",
+   "cmd": "omnibox-filter",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000b",
+    "rows": [
+     {
+      "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+      "url": "https://a.example/"
+     },
+     {
+      "identity_id": "xr:00000000-0000-4000-8000-00000000000b",
+      "url": "https://b-secret.example/"
+     },
+     {
+      "url": "https://untagged.example/"
+     },
+     {
+      "identity_id": "garbage",
+      "url": "https://bad.example/"
+     }
+    ]
+   },
+   "expect_stdout": "{\"current\":[{\"identity_id\":\"xr:00000000-0000-4000-8000-00000000000b\",\"url\":\"https://b-secret.example/\"}],\"identity_id\":\"xr:00000000-0000-4000-8000-00000000000b\",\"unknown\":[{\"provenance\":\"unknown\",\"url\":\"https://untagged.example/\"},{\"provenance\":\"unknown\",\"url\":\"https://bad.example/\"}]}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "omnibox-no-identity-sees-nothing",
+   "cmd": "omnibox-filter",
+   "args": {
+    "rows": [
+     {
+      "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+      "url": "https://a.example/"
+     },
+     {
+      "identity_id": "xr:00000000-0000-4000-8000-00000000000b",
+      "url": "https://b-secret.example/"
+     },
+     {
+      "url": "https://untagged.example/"
+     },
+     {
+      "identity_id": "garbage",
+      "url": "https://bad.example/"
+     }
+    ]
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"identity-id-required\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "omnibox-empty",
+   "cmd": "omnibox-filter",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "rows": []
+   },
+   "expect_stdout": "{\"current\":[],\"identity_id\":\"xr:00000000-0000-4000-8000-00000000000a\",\"unknown\":[]}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "omnibox-rows-not-array",
+   "cmd": "omnibox-filter",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "rows": {}
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"rows-not-array\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "history-single-identity-zero-delta",
+   "cmd": "history-oracle",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "upstream_rows": [
+     {
+      "url_id": 1,
+      "visit_id": 10,
+      "url": "https://a.example/",
+      "title": "A",
+      "ts": 1
+     },
+     {
+      "url_id": 2,
+      "visit_id": 11,
+      "url": "https://b.example/",
+      "title": "caf\u00e9",
+      "ts": 2
+     }
+    ]
+   },
+   "expect_stdout": "{\"overlay_rows\":2,\"upstream_bytes_after\":155,\"upstream_bytes_before\":155,\"verdict\":\"diff-clean\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "history-empty-zero-delta",
+   "cmd": "history-oracle",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "upstream_rows": []
+   },
+   "expect_stdout": "{\"overlay_rows\":0,\"upstream_bytes_after\":2,\"upstream_bytes_before\":2,\"verdict\":\"diff-clean\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "history-unknown-upstream-field",
+   "cmd": "history-oracle",
+   "args": {
+    "identity_id": "xr:00000000-0000-4000-8000-00000000000a",
+    "upstream_rows": [
+     {
+      "url_id": 1,
+      "identity_id": "xr:00000000-0000-4000-8000-00000000000a"
+     }
+    ]
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"upstream-row-unknown-field:identity_id\"}\n",
+   "expect_exit": 0
+  },
+  {
+   "id": "history-no-identity",
+   "cmd": "history-oracle",
+   "args": {
+    "upstream_rows": [
+     {
+      "url_id": 1,
+      "visit_id": 10,
+      "url": "https://a.example/",
+      "title": "A",
+      "ts": 1
+     },
+     {
+      "url_id": 2,
+      "visit_id": 11,
+      "url": "https://b.example/",
+      "title": "caf\u00e9",
+      "ts": 2
+     }
+    ]
+   },
+   "expect_stdout": "{\"error\":\"kRejected\",\"reason\":\"identity-id-required\"}\n",
+   "expect_exit": 0
+  }
+ ]
+}

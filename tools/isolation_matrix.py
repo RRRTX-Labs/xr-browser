@@ -73,9 +73,19 @@ def _check_storage(p: dict[str, Any]) -> tuple[bool, str]:
             f"storage_scope={sc['scope']} in_memory={sc['in_memory']}")
 
 def _check_vault(p: dict[str, Any]) -> tuple[bool, str]:
-    v = p["vault_scope"]
-    ok = isinstance(v["autofill_allowed"], bool) and not v["export_allowed"]
-    return ok, f"autofill={v['autofill_allowed']} export={v['export_allowed']}"
+    # P14-CLOSE C-4 (T6, the ABPF lesson): the no-vault-access row must be
+    # CONSULTED, not merely present — an absent vault_scope is a FAIL (never
+    # a KeyError, never a default), and an in-memory (disposable/ephemeral)
+    # identity must get autofill=False AND export=False from the resolver.
+    # tools/tests/test_p14c_security.py stubs the consult and requires red.
+    v = p.get("vault_scope")
+    if not isinstance(v, dict):
+        return False, "vault_scope absent - the no-vault-access row was not consulted"
+    disposable = (p.get("storage_scope") or {}).get("in_memory") is True
+    ok = (isinstance(v.get("autofill_allowed"), bool)
+          and v.get("export_allowed") is False
+          and not (disposable and v.get("autofill_allowed") is not False))
+    return ok, f"autofill={v.get('autofill_allowed')} export={v.get('export_allowed')}"
 
 def _check_egress(p: dict[str, Any]) -> tuple[bool, str]:
     e = p["egress"]

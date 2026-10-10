@@ -1,0 +1,324 @@
+{
+ "deny_guard_killed": 23,
+ "deny_guard_mutants": 29,
+ "deny_guard_survivors": 6,
+ "gate": "FAIL",
+ "killed": 220,
+ "operators": [
+  "ROR:== -> !=",
+  "ROR:!= -> ==",
+  "ROR:< -> <=",
+  "ROR:<= -> <",
+  "ROR:> -> >=",
+  "ROR:>= -> >",
+  "LOR:&& -> ||",
+  "LOR:|| -> &&",
+  "BOOL:true -> false",
+  "BOOL:false -> true",
+  "AOR:0 -> 1",
+  "AOR:1 -> 2",
+  "AOR:2 -> 3"
+ ],
+ "sampled": false,
+ "score_gate_pct": 90.0,
+ "score_pct": 88.71,
+ "seed": 20261001,
+ "suites": [
+  "test_attribution",
+  "test_binding",
+  "test_derivation",
+  "test_hibernate",
+  "test_identity",
+  "test_ledger_tag",
+  "test_mint",
+  "test_session_chaos",
+  "test_templates"
+ ],
+ "survived": 28,
+ "survivors": [
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/attribution.cc",
+   "line": 61,
+   "mutated": "              return a.kb >= b.kb;  // biggest first: \"what is using my RAM\"",
+   "operator": "ROR:> -> >=",
+   "orig": "              return a.kb > b.kb;  // biggest first: \"what is using my RAM\"",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/binding.cc",
+   "line": 98,
+   "mutated": "  if (suggestions_.size() >= keep_suggestions) {",
+   "operator": "ROR:> -> >=",
+   "orig": "  if (suggestions_.size() > keep_suggestions) {",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/binding.cc",
+   "line": 125,
+   "mutated": "  if (it == tab_identity_.end()) from = it->second;",
+   "operator": "ROR:!= -> ==",
+   "orig": "  if (it != tab_identity_.end()) from = it->second;",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/hibernate.cc",
+   "line": 27,
+   "mutated": "  if (evictions_.size() < keep) return 0;",
+   "operator": "ROR:<= -> <",
+   "orig": "  if (evictions_.size() <= keep) return 0;",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/identity.cc",
+   "line": 85,
+   "mutated": "  if (auto it = residual_.find(std::string(domain)); it == residual_.end()) {",
+   "operator": "ROR:!= -> ==",
+   "orig": "  if (auto it = residual_.find(std::string(domain)); it != residual_.end()) {",
+   "target": "identity"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/ledger_tag.cc",
+   "line": 116,
+   "mutated": "    return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "    return false;",
+   "target": "identity"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/ledger_tag.cc",
+   "line": 147,
+   "mutated": "    return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "    return false;",
+   "target": "identity"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/ledger_tag.cc",
+   "line": 152,
+   "mutated": "    return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "    return false;",
+   "target": "identity"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/ledger_tag.cc",
+   "line": 157,
+   "mutated": "      return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "      return false;",
+   "target": "identity"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/mint.cc",
+   "line": 45,
+   "mutated": "    return true;  // impossible; still fail-closed, never guess",
+   "operator": "BOOL:false -> true",
+   "orig": "    return false;  // impossible; still fail-closed, never guess",
+   "target": "identity"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/mint.cc",
+   "line": 53,
+   "mutated": "    return -2;",
+   "operator": "AOR:1 -> 2",
+   "orig": "    return -1;",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/mint.cc",
+   "line": 55,
+   "mutated": "  for (size_t i = 0; i <= 16; ++i) {",
+   "operator": "ROR:< -> <=",
+   "orig": "  for (size_t i = 0; i < 16; ++i) {",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/mint.cc",
+   "line": 56,
+   "mutated": "    const int hi = nib(digest[3 * i]);",
+   "operator": "AOR:2 -> 3",
+   "orig": "    const int hi = nib(digest[2 * i]);",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/mint.cc",
+   "line": 57,
+   "mutated": "    const int lo = nib(digest[2 * i + 2]);",
+   "operator": "AOR:1 -> 2",
+   "orig": "    const int lo = nib(digest[2 * i + 1]);",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/mint.cc",
+   "line": 101,
+   "mutated": "  if (probe.empty()) return false;",
+   "operator": "BOOL:true -> false",
+   "orig": "  if (probe.empty()) return true;",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/mint.cc",
+   "line": 114,
+   "mutated": "      if (!((l >= '0' && l <= '9') || (l >= 'a' && l <= 'f') || l != '-')) {",
+   "operator": "ROR:== -> !=",
+   "orig": "      if (!((l >= '0' && l <= '9') || (l >= 'a' && l <= 'f') || l == '-')) {",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/mint.cc",
+   "line": 115,
+   "mutated": "        chance_alphabet = true;",
+   "operator": "BOOL:false -> true",
+   "orig": "        chance_alphabet = false;",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/session.cc",
+   "line": 17,
+   "mutated": "  return a.tab_id <= b.tab_id;",
+   "operator": "ROR:< -> <=",
+   "orig": "  return a.tab_id < b.tab_id;",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/session.cc",
+   "line": 104,
+   "mutated": "    t.window = row.substr(c1 + 2, c2 - c1 - 1);",
+   "operator": "AOR:1 -> 2",
+   "orig": "    t.window = row.substr(c1 + 1, c2 - c1 - 1);",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/session.cc",
+   "line": 108,
+   "mutated": "  pos = 1;",
+   "operator": "AOR:0 -> 1",
+   "orig": "  pos = 0;",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/session.cc",
+   "line": 116,
+   "mutated": "    pos = end + 2;",
+   "operator": "AOR:1 -> 2",
+   "orig": "    pos = end + 1;",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/templates.cc",
+   "line": 29,
+   "mutated": "  t.push_back({\"personal\", \"Personal\", \"#4285f4\", \"P\", true, false, \"\", {",
+   "operator": "BOOL:false -> true",
+   "orig": "  t.push_back({\"personal\", \"Personal\", \"#4285f4\", \"P\", false, false, \"\", {",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/templates.cc",
+   "line": 35,
+   "mutated": "  t.push_back({\"work\", \"Work\", \"#1a73e8\", \"W\", true, false, \"\", {",
+   "operator": "BOOL:false -> true",
+   "orig": "  t.push_back({\"work\", \"Work\", \"#1a73e8\", \"W\", false, false, \"\", {",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/templates.cc",
+   "line": 42,
+   "mutated": "  t.push_back({\"research\", \"Research\", \"#0f9d58\", \"R\", true, false, \"\", {",
+   "operator": "BOOL:false -> true",
+   "orig": "  t.push_back({\"research\", \"Research\", \"#0f9d58\", \"R\", false, false, \"\", {",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/templates.cc",
+   "line": 49,
+   "mutated": "  t.push_back({\"banking\", \"Banking\", \"#f4b400\", \"B\", true, false, \"\", {",
+   "operator": "BOOL:false -> true",
+   "orig": "  t.push_back({\"banking\", \"Banking\", \"#f4b400\", \"B\", false, false, \"\", {",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/templates.cc",
+   "line": 58,
+   "mutated": "  t.push_back({\"shopping\", \"Shopping\", \"#db4437\", \"S\", true, false, \"\", {",
+   "operator": "BOOL:false -> true",
+   "orig": "  t.push_back({\"shopping\", \"Shopping\", \"#db4437\", \"S\", false, false, \"\", {",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/templates.cc",
+   "line": 77,
+   "mutated": "  t.push_back({\"tor\", \"Tor\", \"#78288c\", \"T\", true, false, \"tor\", {",
+   "operator": "BOOL:false -> true",
+   "orig": "  t.push_back({\"tor\", \"Tor\", \"#78288c\", \"T\", false, false, \"tor\", {",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/templates.cc",
+   "line": 132,
+   "mutated": "    if (r.ns != \"prefs\" || r.ns == \"policy\") {",
+   "operator": "ROR:== -> !=",
+   "orig": "    if (r.ns == \"prefs\" || r.ns == \"policy\") {",
+   "target": "identity"
+  }
+ ],
+ "target": "xr-core/identity/core/*.cc",
+ "tool": "mutation_test",
+ "total_mutants": 248,
+ "truncated_by_timebox": false
+}

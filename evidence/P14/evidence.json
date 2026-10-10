@@ -262,6 +262,43 @@
         "evidence/P14/human-gates.md"
       ],
       "notes": ""
+    },
+    {
+      "id": "P14-T5-DELIVERED",
+      "corrects": "P14-T5",
+      "dod": "History/bookmarks identity tagging via the ledger overlay (P14-CLOSE C-2). Contract ledger-identity-overlay-v1 is LIVING and recorded as an amendment in docs/contracts/registry-post-freeze.md; no frozen row is edited, and FROZEN.yaml is byte-identical. The schema REQUIRES identity_id on every one of the 10 closed event classes (the 8 frozen ActivityKind values read live from activity_log.mojom, plus kHistory and kBookmark). 35 golden vectors carry it for every class, plus a missing-identity refusal per class. The C++ core (identity/core/ledger_tag via identity_host) and the Python twin (fakes/ledger_identity.py) are byte-identical on every vector. Omnibox: a query in identity A returns no row owned by B, B's row is dropped and not counted, and a row without a valid identity_id is typed 'unknown', never shown as the current identity's. The planted leak (a filter that ignores identity) reddens in both the twin and the C++ unit lane. Upstream history is untouched; the oracle line reads 'history-oracle: upstream history diff-clean (2 vectors)'. A planted upstream write answers DELTA and reddens.",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "docs/contracts/ledger-identity-overlay-v1.md",
+        "docs/contracts/ledger-identity-overlay-v1.schema.json",
+        "docs/contracts/vectors/ledger-identity-overlay-v1.json",
+        "docs/contracts/registry-post-freeze.md",
+        "tools/ledger_identity_check.py",
+        "tools/negatives/p14c_c2.sh",
+        "../xr-core/identity/core/ledger_tag.cc",
+        "../xr-core/identity/tests/test_ledger_tag.cc",
+        "../xr-core/fakes/ledger_identity.py",
+        "logs/c2-ledger-identity.txt"
+      ],
+      "notes": "No frozen stamping condition forbids the field: the frozen ActivityRow and permission-audit-event already carry identity, so the overlay adds a required field in a NEW living contract, not to a frozen shape. There was no STOP. Freezing the overlay is a human act (HG-26). The browser-side history/omnibox consumers that read it are farm work (HG-31). The overlay's model and both backends are what this row verifies."
+    },
+    {
+      "id": "P14-SECURITY-DELIVERED",
+      "corrects": "P14-SECURITY",
+      "dod": "Security requirements closed in the model (P14-CLOSE C-4):\n- Derivation probes (partition name, URL, title, log line) are planted against the minted domain and checked by byte-absence (test_derivation). The refusal strings never echo input.\n- The cross-identity process assertion runs in the fast lane: IdentityStore::Insert refuses a shared partition, citing the P4/P6 partition code, and a planted partition share reddens test_derivation (negative p14c_c2.sh).\n- Purge-verified destroy now carries a real filesystem diff around the identity host. The disposable-zero-residue cells run build/spike/fsdiff.py over each cycle and catch the plant-fs-leftover file.\n- The no-vault-access policy row is asserted CONSULTED: stubbing it absent, or granting it to a disposable, fails.\n- No new crypto, egress or dependencies.\nS0 dual review stays HUMAN-GATED with named files.",
+      "status": "PARTIAL",
+      "source": "local-run",
+      "evidence": [
+        "tools/tests/test_p14c_security.py",
+        "../xr-core/identity/tests/test_derivation.cc",
+        "tools/identity_iso_cells.py",
+        "tools/negatives/p14c_c2.sh",
+        "evidence/P14/human-gates.md",
+        "logs/c4-security.txt",
+        "logs/c2-ledger-identity.txt"
+      ],
+      "notes": "PARTIAL only because the S0 dual review is a human act. It covers HG-S0-IDENTITY, plus three rows opened by this close: HG-S0-P14C-OPACITY (an S0 fix made here, xr-core f031c33; LooksOpaque refused short all-hex display names, so identity creation failed by chance), HG-S0-P14C-MINT-DECODE and HG-S0-P14C-OVERLAY. Every automated half is RUN. The browser-profile FS-diff remains NOT-RUN (docs/qa/browser-harness.md, P14-T6)."
     }
   ]
 }

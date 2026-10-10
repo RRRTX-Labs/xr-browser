@@ -28,6 +28,9 @@ SUITE_MAPS = {
         "binding.cc": ["test_binding"],
         "attribution.cc": ["test_attribution"],
         "session.cc": ["test_session_chaos"],
+        # P14-CLOSE C-2: the ledger identity overlay; test_derivation pins
+        # its refusal strings (byte-absence), test_ledger_tag its laws.
+        "ledger_tag.cc": ["test_ledger_tag", "test_derivation"],
     },
     # P15: the permission firewall core (ADR-0051). Each TU maps to the suites
     # that build WITHOUT the policy tree (the matrix copies only this target and

@@ -46,3 +46,15 @@ p14_parity_selftest() {
   echo "== P14-P0-2: ci-parity --self-test (the detector can detect) =="
   "$PY" tools/ci_parity_check.py --self-test
 }
+
+p14c_ledger_identity() {
+  # P14-CLOSE C-2 (P14-T5): ledger-identity-overlay-v1 — every golden vector
+  # byte-identical across the compiled identity_host and fakes/ledger_identity.py,
+  # identity_id required on every class, the frozen ActivityKind set read live,
+  # and the zero-delta history oracle. g++/make absent => visible SKIP of the
+  # C++ half (the Python half and every law still run), never a silent pass.
+  echo "== P14-CLOSE C-2: ledger identity overlay (both backends, identity_id on every class, upstream zero-delta) =="
+  p13_exit_code_lane "ledger overlay C++ parity" \
+    "tool absent: g++/make; the Python half and every law still ran; local hint: apt-get install g++ make" \
+    "$PY" tools/ledger_identity_check.py
+}

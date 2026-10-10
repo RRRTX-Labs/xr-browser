@@ -49,6 +49,8 @@ SCHEMAS = {
     # docs/contracts/registry-post-freeze.md). Its golden is JSON Lines, so the
     # per-line gate is tools/permission_contract_check.py, not this CLI.
     "permission-audit-event": "permission-audit-event-v1.schema.json",
+    # P14-CLOSE C-2: the identity overlay record (identity_id REQUIRED).
+    "ledger-identity-overlay": "ledger-identity-overlay-v1.schema.json",
 }
 
 

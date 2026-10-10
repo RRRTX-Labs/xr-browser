@@ -99,14 +99,45 @@
       "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
     },
     "identity": {
-      "killed": 204,
-      "mutants": 204,
-      "note": "P14 RE-RUN (2026-10-05): the core changed (CompactAudit + CompactEvictions — bounded campaign memory; see the fleet OOM postmortem in research-log-P14), so the FULL matrix re-ran at pin 9ee4952 (sampled:false, seed 20261001): 204 mutants, 204 killed, 100.00%, deny-guard 19/19 — the five new compaction mutants (ROR/LOR arms on the keep/drop boundaries) are killed by the new deterministic cases (Snapshot-bytes equivalence, eviction tail order). Zero survivors. Prior transcript: evidence/P14/logs/t-mutation-identity.json (199/199 at 7d70013).",
-      "score_pct": 100.0,
+      "killed": 246,
+      "mutants": 252,
+      "note": "P14-CLOSE RE-SCORE (2026-10-10). The 204/204 recorded at 9ee4952 predates the harness fix (xr-browser 3fe8d7e and b6cd40f, 2026-10-09: stale objects and unrestored builds counted false kills). Re-run with the fixed harness at xr-core a7ed1ab (which adds ledger_tag.cc and the S0 opacity fix), the identity core scored 220/248 = 88.71% with deny-guard 23/29, a FAIL. That transcript is evidence/P14/logs/t-mutation-identity-v3-rescore.json. A templates.cc survivor from it was re-checked by hand at 9ee4952 and survives there too, so the old 100% was an artifact. Tests were added (xr-core dec1d83, no behavior change) and the mint digest decoding became a tested function (S0 refactor, HG-S0-P14C-MINT-DECODE). The FULL matrix (sampled:false, seed 20261001) then scored 246/252 = 97.62% with deny-guard 29/29, a PASS. Six survivors remain, each an equivalent mutant (dispositions below).",
+      "score_pct": 97.62,
       "seed": 20261001,
-      "survivors": [],
-      "transcript": "evidence/P14/logs/t-mutation-identity-v2.json",
-      "xr_core_commit": "9ee4952ce89cf1caa076027d1cfa9566a005b16c"
+      "survivors": [
+        {
+          "id": "core/attribution.cc:61 ROR:> -> >=",
+          "operator": "ROR:> -> >=",
+          "disposition": "equivalent-mutant: the std::sort comparator `a.kb > b.kb` becomes `>=`. The two differ only on equal kb, where std::sort leaves the order unspecified under either comparator, and the model's contract (biggest first; sum within total) says nothing about tie order. No deterministic test can tell them apart."
+        },
+        {
+          "id": "core/binding.cc:98 ROR:> -> >=",
+          "operator": "ROR:> -> >=",
+          "disposition": "equivalent-mutant: BindingModel::CompactAudit `suggestions_.size() > keep_suggestions` becomes `>=`. At size == keep the mutant erases the empty range [begin, end - keep), the same outcome as skipping."
+        },
+        {
+          "id": "core/hibernate.cc:27 ROR:<= -> <",
+          "operator": "ROR:<= -> <",
+          "disposition": "equivalent-mutant: CompactEvictions `size <= keep` becomes `<`. At size == keep the mutant computes dropped = 0, erases an empty range and returns 0, the same as the early return."
+        },
+        {
+          "id": "core/mint.cc:58 AOR:0 -> 1",
+          "operator": "AOR:0 -> 1",
+          "disposition": "equivalent-mutant: DecodeDigestHex initializes `hi` to 1 instead of 0. HexNibble overwrites it on success, and on failure the function returns before reading it. The initializer is defensive only; no path reads it."
+        },
+        {
+          "id": "core/mint.cc:59 AOR:0 -> 1",
+          "operator": "AOR:0 -> 1",
+          "disposition": "equivalent-mutant: the same as line 58, for `lo`."
+        },
+        {
+          "id": "core/session.cc:17 ROR:< -> <=",
+          "operator": "ROR:< -> <=",
+          "disposition": "equivalent-mutant: the tab sort comparator `<` becomes `<=`. Snapshot tab ids are unique (std::map keys), so equal ids never meet, and for hand-built docs with duplicate ids std::sort's order is unspecified under either comparator."
+        }
+      ],
+      "transcript": "evidence/P14/logs/t-mutation-identity-v3.json",
+      "xr_core_commit": "dec1d8373faef071c21ccfa31b722d164a9b8b64"
     },
     "permissions": {
       "killed": 90,
