@@ -1,0 +1,20 @@
+ci-triage: repo=RRRTX-Labs/xr-browser sha=267de392bda0
+  check-run fuzz-fleet (settings-core): completed/success
+  check-run fuzz-fleet (themes-core): completed/success
+  check-run fuzz-fleet (cosmetic-core): completed/success
+  check-run fuzz-fleet (identity-core): completed/success
+  check-run fuzz-fleet (policy-core): completed/success
+  check-run fuzz-fleet (commands-core): completed/success
+  check-run snapshot freshness (STALE-* visible, non-fatal to push gates): completed/success
+  check-run scheduled-lane health: completed/success
+  check-run mutation-commands: completed/success
+  check-run mutation-settings: completed/success
+  check-run server-conformance: completed/success
+  check-run mutation-themes: completed/success
+  check-run mutation-update: completed/success
+  check-run shield-vendor: completed/success
+  check-run freshness: completed/success
+  check-run governance: completed/success
+  verdict: green (no failing check-run)
+  logs: run 38071604748: BLOCKED-NET (ADMIN-ONLY-or-QUOTA: HTTP 403 from /repos/RRRTX-Labs/xr-browser/actions/runs/38071604748/logs) (/logs is admin-only; use --sha for the public path)
+EXIT=0

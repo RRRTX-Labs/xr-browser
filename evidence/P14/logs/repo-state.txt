@@ -1,0 +1,33 @@
+# P14-CLOSE C-6 repo state after the push — fresh clones from origin in /var/tmp/p14close (not the working checkouts)
+# as-of 2026-10-10 (date of the record; no tool here reads a clock)
+$ git ls-remote https://github.com/RRRTX-Labs/xr-browser.git refs/heads/main
+267de392bda0253a1126cf16df3a7ad31c98ddaa	refs/heads/main
+$ git ls-remote https://github.com/RRRTX-Labs/xr-core.git refs/heads/main
+e18b82f7c345c6fb8b0aecbef2f39c53a8d84312	refs/heads/main
+$ (xr-browser) git rev-parse HEAD
+267de392bda0253a1126cf16df3a7ad31c98ddaa
+$ (xr-core) git rev-parse HEAD
+e18b82f7c345c6fb8b0aecbef2f39c53a8d84312
+$ (xr-browser) DEPS xr_core_rev
+12:#   xr_core_rev    lineage: P2-T3 created the pin; P4 advanced it to the
+70:xr_core_rev: "e18b82f7c345c6fb8b0aecbef2f39c53a8d84312"     # xr-core e18b82f (P14-CLOSE: Isolation Card identity rows from data e18b82f, xr://identities dev page + honest commands mutation re-score 5ffa695, identity chrome a569801, LooksOpaque chance-probe fix f031c33, ledger-identity-overlay-v1 ad3026c, derivation probes + partition-share law + FS-diff test hook aaf79bd, isolation record with the T6 FS-diff verdict a7ed1ab, mutation-survivor kills + tested mint digest decode dec1d83) on the P15 pin 13a5f7d (P15 permission firewall; ADR-0051 DRAFT).
+$ (xr-browser) git status --porcelain (empty = clean)
+$ (xr-core) git status --porcelain (empty = clean)
+$ python3 build/sync.py check-pin-alive
+PASS: check-pin-alive
+EXIT=0
+$ python3 tools/sibling_pin_check.py --repo .
+pin: xr-core e18b82f7c345c6fb8b0aecbef2f39c53a8d84312 == DEPS e18b82f7c345c6fb8b0aecbef2f39c53a8d84312 (clean worktree)
+PASS: sibling_pin_check (65 sibling reader(s) classified, arg-only=16, gate-ordered=15, probe=4, routed=5, self=2, test=23)
+EXIT=0
+
+$ python3 tools/dco_check.py --range cabb36f..267de39   # xr-browser, the P14-CLOSE range
+PASS: dco_check
+EXIT=0
+$ python3 tools/dco_check.py --repo ../xr-core --range 13a5f7d..e18b82f   # xr-core, the P14-CLOSE range
+PASS: dco_check
+EXIT=0
+$ git log --format='%cn <%ce>' cabb36f..267de39 | sort | uniq -c   # committer identities (xr-browser)
+      7 XR P14-Close Agent <p14-close@users.noreply.github.com>
+$ git -C ../xr-core log --format='%cn <%ce>' 13a5f7d..e18b82f | sort | uniq -c   # committer identities (xr-core)
+      8 XR P14-Close Agent <p14-close@users.noreply.github.com>

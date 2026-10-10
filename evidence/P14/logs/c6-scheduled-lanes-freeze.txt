@@ -1,0 +1,10 @@
+PASS: compat-beta-parity.yml
+    compat-beta-parity.yml: schedule run 38038848531 head cabb36ff7 created 2026-10-10T08:43:04Z — success
+PASS: core-hardening.yml
+    core-hardening.yml: schedule run 37607105196 head 01baba0d6 created 2026-10-07T10:23:43Z — success
+PASS: nightly-rebase-build.yml
+    nightly-rebase-build.yml: schedule run 38035635361 head cabb36ff7 created 2026-10-10T07:47:31Z — success
+PASS: sast.yml
+    sast.yml: schedule run 37303947978 head 6b0908208 created 2026-10-05T11:35:45Z — success
+PASS: scheduled_lane_check (4 scheduled lane(s); PASS=4; every non-green state above is visible and non-fatal BY RULE, never silently dropped)
+EXIT=0

@@ -1,0 +1,32 @@
+# P14-CLOSE C-6 — finality at the closing commit (evidence.json state: final, phase_head 267de39, same-head ci-run rows appended)
+$ python3 tools/evidence_check.py --repo . --strict --only P14 --require-phase-final
+finality: P14: final (declared) — judging the final vocabulary, the declared head, the claimed workflows and report.md
+finality: P14: 9 row(s) superseded by appended corrections (append-only): P14-CLOSE-GATES, P14-CONTRACTS, P14-DOCS, P14-EVIDENCE, P14-P0-3, P14-SECURITY, P14-T4, P14-T5, P14-T7
+head-match: phase_head=267de392bda0253a1126cf16df3a7ad31c98ddaa vs ci-run P14-CI-GOVERNANCE head_sha=267de392bda0253a1126cf16df3a7ad31c98ddaa (workflow=governance)
+head-match: phase_head=267de392bda0253a1126cf16df3a7ad31c98ddaa vs ci-run P14-CI-CORE-HARDENING head_sha=267de392bda0253a1126cf16df3a7ad31c98ddaa (workflow=core-hardening)
+head-match: covered=[core-hardening:P14-CI-CORE-HARDENING, governance:P14-CI-GOVERNANCE] phase_head=267de392bda0253a1126cf16df3a7ad31c98ddaa
+PASS: evidence/P14/evidence.json (strict)
+PASS: evidence_check (1 bundle(s), 0 failure(s); presence law: every phase in git history carries a bundle)
+EXIT=0
+
+$ python3 tools/evidence_finality.py --repo .
+finality: P1: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P10: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P11: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P12: final (declared) — judging the final vocabulary, the declared head, the claimed workflows and report.md
+finality: P12: 11 row(s) superseded by appended corrections (append-only): P12-CLOSE-DOD-10, P12-CLOSE-DOD-11, P12-CLOSE-DOD-12, P12-CLOSE-DOD-12-C1, P12-CLOSE-DOD-13, P12-CLOSE-DOD-14, P12-CLOSE-DOD-15, P12-CLOSE-DOD-4, P12-CLOSE-DOD-7, P12-CLOSE-DOD-8, P12-CLOSE-DOD-9
+finality: P13: final (declared) — judging the final vocabulary, the declared head, the claimed workflows and report.md
+finality: P13: 8 row(s) superseded by appended corrections (append-only): P13-CONTRACTS, P13-EVIDENCE, P13-REPORT, P13-T2, P13-T3, P13-T4, P13-T5, P13-T6
+finality: P14: final (declared) — judging the final vocabulary, the declared head, the claimed workflows and report.md
+finality: P14: 9 row(s) superseded by appended corrections (append-only): P14-CLOSE-GATES, P14-CONTRACTS, P14-DOCS, P14-EVIDENCE, P14-P0-3, P14-SECURITY, P14-T4, P14-T5, P14-T7
+finality: P15: interim — in flight per docs/state/phase-base.json (phase=P15); PENDING sentinels are legal here and the final rules do not apply
+finality: P2: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P3: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P4: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P5: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P6: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P7: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P8: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+finality: P9: pre-law phase (law binds P12+) — state not judged; the bundle's own rows are unchanged
+PASS: evidence_finality (15 bundle(s), 0 failure(s); law binds P12+; in-flight='P15')
+EXIT=0
