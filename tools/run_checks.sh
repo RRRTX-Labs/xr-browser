@@ -34,6 +34,7 @@ echo "== plan pin =="
 p14_parity
 p14_parity_selftest
 p14c_ledger_identity
+p14c_identity_chrome
 
 # P15: the permission-firewall lanes (ADR-0051). Printed in the order they run.
 p15_lanes

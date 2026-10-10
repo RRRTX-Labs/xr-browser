@@ -67,7 +67,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "dec1d8373faef071c21ccfa31b722d164a9b8b64"     # xr-core dec1d83 (P14-CLOSE: LooksOpaque chance-probe fix f031c33, ledger-identity-overlay-v1 ad3026c, derivation probes + partition-share law + FS-diff test hook aaf79bd, isolation record with the T6 FS-diff verdict a7ed1ab, mutation-survivor kills + tested mint digest decode dec1d83) on the P15 pin 13a5f7d (P15 permission firewall; ADR-0051 DRAFT).
+xr_core_rev: "a569801e85160954fae034ba018c328049d398f1"     # xr-core a569801 (P14-CLOSE: identity chrome a569801, LooksOpaque chance-probe fix f031c33, ledger-identity-overlay-v1 ad3026c, derivation probes + partition-share law + FS-diff test hook aaf79bd, isolation record with the T6 FS-diff verdict a7ed1ab, mutation-survivor kills + tested mint digest decode dec1d83) on the P15 pin 13a5f7d (P15 permission firewall; ADR-0051 DRAFT).
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

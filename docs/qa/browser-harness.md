@@ -248,7 +248,9 @@ walkthrough (create Work + Disposable, open a tab in each, move a tab
 across, destroy the disposable) on the visual-rig; snapshot the color-bar +
 pill + amber-dashed-border states per layout × theme into the visual CI
 corpus (`--check`; regeneration is a deliberate act with its own command —
-never rewrite in-tree).
+never rewrite in-tree). The structural half of that corpus shipped at
+P14-CLOSE C-1; the pixel half is NOT-RUN, see
+[identity chrome visual](#identity-chrome-visual).
 
 ## Move-confirm usability session (P14-T3) — METHOD
 
@@ -262,6 +264,59 @@ HG section); no surrogate exists and none may be invented.
 With a screen reader active, focus a tab in each identity kind; the
 identity name + glyph must be announced. Axe-core `--check` covers the
 static assertions; the live SR pass is the audit method (human gate).
+
+## Identity chrome visual
+
+P14-T4, closed at P14-CLOSE C-1. The anchor `#identity-chrome-visual` is cited
+by `evidence/P14/evidence.json` (the T4 correction row). This section separates
+what shipped and is checked from the one thing this sandbox cannot do: render
+pixels.
+
+* **Shipped and checked (structural, real):** `xr-core/ui/identity-chrome/`.
+  * `states.json` is the state table: standard, disposable, tor-unbound, the
+    four layouts and the contrast floors.
+  * `chrome-core.ts` is the pure core. It produces, per identity, the tab's
+    2 px bar (or the rail's 8 px dot + first letter), the toolbar pill, the
+    full-window border, and the tab's screen-reader description.
+  * `identity-chrome.ts` holds the lit elements that render that structure.
+  * `tools/identity_chrome_check.py --check` enforces the state law:
+    * every state has an SR string, an accessible name, a route string and a
+      sample;
+    * every message id is present in `xr_strings.grdp`;
+    * sample colors equal `identity/core/templates.cc`;
+    * pill text is ≥ 4.5:1 in every theme;
+    * a mark under 3:1 carries a 1 px `text`-token edge that reaches 3:1.
+  * The same tool diffs the committed per-layout × per-theme structural
+    snapshots (4 × 5 = 20, `snapshots/<layout>.<theme>.json`). `--write` is
+    the deliberate regeneration; a gate never rewrites.
+  * `build/webui/identity-chrome-tests.sh` runs the TypeScript core under
+    node:test against those snapshots, so the generator and the core cannot
+    drift. `--plant-drift` proves the suite reddens.
+  * Negatives: `tools/negatives/p14c_c1.sh`, including the planted missing SR
+    string.
+* **NOT-RUN: pixels.** `↦ NOT-RUN (method: docs/qa/browser-harness.md#identity-chrome-visual)`.
+  No browser build exists in this tree, so nothing rendered the chrome. The
+  method on the visual rig, with owner and human operator **ahmadrrrtx**:
+  1. **Mixed-identity walkthrough × 3 themes** (light / dark / high-contrast).
+     Create Work + Disposable and open a tab in each. Bind nothing to Tor and
+     open a Tor-template tab. Move a tab across, then destroy the disposable.
+     Per layout (top / vertical / compact / rail), capture the bar or dot,
+     the pill, and the amber-dashed / violet-solid border. Compare each
+     capture against its structural snapshot: same parts, same colors, the
+     edge present exactly where the snapshot carries `edge`. The pixel
+     corpus becomes its own `--check` lane on the rig.
+  2. **SR audit.** With a screen reader active, focus a tab in each identity
+     kind. The announcement must equal the resolved `idchrome.sr.*` string
+     (`Identity: Work`, `Disposable identity: Disposable`, `Tor identity:
+     Tor. The Tor route is not connected.`). The pill must be announced as a
+     button named `Identity menu: <name>, <route>`. The glyph must not be
+     announced twice (it is `aria-hidden`).
+  3. **Contrast spot-check.** On light and prairie, the banking and
+     disposable bars must show their dark edge. On dark, high-contrast and
+     dusk, the Tor bar and border must show their light edge.
+
+  No pixel, screenshot or SR result is claimed in this phase, and no
+  surrogate was invented.
 
 ## Disposable zero-bytes close: the FS-diff halves (P14-T6)
 

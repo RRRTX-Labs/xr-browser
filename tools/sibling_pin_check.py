@@ -106,6 +106,7 @@ REGISTER: dict[str, tuple[str, str]] = {
     "tools/descriptors_to_docs.py": ("routed", "P1 layout guess -> resolve_or_exit"),
     "tools/menu_model_check.py": ("routed", "P1 layout guess -> resolve_or_exit"),
     "tools/rtl_lint.py": ("routed", "P1 layout guess -> resolve_or_exit"),
+    "tools/identity_chrome_check.py": ("routed", "P14-CLOSE C-1: the gate (--check) resolves through resolve_or_exit; only the deliberate --write regeneration, which no gate runs, defaults to the layout"),
     "tools/blink_guard_lint.py": ("routed", "P2 resolve guess -> _sibling_of()"),
     "tools/cosmetic_generic_set_check.py": ("routed", "P2 resolve guess -> _sibling_of()"),
     "tools/cosmetic_scope_single_check.py": ("routed", "P2 resolve guess -> _sibling_of()"),

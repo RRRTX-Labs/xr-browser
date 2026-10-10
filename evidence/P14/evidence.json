@@ -299,6 +299,25 @@
         "logs/c2-ledger-identity.txt"
       ],
       "notes": "PARTIAL only because the S0 dual review is a human act. It covers HG-S0-IDENTITY, plus three rows opened by this close: HG-S0-P14C-OPACITY (an S0 fix made here, xr-core f031c33; LooksOpaque refused short all-hex display names, so identity creation failed by chance), HG-S0-P14C-MINT-DECODE and HG-S0-P14C-OVERLAY. Every automated half is RUN. The browser-profile FS-diff remains NOT-RUN (docs/qa/browser-harness.md, P14-T6)."
+    },
+    {
+      "id": "P14-T4-STRUCTURAL",
+      "corrects": "P14-T4",
+      "dod": "Visual system, structural half (P14-CLOSE C-1). xr-core/ui/identity-chrome/ ships the state table states.json, the pure core chrome-core.ts and the lit elements identity-chrome.ts: 2 px tab bar (rail: 8 px dot + first letter) + glyph, the identity pill (name + color + route summary, a button), the amber-dashed full-window border for disposable and violet-solid for Tor, and the SR description announced on tab focus. tools/identity_chrome_check.py --check enforces the state law: every state has a class, an accessible name, a route string, an SR string and a sample, every id is in xr_strings.grdp, colors equal templates.cc, pill text >= 4.5:1 per theme, and a mark under 3:1 carries an edge. It also diffs 20 per-layout x per-theme structural snapshots, never rewriting them. The node lane holds the TS core to every snapshot, and its --plant-drift reddens. qyy, axe-tree, l10n and the derived grdp count are green with the 6 new messages. Pixels stay NOT-RUN with a named owner: docs/qa/browser-harness.md#identity-chrome-visual.",
+      "status": "PARTIAL",
+      "source": "local-run",
+      "evidence": [
+        "../xr-core/ui/identity-chrome/states.json",
+        "../xr-core/ui/identity-chrome/chrome-core.ts",
+        "../xr-core/ui/identity-chrome/identity-chrome.ts",
+        "../xr-core/ui/identity-chrome/tests/identity-chrome.test.mjs",
+        "tools/identity_chrome_check.py",
+        "build/webui/identity-chrome-tests.sh",
+        "tools/negatives/p14c_c1.sh",
+        "docs/qa/browser-harness.md",
+        "logs/c1-identity-chrome.txt"
+      ],
+      "notes": "Narrows the original NOT-RUN, which covered all of T4 though only the pixel comparison needs a browser. PARTIAL because the rendered-pixel comparison, the mixed-identity walkthrough x 3 themes and the live SR audit are NOT-RUN (no browser build in this sandbox). The methods are in docs/qa/browser-harness.md#identity-chrome-visual and are owned by human operator ahmadrrrtx. Everything structural is RUN, including the planted missing-SR-string negative."
     }
   ]
 }

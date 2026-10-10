@@ -1,0 +1,121 @@
+# P14-CLOSE C-1 identity chrome transcript (xr-core a569801, xr-browser base fc9a8c4 + working tree)
+
+$ python3 tools/identity_chrome_check.py --check
+PASS: identity_chrome_check (3 states, 7 samples, 4 layouts x 5 themes = 20 snapshots; 28 mark(s) carry a text-token edge for contrast)
+exit=0
+
+$ bash build/webui/identity-chrome-tests.sh
+identity-chrome-tests: node --test ui/identity-chrome/tests/identity-chrome.test.mjs
+  TAP version 13
+  # Subtest: every state value gets a case: class, SR description, pill name, border
+  ok 1 - every state value gets a case: class, SR description, pill name, border
+    ---
+    duration_ms: 4.106733
+    ...
+  # Subtest: disposable = amber dashed full-window border; tor-unbound = solid in its color
+  ok 2 - disposable = amber dashed full-window border; tor-unbound = solid in its color
+    ---
+    duration_ms: 0.456149
+    ...
+  # Subtest: every layout value gets a case, and color is never alone
+  ok 3 - every layout value gets a case, and color is never alone
+    ---
+    duration_ms: 0.53363
+    ...
+  # Subtest: a mark below 3:1 carries a text-token edge that reaches 3:1; above, none
+  ok 4 - a mark below 3:1 carries a text-token edge that reaches 3:1; above, none
+    ---
+    duration_ms: 2.016394
+    ...
+  # Subtest: refusals are typed and carry no identity value
+  ok 5 - refusals are typed and carry no identity value
+    ---
+    duration_ms: 0.585658
+    ...
+  # Subtest: the SR announcement resolves through the string map
+  ok 6 - the SR announcement resolves through the string map
+    ---
+    duration_ms: 0.17437
+    ...
+  # Subtest: the core reproduces EVERY committed per-layout x per-theme snapshot
+  ok 7 - the core reproduces EVERY committed per-layout x per-theme snapshot
+    ---
+    duration_ms: 9.327312
+    ...
+  1..7
+  # tests 7
+  # suites 0
+  # pass 7
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+  # duration_ms 115.405386
+identity-chrome-tests: PASS (every state + layout case, color never alone, contrast edge, typed refusals, SR resolution, core == every committed snapshot)
+exit=0
+
+$ bash build/webui/identity-chrome-tests.sh --plant-drift
+identity-chrome-tests: --plant-drift: rail initial rule removed in a scratch copy
+identity-chrome-tests: node --test ui/identity-chrome/tests/identity-chrome.test.mjs
+  not ok 3 - every layout value gets a case, and color is never alone
+  not ok 7 - the core reproduces EVERY committed per-layout x per-theme snapshot
+  # tests 7
+  # pass 5
+  # fail 2
+identity-chrome-tests: PASS — the planted core drift reddens the snapshot law
+exit=0
+
+$ python3 tools/grdp_check.py
+grdp_check: xr_strings.grdp OK (142 messages, isolation-card cross-check clean)
+exit=0
+
+$ python3 tools/l10n_extract.py --check
+l10n_extract: 28 files, 0 raw-string violations, 0 missing ids -> CLEAN
+exit=0
+
+$ python3 tools/pseudo_locale.py --in ../xr-core/l10n/xr_strings.grdp --out docs/qa/qyy/xr_strings.qyy.txt --as-of 2026-09-10 --check
+PASS: pseudo_locale qyy render diff-clean (142 messages, mean 37.0 chars)
+exit=0
+
+$ python3 tools/a11y_tree.py --repo . --check
+PASS: a11y_tree --check (40 nodes, diff-clean)
+exit=0
+
+$ python3 tools/a11y_lint.py
+a11y_lint: 0 violation(s) (PASS)
+exit=0
+
+$ python3 tools/rtl_lint.py
+rtl_lint: 0 violation(s) (PASS)
+exit=0
+
+$ python3 tools/csp_lint.py
+csp_lint: 0 violation(s) (PASS)
+exit=0
+
+$ python3 tools/copy_lint.py --repo .
+copy_lint: 142 string(s) checked, 0 violation(s) (PASS)
+exit=0
+
+$ bash build/webui/toolchain.sh
+toolchain: npm ci --ignore-scripts (lock-pinned, --ignore-scripts)
+toolchain: tsc -p /home/user/xr-core/ui (strict)
+toolchain: node build.mjs (deterministic bundle)
+  build: built dist/ (bundle.js + index.html + tokens.css)
+toolchain: node check-bundle.js (CSP on output)
+  csp: check-bundle: PASS (CSP-strict: no inline JS/eval, no runtime network, no sourcemap)
+toolchain: PASS (tsc-strict + deterministic bundle + CSP-clean) in /home/user/xr-core/ui/toolchain
+exit=0
+
+$ tools/run_negatives.sh (p14c_c1.sh only)
+ok: identity chrome: planted no-sr reddens the law (rejected with expected reason)
+ok: identity chrome: planted missing-msg reddens the law (rejected with expected reason)
+ok: identity chrome: planted template-drift reddens the law (rejected with expected reason)
+ok: identity chrome: planted pill-contrast reddens the law (rejected with expected reason)
+ok: identity chrome: planted no-sample reddens the law (rejected with expected reason)
+ok: identity chrome: planted snapshot-edit reddens the law (rejected with expected reason)
+ok: identity chrome: planted snapshot-missing reddens the law (rejected with expected reason)
+ok: identity chrome: planted snapshot-stale reddens the law (rejected with expected reason)
+
+ALL NEGATIVE CASES REJECTED AS EXPECTED (N=1)
+exit=0

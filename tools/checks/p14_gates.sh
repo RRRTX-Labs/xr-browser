@@ -58,3 +58,19 @@ p14c_ledger_identity() {
     "tool absent: g++/make; the Python half and every law still ran; local hint: apt-get install g++ make" \
     "$PY" tools/ledger_identity_check.py
 }
+
+p14c_identity_chrome() {
+  # P14-CLOSE C-1 (P14-T4): the identity chrome. Three things are checked:
+  #   * the state law + per-layout x per-theme STRUCTURAL snapshots (--check;
+  #     a gate never rewrites them, --write is the deliberate regeneration);
+  #   * the TypeScript core against the same snapshots under node:test;
+  #   * --plant-drift, a scratch-copy core drift that MUST redden that suite.
+  # Pixels are NOT-RUN (docs/qa/browser-harness.md#identity-chrome-visual).
+  # Node/registry absent => visible SKIP (77) of the TS half, never a pass.
+  echo "== P14-CLOSE C-1: identity chrome (state law + structural snapshots; TS core == snapshots; planted drift reddens) =="
+  "$PY" tools/identity_chrome_check.py --check
+  p13_exit_code_lane "identity-chrome core lane" \
+    "node/toolchain unavailable" bash build/webui/identity-chrome-tests.sh
+  p13_exit_code_lane "identity-chrome planted-drift lane" \
+    "node/toolchain unavailable" bash build/webui/identity-chrome-tests.sh --plant-drift
+}

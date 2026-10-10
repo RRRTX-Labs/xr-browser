@@ -135,3 +135,9 @@ panel.tab.observatory	IDS_XR_PANEL_TAB_OBSERVATORY	‏«Obsérvátõry ēxð»
 panel.tab.breakage	IDS_XR_PANEL_TAB_BREAKAGE	‏«Répõrt á brõkéñ sîté ēxðañd »
 panel.tab.update	IDS_XR_PANEL_TAB_UPDATE	‏«Updátés ē»
 panel.tab.sent	IDS_XR_PANEL_TAB_SENT	‏«Whát wõûld bé séñt ēxðañd»
+idchrome.sr.standard	IDS_XR_IDCHROME_SR_STANDARD	‏«Idéñtîty:  ēxð{NAME}»
+idchrome.sr.disposable	IDS_XR_IDCHROME_SR_DISPOSABLE	‏«Dîspõsáblé îdéñtîty:  ēxðañd {NAME}»
+idchrome.sr.tor-unbound	IDS_XR_IDCHROME_SR_TOR_UNBOUND	‏«Tõr îdéñtîty:  ēxða{NAME}. Thé Tõr rõûté îs ñõt çõññéçtéd. ēxðañd ēxðañ»
+idchrome.pill	IDS_XR_IDCHROME_PILL	‏«Idéñtîty méñû:  ēxðañ{NAME}, {ROUTE}»
+idchrome.route.direct	IDS_XR_IDCHROME_ROUTE_DIRECT	‏«dîréçt çõññéçtîõñ ēxðañ»
+idchrome.route.tor-unbound	IDS_XR_IDCHROME_ROUTE_TOR_UNBOUND	‏«Tõr rõûté ñõt çõññéçtéd ēxðañd ē»
