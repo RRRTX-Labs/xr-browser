@@ -41,6 +41,10 @@ _census_fixture() {  # <name> -> echoes a doc path inside a rooted fixture
   # well as sibling ones — carry the docs tree so the control is honest.
   cp -r "$REPO_ROOT/docs/." "$root/docs/"
   cp "$DOC" "$root/docs/spike-identity/papercut-census.md"
+  # P14-CLOSE C-5: the ledger's test / run-here cells also cite tools/ and
+  # evidence/ paths; link them read-only so the control stays honest.
+  ln -sfn "$REPO_ROOT/tools" "$root/tools"
+  ln -sfn "$REPO_ROOT/evidence" "$root/evidence"
   ln -sfn "$REPO_ROOT/../xr-core" "$base/xr-core"
   printf '%s\n' "$root/docs/spike-identity/papercut-census.md"
 }

@@ -12,7 +12,9 @@
 #      P13-C-P0.1 §10 unit change (a tab is DECLARED; a `.ts` file is not a tab);
 #   2c. site-tab.ts (P13-T2) against the REAL reason-code table
 #      (docs/shield/reason-codes.json), so the two repos cannot drift about the
-#      closed verdict vocabulary.
+#      closed verdict vocabulary; and (P14-CLOSE C-5) its identityCardView
+#      against the REAL generated identity-card-rows.json (XR_PANEL_IDENTITY_CARD
+#      overrides it — the p14c_c5 negative points it at a planted copy).
 #
 # Why a bundle and not the .ts directly: this sandbox has no browser and the
 # toolchain is dependency-frozen (no jsdom/happy-dom, no node TS loader), so the
@@ -178,6 +180,7 @@ if [ "$PLANTED" = "0" ]; then
   echo "panel-tests: node --test ui/panel/tests/site-tab.test.mjs"
   if XR_PANEL_SITE_BUNDLE="$SCRATCH/site-tab.mjs" \
      XR_PANEL_WHY_TABLE="$REPO/docs/shield/reason-codes.json" \
+     XR_PANEL_IDENTITY_CARD="${XR_PANEL_IDENTITY_CARD:-$UI_CORE/test/isolation/identity-card-rows.json}" \
      node --test "$PANEL/tests/site-tab.test.mjs" 2>&1 | sed "s/^/  /"; then
     :
   else
@@ -197,5 +200,5 @@ if [ "$SUITE" -ne 0 ]; then
   echo "panel-tests: FAIL — focus-containment/tab-registry suite failed"
   exit 1
 fi
-echo "panel-tests: PASS (focus containment: wrap, intercept, re-open race, restore, planted-leak control; tab registry: inventory bijection, typed refusals; site tab: single-scope dial, why-drill over every reason code + typed fallback; observatory: 2k ring, last-screenful clamp, a11y positions; update tab: closed verb set, no progress states; breakage tab: closed row set, fixture queue, non-attentional confirm; what-would-be-sent: one serializer, planted field renders)"
+echo "panel-tests: PASS (focus containment: wrap, intercept, re-open race, restore, planted-leak control; tab registry: inventory bijection, typed refusals; site tab: single-scope dial, why-drill over every reason code + typed fallback, identity card rendered from generated rows and refusing prose; observatory: 2k ring, last-screenful clamp, a11y positions; update tab: closed verb set, no progress states; breakage tab: closed row set, fixture queue, non-attentional confirm; what-would-be-sent: one serializer, planted field renders)"
 exit 0

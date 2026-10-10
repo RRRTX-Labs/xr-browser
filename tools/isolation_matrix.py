@@ -33,6 +33,7 @@ from _common import EXIT_FAIL, EXIT_PASS, EXIT_USAGE, RunnerError, as_of_arg, \
     iso, require_cases, seed_rng, stable_json  # noqa: E402
 from identity_iso_cells import (  # noqa: E402  (P14 size-law split)
     IDENTITY_MECHS, run_identity_cells)
+import identity_card  # noqa: E402  (P14-CLOSE C-5: the card's identity rows)
 
 MATRIX_DEFAULT = "../xr-core/test/isolation/matrix.yaml"
 OUT_JSON = "../xr-core/test/isolation/isolation-matrix.json"
@@ -194,6 +195,10 @@ def main(argv: list[str]) -> int:
     p.add_argument("--check", action="store_true",
                    help="regenerate and diff against committed outputs")
     p.add_argument("--json", action="store_true")
+    p.add_argument("--card", default=identity_card.OUT_CARD,
+                   help="the Isolation Card identity rows (generated)")
+    p.add_argument("--limitations", default=identity_card.LIMITATIONS,
+                   help="§1.13's page carrying the generated card block")
     as_of_arg(p)
     args = p.parse_args(argv)
 
@@ -265,14 +270,23 @@ def main(argv: list[str]) -> int:
 
     new_json = stable_json(doc) + "\n"
     new_md = render_md(cells, matrix, args.as_of)
+    card_fails = identity_card.emit(repo, cells, matrix, iso(args.as_of),
+                                    args.check, args.card, args.limitations)
+    for f in card_fails:
+        print(f"FAIL: identity card: {f}")
     if args.check:
         ok = out_json.exists() and out_json.read_text(encoding="utf-8") == new_json
         if not ok:
             print(f"FAIL: {out_json.name} drifted from the matrix — "
                   f"regenerate it")
             return EXIT_FAIL
-        print(f"PASS: isolation_matrix --check (matrix record diff-clean)")
+        if card_fails:
+            return EXIT_FAIL
+        print(f"PASS: isolation_matrix --check (matrix record and identity "
+              f"card rows diff-clean)")
         return EXIT_PASS
+    if card_fails:
+        return EXIT_FAIL
     out_json.write_text(new_json, encoding="utf-8")
     out_md.write_text(new_md, encoding="utf-8")
 

@@ -41,6 +41,11 @@ _p13t1_scratch_core() {
   ln -s "$REPO_ROOT/../xr-core/ui/toolchain/node_modules" \
      "$D/ui/toolchain/node_modules"
   cp "$REPO_ROOT/../xr-core/ui/toolchain/package.json" "$D/ui/toolchain/" 2>/dev/null || true
+  # P14-CLOSE C-5: the panel suite now renders the Isolation Card's generated
+  # identity rows (identityCardView reads test/isolation/identity-card-rows.json
+  # from the core root), so the scratch core carries that one generated file too.
+  mkdir -p "$D/test/isolation"
+  cp "$REPO_ROOT/../xr-core/test/isolation/identity-card-rows.json" "$D/test/isolation/"
   if [ "$leak" = "leak" ]; then
     "$PY" - "$D/ui/panel/focus-trap.ts" <<'PYEOF'
 import sys

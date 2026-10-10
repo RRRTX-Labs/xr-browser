@@ -67,7 +67,7 @@ prove it when the browser build exists (a NOT-RUN row must carry its method).
 | C-01 | Downloads shelf/history stay Profile-level; the identity-scoped `downloads-metadata` mechanism is specified but not executed | open-browser | ../xr-core/test/isolation/matrix.yaml (cell `downloads-metadata`, mode browser, NOT-RUN) | spike/probes/isolation_matrix_browsertest.cc — one download per identity, assert no shelf/history crossover |
 | C-02 | Print settings/destination MRU stay shared; `print` cell specified, not executed | open-browser | ../xr-core/test/isolation/matrix.yaml (cell `print`, mode browser, NOT-RUN) | per-identity print from the probe matrix; assert per-identity destinations |
 | C-03 | `chrome://inspect` still enumerates across identities; `devtools-attach` cell specified, not executed | open-browser | ../xr-core/test/isolation/matrix.yaml (cell `devtools-attach`, mode browser, NOT-RUN) | attach in A, list targets, assert B's tabs are not enumerable |
-| C-04 | Omnibox providers still read Profile-level history; `omnibox` cell specified, not executed | open-browser | ../xr-core/test/isolation/matrix.yaml (cell `omnibox`, mode browser, NOT-RUN) | type a B-only prefix in A, assert no completion |
+| C-04 | Omnibox providers still read Profile-level history; `omnibox` cell specified, not executed. The ledger overlay half landed in P14-CLOSE C-2: every omnibox row carries `identity_id`, and a planted cross-identity omnibox leak reddens | open-browser | ../xr-core/test/isolation/matrix.yaml (cell `omnibox`, mode browser, NOT-RUN) | type a B-only prefix in A, assert no completion |
 | C-05 | Cross-identity drag is unblocked in the model; `drag-across-identity` cell specified, not executed | open-browser | ../xr-core/test/isolation/matrix.yaml (cell `drag-across-identity`, mode browser, NOT-RUN) | drag URL A→B, assert refused or re-keyed |
 | C-06 | Find pre-fill is a UI string; no mechanism landed | open-browser | docs/qa/browser-harness.md (mixed-identity walkthrough method) | find "foo" in A, switch to B, assert the field is not pre-filled |
 | C-07 | PiP ownership unchanged; no mechanism landed | open-browser | docs/qa/browser-harness.md (mixed-identity walkthrough method) | PiP in A, close the tab, assert the window closes with it |
@@ -79,3 +79,45 @@ prove it when the browser build exists (a NOT-RUN row must carry its method).
 | C-13 | OS-level drag-out writes to the shared desktop; no mechanism landed | open-browser | docs/qa/browser-harness.md (mixed-identity walkthrough method) | drag out of A to the desktop, drop into B, assert identity-scoped path or refusal |
 | C-14 | The session store carries each tab's recorded binding; restore REFUSES (kMalformedInput, tab named) rather than fall back to the default partition — proven by 345-check seeded chaos suite + the `session-restore-no-bleed` matrix cell (PASS, all 5 pairs) | closed-core | ../xr-core/identity/core/session.h + ../xr-core/identity/tests/test_session_chaos.cc | kill -9 / restore drill on the real browser (docs/qa/drill.md, NOT-RUN this phase) |
 | C-15 | Extension registry stays per-Profile; the chokepoint cannot land before extensions exist | open-browser | ../xr-core/test/isolation/matrix.yaml (cell `extension-availability`, mode not-yet, phase P13) | install a test extension, assert it cannot correlate two identities' tabs |
+
+## P14-CLOSE ledger — status, test, owner, budget for every row (zero silent)
+
+The closure table above says what P14 closed. This ledger makes each row
+actionable: the **test** that proves it (here, or on the browser build), the
+**owner** letter and the **budget** reservation (both copied from the census
+row, and checked equal to it), and whether the test **ran here**. A row
+cannot be silent: `census-lint` (build/spike/census_lint.py) fails when a
+census id has no ledger row, when a status differs from the closure table,
+when an owner or budget differs from the census row, when a test cell cites
+no path that exists, when a closed-core or matrix-covered row has no
+`yes: <log>` transcript, or when an open-browser row has no
+`NOT-RUN: <method>` path (negatives: tools/negatives/p14c_c5.sh). Paths
+starting `../xr-core/` resolve in the pinned sibling.
+
+| id | status | test (what proves it) | owner | budget (files x category) | run here |
+|----|--------|-----------------------|-------|---------------------------|----------|
+| C-01 | open-browser | ../xr-core/spike/identity_seam/probes/isolation_matrix_browsertest.cc (cell `downloads-metadata`) | B | 6 files x ui + 3 files x hook_points | NOT-RUN: docs/qa/browser-harness.md |
+| C-02 | open-browser | ../xr-core/spike/identity_seam/probes/isolation_matrix_browsertest.cc (cell `print`) | B | 4 files x ui | NOT-RUN: docs/qa/browser-harness.md |
+| C-03 | open-browser | ../xr-core/spike/identity_seam/probes/isolation_matrix_browsertest.cc (cell `devtools-attach`) | F | 5 files x hook_points + 2 files x ui | NOT-RUN: docs/qa/browser-harness.md |
+| C-04 | open-browser | ../xr-core/identity/tests/test_ledger_tag.cc (overlay half: an omnibox row tagged with identity B never surfaces in A; the planted leak reddens) + ../xr-core/spike/identity_seam/probes/isolation_matrix_browsertest.cc (cell `omnibox`, provider half) | B | 8 files x ui + 2 files x hook_points | yes: evidence/P14/logs/c2-ledger-identity.txt (overlay half); NOT-RUN: docs/qa/browser-harness.md (provider half) |
+| C-05 | open-browser | ../xr-core/spike/identity_seam/probes/isolation_matrix_browsertest.cc (cell `drag-across-identity`) | B | 3 files x ui + 2 files x blink_seams | NOT-RUN: docs/qa/browser-harness.md |
+| C-06 | open-browser | docs/qa/browser-harness.md (mixed-identity walkthrough: find pre-fill) | B | 2 files x ui | NOT-RUN: docs/qa/browser-harness.md |
+| C-07 | open-browser | docs/qa/browser-harness.md (mixed-identity walkthrough: PiP closes with its tab) | B | 3 files x ui | NOT-RUN: docs/qa/browser-harness.md |
+| C-08 | open-browser | ../xr-core/spike/identity_seam/probes/isolation_matrix_browsertest.cc (cells `serviceworker`, `notification-state`) | A | 5 files x content_seams + 3 files x ui | NOT-RUN: docs/qa/browser-harness.md |
+| C-09 | open-browser | docs/qa/browser-harness.md (`chrome://settings` opened per identity) | A | 6 files x hook_points | NOT-RUN: docs/qa/browser-harness.md |
+| C-10 | open-browser | docs/qa/browser-harness.md (a card saved in B is never suggested in A) | B | 7 files x ui + 2 files x hook_points | NOT-RUN: docs/qa/browser-harness.md |
+| C-11 | matrix-covered | tools/isolation_matrix.py (cell `process-isolation`, 5 of 5 pairs; soft-reuse half) | B | 6 files x ui + 4 files x content_seams | yes: evidence/P14/logs/t5-t6-isolation-matrix.txt; NOT-RUN: docs/qa/browser-harness.md (tab-search half) |
+| C-12 | exception-documented | tools/exception_ledger_check.py (the `favicon-cache` exception cell must carry its §1.13 row in docs/limitations.md) | A | 4 files x hook_points + 2 files x network_seams | NOT-RUN: docs/qa/browser-harness.md (the timing measurement) |
+| C-13 | open-browser | docs/qa/browser-harness.md (mixed-identity walkthrough: OS drag-out / drop-in) | B | 3 files x ui | NOT-RUN: docs/qa/browser-harness.md |
+| C-14 | closed-core | ../xr-core/identity/tests/test_session_chaos.cc (seeded chaos: restore re-binds the recorded identity or refuses, never the default) | A | 5 files x hook_points | yes: evidence/P14/logs/t8-identity-suite.txt; NOT-RUN: docs/qa/drill.md (real kill -9) |
+| C-15 | open-browser | ../xr-core/test/isolation/matrix.yaml (cell `extension-availability`, mode not-yet) | F | 8 files x extension_chokepoint + 4 files x hook_points | NOT-RUN: docs/qa/browser-harness.md |
+
+**Budget, summed honestly.** The fifteen reservations total 99 upstream
+files: ui 47, hook_points 31, content_seams 9, extension_chokepoint 8,
+blink_seams 2, network_seams 2. Against the §1.2 caps (ui 35,
+extension_chokepoint 2), the ui and extension_chokepoint reservations do
+NOT fit as estimated. That is a planning fact for the phases that land the
+browser halves, not something this ledger can fix: those estimates must be
+cut, shared, or the cap raised by the budget process
+(build/farm/budget_meter.py measures what actually lands). Nothing in this
+ledger has been spent: P14-CLOSE landed no upstream patch files.

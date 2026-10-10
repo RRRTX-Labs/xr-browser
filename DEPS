@@ -67,7 +67,7 @@
 
 schema_version: 1
 chromium_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"   # Chromium 152.0.7977.82 (stable)
-xr_core_rev: "5ffa695b7a24146595f25acdcfa2b74aefec2658"     # xr-core 5ffa695 (P14-CLOSE: xr://identities dev page + honest commands mutation re-score 5ffa695, identity chrome a569801, LooksOpaque chance-probe fix f031c33, ledger-identity-overlay-v1 ad3026c, derivation probes + partition-share law + FS-diff test hook aaf79bd, isolation record with the T6 FS-diff verdict a7ed1ab, mutation-survivor kills + tested mint digest decode dec1d83) on the P15 pin 13a5f7d (P15 permission firewall; ADR-0051 DRAFT).
+xr_core_rev: "e18b82f7c345c6fb8b0aecbef2f39c53a8d84312"     # xr-core e18b82f (P14-CLOSE: Isolation Card identity rows from data e18b82f, xr://identities dev page + honest commands mutation re-score 5ffa695, identity chrome a569801, LooksOpaque chance-probe fix f031c33, ledger-identity-overlay-v1 ad3026c, derivation probes + partition-share law + FS-diff test hook aaf79bd, isolation record with the T6 FS-diff verdict a7ed1ab, mutation-survivor kills + tested mint digest decode dec1d83) on the P15 pin 13a5f7d (P15 permission firewall; ADR-0051 DRAFT).
 gclient_url_scheme: "https"                                  # pinned https remotes only
 chromium_milestone: 152
 chromium_version: "152.0.7977.82"

@@ -358,3 +358,46 @@ slots, so this section covers the frame's two states and the keyboard laws.
   geometry against real text metrics. Method: the P7 farm rig (HG-31) opens
   `xr://settings`, sets `open=true`, and runs the two states above; the panel's
   open-latency method is `docs/qa/browser-harness.md#panel-open-150ms` (T7).
+
+## P14 stage: identity chrome, `xr://identities`, the Isolation Card (farm rows — HG-31)
+
+P14 adds three identity surfaces. Their cores, laws and structural
+snapshots run in this tree (`docs/identity/visual.md`,
+`docs/identity/manager.md`, `docs/limitations.md`); everything below is a
+FARM row. No browser exists in any lane yet, and nothing here is implied
+PASS from the in-sandbox suites.
+
+### Flow 1 — identity chrome in every layout × theme
+
+1. Open one tab per template state (`standard`, `disposable`,
+   `tor-unbound`) in each layout (`top`, `vertical`, `compact`, `rail`) and
+   each theme (light, dark, dusk, prairie, high-contrast).
+2. Compare the rendered DOM/AX shape with the committed structural snapshot
+   (`xr-core/ui/identity-chrome/snapshots/<layout>.<theme>.json`): bar or
+   dot side, glyph, label presence, edge line where the snapshot records
+   one. Pixel goldens are captured here for the first time; the method is
+   `docs/qa/browser-harness.md#identity-chrome-visual`.
+3. Focus each tab with a screen reader on; the announcement is the state's
+   SR string (`IDS_XR_IDCHROME_*`). The audit itself is HG-P14-USABILITY.
+
+### Flow 2 — `xr://identities`: dev-only enforcement and page states
+
+1. Dev build (`--build-channel dev`): open `xr://identities` (roster
+   `identities.page`, tier 2). Drive the page through every host state
+   (`manager-page-states`): `normal`, `empty`, `purge-unverified` (plant a
+   residual, then purge), `dev-refused`.
+2. Release build: the host answers `manager-page` and `reset-all` with
+   `build-channel-not-dev:release` and renders no page bytes;
+   `identities.page` is listed but disabled with the predicate reason.
+3. Rename, recolor and archive one identity; assert the opaque domain is
+   unchanged and the tab strip picks up the new name and colour. Type
+   `reset-all` and confirm; assert every identity is purged and verified.
+   Method: `docs/qa/browser-harness.md#identities-page-rendered`.
+
+### Flow 3 — the Isolation Card's identity rows
+
+Open the panel's Site tab in each identity and assert the card's identity
+rows equal `xr-core/test/isolation/identity-card-rows.json` row for row
+(state token, measured / pairs, method). A refused card shows "card
+unavailable" with the typed reason and no fallback copy. The rows are
+generated data, so this flow checks rendering only, never the facts.
