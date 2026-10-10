@@ -1,0 +1,60 @@
+# P14-CLOSE C-6 reproduction at the opening heads (xr-browser cabb36f, xr-core 13a5f7d), read with git show — no worktree, no sibling build
+
+$ git show cabb36f:evidence/P12/evidence.json | python3 -c '<state + non-VERIFIED rows>'
+state: interim  phase_head: f96949914955b38e2c0204ef9792e685264672e7  ci_claimed: ['governance']
+  P12-CLOSE-DOD-4 PARTIAL
+  P12-CLOSE-DOD-7 BLOCKED-PENDING-T5
+  P12-CLOSE-DOD-8 BLOCKED-PENDING-T7
+  P12-CLOSE-DOD-9 BLOCKED-PENDING-T6
+  P12-CLOSE-DOD-10 PARTIAL
+  P12-CLOSE-DOD-11 BLOCKED-PENDING-CLOSE
+  P12-CLOSE-DOD-12 BLOCKED-PENDING-CLOSE
+  P12-CLOSE-DOD-13 BLOCKED-PENDING-DOCS
+  P12-CLOSE-DOD-14 BLOCKED-PENDING-CLOSE
+  P12-CLOSE-DOD-15 BLOCKED-PENDING-REPORT
+  P12-CLOSE-DOD-10-C1 PARTIAL
+  P12-CLOSE-DOD-11-C1 PARTIAL
+  P12-CLOSE-DOD-12-C1 BLOCKED-CAUSE
+exit=0
+
+$ git show cabb36f:evidence/P13/evidence.json | python3 -c '<state + non-VERIFIED rows>'
+state: interim  phase_head: None  ci_claimed: None
+  P13-T2 BLOCKED-PENDING-T2
+  P13-T3 BLOCKED-PENDING-T3
+  P13-T4 BLOCKED-PENDING-T4
+  P13-T5 BLOCKED-PENDING-T5
+  P13-T6 BLOCKED-PENDING-T6
+  P13-CONTRACTS BLOCKED-PENDING-CONTRACTS
+  P13-EVIDENCE BLOCKED-PENDING-EVIDENCE
+  P13-REPORT BLOCKED-PENDING-REPORT
+exit=0
+
+$ git show cabb36f:evidence/P14/evidence.json | python3 -c '<state + non-VERIFIED rows>'
+state: interim  phase_head: None  ci_claimed: None
+  P14-P0-3 BLOCKED-PENDING-P0-3
+  P14-T4 NOT-RUN
+  P14-T5 BLOCKED-PENDING-T5
+  P14-T6 PARTIAL
+  P14-T7 NOT-RUN
+  P14-SECURITY BLOCKED-PENDING-SECURITY
+  P14-CONTRACTS BLOCKED-PENDING-CONTRACTS
+  P14-DOCS BLOCKED-PENDING-DOCS
+  P14-EVIDENCE BLOCKED-PENDING-EVIDENCE
+exit=0
+
+$ git show cabb36f:docs/state/mutation-scores.json | python3 -c '<identity + commands records>'
+identity 204 / 204 100.0 at 9ee4952ce89c
+commands 219 / 219 100.0 at 62b2c923aa7a
+exit=0
+
+$ git show cabb36f:docs/contracts/FROZEN.yaml | sha256sum
+0b79e43988f31df45d60d0c228d4e2693cc01fcfd1d38e4d0376741a03da01a1  -
+exit=0
+
+$ ls docs/identity at cabb36f
+docs/identity/binding.md
+docs/identity/lifecycle.md
+docs/identity/memory-accounting.md
+docs/identity/provisioning.md
+docs/identity/templates.md
+exit=0

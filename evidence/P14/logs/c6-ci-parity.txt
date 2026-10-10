@@ -1,0 +1,64 @@
+# P14-CLOSE C-6: tools/ci_parity_check.py — two runs on 2026-10-10
+# (1) before the lint helpers were installed on this host (main checkout at the C-5 content head):
+
+$ python3 tools/ci_parity_check.py
+== ci-parity: local capability vs hosted lanes (P14-P0-2) ==
+  optional tools (helper-tools.yaml + workflow installs + runner ledger):
+    actionlint         ABSENT (CI has this; the lane will be stricter there)
+    cargo              ABSENT (CI has this; the lane will be stricter there)
+    codesign           absent (normal for a Linux lane; not stricter on CI)
+    faketime           ABSENT (CI has this; the lane will be stricter there)
+    g++                present
+    make               present
+    minisign           ABSENT (CI has this; the lane will be stricter there)
+    python3.12         differs (local interpreter 3.13.16 vs the runner's pinned python3.12; a version gap is a printed note, not a weaker lane)
+    rustc              ABSENT (CI has this; the lane will be stricter there)
+    shellcheck         ABSENT (CI has this; the lane will be stricter there)
+    signtool           absent (normal for a Linux lane; not stricter on CI)
+  entry-point modes: PASS (0 finding(s))
+  sibling pin: PASS — ../xr-core at DEPS.xr_core_rev e18b82f7c345… (clean)
+  dev-deps: closure check PASS; pip dry-run: installable (require-hashes dry run ok)
+  network (live probes through the fetch chokepoint, re-proved now,
+           never inherited from any note):
+    api.github.com                       reachable  0.06 s
+    chromium.googlesource.com            reachable  0.25 s
+    chromiumdash.appspot.com             reachable  0.06 s
+    commondatastorage.googleapis.com     reachable  0.04 s
+    pypi.org                             reachable  0.03 s
+    static.crates.io                     reachable  0.09 s
+    updates.rrrtx.labs                   refused    chokepoint refuses (not a fetch surface — release-client policy data, HG-38)
+    api.github.com quota: core 49/60, reset 1791642280 (epoch)
+ci-parity: PARTIAL (6 lane(s) will be stricter on CI: actionlint (workflow-lint deep pass (expressions+schema)); cargo (Rust conformance + shield vendor/shim lanes); faketime (date-invariance ambient probe (the scheduled governance lane installs it and demands it)); minisign (P3 fast-lane TEST signing drill); rustc (Rust conformance + shield vendor/shim lanes); shellcheck (actionlint's shell-script pass (the SC2251 class))) — exit 0 by design: a printed fact, never a gate red; re-run to re-prove
+exit=0
+
+# (2) after installing actionlint 1.7.7 (release tarball, sha256 023070a2…0757 verified, per docs/dependencies/helper-tools.yaml) and the shellcheck, faketime and minisign OS packages; worktrees xr-browser ef11bbd (= 18caead minus one negative-fixture line set) / xr-core e18b82f, as run by the full gate:
+
+$ python3 tools/ci_parity_check.py
+== ci-parity: local capability vs hosted lanes (P14-P0-2) ==
+  optional tools (helper-tools.yaml + workflow installs + runner ledger):
+    actionlint         present
+    cargo              ABSENT (CI has this; the lane will be stricter there)
+    codesign           absent (normal for a Linux lane; not stricter on CI)
+    faketime           present
+    g++                present
+    make               present
+    minisign           present
+    python3.12         differs (local interpreter 3.13.16 vs the runner's pinned python3.12; a version gap is a printed note, not a weaker lane)
+    rustc              ABSENT (CI has this; the lane will be stricter there)
+    shellcheck         present
+    signtool           absent (normal for a Linux lane; not stricter on CI)
+  entry-point modes: PASS (0 finding(s))
+  sibling pin: PASS — ../xr-core at DEPS.xr_core_rev e18b82f7c345… (clean)
+  dev-deps: closure check PASS; pip dry-run: installable (require-hashes dry run ok)
+  network (live probes through the fetch chokepoint, re-proved now,
+           never inherited from any note):
+    api.github.com                       reachable  0.05 s
+    chromium.googlesource.com            reachable  0.21 s
+    chromiumdash.appspot.com             reachable  0.07 s
+    commondatastorage.googleapis.com     reachable  0.06 s
+    pypi.org                             reachable  0.03 s
+    static.crates.io                     reachable  0.07 s
+    updates.rrrtx.labs                   refused    chokepoint refuses (not a fetch surface — release-client policy data, HG-38)
+    api.github.com quota: core 8/60, reset 1791645970 (epoch)
+ci-parity: PARTIAL (2 lane(s) will be stricter on CI: cargo (Rust conformance + shield vendor/shim lanes); rustc (Rust conformance + shield vendor/shim lanes)) — exit 0 by design: a printed fact, never a gate red; re-run to re-prove
+ci_parity EXIT=0

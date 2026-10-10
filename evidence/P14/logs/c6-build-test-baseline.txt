@@ -1,0 +1,7 @@
+# P14-CLOSE C-6: ./scripts/build test baseline at the close's opening head (xr-browser cabb36f), collected in a detached worktree
+
+$ (worktree at cabb36f) python3 -m pytest tools/tests build docs/contracts/tests -q --collect-only   # the exact paths ./scripts/build test runs
+947 tests collected in 1.44s
+
+$ (main checkout at 18caead, the content head; uncommitted changes are report/docs only) same command
+993 tests collected in 0.54s

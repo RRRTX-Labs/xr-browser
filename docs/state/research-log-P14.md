@@ -492,3 +492,35 @@ The remaining P14 work is the phase close (P0-3): evidence_finality, the
 12-section report, the state flip, and the same-head ci-run rows citing
 run 93 — plus the open human gates (HG-S0-IDENTITY dual review first
 among them).
+
+## P14-CLOSE (2026-10-10): what closing it honestly taught
+
+Written at the freeze commit. The report is `evidence/P14/report.md`.
+
+1. **A 100% mutation score is a claim, not a result.** Both identity 204/204
+   and commands 219/219 predate the harness fix (`3fe8d7e`, `b6cd40f`), when
+   stale objects and unrestored builds counted as kills. Re-scored on the fixed
+   harness they were 88.71% and 88.13%, both gate FAILs. Each is now above 97%
+   because of new tests, not new math. The lesson for every later phase: a
+   score recorded before a harness fix has to be re-scored before anyone cites
+   it.
+2. **A build failure is a kill.** With `/tmp` as a 992 MB tmpfs, running
+   mutation alongside validation filled the disk, and every mutant "died".
+   Mutation runs alone, on a clean scratch, or its number means nothing.
+3. **An opacity heuristic that matches by chance is a correctness bug.**
+   `LooksOpaque` refused any display name that was all hex and appeared in the
+   random domain. For one letter that happens about 87% of the time, so
+   `Create` failed at random. The fix judges only probes long enough to carry
+   information (8+ hex characters). It is an S0 change and is human-gated as
+   such.
+4. **NOT-RUN is for the sandbox's limits, not the agent's.** T4 and T7 were
+   NOT-RUN wholesale. The state law, the structural snapshots, the page model,
+   the dev-only gate and the generators all run here. Only pixels and a
+   rendered page do not.
+5. **Generated prose is still prose.** The Isolation Card's identity rows are
+   data from the matrix generator. The view refuses free text, so a later edit
+   cannot slip a sentence past the generator.
+6. **Budgets add up.** The papercut ledger made the reservation sum explicit:
+   ui 47 and extension_chokepoint 8 exceed the §1.2 caps. That is now a
+   recorded planning fact for P15+, not a surprise for whichever phase lands
+   the browser halves.

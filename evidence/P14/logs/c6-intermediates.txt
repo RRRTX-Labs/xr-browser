@@ -1,0 +1,31 @@
+# P14-CLOSE C-6: every commit of this close, gated in fresh detached worktrees at its own pair (xr-browser commit / xr-core = its DEPS.xr_core_rev)
+# Rule: run_checks.sh --keep-going at 0 FAIL, apart from check-pin-alive, which is red for any pin not yet on origin (xr-core is pushed first).
+
+fc9a8c4 / 13a5f7d (C-0)        : PASS: --keep-going run complete — every lane green   [pin 13a5f7d is on origin, so check-pin-alive is green here]
+d9e6adb / dec1d83 (C-2+C-4)    : 1 lane failed: "$PY" build/sync.py check-pin-alive
+1f04e96 / a569801 (C-1)        : 1 lane failed: "$PY" build/sync.py check-pin-alive
+
+07172c9 / 5ffa695 (the C-3 commit BEFORE the pre-push amend, kept here as the finding):
+200:FAIL: tools/identity_chrome_check.py resolves an xr-core sibling (P3-repo-parent) and is NOT in the register — route it through tools/xr_sibling.py (resolve_or_exit) or classify it with a reason here; a new sibling reader ma
+201:FAIL: tools/identity_page_states.py resolves an xr-core sibling (P5-nested-parent) and is NOT in the register — route it through tools/xr_sibling.py (resolve_or_exit) or classify it with a reason here; a new sibling reader m
+203:LANE FAIL (keep-going): "$PY" tools/sibling_pin_check.py --repo .
+204:LANE FAIL (keep-going): "$PY" tools/sibling_pin_check.py --repo .
+286:LANE FAIL (keep-going): "$PY" build/sync.py check-pin-alive
+1131:FAIL: 3 lane(s) failed (see the 'LANE FAIL (keep-going)'
+
+After the amend, the lane that was red there, at each rewritten commit:
+$ (xr-browser 1f04e96, xr-core a569801) python3 tools/sibling_pin_check.py --repo . --xr-core <worktree at a569801>
+pin: xr-core a569801e85160954fae034ba018c328049d398f1 == DEPS a569801e85160954fae034ba018c328049d398f1 (clean worktree)
+PASS: sibling_pin_check (63 sibling reader(s) classified, arg-only=16, gate-ordered=14, probe=4, routed=5, self=2, test=22)
+$ (xr-browser 990fd1d, xr-core a569801) python3 tools/sibling_pin_check.py --repo . --xr-core <worktree at a569801>
+pin: xr-core a569801e85160954fae034ba018c328049d398f1 == DEPS a569801e85160954fae034ba018c328049d398f1 (clean worktree)
+PASS: sibling_pin_check (63 sibling reader(s) classified, arg-only=16, gate-ordered=14, probe=4, routed=5, self=2, test=22)
+$ (xr-browser 3a46725, xr-core 5ffa695) python3 tools/sibling_pin_check.py --repo . --xr-core <worktree at 5ffa695>
+pin: xr-core 5ffa695b7a24146595f25acdcfa2b74aefec2658 == DEPS 5ffa695b7a24146595f25acdcfa2b74aefec2658 (clean worktree)
+PASS: sibling_pin_check (65 sibling reader(s) classified, arg-only=16, gate-ordered=15, probe=4, routed=5, self=2, test=23)
+$ (xr-browser 18caead, xr-core e18b82f) python3 tools/sibling_pin_check.py --repo . --xr-core <worktree at e18b82f>
+pin: xr-core e18b82f7c345c6fb8b0aecbef2f39c53a8d84312 == DEPS e18b82f7c345c6fb8b0aecbef2f39c53a8d84312 (clean worktree)
+PASS: sibling_pin_check (65 sibling reader(s) classified, arg-only=16, gate-ordered=15, probe=4, routed=5, self=2, test=23)
+
+3a46725 differs from 07172c9 only by that register line and one transcript header, so its other lanes are the ones listed above for 07172c9.
+18caead (content head): logs/c6-full-gate-18caead-keepgoing.txt, where the only failing lane is check-pin-alive.

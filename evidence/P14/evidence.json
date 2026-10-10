@@ -397,6 +397,39 @@
         "logs/c5-docs-contracts.txt"
       ],
       "notes": "Ratifying anything is a human act: FROZEN.yaml gains no row, no ratified value changes, and the proposal names its future review packet without writing it."
+    },
+    {
+      "id": "P14-P0-3-CLOSED",
+      "corrects": "P14-P0-3",
+      "dod": "P13 and P12 closed (P14-CLOSE C-0, xr-browser fc9a8c4): state final, Phase-Close trailers for P13 and P12, phase_head cabb36ff7551, and same-head ci-run rows for governance AND core-hardening with per-step conclusions and the scheduled-lane view, all inside those two bundles. Supersession of the PENDING rows is machine-checked by a before/after negative.",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "logs/c0-ci-triage-cabb36f.txt",
+        "logs/c0-scheduled-lanes-cabb36f.txt",
+        "evidence/P13/logs/p14c-c0-finality-before-after.txt",
+        "evidence/P13/evidence.json",
+        "evidence/P12/evidence.json",
+        "tools/negatives/p14c_c0.sh"
+      ],
+      "notes": "Correction (appended) for P14-P0-3, original status BLOCKED-PENDING-P0-3. This row certifies only what a local run can: both bundles are final, and their closure is legal because of the corrects links. tools/negatives/p14c_c0.sh runs the real bundles both ways: final WITH the links is green, final with the links stripped is red on the PENDING law. evidence_check --strict --require-phase-final judges P12 and P13 as final and passes. The CI half of the claim is certified where it belongs, as machine-checked ci-run rows inside those bundles at their phase_head cabb36ff7551: P13-CI-GOVERNANCE (run 37975129363) and P13-CI-CORE-HARDENING (run 37975128332), with P12's equivalents, resolved by evidence_check there. It is not restated here as a P14 claim."
+    },
+    {
+      "id": "P14-CLOSE-GATES",
+      "dod": "P14-CLOSE DoD 8 and 9 (local half): run_checks.sh --keep-going with the lint tools installed, run_negatives.sh grown from the P13 figure with every new negative named, ./scripts/build test grown from the opening head's baseline with 0 failed, identity mutation fresh with survivors dispositioned, and tools/ci_parity_check.py printed with the ABSENT rows explained.",
+      "status": "PARTIAL",
+      "source": "local-run",
+      "evidence": [
+        "logs/c6-full-gate-18caead-keepgoing.txt",
+        "logs/c6-negatives-18caead.txt",
+        "logs/c6-build-test-18caead.txt",
+        "logs/c6-build-test-baseline.txt",
+        "logs/c6-ci-parity.txt",
+        "logs/t-mutation-identity-v4.json",
+        "logs/t-mutation-commands-c3.json",
+        "logs/c6-intermediates.txt"
+      ],
+      "notes": "Run in fresh detached worktrees at the content heads (xr-browser 18caead, xr-core e18b82f = DEPS.xr_core_rev), with the lint tools installed: actionlint 1.7.7 from the sha256-pinned release tarball, plus shellcheck 0.10.0, faketime and minisign as OS packages, per docs/dependencies/helper-tools.yaml. run_checks.sh --keep-going had exactly one FAIL lane, check-pin-alive, because the pin e18b82f is not yet on origin; the closing commit re-proves it after the push. ./scripts/build test: 993 passed, 0 failed, up from 947 collected at cabb36f. run_negatives.sh: ALL NEGATIVE CASES REJECTED AS EXPECTED (N=232), up from the P13 figure of 163, with 13 new cases named in report section 7. Mutation is fresh at the pin: identity 286/292 = 97.95% and commands 215/219 = 98.17%, every deny-guard killed and every survivor dispositioned. ci_parity_check is PARTIAL only on cargo and rustc, which core-hardening installs (report section 9). Every intermediate commit is gated at its own pair (logs/c6-intermediates.txt). PARTIAL here means exactly one thing: the pin-alive lane cannot be green before the push."
     }
   ]
 }
