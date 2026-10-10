@@ -6,7 +6,8 @@
  "repos": {
   "xr-browser": "7922648aaa40f2013acad79503fcb5d71651d2a3 (201 commits, 201/201 DCO). P11 commit range: e258826 (T1 vendoring) .. 7922648 (docs quartet). P12-CLOSE advanced this repo to f47b54e (T0-U1 d14d8c9 dev-dep closure gate + optional-tool SKIP law; T0-U2 c1d4aaa evidence final-CI head law; T0-U3 f47b54e budget unit = files); the final SHA is recorded at close.",
   "xr-core": "866387aadeb091422dbeb66075804248575bbbe6 (55 commits, 55/55 DCO). shield/{core,host,tests,engine}, third_party/rust/adblock/0.13.3, patches/network-seams/0200-shield-network-seam, mojom/shield.mojom, fakes/shield.py. P12-CLOSE will pair-bump DEPS xr_core_rev to xr-core origin HEAD at close; the pin above is unchanged until then.",
-  "xr-browser-final-ci-anchor": "f96949914955b38e2c0204ef9792e685264672e7 (P13-P0-B: the exec-bit restoration plus the diagnostic preamble; no P12 file changed by either — the diff is tools/, .github/workflows/, docs/process/)"
+  "xr-browser-final-ci-anchor": "f96949914955b38e2c0204ef9792e685264672e7 (P13-P0-B: the exec-bit restoration plus the diagnostic preamble; no P12 file changed by either — the diff is tools/, .github/workflows/, docs/process/)",
+  "close_head": "xr-browser cabb36ff75512e3179da35190278846b929d4130 — the head whose governance + core-hardening runs close this phase (P14-CLOSE C-0, 2026-10-10); additive key, the opening heads above are unchanged"
  },
  "generated": "2026-09-19 (T0-U4 restructure; T0-U1..U3 transcripts appended)",
  "toolchain_capture": {
@@ -471,6 +472,48 @@
     "logs/p0c-refresh.txt"
    ],
    "notes": "Correction (appended, P13-P0-C): evidence/P12/report.md is present — the 12-section report the row demanded. It was written 2026-09-29 in P13-P0-C, not at P12's close; that deviation is stated in the report's header and ss12 rather than papered over. Original status quoted: BLOCKED-PENDING-REPORT."
+  },
+  {
+   "id": "P12-CLOSE-DOD-12-C1-P14C",
+   "dod": "Correction (appended, P14-CLOSE C-0) for P12-CLOSE-DOD-12-C1. Original status 'BLOCKED-CAUSE'; original row text: Correction (appended) for P12-CLOSE-DOD-12 — original row text: DoD 12: governance and core-hardening success at the final SHA, cited in the bundle per T0-U2 (head_sha == phase_head), with the sast 2026-09-21 fire's conclusi… Original status: BLOCKED-PENDING-CLOSE.",
+   "status": "VERIFIED",
+   "source": "local-run",
+   "corrects": "P12-CLOSE-DOD-12-C1",
+   "evidence": [
+    "logs/p14c-c0-ci-triage-cabb36f.txt",
+    "logs/p14c-c0-finality-before-after.txt"
+   ],
+   "notes": "The ABSENT final-CI row is now present: P12's content is an ancestor of cabb36f, where governance run 37975129363 and core-hardening run 37975128332 are both success (rows P12-CI-GOVERNANCE, P12-CI-CORE-HARDENING). The earlier answer (BLOCKED-CAUSE: no green run at any head containing P12) was true when written and is superseded, not edited. phase_head moves from f969499 (which has no green run, and never will) to cabb36f. The 2026-09-30 note forbade pointing at 'someone else's green run'; cabb36f is not someone else's: it is the first green head whose tree contains P12's work, and the rows say so."
+  },
+  {
+   "id": "P12-CI-GOVERNANCE",
+   "dod": "P12 final-CI claim: governance success at the phase head cabb36ff7551 (T0-U2: the row's head_sha equals phase_head).",
+   "status": "VERIFIED",
+   "source": "ci-run",
+   "workflow": "governance",
+   "head_sha": "cabb36ff75512e3179da35190278846b929d4130",
+   "ci_run": 37975129363,
+   "ci_job": 113971387085,
+   "evidence": [
+    "logs/p14c-c0-ci-triage-cabb36f.txt",
+    "logs/p14c-c0-scheduled-lanes-cabb36f.txt"
+   ],
+   "notes": "Read from the public Actions API on 2026-10-10 (push run_number 102, completed success). Per-step conclusions of job 113971387085: 1:Set up job=success; 2:Checkout=success; 3:Set up Python 3.12=success; 4:Install pinned dev dependencies=success; 5:Install optional helper tools (P4-T0.1)=success; 6:Checkout xr-core at the DEPS pin=success; 7:Cross-repo pin: sibling present, at DEPS.xr_core_rev, clean (P13-C-P0.2)=success; 8:Date-invariance strict probe (T0-U1 / ADR-0047)=success; 9:Cross-repo pin is alive (P4-T0.2)=success; 10:Governance checks=success; 11:Workflow files lint (P4)=success; 12:Negative fixtures (gates must fail on bad input)=success; 13:Build-system gates (P2)=success; 14:Contract-freeze gates (P5)=success; 15:Mutation freshness gate (P10-T0-c — a stale score is a FAIL)=success; 16:Policy mutation gate (P6, sampled; full = HG-28)=success; 17:Policy fuzz timebox (P6; 24h campaign = HG-28)=success; 18:Policy bench (P6, record-only; budgets re-checked HG-28)=success; 19:Upstream treadmill gates (P3)=success; 37:Post Set up Python 3.12=success; 38:Post Checkout=success; 39:Complete job=success. tools/ci_triage.py --sha cabb36ff7551: 'verdict: green (no failing check-run)'."
+  },
+  {
+   "id": "P12-CI-CORE-HARDENING",
+   "dod": "P12 final-CI claim: core-hardening success at the phase head cabb36ff7551.",
+   "status": "VERIFIED",
+   "source": "ci-run",
+   "workflow": "core-hardening",
+   "head_sha": "cabb36ff75512e3179da35190278846b929d4130",
+   "ci_run": 37975128332,
+   "ci_job": 113971390103,
+   "evidence": [
+    "logs/p14c-c0-ci-triage-cabb36f.txt",
+    "logs/p14c-c0-scheduled-lanes-cabb36f.txt"
+   ],
+   "notes": "core-hardening run 37975128332 (workflow_dispatch at cabb36ff7551, run_number 45) completed success; every job: scheduled-lane health=success (8 steps, all {'success'}); freshness=success (6 steps, all {'success'}); fuzz-fleet (themes-core)=success (10 steps, all {'success'}); shield-vendor=success (12 steps, all {'success'}); mutation-themes=success (8 steps, all {'success'}); fuzz-fleet (commands-core)=success (10 steps, all {'success'}); mutation-update=success (8 steps, all {'success'}); fuzz-fleet (cosmetic-core)=success (10 steps, all {'success'}); mutation-commands=success (8 steps, all {'success'}); mutation-settings=success (8 steps, all {'success'}); fuzz-fleet (settings-core)=success (10 steps, all {'success'}); server-conformance=success (6 steps, all {'success'}); snapshot freshness (STALE-* visible, non-fatal to push gates)=success (8 steps, all {'success'}); fuzz-fleet (policy-core)=success (10 steps, all {'success'}). Scheduled-lane view (tools/scheduled_lane_check.py, same day): PASS=4 of 4 (compat-beta-parity + nightly-rebase-build at cabb36f, core-hardening schedule at 01baba0, sast at 6b09082). FINDING carried to P14-CLOSE: the fuzz-fleet matrix in core-hardening.yml is a hand-written list of five cores, so build/fuzz/fleet.yaml's sixth row (identity-core) has never run hosted; fixed in this close, with a sync law."
   }
  ],
  "not_done_by_design": [
@@ -484,11 +527,13 @@
   "P12's final-CI row is ABSENT because no green governance run exists at any head that contains the phase's work: a0ac40b/f969499 are red for the external S-01 pin-fetch outage (chromium.googlesource.com), the three earlier P13 heads are red for the documented reasons, and 8db682f never executed the gate (exit 126, the P0-A defect). The resumption procedure is written in evidence/P12/report.md ss10.",
   "core-hardening is NOT claimed for this head, and that is not an omission: .github/workflows/core-hardening.yml triggers on DEPS, tools/mutation_test.py, tools/fuzz_fleet.py, tools/policy_fuzz.py, tools/mutation_freshness.py and its own file — none of which any P13-P0-A/B/C commit touched — so the workflow did not run and there is nothing to cite. The bundle claims exactly the workflow that ran.",
   "P12's own head 8db682f had a red governance run for a structural reason: tools/run_checks.sh and tools/run_negatives.sh were tracked 100644 while governance.yml exec'd them directly, so the runner's annotation read exit code 126 and the gate never ran (three later \"fix the CI\" commits chased real-but-different causes). P13-P0-A restored the bits and built the class gate; the final-CI proof is therefore anchored at the head recorded in phase_head, where both workflows are green and cited, and the 126 red at 8db682f is quoted as the artifact that motivated P0-A.",
-  "2026-09-30 (P13-C-P0.4, decision (a)): P12 declares `state: interim` DELIBERATELY rather than being left to the absent-state default (which judges it final) while eight *-PENDING-* rows remain. The P13-CLOSE brief offered two honest answers and forbade a third: (a) write interim with a dated reason, or (b) wait for a GREEN `governance` run at P12's own recorded head f969499 and add a same-head `ci-run` row behind a `Phase-Close: P12` trailer. (b) is unavailable: a run four commits back cannot be created, green or otherwise, and no green governance run exists at ANY head containing P12's work (rows 7-8 above record why), so (b) would need an older green run cited as the phase's own final CI — the exact evasion T0-U2 exists to stop. (a) is taken. P12's substance landed (its four T0 items and T1-T7, reproduced at P13-P0-A/B/C); the one thing outstanding is a claim about hosted infrastructure, not about the work. When a green `governance` run exists at a head containing this phase, the correct act is an APPENDED correction row here plus its `ci-run` row — never a rewrite of this one."
+  "2026-09-30 (P13-C-P0.4, decision (a)): P12 declares `state: interim` DELIBERATELY rather than being left to the absent-state default (which judges it final) while eight *-PENDING-* rows remain. The P13-CLOSE brief offered two honest answers and forbade a third: (a) write interim with a dated reason, or (b) wait for a GREEN `governance` run at P12's own recorded head f969499 and add a same-head `ci-run` row behind a `Phase-Close: P12` trailer. (b) is unavailable: a run four commits back cannot be created, green or otherwise, and no green governance run exists at ANY head containing P12's work (rows 7-8 above record why), so (b) would need an older green run cited as the phase's own final CI — the exact evasion T0-U2 exists to stop. (a) is taken. P12's substance landed (its four T0 items and T1-T7, reproduced at P13-P0-A/B/C); the one thing outstanding is a claim about hosted infrastructure, not about the work. When a green `governance` run exists at a head containing this phase, the correct act is an APPENDED correction row here plus its `ci-run` row — never a rewrite of this one.",
+  "2026-10-10 — P14-CLOSE C-0 (append-only): P12 is CLOSED rather than left interim. Its work has shipped in two later phases, and a green governance + core-hardening pair now exists at cabb36f, a head whose tree contains all of P12. phase_head is re-pointed from f969499 to cabb36f (the head whose runs are cited). P12-CLOSE-DOD-12-C1's BLOCKED-CAUSE is superseded by P12-CLOSE-DOD-12-C1-P14C. The remaining PARTIAL rows (DoD 10, 11) stay PARTIAL, a legal final status, with their recorded reasons (HG-28 24 h matrices; the forward-dated-clock twin was proven by date_invariance_check, not by a second CI run). Declared by the commit carrying `Phase-Close: P12`."
  ],
- "phase_head": "f96949914955b38e2c0204ef9792e685264672e7",
+ "phase_head": "cabb36ff75512e3179da35190278846b929d4130",
  "ci_claimed": [
-  "governance"
+  "governance",
+  "core-hardening"
  ],
- "state": "interim"
+ "state": "final"
 }

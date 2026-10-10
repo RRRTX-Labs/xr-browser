@@ -1,0 +1,12 @@
+# P14-CLOSE C-0 — P13 flipped final: WITH the appended corrects links, then WITHOUT them (same bundle, scratch copies)
+$ python3 tools/evidence_finality.py --repo .   # WITH corrects
+finality: P13: final (declared) — judging the final vocabulary, the declared head, the claimed workflows and report.md
+finality: P13: 8 row(s) superseded by appended corrections (append-only): P13-CONTRACTS, P13-EVIDENCE, P13-REPORT, P13-T2, P13-T3, P13-T4, P13-T5, P13-T6
+PASS: evidence_finality (1 bundle(s), 0 failure(s); law binds P12+; in-flight='P15')
+EXIT=0
+
+$ python3 tools/evidence_finality.py --repo .   # corrects STRIPPED
+finality: P13: final (declared) — judging the final vocabulary, the declared head, the claimed workflows and report.md
+FAIL: final bundle carries *-PENDING-* sentinels — P13-CONTRACTS='BLOCKED-PENDING-CONTRACTS', P13-EVIDENCE='BLOCKED-PENDING-EVIDENCE', P13-REPORT='BLOCKED-PENDING-REPORT', P13-T2='BLOCKED-PENDING-T2', P13-T3='BLOCKED-PENDING-T3', P13-T4='BLOCKED-PENDING-T4', P13-T5='BLOCKED-PENDING-T5', P13-T6='BLOCKED-PENDING-T6' — PENDING is interim's vocabulary; resolve each row with a status this sandbox can show or an appended correction quoting the original (P13-P0-C)
+FAIL: evidence_finality (1 bundle(s), 1 failure(s); law binds P12+; in-flight='P15')
+EXIT=1
