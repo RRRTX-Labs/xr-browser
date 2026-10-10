@@ -127,6 +127,25 @@ reviewer:
   key `perm.scope.only_in_identity`, plan line 809). The copy is an l10n key,
   not a string in the core.
 
+## Identity (P14-T7)
+
+The identity surfaces are silent: the identity chrome (`xr-core/ui/identity-chrome/`)
+and the `xr://identities` dev page (`xr-core/ui/identities/`) raise no attention
+outside themselves.
+
+- Identity chrome is passive: a 2 px bar, glyph and text on the tab, and the
+  toolbar pill; the screen-reader description is read on tab focus only. No
+  modal, no badge, no toast, no notification.
+- The manager page is a dev page you open; it never opens itself. Purge and
+  reset-all ask for inline typed confirmation on the page itself. No modal, no
+  badge, no toast, no notification.
+- An unverified purge stays visible on the page until it is resolved (never
+  hidden), and it is never escalated off the page.
+- `tools/attention_check.py` scans `ui/identities/*.ts`, `ui/identity-chrome/*.ts`
+  and the `IDS_XR_IDENTITIES_*` / `IDS_XR_IDCHROME_*` grdp messages for
+  attention-escalation vocabulary; a planted modal reddens it
+  (`tools/negatives/p14c_c3.sh`).
+
 ## 9. Enforcement
 
 - C++ suites (`settings` make test): counters unit/durability suites,

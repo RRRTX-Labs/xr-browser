@@ -1,0 +1,83 @@
+{
+ "deny_guard_killed": 8,
+ "deny_guard_mutants": 8,
+ "deny_guard_survivors": 0,
+ "gate": "PASS",
+ "killed": 215,
+ "operators": [
+  "ROR:== -> !=",
+  "ROR:!= -> ==",
+  "ROR:< -> <=",
+  "ROR:<= -> <",
+  "ROR:> -> >=",
+  "ROR:>= -> >",
+  "LOR:&& -> ||",
+  "LOR:|| -> &&",
+  "BOOL:true -> false",
+  "BOOL:false -> true",
+  "AOR:0 -> 1",
+  "AOR:1 -> 2",
+  "AOR:2 -> 3"
+ ],
+ "sampled": false,
+ "score_gate_pct": 90.0,
+ "score_pct": 98.17,
+ "seed": 20261010,
+ "suites": [
+  "test_availability",
+  "test_descriptor",
+  "test_dial",
+  "test_dispatch",
+  "test_host",
+  "test_matcher",
+  "test_registry",
+  "test_shortcuts"
+ ],
+ "survived": 4,
+ "survivors": [
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/matcher.cc",
+   "line": 31,
+   "mutated": "    if (ti > t.size()) return {};",
+   "operator": "ROR:>= -> >",
+   "orig": "    if (ti >= t.size()) return {};",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/matcher.cc",
+   "line": 66,
+   "mutated": "  if (s <= 1) s = 1;",
+   "operator": "ROR:< -> <=",
+   "orig": "  if (s < 1) s = 1;",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/matcher.cc",
+   "line": 115,
+   "mutated": "    return a.order <= b.order;                          // stable tie-break",
+   "operator": "ROR:< -> <=",
+   "orig": "    return a.order < b.order;                          // stable tie-break",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/shortcuts.cc",
+   "line": 76,
+   "mutated": "  bool exists = true;",
+   "operator": "BOOL:false -> true",
+   "orig": "  bool exists = false;",
+   "target": "commands"
+  }
+ ],
+ "target": "xr-core/commands/core/*.cc",
+ "tool": "mutation_test",
+ "total_mutants": 219,
+ "truncated_by_timebox": false
+}

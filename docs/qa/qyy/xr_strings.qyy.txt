@@ -141,3 +141,32 @@ idchrome.sr.tor-unbound	IDS_XR_IDCHROME_SR_TOR_UNBOUND	‏«Tõr îdéñtîty:  
 idchrome.pill	IDS_XR_IDCHROME_PILL	‏«Idéñtîty méñû:  ēxðañ{NAME}, {ROUTE}»
 idchrome.route.direct	IDS_XR_IDCHROME_ROUTE_DIRECT	‏«dîréçt çõññéçtîõñ ēxðañ»
 idchrome.route.tor-unbound	IDS_XR_IDCHROME_ROUTE_TOR_UNBOUND	‏«Tõr rõûté ñõt çõññéçtéd ēxðañd ē»
+identities.heading	IDS_XR_IDENTITIES_HEADING	‏«Idéñtîtîés ēxð»
+identities.dev-only	IDS_XR_IDENTITIES_DEV_ONLY	‏«Dévélõpér págé. Aváîláblé îñ dév bûîlds õñly. ēxðañd ēxðañd ēx»
+identities.state.normal	IDS_XR_IDENTITIES_STATE_NORMAL	‏«Idéñtîtîés õñ thîs dévîçé ēxðañd ēx»
+identities.state.empty	IDS_XR_IDENTITIES_STATE_EMPTY	‏«Nõ îdéñtîtîés õñ thîs dévîçé yét ēxðañd ēxða»
+identities.state.purge-unverified	IDS_XR_IDENTITIES_STATE_PURGE_UNVERIFIED	‏«A délétéd îdéñtîty çõûld ñõt bé vérîfîéd ás fûlly rémõvéd. Sõmé õf îts dátá máy rémáîñ õñ thîs dévîçé. ēxðañd ēxðañd ēxðañd ēxðañd ēxðañd ēxða»
+identities.state.dev-refused	IDS_XR_IDENTITIES_STATE_DEV_REFUSED	‏«Thîs págé îs áváîláblé îñ dév bûîlds õñly. Thîs bûîld's çháññél:  ēxðañd ēxðañd ēxðañd ēxða{CHANNEL}»
+identities.state.unknown	IDS_XR_IDENTITIES_STATE_UNKNOWN	‏«Págé státé ñõt réçõgñîzéd:  ēxðañd ēx{STATE}»
+identities.lifecycle.active	IDS_XR_IDENTITIES_LIFECYCLE_ACTIVE	‏«Açtîvé ē»
+identities.lifecycle.archived	IDS_XR_IDENTITIES_LIFECYCLE_ARCHIVED	‏«Arçhîvéd ēx»
+identities.lifecycle.unknown	IDS_XR_IDENTITIES_LIFECYCLE_UNKNOWN	‏«Nõt réçõgñîzéd:  ēxðañ{STATE}»
+identities.permissions.count	IDS_XR_IDENTITIES_PERMISSIONS_COUNT	‏«{COUNT} sîté pérmîssîõñs ēxðañ»
+identities.not-reported	IDS_XR_IDENTITIES_NOT_REPORTED	‏«Nõt répõrtéd ēxð»
+identities.row-label	IDS_XR_IDENTITIES_ROW_LABEL	‏«{NAME}: {TABS} õpéñ tábs,  ēxð{BYTES} bytés stõréd ēxða»
+identities.in-memory	IDS_XR_IDENTITIES_IN_MEMORY	‏«Iñ mémõry õñly ēxða»
+identities.col.name	IDS_XR_IDENTITIES_COL_NAME	‏«Idéñtîty ēx»
+identities.col.lifecycle	IDS_XR_IDENTITIES_COL_LIFECYCLE	‏«Státé ē»
+identities.col.tabs	IDS_XR_IDENTITIES_COL_TABS	‏«Opéñ tábs ēx»
+identities.col.storage	IDS_XR_IDENTITIES_COL_STORAGE	‏«Stõréd dátá (bytés) ēxðañd»
+identities.col.permissions	IDS_XR_IDENTITIES_COL_PERMISSIONS	‏«Sîté pérmîssîõñs ēxðañ»
+identities.col.actions	IDS_XR_IDENTITIES_COL_ACTIONS	‏«Açtîõñs ē»
+identities.rename	IDS_XR_IDENTITIES_RENAME	‏«Réñámé ē»
+identities.recolor	IDS_XR_IDENTITIES_RECOLOR	‏«Cháñgé çõlõr ēxð»
+identities.archive	IDS_XR_IDENTITIES_ARCHIVE	‏«Arçhîvé ē»
+identities.purge	IDS_XR_IDENTITIES_PURGE	‏«Délété îdéñtîty áñd îts dátá ēxðañd ēxð»
+identities.purge-confirm	IDS_XR_IDENTITIES_PURGE_CONFIRM	‏«Typé  ē{NAME} tõ çõñfîrm délétîõñ ēxðañd »
+identities.purge-unverified-row	IDS_XR_IDENTITIES_PURGE_UNVERIFIED_ROW	‏«Rémõvál ñõt vérîfîéd fõr  ēxðañd ēx{DOMAIN}. Rémáîñîñg:  ēxða{KINDS}»
+identities.reset-all	IDS_XR_IDENTITIES_RESET_ALL	‏«Rését áll îdéñtîtîés ēxðañd »
+identities.reset-all-confirm	IDS_XR_IDENTITIES_RESET_ALL_CONFIRM	‏«Typé  ē{PHRASE} tõ délété évéry îdéñtîty áñd áll õf îts dátá ēxðañd ēxðañd ēx»
+identities.not-found	IDS_XR_IDENTITIES_NOT_FOUND	‏«Nõ îdéñtîtîés págé át thîs áddréss ēxðañd ēxðañ»

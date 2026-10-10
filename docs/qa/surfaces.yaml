@@ -51,6 +51,8 @@ surfaces:
       - "tools/pseudo_locale.py"
       - "tools/shield_state_check.py"
       - "tools/attention_check.py"
+      - "tools/identity_chrome_check.py"  # P14-CLOSE C-1: identity chrome
+      - "build/webui/identities-page-tests.sh"  # P14-CLOSE C-3: xr://identities
     farm: "HG-31 axe run · HG-32 SR/human passes"
     green: "a11y/copy gates green; axe + 12 keyboard tasks HG-31"
   - id: "11.7"

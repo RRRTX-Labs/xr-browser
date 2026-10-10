@@ -1,0 +1,105 @@
+{
+ "deny_guard_killed": 32,
+ "deny_guard_mutants": 32,
+ "deny_guard_survivors": 0,
+ "gate": "PASS",
+ "killed": 286,
+ "operators": [
+  "ROR:== -> !=",
+  "ROR:!= -> ==",
+  "ROR:< -> <=",
+  "ROR:<= -> <",
+  "ROR:> -> >=",
+  "ROR:>= -> >",
+  "LOR:&& -> ||",
+  "LOR:|| -> &&",
+  "BOOL:true -> false",
+  "BOOL:false -> true",
+  "AOR:0 -> 1",
+  "AOR:1 -> 2",
+  "AOR:2 -> 3"
+ ],
+ "sampled": false,
+ "score_gate_pct": 90.0,
+ "score_pct": 97.95,
+ "seed": 20261010,
+ "suites": [
+  "test_attribution",
+  "test_binding",
+  "test_derivation",
+  "test_hibernate",
+  "test_identity",
+  "test_ledger_tag",
+  "test_manager_page",
+  "test_mint",
+  "test_session_chaos",
+  "test_templates"
+ ],
+ "survived": 6,
+ "survivors": [
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/attribution.cc",
+   "line": 61,
+   "mutated": "              return a.kb >= b.kb;  // biggest first: \"what is using my RAM\"",
+   "operator": "ROR:> -> >=",
+   "orig": "              return a.kb > b.kb;  // biggest first: \"what is using my RAM\"",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/binding.cc",
+   "line": 98,
+   "mutated": "  if (suggestions_.size() >= keep_suggestions) {",
+   "operator": "ROR:> -> >=",
+   "orig": "  if (suggestions_.size() > keep_suggestions) {",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/hibernate.cc",
+   "line": 27,
+   "mutated": "  if (evictions_.size() < keep) return 0;",
+   "operator": "ROR:<= -> <",
+   "orig": "  if (evictions_.size() <= keep) return 0;",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/mint.cc",
+   "line": 58,
+   "mutated": "    uint8_t hi = 1;",
+   "operator": "AOR:0 -> 1",
+   "orig": "    uint8_t hi = 0;",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/mint.cc",
+   "line": 59,
+   "mutated": "    uint8_t lo = 1;",
+   "operator": "AOR:0 -> 1",
+   "orig": "    uint8_t lo = 0;",
+   "target": "identity"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/session.cc",
+   "line": 17,
+   "mutated": "  return a.tab_id <= b.tab_id;",
+   "operator": "ROR:< -> <=",
+   "orig": "  return a.tab_id < b.tab_id;",
+   "target": "identity"
+  }
+ ],
+ "target": "xr-core/identity/core/*.cc",
+ "tool": "mutation_test",
+ "total_mutants": 292,
+ "truncated_by_timebox": false
+}

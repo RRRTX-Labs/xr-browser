@@ -31,6 +31,8 @@ SUITE_MAPS = {
         # P14-CLOSE C-2: the ledger identity overlay; test_derivation pins
         # its refusal strings (byte-absence), test_ledger_tag its laws.
         "ledger_tag.cc": ["test_ledger_tag", "test_derivation"],
+        # P14-CLOSE C-3: the xr://identities manager page model.
+        "manager_page.cc": ["test_manager_page"],
     },
     # P15: the permission firewall core (ADR-0051). Each TU maps to the suites
     # that build WITHOUT the policy tree (the matrix copies only this target and

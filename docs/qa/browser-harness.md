@@ -345,17 +345,63 @@ it for the real browser; what shipped is every half that can be shipped:
 
 ## `xr://identities` manager + per-identity stats (P14-T7)
 
-* **Data core (shipped, real):** the stats the page renders exist as
-  cores — per-identity RSS attribution (`xr-core/identity/core/attribution`,
-  19 checks), per-identity storage size with a purge-verified close
-  (`identity/core/identity`), permission-state overlay counts
-  (`xr-core/fakes/policy_resolver.py`). The manager's mojom surface is
-  REVIEW-COMPLETE (contracts/review/03-identity-manager-v1.md; human
-  sign-off pending, HG-26).
-* **NOT-RUN (the page, method):** the WebUI itself — create/rename/
-  recolor/archive, the stats table, the purge button — lands on the P13
-  panel infrastructure when a browser build exists; no views code is in
-  this tree and none may be stubbed to look shipped. Method: the page's
-  data calls go through the same frozen host methods the tests drive;
-  the purge button asserts the same `zero_residual_verified` the matrix
-  cell asserts.
+The P14 phase note here said "no views code is in this tree". That stopped
+being true at P14-CLOSE C-3; what shipped and what is still NOT-RUN is in
+[Identities page rendered](#identities-page-rendered). The data cores this
+section listed stand: per-identity RSS attribution
+(`xr-core/identity/core/attribution`), per-identity storage with a
+purge-verified close (`identity/core/identity`), permission-state overlay
+counts (`xr-core/fakes/policy_resolver.py`). The manager's mojom surface is
+REVIEW-COMPLETE (contracts/review/03-identity-manager-v1.md; human sign-off
+pending, HG-26).
+
+## Identities page rendered
+
+P14-T7, closed at P14-CLOSE C-3. The anchor `#identities-page-rendered` is
+cited by `build/webui/identities-page-tests.sh` and the P14-T7-DELIVERED row of
+`evidence/P14/evidence.json`.
+
+* **Shipped and checked (real):**
+  * `xr-core/identity/core/manager_page.{h,cc}`: the page model. It defines the
+    page states (normal / empty / purge-unverified / dev-refused) and
+    per-identity tab count, storage bytes and permission count (null when
+    absent, never a guessed 0). It handles rename / recolor / archive with
+    typed refusals and the dev-channel predicate. `test_manager_page`
+    covers it, and it is in the identity mutation lane.
+  * `identity_host manager-page` / `reset-all`: dev only, by the host's real
+    `--build-channel` option (default release). Every other channel gets
+    `build-channel-not-dev:<channel>` and no page bytes.
+    `tools/tests/test_p14c_identities_page.py` drives every channel.
+  * `identities.page` in the roster rides `build.channel-dev` (tier2), so it
+    is listed but disabled with a reason off dev.
+  * `xr-core/ui/identities/`: the pure core (`identities-core.ts`) and the lit
+    view (`identities.ts`; `tsc --strict` via the toolchain lane).
+    `build/webui/identities-page-tests.sh` runs the core under node:test
+    against the compiled host's LIVE replies for every page state, and
+    `--plant-drift` proves the suite reddens.
+  * Laws: `tools/shield_state_check.py` (through `tools/identity_page_states.py`):
+    host states ⊆ view union + stateText arms, reset-all/manager-page gated
+    first. `tools/attention_check.py`: the page and the chrome are silent.
+    Negatives: `tools/negatives/p14c_c3.sh`.
+* **NOT-RUN: the rendered page.** `↦ NOT-RUN (method: docs/qa/browser-harness.md#identities-page-rendered)`.
+  No browser build exists in this tree, so nothing loaded `xr://identities` in a
+  WebUI host, and the P16 glue that pipes host replies into the element is not
+  built. The method on the rig, with owner and human operator **ahmadrrrtx**:
+  1. On a dev-channel build, open `xr://identities` with Work, Banking and a
+     disposable identity, each holding tabs. The table must show each row's
+     tab count, the same storage bytes `identity_host manager-page` reports,
+     and permission counts from the overlay ("Not reported" where none
+     came).
+  2. Rename, recolor and archive one identity. Destroy one by typing its
+     name; the unverified-purge line must appear when a residual is planted
+     (`plant_residual`), and must not appear otherwise.
+  3. Open `xr://identities/reset-all`. The button stays disabled until the
+     phrase is typed, and every identity is then purged-and-verified.
+  4. On a release build, the command palette lists "Open Identities Manager
+     Page (Dev)" as disabled with its reason, and loading the URL renders
+     only the dev-refused line.
+  5. axe + screen-reader pass over the table (row names are the
+     `IDS_XR_IDENTITIES_ROW_LABEL` string).
+
+  No rendered page, screenshot or SR result is claimed in this phase, and no
+  surrogate was invented.

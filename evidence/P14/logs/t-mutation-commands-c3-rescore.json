@@ -1,0 +1,303 @@
+{
+ "deny_guard_killed": 4,
+ "deny_guard_mutants": 8,
+ "deny_guard_survivors": 4,
+ "gate": "FAIL",
+ "killed": 193,
+ "operators": [
+  "ROR:== -> !=",
+  "ROR:!= -> ==",
+  "ROR:< -> <=",
+  "ROR:<= -> <",
+  "ROR:> -> >=",
+  "ROR:>= -> >",
+  "LOR:&& -> ||",
+  "LOR:|| -> &&",
+  "BOOL:true -> false",
+  "BOOL:false -> true",
+  "AOR:0 -> 1",
+  "AOR:1 -> 2",
+  "AOR:2 -> 3"
+ ],
+ "sampled": false,
+ "score_gate_pct": 90.0,
+ "score_pct": 88.13,
+ "seed": 20261010,
+ "suites": [
+  "test_availability",
+  "test_descriptor",
+  "test_dial",
+  "test_dispatch",
+  "test_host",
+  "test_matcher",
+  "test_registry",
+  "test_shortcuts"
+ ],
+ "survived": 26,
+ "survivors": [
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/descriptor.cc",
+   "line": 42,
+   "mutated": "                \"additionalProperties:true (new fields register via \"",
+   "operator": "BOOL:false -> true",
+   "orig": "                \"additionalProperties:false (new fields register via \"",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/matcher.cc",
+   "line": 31,
+   "mutated": "    if (ti > t.size()) return {};",
+   "operator": "ROR:>= -> >",
+   "orig": "    if (ti >= t.size()) return {};",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/matcher.cc",
+   "line": 33,
+   "mutated": "    for (; ti <= t.size(); ++ti) {",
+   "operator": "ROR:< -> <=",
+   "orig": "    for (; ti < t.size(); ++ti) {",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/matcher.cc",
+   "line": 66,
+   "mutated": "  if (s <= 1) s = 1;",
+   "operator": "ROR:< -> <=",
+   "orig": "  if (s < 1) s = 1;",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/matcher.cc",
+   "line": 115,
+   "mutated": "    return a.order <= b.order;                          // stable tie-break",
+   "operator": "ROR:< -> <=",
+   "orig": "    return a.order < b.order;                          // stable tie-break",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/registry.cc",
+   "line": 80,
+   "mutated": "              \"' would be the \" + std::to_string(tier1_ + 2) +",
+   "operator": "AOR:1 -> 2",
+   "orig": "              \"' would be the \" + std::to_string(tier1_ + 1) +",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/registry.cc",
+   "line": 81,
+   "mutated": "              \"th tier1 control \u2014 'Tier-1 always-visible <9 controls' \"",
+   "operator": "ROR:<= -> <",
+   "orig": "              \"th tier1 control \u2014 'Tier-1 always-visible <=9 controls' \"",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/registry.cc",
+   "line": 98,
+   "mutated": "  return by_id_.count(id) == 0;",
+   "operator": "ROR:!= -> ==",
+   "orig": "  return by_id_.count(id) != 0;",
+   "target": "commands"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/registry.cc",
+   "line": 163,
+   "mutated": "    return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "    return false;",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/registry.cc",
+   "line": 173,
+   "mutated": "    return set_err(\"unsupported schema_version (want 2)\");",
+   "operator": "AOR:1 -> 2",
+   "orig": "    return set_err(\"unsupported schema_version (want 1)\");",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/registry.cc",
+   "line": 181,
+   "mutated": "    if (!desc && !meta) return set_err(\"entry missing descriptor/registry\");",
+   "operator": "LOR:|| -> &&",
+   "orig": "    if (!desc || !meta) return set_err(\"entry missing descriptor/registry\");",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/shortcuts.cc",
+   "line": 73,
+   "mutated": "    r.ok = false;  // ephemeral: in-memory only",
+   "operator": "BOOL:true -> false",
+   "orig": "    r.ok = true;  // ephemeral: in-memory only",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/shortcuts.cc",
+   "line": 76,
+   "mutated": "  bool exists = true;",
+   "operator": "BOOL:false -> true",
+   "orig": "  bool exists = false;",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/shortcuts.cc",
+   "line": 78,
+   "mutated": "  if (!exists && bytes.empty()) {",
+   "operator": "LOR:|| -> &&",
+   "orig": "  if (!exists || bytes.empty()) {",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/shortcuts.cc",
+   "line": 79,
+   "mutated": "    if (exists || bytes.empty()) {",
+   "operator": "LOR:&& -> ||",
+   "orig": "    if (exists && bytes.empty()) {",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/shortcuts.cc",
+   "line": 81,
+   "mutated": "      r.ok = true;",
+   "operator": "BOOL:false -> true",
+   "orig": "      r.ok = false;",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/shortcuts.cc",
+   "line": 82,
+   "mutated": "      r.preserved = false;",
+   "operator": "BOOL:true -> false",
+   "orig": "      r.preserved = true;",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/shortcuts.cc",
+   "line": 86,
+   "mutated": "    r.ok = false;  // absent => empty store",
+   "operator": "BOOL:true -> false",
+   "orig": "    r.ok = true;  // absent => empty store",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/shortcuts.cc",
+   "line": 101,
+   "mutated": "    r.ok = true;",
+   "operator": "BOOL:false -> true",
+   "orig": "    r.ok = false;",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/shortcuts.cc",
+   "line": 102,
+   "mutated": "    r.preserved = false;",
+   "operator": "BOOL:true -> false",
+   "orig": "    r.preserved = true;",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/shortcuts.cc",
+   "line": 108,
+   "mutated": "    r.ok = true;",
+   "operator": "BOOL:false -> true",
+   "orig": "    r.ok = false;",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/shortcuts.cc",
+   "line": 109,
+   "mutated": "    r.preserved = false;",
+   "operator": "BOOL:true -> false",
+   "orig": "    r.preserved = true;",
+   "target": "commands"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/shortcuts.cc",
+   "line": 177,
+   "mutated": "  if (dir_.empty()) return false;  // ephemeral: in-memory only, nothing to persist",
+   "operator": "BOOL:true -> false",
+   "orig": "  if (dir_.empty()) return true;  // ephemeral: in-memory only, nothing to persist",
+   "target": "commands"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/shortcuts.cc",
+   "line": 196,
+   "mutated": "    return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "    return false;",
+   "target": "commands"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/shortcuts.cc",
+   "line": 204,
+   "mutated": "    return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "    return false;",
+   "target": "commands"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/shortcuts.cc",
+   "line": 208,
+   "mutated": "    return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "    return false;",
+   "target": "commands"
+  }
+ ],
+ "target": "xr-core/commands/core/*.cc",
+ "tool": "mutation_test",
+ "total_mutants": 219,
+ "truncated_by_timebox": false
+}

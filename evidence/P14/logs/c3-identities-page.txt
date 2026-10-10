@@ -1,0 +1,159 @@
+# P14-CLOSE C-3 xr://identities dev page transcript (xr-core 5ffa695, xr-browser base 990fd1d + working tree; recorded at its pre-push predecessor 7195b9e, which differs only by one sibling_pin_check register line)
+
+$ python3 tools/shield_state_check.py
+PASS: shield-state (all 5 host page states rendered: normal, engine-dead, engine-poisoned, kill-switch, route-loss; fake vocabulary byte-identical; stateText arms + honest default; force-disable reason verbatim; shield.page behind build.channel-dev in roster + both availability backends; grdp rows present; cosmetic rows + seam-guard union armed, inert, hook-dead rendered; observatory enum surface: export FIELDS ⊇ action, why_code, request_class, page_modifying and ⊆ the block-event-v1 properties, tab row type carries type, origin, why_code, rule_id, list_id; identities page: 4 host states (normal, empty, purge-unverified, dev-refused) rendered; manager-page/reset-all behind DevChannel + --build-channel (default release); identities.page behind build.channel-dev)
+exit=0
+
+$ python3 tools/attention_check.py
+PASS: attention-budget (P8-T6 policy markers present; P11-T6 shield rule: chip count only — no toast/badge/modal/notification vocabulary in any shield surface or string; 2 surface(s) + 50 shield message(s) scanned; P14-T7 identity rule: 4 identity surface(s) + the IDS_XR_IDENTITIES_*/IDCHROME_* messages silent)
+exit=0
+
+$ bash build/webui/identities-page-tests.sh
+identities-page-tests: node --test ui/identities/tests/identities.test.mjs
+  TAP version 13
+  # Subtest: the view union equals the host page-state list
+  ok 1 - the view union equals the host page-state list
+    ---
+    duration_ms: 1.749784
+    ...
+  # Subtest: every page state renders its own line; others are an honest unknown
+  ok 2 - every page state renders its own line; others are an honest unknown
+    ---
+    duration_ms: 0.281981
+    ...
+  # Subtest: routes: list, detail, reset-all, and not-found (never a guessed page)
+  ok 3 - routes: list, detail, reset-all, and not-found (never a guessed page)
+    ---
+    duration_ms: 0.531911
+    ...
+  # Subtest: the host refusal maps to dev-refused with the channel verbatim
+  ok 4 - the host refusal maps to dev-refused with the channel verbatim
+    ---
+    duration_ms: 1.25176
+    ...
+  # Subtest: rows: numbers verbatim, a missing permission count is "not reported"
+  ok 5 - rows: numbers verbatim, a missing permission count is "not reported"
+    ---
+    duration_ms: 0.354742
+    ...
+  # Subtest: purge needs the typed name; reset-all needs dev AND the phrase
+  ok 6 - purge needs the typed name; reset-all needs dev AND the phrase
+    ---
+    duration_ms: 0.255663
+    ...
+  # Subtest: an unverified purge is always shown; a verified one is not
+  ok 7 - an unverified purge is always shown; a verified one is not
+    ---
+    duration_ms: 0.268768
+    ...
+  # Subtest: real host replies render: release refuses, dev renders every reported state
+  ok 8 - real host replies render: release refuses, dev renders every reported state
+    ---
+    duration_ms: 0.401428
+    ...
+  1..8
+  # tests 8
+  # suites 0
+  # pass 8
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+  # duration_ms 84.968847
+identities-page-tests: PASS (host state union == view union; every state rendered from LIVE host replies; routes; typed purge + dev-only reset-all locks; unknown renders honestly)
+exit=0
+
+$ bash build/webui/identities-page-tests.sh --plant-drift
+identities-page-tests: --plant-drift: the purge-unverified stateText arm removed in a scratch copy
+identities-page-tests: node --test ui/identities/tests/identities.test.mjs
+  not ok 2 - every page state renders its own line; others are an honest unknown
+  not ok 8 - real host replies render: release refuses, dev renders every reported state
+  # tests 8
+  # pass 6
+  # fail 2
+identities-page-tests: PASS — the planted missing state arm reddens the suite
+exit=0
+
+$ timeout 900 python3 -m pytest -q -p no:cacheprovider tools/tests/test_p14c_identities_page.py
+................                                                         [100%]
+16 passed in 0.12s
+exit=0
+
+$ make -s -C ../xr-core/identity/tests BUILD=$PWD/work/scratch/c3-build $PWD/work/scratch/c3-build/test_manager_page >/dev/null && work/scratch/c3-build/test_manager_page
+identity/manager_page: 105 checks, 0 failures
+exit=0
+
+$ make -s -C ../xr-core/commands/tests build >/dev/null && (cd ../xr-core/commands/tests && ./build/test_host && ./build/test_registry && ./build/test_shortcuts && ./build/test_matcher && ./build/test_descriptor; rc=$?; rm -rf shortcuts-test-dir; exit $rc)
+test_host: 51 checks, 0 failures
+test_registry: 50 checks, 0 failures
+test_shortcuts: 56 checks, 0 failures
+test_matcher: 33 checks, 0 failures
+  (XR_BROWSER_ROOT unset; skipping frozen-schema cross-check)
+test_descriptor: 18 checks, 0 failures
+exit=0
+
+$ python3 tools/descriptors_to_docs.py --check
+PASS: ./docs/contracts/commands.md is up to date
+exit=0
+
+$ python3 tools/menu_model_check.py
+PASS: menu_model_check (Tier-1 ≤9, tier separation, stable order)
+exit=0
+
+$ python3 tools/coverage_check.py
+PASS: coverage_check (unit: declared tab/section; 0 failure(s))
+exit=0
+
+$ python3 tools/grdp_check.py
+grdp_check: xr_strings.grdp OK (171 messages, isolation-card cross-check clean)
+exit=0
+
+$ python3 tools/l10n_extract.py --check
+l10n_extract: 30 files, 0 raw-string violations, 0 missing ids -> CLEAN
+exit=0
+
+$ python3 tools/pseudo_locale.py --in ../xr-core/l10n/xr_strings.grdp --out docs/qa/qyy/xr_strings.qyy.txt --as-of 2026-09-10 --check
+PASS: pseudo_locale qyy render diff-clean (171 messages, mean 37.2 chars)
+exit=0
+
+$ python3 tools/a11y_tree.py --repo . --check
+PASS: a11y_tree --check (52 nodes, diff-clean)
+exit=0
+
+$ python3 tools/a11y_lint.py
+a11y_lint: 0 violation(s) (PASS)
+exit=0
+
+$ python3 tools/rtl_lint.py
+rtl_lint: 0 violation(s) (PASS)
+exit=0
+
+$ python3 tools/csp_lint.py
+csp_lint: 0 violation(s) (PASS)
+exit=0
+
+$ python3 tools/copy_lint.py --repo .
+copy_lint: 171 string(s) checked, 0 violation(s) (PASS)
+exit=0
+
+$ bash build/webui/toolchain.sh
+toolchain: npm ci --ignore-scripts (lock-pinned, --ignore-scripts)
+toolchain: tsc -p ../xr-core/ui (strict)
+toolchain: node build.mjs (deterministic bundle)
+  build: built dist/ (bundle.js + index.html + tokens.css)
+toolchain: node check-bundle.js (CSP on output)
+  csp: check-bundle: PASS (CSP-strict: no inline JS/eval, no runtime network, no sourcemap)
+toolchain: PASS (tsc-strict + deterministic bundle + CSP-clean) in ../xr-core/ui/toolchain
+exit=0
+
+$ tools/run_negatives.sh (p14c_c2.sh for its shared C++ plant helper, p14c_c3.sh)
+ok: identities page: planted missing stateText arm reddens shield_state_check (in-band rejection observed)
+ok: identities page: planted union drop reddens shield_state_check (in-band rejection observed)
+ok: identities page: view-side reset-all lock without the dev demand reddens (in-band rejection observed)
+ok: identities page: planted reset-all branch before the gate reddens shield_state_check (in-band rejection observed)
+ok: identities page: planted --build-channel default of dev reddens shield_state_check (in-band rejection observed)
+ok: identities page: planted modal confirmation reddens attention_check (in-band rejection observed)
+ok: C++ planted DevChannel() admitting every channel reddens test_manager_page (rejected with expected reason)
+ok: C++ planted silent unverified purge reddens test_manager_page (rejected with expected reason)
+ALL NEGATIVE CASES REJECTED AS EXPECTED (N=9)
+exit=0

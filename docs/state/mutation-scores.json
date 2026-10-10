@@ -1,15 +1,36 @@
 {
-  "comment": "P10-T0-c/T1: recorded mutation scores per xr-core core. Law: a score is a statement about specific bytes — each record pins the xr-core commit whose core/** the FULL matrix ran against (sampled:false); tools/mutation_freshness.py fails the gate when a core's core/** changes without a fresh transcript. Survivor dispositions are mandatory. P11 re-arm (2026-09-11): all six cores re-run FULL (sampled:false) at the T0-b dedup pin 85289cd — freshness debt from the shared-primitives move paid, and `common` scored for the first time. The dedup shrank the per-core mutant surfaces (the moved files are now mutated ONCE, under common). P11-T4 (2026-09-12): the seventh discovered core `shield` scored for the first time (lane added to mutation_targets.py; FULL matrix at pin cfbb344 after the first run's ParseSlot deny-guard find was discharged with new tests — research-log-P11.md D6); P11-T5 2026-09-13: shield re-run FULL at pin 44f5306 after the emitter landed — 394/394, first-run clean). P11-T6 2026-09-13: commands re-run FULL at pin 62b2c92 after the dev-channel predicate landed — 219/219, first-run clean; shield/core bytes unchanged at T6 (the T6 host/fake changes live in shield/host and fakes/, outside the core/** freshness surface) so the T5 shield record stands. P11-T8 2026-09-15: shield re-run FULL at pin 866387a after the parity-alignment matcher changes — 396/396, first-run clean.",
+  "comment": "P10-T0-c/T1: recorded mutation scores per xr-core core. Law: a score is a statement about specific bytes — each record pins the xr-core commit whose core/** the FULL matrix ran against (sampled:false); tools/mutation_freshness.py fails the gate when a core's core/** changes without a fresh transcript. Survivor dispositions are mandatory. P11 re-arm (2026-09-11): all six cores re-run FULL (sampled:false) at the T0-b dedup pin 85289cd — freshness debt from the shared-primitives move paid, and `common` scored for the first time. The dedup shrank the per-core mutant surfaces (the moved files are now mutated ONCE, under common). P11-T4 (2026-09-12): the seventh discovered core `shield` scored for the first time (lane added to mutation_targets.py; FULL matrix at pin cfbb344 after the first run's ParseSlot deny-guard find was discharged with new tests — research-log-P11.md D6); P11-T5 2026-09-13: shield re-run FULL at pin 44f5306 after the emitter landed — 394/394, first-run clean). P11-T6 2026-09-13: commands re-run FULL at pin 62b2c92 after the dev-channel predicate landed — 219/219, first-run clean; shield/core bytes unchanged at T6 (the T6 host/fake changes live in shield/host and fakes/, outside the core/** freshness surface) so the T5 shield record stands. P11-T8 2026-09-15: shield re-run FULL at pin 866387a after the parity-alignment matcher changes — 396/396, first-run clean. P14-CLOSE C-3 2026-10-10: identity re-run FULL at pin 5ffa695 after manager_page.cc landed — 286/292, deny-guard 32/32; commands re-scored FULL at 5ffa695 — the honest first run was 88.13% (the P11 219/219 was a false-kill artifact), and after new tests 215/219, deny-guard 8/8.",
   "cores": {
     "commands": {
-      "killed": 219,
+      "killed": 215,
       "mutants": 219,
-      "note": "P11-T6 re-run FULL at pin 62b2c92 after the build.channel-dev predicate landed in availability.cc: 215->219 mutants (+4 on the new predicate arm), 100% killed first-run, deny-guard 8/8.",
-      "score_pct": 100.0,
-      "seed": 20260913,
-      "survivors": [],
-      "transcript": "evidence/P11/logs/t6-mutation-commands.json",
-      "xr_core_commit": "62b2c923aa7a48f6adc84299af956be74bf5bf01"
+      "note": "P14-CLOSE C-3 RE-SCORE (2026-10-10). The roster gained identities.page (commands/core/roster_v1.json; availability.cc changed in a comment only), so commands/core/ changed and the FULL matrix had to run again. On the fixed harness (xr-browser 3fe8d7e and b6cd40f, 2026-10-09: stale objects and unrestored builds counted false kills) the unchanged core first scored 193/219 = 88.13% with deny-guard 4/8, a FAIL (evidence/P14/logs/t-mutation-commands-c3-rescore.json). So the 219/219 recorded at 62b2c92 (P11-T6) was a false-kill artifact, like identity's. Tests were added at xr-core 5ffa695 (no behavior change: descriptor refusal text, registry KnownId / tier-1 refusal text / FromJson refusals, a NUL matcher query, every shortcuts Load outcome and every Save failure path). The FULL matrix (sampled:false, seed 20261010) then scored 215/219 = 98.17%, deny-guard 8/8, PASS. Four equivalent survivors remain (dispositions below). The P11 transcript stays at evidence/P11/logs/t6-mutation-commands.json.",
+      "score_pct": 98.17,
+      "seed": 20261010,
+      "survivors": [
+        {
+          "id": "core/matcher.cc:31 ROR:>= -> >",
+          "operator": "ROR:>= -> >",
+          "disposition": "equivalent-mutant: SubseqPositions' early exit `ti >= t.size()` becomes `>`. At ti == t.size() the mutant skips the early return, but the scan loop `ti < t.size()` then runs zero times, found stays false and the function returns {}, the same result."
+        },
+        {
+          "id": "core/matcher.cc:66 ROR:< -> <=",
+          "operator": "ROR:< -> <=",
+          "disposition": "equivalent-mutant: FzfScore's floor `if (s < 1) s = 1` becomes `s <= 1`. At s == 1 the mutant assigns 1 to a value that is already 1."
+        },
+        {
+          "id": "core/matcher.cc:115 ROR:< -> <=",
+          "operator": "ROR:< -> <=",
+          "disposition": "equivalent-mutant: the tie-break `a.order < b.order` becomes `<=`. Registry order values are unique per command (assigned once at registration), so two matches never carry equal order and the comparators agree on every input the matcher can see."
+        },
+        {
+          "id": "core/shortcuts.cc:76 BOOL:false -> true",
+          "operator": "BOOL:false -> true",
+          "disposition": "equivalent-mutant: Load initializes `exists` to true instead of false. ReadAll writes *exists = false as its first statement, so the initializer is never read."
+        }
+      ],
+      "transcript": "evidence/P14/logs/t-mutation-commands-c3.json",
+      "xr_core_commit": "5ffa695b7a24146595f25acdcfa2b74aefec2658"
     },
     "common": {
       "killed": 199,
@@ -99,11 +120,11 @@
       "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
     },
     "identity": {
-      "killed": 246,
-      "mutants": 252,
-      "note": "P14-CLOSE RE-SCORE (2026-10-10). The 204/204 recorded at 9ee4952 predates the harness fix (xr-browser 3fe8d7e and b6cd40f, 2026-10-09: stale objects and unrestored builds counted false kills). Re-run with the fixed harness at xr-core a7ed1ab (which adds ledger_tag.cc and the S0 opacity fix), the identity core scored 220/248 = 88.71% with deny-guard 23/29, a FAIL. That transcript is evidence/P14/logs/t-mutation-identity-v3-rescore.json. A templates.cc survivor from it was re-checked by hand at 9ee4952 and survives there too, so the old 100% was an artifact. Tests were added (xr-core dec1d83, no behavior change) and the mint digest decoding became a tested function (S0 refactor, HG-S0-P14C-MINT-DECODE). The FULL matrix (sampled:false, seed 20261001) then scored 246/252 = 97.62% with deny-guard 29/29, a PASS. Six survivors remain, each an equivalent mutant (dispositions below).",
-      "score_pct": 97.62,
-      "seed": 20261001,
+      "killed": 286,
+      "mutants": 292,
+      "note": "P14-CLOSE RE-SCORE (2026-10-10). The 204/204 recorded at 9ee4952 predates the harness fix (xr-browser 3fe8d7e and b6cd40f, 2026-10-09: stale objects and unrestored builds counted false kills). Re-run with the fixed harness at xr-core a7ed1ab (which adds ledger_tag.cc and the S0 opacity fix), the identity core scored 220/248 = 88.71% with deny-guard 23/29, a FAIL. That transcript is evidence/P14/logs/t-mutation-identity-v3-rescore.json. A templates.cc survivor from it was re-checked by hand at 9ee4952 and survives there too, so the old 100% was an artifact. Tests were added (xr-core dec1d83, no behavior change) and the mint digest decoding became a tested function (S0 refactor, HG-S0-P14C-MINT-DECODE). The FULL matrix (sampled:false, seed 20261001) then scored 246/252 = 97.62% with deny-guard 29/29, a PASS. Six survivors remain, each an equivalent mutant (dispositions below). P14-CLOSE C-3 (2026-10-10): manager_page.cc (the xr://identities page model) joined the core at xr-core 5ffa695, mapped to test_manager_page. The FULL matrix ran again (sampled:false, seed 20261010): 286/292 = 97.95%, deny-guard 32/32, PASS. All 40 manager_page.cc mutants are killed, and the same six equivalent survivors remain (dispositions unchanged). The v3 transcript stays in evidence/P14/logs.",
+      "score_pct": 97.95,
+      "seed": 20261010,
       "survivors": [
         {
           "id": "core/attribution.cc:61 ROR:> -> >=",
@@ -136,8 +157,8 @@
           "disposition": "equivalent-mutant: the tab sort comparator `<` becomes `<=`. Snapshot tab ids are unique (std::map keys), so equal ids never meet, and for hand-built docs with duplicate ids std::sort's order is unspecified under either comparator."
         }
       ],
-      "transcript": "evidence/P14/logs/t-mutation-identity-v3.json",
-      "xr_core_commit": "dec1d8373faef071c21ccfa31b722d164a9b8b64"
+      "transcript": "evidence/P14/logs/t-mutation-identity-v4.json",
+      "xr_core_commit": "5ffa695b7a24146595f25acdcfa2b74aefec2658"
     },
     "permissions": {
       "killed": 90,

@@ -18,6 +18,11 @@ both availability backends must register that predicate (the dev-only
 law lives in the availability snapshot, not in a comment). The grdp must
 carry every required IDS_XR_SHIELD_* message.
 
+P14-CLOSE C-3 extends the same law to the xr://identities dev page
+(tools/identity_page_states.py): the core's kManagerPageStates ⊆ the view
+union + stateText arms, reset-all/manager-page gated on the real
+--build-channel, identities.page behind build.channel-dev.
+
 Exit: 0 pass · 1 fail · 2 usage. Stdlib only.
 """
 from __future__ import annotations
@@ -27,6 +32,9 @@ import json
 import re
 import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import identity_page_states  # noqa: E402  (P14-CLOSE C-3: the xr://identities half)
 
 REPO = Path(__file__).resolve().parent.parent
 HOST_CC = REPO.parent / "xr-core" / "shield" / "host" / "shield_host.cc"
@@ -195,6 +203,10 @@ def main() -> int:
     ap.add_argument("--fixture-export", default=None,
                     help="negative fixture: an exporter source whose FIELDS is "
                          "missing an enum-bearing ledger field")
+    ap.add_argument("--fixture-identities-view", default=None,
+                    help="negative fixture: an identities-core.ts missing a state")
+    ap.add_argument("--fixture-identity-host", default=None,
+                    help="negative fixture: an identity_host.cc with a gate bypass")
     a = ap.parse_args()
     host = host_states()
     if not host:
@@ -274,8 +286,12 @@ def main() -> int:
             fails.append(f"{path.name} does not register build.channel-dev")
 
     fails.extend(observatory_findings(Path(a.fixture_export) if a.fixture_export else None))
+    fails.extend(identity_page_states.findings(
+        Path(a.fixture_identities_view) if a.fixture_identities_view else None,
+        Path(a.fixture_identity_host) if a.fixture_identity_host else None))
 
-    if a.fixture_view or a.fixture_export:
+    if (a.fixture_view or a.fixture_export or a.fixture_identities_view
+            or a.fixture_identity_host):
         # negative fixture: the gate MUST fail
         if fails:
             print(f"ok: negative fixture reddened ({fails[0]})")
@@ -298,7 +314,8 @@ def main() -> int:
           f"seam-guard union {', '.join(guard)} rendered; observatory enum "
           f"surface: export FIELDS ⊇ {', '.join(ENUM_FIELDS)} and ⊆ the "
           f"block-event-v1 properties, tab row type carries "
-          f"{', '.join(TAB_ROW_FIELDS)})")
+          f"{', '.join(TAB_ROW_FIELDS)}; "
+          f"{identity_page_states.summary()})")
     return 0
 
 

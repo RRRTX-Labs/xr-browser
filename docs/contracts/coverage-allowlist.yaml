@@ -102,6 +102,14 @@ surfaces:
     command: shield.page
     phase: P11
     sources: [shield/shield.ts]
+  # --- xr://identities dev page (P14-T7, closed at P14-CLOSE C-3) — dev-only
+  # like xr://shield: it ships BEHIND identities.page (tier2, predicate
+  # build.channel-dev) and the identity host's --build-channel gate. ---------
+  - surface: identities/page
+    unit: page
+    command: identities.page
+    phase: P14
+    sources: [identities/identities.ts, identities/identities-core.ts]
   # --- XR Panel, the frame (lands in P13-T1). The frame is NOT a tab: it is
   # the surface `panel.open` opens. focus-trap.ts implements its containment,
   # panel-frame.ts its chrome, tab-registry.ts the declarative tab API. -------

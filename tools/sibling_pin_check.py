@@ -118,6 +118,7 @@ REGISTER: dict[str, tuple[str, str]] = {
     "tools/shield_state_check.py": ("gate-ordered", "reads xr-core shield/ + roster after this lane"),
     "tools/parity_completeness.py": ("gate-ordered", "parity matrix read after this lane"),
     "tools/attention_check.py": ("gate-ordered", "reads xr-core ui/ copy after this lane"),
+    "tools/identity_page_states.py": ("gate-ordered", "P14-CLOSE C-3: shield_state_check's xr://identities half (imported by it, never run alone); reads manager_page.h, identity_host.cc, the view and the roster after this lane"),
     "tools/contracts_manifest.py": ("gate-ordered", "verifies core: paths after this lane"),
     "tools/panel_bench.py": ("gate-ordered", "bundles xr-core ui/panel after this lane"),
     "tools/about_state_check.py": ("gate-ordered", "reads xr-core update/ui before-after this lane"),

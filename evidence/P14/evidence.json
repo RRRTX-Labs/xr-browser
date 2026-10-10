@@ -318,6 +318,33 @@
         "logs/c1-identity-chrome.txt"
       ],
       "notes": "Narrows the original NOT-RUN, which covered all of T4 though only the pixel comparison needs a browser. PARTIAL because the rendered-pixel comparison, the mixed-identity walkthrough x 3 themes and the live SR audit are NOT-RUN (no browser build in this sandbox). The methods are in docs/qa/browser-harness.md#identity-chrome-visual and are owned by human operator ahmadrrrtx. Everything structural is RUN, including the planted missing-SR-string negative."
+    },
+    {
+      "id": "P14-T7-DELIVERED",
+      "corrects": "P14-T7",
+      "dod": "xr://identities dev page (P14-CLOSE C-3). xr-core identity/core/manager_page.{h,cc} is the page model: the page states normal / empty / purge-unverified / dev-refused; per-identity tab count (latest binding row per tab), storage bytes (the purge-verify walk) and permission count (null when absent, never a guessed 0); rename / recolor / archive edits that never move the opaque domain and refuse with typed reasons that never echo input; any unverified purge raises the page to purge-unverified. test_manager_page covers every state, and the identity mutation lane maps it. identity_host manager-page and reset-all are DEV ONLY BY ENFORCEMENT: the host's real --build-channel option defaults to release, and every non-dev channel gets 'build-channel-not-dev:<channel>' with no page bytes. An unknown channel is a usage error, and the frozen surface replays byte-identically with the option set. reset-all purges and verifies every identity; one planted residual makes all_verified false. The roster gains identities.page (tier2, build.channel-dev), listed but disabled with a reason off dev. ui/identities ships the pure core and the lit view. The node lane runs the core against the compiled host's LIVE replies for every page state, and its --plant-drift reddens. shield_state_check is EXTENDED (tools/identity_page_states.py): host states are a subset of the view union with stateText arms, the gated branch calls DevChannel first, and identities.page rides build.channel-dev. attention_check stays green with the new copy and now scans the identity page and chrome. l10n/a11y generators regenerated and --check green: commands.md, menu-model, coverage-allowlist, qyy, axe tree, grdp (171 messages). Negatives: tools/negatives/p14c_c3.sh (missing state arm, union drop, reset-all bypass, release-default flip, view lock without dev, modal vocabulary, C++ DevChannel admitting all, silent unverified purge).",
+      "status": "PARTIAL",
+      "source": "local-run",
+      "evidence": [
+        "../xr-core/identity/core/manager_page.h",
+        "../xr-core/identity/core/manager_page.cc",
+        "../xr-core/identity/tests/test_manager_page.cc",
+        "../xr-core/identity/host/identity_host.cc",
+        "../xr-core/identity/host_protocol.md",
+        "../xr-core/ui/identities/identities-core.ts",
+        "../xr-core/ui/identities/identities.ts",
+        "../xr-core/ui/identities/tests/identities.test.mjs",
+        "tools/identity_page_states.py",
+        "tools/shield_state_check.py",
+        "tools/attention_check.py",
+        "build/webui/identities-page-tests.sh",
+        "tools/tests/test_p14c_identities_page.py",
+        "tools/negatives/p14c_c3.sh",
+        "docs/state/attention-budget.md",
+        "docs/qa/browser-harness.md",
+        "logs/c3-identities-page.txt"
+      ],
+      "notes": "Narrows the original NOT-RUN, which covered all of T7 though only the rendered page needs a browser. PARTIAL because no browser build exists here, so nothing loaded xr://identities in a WebUI host and the P16 glue that pipes host replies into the element is not built. The method is in docs/qa/browser-harness.md#identities-page-rendered, owned by human operator ahmadrrrtx. Archive is hibernate: a distinct archived state belongs to the manager mojom (review-complete, HG-26). Create stays the host's provision path; the page shows and edits what exists. Adding identities.page changed commands/core/, so the commands mutation matrix ran again. On the fixed harness it first scored 88.13% (deny-guard 4/8), which shows the P11 219/219 record was a false-kill artifact. Tests were added (no behavior change) and it now scores 98.17%, deny-guard 8/8 (docs/state/mutation-scores.json)."
     }
   ]
 }

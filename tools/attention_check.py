@@ -17,6 +17,10 @@ Two jobs:
    and NO shield surface (xr-core/ui/shield/*.ts, the IDS_XR_SHIELD_*
    grdp messages, ui/shell.ts) may carry attention-escalation vocabulary
    (toast / badge / modal / notification).
+3. P14-T7 identity rule (P14-CLOSE C-3): the ledger's "## Identity (P14-T7)"
+   markers must be present, and no identity surface (ui/identities/*.ts,
+   ui/identity-chrome/*.ts, the IDS_XR_IDENTITIES_* / IDS_XR_IDCHROME_* grdp
+   messages) may carry that vocabulary — the manager page confirms inline.
 
 Exit: 0 pass · 1 fail · 2 usage. Stdlib only.
 """
@@ -91,6 +95,34 @@ def permission_fails(paths: list[Path]) -> list[str]:
     return out
 
 
+# --- P14-T7: the identity rule (chrome + the xr://identities dev page) -----
+IDENTITY_MARKERS = ["## Identity (P14-T7)", "silent", "inline typed confirmation",
+                    "no modal, no badge, no toast, no notification",
+                    "never escalated off the page"]
+
+
+def identity_surfaces() -> list[Path]:
+    ui = CORE / "ui"
+    return sorted((ui / "identities").glob("*.ts")) + \
+        sorted((ui / "identity-chrome").glob("*.ts"))
+
+
+def identity_fails(paths: list[Path], scan_grdp: bool) -> list[str]:
+    out: list[str] = []
+    for src in paths:
+        for i, line in enumerate(src.read_text(encoding="utf-8").splitlines(), 1):
+            if BANNED.search(line):
+                out.append(f"{src.name}:{i} identity surface carries attention-"
+                           f"escalation vocabulary: {line.strip()[:72]}")
+    grdp = CORE / "l10n" / "xr_strings.grdp"
+    if scan_grdp and grdp.exists():
+        for m in re.finditer(r'<message name="(IDS_XR_(?:IDENTITIES|IDCHROME)_[A-Z0-9_]+)"'
+                             r'([^>]*)>(.*?)</message>', grdp.read_text(encoding="utf-8"), re.S):
+            if BANNED.search(m.group(2) + m.group(3)):
+                out.append(f"grdp {m.group(1)} carries attention-escalation vocabulary")
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(prog="attention-check",
                                  description=__doc__.splitlines()[0])
@@ -100,6 +132,9 @@ def main() -> int:
     ap.add_argument("--fixture-permission", default=None,
                     help="negative fixture: a permission surface file carrying "
                          "banned attention vocabulary (P15-T7)")
+    ap.add_argument("--fixture-identity", default=None,
+                    help="negative fixture: an identity surface file carrying "
+                         "banned attention vocabulary (P14-T7)")
     a = ap.parse_args()
     fails: list[str] = []
 
@@ -138,6 +173,22 @@ def main() -> int:
                 fails.append("present.h: the T3 ceiling constant drifted from 3 per hour")
             if "max_stacked = 1" not in ptext:
                 fails.append("present.h: max_stacked is no longer 1 (prompts would stack)")
+
+    # --- 2d) the P14-T7 identity rule -------------------------------------
+    for m in IDENTITY_MARKERS:
+        if re.sub(r"\s+", " ", m).lower() not in flat.lower():
+            fails.append(f"identity-section marker missing or drifted: {m!r}")
+    if a.fixture_identity:
+        ifails = identity_fails([Path(a.fixture_identity)], scan_grdp=False)
+        if ifails:
+            print(f"ok: negative fixture reddened ({ifails[0]})")
+            return 0
+        print("FAIL: negative fixture did NOT redden (the identity rule cannot fail)")
+        return 1
+    id_surfaces = identity_surfaces()
+    if not any(p.parent.name == "identities" for p in id_surfaces):
+        fails.append("no identity page surfaces found under xr-core/ui/identities/")
+    fails += identity_fails(id_surfaces, scan_grdp=not a.fixture_view)
 
     surfaces = shield_surfaces()
     if not surfaces:
@@ -206,7 +257,9 @@ def main() -> int:
           "shield rule: chip count only — no toast/badge/modal/"
           "notification vocabulary in any shield surface or string; "
           f"{len(surfaces)} surface(s) + "
-          f"{len(grdp_shield_messages())} shield message(s) scanned)")
+          f"{len(grdp_shield_messages())} shield message(s) scanned; P14-T7 "
+          f"identity rule: {len(id_surfaces)} identity surface(s) + the "
+          "IDS_XR_IDENTITIES_*/IDCHROME_* messages silent)")
     return 0
 
 

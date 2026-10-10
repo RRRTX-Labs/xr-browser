@@ -74,3 +74,18 @@ p14c_identity_chrome() {
   p13_exit_code_lane "identity-chrome planted-drift lane" \
     "node/toolchain unavailable" bash build/webui/identity-chrome-tests.sh --plant-drift
 }
+
+p14c_identities_page() {
+  # P14-CLOSE C-3 (P14-T7): the xr://identities dev page. The TS core runs
+  # under node:test against the compiled identity_host's LIVE replies (every
+  # page state, the release/nightly-test refusal included), and the planted
+  # missing-state drift must redden that suite. The state-coverage and
+  # dev-only laws are shield_state_check's (tools/identity_page_states.py);
+  # the silence law is attention_check's. The rendered page is NOT-RUN
+  # (docs/qa/browser-harness.md#identities-page-rendered).
+  echo "== P14-CLOSE C-3: xr://identities dev page (TS core vs live host replies; planted drift reddens) =="
+  p13_exit_code_lane "identities-page core lane" \
+    "node/toolchain or g++/make unavailable" bash build/webui/identities-page-tests.sh
+  p13_exit_code_lane "identities-page planted-drift lane" \
+    "node/toolchain or g++/make unavailable" bash build/webui/identities-page-tests.sh --plant-drift
+}
