@@ -33,7 +33,7 @@ Two facts make the design non-trivial. First, the resolver's parser drops an inv
 
 ## Alternatives considered
 
-- **R1, a new mojom field on `PermissionPolicy`.** Rejected. It edits a frozen file, which the brief forbids, and it requires a contract amendment.
+- **R1, a new mojom field on `PermissionPolicy`.** Rejected for P15. It edits a frozen file, which the brief forbids, and it requires a contract amendment. The widening itself (four `[MinVersion=1]` slots for the extras, needed by P35 and P21) is drafted as `docs/rfcs/RFC-0002.md` (DRAFT, human gate HG-P15-RFC2); envelope (ii) stays the law until a human approves it.
 - **R3, a separate permission service that the resolver consults over IPC.** Rejected. It creates a second decision point and a second brain, and it brings no benefit that the pure in-process input does not already give.
 - **Per-entry drop for malformed overlay records (the other layers' behaviour).** Rejected. A dropped allow-narrowing entry widens the answer, so the failure mode is the wrong way round.
 - **Trusting the parser's duplicate-key behaviour.** Rejected. The shared parser keeps the last duplicate, so the store relies on the canonical round-trip instead.
