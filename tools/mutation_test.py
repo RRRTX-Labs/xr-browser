@@ -49,6 +49,7 @@ EXIT_PASS, EXIT_FAIL, EXIT_USAGE = 0, 1, 2
 # to keep per-mutant runtime low). The wall-clock fuzz suites stay OUT of the
 # per-mutant maps (unit budgets + the 600 s evidence campaigns cover them).
 DEFAULT_TARGET = "policy"
+SUITE_TIMEOUT_S = 120  # per suite; run() kills the child when it expires
 SUITE_MAP = SUITE_MAPS[DEFAULT_TARGET]  # keeps gen_mutants' call site simple
 
 # One mutation per (line, operator-instance): operator name, regex, rewrite.
@@ -150,13 +151,17 @@ def run_suites(tmp: Path, target: str, suites: list[str],
     logs = []
     cwd = tmp / target / "tests"
     for s in suites:
-        r = subprocess.run(
-            [str(cwd / "build" / s)],
-            capture_output=True, text=True, timeout=120,
-            cwd=cwd,
-            env={"XR_BROWSER_ROOT": vectors_env,
-                 "PATH": "/usr/bin:/bin:/usr/local/bin"},
-        )
+        try:
+            r = subprocess.run(
+                [str(cwd / "build" / s)],
+                capture_output=True, text=True, timeout=SUITE_TIMEOUT_S,
+                cwd=cwd,
+                env={"XR_BROWSER_ROOT": vectors_env,
+                     "PATH": "/usr/bin:/bin:/usr/local/bin"},
+            )
+        except subprocess.TimeoutExpired:  # P15-CLOSE C11: a hang is a kill,
+            logs.append(f"[{s}] TIMEOUT after {SUITE_TIMEOUT_S} s")  # not a crash
+            return True, "\n".join(logs)
         logs.append(f"[{s}] rc={r.returncode}\n{(r.stdout + r.stderr)[-800:]}")
         if r.returncode != 0:
             return True, "\n".join(logs)  # killed
@@ -266,7 +271,8 @@ def main(argv: list[str]) -> int:
                     deny_guard_killed += 1
             if was_killed:
                 killed += 1
-                m["disposition"] = "killed(test)"
+                m["disposition"] = ("killed(timeout)" if "] TIMEOUT after "
+                                    in run_log else "killed(test)")
             else:
                 survived += 1
                 m["disposition"] = "SURVIVED"
@@ -291,7 +297,8 @@ def main(argv: list[str]) -> int:
             "deny_guard_killed": deny_guard_killed,
             "deny_guard_survivors": deny_guard_total - deny_guard_killed,
             "sampled": sampled, "seed": args.seed,
-            "truncated_by_timebox": truncated,
+            "truncated_by_timebox": truncated, "killed_by_timeout": sum(
+                m.get("disposition") == "killed(timeout)" for m in mutants),
             "suites": sorted({s for m in mutants for s in m["suites"]}),
             "survivors": [{k: m[k] for k in (
                 "target", "file", "line", "operator", "orig", "mutated",

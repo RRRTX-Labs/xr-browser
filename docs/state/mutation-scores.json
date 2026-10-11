@@ -4,7 +4,7 @@
     "commands": {
       "killed": 215,
       "mutants": 219,
-      "note": "P14-CLOSE C-3 RE-SCORE (2026-10-10). The roster gained identities.page (commands/core/roster_v1.json; availability.cc changed in a comment only), so commands/core/ changed and the FULL matrix had to run again. On the fixed harness (xr-browser 3fe8d7e and b6cd40f, 2026-10-09: stale objects and unrestored builds counted false kills) the unchanged core first scored 193/219 = 88.13% with deny-guard 4/8, a FAIL (evidence/P14/logs/t-mutation-commands-c3-rescore.json). So the 219/219 recorded at 62b2c92 (P11-T6) was a false-kill artifact, like identity's. Tests were added at xr-core 5ffa695 (no behavior change: descriptor refusal text, registry KnownId / tier-1 refusal text / FromJson refusals, a NUL matcher query, every shortcuts Load outcome and every Save failure path). The FULL matrix (sampled:false, seed 20261010) then scored 215/219 = 98.17%, deny-guard 8/8, PASS. Four equivalent survivors remain (dispositions below). The P11 transcript stays at evidence/P11/logs/t6-mutation-commands.json.",
+      "note": "P15-CLOSE C11 RE-SCORE (2026-10-11). P15-CLOSE C5 added settings.permissions to commands/core/roster_v1.json (xr-core 35c998a), so commands/core/ changed after the 5ffa695 record and mutation_freshness went stale. The FULL matrix (sampled:false, seed 20261010, gate 90) ran again at xr-core c9c51d8 on the fixed harness: 215/219 = 98.17%, deny-guard 8/8, PASS, not truncated. The four survivors are the same four lines as at 5ffa695, and their dispositions still hold at this tree (re-read for C11: registry.cc assigns each order from the registry size at registration, so orders stay unique with 28 commands). Previous record: P14-CLOSE C-3, 215/219 at 5ffa695 (evidence/P14/logs/t-mutation-commands-c3.json); the P11 transcript stays at evidence/P11/logs/t6-mutation-commands.json.",
       "score_pct": 98.17,
       "seed": 20261010,
       "survivors": [
@@ -29,8 +29,8 @@
           "disposition": "equivalent-mutant: Load initializes `exists` to true instead of false. ReadAll writes *exists = false as its first statement, so the initializer is never read."
         }
       ],
-      "transcript": "evidence/P14/logs/t-mutation-commands-c3.json",
-      "xr_core_commit": "5ffa695b7a24146595f25acdcfa2b74aefec2658"
+      "transcript": "evidence/P15/logs/mutation-commands-c9c51d8.json",
+      "xr_core_commit": "c9c51d89bed9d25056f9b5c3e8798e2a01588374"
     },
     "common": {
       "killed": 199,
@@ -74,14 +74,85 @@
       "xr_core_commit": "4f3be7a8fe863d19a404162b43e2bc19c68a5baa"
     },
     "settings": {
-      "killed": 286,
-      "mutants": 286,
-      "note": "re-arm at the T0-b dedup pin: 485->286 mutants (the five deduped files now live in common/core, scored there); 100% killed.",
-      "score_pct": 100.0,
+      "killed": 278,
+      "mutants": 292,
+      "note": "P15-CLOSE C11 RE-SCORE (2026-10-11). P15-CLOSE C5 changed settings/core (settings_schema_v1.json and the schema/search sources), so the 85289cd record went stale. The FULL matrix (sampled:false, seed 20260911, gate 90) on the fixed harness first scored 242/290 = 83.45%, deny-guard 13/18, a FAIL, at xr-core c9c51d8 (evidence/P15/logs/mutation-settings-c9c51d8.json). So the 286/286 at 85289cd was a false-kill result of the pre-3fe8d7e harness, like identity and commands in P14-CLOSE. Tests were added at a94aff9 (counters, search, router, sections, schema; 277/292, deny-guard 18/19, evidence/P15/logs/mutation-settings-a94aff9.json). 30adb62 split out CounterStore::SaveAt(today) with no behaviour change, so Save's unparsable-day refusal is reachable. FULL at 30adb62: 278/292 = 95.21%, deny-guard 19/19, PASS, not truncated, 1 kill by suite timeout. The 14 survivors are argued equivalent below. The P11 transcript stays at evidence/P11/logs/t1-mutation-settings.json.",
+      "score_pct": 95.21,
       "seed": 20260911,
-      "survivors": [],
-      "transcript": "evidence/P11/logs/t1-mutation-settings.json",
-      "xr_core_commit": "85289cd719d72b0dc76ac3e38f758bccae0e9362"
+      "survivors": [
+        {
+          "id": "core/counters.cc:83 AOR:0 -> 1",
+          "operator": "AOR:0 -> 1",
+          "disposition": "equivalent-mutant: RetentionCutoff initializes y to 1 instead of 0. sscanf assigns y on the success path, and the failure path returns before y is read."
+        },
+        {
+          "id": "core/counters.cc:104 BOOL:false -> true",
+          "operator": "BOOL:false -> true",
+          "disposition": "equivalent-mutant: Load initializes `exists` to true. ReadAll writes *exists = false as its first statement, so the initializer is never read."
+        },
+        {
+          "id": "core/search.cc:48 ROR:< -> <=",
+          "operator": "ROR:< -> <=",
+          "disposition": "equivalent-mutant: LowerAscii also lowercases byte 0x80. The core never calls setlocale, so std::tolower runs in the \"C\" locale and returns 0x80 unchanged."
+        },
+        {
+          "id": "core/search.cc:54 LOR:|| -> &&",
+          "operator": "LOR:|| -> &&",
+          "disposition": "equivalent-mutant: the empty-input guard `||` becomes `&&`. When exactly one of word/token is empty, every later branch still returns 0: token != word, the prefix and subsequence tiers both need word.size() >= 3 and a token at least that long, and a non-empty word is never a subsequence of an empty token."
+        },
+        {
+          "id": "core/search.cc:56 ROR:> -> >=",
+          "operator": "ROR:> -> >=",
+          "disposition": "equivalent-mutant: the prefix tier's `token.size() > word.size()` becomes `>=`. An equal-length prefix means token == word, which already returned 3 on the line above."
+        },
+        {
+          "id": "core/search.cc:67 ROR:<= -> <",
+          "operator": "ROR:<= -> <",
+          "disposition": "equivalent-mutant: WordFieldBest's split loop `<=` becomes `<`. The only iteration removed scores the empty trailing token (or an empty field), and WordTokenScore returns 0 for an empty token, which never raises best (best starts at 0)."
+        },
+        {
+          "id": "core/search.cc:71 ROR:> -> >=",
+          "operator": "ROR:> -> >=",
+          "disposition": "equivalent-mutant: running maximum `>` becomes `>=`. Replacing best with an equal value changes nothing."
+        },
+        {
+          "id": "core/search.cc:78 ROR:> -> >=",
+          "operator": "ROR:> -> >=",
+          "disposition": "equivalent-mutant: running maximum `>` becomes `>=` (the joined-field comparison). Replacing best with an equal value changes nothing."
+        },
+        {
+          "id": "core/search.cc:93 ROR:<= -> <",
+          "operator": "ROR:<= -> <",
+          "disposition": "equivalent-mutant: BuildIndex's split loop `<=` becomes `<`. The only iteration removed yields an empty token, which the loop already skips (`if (!tok.empty())`)."
+        },
+        {
+          "id": "core/search.cc:133 ROR:<= -> <",
+          "operator": "ROR:<= -> <",
+          "disposition": "equivalent-mutant: MatchQuery's word-split loop `<=` becomes `<`. The only iteration removed yields an empty word, which the loop already skips (`!w.empty() && w.size() > 1`)."
+        },
+        {
+          "id": "core/search.cc:151 ROR:> -> >=",
+          "operator": "ROR:> -> >=",
+          "disposition": "equivalent-mutant: running maximum `>` becomes `>=` over field tokens. Replacing best with an equal value changes nothing."
+        },
+        {
+          "id": "core/search.cc:154 ROR:> -> >=",
+          "operator": "ROR:> -> >=",
+          "disposition": "equivalent-mutant: running maximum `>` becomes `>=` over the joined field. Replacing best with an equal value changes nothing."
+        },
+        {
+          "id": "core/search.cc:166 ROR:< -> <=",
+          "operator": "ROR:< -> <=",
+          "disposition": "equivalent-mutant: `phrase < 150` becomes `<=`. At that point phrase is 0 or 150 (300 breaks out of the loop), so at 150 the mutant assigns 150 again."
+        },
+        {
+          "id": "core/search.cc:181 ROR:< -> <=",
+          "operator": "ROR:< -> <=",
+          "disposition": "equivalent-mutant: the tie-break `a.order < b.order` becomes `<=`. BuildIndex assigns order from a counter, so orders are unique per entry and no two results compare equal on order."
+        }
+      ],
+      "transcript": "evidence/P15/logs/mutation-settings-30adb62.json",
+      "xr_core_commit": "30adb622ae823efba169f7613f871f7433d69695"
     },
     "shield": {
       "killed": 396,
@@ -168,7 +239,7 @@
       "survivors": [],
       "transcript": "evidence/P15/logs/mutation-permissions-fixed-4d6672d.txt",
       "xr_core_commit": "4d6672d04876b4daa29bd10355de0d3801c8f9b5",
-      "note": "P15 re-measured at xr-core 4d6672d under the fixed harness (commit 3fe8d7e): sampled matrix (--sample 90 --seed 20260908) 90/90 killed, deny-guard 23/23, PASS. The earlier 90/90 at 8b26589 used the buggy harness; the number holds under the fixed one. NOT the full matrix: the full run is HG-28 (farm)."
+      "note": "P15 re-measured at xr-core 4d6672d under the fixed harness (commit 3fe8d7e): sampled matrix (--sample 90 --seed 20260908) 90/90 killed, deny-guard 23/23, PASS. The earlier 90/90 at 8b26589 used the buggy harness; the number holds under the fixed one. NOT the full matrix: the full run is HG-28 (farm). P15-CLOSE C11 (2026-10-11): permissions/core is unchanged since 4d6672d, so the record is fresh. The same sample was re-run at xr-core 30adb62: 90/90, deny-guard 23/23, PASS (evidence/P15/logs/mutation-permissions-30adb62.json)."
     }
   },
   "schema": "xr-mutation-scores",

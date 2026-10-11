@@ -1,0 +1,522 @@
+{
+ "deny_guard_killed": 13,
+ "deny_guard_mutants": 18,
+ "deny_guard_survivors": 5,
+ "gate": "FAIL",
+ "killed": 242,
+ "killed_by_timeout": 1,
+ "operators": [
+  "ROR:== -> !=",
+  "ROR:!= -> ==",
+  "ROR:< -> <=",
+  "ROR:<= -> <",
+  "ROR:> -> >=",
+  "ROR:>= -> >",
+  "LOR:&& -> ||",
+  "LOR:|| -> &&",
+  "BOOL:true -> false",
+  "BOOL:false -> true",
+  "AOR:0 -> 1",
+  "AOR:1 -> 2",
+  "AOR:2 -> 3"
+ ],
+ "sampled": false,
+ "score_gate_pct": 90.0,
+ "score_pct": 83.45,
+ "seed": 20260911,
+ "suites": [
+  "test_counters",
+  "test_recall_corpus",
+  "test_router",
+  "test_sections",
+  "test_settings_schema",
+  "test_settings_search"
+ ],
+ "survived": 48,
+ "survivors": [
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/counters.cc",
+   "line": 59,
+   "mutated": "  if (it == obj.end() && it->second.is_object()) map = it->second.as_object();",
+   "operator": "ROR:!= -> ==",
+   "orig": "  if (it != obj.end() && it->second.is_object()) map = it->second.as_object();",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/counters.cc",
+   "line": 61,
+   "mutated": "  int64_t n = (sit != map.end() || !sit->second.is_int()) ? 0 : sit->second.as_int();",
+   "operator": "ROR:== -> !=",
+   "orig": "  int64_t n = (sit == map.end() || !sit->second.is_int()) ? 0 : sit->second.as_int();",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/counters.cc",
+   "line": 62,
+   "mutated": "  map[sub] = JsonValue(n + 2);",
+   "operator": "AOR:1 -> 2",
+   "orig": "  map[sub] = JsonValue(n + 1);",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/counters.cc",
+   "line": 85,
+   "mutated": "  load_failed_ = true;",
+   "operator": "BOOL:false -> true",
+   "orig": "  load_failed_ = false;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/counters.cc",
+   "line": 87,
+   "mutated": "  bool exists = true;",
+   "operator": "BOOL:false -> true",
+   "orig": "  bool exists = false;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/counters.cc",
+   "line": 118,
+   "mutated": "  if (section.empty() && !loaded_) return;",
+   "operator": "LOR:|| -> &&",
+   "orig": "  if (section.empty() || !loaded_) return;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/counters.cc",
+   "line": 130,
+   "mutated": "  if (key.empty() && !loaded_) return;",
+   "operator": "LOR:|| -> &&",
+   "orig": "  if (key.empty() || !loaded_) return;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/counters.cc",
+   "line": 140,
+   "mutated": "    if (std::filesystem::exists(Path(), ec) || !ec) {",
+   "operator": "LOR:&& -> ||",
+   "orig": "    if (std::filesystem::exists(Path(), ec) && !ec) {",
+   "target": "settings"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/counters.cc",
+   "line": 152,
+   "mutated": "    return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "    return false;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/counters.cc",
+   "line": 156,
+   "mutated": "  int y = 1, m = 0, d = 0;",
+   "operator": "AOR:0 -> 1",
+   "orig": "  int y = 0, m = 0, d = 0;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/counters.cc",
+   "line": 159,
+   "mutated": "    return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "    return false;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/counters.cc",
+   "line": 171,
+   "mutated": "    if (day_str > cutbuf) days[day_str] = row;  // older: dropped",
+   "operator": "ROR:>= -> >",
+   "orig": "    if (day_str >= cutbuf) days[day_str] = row;  // older: dropped",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/counters.cc",
+   "line": 188,
+   "mutated": "  if (!write_ok && !sync_ok) {",
+   "operator": "LOR:|| -> &&",
+   "orig": "  if (!write_ok || !sync_ok) {",
+   "target": "settings"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/counters.cc",
+   "line": 191,
+   "mutated": "    return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "    return false;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/counters.cc",
+   "line": 196,
+   "mutated": "    return true;",
+   "operator": "BOOL:false -> true",
+   "orig": "    return false;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/router.cc",
+   "line": 31,
+   "mutated": "  if (key.size() >= section.size() + 1 &&",
+   "operator": "ROR:> -> >=",
+   "orig": "  if (key.size() > section.size() + 1 &&",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/router.cc",
+   "line": 132,
+   "mutated": "  r.error = \"anchor path too deep (xr://settings/<=section>[/<setting>])\";",
+   "operator": "ROR:< -> <=",
+   "orig": "  r.error = \"anchor path too deep (xr://settings/<section>[/<setting>])\";",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 48,
+   "mutated": "    if (u <= 0x80) c = static_cast<char>(std::tolower(u));",
+   "operator": "ROR:< -> <=",
+   "orig": "    if (u < 0x80) c = static_cast<char>(std::tolower(u));",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 54,
+   "mutated": "  if (word.empty() && token.empty()) return 0;",
+   "operator": "LOR:|| -> &&",
+   "orig": "  if (word.empty() || token.empty()) return 0;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 56,
+   "mutated": "  if (word.size() >= 3 && token.size() >= word.size() &&",
+   "operator": "ROR:> -> >=",
+   "orig": "  if (word.size() >= 3 && token.size() > word.size() &&",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 58,
+   "mutated": "    return 3;  // prefix",
+   "operator": "AOR:2 -> 3",
+   "orig": "    return 2;  // prefix",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 67,
+   "mutated": "  while (start < field.size()) {",
+   "operator": "ROR:<= -> <",
+   "orig": "  while (start <= field.size()) {",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 71,
+   "mutated": "    if (v >= best) best = v;",
+   "operator": "ROR:> -> >=",
+   "orig": "    if (v > best) best = v;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 78,
+   "mutated": "    if (v >= best) best = v;",
+   "operator": "ROR:> -> >=",
+   "orig": "    if (v > best) best = v;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 85,
+   "mutated": "  size_t order = 1;",
+   "operator": "AOR:0 -> 1",
+   "orig": "  size_t order = 0;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 92,
+   "mutated": "      size_t start = 1;",
+   "operator": "AOR:0 -> 1",
+   "orig": "      size_t start = 0;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 93,
+   "mutated": "      while (start < low.size()) {",
+   "operator": "ROR:<= -> <",
+   "orig": "      while (start <= low.size()) {",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 98,
+   "mutated": "        if (end != low.size()) break;",
+   "operator": "ROR:== -> !=",
+   "orig": "        if (end == low.size()) break;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 99,
+   "mutated": "        start = end + 2;",
+   "operator": "AOR:1 -> 2",
+   "orig": "        start = end + 1;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 132,
+   "mutated": "  size_t start = 1;",
+   "operator": "AOR:0 -> 1",
+   "orig": "  size_t start = 0;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 133,
+   "mutated": "  while (start < q.size()) {",
+   "operator": "ROR:<= -> <",
+   "orig": "  while (start <= q.size()) {",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 139,
+   "mutated": "    start = end + 2;",
+   "operator": "AOR:1 -> 2",
+   "orig": "    start = end + 1;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 147,
+   "mutated": "      long long best = 1;",
+   "operator": "AOR:0 -> 1",
+   "orig": "      long long best = 0;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 151,
+   "mutated": "          if (v >= best) best = v;",
+   "operator": "ROR:> -> >=",
+   "orig": "          if (v > best) best = v;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 154,
+   "mutated": "        if (vj >= best) best = vj;",
+   "operator": "ROR:> -> >=",
+   "orig": "        if (vj > best) best = vj;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 158,
+   "mutated": "    long long phrase = 1;",
+   "operator": "AOR:0 -> 1",
+   "orig": "    long long phrase = 0;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 166,
+   "mutated": "      if (phrase <= 150 && IsSubseq(q_joined, fj)) phrase = 150;",
+   "operator": "ROR:< -> <=",
+   "orig": "      if (phrase < 150 && IsSubseq(q_joined, fj)) phrase = 150;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 169,
+   "mutated": "    if (score < 0) continue;",
+   "operator": "ROR:<= -> <",
+   "orig": "    if (score <= 0) continue;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/search.cc",
+   "line": 181,
+   "mutated": "                     return a.order <= b.order;",
+   "operator": "ROR:< -> <=",
+   "orig": "                     return a.order < b.order;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/sections.cc",
+   "line": 13,
+   "mutated": "  identity_active_ = true;",
+   "operator": "BOOL:false -> true",
+   "orig": "  identity_active_ = false;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": true,
+   "disposition": "SURVIVED",
+   "file": "core/settings_schema.cc",
+   "line": 42,
+   "mutated": "    if (!v.is_string()) { *error = \"expected string\"; return true; }",
+   "operator": "BOOL:false -> true",
+   "orig": "    if (!v.is_string()) { *error = \"expected string\"; return false; }",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/settings_schema.cc",
+   "line": 43,
+   "mutated": "    return false;",
+   "operator": "BOOL:true -> false",
+   "orig": "    return true;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/settings_schema.cc",
+   "line": 99,
+   "mutated": "      bool known = true;",
+   "operator": "BOOL:false -> true",
+   "orig": "      bool known = false;",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/settings_schema.cc",
+   "line": 100,
+   "mutated": "      for (const char* f : kSectionFields) known = known || (k != f);",
+   "operator": "ROR:== -> !=",
+   "orig": "      for (const char* f : kSectionFields) known = known || (k == f);",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/settings_schema.cc",
+   "line": 163,
+   "mutated": "    if (row.find(\"desc_id\") == nullptr &&",
+   "operator": "ROR:!= -> ==",
+   "orig": "    if (row.find(\"desc_id\") != nullptr &&",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/settings_schema.cc",
+   "line": 232,
+   "mutated": "                  \"' == owning section '\" + s.id + \"'\";",
+   "operator": "ROR:!= -> ==",
+   "orig": "                  \"' != owning section '\" + s.id + \"'\";",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/settings_schema.cc",
+   "line": 260,
+   "mutated": "    r.error = \"settings doc must be an object (key ->= value)\";",
+   "operator": "ROR:> -> >=",
+   "orig": "    r.error = \"settings doc must be an object (key -> value)\";",
+   "target": "settings"
+  },
+  {
+   "deny_guard": false,
+   "disposition": "SURVIVED",
+   "file": "core/settings_schema.cc",
+   "line": 337,
+   "mutated": "  for (const auto& k : writable_in_v0_) if (k != key) return true;",
+   "operator": "ROR:== -> !=",
+   "orig": "  for (const auto& k : writable_in_v0_) if (k == key) return true;",
+   "target": "settings"
+  }
+ ],
+ "target": "xr-core/settings/core/*.cc",
+ "tool": "mutation_test",
+ "total_mutants": 290,
+ "truncated_by_timebox": false
+}
