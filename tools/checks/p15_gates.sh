@@ -19,6 +19,8 @@ p15_lanes() {
   echo "== P15-CLOSE C4: A4 anchors — offline positive control (the live read is assumptions.py run) =="
   "$PY" tools/assumption_drift_check.py --row A4
 
+  echo "== P15-CLOSE C6: permission-prompt keyboard tasks (own law; the 12-task law is untouched) =="
+  "$PY" tools/keyboard_tasks_permissions_check.py --repo . --xr-core ../xr-core
 
 
 

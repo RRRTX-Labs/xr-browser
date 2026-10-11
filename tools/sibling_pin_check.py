@@ -137,6 +137,7 @@ REGISTER: dict[str, tuple[str, str]] = {
     "tools/mutation_test.py": ("arg-only", "explicit target tree"),
     "tools/secret_scan.py": ("arg-only", "explicit scan roots"),
     "tools/permission_host_parity.py": ("arg-only", "P15-CLOSE C2: explicit --xr-core (host binary + fake)"),
+    "tools/keyboard_tasks_permissions_check.py": ("arg-only", "P15-CLOSE C6: explicit --xr-core (the fake's CAPS)"),
     "build/upstream/rebase_bot.py": ("probe", "clones/checkouts the pinned sibling itself"),
     "build/upstream/fork_health.py": ("probe", "live fork probe"),
     "build/upstream/promotion.py": ("probe", "reads the pinned sibling's manifest"),

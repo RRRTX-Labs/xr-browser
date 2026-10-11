@@ -1,0 +1,59 @@
+# Permission-prompt keyboard tasks (P15-CLOSE C6, option (a); ADR-0051 addendum).
+#
+# The plan §11.6 list of 12 core tasks lives in docs/qa/keyboard-tasks.yaml and
+# its 12-task law (tools/keyboard_tasks_check.py) is untouched. The prompt-focus
+# task the P15 brief asks for lives HERE, with its own law
+# (tools/keyboard_tasks_permissions_check.py) and its own negative
+# (tools/negatives/p15c_c6.sh).
+#
+# One task per capability of the permission overlay core. The count is DERIVED
+# from the core's capability set (xr-core/fakes/permissions.py CAPS, held
+# byte-identical to the C++ host by tools/permission_host_parity.py) — there is
+# no count literal. Each task is presentation as DATA:
+#   buttons      the prompt's button order, first to last;
+#   focus_first  the button keyboard focus lands on when the prompt opens
+#                (must be buttons[0]; ONE-TIME for a sensitive capability,
+#                plan line 808);
+#   scope_copy_key  the inline copy key an identity-scoped prompt carries
+#                (plan line 809).
+# xr-core/permissions/tests/test_present.cc reads this file and asserts every
+# row equals the core (ButtonOrder / IsSensitive / BuildPrompt). Execution of
+# the tasks on a built browser is farm work (HG-31); this file is the LIST.
+schema_version: 1
+tasks:
+  - id: kp-01
+    task: "A site asks for location: focus lands on Allow this time; Enter grants once, Tab reaches the other scopes and Deny"
+    surface: "permission prompt"
+    owner: "A lead (Platform/Chromium) — a11y track"
+    capability: geolocation
+    sensitive: true
+    buttons: [once, session, 7d, deny]
+    focus_first: once
+    scope_copy_key: perm.scope.only_in_identity
+  - id: kp-02
+    task: "A site asks for the camera: focus lands on Allow this time; Enter grants once, Escape dismisses without a grant"
+    surface: "permission prompt"
+    owner: "A lead (Platform/Chromium) — a11y track"
+    capability: camera
+    sensitive: true
+    buttons: [once, session, 7d, deny]
+    focus_first: once
+    scope_copy_key: perm.scope.only_in_identity
+  - id: kp-03
+    task: "A site asks for the microphone: focus lands on Allow this time; the identity scope line is read before the buttons"
+    surface: "permission prompt"
+    owner: "A lead (Platform/Chromium) — a11y track"
+    capability: microphone
+    sensitive: true
+    buttons: [once, session, 7d, deny]
+    focus_first: once
+    scope_copy_key: perm.scope.only_in_identity
+  - id: kp-04
+    task: "A site asks to send notifications: focus lands on Deny; Tab reaches the allow scopes"
+    surface: "permission prompt"
+    owner: "A lead (Platform/Chromium) — a11y track"
+    capability: notifications
+    sensitive: false
+    buttons: [deny, once, session, 7d]
+    focus_first: deny
+    scope_copy_key: perm.scope.only_in_identity
