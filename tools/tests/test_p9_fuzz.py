@@ -56,20 +56,30 @@ def test_seed_corpus_check_green() -> None:
 
 
 def test_seed_corpus_every_target_seeded() -> None:
-    for t in ("policy-core", "commands-core", "settings-core", "themes-core",
-              "cosmetic-core", "identity-core"):
-        cdir = REPO / "build" / "fuzz" / "corpus" / t
-        assert cdir.is_dir() and any(cdir.iterdir()), f"{t} unseeded"
+    # DERIVED from fleet.yaml (P15-CLOSE C3): no hand-listed id set, so a new
+    # row cannot land with an empty corpus and still pass.
+    import yaml
+    doc = yaml.safe_load((REPO / "build/fuzz/fleet.yaml").read_text())
+    assert doc["targets"], "fleet.yaml lists no targets (zero-case law)"
+    for t in doc["targets"]:
+        cdir = REPO / t["corpus_dir"]
+        assert cdir.is_dir() and any(cdir.iterdir()), f"{t['id']} unseeded"
 
 
 def test_fleet_yaml_discovers_every_core() -> None:
     import yaml
     doc = yaml.safe_load((REPO / "build/fuzz/fleet.yaml").read_text())
     ids = [t["id"] for t in doc["targets"]]
-    # six since P14 (identity): one row per C++ core that exists — a new
-    # core without a fleet row is invisible to the never-crash law.
-    assert ids == ["policy-core", "commands-core", "settings-core",
-                   "themes-core", "cosmetic-core", "identity-core"]
+    # One row per fuzzed C++ core; the order is history (P6..P15-CLOSE), and
+    # the rows that exist may never silently drop out. No count literal: the
+    # set is the data (P15-CLOSE C3 added permissions-overlay).
+    assert ids[:6] == ["policy-core", "commands-core", "settings-core",
+                       "themes-core", "cosmetic-core", "identity-core"]
+    assert "permissions-overlay" in ids and len(ids) == len(set(ids))
+    row = next(t for t in doc["targets"] if t["id"] == "permissions-overlay")
+    assert row["core"] == "permissions" and row["owner_phase"] == "P15"
+    assert row["runner_makefile"] == "../xr-core/permissions/tests"
+    assert row["runner"] == "make-test"
     # libFuzzer entry points must exist for every target (never referenced
     # before existing)
     for t in doc["targets"]:

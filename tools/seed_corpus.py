@@ -89,7 +89,25 @@ def derive(repo: Path) -> dict[str, list[tuple[str, str]]]:
     # {method,args} corpus cases — byte-copies of committed artifacts (the
     # same 15 cases test_p14_identity.py replays for host-vs-fake parity).
     seeds["identity-core"] = parity_seeds(repo, core, "identity", "identity")
+    # P15-CLOSE C3: the seventh fleet target. The permission overlay fuzzer
+    # eats STORED documents, so its seeds are the distinct `args.store` texts
+    # of the permissions parity corpus (first occurrence wins) — byte-copies
+    # of committed artifacts, canonical and hostile alike.
+    seeds["permissions-overlay"] = permission_store_seeds(repo)
     return seeds
+
+
+def permission_store_seeds(repo: Path) -> list[tuple[str, str]]:
+    doc = json.loads((repo / "tools/parity/corpus-permissions.json")
+                     .read_text(encoding="utf-8"))
+    out: list[tuple[str, str]] = []
+    seen: set[str] = set()
+    for case in doc["cases"]:
+        store = (case.get("args") or {}).get("store")
+        if isinstance(store, str) and store.strip() not in seen:
+            seen.add(store.strip())
+            out.append((f"permissions-{case.get('id')}.json", store.strip()))
+    return out
 
 
 def main(argv: list[str]) -> int:

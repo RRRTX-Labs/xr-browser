@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """tools/fuzz_fleet.py — the fuzz fleet runner (P9-T8).
 
-Discovers the five fleet targets from build/fuzz/fleet.yaml (data, not code)
-— four in-house C++ fuzzers (commands/settings/themes/cosmetic) plus the
-python policy harness — and runs each seeded fuzzer under the timebox law:
+Discovers the fleet targets from build/fuzz/fleet.yaml (data, not code; no
+count literal) — the in-house C++ fuzzers plus the python policy harness —
+and runs each seeded fuzzer under the timebox law:
 >=60 s in the gate, >=600 s in evidence (XR_FUZZ_SECONDS), with a hard
 --min-iters floor — a lane that executed nothing is a FAILURE (empty-run
 law). Collects iters/seeds/violations per target.
@@ -95,7 +95,7 @@ def main(argv: list[str]) -> int:
     if shutil.which("g++") is None or shutil.which("make") is None:
         return skip_visible("fuzz_fleet",
                             "SKIP (tool absent: g++/make) — needed for: the "
-                            "five fleet targets (four in-house C++ fuzzers + "
+                            "build/fuzz/fleet.yaml targets (in-house C++ fuzzers + "
                             "the policy harness); local hint: "
                             "apt-get install g++ make (build-essential)")
 

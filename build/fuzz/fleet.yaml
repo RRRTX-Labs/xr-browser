@@ -1,5 +1,6 @@
 # The fuzz fleet (P9-T8) — one row per C++ core that exists today
-# (six since P14: identity).
+# (P14 added identity; P15-CLOSE added permissions-overlay). No count
+# literal lives here or in the tests: every consumer derives the set.
 # `runner` is the in-house seeded fuzzer (g++ here AND the Makefile lane);
 # `libfuzzer_target` is the CI-side clang/libFuzzer entry (build/fuzz/
 # libfuzzer/, built only where clang exists — never in this sandbox).
@@ -67,6 +68,17 @@ targets:
     libfuzzer_target: "identity_core_fuzz"
     corpus_dir: "build/fuzz/corpus/identity-core"
     owner_phase: "P14"
+  # P15-CLOSE C3: the permission overlay core (store, ops, sweep, projection)
+  # plus hostile store bytes; invariants asserted every step — see
+  # xr-core/permissions/tests/test_fuzz.cc. libFuzzer side needs clang (HG-28).
+  - id: permissions-overlay
+    core: permissions
+    runner_makefile: "../xr-core/permissions/tests"
+    runner_binary: "build/test_fuzz"
+    runner: "make-test"
+    libfuzzer_target: "permissions_overlay_fuzz"
+    corpus_dir: "build/fuzz/corpus/permissions-overlay"
+    owner_phase: "P15"
 not_yet:
   # No Rust code exists and rustc is absent here — the plan's Rust targets are
   # accounted for as not-yet with their owning phase (never fabricated).
