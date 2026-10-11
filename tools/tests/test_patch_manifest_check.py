@@ -78,7 +78,8 @@ def test_real_tree_is_clean() -> None:
     p = _run(XR_CORE)
     assert p.returncode == 0, p.stdout
     # Counts, not just PASS: the zero-case law.
-    assert "patches: 4" in p.stdout and "files: 21" in p.stdout, p.stdout
+    # P15-CLOSE C7: +0400-permission-prompt-order (1 file).
+    assert "patches: 5" in p.stdout and "files: 22" in p.stdout, p.stdout
     assert "drifted: 0" in p.stdout, p.stdout
 
 

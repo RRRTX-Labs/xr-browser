@@ -11,7 +11,7 @@ from the xr-core patch manifest at the DEPS pin. Config source: docs/plans/XR_BR
 | extension_chokepoint | 0 | 0 | 2 |
 | hook_points | 0 | 0 | 45 |
 | network_seams | 5 | 1 | 20 |
-| ui | 9 | 1 | 35 |
-| **total** | **21** | **4** | **150** |
+| ui | 10 | 2 | 35 |
+| **total** | **22** | **5** | **150** |
 
-_Total 21 / 150 upstream-touched files; 4 patch entries. The budget unit is FILES, derived from each patch's diff headers — the count is published in every release note (Plan §12.2)._ (regenerated: see git log)
+_Total 22 / 150 upstream-touched files; 5 patch entries. The budget unit is FILES, derived from each patch's diff headers — the count is published in every release note (Plan §12.2)._ (regenerated: see git log)

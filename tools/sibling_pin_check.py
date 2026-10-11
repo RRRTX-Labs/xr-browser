@@ -148,6 +148,7 @@ REGISTER: dict[str, tuple[str, str]] = {
     "build/webui/patch_roundtrip.py": ("arg-only", "explicit --xr-core"),
     "build/webui/cosmetic_seam_roundtrip.py": ("arg-only", "explicit --xr-core"),
     "build/webui/shield_seam_roundtrip.py": ("arg-only", "explicit --xr-core"),
+    "build/webui/permission_patch_roundtrip.py": ("arg-only", "P15-CLOSE C7: explicit --xr-core"),
     "tools/negatives/p13_c02.sh": ("test", "fixture: PLANTS an unclassified sibling reader in a scratch tree (case 4) — the pattern in this file is the defect being reproduced, which is why the audit classified it the moment it landed"),
     "tools/negatives/p11_t5.sh": ("test", "fixture: builds a scratch sibling"),
     "tools/negatives/p11_t6.sh": ("test", "fixture: builds a scratch sibling"),

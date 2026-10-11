@@ -22,6 +22,8 @@ p15_lanes() {
   echo "== P15-CLOSE C6: permission-prompt keyboard tasks (own law; the 12-task law is untouched) =="
   "$PY" tools/keyboard_tasks_permissions_check.py --repo . --xr-core ../xr-core
 
+  echo "== P15-CLOSE C7: permission-prompt order patch 0400 round-trips at the pin (regenerate + byte-compare) =="
+  "$PY" build/webui/permission_patch_roundtrip.py --xr-core ../xr-core --check
 
 
 }
