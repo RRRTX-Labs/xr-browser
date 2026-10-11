@@ -52,6 +52,18 @@ HOST_DRILLS: dict[str, dict[str, Any]] = {
         "seed": ["apply", '{"name":"light"}'],
         "state": ["xr-themes-state.json"],
     },
+    # P15-CLOSE C2: the clock-owning permissions host (xr-core
+    # permissions/host). A 7d grant writes the store; the clock file carries
+    # the high-water mark, so a rolled-back clock never revives a grant.
+    "permissions": {
+        "core": "permissions",
+        "read": ["view"],
+        "write": ["grant", '{"identity":"xr:00000000-0000-4000-8000-0000000000a1",'
+                           '"domain":"example.com","capability":"camera","scope":"7d"}'],
+        "seed": ["grant", '{"identity":"xr:00000000-0000-4000-8000-0000000000a1",'
+                          '"domain":"seed.example","capability":"microphone","scope":"7d"}'],
+        "state": ["permissions-store.json", "permissions-clock.json"],
+    },
 }
 
 

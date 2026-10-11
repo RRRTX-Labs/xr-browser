@@ -42,6 +42,12 @@
    "id": "identity",
    "living_surface": "the P14 subcommand surface (provision/templates/ceremony/scheduler/binding/attribution) has no fake counterpart BY DESIGN \u2014 the policy_host precedent: covered by xr-core/identity/tests (the C++ suite) + tools/tests/test_p14_identity.py, recorded HERE as data, never a silent omission",
    "protocol": "../xr-core/identity/host_protocol.md"
+  },
+  {
+   "clock": "the host owns the clock (one read per mutating call when --as-of is absent); the fake reads none, so every parity case runs at the corpus' fixed as_of \u2014 the host's own clock path is proven by xr-core/permissions/tests/test_kill9.cc (real SIGKILL) and tools/kill_matrix.py, recorded HERE as data (P15-CLOSE C2)",
+   "corpus": "tools/parity/corpus-permissions.json",
+   "id": "permissions",
+   "protocol": "../xr-core/permissions/host_protocol.md"
   }
  ],
  "schema_version": 1

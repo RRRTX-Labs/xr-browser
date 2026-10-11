@@ -1,0 +1,613 @@
+{
+  "as_of": 1790000000000,
+  "cases": [
+    {
+      "args": {},
+      "expect": "ok",
+      "id": "view-empty",
+      "method": "view"
+    },
+    {
+      "args": {
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "view-populated",
+      "method": "view"
+    },
+    {
+      "args": {
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "view-spent-once-hidden",
+      "method": "view"
+    },
+    {
+      "args": {
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":true,\"revoked_at\":1790000000000,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "view-revoked-hidden",
+      "method": "view"
+    },
+    {
+      "args": {
+        "store": "{\"contract\":\"permission-store\",\"corrupt\":true}"
+      },
+      "expect": "ok",
+      "id": "view-corrupt-marker",
+      "method": "view"
+    },
+    {
+      "args": {
+        "store": "{\"contract\":\"permission-store\", \"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "view-noncanonical-whitespace-is-corrupt",
+      "method": "view"
+    },
+    {
+      "args": {
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5,\"next_seq\":9}"
+      },
+      "expect": "ok",
+      "id": "view-duplicate-key-is-corrupt",
+      "method": "view"
+    },
+    {
+      "args": {
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{\"sensors\":\"kAllow\"},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "view-extra-allow-is-corrupt",
+      "method": "view"
+    },
+    {
+      "args": {
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{\"midi\":\"kDeny\"},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "view-extra-deny-loads",
+      "method": "view"
+    },
+    {
+      "args": {
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400001,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "view-ttl-longer-than-7d-is-corrupt",
+      "method": "view"
+    },
+    {
+      "args": {
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":5,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "view-live-grant-with-revoked-at-is-corrupt",
+      "method": "view"
+    },
+    {
+      "args": {
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "view-duplicate-grant-id-is-corrupt",
+      "method": "view"
+    },
+    {
+      "args": {
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":2,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "view-version-2-is-corrupt",
+      "method": "view"
+    },
+    {
+      "args": {
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1.5,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "view-float-time-is-corrupt",
+      "method": "view"
+    },
+    {
+      "args": {
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\""
+      },
+      "expect": "ok",
+      "id": "view-truncated-is-corrupt",
+      "method": "view"
+    },
+    {
+      "args": {
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:caf\\u00e9\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:caf\\u00e9\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "view-non-ascii-identity",
+      "method": "view"
+    },
+    {
+      "args": {
+        "x": 1
+      },
+      "expect": "reject",
+      "id": "view-unknown-arg",
+      "method": "view"
+    },
+    {
+      "args": {
+        "store": {}
+      },
+      "expect": "reject",
+      "id": "view-store-not-string",
+      "method": "view"
+    },
+    {
+      "args": {
+        "capability": "geolocation",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "state": "kAllow"
+      },
+      "expect": "ok",
+      "id": "set-default-allow-new",
+      "method": "set-default"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "state": "kDeny",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "set-default-deny-existing",
+      "method": "set-default"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "state": "kAllow",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "set-default-no-change-no-row",
+      "method": "set-default"
+    },
+    {
+      "args": {
+        "capability": "sensors",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "state": "kAllow"
+      },
+      "expect": "reject",
+      "id": "set-default-bad-capability",
+      "method": "set-default"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "state": "allow"
+      },
+      "expect": "reject",
+      "id": "set-default-bad-state",
+      "method": "set-default"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "identity": "",
+        "state": "kAsk"
+      },
+      "expect": "reject",
+      "id": "set-default-empty-identity",
+      "method": "set-default"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "state": "kAsk",
+        "store": "{\"contract\":\"permission-store\",\"corrupt\":true}"
+      },
+      "expect": "reject",
+      "id": "set-default-corrupt-store-refused",
+      "method": "set-default"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1"
+      },
+      "expect": "reject",
+      "id": "set-default-missing-state",
+      "method": "set-default"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "domain": "example.com",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "scope": "once"
+      },
+      "expect": "ok",
+      "id": "grant-once",
+      "method": "grant"
+    },
+    {
+      "args": {
+        "capability": "microphone",
+        "domain": "example.com",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "scope": "session",
+        "session_id": "s-live",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "grant-session",
+      "method": "grant"
+    },
+    {
+      "args": {
+        "capability": "geolocation",
+        "domain": "a-b.example.co",
+        "identity": "xr:00000000-0000-4000-8000-0000000000b2",
+        "scope": "7d",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "grant-7d",
+      "method": "grant"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "domain": "example.com",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "scope": "once",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":2}"
+      },
+      "expect": "ok",
+      "id": "grant-skips-taken-id",
+      "method": "grant"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "domain": "Example.com",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "scope": "once"
+      },
+      "expect": "reject",
+      "id": "grant-uppercase-domain-refused",
+      "method": "grant"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "domain": "https://example.com/",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "scope": "once"
+      },
+      "expect": "reject",
+      "id": "grant-url-refused",
+      "method": "grant"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "domain": "example.com:443",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "scope": "once"
+      },
+      "expect": "reject",
+      "id": "grant-port-refused",
+      "method": "grant"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "domain": "example..com",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "scope": "once"
+      },
+      "expect": "reject",
+      "id": "grant-double-dot-refused",
+      "method": "grant"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "domain": "-example.com",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "scope": "once"
+      },
+      "expect": "reject",
+      "id": "grant-hyphen-edge-refused",
+      "method": "grant"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "domain": "caf\u00e9.example",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "scope": "once"
+      },
+      "expect": "reject",
+      "id": "grant-non-ascii-domain-refused",
+      "method": "grant"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "domain": "example.com",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "scope": "30d"
+      },
+      "expect": "reject",
+      "id": "grant-bad-scope",
+      "method": "grant"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "domain": "example.com",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "scope": "session"
+      },
+      "expect": "reject",
+      "id": "grant-session-needs-id",
+      "method": "grant"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "domain": "example.com",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "scope": "once",
+        "session_id": "s"
+      },
+      "expect": "reject",
+      "id": "grant-once-with-session-refused",
+      "method": "grant"
+    },
+    {
+      "args": {
+        "capability": "midi",
+        "domain": "example.com",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "scope": "once"
+      },
+      "expect": "reject",
+      "id": "grant-extra-capability-refused",
+      "method": "grant"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "domain": "example.com",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "scope": "once",
+        "ttl": 9
+      },
+      "expect": "reject",
+      "id": "grant-unknown-arg",
+      "method": "grant"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "domain": 7,
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "scope": "once"
+      },
+      "expect": "reject",
+      "id": "grant-wrong-type",
+      "method": "grant"
+    },
+    {
+      "args": {
+        "capability": "camera",
+        "domain": "example.com",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "scope": "once",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5,\"next_seq\":9}"
+      },
+      "expect": "reject",
+      "id": "grant-corrupt-store-refused",
+      "method": "grant"
+    },
+    {
+      "args": {
+        "denied": true,
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "set-denied-true",
+      "method": "set-denied"
+    },
+    {
+      "args": {
+        "denied": false,
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1"
+      },
+      "expect": "ok",
+      "id": "set-denied-false-absent-no-row",
+      "method": "set-denied"
+    },
+    {
+      "args": {
+        "denied": false,
+        "identity": "xr:00000000-0000-4000-8000-0000000000b2",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "set-denied-clears",
+      "method": "set-denied"
+    },
+    {
+      "args": {
+        "denied": "yes",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1"
+      },
+      "expect": "reject",
+      "id": "set-denied-wrong-type",
+      "method": "set-denied"
+    },
+    {
+      "args": {
+        "grant_id": "g3",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "consume-once-spends",
+      "method": "consume-once"
+    },
+    {
+      "args": {
+        "grant_id": "g3",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "reject",
+      "id": "consume-once-twice-refused",
+      "method": "consume-once"
+    },
+    {
+      "args": {
+        "grant_id": "g2",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "reject",
+      "id": "consume-once-session-grant-refused",
+      "method": "consume-once"
+    },
+    {
+      "args": {
+        "grant_id": "g3",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":true,\"revoked_at\":1790000000000,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "reject",
+      "id": "consume-once-revoked-refused",
+      "method": "consume-once"
+    },
+    {
+      "args": {
+        "grant_id": "g999"
+      },
+      "expect": "reject",
+      "id": "consume-once-unknown",
+      "method": "consume-once"
+    },
+    {
+      "args": {
+        "session_id": "s-live",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "sweep-ttl-at-boundary-and-session-end",
+      "method": "sweep"
+    },
+    {
+      "args": {
+        "session_id": "s-old",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "sweep-active-session-kept",
+      "method": "sweep"
+    },
+    {
+      "args": {
+        "session_id": "",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "sweep-empty-session",
+      "method": "sweep"
+    },
+    {
+      "args": {
+        "session_id": "s-live"
+      },
+      "expect": "ok",
+      "id": "sweep-nothing-to-do",
+      "method": "sweep"
+    },
+    {
+      "args": {
+        "session_id": "s-live",
+        "store": "{\"contract\":\"permission-store\",\"corrupt\":true}"
+      },
+      "expect": "reject",
+      "id": "sweep-corrupt-refused",
+      "method": "sweep"
+    },
+    {
+      "args": {},
+      "expect": "reject",
+      "id": "sweep-missing-session",
+      "method": "sweep"
+    },
+    {
+      "args": {
+        "domain": "example.com",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "revoke-site-tombstones",
+      "method": "revoke-site"
+    },
+    {
+      "args": {
+        "domain": "example.com",
+        "identity": "xr:none",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "revoke-site-absent-identity",
+      "method": "revoke-site"
+    },
+    {
+      "args": {
+        "domain": "example.com/x",
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1"
+      },
+      "expect": "reject",
+      "id": "revoke-site-bad-domain",
+      "method": "revoke-site"
+    },
+    {
+      "args": {
+        "identity": "xr:00000000-0000-4000-8000-0000000000a1",
+        "store": "{\"contract\":\"permission-store\",\"contract_version\":1,\"identities\":{\"xr:00000000-0000-4000-8000-0000000000a1\":{\"defaults\":{\"camera\":\"kAllow\"},\"denied\":false,\"extras\":{},\"grants\":[{\"capability\":\"geolocation\",\"created_at\":1789395200000,\"domain\":\"example.com\",\"expires_at\":1790000000000,\"id\":\"g1\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"},{\"capability\":\"camera\",\"created_at\":1790000000000,\"domain\":\"example.com\",\"expires_at\":0,\"id\":\"g2\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"session\",\"session_id\":\"s-old\"},{\"capability\":\"microphone\",\"created_at\":1790000000000,\"domain\":\"maps.example.org\",\"expires_at\":0,\"id\":\"g3\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000a1\",\"remaining_uses\":1,\"revoked\":false,\"revoked_at\":0,\"scope\":\"once\",\"session_id\":\"\"}]},\"xr:00000000-0000-4000-8000-0000000000b2\":{\"defaults\":{},\"denied\":true,\"extras\":{},\"grants\":[{\"capability\":\"notifications\",\"created_at\":1789913600000,\"domain\":\"news.example\",\"expires_at\":1790518400000,\"id\":\"g4\",\"identity\":\"xr:00000000-0000-4000-8000-0000000000b2\",\"remaining_uses\":0,\"revoked\":false,\"revoked_at\":0,\"scope\":\"7d\",\"session_id\":\"\"}]}},\"next_seq\":5}"
+      },
+      "expect": "ok",
+      "id": "revoke-all-defaults-and-grants",
+      "method": "revoke-all"
+    },
+    {
+      "args": {
+        "identity": "xr:none"
+      },
+      "expect": "ok",
+      "id": "revoke-all-absent",
+      "method": "revoke-all"
+    },
+    {
+      "args": {
+        "identity": ""
+      },
+      "expect": "reject",
+      "id": "revoke-all-empty-identity",
+      "method": "revoke-all"
+    }
+  ],
+  "pair": "permissions",
+  "protocol": "permissions/host_protocol.md",
+  "provenance": "P15-CLOSE C2: hand-specified cases (work/gen_perm_corpus.py chains the store texts through the ops); every case replays byte-identically host vs fake at --as-of",
+  "schema_version": 1
+}

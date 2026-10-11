@@ -145,7 +145,10 @@ def test_completeness_gate_positive_with_update_pair() -> None:
     # data in the manifest). The count is asserted for the same reason as
     # above: a hardcoded number is what makes the gate notice a 9th.
     assert "identity: methods covered by parity corpus" in r.stdout
-    assert "8 pair(s), 0 failure(s)" in r.stdout
+    # P15-CLOSE C2: permissions is the 9th stdio host (the clock-owning
+    # sweep). Same reason again: the number moves only with a counted host.
+    assert "permissions: methods covered by parity corpus" in r.stdout
+    assert "9 pair(s), 0 failure(s)" in r.stdout
 
 
 def test_phantom_pair_fails(tmp_path: Path) -> None:

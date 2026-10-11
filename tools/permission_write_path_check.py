@@ -11,6 +11,11 @@ Tests and the bench under permissions/ are exempt: they are the proof, not
 the product. The renderer, the WebUI and Blink-side code are product, so a
 planted call there is RED.
 
+P15-CLOSE C2 adds the CLOCK-FREE row: the core under
+xr-core/permissions/core/ must never read a clock. Time enters the core only as
+a parameter; permissions/host/permissions_host.cc owns the one clock read. A
+clock include or call in permissions/core/** is RED ("clock read inside core").
+
 Mechanically: a stdlib scan of xr-core's C++ and TS/JS sources. --root DIR
 scans a fixture tree instead (the negative case plants a renderer-side call and
 must redden; a gate that cannot fail certifies nothing).
@@ -36,6 +41,27 @@ INCLUDE_RE = re.compile(r'#\s*include\s+"permissions/core/ops\.h"')
 SUFFIXES = (".cc", ".h", ".mm", ".ts", ".js")
 EXEMPT_PREFIX = "permissions/"          # the core, its tests and bench
 PRUNE = {".git", "build", "out", "node_modules", "__pycache__"}
+CLOCK_CORE = "permissions/core/"
+# Includes and calls that read time (std::chrono clocks, libc time, POSIX).
+CLOCK_RE = re.compile(
+    r"#\s*include\s*<(chrono|ctime|time\.h|sys/time\.h)>"
+    r"|\b(system_clock|steady_clock|high_resolution_clock|utc_clock|file_clock)\b"
+    r"|\b(time|clock|gettimeofday|clock_gettime|localtime|gmtime|ftime)\s*\(")
+
+
+def clock_rows(path: Path, rel: str) -> list[str]:
+    """The clock-free row: any clock include/call in permissions/core/**."""
+    out: list[str] = []
+    try:
+        lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError as e:
+        return [f"{rel}: unreadable ({e})"]
+    for i, line in enumerate(lines, 1):
+        code = line.split("//", 1)[0]
+        if CLOCK_RE.search(code):
+            out.append(f"{rel}:{i} clock read inside core (the host owns the clock): "
+                       f"{line.strip()[:72]}")
+    return out
 
 
 def scan(core: Path) -> tuple[int, list[str]]:
@@ -48,6 +74,8 @@ def scan(core: Path) -> tuple[int, list[str]]:
                 continue
             path = Path(dirpath) / name
             rel = path.relative_to(core).as_posix()
+            if rel.startswith(CLOCK_CORE):
+                fails += clock_rows(path, rel)
             if rel.startswith(EXEMPT_PREFIX):
                 continue
             scanned += 1
@@ -82,10 +110,11 @@ def main() -> int:
     if fails:
         for f in fails:
             print(f"FAIL: {f}")
-        print(f"FAIL: permission-write-path ({len(fails)} second write path(s))")
+        print(f"FAIL: permission-write-path ({len(fails)} second write path(s) "
+              f"or core clock read(s))")
         return 1
     print(f"PASS: permission-write-path (overlay mutators confined to xr-core/permissions/; "
-          f"{scanned} product source(s) scanned)")
+          f"permissions/core/ clock-free; {scanned} product source(s) scanned)")
     return 0
 
 
