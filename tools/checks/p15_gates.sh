@@ -25,5 +25,7 @@ p15_lanes() {
   echo "== P15-CLOSE C7: permission-prompt order patch 0400 round-trips at the pin (regenerate + byte-compare) =="
   "$PY" build/webui/permission_patch_roundtrip.py --xr-core ../xr-core --check
 
+  echo "== P15-CLOSE C9: invariant 7 — every overlay change leaves exactly one audit row (no silent grant) =="
+  "$PY" tools/permission_audit_count_check.py --xr-core ../xr-core
 
 }

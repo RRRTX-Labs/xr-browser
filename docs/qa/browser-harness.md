@@ -435,3 +435,28 @@ by the A4 row of `build/upstream/assumptions.yaml` and by `evidence/P15/evidence
   No browser run, trace or screenshot is claimed in this phase, and no surrogate was
   invented.
 
+## P15 activity rows
+
+P15-T4/T7, recorded at P15-CLOSE C9. The anchor `#p15-activity-rows` is cited by
+the ADR-0051 addendum and by `evidence/P15/evidence.json`; human gate
+HG-P15-ACTIVITY-SURFACE is open.
+
+* **Shipped and checked (real, in this sandbox):** `permissions/core/audit.cc`
+  emits one `kind: kPermission` ActivityRow per audit event, with the origin
+  redacted to a registrable domain (`test_audit.cc`, the golden
+  `docs/contracts/tests/golden-permission-audit-event.jsonl`). Every overlay change
+  leaves exactly one row, counted against the store
+  (`tools/permission_audit_count_check.py`; a planted silent grant reddens,
+  `tools/negatives/p15c_c9.sh`). A planted `usage_active` field and a planted full
+  origin redden the contract lane (`tools/negatives/p15_permissions.sh`).
+* **NOT-RUN here:** there is no Activity tab in either repository's code (P13's
+  Activity surface is interim), so nothing renders the rows. When a surface lands:
+  1. Grant camera once to `example.com` in identity Work; the Activity list shows
+     one Permission row for `example.com`, scope once, deciding layer
+     identity_overlay.
+  2. Consume the grant: one expiry row, reason used. Revoke the site: one revoke
+     row. The row count equals the audit-row count for the identity.
+  3. No row shows a full URL, a path or a query; screen readers read the row's
+     summary string.
+
+  No rendered row or screenshot is claimed in this phase, and no tab was invented.
