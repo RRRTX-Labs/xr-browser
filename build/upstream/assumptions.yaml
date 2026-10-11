@@ -62,8 +62,18 @@ rows:
     file: "components/permissions/permission_context_base.h"
     contains:
       - "class PermissionContextBase"
-    note: "mediation *behavior* tests land with P15 (PermissionManager overlay);
-      this row pins the mediation base surface"
+      # P15-CLOSE C4 — read live at the pin (fetch.py, gitiles) on 2026-10-10:
+      # revocation surface
+      - "virtual void ResetPermission(const GURL& requesting_origin,"
+      # propagation surfaces (content-setting change -> observers -> open tabs)
+      - "void OnContentSettingChanged("
+      - "virtual void NotifyObservers(const ContentSettingsPattern& primary_pattern,"
+      - "virtual void OnPermissionChanged("
+    note: "P15 landed the overlay core and its revoke semantics (tombstones,
+      tested in xr-core/permissions/tests); the anchors above pin the upstream
+      revocation and propagation surfaces it depends on. The runtime half
+      (revoke reaching a live tab) is NOT-RUN (method:
+      docs/qa/browser-harness.md#p15-t5-revoke-propagation)"
     since_rev: "d04cdb24d67b081f6cf80200ffc5233f44b61109"
 
   - id: A5

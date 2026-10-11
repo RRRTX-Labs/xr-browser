@@ -107,8 +107,11 @@ def run_rows(source, rev: str, reg: dict[str, Any]) -> tuple[list[dict[str, Any]
     return results, failures
 
 
-def _p0_artifact(row: dict[str, Any], rev: str, reason: str, out_dir: Path) -> Path:
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+def _p0_artifact(row: dict[str, Any], rev: str, reason: str, out_dir: Path,
+                 as_of: str) -> Path:
+    # File-name stamp from --as-of (P15-CLOSE: this module is in the gate
+    # closure via tools/assumption_drift_check.py, so no wall-clock read).
+    stamp = "".join(c for c in as_of if c.isalnum())
     out_dir.mkdir(parents=True, exist_ok=True)
     p = out_dir / f"{stamp}-P0-assumption-{row['id']}.md"
     p.write_text(
@@ -134,6 +137,8 @@ def main() -> int:
     r.add_argument("--use-deps", action="store_true", help="resolve --rev from DEPS chromium_rev")
     r.add_argument("--out", default="work/upstream-cache", help="artifact dir")
     r.add_argument("--json", action="store_true")
+    r.add_argument("--as-of", default=datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                   help="report timestamp (ISO-8601); stamps the summary and P0 artifact names")
     args = parser.parse_args()
 
     reg = load_registry()
@@ -161,13 +166,13 @@ def main() -> int:
     import json
     summary = {
         "tool": "xr-assumptions", "rev": rev,
-        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "generated_at": args.as_of,
         "pass": sum(1 for r in results if r["status"] == "PASS"),
         "skip": sum(1 for r in results if r["status"] == "SKIP"),
         "fail": sum(1 for r in results if r["status"] == "FAIL"),
         "results": results,
     }
-    artifacts = [_p0_artifact(r, rev, r["reason"], Path(args.out))
+    artifacts = [_p0_artifact(r, rev, r["reason"], Path(args.out), args.as_of)
                  for r in results if r["status"] == "FAIL"]
     if args.json:
         print(json.dumps(summary, indent=2))

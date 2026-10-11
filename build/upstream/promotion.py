@@ -116,7 +116,8 @@ def compat_smoke_v0(root: Path, source: GitilesFetchSource, candidate_rev: str,
                   f"{sum(1 for r in results if r['status']=='SKIP')} SKIP"})
     for r in results:
         if r["status"] == "FAIL":
-            assumptions_mod._p0_artifact(r, candidate_rev, r["reason"], work / "issues")
+            assumptions_mod._p0_artifact(r, candidate_rev, r["reason"], work / "issues",
+                                         datetime.now(timezone.utc).isoformat(timespec="seconds"))
     return steps
 
 

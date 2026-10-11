@@ -405,3 +405,33 @@ cited by `build/webui/identities-page-tests.sh` and the P14-T7-DELIVERED row of
 
   No rendered page, screenshot or SR result is claimed in this phase, and no
   surrogate was invented.
+
+## P15-T5 revoke propagation
+
+P15-T5, recorded at P15-CLOSE C4. The anchor `#p15-t5-revoke-propagation` is cited
+by the A4 row of `build/upstream/assumptions.yaml` and by `evidence/P15/evidence.json`.
+
+* **Shipped and checked (real, in this sandbox):**
+  * the revoke semantics in the core: `RevokeSite` / `RevokeAll` tombstone grants, a
+    tombstone is never projected and never revived (`permissions/tests/test_ops.cc`,
+    `test_expiry.cc`, the overlay vectors through the real resolver in
+    `test_cross_core.cc`);
+  * the upstream surfaces the runtime half depends on, read live at the Chromium pin
+    by the A4 row (`components/permissions/permission_context_base.h`):
+    `ResetPermission` (revocation), `OnContentSettingChanged`, `NotifyObservers` and
+    `Observer::OnPermissionChanged` (propagation to open tabs). A planted rename of
+    any anchor reddens the row (`tools/negatives/p15c_c4.sh`).
+* **NOT-RUN here (needs a built browser with the overlay host wired in):**
+  1. Grant camera to `example.com` for identity Work (7d). Open two tabs on the site
+     in Work and one in Personal.
+  2. In `xr://settings/permissions`, revoke the site for Work. Within one event-loop
+     turn both Work tabs must observe the revoke (`OnPermissionChanged` fires; a
+     `getUserMedia` call from either tab is denied without a stale grant token), and
+     the Personal tab is unaffected.
+  3. Revoke-all for Work: every Work tab loses every overlay grant; the Fortress
+     deny-list and the deny-only extras are unchanged.
+  4. Restart the browser: no revoked grant comes back (tombstones persist).
+
+  No browser run, trace or screenshot is claimed in this phase, and no surrogate was
+  invented.
+

@@ -15,4 +15,11 @@ p15_lanes() {
 
   echo "== P15-T9.2: write-path law (overlay mutators confined to xr-core/permissions/) =="
   "$PY" tools/permission_write_path_check.py
+
+  echo "== P15-CLOSE C4: A4 anchors — offline positive control (the live read is assumptions.py run) =="
+  "$PY" tools/assumption_drift_check.py --row A4
+
+
+
+
 }
