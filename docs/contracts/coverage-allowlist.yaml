@@ -81,6 +81,15 @@ surfaces:
     command: settings.identity
     phase: P8
     sources: [settings/identity.ts]
+  - surface: settings/permissions
+    unit: section
+    command: settings.permissions
+    phase: P15
+    sources: [settings/permissions.ts]
+    why: >-
+      P15-CLOSE C5: the overlay's settings destination xr://settings/permissions
+      (ADR-0051 addendum: a new section; privacy.notifications stays put).
+      Search words are the section's schema aliases.
   # --- About/update surface (lands in P10-T8) — ratchet-safe tier-2 trio. ----
   - surface: about/update
     unit: about

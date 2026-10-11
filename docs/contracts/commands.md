@@ -8,7 +8,7 @@ availability predicate with a reason** — never absent, never a "coming
 soon" rail (§10). Tier-1 ≤ 9 controls is enforced in the registry itself
 (Plan §1.10 Attention Budget).
 
-27 commands registered; 7 in Tier-1 (≤ 9).
+28 commands registered; 7 in Tier-1 (≤ 9).
 
 | id | scope | tier | danger | predicate | status |
 | --- | --- | --- | --- | --- | --- |
@@ -32,6 +32,7 @@ soon" rail (§10). Tier-1 ≤ 9 controls is enforced in the registry itself
 | `settings.network` | global | tier2 | safe | `always` | enabled |
 | `settings.privacy` | global | tier2 | safe | `always` | enabled |
 | `settings.identity` | global | tier2 | safe | `always` | enabled |
+| `settings.permissions` | global | tier2 | safe | `always` | enabled |
 | `help.index` | global | tier2 | safe | `always` | enabled |
 | `help.cheatsheet` | global | tier2 | safe | `always` | enabled |
 | `history.clear-identity` | identity | tier1 | destructive | `always` | enabled |

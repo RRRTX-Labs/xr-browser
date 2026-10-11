@@ -56,7 +56,7 @@ def _contract(tmp: Path) -> Path:
 def test_live_repo_passes() -> None:
     r = run()
     assert r.returncode == 0, r.stderr
-    assert "3 sections" in r.stdout
+    assert "4 sections" in r.stdout  # P15-CLOSE C5: +permissions
 
 
 def test_missing_section_command_fails(tmp_path: Path) -> None:

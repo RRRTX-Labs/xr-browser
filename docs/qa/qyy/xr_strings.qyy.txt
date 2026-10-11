@@ -14,6 +14,7 @@ settings.badge.readonly-v0	IDS_XR_SETTINGS_BADGE_READONLY_V0	‏«réád-õñly 
 settings.section.network	IDS_XR_SETTINGS_SECTION_NETWORK	‏«Nétwõrk ē»
 settings.section.privacy	IDS_XR_SETTINGS_SECTION_PRIVACY	‏«Prîváçy ē»
 settings.section.identity	IDS_XR_SETTINGS_SECTION_IDENTITY	‏«Idéñtîty ēx»
+settings.section.permissions	IDS_XR_SETTINGS_SECTION_PERMISSIONS	‏«Pérmîssîõñs ēxð»
 settings.network.adblock.title	IDS_XR_SETTINGS_NETWORK_ADBLOCK_TITLE	‏«Ad blõçkîñg ēxð»
 settings.network.adblock.desc	IDS_XR_SETTINGS_NETWORK_ADBLOCK_DESC	‏«Whéthér áds áré blõçkéd. Sûrfáçéd frõm põlîçy îñ v0; ñõt ûsér-wrîtáblé. ēxðañd ēxðañd ēxðañd ēxðañd»
 settings.network.tracker-block.title	IDS_XR_SETTINGS_NETWORK_TRACKER_BLOCK_TITLE	‏«Tráçkér blõçkîñg ēxðañ»

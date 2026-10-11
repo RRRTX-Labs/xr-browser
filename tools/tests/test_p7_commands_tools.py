@@ -171,7 +171,7 @@ def test_descriptors_to_docs_generates_and_check_is_idempotent(tmp_path):
     r = run("descriptors_to_docs.py", "--out", str(out))
     assert r.returncode == 0, r.stdout + r.stderr
     text = out.read_text(encoding="utf-8")
-    assert "27 commands registered" in text  # P11-T6: +shield.page/add-rule/remove-rule; P14-T7: +identities.page
+    assert "28 commands registered" in text  # P11-T6: +shield.page/add-rule/remove-rule; P14-T7: +identities.page; P15-CLOSE C5: +settings.permissions
     assert "7 in Tier-1" in text
     # The doc is a pure function of the roster: regenerating is a no-op.
     r2 = run("descriptors_to_docs.py", "--out", str(out))
