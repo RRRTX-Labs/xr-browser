@@ -69,8 +69,8 @@ def build_rows(cells: list[dict[str, Any]],
             state, method = "disclosed", METHOD_DISCLOSED
         elif mech["mode"] == "not-yet":
             state, method = "not-run", METHOD_NOT_YET
-        else:
-            state, method = "not-run", METHOD_BROWSER
+        else:  # a browser cell may name its own method path (P15-CLOSE C8)
+            state, method = "not-run", mech.get("method", METHOD_BROWSER)
         rows.append({"prop": mech["id"], "state": state,
                      "measured": passed if state != "not-run" else 0,
                      "pairs": len(mine), "method": method})

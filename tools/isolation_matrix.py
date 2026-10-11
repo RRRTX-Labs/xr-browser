@@ -34,6 +34,8 @@ from _common import EXIT_FAIL, EXIT_PASS, EXIT_USAGE, RunnerError, as_of_arg, \
 from identity_iso_cells import (  # noqa: E402  (P14 size-law split)
     IDENTITY_MECHS, run_identity_cells)
 import identity_card  # noqa: E402  (P14-CLOSE C-5: the card's identity rows)
+from permission_iso_cells import (  # noqa: E402  (P15-CLOSE C8 split)
+    PERMISSION_MECHS, method_problems, run_permission_cells)
 
 MATRIX_DEFAULT = "../xr-core/test/isolation/matrix.yaml"
 OUT_JSON = "../xr-core/test/isolation/isolation-matrix.json"
@@ -122,8 +124,8 @@ def run_fake_cells(mod: Any, matrix: dict[str, Any]) -> list[dict[str, Any]]:
     for mech in matrix["mechanisms"]:
         if mech["mode"] != "fake":
             continue
-        if mech["id"] in IDENTITY_MECHS:
-            continue  # identity-core cells: run_identity_cells (the host)
+        if mech["id"] in IDENTITY_MECHS or mech["id"] in PERMISSION_MECHS:
+            continue  # identity host / permission overlay: their own modules
         checker = CHECKERS[mech["id"]]
         for a, b in matrix["identity_pairs"]:
             ia, ib = idents[a], idents[b]
@@ -224,6 +226,11 @@ def main(argv: list[str]) -> int:
     cells: list[dict[str, Any]] = run_fake_cells(mod, matrix)
     # P14 identity-core cells (the host/suite path, not the resolver fake).
     cells += run_identity_cells(xr_core, matrix)
+    # P15 permission-overlay cells (the overlay fake; tools/permission_iso_cells.py).
+    cells += run_permission_cells(xr_core, matrix)
+    for prob in method_problems(repo, matrix):
+        print(f"FAIL: {prob}")
+        return EXIT_FAIL
     rounds, violations = run_adversarial(mod, matrix)
     if violations:
         for v in violations[:10]:
@@ -240,6 +247,9 @@ def main(argv: list[str]) -> int:
         detail = mech.get("question", "")
         if mech["mode"] == "not-yet":
             detail = f"not-yet (owner phase {mech.get('phase', '?')})"
+        elif mech.get("method"):  # P15-CLOSE C8: owner phase + method path
+            detail = (f"{detail} (owner phase {mech.get('phase', '?')}; "
+                      f"method: {mech['method']})")
         for a, b in matrix["identity_pairs"]:
             cells.append({"mechanism": mech["id"], "pair": [a, b],
                           "mode": mech["mode"], "verdict": verdict,
