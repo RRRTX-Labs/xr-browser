@@ -31,7 +31,7 @@ PYEOF
 
 _p14c_c3_case() {   # <desc> <rel-src> <tool> <flag> <anchor> <repl> <pattern>
   local desc="$1" rel="$2" tool="$3" flag="$4" anchor="$5" repl="$6" pat="$7" W
-  W="$(mktemp -d "${NEG_TMP:-${TMPDIR:-/tmp}}/p14c-c3.XXXXXX")"
+  W="$(neg_case_dir p14c-c3)"
   if ! _p14c_c3_plant "$(_p14c_c2_core)/$rel" "$W/$(basename "$rel")" "$anchor" "$repl"; then
     echo "NEGATIVE-FAIL: $desc — plant anchor missing in $rel"
     NEG_FAILURES=$((NEG_FAILURES + 1)); rm -rf "$W"; return

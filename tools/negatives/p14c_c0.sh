@@ -37,7 +37,7 @@ neg_register p14c_c0_final_with_corrects_is_green_without_is_red
 case_p14c_c0_final_with_corrects_is_green_without_is_red() {
   local P W out rc
   for P in P13 P12; do
-    W="$(mktemp -d "${NEG_TMP:-${TMPDIR:-/tmp}}/p14c-c0.XXXXXX")"
+    W="$(neg_case_dir p14c-c0)"
     _p14c_c0_fixture "$W/with" "$P" no
     out="$(cd "$W/with" && "$PY" tools/evidence_finality.py --repo . 2>&1)" && rc=0 || rc=$?
     if [ "$rc" -ne 0 ]; then

@@ -25,6 +25,11 @@
 # caller is a library whose laws cannot be exercised on their own).
 : "${PY:=${PYTHON:-python3}}"
 export PY
+# P15-CLOSE C10: NEG_TMP is always a private mktemp -d root (never a shared
+# /tmp fallback); per-case dirs come from neg_case_dir. See isolation.sh.
+# shellcheck disable=SC1091
+. "$(dirname "${BASH_SOURCE[0]}")/isolation.sh"
+neg_tmp_root
 
 NEG_TOTAL=0
 NEG_RUN=0
@@ -48,7 +53,7 @@ neg_register() {
 # happened once in the P13-P0-C battery (2026-09-29, cosmetic naive-embedder
 # case) and would be indistinguishable from a real regression. So: capture to
 # a FILE once, then grep the file. No pipeline, no SIGPIPE, one verdict.
-NEG_LAST_OUT_FILE="${NEG_LAST_OUT_FILE:-${NEG_TMP:-${TMPDIR:-/tmp}}/.neg-last-out.$$}"
+NEG_LAST_OUT_FILE="${NEG_LAST_OUT_FILE:-$NEG_TMP/.neg-last-out.$$}"
 neg_out_file() { printf '%s\n' "$1" >"$NEG_LAST_OUT_FILE"; }   # <captured out>
 neg_out_has()       { grep -qE "$1" "$NEG_LAST_OUT_FILE"; }    # <ERE>
 neg_out_has_fixed() { grep -qF "$1" "$NEG_LAST_OUT_FILE"; }    # <literal>
@@ -342,7 +347,7 @@ neg_self_test() {   # <case-file...> — the same list the dispatcher will sourc
   # canary this law would be a vacuous green: a linter that matches nothing
   # looks exactly like a tree with no offenders.
   local canary files=() f
-  canary="$(mktemp "${NEG_TMP:-${TMPDIR:-/tmp}}/neg-lint-canary.XXXXXX.sh")"
+  canary="$(mktemp "$NEG_TMP/neg-lint-canary.XXXXXX.sh")"
   cat >"$canary" <<'CANARY'
 case_canary() {
   out="$(false)"

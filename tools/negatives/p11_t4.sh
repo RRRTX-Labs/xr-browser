@@ -31,14 +31,14 @@ snapshot_browser() {
 
 # --- protocol row canary: deleting a Methods row reddens the doc↔code check --
 case_protocol_row() {
-  local N="$NEG_TMP/t4-norow"
+  local N; N="$(neg_case_dir t4-norow)"
   snapshot_core "$N"
   sed -i '/^| `site-toggle` |/d' "$N/xr-core/shield/host_protocol.md"
   neg_expect_reject "host_protocol_check: an undocumented dispatch literal (site-toggle row deleted) reddens" \
     'FAIL' \
     "$PY" tools/host_protocol_check.py --xr-core "$N/xr-core"
   # positive control: the UNMUTATED snapshot passes
-  local C="$NEG_TMP/t4-core-clean"
+  local C; C="$(neg_case_dir t4-core-clean)"
   snapshot_core "$C"
   if "$PY" tools/host_protocol_check.py --xr-core "$C/xr-core" >/dev/null 2>&1; then
     echo "ok: host_protocol_check positive control (clean snapshot passes)"
@@ -51,7 +51,7 @@ neg_register protocol_row
 
 # --- corpus coverage canary: dropping a method's cases reddens completeness --
 case_corpus_coverage() {
-  local B="$NEG_TMP/t4-nocase"
+  local B; B="$(neg_case_dir t4-nocase)"
   snapshot_browser "$B"
   "$PY" - "$B" <<'PYEOF'
 import json, sys
@@ -71,7 +71,7 @@ neg_register corpus_coverage
 
 # --- vector boundary canary: flipping the fake's sweep boundary drifts -------
 case_vector_boundary() {
-  local N="$NEG_TMP/t4-flip"
+  local N; N="$(neg_case_dir t4-flip)"
   snapshot_core "$N"
   # the sweep law: expiry_mono >= 0 && now_mono >= expiry_mono ⇒ swept
   # (INCLUSIVE). Flip >= to > in the fake's method_exception_sweep only —
@@ -89,7 +89,7 @@ neg_register vector_boundary
 
 # --- ledger section canary: deleting the shield section reddens the ledger ---
 case_ledger_section() {
-  local B="$NEG_TMP/t4-nosection"
+  local B; B="$(neg_case_dir t4-nosection)"
   snapshot_browser "$B"
   # the shield ledger section is the LAST section of limitations.md
   sed -i '/^## shield exception ledger rows$/,$d' "$B/docs/limitations.md"

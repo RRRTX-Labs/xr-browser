@@ -37,7 +37,7 @@ snapshot_pair_t6() {
 
 # --- channel-gate canary: a fake that serves the page on release DRIFTS ---
 case_t6_gate_drift() {
-  local N="$NEG_TMP/t6-gatedrift"
+  local N; N="$(neg_case_dir t6-gatedrift)"
   snapshot_pair_t6 "$N"
   grep -q 'channel = "release"  # P11-T6' "$N/xr-core/fakes/shield.py" || {
     echo "NEGATIVE-FAIL: the fake's fail-closed channel default moved — fix the canary's sed"
@@ -63,7 +63,7 @@ neg_register t6_gate_drift
 
 # --- state-coverage canary: a view that forgets a state reddens -----------
 case_t6_state_gap() {
-  local N="$NEG_TMP/t6-stategap"
+  local N; N="$(neg_case_dir t6-stategap)"
   snapshot_pair_t6 "$N"
   grep -q "'route-loss'," "$N/xr-core/ui/shield/shield.ts" || {
     echo "NEGATIVE-FAIL: the view's state union moved — fix the canary's sed"
@@ -72,7 +72,7 @@ case_t6_state_gap() {
   neg_expect_reject "shield_state_check: a debug-page view missing a host state (route-loss dropped) reddens" \
     'route-loss|FAIL' \
     "$PY" "$N/xr-browser/tools/shield_state_check.py"
-  local C="$NEG_TMP/t6-state-clean"
+  local C; C="$(neg_case_dir t6-state-clean)"
   snapshot_pair_t6 "$C"
   if "$PY" "$C/xr-browser/tools/shield_state_check.py" >/dev/null 2>&1; then
     echo "ok: shield_state_check positive control (clean snapshot passes)"
@@ -85,7 +85,7 @@ neg_register t6_state_gap
 
 # --- tier-escalation canary: shield.page as tier1 reddens ------------------
 case_t6_tier_law() {
-  local N="$NEG_TMP/t6-tierlaw"
+  local N; N="$(neg_case_dir t6-tierlaw)"
   snapshot_pair_t6 "$N"
   "$PY" - "$N" <<'PYEOF'
 import json, sys
@@ -108,14 +108,14 @@ neg_register t6_tier_law
 
 # --- attention-vocabulary canary: an escalating shield view reddens --------
 case_t6_attention_vocab() {
-  local N="$NEG_TMP/t6-attnvocab"
+  local N; N="$(neg_case_dir t6-attnvocab)"
   snapshot_pair_t6 "$N"
   printf '\n// show a toast when the count changes\nexport function ping() { return "toast"; }\n' \
     >> "$N/xr-core/ui/shield/shield.ts"
   neg_expect_reject "attention_check: a shield surface carrying attention-escalation vocabulary (toast) reddens" \
     'toast|FAIL' \
     "$PY" "$N/xr-browser/tools/attention_check.py"
-  local C="$NEG_TMP/t6-attn-clean"
+  local C; C="$(neg_case_dir t6-attn-clean)"
   snapshot_pair_t6 "$C"
   if "$PY" "$C/xr-browser/tools/attention_check.py" >/dev/null 2>&1; then
     echo "ok: attention_check positive control (clean snapshot passes)"
@@ -128,7 +128,7 @@ neg_register t6_attention_vocab
 
 # --- protocol row canary: deleting a T6 Methods row reddens the doc check --
 case_t6_protocol_row() {
-  local N="$NEG_TMP/t6-norow"
+  local N; N="$(neg_case_dir t6-norow)"
   snapshot_core_t6 "$N"
   sed -i '/^| `debug-page` |/d' "$N/xr-core/shield/host_protocol.md"
   neg_expect_reject "host_protocol_check: an undocumented dispatch literal (debug-page row deleted) reddens" \

@@ -65,7 +65,7 @@ case_p14c_c5_papercut_ledger_reddens() {
 neg_register p14c_c5_identity_card_refuses_prose
 case_p14c_c5_identity_card_refuses_prose() {
   local W core
-  W="$(mktemp -d "${NEG_TMP:-${TMPDIR:-/tmp}}/p14c-c5.XXXXXX")"
+  W="$(neg_case_dir p14c-c5)"
   core="$(_p14c_c2_core)"
   cp "$core/test/isolation/identity-card-rows.json" "$W/rows.json"
   cp "$REPO_ROOT/docs/limitations.md" "$W/limitations.md"

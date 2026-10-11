@@ -35,7 +35,7 @@ snapshot_pair_t5() {
 
 # --- golden schema canary: a mutated golden row reddens xr_schema ----------
 case_t5_golden_schema() {
-  local B="$NEG_TMP/t5-badgolden"
+  local B; B="$(neg_case_dir t5-badgolden)"
   snapshot_browser_t5 "$B"
   "$PY" - "$B" <<'PYEOF'
 import json, sys
@@ -49,7 +49,7 @@ PYEOF
     'FAIL' \
     "$PY" tools/xr_schema.py --repo "$B" validate block-event \
       "$B/docs/contracts/tests/golden-block-event.json"
-  local C="$NEG_TMP/t5-golden-clean"
+  local C; C="$(neg_case_dir t5-golden-clean)"
   snapshot_browser_t5 "$C"
   if "$PY" tools/xr_schema.py --repo "$C" validate block-event \
       "$C/docs/contracts/tests/golden-block-event.json" \
@@ -64,7 +64,7 @@ neg_register t5_golden_schema
 
 # --- reason-code drift canary: dropping a code reddens the sync test -------
 case_t5_reason_drift() {
-  local N="$NEG_TMP/t5-reasondrift"
+  local N; N="$(neg_case_dir t5-reasondrift)"
   snapshot_pair_t5 "$N"
   "$PY" - "$N" <<'PYEOF'
 import json, sys
@@ -81,7 +81,7 @@ PYEOF
     "$PY" -m pytest -q -p no:cacheprovider \
       "$N/xr-browser/docs/contracts/tests/test_block_event.py" \
       -k five_way
-  local C="$NEG_TMP/t5-reason-clean"
+  local C; C="$(neg_case_dir t5-reason-clean)"
   snapshot_pair_t5 "$C"
   if "$PY" -m pytest -q -p no:cacheprovider \
       "$C/xr-browser/docs/contracts/tests/test_block_event.py" \
@@ -96,7 +96,7 @@ neg_register t5_reason_drift
 
 # --- emitter redaction canary: a fake that stops redacting drifts ----------
 case_t5_vectors_drift() {
-  local N="$NEG_TMP/t5-fakedrift"
+  local N; N="$(neg_case_dir t5-fakedrift)"
   snapshot_pair_t5 "$N"
   grep -q 'redact_target(ctx\["parts"\])' "$N/xr-core/fakes/shield.py" || {
     echo "NEGATIVE-FAIL: ledger_row redaction text moved — fix the canary's sed"
@@ -118,7 +118,7 @@ neg_register t5_vectors_drift
 
 # --- corpus coverage canary: dropping event-emit's cases reddens -----------
 case_t5_corpus_gap() {
-  local B="$NEG_TMP/t5-nocorpus"
+  local B; B="$(neg_case_dir t5-nocorpus)"
   snapshot_browser_t5 "$B"
   "$PY" - "$B" <<'PYEOF'
 import json, sys
@@ -138,13 +138,13 @@ neg_register t5_corpus_gap
 
 # --- protocol row canary: deleting the Methods row reddens the doc check ---
 case_t5_protocol_row() {
-  local N="$NEG_TMP/t5-norow"
+  local N; N="$(neg_case_dir t5-norow)"
   snapshot_core_t5 "$N"
   sed -i '/^| `event-emit` |/d' "$N/xr-core/shield/host_protocol.md"
   neg_expect_reject "host_protocol_check: an undocumented dispatch literal (event-emit row deleted) reddens" \
     'FAIL' \
     "$PY" tools/host_protocol_check.py --xr-core "$N/xr-core"
-  local C="$NEG_TMP/t5-row-clean"
+  local C; C="$(neg_case_dir t5-row-clean)"
   snapshot_core_t5 "$C"
   if "$PY" tools/host_protocol_check.py --xr-core "$C/xr-core" >/dev/null 2>&1; then
     echo "ok: host_protocol_check positive control (clean snapshot passes)"

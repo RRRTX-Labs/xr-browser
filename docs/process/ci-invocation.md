@@ -97,6 +97,33 @@ The same file, two contracts (P13-P0-C):
   invocation is green on an in-flight interim bundle) and
   `closing_wire_demands_final` (the closing invocation refuses it).
 
+## One negatives battery at a time (P15-CLOSE C10)
+
+`tools/run_negatives.sh` takes a lock before it does any work, so a second
+battery in the same checkout refuses to start and prints who holds the lock
+(`held by pid N: <command line> (cwd ...)`). Two batteries would otherwise
+share the sibling `xr-core` build directories and `work/scratch`.
+
+* **Why a lock and not "they cannot interfere".** Scratch is now private
+  (`NEG_TMP` is a `mktemp -d` root, and every case directory comes from
+  `neg_case_dir`), but the battery also rebuilds hosts inside `../xr-core`.
+  Private scratch cannot make two concurrent `make` runs in one tree safe; a
+  lock can.
+* **Mechanism.** `flock -n` on `work/scratch/run_negatives.lock` (override:
+  `XR_NEG_LOCK`). The kernel releases the lock when the holder dies, so a
+  crash leaves no stale state. Where `flock` is absent, an atomic `mkdir` lock
+  with a pid file is used; a dead holder's lock is reclaimed, a live one
+  refuses. `XR_NEG_LOCK_MODE=mkdir` forces the fallback so both paths stay
+  tested. Code: `tools/negatives/isolation.sh`.
+* **Reproduction.** `tools/neg_interference_repro.py --mode legacy` runs two
+  concurrent copies of a case on the pre-fix scratch shape and they collide
+  (red); `--mode fixed` runs the same pair on the shipped helpers and they do
+  not (green). Registered negatives: `tools/negatives/p15c_c10.sh`, cases
+  `p15c_interference_red`, `p15c_lock_flock`, `p15c_lock_mkdir` and
+  `p15c_lock_stale`.
+* **CI.** Only one step in `governance.yml` runs the battery, and
+  `core-hardening.yml` does not run it, so no runner hosts two batteries.
+
 ## The parity line: what your host lacks vs what the lanes demand (P14-P0-2)
 
 Run the gate on a laptop and you are not running the gate the runner runs.

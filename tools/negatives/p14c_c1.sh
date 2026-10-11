@@ -67,7 +67,7 @@ case_p14c_c1_identity_chrome_law_reddens_on_each_plant() {
       snapshot-edit|snapshot-missing) pat="differs from the generator" ;;
       snapshot-stale) pat="rail.sepia.json has no layout x theme" ;;
     esac
-    W="$(mktemp -d "${NEG_TMP:-${TMPDIR:-/tmp}}/p14c-c1.XXXXXX")"
+    W="$(neg_case_dir p14c-c1)"
     neg_expect_reject "identity chrome: planted $plant reddens the law" "$pat" _p14c_c1_run "$plant" "$W"
     rm -rf "$W"
   done

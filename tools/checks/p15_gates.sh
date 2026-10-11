@@ -28,4 +28,6 @@ p15_lanes() {
   echo "== P15-CLOSE C9: invariant 7 — every overlay change leaves exactly one audit row (no silent grant) =="
   "$PY" tools/permission_audit_count_check.py --xr-core ../xr-core
 
+  echo "== P15-CLOSE C10: negatives scratch isolation — two concurrent runs on the shipped helpers never collide =="
+  "$PY" tools/neg_interference_repro.py --mode fixed
 }

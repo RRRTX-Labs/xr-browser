@@ -104,9 +104,7 @@ case_invariance_drift() {
   # this case exists to prove. The real parent is the only layout that both
   # keeps the sibling ../xr-core resolution working and stays outside the copy.
   local R
-  R="$(cd "$REPO_ROOT/.." && pwd)/.p12-invariance-drift.$$"
-  rm -rf "$R"
-  mkdir -p "$R"
+  R="$(mktemp -d "$(cd "$REPO_ROOT/.." && pwd)/.p12-invariance-drift.XXXXXX")"
   (cd "$REPO_ROOT" && tar cf - --exclude=./.git .) | (cd "$R" && tar xf -)
   rm -f "$R/tools/release_notes.py"
   # The plant reproduces the EXACT P11-tip defect: the citation embedded
@@ -228,8 +226,8 @@ jobs:
     steps:
       - name: unguarded
         run: |
-          cargo test --locked 2>&1 | tee /tmp/t.log
-          grep -q "test result: ok" /tmp/t.log
+          cargo test --locked 2>&1 | tee "$RUNNER_TEMP/t.log"
+          grep -q "test result: ok" "$RUNNER_TEMP/t.log"
 YML
   neg_expect_reject "tee_assert_lint: a verdict-bearing pipe with no pipefail and no negative assert reddens" \
     'exit status is swallowed' \
@@ -264,8 +262,8 @@ jobs:
       - name: continued
         run: |
           python3 tools/some_check.py --repo . \
-            --json 2>&1 | tee /tmp/out.log
-          grep -q PASS /tmp/out.log
+            --json 2>&1 | tee "$RUNNER_TEMP/out.log"
+          grep -q PASS "$RUNNER_TEMP/out.log"
 YML
   neg_expect_reject "tee_assert_lint: a backslash-continued command's pipe is still inspected (no per-line blind spot)" \
     'some_check.py' \

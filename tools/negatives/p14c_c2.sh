@@ -31,7 +31,7 @@ PYEOF
 
 neg_register p14c_c2_omnibox_cross_identity_leak_reddens
 case_p14c_c2_omnibox_cross_identity_leak_reddens() {
-  local W; W="$(mktemp -d "${NEG_TMP:-${TMPDIR:-/tmp}}/p14c-c2.XXXXXX")"
+  local W; W="$(neg_case_dir p14c-c2)"
   _p14c_c2_twin_plant "$W" "        elif owner == current:" "        elif owner:  # PLANTED LEAK" || {
     echo "NEGATIVE-FAIL: omnibox leak plant could not be made"; NEG_FAILURES=$((NEG_FAILURES + 1)); rm -rf "$W"; return; }
   neg_expect_reject "planted cross-identity omnibox leak reddens the overlay replay" \
@@ -42,7 +42,7 @@ case_p14c_c2_omnibox_cross_identity_leak_reddens() {
 
 neg_register p14c_c2_upstream_history_write_is_delta
 case_p14c_c2_upstream_history_write_is_delta() {
-  local W out rc; W="$(mktemp -d "${NEG_TMP:-${TMPDIR:-/tmp}}/p14c-c2.XXXXXX")"
+  local W out rc; W="$(neg_case_dir p14c-c2)"
   _p14c_c2_twin_plant "$W" \
     "            upstream.append({k: row[k] for k in UPSTREAM_FIELDS if k in row})" \
     "            upstream.append({**{k: row[k] for k in UPSTREAM_FIELDS if k in row}, **({'identity_id': ident} if overlay is not None else {})})  # PLANTED WRITE" || {
@@ -100,7 +100,7 @@ _p14c_c2_cpp_plant() {   # <case-desc> <rel-file> <anchor> <repl> <test-bin> <pa
   if ! command -v g++ >/dev/null 2>&1 || ! command -v make >/dev/null 2>&1; then
     neg_skip "$desc (g++/make absent — skip-policy)"; return
   fi
-  W="$(mktemp -d "${NEG_TMP:-${TMPDIR:-/tmp}}/p14c-c2cc.XXXXXX")"
+  W="$(neg_case_dir p14c-c2cc)"
   mkdir -p "$W/xr-core"
   cp -r "$(_p14c_c2_core)/identity" "$(_p14c_c2_core)/common" "$W/xr-core/"
   rm -rf "$W/xr-core/identity/tests/build"
