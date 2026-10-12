@@ -1,0 +1,27 @@
+# P15-CLOSE C1 / T0: RFC-0002 is DRAFT and nothing frozen moved (xr-browser ae10987, xr-core 30adb62)
+$ grep -n '^status:\|^- \*\*Status\|status' docs/rfcs/RFC-0002.md
+4:status: DRAFT
+8:- **Status:** DRAFT. Only a human reviewer may change this line, to APPROVED or to
+rc=0
+$ grep -c RFC-0002 docs/adr/0051-permission-overlay-carrier.md docs/state/research-log-P15.md
+docs/adr/0051-permission-overlay-carrier.md:1
+docs/state/research-log-P15.md:1
+rc=0
+$ python3 tools/amend_guard.py
+PASS: amend_guard (stamped=True)
+rc=0
+$ python3 tools/freeze_check.py
+PASS: freeze_check
+rc=0
+$ python3 tools/dr_parse.py
+PASS: dr_parse
+rc=0
+$ sha256sum docs/contracts/FROZEN.yaml
+0b79e43988f31df45d60d0c228d4e2693cc01fcfd1d38e4d0376741a03da01a1  docs/contracts/FROZEN.yaml
+rc=0
+$ git log --format=%B cabb36f..HEAD | grep -c '^Contract-Amendment:'
+0
+$ git -C ../xr-core log --format=%B 13a5f7d..HEAD | grep -c '^Contract-Amendment:'
+0
+$ python3 tools/dco_check.py --range cabb36f..HEAD
+PASS: dco_check

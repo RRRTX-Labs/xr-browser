@@ -1,7 +1,7 @@
 {
   "phase": "P15",
   "state": "interim",
-  "generated": "2026-10-09 (P15 phase open; interim until every gate is green and every row resolves)",
+  "generated": "2026-10-09 (P15 phase open); P15-CLOSE rows appended 2026-10-11. Interim until the human push and hosted runs.",
   "plan": "docs/plans/XR_BROWSER_MASTER_IMPLEMENTATION_PLAN_v2.md",
   "plan_sha256": "02743146146fa139cd53b15216aaa26b79f9d9307998b1814019d27406265a7b",
   "source_labels": [
@@ -22,28 +22,24 @@
   ],
   "not_done_by_design": [
     "T0: the decision-register row is not appended (dr_parse fixes DR-01..DR-30; human gate HG-P15-REGISTER).",
-    "T2: the <=4-file patch half and the Panel surface are not built (scope).",
-    "T4: rendering in the P13 Activity tab is not built (scope; the rows are generated and verified).",
-    "T5: the A4 anchor upgrade in build/upstream/assumptions.yaml is not done (scope; method in the research log).",
-    "T8: the settings section xr://settings/permissions is not started (scope).",
-    "T9.3: libFuzzer is not run (no clang in this sandbox; method in the research log).",
-    "T9.4: the Chromium isolation-matrix cells are not wired (scope).",
+    "T2: the Panel surface is not built (scope; not in P15-CLOSE).",
+    "T4: rendering in an Activity tab is not built; no tab exists in either repo (option b; HG-P15-ACTIVITY-SURFACE; method docs/qa/browser-harness.md#p15-activity-rows).",
+    "T9.3: libFuzzer is not run (no clang in this sandbox; HG-28).",
+    "T9.4: the two browser isolation cells are NOT-RUN (no browser runtime here; method paths in xr-core/test/isolation/matrix.yaml).",
     "GN build wiring for xr-core/permissions cannot be checked (no gn in this sandbox).",
-    "Live propagation to open tabs and the browser runtime are not built (sandbox and scope).",
-    "The full mutation matrix is not run (HG-28 farm); the recorded matrices are sampled, and they say so.",
-    "The policy mutation gate is red at 4d6672d: 62/90 killed, deny-guard 11/23, with 28 OPEN survivors (HG-P15-MUTATION). The gate is not weakened.",
+    "Live propagation to open tabs and the browser runtime are not built (sandbox; method docs/qa/browser-harness.md#p15-t5-revoke-propagation).",
+    "The full permissions mutation matrix is not run (HG-28 farm); the recorded permissions matrix is sampled and says so.",
     "Reference-hardware bench re-check (HG-28).",
     "Dual S0 review of the permissions core (HG-P15-S0-REVIEW).",
-    "Hosted results at the final head are read from the Actions API after the push; they are not claimed in-tree.",
-    "P14-CLOSE is not present in the repository (HG-P15-P14CLOSE)."
+    "Hosted results at the final head: P15-CLOSE commits are local, and a human pushes them (HG-P15-TOKEN). They are not claimed in-tree."
   ],
   "human_gates": {
     "path": "evidence/P15/human-gates.md",
     "note": "authored 2026-10-09 by the P15 agent; one row per act this sandbox cannot perform or that a human must decide"
   },
   "repos": {
-    "xr-browser": "phase opened at 01baba0d6ce8d923b833e30dbf25463211ec8d91 (origin/main, P14 close). Code head 3fe8d7e (the mutation-harness fix; pre-evidence). The final head is the evidence commit (see the run summary).",
-    "xr-core": "phase opened at 81376ac6da284faf28098acc39314b17231bea95. Pushed: e2caedc, 98946b1, 410f34d, aab82f4, 8b26589, f71fcdf, 4d6672d (DEPS.xr_core_rev = 4d6672d). Round update: pinned at 13a5f7d (policy survivor kills in four commits, a6b4c69..13a5f7d; owning suites only; author ahmadrrrtx, committer and sign-off the P15 agent)."
+    "xr-browser": "phase opened at 01baba0d6ce8d923b833e30dbf25463211ec8d91 (origin/main, P14 close). Code head 3fe8d7e (the mutation-harness fix; pre-evidence). The final head is the evidence commit (see the run summary). P15-CLOSE (2026-10-11): opened at cabb36f (origin/main); P14-CLOSE landed on top (267de39 pushed; 53a628c local). P15-CLOSE commits f5562b4..HEAD are local and wait for a human push.",
+    "xr-core": "phase opened at 81376ac6da284faf28098acc39314b17231bea95. Pushed: e2caedc, 98946b1, 410f34d, aab82f4, 8b26589, f71fcdf, 4d6672d (DEPS.xr_core_rev = 4d6672d). Round update: pinned at 13a5f7d (policy survivor kills in four commits, a6b4c69..13a5f7d; owning suites only; author ahmadrrrtx, committer and sign-off the P15 agent). P15-CLOSE: opened at 13a5f7d; P14-CLOSE pushed e18b82f. Local chain c1c5f09, 0c1e9e6, 35c998a, b480c45, 3871399, 94cc74f, 1d5f018, c9c51d8, a94aff9, 30adb62 (DEPS.xr_core_rev = 30adb622ae823efba169f7613f871f7433d69695)."
   },
   "dod_rows": [
     {
@@ -295,6 +291,218 @@
         "logs/gate-candidate-503589f.txt"
       ],
       "notes": "All four artifacts exist. The phase state is interim, and no 'done' wording appears."
+    },
+    {
+      "id": "P15-T0-RFC2",
+      "dod": "T0 cross-reference: RFC-0002 (DRAFT) proposes widening PermissionPolicy for the four deny-only extras (P15-CLOSE C1).",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "docs/rfcs/RFC-0002.md",
+        "docs/adr/0051-permission-overlay-carrier.md",
+        "docs/state/research-log-P15.md",
+        "evidence/P15/human-gates.md",
+        "logs/p15c-c1-rfc2.txt"
+      ],
+      "notes": "Absent at cabb36f (logs/c12-reproduction-cabb36f.txt). The file exists with status DRAFT, from the template. It names the dependents P35 and P21 (plan lines 803 and 815) and the alternatives, and ADR-0051 and the research log reference it. amend_guard stays green, and no Contract-Amendment: trailer or approval literal was written. HG-P15-RFC2 holds the decision."
+    },
+    {
+      "id": "P15-T0-C",
+      "corrects": "P15-T0",
+      "dod": "ADR-0051 DRAFT, the decision-register row, and the bundle skeleton (re-scored at P15-CLOSE).",
+      "status": "HUMAN-GATED",
+      "source": "local-run",
+      "evidence": [
+        "docs/adr/0051-permission-overlay-carrier.md",
+        "docs/rfcs/RFC-0002.md",
+        "evidence/P15/human-gates.md",
+        "docs/register/decisions.yaml",
+        "logs/p15c-c1-rfc2.txt"
+      ],
+      "notes": "Supersedes P15-T0. The ADR (DRAFT, with the dated P15-CLOSE addendum) and RFC-0002 are present (P15-T0-RFC2). The only open part is the register row: tools/dr_parse.py fixes DR-01..DR-30, so the choice is HG-P15-REGISTER. Ratifying the ADR is HG-P15-ADR51."
+    },
+    {
+      "id": "P15-T2-C",
+      "corrects": "P15-T2",
+      "dod": "One-time grant presentation, the keyboard task, and the <=4-file patch half (re-scored at P15-CLOSE C6/C7).",
+      "status": "PARTIAL",
+      "source": "local-run",
+      "evidence": [
+        "docs/qa/keyboard-tasks-permissions.yaml",
+        "tools/keyboard_tasks_permissions_check.py",
+        "tools/negatives/p15c_c6.sh",
+        "build/webui/permission_patch_roundtrip.py",
+        "tools/negatives/p15c_c7.sh",
+        "logs/p15c-c7-roundtrip.txt",
+        "../xr-core/patches/manifest.yaml",
+        "../xr-core/permissions/tests/test_present.cc",
+        "docs/state/budget.md"
+      ],
+      "notes": "Supersedes P15-T2. VERIFIED here: keyboard option (a) with its own law and negative (the 12-task law is untouched), and patch 0400 (one file, chrome/browser/ui/views/permissions/permission_prompt_bubble_base_view.cc, 1383 B, sha256 439110f8...) regenerated at pin d04cdb24 and byte-compared in --check mode. The budget was regenerated by budget_meter.py (ui 10/35, total 22/150). Still PARTIAL: the Panel surface is not built (not in P15-CLOSE scope), and a Chromium build with the patch is NOT-RUN (no gn here)."
+    },
+    {
+      "id": "P15-T3-C",
+      "corrects": "P15-T3",
+      "dod": "Expiry engine with the clock as a parameter, the host-side clock-owning sweep, and a kill -9 mid-sweep proof (re-scored at P15-CLOSE C2).",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "../xr-core/permissions/host/permissions_host.cc",
+        "../xr-core/permissions/tests/test_kill9.cc",
+        "../xr-core/permissions/host_protocol.md",
+        "../xr-core/fakes/permissions.py",
+        "../xr-core/fakes/fixtures/permission-v1.json",
+        "tools/permission_host_parity.py",
+        "tools/permission_write_path_check.py",
+        "build/qa/drill/host_drills.py",
+        "tools/negatives/p15c_c2.sh",
+        "logs/p15c-c2-host-kill9.txt"
+      ],
+      "notes": "Supersedes P15-T3, which said VERIFIED on test_expiry alone, with no kill -9 test in the tree (logs/c12-reproduction-cabb36f.txt). Now: permissions_host owns the clock and passes now_ms into the core. The write-path law has a clock-free row for permissions/core/**, and its planted time(nullptr) reddens. test_kill9 forks the built host and SIGKILLs it at seeded delays mid-sweep; the store must be byte-equal to the pre- or post-sweep generation, with no grant live past expiry after restart. The kill_matrix permissions row runs 6 cells and all pass, and host/fake parity is 80 cases, byte-identical."
+    },
+    {
+      "id": "P15-T4-C",
+      "corrects": "P15-T4",
+      "dod": "permission-audit-event-v1, the kPermission rows, invariant 7 (no silent grant), and the Activity surface (re-scored at P15-CLOSE C9).",
+      "status": "PARTIAL",
+      "source": "local-run",
+      "evidence": [
+        "tools/permission_audit_count_check.py",
+        "tools/negatives/p15c_c9.sh",
+        "tools/negatives/p15_permissions.sh",
+        "logs/p15c-c9-count-check.txt",
+        "docs/qa/browser-harness.md",
+        "evidence/P15/human-gates.md"
+      ],
+      "notes": "Supersedes P15-T4. VERIFIED here: the contract rows as before, plus the invariant-7 count law (600 seeded ops, seed 20261010; grant 228, revoke 155, expiry 70, default 95, deny 108; 0 violations). A planted silent grant reddens it. PARTIAL because no Activity tab exists in either repo and none was invented (option b). Rendering is NOT-RUN (method: docs/qa/browser-harness.md#p15-activity-rows), and HG-P15-ACTIVITY-SURFACE holds the surface decision."
+    },
+    {
+      "id": "P15-T5-C",
+      "corrects": "P15-T5",
+      "dod": "Revoke-all per identity, revoke-by-site, and the A4 anchor upgrade (re-scored at P15-CLOSE C4).",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "build/upstream/assumptions.yaml",
+        "build/upstream/assumptions.py",
+        "tools/assumption_drift_check.py",
+        "tools/negatives/p15c_c4.sh",
+        "logs/p15c-c4-assumptions-run.txt",
+        "logs/p15c-c4-drift.txt",
+        "../xr-core/permissions/tests/test_ops.cc"
+      ],
+      "notes": "Supersedes P15-T5. Row A4 now pins five anchors read live at the Chromium pin d04cdb24 (assumptions.py run: 6 PASS / 1 SKIP / 0 FAIL with --as-of). A planted rename of one anchor reddens the drift check. Revoke-by-site and revoke-all are unchanged and VERIFIED. Live propagation to an open tab is NOT-RUN (method: docs/qa/browser-harness.md#p15-t5-revoke-propagation)."
+    },
+    {
+      "id": "P15-T8-C",
+      "corrects": "P15-T8",
+      "dod": "Settings section xr://settings/permissions (P15-CLOSE C5).",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "../xr-core/settings/core/settings_schema_v1.json",
+        "../xr-core/commands/core/roster_v1.json",
+        "docs/contracts/coverage-allowlist.yaml",
+        "docs/contracts/commands.md",
+        "docs/contracts/menu-model.json",
+        "tools/tests/test_p8_t7_help_deep_link.py",
+        "tools/tests/test_p7_commands_tools.py",
+        "logs/p15c-c5-settings.txt"
+      ],
+      "notes": "Supersedes P15-T8 (BLOCKED-DEFERRED). Section permissions (order 10, availability always) and command settings.permissions; coverage-allowlist row; help anchor both ways; gen_registry --check clean. Deviation: the search terms are schema aliases, because settings-search.ts reads the schema and holds no terms. Rendered pixels and screen-reader output are NOT-RUN. The commands and settings mutation records were re-scored because of this change (P15-MUT-C)."
+    },
+    {
+      "id": "P15-T9.3-C",
+      "corrects": "P15-T9.3",
+      "dod": "Fuzz row for the store loader: fleet row 7 permissions-overlay (P15-CLOSE C3).",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "build/fuzz/fleet.yaml",
+        "build/fuzz/libfuzzer/permissions_overlay_fuzz.cc",
+        "tools/seed_corpus.py",
+        "tools/fuzz_fleet.py",
+        "logs/t-fuzz-permissions-600s.txt",
+        "../xr-core/permissions/tests/test_fuzz.cc",
+        ".github/workflows/core-hardening.yml"
+      ],
+      "notes": "Supersedes P15-T9.3. The fleet row exists with no count literal, and seed_corpus --check covers its 16 seeds. The 600 s evidence run is clean (logs/t-fuzz-permissions-600s.txt), and the core-hardening matrix equals the fleet ids. The libFuzzer half is NOT-RUN because there is no clang here (it prints SKIP and names HG-28), and the 24 h run is HG-28."
+    },
+    {
+      "id": "P15-T9.4-C",
+      "corrects": "P15-T9.4",
+      "dod": "Isolation-matrix permissions cells (P15-CLOSE C8).",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "tools/permission_iso_cells.py",
+        "tools/isolation_matrix.py",
+        "tools/negatives/p15c_c8.sh",
+        "logs/p15c-c8-isolation.txt",
+        "../xr-core/test/isolation/matrix.yaml",
+        "docs/limitations.md"
+      ],
+      "notes": "Supersedes P15-T9.4 (BLOCKED-DEFERRED). Four fake-mode mechanisms run against fakes/permissions.py for every declared pair: 20/20 cells pass, and a planted identity-blind overlay reddens 8 of 20. The two browser mechanisms are NOT-RUN with method paths that the runner checks exist. The JSON, the Markdown and the card rows were regenerated by the tool (41 mechanisms)."
+    },
+    {
+      "id": "P15-C10",
+      "dod": "The negatives interference hazard: per-case mktemp, a single-run lock, and a red-then-green reproduction (P15-CLOSE C10).",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "tools/negatives/isolation.sh",
+        "tools/run_negatives.sh",
+        "tools/neg_interference_repro.py",
+        "tools/negatives/p15c_c10.sh",
+        "logs/c10-interference.txt",
+        "logs/c10-concurrent.txt",
+        "docs/process/ci-invocation.md"
+      ],
+      "notes": "Absent at cabb36f (no lock, no mktemp; logs/c12-reproduction-cabb36f.txt). Legacy mode collides (red) and fixed mode does not (green). A second real run_negatives.sh refuses and names the holder (logs/c10-concurrent.txt, rc=1). The four lock and isolation negatives pass. No workflow runs two batteries on one runner."
+    },
+    {
+      "id": "P15-MUT-C",
+      "corrects": "P15-MUT",
+      "dod": "Mutation evidence after P15-CLOSE: permissions freshness, and the commands and settings re-scores that C5 forced (P15-CLOSE C11).",
+      "status": "VERIFIED",
+      "source": "local-run",
+      "evidence": [
+        "docs/state/mutation-scores.json",
+        "logs/mutation-permissions-30adb62.json",
+        "logs/mutation-commands-c9c51d8.json",
+        "logs/mutation-settings-c9c51d8.json",
+        "logs/mutation-settings-a94aff9.json",
+        "logs/mutation-settings-30adb62.json",
+        "tools/mutation_test.py",
+        "tools/tests/test_p15c_mutation_timeout.py",
+        "docs/state/research-log-P15.md"
+      ],
+      "notes": "Supersedes P15-MUT. mutation_freshness passes with 10 cores fresh at pin 30adb62. Permissions sample 90/90, deny-guard 23/23. Commands FULL 215/219, deny-guard 8/8. Settings FULL went from 242/290 (deny-guard 13/18, a FAIL that unmasked the old 286/286 as false kills) to 278/292 = 95.21% with deny-guard 19/19 after tests and a SaveAt seam. The 14 survivors are argued equivalent (research log item 31; HG-P15-MUTATION). A harness crash on a hanging mutant was fixed (killed(timeout)). The full permissions matrix is HG-28."
+    },
+    {
+      "id": "P15-GATE-CLOSE",
+      "corrects": "P15-GATE-CANDIDATE",
+      "dod": "Full local gate and negatives at the P15-CLOSE code head.",
+      "status": "PARTIAL",
+      "source": "local-run",
+      "evidence": [
+        "logs/gate-p15close.txt",
+        "logs/negatives-p15close-ae10987.txt",
+        "logs/build-test-p15close-ae10987.txt"
+      ],
+      "notes": "Supersedes P15-GATE-CANDIDATE. Negatives: N=247, EXIT=0, 3 visible SKIPs (negatives-p15close-ae10987.txt). scripts/build test: 1015 passed, 2 skipped. Full gate --keep-going at ae10987 + xr-core 30adb62: 1 LANE FAIL, check-pin-alive, which cannot pass locally while xr-core 30adb62 is unpushed (gate-p15close.txt). PARTIAL until a human pushes and the hosted runs are read."
+    },
+    {
+      "id": "P15-HOSTED-C",
+      "corrects": "P15-HOSTED",
+      "dod": "Hosted governance and core-hardening at the P15-CLOSE final head.",
+      "status": "BLOCKED",
+      "source": "UNVERIFIED",
+      "evidence": [
+        "evidence/P15/human-gates.md",
+        "evidence/P15/report.md"
+      ],
+      "notes": "Supersedes P15-HOSTED. Blocked on a human push: P15-CLOSE rule 1 forbids the agent any token, so every P15-CLOSE commit (and the P14 closing commit 53a628c) is local. After the push, a human records governance and core-hardening as ci-run rows through tools/evidence_ci.py. core-hardening is triggered here by DEPS and tools/mutation_test.py."
     }
   ]
 }

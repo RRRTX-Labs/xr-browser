@@ -1,0 +1,6 @@
+# P15-CLOSE C3: evidence timebox for fleet row permissions-overlay (600 s, seed 20260910, in-house C++ fuzzer)
+# xr-browser 3a3447a, xr-core c9c51d8
+$ XR_FUZZ_SECONDS=600 python3 tools/fuzz_fleet.py --only permissions-overlay
+fuzz_fleet: 1 target(s) x 600s clean (corpus dirs seeded)
+PASS: fuzz_fleet
+FLEET600_EXIT=0

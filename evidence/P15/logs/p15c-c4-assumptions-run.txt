@@ -1,0 +1,10 @@
+$ python3 build/upstream/assumptions.py run --use-deps --out work/upstream-cache --as-of 2026-10-11T00:00:00+00:00   # xr-browser DEPS chromium_rev, xr-core 1d5f018
+SKIP  A1   Site Isolation partition-suitability rule                      - behavioral rule (which origins are isolated) needs runtime Site Isolation tests 
+PASS  A2   GetStoragePartitionConfigForSiteInstance contract              
+PASS  A3   per-partition NetworkContext                                   
+PASS  A4   HCMS mediation points                                          
+PASS  A5   extension dispatch funnel                                      
+PASS  A6   component-updater signature path                               
+PASS  A7   Safe Browsing v5 mode APIs                                     
+ totals: 6 PASS / 1 SKIP / 0 FAIL
+rc=0

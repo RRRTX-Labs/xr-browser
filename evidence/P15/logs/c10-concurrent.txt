@@ -1,0 +1,11 @@
+# P15-CLOSE C10: concurrent run_negatives.sh refusal (real battery, xr-browser 3a3447a)
+$ bash tools/run_negatives.sh   # second instance while pid 55690 runs
+scratch: /home/user/xr-browser/work/scratch (20103 MiB free, >= 512 MiB required)
+NEGATIVE GATE REFUSED: another run_negatives.sh holds the lock /home/user/xr-browser/work/scratch/run_negatives.lock (flock)
+  held by pid 55690: bash tools/run_negatives.sh (cwd /home/user/xr-browser)
+  concurrent batteries share the sibling xr-core build dirs; wait for it to finish
+rc=1
+first instance (pid 55690) stopped by SIGTERM after the refusal was recorded; head of its log:
+scratch: /home/user/xr-browser/work/scratch (20242 MiB free, >= 512 MiB required)
+ok: self-test (rc=0 canary fires — the harness can fail)
+ok: self-test (dropping a case file changes N: 247 -> 240)

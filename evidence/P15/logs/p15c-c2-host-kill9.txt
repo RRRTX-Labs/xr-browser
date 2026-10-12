@@ -1,0 +1,32 @@
+# P15-CLOSE C2 / T3: permissions suites incl. test_kill9, host/fake parity, kill matrix (xr-browser ae10987, xr-core 30adb62)
+$ make -C ../xr-core/permissions/tests test
+test_store: 2257 checks, 0 failures
+test_ops: 80 checks, 0 failures
+test_expiry: 47 checks, 0 failures
+test_isolation: 1204 checks, 0 failures
+test_merge: 36 checks, 0 failures
+test_present: 48 checks, 0 failures
+test_envelope: 15 checks, 0 failures
+test_audit: 36 checks, 0 failures
+test_cross_core: 38 checks, 0 failures
+== test_kill9 ==
+kill9: 30 iteration(s), 16 killed mid-run, 14 after exit (runtime 92886 us)
+test_kill9: 277 checks, 0 failures
+permissions/fuzz: 200599 checks, 0 failures
+ALL C++ PERMISSIONS TESTS PASSED
+rc=0
+$ python3 tools/permission_host_parity.py --xr-core ../xr-core
+PASS: permission-host-parity (80 case(s) byte-identical host vs fake, incl. a store-dir sequence with a rolled-back clock)
+rc=0
+$ python3 tools/kill_matrix.py --xr-core ../xr-core
+  executed: permissions/mid-dispatch/SIGKILL (3 iteration(s))
+  executed: permissions/mid-dispatch/SIGTERM (3 iteration(s))
+  executed: permissions/mid-write/SIGKILL (3 iteration(s))
+  executed: permissions/mid-write/SIGTERM (3 iteration(s))
+  executed: permissions/corrupt-load/- (1 iteration(s))
+  executed: permissions/disposable-zero-bytes/- (1 iteration(s))
+PASS: kill-matrix
+rc=0
+$ python3 tools/permission_write_path_check.py
+PASS: permission-write-path (overlay mutators confined to xr-core/permissions/; permissions/core/ clock-free; 283 product source(s) scanned)
+rc=0

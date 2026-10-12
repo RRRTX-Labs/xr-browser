@@ -1,0 +1,41 @@
+# P15-CLOSE ①: the brief's section-0 claims, re-read at the opening heads with git show / git ls-tree (no worktree)
+# xr-browser cabb36ff75512e3179da35190278846b929d4130, xr-core 13a5f7d980101ac8d61b707d7728674f268f8990
+$ git ls-tree --name-only cabb36ff75512e3179da35190278846b929d4130 docs/rfcs/
+docs/rfcs/0000-template.md
+docs/rfcs/RFC-0001.md
+$ git grep -l RFC-0002 cabb36ff75512e3179da35190278846b929d4130 -- . | wc -l   (files mentioning RFC-0002)
+0
+$ git -C ../xr-core ls-tree --name-only 13a5f7d980101ac8d61b707d7728674f268f8990 permissions/
+permissions/README.md
+permissions/bench
+permissions/core
+permissions/tests
+$ git -C ../xr-core grep -il kill 13a5f7d980101ac8d61b707d7728674f268f8990 -- permissions/ | wc -l
+0
+$ git -C ../xr-core ls-tree -r --name-only 13a5f7d980101ac8d61b707d7728674f268f8990 fakes/ | grep -c permission
+0
+$ fleet ids at cabb36ff75512e3179da35190278846b929d4130 (build/fuzz/fleet.yaml)
+- id: policy-core
+- id: commands-core
+- id: settings-core
+- id: themes-core
+- id: cosmetic-core
+- id: identity-core
+$ A4 contains at cabb36ff75512e3179da35190278846b929d4130 (build/upstream/assumptions.yaml)
+A4 contains: ['class PermissionContextBase']
+$ settings sections at 13a5f7d980101ac8d61b707d7728674f268f8990
+['network', 'privacy', 'identity']
+$ permissions cells in test/isolation/matrix.yaml at 13a5f7d980101ac8d61b707d7728674f268f8990
+0
+$ permissions entries in patches/manifest.yaml at 13a5f7d980101ac8d61b707d7728674f268f8990
+0
+$ keyboard_tasks_check.py REQUIRED_COUNT at cabb36ff75512e3179da35190278846b929d4130
+23:REQUIRED_COUNT = 12
+$ run_negatives.sh at cabb36ff75512e3179da35190278846b929d4130: lines, lock, mktemp
+72
+0
+0
+$ P15-T3 row at cabb36ff75512e3179da35190278846b929d4130
+P15-T3 VERIFIED | test_expiry: 47 checks. The 7d boundary is exact at expires_at (fail-closed at equality), 
+$ FROZEN.yaml sha256 at cabb36ff75512e3179da35190278846b929d4130
+0b79e43988f31df45d60d0c228d4e2693cc01fcfd1d38e4d0376741a03da01a1  -

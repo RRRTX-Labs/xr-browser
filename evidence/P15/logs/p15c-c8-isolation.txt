@@ -1,0 +1,15 @@
+$ python3 tools/permission_iso_cells.py --xr-core ../xr-core   # xr-core 1d5f018
+PASS: permission_iso_cells (20/20 cells pass)
+rc=0
+
+$ python3 tools/permission_iso_cells.py --xr-core ../xr-core --plant leak
+FAIL: permissions-deny-list ['standard', 'ephemeral']: standard/ephemeral: B on the deny list after denying A: True (expected False)
+FAIL: permissions-deny-list ['shield', 'fortress']: shield/fortress: B on the deny list after denying A: True (expected False)
+FAIL: permissions-deny-list ['shield', 'ephemeral']: shield/ephemeral: B on the deny list after denying A: True (expected False)
+FAIL: permission_iso_cells (8/20 cells pass)
+rc=1 (expected 1)
+
+$ python3 tools/isolation_matrix.py --repo . --check
+PASS: isolation_matrix --check (matrix record and identity card rows diff-clean)
+rc=0
+

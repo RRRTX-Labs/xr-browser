@@ -1,0 +1,9 @@
+$ python3 tools/permission_audit_count_check.py --xr-core ../xr-core   # xr-core 1d5f018
+permission_audit_count_check: 600 ops (seed 20261010), rows {'grant': 228, 'revoke': 155, 'expiry': 70, 'default': 95, 'deny': 108}, 0 violation(s) (PASS)
+rc=0
+
+$ python3 tools/permission_audit_count_check.py --xr-core ../xr-core --plant silent-grant
+FAIL: op 0 grant: count mismatch — store changed {'grant': 2, 'revoke': 0, 'expiry': 0, 'default': 0, 'deny': 0}, audit rows {'grant': 1, 'revoke': 0, 'expiry': 0, 'default': 0, 'deny': 0}
+FAIL: totals mismatch — store {'grant': 229, 'revoke': 156, 'expiry': 70, 'default': 95, 'deny': 108} vs rows {'grant': 228, 'revoke': 156, 'expiry': 70, 'default': 95, 'deny': 108}
+permission_audit_count_check: 600 ops (seed 20261010), rows {'grant': 228, 'revoke': 156, 'expiry': 70, 'default': 95, 'deny': 108}, 2 violation(s) (FAIL)
+rc=1 (expected 1)

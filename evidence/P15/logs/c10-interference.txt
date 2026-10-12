@@ -1,0 +1,25 @@
+# C10 reproduction: red before the fix shape, green after (tools/neg_interference_repro.py)
+$ python3 tools/neg_interference_repro.py --mode legacy
+== legacy: two concurrent runs, shared TMPDIR, NEG_TMP unset
+   clean: run A kept <work>/v0/shared-TMPDIR/t4-norow to itself
+   collision: run B found run A's marker in <work>/v0/shared-TMPDIR/t4-norow
+RED: concurrent runs collided (legacy scratch shape)
+rc=1 (expected 1: the captured red)
+
+$ python3 tools/neg_interference_repro.py --mode fixed
+== fixed: two concurrent runs, shared TMPDIR, NEG_TMP unset
+   clean: run A kept <work>/v0/shared-TMPDIR/xr-neg.kt27rr/t4-norow.yyo4s2 to itself
+   clean: run B kept <work>/v0/shared-TMPDIR/xr-neg.Jdv8oJ/t4-norow.9ifCMW to itself
+== fixed: two concurrent runs, shared TMPDIR, NEG_TMP shared
+   clean: run A kept <work>/v1/shared-NEG_TMP/t4-norow.DrFG9H to itself
+   clean: run B kept <work>/v1/shared-NEG_TMP/t4-norow.6pRHsy to itself
+GREEN: no collision (fixed scratch shape: per-case mktemp -d)
+rc=0 (expected 0: the captured green)
+
+$ bash work/negone.sh p15c_c10.sh
+ok: C10: two concurrent runs on the pre-fix shared scratch shape collide (the red) (rejected with expected reason)
+ok: C10 positive control (per-case mktemp -d: the same two runs do not collide)
+ok: C10: a second run_negatives.sh refuses while the first holds the lock (flock) and names the holder (rejected with expected reason)
+ok: C10: the mkdir fallback lock refuses a second run while a LIVE holder has it (rejected with expected reason)
+ok: C10 positive control (a dead holder's mkdir lock is reclaimed and released on exit)
+ALL NEGATIVE CASES REJECTED AS EXPECTED (N=4)

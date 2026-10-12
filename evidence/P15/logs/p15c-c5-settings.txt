@@ -1,0 +1,28 @@
+# P15-CLOSE C5 / T8: settings section permissions (xr-browser ae10987, xr-core 30adb62)
+$ python3 tools/gen_registry.py --check
+PASS: registry_lint
+rc=0
+$ python3 tools/help_deep_link.py
+help_deep_link: OK (4 sections, 25 enabled commands, contract markers present)
+rc=0
+$ python3 tools/coverage_check.py
+PASS: coverage_check (unit: declared tab/section; 0 failure(s))
+rc=0
+$ python3 -m pytest -q tools/tests/test_p8_t7_help_deep_link.py tools/tests/test_p7_commands_tools.py
+................                                                         [100%]
+16 passed in 2.40s
+rc=0
+$ python3 -c "import json;d=json.load(open('../xr-core/settings/core/settings_schema_v1.json'));s=[x for x in d['sections'] if x['id']=='permissions'][0];print(s)"
+{'id': 'permissions', 'order': 10, 'title_id': 'settings.section.permissions', 'availability': 'always', 'subsections': [], 'settings': [], 'aliases': ['permission', 'site permissions', 'camera', 'microphone', 'location', 'geolocation', 'clipboard']}
+rc=0
+$ make -C ../xr-core/settings/tests test
+test_settings_schema: 83 checks, 0 failures
+test_sections: 67 checks, 0 failures
+test_settings_search: 95 checks, 0 failures
+test_recall_corpus: 6 checks, 0 failures
+test_router: 88 checks, 0 failures
+test_settings_host: 46 checks, 0 failures
+test_counters: 58 checks, 0 failures
+test_settings_fuzz: 5 checks, 0 failures
+test_sha256_kat: 10 checks, 0 failures
+ALL C++ SETTINGS TESTS PASSED

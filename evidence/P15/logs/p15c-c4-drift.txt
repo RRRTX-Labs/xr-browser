@@ -1,0 +1,7 @@
+$ python3 tools/assumption_drift_check.py --row A4
+PASS A4 (HCMS mediation points) scratch copy of components/permissions/permission_context_base.h
+rc=0
+
+$ bash work/negone.sh p15c_c4.sh   (the planted-drift negative)
+ok: A4: a renamed upstream anchor reddens the row (P0 before promotion) (rejected with expected reason)
+ALL NEGATIVE CASES REJECTED AS EXPECTED (N=1)

@@ -1,0 +1,21 @@
+$ python3 build/webui/permission_patch_roundtrip.py --xr-core ../xr-core --check   # xr-core 1d5f018
+rev            : d04cdb24d67b081f6cf80200ffc5233f44b61109
+patch          : 1383 B  sha256 439110f8d1d6b58e…
+files (1)      : chrome/browser/ui/views/permissions/permission_prompt_bubble_base_view.cc (cap ≤4)
+never-list     : PASS (all files under chrome/browser/ui/views/permissions/**)
+order-only     : PASS
+apply          : PASS
+verify         : PASS
+revert         : PASS (byte-exact: True)
+negative       : perturbed-anchor apply FAIL (expected FAIL (patch is bound to the pinned bytes))
+committed      : MATCH
+PASS: permission patch 0400 round-trips at the pin
+rc=0
+
+$ python3 build/webui/permission_patch_roundtrip.py --xr-core ../xr-core --plant-drift
+error: anchor not found (upstream drift): 'buttons_container->AddChildView(std::move(allow_always_button));'
+FAIL: anchor not found (upstream drift): 'buttons_container->AddChildView(std::move(allow_always_button));'
+rc=1 (expected 1)
+
+$ sha256sum ../xr-core/patches/ui-permissions/0400-permission-prompt-order/0400-permission-prompt-order.patch
+439110f8d1d6b58ecb07c6c9946b4d195903ea8a0a5e8e9032bd284dad2205cd  xr-core/patches/ui-permissions/0400-permission-prompt-order/0400-permission-prompt-order.patch
