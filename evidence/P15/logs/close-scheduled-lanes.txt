@@ -1,0 +1,11 @@
+$ python3 tools/scheduled_lane_check.py --repo .
+PASS: compat-beta-parity.yml
+    compat-beta-parity.yml: schedule run 38230297423 head 267de392b created 2026-10-12T09:30:11Z — success
+PASS: core-hardening.yml
+    core-hardening.yml: schedule run 37607105196 head 01baba0d6 created 2026-10-07T10:23:43Z — success
+PASS: nightly-rebase-build.yml
+    nightly-rebase-build.yml: schedule run 38221803377 head 267de392b created 2026-10-12T08:08:49Z — success
+PASS: sast.yml
+    sast.yml: schedule run 38247071387 head 267de392b created 2026-10-12T12:07:41Z — success
+PASS: scheduled_lane_check (4 scheduled lane(s); PASS=4; every non-green state above is visible and non-fatal BY RULE, never silently dropped)
+EXIT=0

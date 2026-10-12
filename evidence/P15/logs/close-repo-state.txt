@@ -1,0 +1,51 @@
+# P15-CLOSE repo state after the push: fresh clones from origin in /tmp/p15close.ky4220g0
+# as-of 2026-10-12 (date of the record; no tool here reads a clock)
+$ git ls-remote https://github.com/RRRTX-Labs/xr-browser.git refs/heads/main
+e113f8e5b3af0a74def0d25cfa856fd9e8f4b952	refs/heads/main
+EXIT=0
+
+$ git ls-remote https://github.com/RRRTX-Labs/xr-core.git refs/heads/main
+30adb622ae823efba169f7613f871f7433d69695	refs/heads/main
+EXIT=0
+
+$ git rev-parse HEAD
+e113f8e5b3af0a74def0d25cfa856fd9e8f4b952
+EXIT=0
+
+$ git -C ../xr-core rev-parse HEAD
+30adb622ae823efba169f7613f871f7433d69695
+EXIT=0
+
+$ grep -n '^xr_core_rev' DEPS
+70:xr_core_rev: "30adb622ae823efba169f7613f871f7433d69695"     # xr-core e18b82f (P14-CLOSE: Isolation Card identity rows from data e18b82f, xr://identities dev page + honest commands mutation re-score 5ffa695, identity chrome a569801, LooksOpaque chance-probe fix f031c33, ledger-identity-overlay-v1 ad3026c, derivation probes + partition-share law + FS-diff test hook aaf79bd, isolation record with the T6 FS-diff verdict a7ed1ab, mutation-survivor kills + tested mint digest decode dec1d83) on the P15 pin 13a5f7d (P15 permission firewall; ADR-0051 DRAFT).
+EXIT=0
+
+$ git status --porcelain; git -C ../xr-core status --porcelain
+
+EXIT=0
+
+$ python3 build/sync.py check-pin-alive
+PASS: check-pin-alive
+EXIT=0
+
+$ python3 tools/sibling_pin_check.py --repo .
+pin: xr-core 30adb622ae823efba169f7613f871f7433d69695 == DEPS 30adb622ae823efba169f7613f871f7433d69695 (clean worktree)
+PASS: sibling_pin_check (70 sibling reader(s) classified, arg-only=20, gate-ordered=15, probe=4, routed=5, self=2, test=24)
+EXIT=0
+
+$ python3 tools/dco_check.py --range cabb36f..e113f8e
+PASS: dco_check
+EXIT=0
+
+$ python3 tools/dco_check.py --repo ../xr-core --range 13a5f7d..30adb62
+PASS: dco_check
+EXIT=0
+
+$ git log --format='%cn <%ce>' 267de39..e113f8e | sort | uniq -c
+      1 XR P14-Close Agent <p14-close@users.noreply.github.com>
+     12 XR P15 Agent <p15-agent@users.noreply.github.com>
+EXIT=0
+
+$ git -C ../xr-core log --format='%cn <%ce>' e18b82f..30adb62 | sort | uniq -c
+     10 XR P15 Agent <p15-agent@users.noreply.github.com>
+EXIT=0

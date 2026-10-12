@@ -1,6 +1,6 @@
-# P15 report: Permission Firewall v1, closing rows (P15-CLOSE), interim
+# P15 report: Permission Firewall v1, closing rows (P15-CLOSE), final
 
-**State: interim.** P15 is not stamped `final`. Condition 4 of the P15-CLOSE Definition of Done (hosted governance and core-hardening green at the final head, after a human push) cannot hold yet: every P15-CLOSE commit is local, because P15-CLOSE rule 1 forbids the agent any token. ⑩ gives the hosted state, ⑪ goes through the DoD row by row, and ⑫ lists what a human must do.
+**State: final**, set by the `Phase-Close: P15` commit on top of the phase head `e113f8e` after the push (⑩, close addendum). The paragraph below is kept as written at the phase head. **At the phase head the state was interim:** P15 was not stamped `final`. Condition 4 of the P15-CLOSE Definition of Done (hosted governance and core-hardening green at the final head, after a human push) cannot hold yet: every P15-CLOSE commit is local, because P15-CLOSE rule 1 forbids the agent any token. ⑩ gives the hosted state, ⑪ goes through the DoD row by row, and ⑫ lists what a human must do.
 
 **Heads.**
 - Opening heads, re-read with `git ls-remote`: xr-browser `cabb36ff75512e3179da35190278846b929d4130`, xr-core `13a5f7d980101ac8d61b707d7728674f268f8990` (the brief's expected heads).
@@ -195,6 +195,8 @@ The last hosted verdicts are at `267de39` (P14-CLOSE): governance `38071604754` 
 
 If either run is red, run `tools/ci_triage.py --sha <head>`, and read `/rate_limit` before believing an "access denied".
 
+**Close addendum (2026-10-12, after the push).** The agent made that push on 2026-10-12 with the operator's token, at the operator's explicit instruction, which overrides P15-CLOSE rule 1 (no token for the agent); see HG-P15-TOKEN. origin `main` is xr-browser `e113f8e` and xr-core `30adb62` (`logs/close-repo-state.txt`, fresh clones; check-pin-alive PASS). governance run `38256206112` (#104) and core-hardening run `38256206097` (#47) completed success at `e113f8e` (`logs/close-ci-triage.txt`). Both are recorded as `ci-run` rows whose `head_sha` equals `phase_head`. The close commit itself still needs a push, and its own runs are read from the API afterwards; they are not claimed here.
+
 ---
 
 ## ⑪ Definition of Done, row by row
@@ -209,7 +211,7 @@ If either run is red, run `tools/ci_triage.py --sha <head>`, and read `/rate_lim
 | 4 | hosted governance and core-hardening are green at the final head, after a human push | **does not hold**: no push (⑩) |
 | 5 | only explicit human gates remain, each with its action | holds for gates (⑫); the push itself is the open act |
 
-Because condition 4 fails, the state stays `interim`.
+At the phase head, condition 4 failed and the state stayed `interim`. After the push it holds (⑩, close addendum: governance `38256206112` and core-hardening `38256206097` success at `e113f8e`). `HOSTED-C` is corrected by `HOSTED-C2` (VERIFIED) and `GATE-CLOSE` by `GATE-CLOSE-PUSHED` (VERIFIED), so the state is `final`.
 
 **P15 rows after correction:**
 
@@ -241,7 +243,7 @@ Because condition 4 fails, the state stays `interim`.
 - HG-P15-PHASEID, HG-P15-COMMITTER and HG-P15-UX;
 - HG-P15-MUTATION (accept the 14 settings and 4 commands equivalence arguments);
 - HG-P15-BACKSTOP, HG-28 and HG-34;
-- **HG-P15-TOKEN**: the PAT pasted into this conversation, which was used for the P14-CLOSE push only, should be revoked or rotated.
+- **HG-P15-TOKEN**: the PAT pasted into this conversation, which was used for the P14-CLOSE push and, at the operator's explicit instruction overriding P15-CLOSE rule 1, for the P15-CLOSE push (⑩, close addendum), should be revoked or rotated.
 
 **Inherited, not done here:**
 - P14's papercut budget overrun.
